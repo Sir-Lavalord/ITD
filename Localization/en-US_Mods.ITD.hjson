@@ -33,4 +33,19 @@ Items: {
 		DisplayName: Alloy Sword
 		Tooltip: ""
 	}
+
+	RhodiumBow: {
+		DisplayName: Rhodium Bow
+		Tooltip: ""
+	}
+
+	ElectrumBar: {
+		DisplayName: Electrum
+		Tooltip: ""
+	}
+
+	RhodiumBar: {
+		DisplayName: Rhodium
+		Tooltip: ""
+	}
 }
