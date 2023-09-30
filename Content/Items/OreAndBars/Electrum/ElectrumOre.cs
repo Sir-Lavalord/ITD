@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
 
-namespace tempmod.Items
+namespace ITD.Content.Items.OreAndBars.Electrum
 {
     internal class ElectrumOre : ModTile
     {

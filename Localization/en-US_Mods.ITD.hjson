@@ -1,8 +1,36 @@
-# This file will automatically update with entries for new content after a build and reload
+Content: {
+	Items: {
+		Weapons: {
+			# This file will automatically update with entries for new content after a build and reload
+			
+			AlloySword: {
+				AlloySword: {
+					DisplayName: Alloy Sword
+					Tooltip: ""
+				}
+			}
+		}
+	}
+}
+
+Tiles: {
+	ElectrumOre.MapEntry: Electrum Ore
+	RhodiumOre.MapEntry: Rhodium Ore
+}
 
 Items: {
+	Electrum: {
+		DisplayName: Electrum
+		Tooltip: ""
+	}
+
+	Rhodium: {
+		DisplayName: Rhodium
+		Tooltip: ""
+	}
+
 	AlloySword: {
 		DisplayName: Alloy Sword
 		Tooltip: ""
 	}
-} 
+}

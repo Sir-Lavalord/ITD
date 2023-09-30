@@ -1,11 +1,11 @@
-﻿using Terraria;
+using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 
-namespace tempmod.Items
+namespace ITD.Content.Items.OreAndBars.Rhodium
 {
-    internal class Electrum : ModItem
+    internal class Rhodium : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -25,7 +25,7 @@ namespace tempmod.Items
             Item.useTime = 10;
             Item.useTurn = true;
             Item.autoReuse = true;
-            Item.createTile = ModContent.TileType<Items.ElectrumOre>();
+            Item.createTile = ModContent.TileType<Content.Items.OreAndBars.Rhodium.RhodiumOre>();
 
         }
     }

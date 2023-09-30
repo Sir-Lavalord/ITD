@@ -2,7 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Items
+namespace ITD.Content.Items.Weapons.AlloySword
 {
 	public class AlloySword : ModItem
 	{
