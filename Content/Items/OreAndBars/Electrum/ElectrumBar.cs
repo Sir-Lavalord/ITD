@@ -35,8 +35,8 @@ namespace ITD.Content.Items.OreAndBars.Electrum
         public override void AddRecipes()
         {
             CreateRecipe(1)
-                .AddIngredient(ItemID.PlatinumOre, 10)
-                .AddRecipeGroup(RecipeGroupID.IronBar, 10)
+                .AddIngredient(ItemID.GoldOre, 5)
+                .AddRecipeGroup("IronOre", 10)
                 .AddTile(TileID.Furnaces)
                 .Register();
         }

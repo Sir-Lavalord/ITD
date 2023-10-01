@@ -31,12 +31,11 @@ namespace ITD.Content.Items.OreAndBars.Rhodium
             Item.createTile = ModContent.TileType<Content.Items.OreAndBars.Rhodium.RhodiumBars>();
             Item.placeStyle = 0;
         }
-
         public override void AddRecipes()
         {
             CreateRecipe(1)
-                .AddIngredient(ItemID.PlatinumOre, 10)
-                .AddRecipeGroup(RecipeGroupID.IronBar, 10)
+                .AddIngredient(ItemID.PlatinumOre, 5)
+                .AddRecipeGroup("IronOre", 10)
                 .AddTile(TileID.Furnaces)
                 .Register();
         }
