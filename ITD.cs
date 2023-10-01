@@ -5,7 +5,7 @@ using Terraria.Localization;
 
 namespace ITD
 {
-	public class ITD : Mod
+	public class ITD : ModSystem
 	{
         public override void AddRecipeGroups()
         {
