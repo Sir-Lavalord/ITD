@@ -6,30 +6,25 @@ namespace ITD.Content.Items.Weapons.Rhodium
 {
     public class RhodiumBow : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            // DisplayName.SetDefault("Rhodium Bow");
-            // Tooltip.SetDefault("A bow made of precious rhodium.");
-        }
 
         public override void SetDefaults()
         {
-            Item.damage = 7; // Low damage
+            Item.damage = 7;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 20;
             Item.height = 40;
-            Item.useTime = 10; // Faster fire rate
-            Item.useAnimation = 12;
-            Item.useStyle = ItemUseStyleID.Thrust;
+            Item.useTime = 30;
+            Item.useAnimation = 30;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 2;
             Item.value = Item.sellPrice(silver: 5);
             Item.rare = ItemRarityID.Blue;
             Item.UseSound = SoundID.Item5;
-            Item.autoReuse = true;
             Item.shoot = ProjectileID.WoodenArrowFriendly;
-            Item.shootSpeed = 8f; // Slightly higher shoot speed
+            Item.shootSpeed = 8f;
             Item.useAmmo = AmmoID.Arrow;
+            Item.autoReuse = false;
         }
 
         public override bool? UseItem(Player player)

@@ -18,4 +18,9 @@ Items: {
 		DisplayName: Rhodium Bow
 		Tooltip: ""
 	}
+
+	RhodiumBroadsword: {
+		DisplayName: Rhodium Broadsword
+		Tooltip: ""
+	}
 }

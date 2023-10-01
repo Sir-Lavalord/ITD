@@ -19,7 +19,7 @@ namespace ITD.Content.Items.Weapons.Alloy
             Item.value = 10000;
             Item.rare = 2;
             Item.UseSound = SoundID.Item1;
-            Item.autoReuse = true;
+            Item.autoReuse = false;
         }
 
         /*   public override void AddRecipes()
