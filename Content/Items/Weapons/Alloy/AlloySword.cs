@@ -6,30 +6,28 @@ namespace ITD.Content.Items.Weapons.Alloy
 {
     public class AlloySword : ModItem
     {
-        // The Display Name and Tooltip of this item can be edited in the Localization/en-US_Mods.ITD.hjson file.
-
         public override void SetDefaults()
         {
-            Item.damage = 50;
+            Item.damage = 15;
             Item.DamageType = DamageClass.Melee;
-            Item.width = 40;
-            Item.height = 40;
-            Item.useTime = 20;
+            Item.width = 20;
+            Item.height = 20;
+            Item.useTime = 33;
             Item.useAnimation = 20;
             Item.useStyle = 1;
-            Item.knockBack = 6;
+            Item.knockBack = 2.1f;
             Item.value = 10000;
             Item.rare = 2;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
         }
 
-        public override void AddRecipes()
-        {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.DirtBlock, 10);
-            recipe.AddTile(TileID.WorkBenches);
-            recipe.Register();
-        }
+        /*   public override void AddRecipes()
+           {
+               Recipe recipe = CreateRecipe();
+               recipe.AddIngredient(ItemID.DirtBlock, 10);
+               recipe.AddTile(TileID.WorkBenches);
+               recipe.Register();
+           }  */
     }
 }
