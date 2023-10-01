@@ -23,4 +23,11 @@ Items: {
 		DisplayName: Rhodium Broadsword
 		Tooltip: ""
 	}
+
+	ElectrumSpear: {
+		Tooltip: ""
+		DisplayName: Electrum Spear
+	}
 }
+
+Projectiles.ElectrumSpearProjectile.DisplayName: Electrum Spear Projectile
