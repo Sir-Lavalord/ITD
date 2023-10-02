@@ -14,24 +14,20 @@ namespace ITD.Content.Items.Weapons.Electrum
 			ItemID.Sets.Spears[Item.type] = true; 
 		}
 
-		public override void SetDefaults()
-		{
-			
-			Item.rare = ItemRarityID.Pink;
-			Item.value = Item.sellPrice(silver: 10); 
-
-			Item.useStyle = ItemUseStyleID.Shoot;
-			Item.useAnimation = 12;
-			Item.useTime = 18;
-			Item.UseSound = SoundID.Item71;
-			Item.autoReuse = true;
-		
-			Item.damage = 25;
-			Item.knockBack = 6.5f;
-			Item.noUseGraphic = true;
+        public override void SetDefaults()
+        {
+            Item.CloneDefaults(ItemID.Spear);
+            Item.damage = 13;
 			Item.DamageType = DamageClass.Melee;
-			Item.noMelee = true;
-
+            Item.width = 40;
+            Item.height = 40;
+            Item.useTime = 28;
+            Item.useAnimation = 28;
+            Item.knockBack = 7;
+            Item.value = 500;
+            Item.rare = 1;
+            Item.autoReuse = false;
+            Item.noMelee = true;
 			Item.shootSpeed = 3.7f;
 			Item.shoot = ModContent.ProjectileType<ElectrumSpearProjectile>();
 		}
