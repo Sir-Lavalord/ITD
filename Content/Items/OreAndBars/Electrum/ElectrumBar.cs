@@ -2,9 +2,9 @@
 using Terraria.ModLoader;
 using Terraria.ID;
 using Terraria.GameContent.Creative;
+using ITD.Content.Tiles;
 
-
-namespace ITD.Content.Items.OreAndBars.Electrum
+namespace ITD.Content.Items
 {
     internal class ElectrumBar : ModItem
     {
@@ -28,7 +28,7 @@ namespace ITD.Content.Items.OreAndBars.Electrum
             Item.useTime = 10;
             Item.autoReuse = true;
 
-            Item.createTile = ModContent.TileType<Content.Items.OreAndBars.Electrum.ElectrumBars>();
+            Item.createTile = ModContent.TileType<ElectrumBars>();
             Item.placeStyle = 0;
         }
 

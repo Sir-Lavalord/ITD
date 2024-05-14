@@ -1,10 +1,10 @@
-﻿using ITD.Content.Items.Weapons.Electrum;
-using Terraria;
+﻿using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using ITD.Content.Projectiles;
 
-namespace ITD.Content.Items.Weapons.Electrum
+namespace ITD.Content.Items
 {
 	public class ElectrumSpear : ModItem
 	{
