@@ -60,7 +60,7 @@ namespace ITD.Content.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Main.instance.LoadProjectile(Projectile.type);
-            Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/CosmicSludgeBomb_Effect").Value;
+            Texture2D texture = Mod.Assets.Request<Texture2D>("Content/Projectiles/CosmicSludgeBomb_Effect").Value;
             Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
