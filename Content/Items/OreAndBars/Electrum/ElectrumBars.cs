@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 using Terraria.ObjectData;
 using Terraria.Localization;
 
-namespace ITD.Content.Items.OreAndBars.Electrum
+namespace ITD.Content.Tiles
 {
     internal class ElectrumBars : ModTile
     {

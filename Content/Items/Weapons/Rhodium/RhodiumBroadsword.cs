@@ -2,7 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items.Weapons.Rhodium
+namespace ITD.Content.Items
 {
     public class RhodiumBroadsword : ModItem
     {
@@ -24,7 +24,7 @@ namespace ITD.Content.Items.Weapons.Rhodium
             public override void AddRecipes()
            {
                Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ModContent.ItemType<Content.Items.OreAndBars.Rhodium.RhodiumBar>(), 11);
+            recipe.AddIngredient(ModContent.ItemType<RhodiumBar>(), 11);
             recipe.AddTile(TileID.Anvils);
                recipe.Register();
            } 

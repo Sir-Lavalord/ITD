@@ -4,7 +4,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Items
+namespace ITD.Content.Items
 {
     public class SpacePrawn : ModItem
     {

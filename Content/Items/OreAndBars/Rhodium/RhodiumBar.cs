@@ -2,9 +2,10 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using Terraria.GameContent.Creative;
+using ITD.Content.Tiles;
 
 
-namespace ITD.Content.Items.OreAndBars.Rhodium
+namespace ITD.Content.Items
 {
     internal class RhodiumBar : ModItem
     {
@@ -28,7 +29,7 @@ namespace ITD.Content.Items.OreAndBars.Rhodium
             Item.useTime = 10;
             Item.autoReuse = true;
 
-            Item.createTile = ModContent.TileType<Content.Items.OreAndBars.Rhodium.RhodiumBars>();
+            Item.createTile = ModContent.TileType<RhodiumBars>();
             Item.placeStyle = 0;
         }
         public override void AddRecipes()

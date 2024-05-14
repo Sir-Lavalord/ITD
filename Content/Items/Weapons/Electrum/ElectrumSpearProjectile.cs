@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items.Weapons.Electrum
+namespace ITD.Content.Projectiles
 {
 	public class ElectrumSpearProjectile : ModProjectile
 	{
