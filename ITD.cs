@@ -13,6 +13,7 @@ using Terraria.ModLoader.IO;
 using System.IO;
 using Terraria.Audio;
 using ITD.Content.NPCs;
+using Terraria.Localization;
 
 namespace ITD
 {
