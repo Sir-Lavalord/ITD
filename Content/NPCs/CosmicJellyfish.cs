@@ -7,17 +7,11 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-<<<<<<<< HEAD:Content/NPCs/CosmicJellyfish.cs
 using ITD.Physics;
 using ITD.Content.Projectiles;
 
 namespace ITD.Content.NPCs
-========
-using ITDQTest.Physics;
-using ITDQTest.Projectiles;
 
-namespace ITDQTest.NPCs
->>>>>>>> a1ce0efdd2fc91b7a56391706e903e6dadd0b982:NPCs/CosmicJellyfish.cs
 {
     [AutoloadBossHead]
     public class CosmicJellyfish : ModNPC
@@ -102,11 +96,7 @@ namespace ITDQTest.NPCs
         Random rnd = new Random();
         public override bool PreAI()
         {
-<<<<<<<< HEAD:Content/NPCs/CosmicJellyfish.cs
             Dust.NewDust(NPC.Center + new Vector2(rnd.Next(NPC.width) - NPC.width / 2, 0), 1, 1, DustID.ShimmerTorch, 0f, 0f, 0, default(Color), 1f);
-========
-            Dust.NewDust(NPC.Center+new Vector2(rnd.Next(NPC.width)-NPC.width/2, 0), 1, 1, DustID.ShimmerTorch, 0f, 0f, 0, default(Color), 1f);
->>>>>>>> a1ce0efdd2fc91b7a56391706e903e6dadd0b982:NPCs/CosmicJellyfish.cs
             return true;
         }
         public override void AI()
@@ -152,11 +142,7 @@ namespace ITDQTest.NPCs
                 return;
             }
 
-<<<<<<<< HEAD:Content/NPCs/CosmicJellyfish.cs
             if (NPC.life * 100 / NPC.lifeMax < 50)
-========
-            if (NPC.life*100/NPC.lifeMax < 50)
->>>>>>>> a1ce0efdd2fc91b7a56391706e903e6dadd0b982:NPCs/CosmicJellyfish.cs
             {
                 SecondStage = true;
                 NPC.netUpdate = true;
@@ -182,11 +168,7 @@ namespace ITDQTest.NPCs
                 float startXVelo = -((float)(projectileAmount - 1) / 2) * (float)XVeloDifference;
                 for (int i = 0; i < projectileAmount; i++)
                 {
-<<<<<<<< HEAD:Content/NPCs/CosmicJellyfish.cs
                     Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -8f);
-========
-                    Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference*i, -8f);
->>>>>>>> a1ce0efdd2fc91b7a56391706e903e6dadd0b982:NPCs/CosmicJellyfish.cs
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity + projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 0, 0, -1);
                 }
             }
@@ -199,19 +181,11 @@ namespace ITDQTest.NPCs
                 float sector = MathHelper.ToRadians(80f);
                 float sectorOfSector = sector / projectileAmount;
                 float towardsAngle = toPlayer.ToRotation();
-<<<<<<<< HEAD:Content/NPCs/CosmicJellyfish.cs
                 float startAngle = towardsAngle - sectorOfSector * (projectileAmount - 1) / 2;
                 for (int i = 0; i < projectileAmount; i++)
                 {
                     float angle = startAngle + sectorOfSector * i;
                     Vector2 projectileVelo = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * radius;
-========
-                float startAngle = towardsAngle - (sectorOfSector * (projectileAmount - 1) / 2);
-                for (int i = 0; i < projectileAmount; i++)
-                {
-                    float angle = startAngle + sectorOfSector *i ;
-                    Vector2 projectileVelo = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle))*radius;
->>>>>>>> a1ce0efdd2fc91b7a56391706e903e6dadd0b982:NPCs/CosmicJellyfish.cs
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1);
                 }
             }
@@ -239,11 +213,7 @@ namespace ITDQTest.NPCs
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-<<<<<<<< HEAD:Content/NPCs/CosmicJellyfish.cs
 
-========
-            
->>>>>>>> a1ce0efdd2fc91b7a56391706e903e6dadd0b982:NPCs/CosmicJellyfish.cs
             return true;
         }
     }
