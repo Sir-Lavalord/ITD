@@ -28,6 +28,61 @@ Items: {
 		Tooltip: ""
 		DisplayName: Electrum Spear
 	}
+
+	Blueshroom: {
+		DisplayName: Blueshroom
+		Tooltip: ""
+	}
+
+	DashingFeather: {
+		DisplayName: Dashing Feather
+		Tooltip: ""
+	}
+
+	DespoticSnaptrap: {
+		DisplayName: Despotic Snaptrap
+		Tooltip: ""
+	}
+
+	EmberSlasher: {
+		DisplayName: Ember Slasher
+		Tooltip: ""
+	}
+
+	Snaptrap: {
+		DisplayName: Snaptrap
+		Tooltip: ""
+	}
+
+	SpacePrawn: {
+		DisplayName: Space Prawn
+		Tooltip: ""
+	}
+
+	VocalZero: {
+		DisplayName: Vocal Zero
+		Tooltip: ""
+	}
+
+	WormholeRipper: {
+		DisplayName: Wormhole Ripper
+		Tooltip: ""
+	}
 }
 
-Projectiles.ElectrumSpearProjectile.DisplayName: Electrum Spear Projectile
+Projectiles: {
+	ElectrumSpearProjectile.DisplayName: Electrum Spear Projectile
+	CosmicSludgeBomb.DisplayName: Cosmic Sludge Bomb
+	CosmicVoidShard.DisplayName: Cosmic Void Shard
+	DespoticSnaptrapProjectile.DisplayName: Despotic Snaptrap Projectile
+	EmberSlash.DisplayName: Ember Slash
+	SnaptrapProjectile.DisplayName: Snaptrap Projectile
+	VocalZeroProjectile.DisplayName: Vocal Zero Projectile
+	WRipperProjectile.DisplayName: W Ripper Projectile
+}
+
+NPCs: {
+	CosmicJellyfish.DisplayName: Cosmic Jellyfish
+	FloralDevourer.DisplayName: Floral Devourer
+	FloralDevourerSegment.DisplayName: Floral Devourer Segment
+}

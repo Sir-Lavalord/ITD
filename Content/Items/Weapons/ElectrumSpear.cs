@@ -51,7 +51,7 @@ namespace ITD.Content.Items
 		public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ModContent.ItemType<Content.Items.OreAndBars.Electrum.ElectrumBar>(), 10);
+			recipe.AddIngredient(ModContent.ItemType<ElectrumBar>(), 10);
 			recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}
