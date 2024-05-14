@@ -1,4 +1,4 @@
-﻿using ITD.NPCs;
+﻿using ITD.Content.NPCs;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
