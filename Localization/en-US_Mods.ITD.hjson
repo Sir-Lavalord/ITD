@@ -1,11 +1,11 @@
 Items: {
 	ElectrumBar: {
-		DisplayName: Electrum
+		DisplayName: Electrum Bar
 		Tooltip: ""
 	}
 
 	RhodiumBar: {
-		DisplayName: Rhodium
+		DisplayName: Rhodium Bar
 		Tooltip: ""
 	}
 
@@ -40,8 +40,8 @@ Items: {
 	}
 
 	DespoticSnaptrap: {
-		DisplayName: Despotic Snaptrap
-		Tooltip: ""
+		DisplayName: Maw of The Deep
+		Tooltip: "[c/{0}:Latch Effect:] Creates jaws that damage the target and surrounding enemies"
 	}
 
 	EmberSlasher: {
@@ -51,38 +51,74 @@ Items: {
 
 	Snaptrap: {
 		DisplayName: Snaptrap
-		Tooltip: ""
+		Tooltip:
+			'''
+			"'Ey 'bert! I put a goshdurn beartrap on me chain whip! Yeeehawww!"
+			[c/{0}:Latch Effect:] Increases crit chance by 4%
+			'''
 	}
 
 	SpacePrawn: {
 		DisplayName: Space Prawn
-		Tooltip: ""
+		Tooltip: Summons the Cosmic Jellyfish during nighttime
 	}
 
 	VocalZero: {
 		DisplayName: Vocal Zero
-		Tooltip: ""
+		Tooltip: "[c/{0}:Latch Effect:] Increases damage by 10% every second, maxes out at 100%"
 	}
 
 	WormholeRipper: {
 		DisplayName: Wormhole Ripper
+		Tooltip:
+			'''
+			"Lightspeed!"
+			Right click to dash forward, leaving behind a wormhole
+			'''
+	}
+
+	VoidShard: {
 		Tooltip: ""
+		DisplayName: Void Shard
+	}
+
+	CosmicJellyfishTrophy: {
+		Tooltip: ""
+		DisplayName: Cosmic Jellyfish Trophy
+	}
+
+	CosmicJellyfishBag: {
+		Tooltip: ""
+		DisplayName: Cosmic Jellyfish Treasure Bag
+	}
+
+	CosmicJam: {
+		Tooltip: Summons a pet Jammyfish
+		DisplayName: Cosmic Jam
 	}
 }
 
 Projectiles: {
-	ElectrumSpearProjectile.DisplayName: Electrum Spear Projectile
+	ElectrumSpearProjectile.DisplayName: Electrum Spear
 	CosmicSludgeBomb.DisplayName: Cosmic Sludge Bomb
 	CosmicVoidShard.DisplayName: Cosmic Void Shard
-	DespoticSnaptrapProjectile.DisplayName: Despotic Snaptrap Projectile
-	EmberSlash.DisplayName: Ember Slash
-	SnaptrapProjectile.DisplayName: Snaptrap Projectile
-	VocalZeroProjectile.DisplayName: Vocal Zero Projectile
-	WRipperProjectile.DisplayName: W Ripper Projectile
+	DespoticSnaptrapProjectile.DisplayName: Maw of The Deep
+	EmberSlash.DisplayName: Ember Slasher
+	SnaptrapProjectile.DisplayName: Snaptrap
+	VocalZeroProjectile.DisplayName: Vocal Zero
+	WRipperProjectile.DisplayName: Wormhole Ripper
+	CosmicJamPet.DisplayName: Jammyfish
 }
 
 NPCs: {
 	CosmicJellyfish.DisplayName: Cosmic Jellyfish
 	FloralDevourer.DisplayName: Floral Devourer
-	FloralDevourerSegment.DisplayName: Floral Devourer Segment
+	FloralDevourerSegment.DisplayName: Floral Devourer
+}
+
+Buffs: {
+	CosmicJamBuff: {
+		Description: COME ON AND JAM!
+		DisplayName: Jammyfish
+	}
 }

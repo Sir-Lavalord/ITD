@@ -22,10 +22,12 @@ namespace ITD
         public class ITDSystem : ModSystem
         {
             public static bool hasMeteorFallen;
+            public static bool downedCosJel;
 
             public override void ClearWorld()
             {
                 hasMeteorFallen = false;
+                downedCosJel = false;
             }
             public override void SaveWorldData(TagCompound tag)
             {
@@ -33,17 +35,23 @@ namespace ITD
                 {
                     tag["hasMeteorFallen"] = true;
                 }
+                if (downedCosJel)
+                {
+                    tag["downedCosJel"] = true;
+                }
             }
 
             public override void LoadWorldData(TagCompound tag)
             {
                 hasMeteorFallen = tag.ContainsKey("hasMeteorFallen");
+                downedCosJel = tag.ContainsKey("downedCosJel");
             }
 
             public override void NetSend(BinaryWriter writer)
             {
                 var flags = new BitsByte();
                 flags[0] = hasMeteorFallen;
+                flags[1] = downedCosJel;
                 writer.Write(flags);
             }
 
@@ -51,6 +59,7 @@ namespace ITD
             {
                 BitsByte flags = reader.ReadByte();
                 hasMeteorFallen = flags[0];
+                downedCosJel = flags[1];
             }
 
             public override void PostUpdateEverything()
@@ -113,10 +122,14 @@ namespace ITD
                 if (prevTime && !curTime)
                 {
 
-                    if (NPC.downedBoss1 && ITDSystem.hasMeteorFallen && Player.ZoneOverworldHeight && (!cosJelCounter))
+                    if (NPC.downedBoss1 && ITDSystem.hasMeteorFallen && Player.ZoneOverworldHeight && (!cosJelCounter) && (!ITDSystem.downedCosJel))
                     {
-                        Main.NewText("It's going to be a wiggly night...", Color.Purple);
-                        cosJelCounter = true;
+                        Random rand = new Random();
+                        if (rand.Next(2) == 0)
+                        {
+                            Main.NewText("It's going to be a wiggly night...", Color.Purple);
+                            cosJelCounter = true;
+                        }
                     }
                 }
                 if (cosJelCounter)

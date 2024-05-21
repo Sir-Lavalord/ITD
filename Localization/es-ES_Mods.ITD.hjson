@@ -1,0 +1,124 @@
+Items: {
+	ElectrumBar: {
+		DisplayName: Lingote de electro
+		Tooltip: ""
+	}
+
+	RhodiumBar: {
+		DisplayName: Lingote de rodio
+		Tooltip: ""
+	}
+
+	AlloySword: {
+		DisplayName: Espada de aleación
+		Tooltip: ""
+	}
+
+	RhodiumBow: {
+		DisplayName: Arco de rodio
+		Tooltip: ""
+	}
+
+	RhodiumBroadsword: {
+		DisplayName: Espada de rodio
+		Tooltip: ""
+	}
+
+	ElectrumSpear: {
+		Tooltip: ""
+		DisplayName: Lanza de electro
+	}
+
+	Blueshroom: {
+		DisplayName: Champizúl
+		Tooltip: ""
+	}
+
+	DashingFeather: {
+		DisplayName: Pluma airosa
+		Tooltip: ""
+	}
+
+	DespoticSnaptrap: {
+		DisplayName: Fauces del Abísmo
+		Tooltip: "[c/{0}:Efecto de Enganche:] Invoca fauces que se almuerzan a los enemigos"
+	}
+
+	EmberSlasher: {
+		DisplayName: Tajadora de llamarada
+		Tooltip: ""
+	}
+
+	Snaptrap: {
+		DisplayName: Enganchadora
+		Tooltip:
+			'''
+			"Oye 'bert! Le monté una trampa de osos a esta cadena! Yijaaa!"
+			[c/{0}:Efecto de Enganche:] Aumenta el porcentaje de ataque crítico por un 4%
+			'''
+	}
+
+	SpacePrawn: {
+		DisplayName: Camarón espacial
+		Tooltip: Invoca a la Medusa Cósmica durante la noche
+	}
+
+	VocalZero: {
+		DisplayName: Vocal Zero
+		Tooltip: "[c/{0}:Efecto de Enganche:] Aumenta el daño por 10% cada segundo, máximo hasta el 100%"
+	}
+
+	WormholeRipper: {
+		DisplayName: Desgarradora del Espaciotiempo
+		Tooltip:
+			'''
+			"A velocidad luz!"
+			Haz clic derecho para embestir hacia delante, dejando atrás un agujero de gusano
+			'''
+	}
+
+	VoidShard: {
+		Tooltip: ""
+		DisplayName: Fragmento del vacío
+	}
+
+	CosmicJellyfishTrophy: {
+		Tooltip: ""
+		DisplayName: Trofeo de Medusa Cósmica
+	}
+
+	CosmicJellyfishBag: {
+		Tooltip: ""
+		DisplayName: Bolsa del tesoro de Medusa Cósmica
+	}
+
+	CosmicJam: {
+		Tooltip: Invoca una Medusilla mascota
+		DisplayName: Mermelada Cósmica
+	}
+}
+
+Projectiles: {
+	ElectrumSpearProjectile.DisplayName: Lanza de electro
+	CosmicSludgeBomb.DisplayName: Bomba de lodo cósmico
+	CosmicVoidShard.DisplayName: Fragmento del vacío
+	DespoticSnaptrapProjectile.DisplayName: Fauces del Abísmo
+	EmberSlash.DisplayName: Tajadora de llamarada
+	SnaptrapProjectile.DisplayName: Enganchadora
+	VocalZeroProjectile.DisplayName: Vocal Zero
+	WRipperProjectile.DisplayName: Desgarrador del Espaciotiempo
+	CosmicJamPet.DisplayName: Medusilla
+}
+
+NPCs: {
+	CosmicJellyfish.DisplayName: Medusa Cósmica
+	FloralDevourer.DisplayName: Devorador Floral
+	FloralDevourerSegment.DisplayName: Devorador Floral
+}
+
+Buffs: {
+	CosmicJamBuff: {
+		Description: COME ON AND JAM!
+		DisplayName: Medusilla
+	}
+}
