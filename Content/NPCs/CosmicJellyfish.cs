@@ -9,6 +9,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Physics;
 using ITD.Content.Projectiles;
+using ITD.Content.Items;
+using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 
 namespace ITD.Content.NPCs
 
@@ -16,6 +19,8 @@ namespace ITD.Content.NPCs
     [AutoloadBossHead]
     public class CosmicJellyfish : ModNPC
     {
+        private Asset<Texture2D> spriteBack = ModContent.Request<Texture2D>("ITD/Content/NPCs/CosmicJellyfish_Back");
+        private List<Rectangle> quads = new List<Rectangle>();
         public bool SecondStage
         {
             get => NPC.ai[0] == 1f;
@@ -51,6 +56,33 @@ namespace ITD.Content.NPCs
             NPC.npcSlots = 10f;
             NPC.aiStyle = -1;
             Main.npcFrameCount[NPC.type] = 5;
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<CosmicJellyfishBag>()));
+
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CosmicJellyfishTrophy>(), 10));
+
+            //npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<CosmicJellyfishRelic>()));
+
+            npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<CosmicJam>(), 4));
+
+            LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+
+
+            //notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<CosmicJellyfishMask>(), 7));
+            notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<VoidShard>(), 1, 7, 15));
+        }
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            
+        }
+
+        public override void OnKill()
+        {
+            NPC.SetEventFlagCleared(ref ITD.ITDSystem.downedCosJel, -1);
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
