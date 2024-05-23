@@ -20,14 +20,20 @@ namespace ITD.Content.NPCs
     public class CosmicJellyfish : ModNPC
     {
         private Asset<Texture2D> spriteBack = ModContent.Request<Texture2D>("ITD/Content/NPCs/CosmicJellyfish_Back");
-        private List<Rectangle> quads = new List<Rectangle>();
+        //private static List<CosmicJellyfish_Hand> hands = new List<CosmicJellyfish_Hand>();
+        public float rotation = 0f;
         public bool SecondStage
         {
             get => NPC.ai[0] == 1f;
             set => NPC.ai[0] = value ? 1f : 0f;
         }
 
-        private int actionID = 0;
+        private enum States
+        {
+            FollowingRegular,
+            Wandering,
+        }
+        private States actionID = 0;
 
         public override void SetStaticDefaults()
         {
@@ -164,7 +170,7 @@ namespace ITD.Content.NPCs
             float maxRotation = MathHelper.Pi / 6; // Maximum rotation angle
             float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f); // Adjust the divisor for rotation sensitivity
 
-            float rotation = rotationFactor * maxRotation;
+            rotation = rotationFactor * maxRotation;
             NPC.rotation = rotation;
         }
         private void CheckSecondStage()
@@ -223,7 +229,7 @@ namespace ITD.Content.NPCs
             }
             switch (actionID)
             {
-                case 0:
+                case States.FollowingRegular:
                     if (speed > 1.1f)
                     {
                         NPC.velocity = aboveNormalized * (speed + 1f) / 20;
@@ -233,7 +239,7 @@ namespace ITD.Content.NPCs
                         NPC.velocity = Vector2.Zero;
                     }
                     break;
-                case 1:
+                case States.Wandering:
                     break;
             }
         }
@@ -245,7 +251,7 @@ namespace ITD.Content.NPCs
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-
+            spriteBatch.Draw(spriteBack.Value, NPC.Center-screenPos-new Vector2(0f, 32f), NPC.frame, Color.White, rotation, new Vector2(spriteBack.Width()/2f, spriteBack.Height() / Main.npcFrameCount[NPC.type] / 2f), 1f, SpriteEffects.None, default);
             return true;
         }
     }

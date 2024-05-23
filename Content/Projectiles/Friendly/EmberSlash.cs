@@ -87,7 +87,6 @@ namespace ITD.Content.Projectiles
 
         public override void OnKill(int timeLeft)
         {
-            // This code and the similar code above in OnTileCollide spawn dust from the tiles collided with. SoundID.Item10 is the bounce sound you hear.
             for (int i = 0; i < 20; i++)
             {
                 Dust.NewDust(Projectile.Center, 1, 1, DustID.InfernoFork, 0f, 0f, 0, default(Color), 1.5f);
