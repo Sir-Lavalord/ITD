@@ -62,13 +62,13 @@ namespace ITD
                 downedCosJel = flags[1];
             }
 
-            public override void PostUpdateEverything()
+            /*public override void PreUpdateTime()
             {
                 if (WorldGen.spawnMeteor)
                 {
-                    NPC.SetEventFlagCleared(ref hasMeteorFallen, -1);
+                    hasMeteorFallen = true;
                 }
-            }
+            }*/
 
             public override void AddRecipeGroups()
             {
@@ -119,13 +119,29 @@ namespace ITD
 
                 prevTime = curTime;
                 curTime = Main.dayTime;
-                if (prevTime && !curTime)
-                {
-
-                    if (NPC.downedBoss1 && ITDSystem.hasMeteorFallen && Player.ZoneOverworldHeight && (!cosJelCounter) && (!ITDSystem.downedCosJel))
+                if (prevTime && !curTime) // It has just turned into nighttime
+                { 
+                    if (!ITDSystem.hasMeteorFallen) // If the hasMeteorFallen flag is false, it checks for a meteor
                     {
-                        Random rand = new Random();
-                        if (rand.Next(2) == 0)
+                        bool found = false;
+                        for (int i = 0;i < Main.maxTilesX && !found; i++) // Loop through every horizontal tile
+                        {
+                            for (int j = 0;j < Main.maxTilesY; j++) // For each horizontal tile, loop through every column of that tile
+                            {
+                                Tile tile = Main.tile[i, j];
+                                if (tile.TileType == TileID.Meteorite)
+                                {
+                                    ITDSystem.hasMeteorFallen = true; // Set the flag to true
+                                    found = true; // Break the outer loop
+                                    break; // Break the inner loop
+                                }
+                            }
+                        }
+                    }
+                    if (NPC.downedBoss1 && ITDSystem.hasMeteorFallen && (Player.ZoneOverworldHeight||Player.ZoneSkyHeight) && (!cosJelCounter) && (!ITDSystem.downedCosJel))
+                    {
+                        Random rand = new();
+                        if (rand.Next(3) == 0)
                         {
                             Main.NewText("It's going to be a wiggly night...", Color.Purple);
                             cosJelCounter = true;
@@ -156,7 +172,39 @@ namespace ITD
             }
             public override void OnEnterWorld()
             {
+                cosJelCounter = false;
                 PhysicsMethods.ClearAll();
+            }
+        }
+    }
+
+    public static class Helpers
+    {
+        public static Color ColorFromHSV(float hue, float saturation, float value)
+        {
+            int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
+            float f = hue / 60 - (float)Math.Floor(hue / 60);
+
+            value = value * 255;
+            int v = Convert.ToInt32(value);
+            int p = Convert.ToInt32(value * (1 - saturation));
+            int q = Convert.ToInt32(value * (1 - f * saturation));
+            int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
+
+            switch (hi)
+            {
+                case 0:
+                    return new Color(v, t, p);
+                case 1:
+                    return new Color(q, v, p);
+                case 2:
+                    return new Color(p, v, t);
+                case 3:
+                    return new Color(p, q, v);
+                case 4:
+                    return new Color(t, p, v);
+                default:
+                    return new Color(v, p, q);
             }
         }
     }

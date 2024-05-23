@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ITD.Content.Items;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -14,10 +16,10 @@ namespace ITD.Content.Projectiles
 {
     public abstract class ITDSnaptrap : ModProjectile
     {
-        SoundStyle snaptrapMetal = new SoundStyle("ITD/Content/Sounds/SnaptrapMetal", SoundType.Sound);
+        public SoundStyle snaptrapMetal = new SoundStyle("ITD/Content/Sounds/SnaptrapMetal", SoundType.Sound);
         SoundStyle snaptrapForcedRetract = new SoundStyle("ITD/Content/Sounds/SnaptrapForcedRetract", SoundType.Sound);
         SlotId chainUnwindSlot;
-        SoundStyle snaptrapChain = new SoundStyle("ITD/Content/SnaptrapUnwind", SoundType.Sound)
+        SoundStyle snaptrapChain = new SoundStyle("ITD/Content/Sounds/SnaptrapUnwind", SoundType.Sound)
         {
             IsLooped = true,
         };
@@ -27,39 +29,61 @@ namespace ITD.Content.Projectiles
             IsLooped = true,
         };
 
-        Player myPlayer = Main.player[Main.myPlayer];
-        public float shootRange { get; set; }
-        public float retractAccel { get; set; }
-        public int framesUntilRetractable { get; set; }
-        public float extraFlexibility { get; set; }
-        public int framesBetweenHits { get; set; }
-        public int minDamage { get; set; }
-        public int maxDamage { get; set; }
-        public int fullPowerHitsAmount { get; set; }
-        public int warningFrames { get; set; }
-        public int chompDust { get; set; }
-        public string toChainTexture {  get; set; }
-        protected ITDSnaptrap()
-        {
-            shootRange = 16f * 8f;
-            retractAccel = 1.5f;
-            framesUntilRetractable = 10;
-            extraFlexibility = 16f * 2f;
-            framesBetweenHits = 60;
-            minDamage = 1;
-            maxDamage = 25;
-            fullPowerHitsAmount = 10;
-            warningFrames = 60;
-            chompDust = DustID.Torch;
-            toChainTexture = "ITD/Content/Projectiles/SnapB";
-        }
+        public static Player myPlayer;
+        /// <summary>
+        /// In pixels. Multiply by 16f to get the tile equivalent.
+        /// </summary>
+        public float shootRange { get; set; } = 16f * 8f;
+        /// <summary>
+        /// Acceleration of the Snaptrap while retracting.
+        /// </summary>
+        public float retractAccel { get; set; } = 1.5f;
+        /// <summary>
+        /// Timer. The Snaptrap cannot retract until this value is equal or less than 0. (This is done in the AI)
+        /// </summary>
+        public int framesUntilRetractable { get; set; } = 10;
+        /// <summary>
+        /// The amount of tiles you can go outside shootRange without forced retraction.
+        /// </summary>
+        public float extraFlexibility { get; set; } = 16f * 2f;
+        /// <summary>
+        /// Amount of frames between each hit the Snaptrap gives. Less is faster.
+        /// </summary>
+        public int framesBetweenHits { get; set; } = 60;
+        /// <summary>
+        /// Damage at the start, before reaching full power.
+        /// </summary>
+        public int minDamage { get; set; } = 1;
+        /// <summary>
+        /// Damage when reaching full power.
+        /// </summary>
+        public int maxDamage { get; set; } = 25;
+        /// <summary>
+        /// Amount of hits it takes for the Snaptrap to reach full power.
+        /// </summary>
+        public int fullPowerHitsAmount { get; set; } = 10;
+        /// <summary>
+        /// Amount of frames the warning sound should play for before forcefully retracting.
+        /// </summary>
+        public int warningFrames { get; set; } = 60;
+        /// <summary>
+        /// DustID of the dust that appears when the Snaptrap latches onto an enemy.
+        /// </summary>
+        public int chompDust { get; set; } = DustID.Torch;
+        /// <summary>
+        /// Chain texture. Override GetChainTexture(), GetChainColor(), and ExtraChainEffects() for customization.
+        /// </summary>
+        public string toChainTexture {  get; set; } = "ITD/Content/Projectiles/Friendly/SnaptrapChain";
+
         float staticRotation; //
-        bool retracting = false; //
+        public bool retracting = false; //
         int damageTimer = 0; //
         int currentDamageAmount = 0; //
         int warningTimer = 0; //
         bool shouldBeWarning = false; //
         bool hasDoneLatchEffect = false;
+
+        bool chainWeight = false;
 
         public bool IsStickingToTarget
         {
@@ -78,6 +102,12 @@ namespace ITD.Content.Projectiles
             get => Projectile.localAI[0];
             set => Projectile.localAI[0] = value;
         }
+
+        public virtual void SetSnaptrapProperties()
+        {
+
+        }
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
@@ -104,8 +134,25 @@ namespace ITD.Content.Projectiles
             return new Color(Color.White.ToVector4() * Lighting.GetColor(tileCoords.X, tileCoords.Y).ToVector4());
         }
 
+        private void SetSnaptrapPlayerFlags(SnaptrapPlayer snaptrapPlayer)
+        {
+            chainWeight = snaptrapPlayer.ChainWeightEquipped;
+        }
+
         public override void OnSpawn(IEntitySource source)
         {
+            myPlayer = Main.player[Projectile.owner];
+            SetSnaptrapProperties();
+            myPlayer.TryGetModPlayer<SnaptrapPlayer>(out SnaptrapPlayer modPlayer);
+            if (modPlayer != null)
+            {
+                SetSnaptrapPlayerFlags(modPlayer);
+            }
+            if (chainWeight)
+            {
+                minDamage += minDamage / 10;
+                maxDamage += maxDamage / 10;
+            }
             Projectile.damage = minDamage;
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -163,6 +210,11 @@ namespace ITD.Content.Projectiles
             Vector2 toOwner = mountedCenter - Projectile.Center;
             myPlayer.ChangeDir(-Math.Sign(toOwner.X));
             float chainLength = toOwner.Length();
+
+            if (chainWeight)
+            {
+                Projectile.velocity.Y += 0.4f/(Projectile.extraUpdates+1);
+            }
 
             if (IsStickingToTarget)
             {
@@ -260,7 +312,6 @@ namespace ITD.Content.Projectiles
                     }
                 }
             }
-
             if (chainLength >= shootRange)
             {
                 Projectile.damage = 0;
@@ -363,6 +414,26 @@ namespace ITD.Content.Projectiles
                 }
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chainDrawPosition">Position this chain is being drawn at. Divide by 16 to get tile coordinates.</param>
+        /// <param name="chainCount">Position of this chain segment in the chain, starting from the Snaptrap and ending at the player's arms.</param>
+        /// <returns></returns>
+        public virtual Color GetChainColor(Vector2 chainDrawPosition, int chainCount)
+        {
+            return Lighting.GetColor((int)chainDrawPosition.X / 16, (int)(chainDrawPosition.Y / 16f));
+        }
+
+        public virtual Asset<Texture2D> GetChainTexture(Asset<Texture2D> defaultTexture, Vector2 chainDrawPosition, int chainCount)
+        {
+            return defaultTexture;
+        }
+
+        public virtual void ExtraChainEffects(Vector2 chainDrawPosition, int chaincount)
+        {
+
+        }
 
         public override bool PreDraw(ref Color lightColor)
         {
@@ -378,19 +449,18 @@ namespace ITD.Content.Projectiles
             float chainSegmentLength = (chainSourceRectangle.HasValue ? chainSourceRectangle.Value.Height : chainTexture.Height()) + chainHeightAdjustment;
             if (chainSegmentLength == 0)
             {
-                chainSegmentLength = 10; // When the chain texture is being loaded, the height is 0 which would cause infinite loops.
+                chainSegmentLength = 10;
             }
             float chainRotation = unitVectorFromProjectileToPlayerArms.ToRotation() + MathHelper.PiOver2;
             int chainCount = 0;
             float chainLengthRemainingToDraw = vectorFromProjectileToPlayerArms.Length() + chainSegmentLength / 2f;
             while (chainLengthRemainingToDraw > 0f)
             {
-                // This code gets the lighting at the current tile coordinates
-                Color chainDrawColor = Lighting.GetColor((int)chainDrawPosition.X / 16, (int)(chainDrawPosition.Y / 16f));
-                var chainTextureToDraw = chainTexture;
+                ExtraChainEffects(chainDrawPosition, chainCount);
+                Color chainDrawColor = GetChainColor(chainDrawPosition, chainCount);
+                var chainTextureToDraw = GetChainTexture(chainTexture, chainDrawPosition, chainCount);
                 Main.spriteBatch.Draw(chainTextureToDraw.Value, chainDrawPosition - Main.screenPosition, chainSourceRectangle, chainDrawColor, chainRotation, chainOrigin, 1f, SpriteEffects.None, 0f);
                 
-                // chainDrawPosition is advanced along the vector back to the player by the chainSegmentLength
                 chainDrawPosition += unitVectorFromProjectileToPlayerArms * chainSegmentLength;
                 chainCount++;
                 chainLengthRemainingToDraw -= chainSegmentLength;

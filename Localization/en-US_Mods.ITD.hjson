@@ -96,6 +96,30 @@ Items: {
 		Tooltip: Summons a pet Jammyfish
 		DisplayName: Cosmic Jam
 	}
+
+	ChainWeight: {
+		Tooltip: ""
+		DisplayName: Chain Weight
+	}
+
+	Sniptrap: {
+		Tooltip: ""
+		DisplayName: Sniptrap
+	}
+
+	MrSnapkins: {
+		DisplayName: Mr. Snapkins
+		Tooltip:
+			'''
+			"My dearest Snapkins..."
+			[c/{0}:Latch Effect:] Periodically summons bowties in eight directions
+			'''
+	}
+
+	TheScorpion: {
+		DisplayName: The Scorpion
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -108,6 +132,11 @@ Projectiles: {
 	VocalZeroProjectile.DisplayName: Vocal Zero
 	WRipperProjectile.DisplayName: Wormhole Ripper
 	CosmicJamPet.DisplayName: Jammyfish
+	SniptrapProjectile.DisplayName: Sniptrap Projectile
+	MrSnapkinsProjectile.DisplayName: Mr Snapkins Projectile
+	SnapkinsBowtie.DisplayName: Snapkins Bowtie
+	TheScorpionProjectile.DisplayName: The Scorpion Projectile
+	CosmicJellyfish_Hand.DisplayName: Cosmic Jellyfish_ Hand
 }
 
 NPCs: {

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace ITD.Content.Items
 {
-    public class DespoticSnaptrap : ModItem
+    public class TheScorpion : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -20,12 +20,12 @@ namespace ITD.Content.Items
             Item.autoReuse = false;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.useAnimation = 20;
-            Item.useTime = 8;
+            Item.useTime = 20;
             Item.knockBack = 0f;
             Item.width = 30;
             Item.height = 10;
-            Item.damage = 8900;
-            Item.shoot = ModContent.ProjectileType<DespoticSnaptrapProjectile>();
+            Item.damage = 75;
+            Item.shoot = ModContent.ProjectileType<TheScorpionProjectile>();
             Item.shootSpeed = 12f;
             Item.UseSound = SoundID.Item1;
             Item.rare = ItemRarityID.LightRed;
@@ -36,11 +36,17 @@ namespace ITD.Content.Items
             Item.channel = true;
         }
 
+        public override bool CanUseItem(Player player)
+        {
+            return (player.ownedProjectileCounts[Item.shoot] <= 0);
+        }
+
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.IronBar, 6);
+            recipe.AddIngredient(ItemID.FossilOre, 16);
             recipe.AddIngredient(ItemID.Chain, 16);
+            recipe.AddIngredient(ItemID.AncientBattleArmorMaterial, 3);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.Register();
         }
@@ -49,7 +55,7 @@ namespace ITD.Content.Items
         {
             float pulseAmount = Main.mouseTextColor / 255f;
             Color textColor = Color.LightPink * pulseAmount;
-            var line = tooltips.First(x => x.Name == "Tooltip0");
+            var line = tooltips.First(x => x.Name == "Tooltip1");
             string coloredText = string.Format(line.Text, textColor.Hex3());
             line.Text = coloredText;
         }
