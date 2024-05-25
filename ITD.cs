@@ -173,6 +173,7 @@ namespace ITD
             public override void OnEnterWorld()
             {
                 cosJelCounter = false;
+                cosJelTimer = 0;
                 PhysicsMethods.ClearAll();
             }
         }
@@ -206,6 +207,22 @@ namespace ITD
                 default:
                     return new Color(v, p, q);
             }
+        }
+        public static Vector2? RecursiveRaycast(Vector2 startWorldPos, float approxLengthTiles, float currentLengthTiles)
+        {
+            if (!(currentLengthTiles > approxLengthTiles))
+            {
+                currentLengthTiles++;
+                if (Collision.SolidCollision(startWorldPos, 1, 1))
+                {
+                    return startWorldPos;
+                }
+                else
+                {
+                    return RecursiveRaycast(startWorldPos + new Vector2(0f, 8f), approxLengthTiles, currentLengthTiles);
+                }
+            }
+            return null;
         }
     }
 }

@@ -211,7 +211,7 @@ namespace ITD.Content.Projectiles
             myPlayer.ChangeDir(-Math.Sign(toOwner.X));
             float chainLength = toOwner.Length();
 
-            if (chainWeight)
+            if (chainWeight && !IsStickingToTarget)
             {
                 Projectile.velocity.Y += 0.4f/(Projectile.extraUpdates+1);
             }
