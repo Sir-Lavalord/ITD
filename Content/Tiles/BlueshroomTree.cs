@@ -25,7 +25,7 @@ namespace ITD.Content.Tiles
         public override void SetStaticDefaults()
         {
             // Makes Example Tree grow on ExampleBlock
-            GrowsOnTileId = new int[1] { TileID.Stone };
+            GrowsOnTileId = new int[1] { ModContent.TileType<BluesoilTile>() };
         }
 
         // This is the primary texture for the trunk. Branches and foliage use different settings.

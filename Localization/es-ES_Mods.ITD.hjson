@@ -98,27 +98,41 @@ Items: {
 	}
 
 	ChainWeight: {
-		// Tooltip: ""
-		// DisplayName: Chain Weight
+		Tooltip: Le añade peso a las cadenas de las Enganchadores, aumentando su daño por un 10%
+		DisplayName: Pesa para cadena
 	}
 
 	Sniptrap: {
-		// Tooltip: ""
-		// DisplayName: Sniptrap
+		Tooltip: Solo para cortar PAPEL, no cartulina!
+		DisplayName: Enganchadorcilla
 	}
 
 	MrSnapkins: {
-		// DisplayName: Mr. Snapkins
-		/* Tooltip:
+		DisplayName: Sr. Snapkins
+		Tooltip:
 			'''
-			"My dearest Snapkins..."
-			[c/{0}:Latch Effect:] Periodically summons bowties in eight directions
-			''' */
+			"Mi queridísimo Snapkins..."
+			[c/{0}:Efecto de Enganche:] Periódicamente lanza corbatas en ocho direcciones
+			'''
 	}
 
 	TheScorpion: {
-		// DisplayName: The Scorpion
-		// Tooltip: ""
+		DisplayName: El Jalacrán
+		Tooltip:
+			'''
+			"GET OVER HERE!"
+			[c/{0}:Efecto de Enganche:] Jala al enemigo enganchado hacia tí
+			'''
+	}
+
+	CosmicJellyfishRelic: {
+		Tooltip: ""
+		DisplayName: Reliquia de Medusa Cósmica
+	}
+
+	Bluesoil: {
+		Tooltip: Es tierra, es azul
+		DisplayName: Tierrazúl
 	}
 }
 
@@ -132,11 +146,11 @@ Projectiles: {
 	VocalZeroProjectile.DisplayName: Vocal Zero
 	WRipperProjectile.DisplayName: Desgarrador del Espaciotiempo
 	CosmicJamPet.DisplayName: Medusilla
-	// SniptrapProjectile.DisplayName: Sniptrap Projectile
-	// MrSnapkinsProjectile.DisplayName: Mr Snapkins Projectile
-	// SnapkinsBowtie.DisplayName: Snapkins Bowtie
-	// TheScorpionProjectile.DisplayName: The Scorpion Projectile
-	// CosmicJellyfish_Hand.DisplayName: Cosmic Jellyfish_ Hand
+	SniptrapProjectile.DisplayName: Enganchadorcilla
+	MrSnapkinsProjectile.DisplayName: Sr. Snapkins
+	SnapkinsBowtie.DisplayName: Corbata de Snapkins
+	TheScorpionProjectile.DisplayName: El Jalacrán
+	CosmicJellyfish_Hand.DisplayName: Medusa Cósmica
 }
 
 NPCs: {

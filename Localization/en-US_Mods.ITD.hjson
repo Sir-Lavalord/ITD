@@ -98,12 +98,12 @@ Items: {
 	}
 
 	ChainWeight: {
-		Tooltip: ""
+		Tooltip: Adds some heft to Snaptrap's chains, also increasing Snaptrap damage by 10%
 		DisplayName: Chain Weight
 	}
 
 	Sniptrap: {
-		Tooltip: ""
+		Tooltip: For cutting LEAF PAPER only, no cardstock!
 		DisplayName: Sniptrap
 	}
 
@@ -118,7 +118,21 @@ Items: {
 
 	TheScorpion: {
 		DisplayName: The Scorpion
+		Tooltip:
+			'''
+			"GET OVER HERE!"
+			[c/{0}:Latch Effect:] Pulls the latched enemy towards you
+			'''
+	}
+
+	CosmicJellyfishRelic: {
 		Tooltip: ""
+		DisplayName: Cosmic Jellyfish Relic
+	}
+
+	Bluesoil: {
+		Tooltip: It's blue, it's soil
+		DisplayName: Bluesoil
 	}
 }
 
@@ -132,11 +146,11 @@ Projectiles: {
 	VocalZeroProjectile.DisplayName: Vocal Zero
 	WRipperProjectile.DisplayName: Wormhole Ripper
 	CosmicJamPet.DisplayName: Jammyfish
-	SniptrapProjectile.DisplayName: Sniptrap Projectile
-	MrSnapkinsProjectile.DisplayName: Mr Snapkins Projectile
+	SniptrapProjectile.DisplayName: Sniptrap
+	MrSnapkinsProjectile.DisplayName: Mr. Snapkins
 	SnapkinsBowtie.DisplayName: Snapkins Bowtie
-	TheScorpionProjectile.DisplayName: The Scorpion Projectile
-	CosmicJellyfish_Hand.DisplayName: Cosmic Jellyfish_ Hand
+	TheScorpionProjectile.DisplayName: The Scorpion
+	CosmicJellyfish_Hand.DisplayName: Cosmic Jellyfish
 }
 
 NPCs: {
