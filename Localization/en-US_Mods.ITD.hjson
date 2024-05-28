@@ -134,6 +134,16 @@ Items: {
 		Tooltip: It's blue, it's soil
 		DisplayName: Bluesoil
 	}
+
+	Subfrost: {
+		Tooltip: ""
+		DisplayName: Subfrost
+	}
+
+	CyaniteOre: {
+		DisplayName: Cyanite Ore
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -163,5 +173,24 @@ Buffs: {
 	CosmicJamBuff: {
 		Description: COME ON AND JAM!
 		DisplayName: Jammyfish
+	}
+}
+
+WorldGen.BluesoilPassMessage: Mods.ITD.WorldGen.BluesoilPassMessage
+
+Tiles: {
+	BlueshroomSapling.MapEntry: Blueshroom Sapling
+	CyaniteOreTile.MapEntry: Cyanite Ore Tile
+}
+
+Biomes: {
+	BlueshroomGrovesBiome: {
+		TownNPCDialogueName: the Blueshroom Groves Biome
+		DisplayName: Blueshroom Groves Biome
+	}
+
+	BlueshroomGrovesSurfaceBiome: {
+		TownNPCDialogueName: the Blueshroom Groves Surface Biome
+		DisplayName: Blueshroom Groves Surface Biome
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ITD.Content.Tiles;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
@@ -21,10 +22,15 @@ namespace ITD.Content.Items
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = false;
         }
+        public override void SetDefaults()
+        {
+            Item.maxStack = Item.CommonMaxStack;
+        }
         public override bool? UseItem(Player player)
         {
             int i = (int)Main.MouseWorld.X;
             int j = (int)Main.MouseWorld.Y;
+            WorldGen.PlaceObject(i, j, ModContent.TileType<BlueshroomSapling>());
             WorldGen.GrowTree(i, j);
             return true;
         }

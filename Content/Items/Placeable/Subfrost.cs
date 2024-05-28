@@ -5,7 +5,7 @@ using ITD.Content.Tiles;
 
 namespace ITD.Content.Items
 {
-    public class Bluesoil : ModItem
+    public class Subfrost : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -14,7 +14,7 @@ namespace ITD.Content.Items
 
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<BluesoilTile>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<SubfrostTile>());
             Item.width = 12;
             Item.height = 12;
         }
