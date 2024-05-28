@@ -14,6 +14,7 @@ using System.IO;
 using Terraria.Audio;
 using ITD.Content.NPCs;
 using Terraria.Localization;
+using ITD.Content.Tiles;
 
 namespace ITD
 {
@@ -23,6 +24,11 @@ namespace ITD
         {
             public static bool hasMeteorFallen;
             public static bool downedCosJel;
+            public int bluegrassCount;
+            public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
+            {
+                bluegrassCount = tileCounts[ModContent.TileType<Bluegrass>()];
+            }
 
             public override void ClearWorld()
             {
@@ -61,14 +67,6 @@ namespace ITD
                 hasMeteorFallen = flags[0];
                 downedCosJel = flags[1];
             }
-
-            /*public override void PreUpdateTime()
-            {
-                if (WorldGen.spawnMeteor)
-                {
-                    hasMeteorFallen = true;
-                }
-            }*/
 
             public override void AddRecipeGroups()
             {
@@ -223,6 +221,42 @@ namespace ITD
                 }
             }
             return null;
+        }
+        public static void GrowBluegrass(int i, int j)
+        {
+            if (Main.tile[i, j].TileType == TileID.SnowBlock)
+            {
+                if (!SolidTile(i - 1, j) || !SolidTile(i + 1, j) || !SolidTile(i, j - 1) || !SolidTile(i, j + 1) || !SolidTile(i - 1, j - 1) || !SolidTile(i + 1, j + 1) || !SolidTile(i + 1, j - 1) || !SolidTile(i - 1, j + 1))
+                {
+                    WorldGen.ReplaceTile(i, j, (ushort)ModContent.TileType<Bluegrass>(), default);
+                }
+            }
+        }
+        public static void GrowTallBluegrass(int i, int j)
+        {
+            if (TileType(i, j + 1, ModContent.TileType<Bluegrass>()))
+            {
+                //WorldGen.Place1x1(i, j, ModContent.TileType<BluegrassBlades>(), WorldGen._genRand.Next(2));
+                WorldGen.PlaceTile(i, j, ModContent.TileType<BluegrassBlades>(), true, false, -1, WorldGen._genRand.Next(3));
+            }
+        }
+        public static bool TileType(int i, int j, int t) => Framing.GetTileSafely(i, j).HasTile && Framing.GetTileSafely(i, j).TileType == t;
+        public static bool SolidTile(int i, int j) => Framing.GetTileSafely(i, j).HasTile && Main.tileSolid[Framing.GetTileSafely(i, j).TileType];
+        public static bool SolidTopTile(int i, int j) => Framing.GetTileSafely(i, j).HasTile && (Main.tileSolidTop[Framing.GetTileSafely(i, j).TileType] || Main.tileSolid[Framing.GetTileSafely(i, j).TileType]);
+        public static bool AptForTree (int i, int j, int height)
+        {
+            Rectangle rect = new Rectangle(i, j-height, 5, height);
+            for (int k = rect.Left; k < rect.Right; k++)
+            {
+                for (int l = rect.Top; l < rect.Bottom; l++)
+                {
+                    if (Framing.GetTileSafely(k, l).HasTile)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }
