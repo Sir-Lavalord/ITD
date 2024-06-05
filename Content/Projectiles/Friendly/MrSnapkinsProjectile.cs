@@ -14,15 +14,19 @@ using Terraria.ID;
 using Terraria.Map;
 using Terraria.ModLoader;
 using ITD.Content.Projectiles;
+using Terraria.Localization;
 
 namespace ITD.Content.Projectiles
 {
     public class MrSnapkinsProjectile : ITDSnaptrap
     {
+        public static LocalizedText OneTimeLatchMessage { get; private set; }
+
         int constantEffectFrames = 100;
         int constantEffectTimer = 0;
         public override void SetSnaptrapProperties()
         {
+            OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(MrSnapkinsProjectile)}.OneTimeLatchMessage"));
             shootRange = 16f * 16f;
             retractAccel = 1.5f;
             extraFlexibility = 16f * 2f;
@@ -49,7 +53,7 @@ namespace ITD.Content.Projectiles
             SoundEngine.PlaySound(snaptrapMetal, Projectile.Center);
             AdvancedPopupRequest popupSettings = new AdvancedPopupRequest
             {
-                Text = "Commence the bowtying...",
+                Text = OneTimeLatchMessage.Value,
                 Color = Color.DarkSlateGray,
                 DurationInFrames = 60 * 2,
                 Velocity = Projectile.velocity,
@@ -60,7 +64,7 @@ namespace ITD.Content.Projectiles
 
         public override void ConstantLatchEffect()
         {
-            constantEffectTimer += 1;
+            constantEffectTimer++;
             if (constantEffectTimer >= constantEffectFrames)
             {
                 constantEffectTimer = 0;

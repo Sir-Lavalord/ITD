@@ -41,7 +41,7 @@ Items: {
 
 	DespoticSnaptrap: {
 		DisplayName: Fauces del Abísmo
-		Tooltip: "[c/{0}:Efecto de Enganche:] Invoca fauces que se almuerzan a los enemigos"
+		Tooltip: "[c/{0}:Efecto de Enganche:] Invoca mandíbulas que se almuerzan a los enemigos"
 	}
 
 	EmberSlasher: {
@@ -89,7 +89,7 @@ Items: {
 
 	CosmicJellyfishBag: {
 		Tooltip: ""
-		DisplayName: Bolsa del tesoro de Medusa Cósmica
+		DisplayName: Bolsa del tesoro (Medusa Cósmica)
 	}
 
 	CosmicJam: {
@@ -130,19 +130,14 @@ Items: {
 		DisplayName: Reliquia de Medusa Cósmica
 	}
 
-	Bluesoil: {
-		Tooltip: Es tierra, es azul
-		DisplayName: Tierrazúl
-	}
-
 	Subfrost: {
-		// Tooltip: ""
-		// DisplayName: Subfrost
+		Tooltip: Podría congelarte
+		DisplayName: Subescarcha
 	}
 
 	CyaniteOre: {
-		// DisplayName: Cyanite Ore
-		// Tooltip: ""
+		DisplayName: Mineral de cianita
+		Tooltip: ""
 	}
 }
 
@@ -150,17 +145,36 @@ Projectiles: {
 	ElectrumSpearProjectile.DisplayName: Lanza de electro
 	CosmicSludgeBomb.DisplayName: Bomba de lodo cósmico
 	CosmicVoidShard.DisplayName: Fragmento del vacío
-	DespoticSnaptrapProjectile.DisplayName: Fauces del Abísmo
 	EmberSlash.DisplayName: Tajadora de llamarada
-	SnaptrapProjectile.DisplayName: Enganchadora
-	VocalZeroProjectile.DisplayName: Vocal Zero
 	WRipperProjectile.DisplayName: Desgarrador del Espaciotiempo
+
+	DespoticSnaptrapProjectile: {
+		DisplayName: Fauces del Abísmo
+		OneTimeLatchMessage: Ñam ñam...
+	}
+
+	SnaptrapProjectile: {
+		DisplayName: Enganchadora
+		OneTimeLatchMessage: +{0}% de porcentaje de ataque crítico!
+	}
+
+	VocalZeroProjectile: {
+		DisplayName: Vocal Zero
+		OneTimeLatchMessage: +{0}% de daño!
+	}
+
 	CosmicJamPet.DisplayName: Medusilla
 	SniptrapProjectile.DisplayName: Enganchadorcilla
-	MrSnapkinsProjectile.DisplayName: Sr. Snapkins
+
+	MrSnapkinsProjectile: {
+		DisplayName: Sr. Snapkins
+		OneTimeLatchMessage: Comienza la corbatación...
+	}
+
 	SnapkinsBowtie.DisplayName: Corbata de Snapkins
 	TheScorpionProjectile.DisplayName: El Jalacrán
 	CosmicJellyfish_Hand.DisplayName: Medusa Cósmica
+	DespoticJawProjectile.DisplayName: Mandíbula Despótica
 }
 
 NPCs: {
@@ -176,21 +190,21 @@ Buffs: {
 	}
 }
 
-// WorldGen.BluesoilPassMessage: Mods.ITD.WorldGen.BluesoilPassMessage
+WorldGen.BluesoilPassMessage: Azulificando la Tundra Subterranea...
 
 Tiles: {
-	// BlueshroomSapling.MapEntry: Blueshroom Sapling
-	// CyaniteOreTile.MapEntry: Cyanite Ore Tile
+	BlueshroomSapling.MapEntry: Primordio de champizúl
+	CyaniteOreTile.MapEntry: Cianita
 }
 
 Biomes: {
 	BlueshroomGrovesBiome: {
-		// TownNPCDialogueName: the Blueshroom Groves Biome
-		// DisplayName: Blueshroom Groves Biome
+		TownNPCDialogueName: la Fungoleda Champizúl Subterranea
+		DisplayName: Fungoleda Champizúl Subterranea
 	}
 
 	BlueshroomGrovesSurfaceBiome: {
-		// TownNPCDialogueName: the Blueshroom Groves Surface Biome
-		// DisplayName: Blueshroom Groves Surface Biome
+		TownNPCDialogueName: la Fungoleda Champizúl
+		DisplayName: Fungoleda Champizúl
 	}
 }
