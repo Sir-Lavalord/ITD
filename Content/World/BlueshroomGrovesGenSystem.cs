@@ -49,9 +49,9 @@ namespace ITD.Content.World
 
         private void TestMethod(int x, int y)
         {
-            Dust.QuickBox(new Vector2(x, y) * 16, new Vector2(x + 1, y + 1) * 16, 2, Color.YellowGreen, null);
-            Tile thisTile = Framing.GetTileSafely(x, y);
-            Main.NewText("FrameX: " + thisTile.TileFrameX.ToString() + " FrameY: " + thisTile.TileFrameY.ToString());
+            //Dust.QuickBox(new Vector2(x, y) * 16, new Vector2(x + 1, y + 1) * 16, 2, Color.YellowGreen, null);
+            //Tile thisTile = Framing.GetTileSafely(x, y);
+            //Main.NewText("FrameX: " + thisTile.TileFrameX.ToString() + " FrameY: " + thisTile.TileFrameY.ToString());
             //Helpers.GrowTallBluegrass(x, y);
         }
     }

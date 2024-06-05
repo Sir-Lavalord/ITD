@@ -98,7 +98,7 @@ Items: {
 	}
 
 	ChainWeight: {
-		Tooltip: Adds some heft to Snaptrap's chains, also increasing Snaptrap damage by 10%
+		Tooltip: Adds some heft to a Snaptrap's chains, also increasing Snaptrap damage by 10%
 		DisplayName: Chain Weight
 	}
 
@@ -130,13 +130,8 @@ Items: {
 		DisplayName: Cosmic Jellyfish Relic
 	}
 
-	Bluesoil: {
-		Tooltip: It's blue, it's soil
-		DisplayName: Bluesoil
-	}
-
 	Subfrost: {
-		Tooltip: ""
+		Tooltip: May cause frostbite
 		DisplayName: Subfrost
 	}
 
@@ -150,17 +145,36 @@ Projectiles: {
 	ElectrumSpearProjectile.DisplayName: Electrum Spear
 	CosmicSludgeBomb.DisplayName: Cosmic Sludge Bomb
 	CosmicVoidShard.DisplayName: Cosmic Void Shard
-	DespoticSnaptrapProjectile.DisplayName: Maw of The Deep
 	EmberSlash.DisplayName: Ember Slasher
-	SnaptrapProjectile.DisplayName: Snaptrap
-	VocalZeroProjectile.DisplayName: Vocal Zero
 	WRipperProjectile.DisplayName: Wormhole Ripper
+
+	DespoticSnaptrapProjectile: {
+		DisplayName: Maw of the Deep
+		OneTimeLatchMessage: Munchity munch...
+	}
+
+	SnaptrapProjectile: {
+		DisplayName: Snaptrap
+		OneTimeLatchMessage: +{0}% crit chance!
+	}
+
+	VocalZeroProjectile: {
+		DisplayName: Vocal Zero
+		OneTimeLatchMessage: +{0}% damage!
+	}
+
 	CosmicJamPet.DisplayName: Jammyfish
 	SniptrapProjectile.DisplayName: Sniptrap
-	MrSnapkinsProjectile.DisplayName: Mr. Snapkins
+
+	MrSnapkinsProjectile: {
+		DisplayName: Mr. Snapkins
+		OneTimeLatchMessage: Commence the bowtying...
+	}
+
 	SnapkinsBowtie.DisplayName: Snapkins Bowtie
 	TheScorpionProjectile.DisplayName: The Scorpion
 	CosmicJellyfish_Hand.DisplayName: Cosmic Jellyfish
+	DespoticJawProjectile.DisplayName: Despotic Jaw
 }
 
 NPCs: {
@@ -176,21 +190,21 @@ Buffs: {
 	}
 }
 
-WorldGen.BluesoilPassMessage: Mods.ITD.WorldGen.BluesoilPassMessage
+WorldGen.BluesoilPassMessage: Blueifying the Underground Tundra...
 
 Tiles: {
-	BlueshroomSapling.MapEntry: Blueshroom Sapling
-	CyaniteOreTile.MapEntry: Cyanite Ore Tile
+	BlueshroomSapling.MapEntry: Blueshroom Primordium
+	CyaniteOreTile.MapEntry: Cyanite
 }
 
 Biomes: {
 	BlueshroomGrovesBiome: {
-		TownNPCDialogueName: the Blueshroom Groves Biome
-		DisplayName: Blueshroom Groves Biome
+		TownNPCDialogueName: the Blueshroom Groves
+		DisplayName: Blueshroom Groves
 	}
 
 	BlueshroomGrovesSurfaceBiome: {
-		TownNPCDialogueName: the Blueshroom Groves Surface Biome
-		DisplayName: Blueshroom Groves Surface Biome
+		TownNPCDialogueName: the Surface Blueshroom Groves
+		DisplayName: Surface Blueshroom Groves
 	}
 }

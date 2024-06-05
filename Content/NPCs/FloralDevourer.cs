@@ -26,8 +26,8 @@ namespace ITD.Content.NPCs
         private int dipProgress = 0;
         private int dipProgLimit = 60;
         private int dipCooldown = 0;
-        private float raycastFloatLength = 20f;
-        private float defaultRaycastFloatLength = 20f;
+        private float raycastFloatLength = 18f;
+        private float defaultRaycastFloatLength = 18f;
         private bool dipping = false;
         public override void SetStaticDefaults()
         {
@@ -139,12 +139,17 @@ namespace ITD.Content.NPCs
         {
             for (int i = 0; i < 5; i++)
             {
-                floralDevourerSegments.Add(new FloralDevourerSegment(NPC.position, floralDevourerSegments.Count+1));
+                floralDevourerSegments.Add(new FloralDevourerSegment(NPC.position, floralDevourerSegments.Count+1, true));
             }
+            floralDevourerSegments.Add(new FloralDevourerSegment(NPC.position, floralDevourerSegments.Count+1, false));
         }
 
         public override void OnKill()
         {
+            foreach (FloralDevourerSegment seg in floralDevourerSegments)
+            {
+                seg.Dispose();
+            }
             floralDevourerSegments.Clear();
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -165,15 +170,23 @@ namespace ITD.Content.NPCs
         }
     }
 
-    public class FloralDevourerSegment
+    public class FloralDevourerSegment : IDisposable
     {
         private Queue<Vector2> path = new();
-        public Vector2 legTarget;
-        public Vector2 backLegTarget;
-        public Vector2 legTargetTarget;
-        public Vector2 backLegTargetTarget;
+
+        public Vector2 frontLegPosition;
+        public Vector2 backLegPosition;
+
+        public Vector2 frontRayPosition;
+        public Vector2 backRayPosition;
+
+        public bool frontStepping = false;
+        public bool backStepping = false;
+
         public Vector2 position;
         public Vector2 direction;
+
+        public bool hasLegs = true;
         private Leg legFront;
         private Leg legBack;
         private int delay = 20;
@@ -181,13 +194,17 @@ namespace ITD.Content.NPCs
         public int ID = 0;
         private Asset<Texture2D> outline;
         private Asset<Texture2D> sprite;
-        public FloralDevourerSegment(Vector2 pos, int id)
+        public FloralDevourerSegment(Vector2 pos, int id, bool shouldHaveLegs)
         {
             outline = ModContent.Request<Texture2D>("ITD/Content/NPCs/FloralDevourerSegmentOutline");
             sprite = ModContent.Request<Texture2D>("ITD/Content/NPCs/FloralDevourerSegment");
             position = pos;
-            legFront = new Leg(position.X, position.Y, 0f);
-            legBack = new Leg(position.X, position.Y, 0f);
+            hasLegs = shouldHaveLegs;
+            if (shouldHaveLegs)
+            {
+                legFront = new Leg(position.X, position.Y, 0f);
+                legBack = new Leg(position.X, position.Y, 0f);
+            }
             ID = id;
             delay *= ID;
         }
@@ -199,59 +216,107 @@ namespace ITD.Content.NPCs
 
         public void Update()
         {
-            var raycastCheck = Helpers.RecursiveRaycast(position, 24f, 0f);
-            if (raycastCheck != null)
+            if (hasLegs)
             {
-                legTargetTarget = (Vector2)raycastCheck;
+                var raycastCheck = Helpers.RecursiveRaycast(position, 24f, 0f);
+                if (raycastCheck != null)
+                {
+                    frontRayPosition = (Vector2)raycastCheck;
+                }
+                var raycastCheckBack = Helpers.RecursiveRaycast(position + new Vector2(direction.X * 32f, 0f), 24f, 0f);
+                if (raycastCheckBack != null)
+                {
+                    backRayPosition = (Vector2)raycastCheckBack;
+                }
+                float step = 80f;
+                if (legFront != null && legBack != null)
+                {
+                    if ((frontRayPosition - frontLegPosition).Length() > step)
+                    {
+                        frontStepping = true;
+                    }
+                    if ((backRayPosition - backLegPosition).Length() > step)
+                    {
+                        backStepping = true;
+                    }
+                    if (frontStepping)
+                    {
+                        // this is odd
+                        //frontLegPosition = Vector2.Lerp(frontLegPosition, frontRayPosition, 0.6f) + new Vector2(0f, -(float)Math.Sin((1-((frontRayPosition-frontLegPosition).Length()/step))*Math.PI)*32f);
+                        frontLegPosition = Vector2.Lerp(frontLegPosition, frontRayPosition, 0.6f);
+                        if ((frontRayPosition - frontLegPosition).Length() < 12f)
+                        {
+                            frontStepping = false;
+                        }
+                    }
+                    if (backStepping)
+                    {
+                        backLegPosition = Vector2.Lerp(backLegPosition, backRayPosition, 0.6f);
+                        if ((backRayPosition - backLegPosition).Length() < 12f)
+                        {
+                            backStepping = false;
+                        }
+                    }
+                    //frontLegPosition = Vector2.Lerp(frontLegPosition, frontRayPosition, 0.1f);
+                    //backLegPosition = Vector2.Lerp(backLegPosition, backRayPosition, 0.1f);
+                    legFront.Update(frontLegPosition);
+                    legBack.Update(backLegPosition);
+                    legFront.legBase = position;
+                    legBack.legBase = position + new Vector2(direction.X * 32f, 0f);
+                }
             }
-            var raycastCheckBack = Helpers.RecursiveRaycast(position + direction*8f, 24f, 0f);
-            if (raycastCheckBack != null)
-            {
-                backLegTargetTarget = (Vector2)raycastCheckBack;
-            }
-            if (legFront != null && legBack != null)
-            {
-                legTarget = Vector2.Lerp(legTarget, legTargetTarget, 0.1f);
-                backLegTarget = Vector2.Lerp(backLegTarget, backLegTargetTarget, 0.1f);
-                legFront.Update(legTarget);
-                legBack.Update(backLegTarget);
-                legFront.legBase = position;
-                legBack.legBase = position + direction*8f;
-            }
+            
             timer += 1;
             if (path.Count != 0 && timer > delay)
             {
                 var prev = position;
-                position = path.Peek();
-                direction = position - prev;
+                position = path.Peek() + new Vector2(0f, ((float)Math.Sin(timer/10f + ID))*20f);
+                direction = (position - prev).SafeNormalize(Vector2.Zero);
                 path.Dequeue();
             }
         }
 
         public void PostDrawLegs(SpriteBatch spriteBatch, Vector2 screenPos)
         {
+            bool isFacingRight = direction.X > 0f;
             if (legFront != null)
             {
-                legFront.Draw(spriteBatch, screenPos, Color.White);
+                legFront.Draw(spriteBatch, screenPos, Color.White, isFacingRight);
             }
         }
         public void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos)
         {
+            bool isFacingRight = direction.X > 0f;
             Point tileCoords = position.ToTileCoordinates();
-            spriteBatch.Draw(sprite.Value, position - screenPos, null, Lighting.GetColor(tileCoords), 0f, sprite.Size() / 2f, 1f, SpriteEffects.None, default);
+            spriteBatch.Draw(sprite.Value, position - screenPos, null, Lighting.GetColor(tileCoords), 0f, sprite.Size() / 2f, 1f, isFacingRight ? SpriteEffects.FlipHorizontally : SpriteEffects.None, default);
         }
 
         public void PreDraw(SpriteBatch spriteBatch, Vector2 screenPos)
         {
+            bool isFacingRight = direction.X > 0f;
             if (legBack != null)
             {
-                legBack.Draw(spriteBatch, screenPos, Color.Gray);
+                legBack.Draw(spriteBatch, screenPos, Color.Gray, isFacingRight);
             }
             Point tileCoords = position.ToTileCoordinates();
-            spriteBatch.Draw(outline.Value, position - screenPos, null, Lighting.GetColor(tileCoords), 0f, outline.Size() / 2f, 1f, SpriteEffects.None, default);
+            spriteBatch.Draw(outline.Value, position - screenPos, null, Lighting.GetColor(tileCoords), 0f, outline.Size() / 2f, 1f, isFacingRight ? SpriteEffects.FlipHorizontally : SpriteEffects.None, default);
+        }
+
+        public void Dispose()
+        {
+            if (legFront != null)
+            {
+                legFront.Dispose();
+                legFront = null;
+            }
+            if (legBack != null)
+            {
+                legBack.Dispose();
+                legBack = null;
+            }
         }
     }
-    public class Leg
+    public class Leg : IDisposable
     {
         public Segment[] segments;
         public Vector2 legBase;
@@ -289,12 +354,17 @@ namespace ITD.Content.NPCs
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 screenPos, Color color)
+        public void Draw(SpriteBatch spriteBatch, Vector2 screenPos, Color color, bool shouldBeMirrored)
         {
             for (int i = segments.Length - 1; i >= 0; i--)
             {
-                segments[i].Draw(spriteBatch, screenPos, color);
+                segments[i].Draw(spriteBatch, screenPos, color, shouldBeMirrored);
             }
+        }
+
+        public void Dispose()
+        {
+            segments = null;
         }
     }
 
@@ -338,11 +408,11 @@ namespace ITD.Content.NPCs
             float dy = Length * (float)Math.Sin(Angle);
             b = new Vector2(a.X+dx, a.Y+dy);
         }
-        public void Draw(SpriteBatch spriteBatch, Vector2 screenPos, Color color)
+        public void Draw(SpriteBatch spriteBatch, Vector2 screenPos, Color color, bool shouldBeMirrored)
         {
             Point tileCoords = new Vector2((a.X+b.X)/2f, (a.Y+b.Y)/2f).ToTileCoordinates();
             Texture2D textureToDraw = isFemur ? femurTexture.Value : tibiaTexture.Value;
-            spriteBatch.Draw(textureToDraw, a-screenPos, null, Lighting.GetColor(tileCoords.X, tileCoords.Y), Angle, new Vector2(0f, textureToDraw.Height / 2f), 1f, SpriteEffects.None, default);
+            spriteBatch.Draw(textureToDraw, a-screenPos, null, Lighting.GetColor(tileCoords.X, tileCoords.Y), Angle, new Vector2(0f, textureToDraw.Height / 2f), 1f, shouldBeMirrored? SpriteEffects.FlipVertically : SpriteEffects.None, default);
         }
     }
 }

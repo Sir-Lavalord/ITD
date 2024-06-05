@@ -11,17 +11,21 @@ using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Dusts;
+using Terraria.Localization;
 
 namespace ITD.Content.Projectiles
 {
     public class VocalZeroProjectile : ITDSnaptrap
     {
+        public static LocalizedText OneTimeLatchMessage { get; private set; }
         int constantEffectFrames = 60;
         int constantEffectTimer = 0;
         public int maxDamageStatic { get; set; } = 3200; // This is specific to VocalZero
+        float percentageToAdd = 10;
         int effectCount = 0;
         public override void SetSnaptrapProperties()
         {
+            OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(VocalZeroProjectile)}.OneTimeLatchMessage"));
             shootRange = 16f * 12f;
             retractAccel = 1.8f;
             framesUntilRetractable = 10;
@@ -45,11 +49,12 @@ namespace ITD.Content.Projectiles
                 if (effectCount < 10)
                 {
                     effectCount += 1;
-                    float damageToAdd = (float)maxDamageStatic / 10f;
+                    float damageToAdd = (float)maxDamageStatic / (100/percentageToAdd);
                     maxDamage = maxDamageStatic + ((int)damageToAdd * effectCount);
                     AdvancedPopupRequest popupSettings = new AdvancedPopupRequest
                     {
-                        Text = "+10% damage!",
+                        //Text = "+10% damage!",
+                        Text = OneTimeLatchMessage.WithFormatArgs(percentageToAdd).Value,
                         Color = Color.Red,
                         DurationInFrames = 60 * 2,
                         Velocity = Projectile.velocity,

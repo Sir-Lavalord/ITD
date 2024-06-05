@@ -11,6 +11,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.Map;
 using Terraria.ModLoader;
 
@@ -18,8 +19,11 @@ namespace ITD.Content.Projectiles
 {
     public class SnaptrapProjectile : ITDSnaptrap
     {
+        public static LocalizedText OneTimeLatchMessage { get; private set; }
+        int addCritChance = 4;
         public override void SetSnaptrapProperties()
         {
+            OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(SnaptrapProjectile)}.OneTimeLatchMessage"));
             shootRange = 16f * 16f;
             retractAccel = 1.5f;
             extraFlexibility = 16f * 2f;
@@ -32,11 +36,12 @@ namespace ITD.Content.Projectiles
         }
         public override void OneTimeLatchEffect()
         {
-            Projectile.CritChance += 4;
+            Projectile.CritChance += addCritChance;
             SoundEngine.PlaySound(snaptrapMetal, Projectile.Center);
             AdvancedPopupRequest popupSettings = new AdvancedPopupRequest
             {
-                Text = "+4% crit chance!",
+                Text = OneTimeLatchMessage.WithFormatArgs(addCritChance).Value,
+                //Text = "+4% crit chance!",
                 Color = Color.White,
                 DurationInFrames = 60 * 2,
                 Velocity = Projectile.velocity,
