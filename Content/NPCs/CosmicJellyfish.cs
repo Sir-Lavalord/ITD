@@ -19,7 +19,7 @@ namespace ITD.Content.NPCs
     [AutoloadBossHead]
     public class CosmicJellyfish : ModNPC
     {
-        private Asset<Texture2D> spriteBack = ModContent.Request<Texture2D>("ITD/Content/NPCs/CosmicJellyfish_Back");
+        private readonly Asset<Texture2D> spriteBack = ModContent.Request<Texture2D>("ITD/Content/NPCs/CosmicJellyfish_Back");
         //private static List<CosmicJellyfish_Hand> hands = new List<CosmicJellyfish_Hand>();
         public float rotation = 0f;
         public bool SecondStage
@@ -88,7 +88,7 @@ namespace ITD.Content.NPCs
 
         public override void OnKill()
         {
-            NPC.SetEventFlagCleared(ref ITD.ITDSystem.downedCosJel, -1);
+            DownedBossSystem.downedCosJel = true;
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
@@ -130,11 +130,9 @@ namespace ITD.Content.NPCs
         {
             return Color.White;
         }
-
-        Random rnd = new Random();
         public override bool PreAI()
         {
-            Dust.NewDust(NPC.Center + new Vector2(rnd.Next(NPC.width) - NPC.width / 2, 0), 1, 1, DustID.ShimmerTorch, 0f, 0f, 0, default(Color), 1f);
+            Dust.NewDust(NPC.Center + new Vector2(Main.rand.Next(NPC.width) - NPC.width / 2, 0), 1, 1, DustID.ShimmerTorch, 0f, 0f, 0, default, 1f);
             return true;
         }
         public override void AI()
@@ -200,8 +198,7 @@ namespace ITD.Content.NPCs
             if (++sludgeTimer == 360)
             {
                 sludgeTimer = 0;
-                Random random = new Random();
-                int projectileAmount = random.Next(3, 6);
+                int projectileAmount = Main.rand.Next(3, 6);
                 float XVeloDifference = 2f;
                 float startXVelo = -((float)(projectileAmount - 1) / 2) * (float)XVeloDifference;
                 for (int i = 0; i < projectileAmount; i++)
@@ -213,8 +210,7 @@ namespace ITD.Content.NPCs
             if (sludgeTimer == 180)
             {
                 SoundEngine.PlaySound(SoundID.Item20, NPC.Center);
-                Random random = new Random();
-                int projectileAmount = random.Next(5, 11);
+                int projectileAmount = Main.rand.Next(5, 11);
                 float radius = 6.5f;
                 float sector = MathHelper.ToRadians(80f);
                 float sectorOfSector = sector / projectileAmount;

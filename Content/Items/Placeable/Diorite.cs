@@ -1,11 +1,9 @@
-﻿using Terraria;
-using Terraria.ID;
+﻿using ITD.Content.Tiles;
 using Terraria.ModLoader;
-using ITD.Content.Tiles;
 
 namespace ITD.Content.Items
 {
-    public class CyaniteOre : ModItem
+    public class Diorite : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -14,7 +12,7 @@ namespace ITD.Content.Items
 
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<CyaniteOreTile>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<DioriteTile>());
             Item.width = 12;
             Item.height = 12;
         }

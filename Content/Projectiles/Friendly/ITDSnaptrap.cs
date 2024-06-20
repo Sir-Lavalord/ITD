@@ -4,13 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles
@@ -124,9 +121,10 @@ namespace ITD.Content.Projectiles
             Projectile.alpha = 0;
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Melee;
-            DrawOffsetX = -10;
+            DrawOffsetX = -12;
             DrawOriginOffsetY = -16;
             Projectile.hide = true;
+            SetSnaptrapProperties();
         }
 
         public override Color? GetAlpha(Color lightColor)
@@ -143,7 +141,6 @@ namespace ITD.Content.Projectiles
         public override void OnSpawn(IEntitySource source)
         {
             myPlayer = Main.player[Projectile.owner];
-            SetSnaptrapProperties();
             myPlayer.TryGetModPlayer<SnaptrapPlayer>(out SnaptrapPlayer modPlayer);
             if (modPlayer != null)
             {
@@ -221,10 +218,10 @@ namespace ITD.Content.Projectiles
             {
                 if (Chomped == false)
                 {
-                    if (++Projectile.frameCounter >= 3)
+                    if (++Projectile.frameCounter >= 3 * (Projectile.extraUpdates + 1))
                     {
                         Projectile.frameCounter = 0;
-                        Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
+                        Projectile.frame++;
                         if (Projectile.frame == 3)
                         {
                             Chomped = true;
