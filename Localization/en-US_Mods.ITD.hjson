@@ -89,7 +89,7 @@ Items: {
 
 	CosmicJellyfishBag: {
 		Tooltip: ""
-		DisplayName: Cosmic Jellyfish Treasure Bag
+		DisplayName: Treasure Bag (Cosmic Jellyfish)
 	}
 
 	CosmicJam: {
@@ -139,6 +139,35 @@ Items: {
 		DisplayName: Cyanite Ore
 		Tooltip: ""
 	}
+
+	Soulsnapper: {
+		Tooltip: ""
+		DisplayName: Soulsnapper
+	}
+
+	Spidermeal: {
+		Tooltip:
+			'''
+			Best used for murdering townsfolk
+			"Everything changed after I got bitten by a radioactive spider..."
+			'''
+		DisplayName: Spidermeal
+	}
+
+	Crimeratrap: {
+		DisplayName: Crimeratrap
+		Tooltip: ""
+	}
+
+	Diorite: {
+		Tooltip: ""
+		DisplayName: Diorite
+	}
+
+	Pegmatite: {
+		DisplayName: Pegmatite
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -175,12 +204,23 @@ Projectiles: {
 	TheScorpionProjectile.DisplayName: The Scorpion
 	CosmicJellyfish_Hand.DisplayName: Cosmic Jellyfish
 	DespoticJawProjectile.DisplayName: Despotic Jaw
+
+	SoulsnapperProjectile: {
+		DisplayName: Soulsnapper
+		OneTimeLatchMessage: Mods.ITD.Projectiles.SoulsnapperProjectile.OneTimeLatchMessage
+	}
+
+	CrimeratrapProjectile: {
+		OneTimeLatchMessage: Mods.ITD.Projectiles.CrimeratrapProjectile.OneTimeLatchMessage
+		DisplayName: Crimeratrap
+	}
 }
 
 NPCs: {
 	CosmicJellyfish.DisplayName: Cosmic Jellyfish
 	FloralDevourer.DisplayName: Floral Devourer
 	FloralDevourerSegment.DisplayName: Floral Devourer
+	EmberlionPiercer.DisplayName: Emberlion Piercer
 }
 
 Buffs: {
@@ -190,7 +230,10 @@ Buffs: {
 	}
 }
 
-WorldGen.BluesoilPassMessage: Blueifying the Underground Tundra...
+WorldGen: {
+	BluesoilPassMessage: Blueifying the Underground Tundra...
+	DeepDesertPassMessage: Compressing the Desert...
+}
 
 Tiles: {
 	BlueshroomSapling.MapEntry: Blueshroom Primordium
@@ -206,5 +249,10 @@ Biomes: {
 	BlueshroomGrovesSurfaceBiome: {
 		TownNPCDialogueName: the Surface Blueshroom Groves
 		DisplayName: Surface Blueshroom Groves
+	}
+
+	DeepDesertBiome: {
+		DisplayName: Deep Desert
+		TownNPCDialogueName: the Deep Desert
 	}
 }

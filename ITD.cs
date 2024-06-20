@@ -15,25 +15,55 @@ using Terraria.Audio;
 using ITD.Content.NPCs;
 using Terraria.Localization;
 using ITD.Content.Tiles;
+using Humanizer;
 
 namespace ITD
 {
     public class ITD : Mod
     {
+        public static ITD Instance;
+        public ITD() => Instance = this;
+        internal Mod wikithis = null;
+        internal Mod bossChecklist = null;
+        internal Mod musicDisplay = null;
+        public override void PostSetupContent()
+        {
+            ExternalModSupport.Init();
+        }
+        public override void Load()
+        {
+            wikithis = null;
+            bossChecklist = null;
+            musicDisplay = null;
+            ModLoader.TryGetMod("Wikithis", out wikithis);
+            ModLoader.TryGetMod("BossChecklist", out bossChecklist);
+            ModLoader.TryGetMod("MusicDisplay", out musicDisplay);
+            if (!Main.dedServ)
+            {
+                wikithis?.Call("AddModURL", this, "https://itdmod.fandom.com/wiki/{}");
+            }
+        }
+        public override void Unload()
+        {
+            wikithis = null;
+            bossChecklist = null;
+            musicDisplay = null;
+            Instance = null;
+        }
         public class ITDSystem : ModSystem
         {
             public static bool hasMeteorFallen;
-            public static bool downedCosJel;
             public int bluegrassCount;
+            public int deepdesertTileCount;
             public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
             {
                 bluegrassCount = tileCounts[ModContent.TileType<Bluegrass>()];
+                deepdesertTileCount = tileCounts[ModContent.TileType<DioriteTile>()]+tileCounts[ModContent.TileType<PegmatiteTile>()];
             }
 
             public override void ClearWorld()
             {
                 hasMeteorFallen = false;
-                downedCosJel = false;
             }
             public override void SaveWorldData(TagCompound tag)
             {
@@ -41,23 +71,17 @@ namespace ITD
                 {
                     tag["hasMeteorFallen"] = true;
                 }
-                if (downedCosJel)
-                {
-                    tag["downedCosJel"] = true;
-                }
             }
 
             public override void LoadWorldData(TagCompound tag)
             {
                 hasMeteorFallen = tag.ContainsKey("hasMeteorFallen");
-                downedCosJel = tag.ContainsKey("downedCosJel");
             }
 
             public override void NetSend(BinaryWriter writer)
             {
                 var flags = new BitsByte();
                 flags[0] = hasMeteorFallen;
-                flags[1] = downedCosJel;
                 writer.Write(flags);
             }
 
@@ -65,16 +89,15 @@ namespace ITD
             {
                 BitsByte flags = reader.ReadByte();
                 hasMeteorFallen = flags[0];
-                downedCosJel = flags[1];
             }
 
             public override void AddRecipeGroups()
             {
-                RecipeGroup group = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Iron Ore", new int[]
-                {
+                RecipeGroup group = new(() => Language.GetTextValue("LegacyMisc.37") + " Iron Ore",
+                [
                 ItemID.IronOre,
                 ItemID.LeadOre
-                });
+                ]);
                 RecipeGroup.RegisterGroup("IronOre", group);
             }
         }
@@ -87,8 +110,7 @@ namespace ITD
             int cosJelTimer = 0;
             int cosJelTime = 60 * 80;
 
-            float gravityForPhysics = 0.5f;
-            float stiffness = 1f;
+            readonly float gravityForPhysics = 0.5f;
             public override void PreUpdate() // I'm using this hook to simulate all of the physics
             {
                 List<VerletPoint> pointsList = PhysicsMethods.GetPoints();
@@ -99,8 +121,8 @@ namespace ITD
                     {
                         Vector2 velocity = point.pos - point.oldPos;
                         point.oldPos = point.pos;
-                        point.pos = point.pos + velocity;
-                        point.pos = point.pos + new Vector2(0, gravityForPhysics);
+                        point.pos += velocity;
+                        point.pos += new Vector2(0, gravityForPhysics);
                     }
                 }
                 List<VerletStick> sticksList = PhysicsMethods.GetSticks();
@@ -136,10 +158,9 @@ namespace ITD
                             }
                         }
                     }
-                    if (NPC.downedBoss1 && ITDSystem.hasMeteorFallen && (Player.ZoneOverworldHeight||Player.ZoneSkyHeight) && (!cosJelCounter) && (!ITDSystem.downedCosJel))
+                    if (NPC.downedBoss1 && ITDSystem.hasMeteorFallen && (Player.ZoneOverworldHeight||Player.ZoneSkyHeight) && (!cosJelCounter) && (!DownedBossSystem.downedCosJel))
                     {
-                        Random rand = new();
-                        if (rand.Next(3) == 0)
+                        if (Main.rand.NextBool(3))
                         {
                             Main.NewText("It's going to be a wiggly night...", Color.Purple);
                             cosJelCounter = true;
@@ -174,89 +195,6 @@ namespace ITD
                 cosJelTimer = 0;
                 PhysicsMethods.ClearAll();
             }
-        }
-    }
-
-    public static class Helpers
-    {
-        public static Color ColorFromHSV(float hue, float saturation, float value)
-        {
-            int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
-            float f = hue / 60 - (float)Math.Floor(hue / 60);
-
-            value = value * 255;
-            int v = Convert.ToInt32(value);
-            int p = Convert.ToInt32(value * (1 - saturation));
-            int q = Convert.ToInt32(value * (1 - f * saturation));
-            int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
-
-            switch (hi)
-            {
-                case 0:
-                    return new Color(v, t, p);
-                case 1:
-                    return new Color(q, v, p);
-                case 2:
-                    return new Color(p, v, t);
-                case 3:
-                    return new Color(p, q, v);
-                case 4:
-                    return new Color(t, p, v);
-                default:
-                    return new Color(v, p, q);
-            }
-        }
-        public static Vector2? RecursiveRaycast(Vector2 startWorldPos, float approxLengthTiles, float currentLengthTiles)
-        {
-            if (!(currentLengthTiles > approxLengthTiles))
-            {
-                currentLengthTiles++;
-                if (Collision.SolidCollision(startWorldPos, 1, 1))
-                {
-                    return startWorldPos;
-                }
-                else
-                {
-                    return RecursiveRaycast(startWorldPos + new Vector2(0f, 8f), approxLengthTiles, currentLengthTiles);
-                }
-            }
-            return null;
-        }
-        public static void GrowBluegrass(int i, int j)
-        {
-            if (Main.tile[i, j].TileType == TileID.SnowBlock)
-            {
-                if (!SolidTile(i - 1, j) || !SolidTile(i + 1, j) || !SolidTile(i, j - 1) || !SolidTile(i, j + 1) || !SolidTile(i - 1, j - 1) || !SolidTile(i + 1, j + 1) || !SolidTile(i + 1, j - 1) || !SolidTile(i - 1, j + 1))
-                {
-                    WorldGen.ReplaceTile(i, j, (ushort)ModContent.TileType<Bluegrass>(), default);
-                }
-            }
-        }
-        public static void GrowTallBluegrass(int i, int j)
-        {
-            if (TileType(i, j + 1, ModContent.TileType<Bluegrass>()))
-            {
-                //WorldGen.Place1x1(i, j, ModContent.TileType<BluegrassBlades>(), WorldGen._genRand.Next(2));
-                WorldGen.PlaceTile(i, j, ModContent.TileType<BluegrassBlades>(), true, false, -1, WorldGen._genRand.Next(3));
-            }
-        }
-        public static bool TileType(int i, int j, int t) => Framing.GetTileSafely(i, j).HasTile && Framing.GetTileSafely(i, j).TileType == t;
-        public static bool SolidTile(int i, int j) => Framing.GetTileSafely(i, j).HasTile && Main.tileSolid[Framing.GetTileSafely(i, j).TileType];
-        public static bool SolidTopTile(int i, int j) => Framing.GetTileSafely(i, j).HasTile && (Main.tileSolidTop[Framing.GetTileSafely(i, j).TileType] || Main.tileSolid[Framing.GetTileSafely(i, j).TileType]);
-        public static bool AptForTree (int i, int j, int height)
-        {
-            Rectangle rect = new Rectangle(i, j-height, 5, height);
-            for (int k = rect.Left; k < rect.Right; k++)
-            {
-                for (int l = rect.Top; l < rect.Bottom; l++)
-                {
-                    if (Framing.GetTileSafely(k, l).HasTile)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
         }
     }
 }

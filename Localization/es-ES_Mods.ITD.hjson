@@ -139,6 +139,35 @@ Items: {
 		DisplayName: Mineral de cianita
 		Tooltip: ""
 	}
+
+	Soulsnapper: {
+		Tooltip: ""
+		DisplayName: Enganchaalmas
+	}
+
+	Spidermeal: {
+		Tooltip:
+			'''
+			Ideal para causar genocidio en los pueblos
+			"Todo cambió cuando me mordió una araña radioactiva..."
+			'''
+		DisplayName: Comida de araña
+	}
+
+	Crimeratrap: {
+		DisplayName: Carmengancho
+		Tooltip: ""
+	}
+
+	Diorite: {
+		Tooltip: ""
+		DisplayName: Diorita
+	}
+
+	Pegmatite: {
+		DisplayName: Pegmatita
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -175,12 +204,23 @@ Projectiles: {
 	TheScorpionProjectile.DisplayName: El Jalacrán
 	CosmicJellyfish_Hand.DisplayName: Medusa Cósmica
 	DespoticJawProjectile.DisplayName: Mandíbula Despótica
+
+	SoulsnapperProjectile: {
+		DisplayName: Enganchaalmas
+		OneTimeLatchMessage: Mods.ITD.Projectiles.SoulsnapperProjectile.OneTimeLatchMessage
+	}
+
+	CrimeratrapProjectile: {
+		OneTimeLatchMessage: Mods.ITD.Projectiles.CrimeratrapProjectile.OneTimeLatchMessage
+		DisplayName: Carmengancho
+	}
 }
 
 NPCs: {
 	CosmicJellyfish.DisplayName: Medusa Cósmica
 	FloralDevourer.DisplayName: Devorador Floral
 	FloralDevourerSegment.DisplayName: Devorador Floral
+	// EmberlionPiercer.DisplayName: Emberlion Piercer
 }
 
 Buffs: {
@@ -190,7 +230,10 @@ Buffs: {
 	}
 }
 
-WorldGen.BluesoilPassMessage: Azulificando la Tundra Subterranea...
+WorldGen: {
+	BluesoilPassMessage: Azulificando la Tundra Subterranea...
+	DeepDesertPassMessage: Comprimiendo el Desierto...
+}
 
 Tiles: {
 	BlueshroomSapling.MapEntry: Primordio de champizúl
@@ -206,5 +249,10 @@ Biomes: {
 	BlueshroomGrovesSurfaceBiome: {
 		TownNPCDialogueName: la Fungoleda Champizúl
 		DisplayName: Fungoleda Champizúl
+	}
+
+	DeepDesertBiome: {
+		DisplayName: Profundidad del Desierto
+		TownNPCDialogueName: la Profundidad del Desierto
 	}
 }

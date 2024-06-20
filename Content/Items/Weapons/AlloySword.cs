@@ -21,13 +21,5 @@ namespace ITD.Content.Items
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = false;
         }
-
-        /*   public override void AddRecipes()
-           {
-               Recipe recipe = CreateRecipe();
-               recipe.AddIngredient(ItemID.DirtBlock, 10);
-               recipe.AddTile(TileID.WorkBenches);
-               recipe.Register();
-           }  */
     }
 }
