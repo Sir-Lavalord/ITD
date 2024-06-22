@@ -168,6 +168,11 @@ Items: {
 		DisplayName: Pegmatita
 		Tooltip: ""
 	}
+
+	EmberlionSclerite: {
+		// DisplayName: Emberlion Sclerite
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -221,12 +226,19 @@ NPCs: {
 	FloralDevourer.DisplayName: Devorador Floral
 	FloralDevourerSegment.DisplayName: Devorador Floral
 	// EmberlionPiercer.DisplayName: Emberlion Piercer
+	// DesertBat.DisplayName: Desert Bat
+	// EmberlionMiner.DisplayName: Emberlion Miner
 }
 
 Buffs: {
 	CosmicJamBuff: {
 		Description: COME ON AND JAM!
 		DisplayName: Medusilla
+	}
+
+	SandyBuff: {
+		// DisplayName: Sandy Buff
+		// Description: Mods.ITD.Buffs.SandyBuff.Description
 	}
 }
 

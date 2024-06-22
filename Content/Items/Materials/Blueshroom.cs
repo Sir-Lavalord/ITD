@@ -12,18 +12,19 @@ namespace ITD.Content.Items
     {
         public override void SetStaticDefaults()
         {
-            Item.width = 48;
-            Item.height = 50;
-            Item.useTime = 20;
-            Item.useAnimation = 20;
-            Item.useStyle = ItemUseStyleID.Swing;
-            Item.value = 10000;
-            Item.rare = ItemRarityID.Green;
-            Item.UseSound = SoundID.Item1;
-            Item.autoReuse = false;
+            Item.ResearchUnlockCount = 100;
         }
         public override void SetDefaults()
         {
+            Item.width = 32;
+            Item.height = 32;
+            Item.value = Item.buyPrice(silver: 1);
+            Item.useTime = 20;
+            Item.useAnimation = 20;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.rare = ItemRarityID.Green;
+            Item.UseSound = SoundID.Item1;
+            Item.autoReuse = true;
             Item.maxStack = Item.CommonMaxStack;
         }
         public override bool? UseItem(Player player)

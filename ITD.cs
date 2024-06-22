@@ -110,9 +110,15 @@ namespace ITD
             int cosJelTimer = 0;
             int cosJelTime = 60 * 80;
 
+            public bool ZoneDeepDesert;
+            public bool ZoneBlueshroomsUnderground;
+
             readonly float gravityForPhysics = 0.5f;
             public override void PreUpdate() // I'm using this hook to simulate all of the physics
             {
+                ZoneBlueshroomsUnderground = ModContent.GetInstance<ITDSystem>().bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
+                ZoneDeepDesert = ModContent.GetInstance<ITDSystem>().deepdesertTileCount > 50 && (Player.ZoneRockLayerHeight);
+
                 List<VerletPoint> pointsList = PhysicsMethods.GetPoints();
 
                 foreach (VerletPoint point in pointsList) // Applies gravity to each point.

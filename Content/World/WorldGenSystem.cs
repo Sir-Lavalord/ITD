@@ -29,7 +29,7 @@ namespace ITD.Content.World
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {
             int blueshroomIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Lakes"));
-            int deepdesertIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Underworld"));
+            int deepdesertIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Full Desert"));
             if (blueshroomIndex != -1)
             {
                 tasks.Insert(blueshroomIndex + 1, new BlueshroomGrovesGenPass("Blueshroom Groves", 100f));
