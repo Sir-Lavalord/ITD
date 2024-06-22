@@ -5,7 +5,10 @@ using Microsoft.Xna.Framework;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using ITD.Content;
 using System.Diagnostics;
+using ITD.Content.Items;
+using Terraria.GameContent.ItemDropRules;
 
 namespace ITD.Content.NPCs
 {
@@ -24,14 +27,14 @@ namespace ITD.Content.NPCs
         public int dashingTimer;
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[NPC.type] = 4; // make sure to set this for your modnpcs.
+            Main.npcFrameCount[NPC.type] = 4;
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.OnFire] = true;
         }
         public override void SetDefaults()
         {
             glowmaskOpacity = 0f;
-            AI_State = (float)ActionState.Asleep;
+            AI_State = ActionState.Asleep;
             NPC.width = 72;
             NPC.height = 36;
             NPC.damage = 60;
@@ -47,12 +50,13 @@ namespace ITD.Content.NPCs
         public override bool PreAI()
         {
             Player player = Main.player[NPC.target];
-            Vector2 toPlayer = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+            Vector2 toPlayerTotal = player.Center - NPC.Center;
+            Vector2 toPlayer = toPlayerTotal.SafeNormalize(Vector2.Zero);
             switch (AI_State)
             {
                 case ActionState.Asleep:
                     NPC.TargetClosest(false);
-                    if (Collision.CanHitLine(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height) && toPlayer.Length() < 20f * 60f)
+                    if (Collision.CanHitLine(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height) && toPlayerTotal.Length() < 16f * 60f)
                     {
                         AI_State = ActionState.Noticed;
                     }
@@ -64,7 +68,7 @@ namespace ITD.Content.NPCs
                     }
                     else
                     {
-                        if (Collision.CanHitLine(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height) && toPlayer.Length() < 10f * 60f)
+                        if (Collision.CanHitLine(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height) && toPlayerTotal.Length() < 10f * 60f)
                         {
                             AI_State = ActionState.Dashing;
                         }
@@ -77,6 +81,7 @@ namespace ITD.Content.NPCs
                     dashingTimer++;
                     Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.Torch);
                     Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.Flare);
+                    Dust.NewDust(NPC.Center, NPC.width, NPC.height, DustID.SolarFlare);
                     if (dashingTimer < 3)
                     {
                         Gore.NewGoreDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, 62);
@@ -89,6 +94,13 @@ namespace ITD.Content.NPCs
                     }
                     return false;
                 default: return true;
+            }
+        }
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
+        {
+            if (AI_State == ActionState.Dashing)
+            {
+                target.AddBuff(BuffID.OnFire, 60*5);
             }
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -112,6 +124,19 @@ namespace ITD.Content.NPCs
                     }
                 }
             }
+        }
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            if (spawnInfo.Player.GetModPlayer<ITD.ITDPlayer>().ZoneDeepDesert)
+            {
+                return 0.15f;
+            }
+            return 0f;
+        }
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<EmberlionSclerite>(), 1, 1, 2));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<EmberSlasher>(), 20));
         }
     }
 }

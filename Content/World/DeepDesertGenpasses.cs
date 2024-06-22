@@ -56,14 +56,6 @@ namespace ITD.Content.World
             int width = Main.maxTilesX / 15;
             int height = Main.maxTilesY / 6;
             var rectangle = new Rectangle((int)x - (width / 2), (int)y - (height / 2), width, height);
-            static bool inCircle(int i, int j, Rectangle rect, int wid)
-            {
-                Point rC = rect.Center;
-                int xElem = i - rC.X;
-                int yElem = j - rC.Y;
-                int r = wid / 2;
-                return xElem * xElem + yElem * yElem <= r * r;
-            }
             List<Rectangle> tunnelsList = new List<Rectangle>();
             bool inTunnels(int i, int j)
             {
@@ -76,40 +68,42 @@ namespace ITD.Content.World
                 }
                 return false;
             }
-            WorldUtils.Gen(rectangle.Center, new Shapes.Circle(width/2, height/2), Actions.Chain(
+            //WorldUtils.Gen(rectangle.Center, new Shapes.Circle(width/2, height/2), Actions.Chain(
+            WorldUtils.Gen(rectangle.Center, new Shapes.Slime(width/2, 1f, 1f), Actions.Chain(
             [
                 new Actions.SetTile((ushort)diorite),
                 new Actions.PlaceWall((ushort)pegmatiteWall)
             ]));
+            int tunnelsAmount = WorldGen.genRand.Next(7, 10);
+            int tunnelSize = (int)5f * (int)(tunnelsAmount / 7f);
+
             for (int i = rectangle.Left; i <= rectangle.Right; i++)
             {
                 for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
                 {
-                    if (inCircle(i, j, rectangle, width) && Helpers.TileType(i, j, diorite))
+                    if (Helpers.TileType(i, j, diorite))
                     {
-                        if (WorldGen.genRand.NextBool(500) && !inTunnels(i,j))
+                        if (WorldGen.genRand.NextBool(2) && !inTunnels(i,j))
                         {
                             int dir = Math.Sign((rectangle.Center.ToVector2() - new Vector2(i, j)).X);
-                            //WorldGen.digTunnel(i, j, dir, 0, 150, 4);
                             int padding = 54;
                             tunnelsList.Add(new Rectangle(i-padding, j-padding, 200+padding*2, 6+padding*2));
                             int steps = WorldGen.genRand.Next(90, 300);
                             for (int k = 0; k < steps; k++)
                             {
-                                WorldGen.digTunnel(i + (dir==1?k:-k), j, dir, 0, 5, 6);
+                                WorldGen.digTunnel(i + (dir==1?k:-k), j, dir, 0, 5, tunnelSize);
                             }
                             WorldGen.digTunnel(i + WorldGen.genRand.Next(0, steps), j, 0, 2, 60, 8);
-                            //WorldGen.ReplaceTile(i, j, (ushort)ModContent.TileType<DioriteTile>(), 0);
                         }
                     }
                 }
             }
+            tunnelsList.Clear();
             for (int i = rectangle.Left; i <= rectangle.Right; i++)
             {
                 for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
                 {
-                    bool isTileEdgeTile = Framing.GetTileSafely(i, j).HasTile && (!Framing.GetTileSafely(i+1, j).HasTile|| !Framing.GetTileSafely(i - 1, j).HasTile || !Framing.GetTileSafely(i, j + 1).HasTile || !Framing.GetTileSafely(i, j - 1).HasTile);
-                    if (isTileEdgeTile && Helpers.TileType(i, j, diorite))
+                    if (Helpers.EdgeTile(i, j) && Helpers.TileType(i, j, diorite))
                     {
                         WorldGen.TileRunner(i, j, 5, 2, pegmatite);
                     }
