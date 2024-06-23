@@ -173,6 +173,16 @@ Items: {
 		DisplayName: Emberlion Sclerite
 		Tooltip: ""
 	}
+
+	FirestormInABottle: {
+		DisplayName: Firestorm In A Bottle
+		Tooltip: 
+		'''
+		Allows the holder to double jump.
+		Upon using the Double-Jump, a firestorm appears beneath the player,
+		dealing a total of 50 DMG a second for up to 3 seconds, while also inflicting 'On Fire!'.
+		'''
+	}
 }
 
 Projectiles: {

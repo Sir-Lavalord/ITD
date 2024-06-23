@@ -173,6 +173,11 @@ Items: {
 		// DisplayName: Emberlion Sclerite
 		// Tooltip: ""
 	}
+
+	FirestormInABottle: {
+		// Tooltip: ""
+		// DisplayName: Firestorm In A Bottle
+	}
 }
 
 Projectiles: {
