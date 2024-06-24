@@ -20,7 +20,7 @@ namespace ITD.Content.Items
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<CustomDoubleJumpPlayer>().hasDoubleJump = true;
+            player.GetModPlayer<FireDoubleJump>().hasFireJump = true;
         }
 
         /*
@@ -32,25 +32,26 @@ namespace ITD.Content.Items
         }
         */
     }
-    public class CustomDoubleJumpPlayer : ModPlayer
-    {
-        public bool hasDoubleJump;
-        public bool canDoubleJump;
-        private bool waitDoubleJump;
-        private int fireCloudTimer;
-        private int fireTrailTimer;
-        private int rainTimer;
-        private int damageTimer;
-        private const int FireCloudDuration = 180;
-        private const int FireTrailDuration = 60;
-        private const int RainDuration = 120;
-        private const int FireRainLifetime = 180;
 
-        private Vector2 jumpPosition;
+    public class FireDoubleJump : ModPlayer
+    {
+        public const int FireCloudDuration = 180;
+        public const int FireTrailDuration = 60;
+        public const int RainDuration = 120;
+        public const int FireRainLifetime = 180;
+
+        public bool hasFireJump;
+        public bool canDoubleJump;
+        public bool waitDoubleJump;
+        public int fireCloudTimer;
+        public int fireTrailTimer;
+        public int rainTimer;
+        public int damageTimer;
+        public Vector2 jumpPosition;
 
         public override void ResetEffects()
         {
-            hasDoubleJump = false;
+            hasFireJump = false;
         }
 
         public override void PreUpdate()
@@ -64,9 +65,9 @@ namespace ITD.Content.Items
             UpdateFireRain();
         }
 
-        private void HandleDoubleJump()
+        public void HandleDoubleJump()
         {
-            if ((Player.velocity.Y == 0f || Player.sliding || (Player.autoJump && Player.justJumped)) && hasDoubleJump)
+            if ((Player.velocity.Y == 0f || Player.sliding || (Player.autoJump && Player.justJumped)) && hasFireJump)
             {
                 canDoubleJump = true;
                 waitDoubleJump = true;
@@ -79,7 +80,7 @@ namespace ITD.Content.Items
             waitDoubleJump = Player.controlJump;
         }
 
-        private void PerformDoubleJump()
+        public void PerformDoubleJump()
         {
             if (Player.jump > 0) return;
 
@@ -98,7 +99,7 @@ namespace ITD.Content.Items
             jumpPosition = Player.Bottom;
         }
 
-        private void UpdateTimers()
+        public void UpdateTimers()
         {
             if (fireCloudTimer > 0)
             {
@@ -124,7 +125,7 @@ namespace ITD.Content.Items
             }
         }
 
-        private void FireCloud()
+        public void FireCloud()
         {
             float progress = (float)fireCloudTimer / FireCloudDuration;
             for (int i = 0; i < 10; i++)
@@ -133,16 +134,16 @@ namespace ITD.Content.Items
             }
             if (damageTimer <= 0)
             {
-                NPCDamage(jumpPosition, true);
+                DamageEnemy(jumpPosition, true);
                 damageTimer = 30;
             }
             else
             {
-                NPCDamage(jumpPosition, false);
+                DamageEnemy(jumpPosition, false);
             }
         }
 
-        private void FireCloudDust(float progress)
+        public void FireCloudDust(float progress)
         {
             Vector2 speed = Main.rand.NextVector2Circular(5f * progress, 5f * progress);
             speed.Y -= Main.rand.NextFloat(2f * progress, 8f * progress);
@@ -172,16 +173,16 @@ namespace ITD.Content.Items
             }
         }
 
-        private void FireTrail()
+        public void FireTrail()
         {
             for (int i = 0; i < 3; i++)
             {
                 FireTrailDust();
             }
-            NPCDamage(Player.Bottom, false);
+            DamageEnemy(Player.Bottom, false);
         }
 
-        private void FireTrailDust()
+        public void FireTrailDust()
         {
             Vector2 speed = new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1.5f, -0.5f));
 
@@ -199,7 +200,7 @@ namespace ITD.Content.Items
             dust.color = Color.Lerp(Color.OrangeRed, Color.Yellow, Main.rand.NextFloat(0.5f));
         }
 
-        private void FireRain()
+        public void FireRain()
         {
             float progress = (float)rainTimer / RainDuration;
             for (int i = 0; i < 3; i++)
@@ -208,7 +209,7 @@ namespace ITD.Content.Items
             }
         }
 
-        private void FireRainDust(float progress)
+        public void FireRainDust(float progress)
         {
             Vector2 rainPosition = jumpPosition + new Vector2(Main.rand.Next(-50, 51), Main.rand.Next(-20, 0));
             Vector2 rainVelocity = new Vector2(Main.windSpeedCurrent * 0.3f, Main.rand.Next(2, 4));
@@ -229,7 +230,7 @@ namespace ITD.Content.Items
             dust.customData = new FireRainData { InitialPosition = rainPosition, CreationTime = Main.GameUpdateCount };
         }
 
-        private void UpdateFireRain()
+        public void UpdateFireRain()
         {
             for (int i = 0; i < Main.maxDust; i++)
             {
@@ -261,7 +262,7 @@ namespace ITD.Content.Items
             }
         }
 
-        private bool IsTileCollision(Vector2 position)
+        public bool IsTileCollision(Vector2 position)
         {
             int tileX = (int)(position.X / 16f);
             int tileY = (int)(position.Y / 16f);
@@ -270,7 +271,7 @@ namespace ITD.Content.Items
             return tile != null && Main.tileSolid[tile.TileType] && tile.HasTile;
         }
 
-        private void NPCDamage(Vector2 position, bool dealDamage)
+        public void DamageEnemy(Vector2 position, bool dealDamage)
         {
             for (int i = 0; i < Main.maxNPCs; i++)
             {
@@ -303,7 +304,7 @@ namespace ITD.Content.Items
             }
         }
 
-        private void FirestormSFX()
+        public void FirestormSFX()
         {
             string soundPath = Main.rand.Next(3) switch
             {
@@ -315,7 +316,7 @@ namespace ITD.Content.Items
             SoundEngine.PlaySound(new SoundStyle(soundPath), Player.position);
         }
 
-        private class FireRainData
+        public class FireRainData
         {
             public Vector2 InitialPosition;
             public uint CreationTime;

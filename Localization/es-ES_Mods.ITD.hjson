@@ -175,8 +175,33 @@ Items: {
 	}
 
 	FirestormInABottle: {
-		// Tooltip: ""
 		// DisplayName: Firestorm In A Bottle
+		/* Tooltip:
+			'''
+			Allows the holder to double jump.
+			Upon using the Double-Jump, a firestorm appears beneath the player,
+			dealing a total of 50 DMG a second for up to 3 seconds, while also inflicting 'On Fire!'.
+			''' */
+	}
+
+	TwisterInABottle: {
+		// DisplayName: Twister In A Bottle
+		/* Tooltip:
+			'''
+			Allows the holder to do an improved double jump and swiftly change directions in air.
+			Upon using the Double-Jump, wind will cycle below the player,
+			dealing a total of 70 DMG a second for a course of 2 seconds.
+			''' */
+	}
+
+	StormInABottle: {
+		// DisplayName: Storm In A Bottle
+		// Tooltip: ""
+	}
+
+	DisasterInABottle: {
+		// DisplayName: Disaster In A Bottle
+		// Tooltip: ""
 	}
 }
 
