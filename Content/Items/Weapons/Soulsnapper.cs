@@ -50,6 +50,7 @@ namespace ITD.Content.Items
             recipe.Register();
         }
 
+        /*
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             float pulseAmount = Main.mouseTextColor / 255f;
@@ -58,5 +59,6 @@ namespace ITD.Content.Items
             string coloredText = string.Format(line.Text, textColor.Hex3());
             line.Text = coloredText;
         }
+        */
     }
 }

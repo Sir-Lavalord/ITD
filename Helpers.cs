@@ -288,7 +288,49 @@ namespace ITD
                 return;
             }
         }
-        public static void VanillaTileMergeWithOther(ref Tile tileToCheck, int otherType, Tile up, Tile upLeft, Tile upRight, Tile down, Tile downLeft, Tile downRight, Tile left, Tile right)
+        public static void VanillaTileMergeWithOtherTopRight(ref Tile tileToCheck, int otherType, Tile up, Tile down, Tile left, Tile right, int yOffset)
+        {
+            int r = Main.rand.Next(3);
+            int t = tileToCheck.TileType;
+            bool upHas = TileType(up, t);
+            bool downHas = TileType(down, t);
+            bool leftHas = TileType(left, t);
+            bool rightHas = TileType(right, t);
+            bool upHasOther = TileType(up, otherType);
+            bool downHasOther = TileType(down, otherType);
+            bool leftHasOther = TileType(left, otherType);
+            bool rightHasOther = TileType(right, otherType);
+            //
+            Point[] allSurroundingNotUpAndDownIsOther = [new(234, 0), new(252, 0), new(270, 0)];
+            Point[] allSurroundingNotDownAndUpIsOther = [new(234, 18), new(252, 18), new(270, 18)];
+            Point[] allSurroundingNotLeftAndRightIsOther = [new(234, 36), new(252, 36), new(270, 36)];
+            Point[] allSurroundingNotRightAndLeftIsOther = [new(234, 54), new(252, 54), new(270, 54)];
+            if (!upHas && !upHasOther && leftHas && rightHas && downHasOther)
+            {
+                tileToCheck.TileFrameX = (short)allSurroundingNotUpAndDownIsOther[r].X;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotUpAndDownIsOther[r].Y + yOffset);
+                return;
+            }
+            if (!downHas && !downHasOther && leftHas && rightHas && upHasOther)
+            {
+                tileToCheck.TileFrameX = (short)allSurroundingNotDownAndUpIsOther[r].X;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotDownAndUpIsOther[r].Y + yOffset);
+                return;
+            }
+            if (!leftHas && !leftHasOther && upHas && downHas && rightHasOther)
+            {
+                tileToCheck.TileFrameX = (short)allSurroundingNotLeftAndRightIsOther[r].X;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotLeftAndRightIsOther[r].Y + yOffset);
+                return;
+            }
+            if (!rightHas && !rightHasOther && upHas && downHas && leftHasOther)
+            {
+                tileToCheck.TileFrameX = (short)allSurroundingNotRightAndLeftIsOther[r].X;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotRightAndLeftIsOther[r].Y + yOffset);
+                return;
+            }
+        }
+        public static void VanillaTileMergeWithOther(ref Tile tileToCheck, int otherType, Tile up, Tile upLeft, Tile upRight, Tile down, Tile downLeft, Tile downRight, Tile left, Tile right, int yOffset = 0, int topRightYOffset = 0)
         {
             int r = Main.rand.Next(3);
             int t = tileToCheck.TileType;
@@ -309,11 +351,11 @@ namespace ITD
                 return;
             }
             Point[] allSurroundingIsOther = [new(108, 198), new(126, 198), new(144, 198)];
-            //
-            Point[] allSurroundingNotUpAndDownIsOther = [new(234, 0), new(252, 0), new(270, 0)];
-            Point[] allSurroundingNotDownAndUpIsOther = [new(234, 18), new(252, 18), new(270, 18)];
-            Point[] allSurroundingNotLeftAndRightIsOther = [new(234, 36), new(252, 36), new(270, 36)];
-            Point[] allSurroundingNotRightAndLeftIsOther = [new(234, 54), new(252, 54), new(270, 54)];
+            // aaaaaaaaaaaaaaaaaaaaaaaaa
+            //Point[] allSurroundingNotUpAndDownIsOther = [new(234, 0), new(252, 0), new(270, 0)];
+            //Point[] allSurroundingNotDownAndUpIsOther = [new(234, 18), new(252, 18), new(270, 18)];
+            //Point[] allSurroundingNotLeftAndRightIsOther = [new(234, 36), new(252, 36), new(270, 36)];
+            //Point[] allSurroundingNotRightAndLeftIsOther = [new(234, 54), new(252, 54), new(270, 54)];
             //
             Point[] allSurroundingAndDownRightIsOther = [new(0, 90), new(0, 126), new(0, 162)];
             Point[] allSurroundingAndDownLeftIsOther = [new(18, 90), new(18, 126), new(18, 162)];
@@ -364,251 +406,228 @@ namespace ITD
             if (upHasOther && downHasOther && leftHasOther && rightHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingIsOther[r].Y + yOffset);
                 return;
             }
-            if (!upHas && !upHasOther && leftHas && rightHas && downHasOther)
-            {
-                tileToCheck.TileFrameX = (short)allSurroundingNotUpAndDownIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotUpAndDownIsOther[r].Y;
-                return;
-            }
-            if (!downHas && !downHasOther && leftHas && rightHas && upHasOther)
-            {
-                tileToCheck.TileFrameX = (short)allSurroundingNotDownAndUpIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotDownAndUpIsOther[r].Y;
-                return;
-            }
-            if (!leftHas && !leftHasOther && upHas && downHas && rightHasOther)
-            {
-                tileToCheck.TileFrameX = (short)allSurroundingNotLeftAndRightIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotLeftAndRightIsOther[r].Y;
-                return;
-            }
-            if (!rightHas && !rightHasOther && upHas && downHas && leftHasOther)
-            {
-                tileToCheck.TileFrameX = (short)allSurroundingNotRightAndLeftIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotRightAndLeftIsOther[r].Y;
-                return;
-            }
+            VanillaTileMergeWithOtherTopRight(ref tileToCheck, otherType, up, down, left, right, topRightYOffset);
             if (upHas && downHas && leftHas && rightHas)
             {
                 if (downRightHasOther)
                 {
                     tileToCheck.TileFrameX = (short)allSurroundingAndDownRightIsOther[r].X;
-                    tileToCheck.TileFrameY = (short)allSurroundingAndDownRightIsOther[r].Y;
+                    tileToCheck.TileFrameY = (short)(allSurroundingAndDownRightIsOther[r].Y + yOffset);
                     return;
                 }
                 if (downLeftHasOther)
                 {
                     tileToCheck.TileFrameX = (short)allSurroundingAndDownLeftIsOther[r].X;
-                    tileToCheck.TileFrameY = (short)allSurroundingAndDownLeftIsOther[r].Y;
+                    tileToCheck.TileFrameY = (short)(allSurroundingAndDownLeftIsOther[r].Y + yOffset);
                     return;
                 }
                 if (upLeftHasOther)
                 {
                     tileToCheck.TileFrameX = (short)allSurroundingAndUpLeftIsOther[r].X;
-                    tileToCheck.TileFrameY = (short)allSurroundingAndUpLeftIsOther[r].Y;
+                    tileToCheck.TileFrameY = (short)(allSurroundingAndUpLeftIsOther[r].Y + yOffset);
                     return;
                 }
                 if (upRightHasOther)
                 {
                     tileToCheck.TileFrameX = (short)allSurroundingAndUpRightIsOther[r].X;
-                    tileToCheck.TileFrameY = (short)allSurroundingAndUpRightIsOther[r].Y;
+                    tileToCheck.TileFrameY = (short)(allSurroundingAndUpRightIsOther[r].Y + yOffset);
                     return;
                 }
             }
             if (rightHas && downHas && upHasOther && leftHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingButUpAndLeftIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingButUpAndLeftIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingButUpAndLeftIsOther[r].Y + yOffset);
                 return;
             }
             if (leftHas && downHas && upHasOther && rightHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingButUpAndRightIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingButUpAndRightIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingButUpAndRightIsOther[r].Y + yOffset);
                 return;
             }
             if (rightHas && upHas && downHasOther && leftHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingButDownAndLeftIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingButDownAndLeftIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingButDownAndLeftIsOther[r].Y + yOffset);
                 return;
             }
             if (leftHas && upHas && downHasOther && rightHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingButDownAndRightIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingButDownAndRightIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingButDownAndRightIsOther[r].Y + yOffset);
                 return;
             }
             if (!leftHas && !leftHasOther && downHasOther && upHas && rightHas)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingNotLeftAndDownIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotLeftAndDownIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotLeftAndDownIsOther[r].Y + yOffset);
                 return;
             }
             if (!leftHas && !leftHasOther && upHasOther && downHas && rightHas)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingNotLeftAndUpIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotLeftAndUpIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotLeftAndUpIsOther[r].Y + yOffset);
                 return;
             }
             if (!rightHas && !rightHasOther && downHasOther && upHas && leftHas)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingNotRightAndDownIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotRightAndDownIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotRightAndDownIsOther[r].Y + yOffset);
                 return;
             }
             if (!rightHas && !rightHasOther && upHasOther && downHas && leftHas)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingNotRightAndUpIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotRightAndUpIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotRightAndUpIsOther[r].Y + yOffset);
                 return;
             }
             if (!leftHas && !leftHasOther && !upHas && !upHasOther && !rightHas && !rightHasOther && downHasOther)
             {
                 tileToCheck.TileFrameX = (short)onlyDownAndIsOther[r].X;
-                tileToCheck.TileFrameY = (short)onlyDownAndIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(onlyDownAndIsOther[r].Y + yOffset);
                 return;
             }
             if (!leftHas && !leftHasOther && !downHas && !downHasOther && !rightHas && !rightHasOther && upHasOther)
             {
                 tileToCheck.TileFrameX = (short)onlyUpAndIsOther[r].X;
-                tileToCheck.TileFrameY = (short)onlyUpAndIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(onlyUpAndIsOther[r].Y + yOffset);
                 return;
             }
             if (!upHas && !upHasOther && !rightHas && !rightHasOther && !downHas && !downHasOther && leftHasOther)
             {
                 tileToCheck.TileFrameX = (short)onlyLeftAndIsOther[r].X;
-                tileToCheck.TileFrameY = (short)onlyLeftAndIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(onlyLeftAndIsOther[r].Y + yOffset);
                 return;
             }
             if (!upHas && !upHasOther && !leftHas && !leftHasOther && !downHas && !downHasOther && rightHasOther)
             {
                 tileToCheck.TileFrameX = (short)onlyRightAndIsOther[r].X;
-                tileToCheck.TileFrameY = (short)onlyRightAndIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(onlyRightAndIsOther[r].Y + yOffset);
                 return;
             }
             if (!leftHas && !leftHasOther && !rightHas && !rightHasOther && upHas && downHasOther)
             {
                 tileToCheck.TileFrameX = (short)onlyUpDownAndDownIsOther[r].X;
-                tileToCheck.TileFrameY = (short)onlyUpDownAndDownIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(onlyUpDownAndDownIsOther[r].Y + yOffset);
                 return;
             }
             if (!leftHas && !leftHasOther && !rightHas && !rightHasOther && downHas && upHasOther)
             {
                 tileToCheck.TileFrameX = (short)onlyUpDownAndUpIsOther[r].X;
-                tileToCheck.TileFrameY = (short)onlyUpDownAndUpIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(onlyUpDownAndUpIsOther[r].Y + yOffset);
                 return;
             }
             if (!upHas && !upHasOther && !downHas && !downHasOther && rightHas && leftHasOther)
             {
                 tileToCheck.TileFrameX = (short)onlyLeftRightAndLeftIsOther[r].X;
-                tileToCheck.TileFrameY = (short)onlyLeftRightAndLeftIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(onlyLeftRightAndLeftIsOther[r].Y + yOffset);
                 return;
             }
             if (!upHas && !upHasOther && !downHas && !downHasOther && leftHas && rightHasOther)
             {
                 tileToCheck.TileFrameX = (short)onlyLeftRightAndRightIsOther[r].X;
-                tileToCheck.TileFrameY = (short)onlyLeftRightAndRightIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(onlyLeftRightAndRightIsOther[r].Y + yOffset);
                 return;
             }
             if (!upHas && !upHasOther && leftHasOther && rightHas && downHas)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingNotUpAndLeftIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotUpAndLeftIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotUpAndLeftIsOther[r].Y + yOffset);
                 return;
             }
             if (!upHas && !upHasOther && rightHasOther && leftHas && downHas)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingNotUpAndRightIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotUpAndRightIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotUpAndRightIsOther[r].Y + yOffset);
                 return;
             }
             if (!downHas && !downHasOther && leftHasOther && rightHas && upHas)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingNotDownAndLeftIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotDownAndLeftIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotDownAndLeftIsOther[r].Y + yOffset);
                 return;
             }
             if (!downHas && !downHasOther && rightHasOther && leftHas && upHas)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingNotDownAndRightIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingNotDownAndRightIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingNotDownAndRightIsOther[r].Y + yOffset);
                 return;
             }
             if (!leftHas && !leftHasOther && !rightHas && !rightHasOther && upHasOther && downHasOther)
             {
                 tileToCheck.TileFrameX = (short)onlyUpDownAndBothOther[r].X;
-                tileToCheck.TileFrameY = (short)onlyUpDownAndBothOther[r].Y;
+                tileToCheck.TileFrameY = (short)(onlyUpDownAndBothOther[r].Y + yOffset);
                 return;
             }
             if (!upHas && !upHasOther && !downHas && !downHasOther && leftHasOther && rightHasOther)
             {
                 tileToCheck.TileFrameX = (short)onlyLeftRightAndBothOther[r].X;
-                tileToCheck.TileFrameY = (short)onlyLeftRightAndBothOther[r].Y;
+                tileToCheck.TileFrameY = (short)(onlyLeftRightAndBothOther[r].Y + yOffset);
                 return;
             }
             if (upHas && leftHas && rightHas && downHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingAndDownIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingAndDownIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingAndDownIsOther[r].Y + yOffset);
                 return;
             }
             if (downHas && leftHas && rightHas && upHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingAndUpIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingAndUpIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingAndUpIsOther[r].Y + yOffset);
                 return;
             }
             if (upHas && downHas && leftHas && rightHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingAndRightIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingAndRightIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingAndRightIsOther[r].Y + yOffset);
                 return;
             }
             if (upHas && downHas && rightHas && leftHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingAndLeftIsOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingAndLeftIsOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingAndLeftIsOther[r].Y + yOffset);
                 return;
             }
             if (upHasOther && downHasOther && leftHas && rightHas)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingAndUpDownAreOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingAndUpDownAreOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingAndUpDownAreOther[r].Y + yOffset);
                 return;
             }
             if (leftHasOther && rightHasOther && upHas && downHas)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingAndLeftRightAreOther[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingAndLeftRightAreOther[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingAndLeftRightAreOther[r].Y + yOffset);
                 return;
             }
             //
             if (leftHasOther && rightHasOther && upHasOther && downHas)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingAreOtherOpensDown[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingAreOtherOpensDown[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingAreOtherOpensDown[r].Y + yOffset);
                 return;
             }
             if (leftHasOther && rightHasOther && upHas && downHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingAreOtherOpensUp[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingAreOtherOpensUp[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingAreOtherOpensUp[r].Y + yOffset);
                 return;
             }
             if (leftHas && rightHasOther && upHasOther && downHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingAreOtherOpensLeft[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingAreOtherOpensLeft[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingAreOtherOpensLeft[r].Y + yOffset);
                 return;
             }
             if (leftHasOther && rightHas && upHasOther && downHasOther)
             {
                 tileToCheck.TileFrameX = (short)allSurroundingAreOtherOpensRight[r].X;
-                tileToCheck.TileFrameY = (short)allSurroundingAreOtherOpensRight[r].Y;
+                tileToCheck.TileFrameY = (short)(allSurroundingAreOtherOpensRight[r].Y + yOffset);
                 return;
             }
         }

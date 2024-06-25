@@ -196,8 +196,8 @@ Items: {
 
 	StormInABottle: {
 		DisplayName: Storm In A Bottle
-		Tooltip: 
-		    '''
+		Tooltip:
+			'''
 			Allows the holder to double jump.
 			Upon using the Double-Jump, a tornado appears beneath the player,
 			striking nearby enemies with electricity, dealing 300 DMG per hit
@@ -206,7 +206,7 @@ Items: {
 
 	DisasterInABottle: {
 		DisplayName: Disaster In A Bottle
-		Tooltip: 
+		Tooltip:
 			'''
 			Allows the holder to triple jump
 			First jump: Summons a firestorm and circling wind beneath the player

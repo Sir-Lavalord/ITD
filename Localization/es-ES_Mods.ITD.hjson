@@ -180,7 +180,7 @@ Items: {
 			'''
 			Allows the holder to double jump.
 			Upon using the Double-Jump, a firestorm appears beneath the player,
-			dealing a total of 50 DMG a second for up to 3 seconds, while also inflicting 'On Fire!'.
+			dealing a total of 50 DMG a second for up to 3 seconds, while also inflicting 'On Fire!'
 			''' */
 	}
 
@@ -188,20 +188,30 @@ Items: {
 		// DisplayName: Twister In A Bottle
 		/* Tooltip:
 			'''
-			Allows the holder to do an improved double jump and swiftly change directions in air.
-			Upon using the Double-Jump, wind will cycle below the player,
-			dealing a total of 70 DMG a second for a course of 2 seconds.
+			Allows the holder to do an improved double jump and swiftly change directions in air
+			Upon using the Double-Jump, wind will cycle below the player
+			dealing a total of 70 DMG a second for a course of 2 seconds
 			''' */
 	}
 
 	StormInABottle: {
 		// DisplayName: Storm In A Bottle
-		// Tooltip: ""
+		/* Tooltip:
+			'''
+			Allows the holder to double jump.
+			Upon using the Double-Jump, a tornado appears beneath the player,
+			striking nearby enemies with electricity, dealing 300 DMG per hit
+			''' */
 	}
 
 	DisasterInABottle: {
 		// DisplayName: Disaster In A Bottle
-		// Tooltip: ""
+		/* Tooltip:
+			'''
+			Allows the holder to triple jump
+			First jump: Summons a firestorm and circling wind beneath the player
+			Second jump: Summons a tornado strking enemies, dealing electrical damage
+			''' */
 	}
 }
 
