@@ -22,7 +22,7 @@ namespace ITD.Content.Projectiles
     {
         public static LocalizedText OneTimeLatchMessage { get; private set; }
 
-        int constantEffectFrames = 100;
+        int constantEffectFrames = 80;
         int constantEffectTimer = 0;
         public override void SetSnaptrapProperties()
         {

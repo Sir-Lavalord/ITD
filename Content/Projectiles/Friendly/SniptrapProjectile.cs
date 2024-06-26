@@ -23,9 +23,9 @@ namespace ITD.Content.Projectiles
             shootRange = 16f * 8f;
             retractAccel = 1.5f;
             extraFlexibility = 16f * 2f;
-            framesBetweenHits = 10;
+            framesBetweenHits = 16;
             minDamage = 1;
-            maxDamage = 25;
+            maxDamage = 10;
             fullPowerHitsAmount = 10;
             warningFrames = 60;
             chompDust = DustID.Iron;

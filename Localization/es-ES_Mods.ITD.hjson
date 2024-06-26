@@ -259,6 +259,8 @@ Projectiles: {
 		OneTimeLatchMessage: Mods.ITD.Projectiles.CrimeratrapProjectile.OneTimeLatchMessage
 		DisplayName: Carmengancho
 	}
+
+	// EvilSpitProjectile.DisplayName: Evil Spit Projectile
 }
 
 NPCs: {

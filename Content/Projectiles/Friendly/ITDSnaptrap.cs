@@ -255,7 +255,7 @@ namespace ITD.Content.Projectiles
                 chainUnwindSlot = SoundEngine.PlaySound(snaptrapChain, Projectile.position, soundInstance => BasicSoundUpdateCallback(tracker, soundInstance, 0));
             }
             Projectile.timeLeft = 2;
-            if (hasDoneLatchEffect)
+            if (hasDoneLatchEffect && !retracting)
             {
                 ConstantLatchEffect();
             }
@@ -280,10 +280,14 @@ namespace ITD.Content.Projectiles
                 soundInstance.Position = myPlayer.position;
                 if (shouldBeWarning)
                 {
+                    soundInstance.Volume = 0f + ((float)warningTimer / (float)warningFrames);
                     soundInstance.Pitch = 0f + ((float)warningTimer / (float)warningFrames);
                 }
                 else
-                {  soundInstance.Pitch = 0f; }
+                {
+                    soundInstance.Volume = 0f;
+                    soundInstance.Pitch = 0f;
+                }
                 if (IsStickingToTarget)
                 {
                     return tracker.IsActiveAndInGame();

@@ -24,7 +24,7 @@ namespace ITD.Content.Items
             Item.knockBack = 0f;
             Item.width = 30;
             Item.height = 10;
-            Item.damage = 25;
+            Item.damage = 10;
             Item.shoot = ModContent.ProjectileType<SniptrapProjectile>();
             Item.shootSpeed = 12f;
             Item.UseSound = SoundID.Item1;
