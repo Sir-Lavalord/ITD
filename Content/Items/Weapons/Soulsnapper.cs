@@ -50,15 +50,13 @@ namespace ITD.Content.Items
             recipe.Register();
         }
 
-        /*
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             float pulseAmount = Main.mouseTextColor / 255f;
             Color textColor = Color.LightPink * pulseAmount;
-            var line = tooltips.First(x => x.Name == "Tooltip1");
+            var line = tooltips.First(x => x.Name == "Tooltip0");
             string coloredText = string.Format(line.Text, textColor.Hex3());
             line.Text = coloredText;
         }
-        */
     }
 }

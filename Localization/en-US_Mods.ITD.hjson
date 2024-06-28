@@ -141,8 +141,8 @@ Items: {
 	}
 
 	Soulsnapper: {
-		Tooltip: ""
 		DisplayName: Soulsnapper
+		Tooltip: "[c/{0}:Latch Effect:] Continuously spits globs of corruption"
 	}
 
 	Spidermeal: {
@@ -156,7 +156,7 @@ Items: {
 
 	Crimeratrap: {
 		DisplayName: Crimeratrap
-		Tooltip: ""
+		Tooltip: "[c/{0}:Latch Effect:] Continuously spits globs of crimson"
 	}
 
 	Diorite: {
@@ -210,8 +210,18 @@ Items: {
 			'''
 			Allows the holder to triple jump
 			First jump: Summons a firestorm and circling wind beneath the player
-			Second jump: Summons a tornado strking enemies, dealing electrical damage
+			Second jump: Summons a tornado striking enemies, dealing electrical damage
 			'''
+	}
+
+	Shale: {
+		DisplayName: Shale
+		Tooltip: ""
+	}
+
+	Depthrock: {
+		Tooltip: ""
+		DisplayName: Depthrock
 	}
 }
 
@@ -252,15 +262,15 @@ Projectiles: {
 
 	SoulsnapperProjectile: {
 		DisplayName: Soulsnapper
-		OneTimeLatchMessage: Mods.ITD.Projectiles.SoulsnapperProjectile.OneTimeLatchMessage
+		OneTimeLatchMessage: Spitting...
 	}
 
 	CrimeratrapProjectile: {
-		OneTimeLatchMessage: Mods.ITD.Projectiles.CrimeratrapProjectile.OneTimeLatchMessage
+		OneTimeLatchMessage: Spitting...
 		DisplayName: Crimeratrap
 	}
 
-	EvilSpitProjectile.DisplayName: Evil Spit Projectile
+	EvilSpitProjectile.DisplayName: Evil Spit
 }
 
 NPCs: {
@@ -279,8 +289,8 @@ Buffs: {
 	}
 
 	SandyBuff: {
-		DisplayName: Sandy Buff
-		Description: Mods.ITD.Buffs.SandyBuff.Description
+		DisplayName: Sandy
+		Description: You feel itchy.
 	}
 }
 

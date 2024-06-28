@@ -106,6 +106,38 @@ namespace ITD
             }
         }
         /// <summary>
+        /// If any of the tiles right below this are standable, return true
+        /// </summary>
+        public static bool IsOnStandableGround(in float startX, float y, int width, bool onlySolid = false)
+        {
+            if (width <= 0)
+            {
+                throw new ArgumentException("width cannot be negative");
+            }
+
+            float fx = startX;
+
+            //Needs atleast one iteration (in case width is 0)
+            do
+            {
+                Point point = new Vector2(fx, y + 0.01f).ToTileCoordinates(); //0.01f is a magic number vanilla uses
+                if (onlySolid && SolidTile(point.X, point.Y) || SolidTopTile(point.X, point.Y))
+                {
+                    return true;
+                }
+                fx += 16;
+            }
+            while (fx < startX + width);
+
+            return false;
+        }
+
+        /// <inheritdoc cref="IsOnStandableGround(in float, float, int, bool)"/>
+        public static bool IsOnStandableGround(this Entity entity, float yOffset = 0f, bool onlySolid = false)
+        {
+            return IsOnStandableGround(entity.BottomLeft.X, entity.BottomLeft.Y + yOffset, entity.width, onlySolid);
+        }
+        /// <summary>
         /// Attempts to recreate vanilla tile framing behaviour. I'm using this for pegmatite as I need pegmatite and diorite to merge properly and not look ugly.
         /// </summary>
         /// <param name="tileToCheck">Tile that will get re-framed</param>
@@ -351,11 +383,6 @@ namespace ITD
                 return;
             }
             Point[] allSurroundingIsOther = [new(108, 198), new(126, 198), new(144, 198)];
-            // aaaaaaaaaaaaaaaaaaaaaaaaa
-            //Point[] allSurroundingNotUpAndDownIsOther = [new(234, 0), new(252, 0), new(270, 0)];
-            //Point[] allSurroundingNotDownAndUpIsOther = [new(234, 18), new(252, 18), new(270, 18)];
-            //Point[] allSurroundingNotLeftAndRightIsOther = [new(234, 36), new(252, 36), new(270, 36)];
-            //Point[] allSurroundingNotRightAndLeftIsOther = [new(234, 54), new(252, 54), new(270, 54)];
             //
             Point[] allSurroundingAndDownRightIsOther = [new(0, 90), new(0, 126), new(0, 162)];
             Point[] allSurroundingAndDownLeftIsOther = [new(18, 90), new(18, 126), new(18, 162)];
