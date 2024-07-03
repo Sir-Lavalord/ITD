@@ -1,11 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ITD.Content.Projectiles;
-using ITD.Content.Buffs;
+using ITD.Content.Projectiles.Friendly.Pets;
+using ITD.Content.Buffs.PetBuffs;
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items.PetSummons
 {
     public class CosmicJam : ModItem
     {

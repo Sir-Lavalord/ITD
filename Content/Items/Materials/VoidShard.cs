@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using Terraria.ID;
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items.Materials
 {
     public class VoidShard : ModItem
     {

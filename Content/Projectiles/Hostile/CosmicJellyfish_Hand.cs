@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using System.Collections.Generic;
 
-namespace ITD.Content.Projectiles
+namespace ITD.Content.Projectiles.Hostile
 {
     public class CosmicJellyfish_Hand : ModProjectile
     {

@@ -1,7 +1,7 @@
-﻿using ITD.Content.Tiles;
+﻿using ITD.Content.Tiles.DeepDesert;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items.Placeable
 {
     public class Diorite : ModItem
     {

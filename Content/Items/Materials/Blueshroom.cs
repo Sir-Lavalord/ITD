@@ -1,12 +1,9 @@
-﻿using ITD.Content.Tiles;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+﻿using ITD.Content.Tiles.BlueshroomGroves;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items.Materials
 {
     public class Blueshroom : ModItem
     {

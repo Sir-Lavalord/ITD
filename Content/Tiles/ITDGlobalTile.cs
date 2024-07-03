@@ -5,16 +5,13 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Dusts;
+using ITD.Content.Tiles.BlueshroomGroves;
 
 namespace ITD.Content.Tiles
 {
     public class ITDGlobalTile : GlobalTile
     {
-        private Asset<Texture2D> bluetopsglowmask;
-        public override void SetStaticDefaults()
-        {
-            bluetopsglowmask = ModContent.Request<Texture2D>("ITD/Content/Tiles/BlueshroomTops_Glow");
-        }
+        private readonly Asset<Texture2D> bluetopsglowmask = ModContent.Request<Texture2D>("ITD/Content/Tiles/BlueshroomGroves/BlueshroomTops_Glow");
         public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch)
         {
             if (type == TileID.Trees)

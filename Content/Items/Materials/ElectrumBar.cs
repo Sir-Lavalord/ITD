@@ -4,9 +4,9 @@ using Terraria.ID;
 using Terraria.GameContent.Creative;
 using ITD.Content.Tiles;
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items.Materials
 {
-    internal class ElectrumBar : ModItem
+    public class ElectrumBar : ModItem
     {
         public override void SetStaticDefaults()
         {

@@ -1,9 +1,9 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ITD.Content.Buffs;
+using ITD.Content.Buffs.PetBuffs;
 
-namespace ITD.Content.Projectiles
+namespace ITD.Content.Projectiles.Friendly.Pets
 {
     public class CosmicJamPet : ModProjectile
     {

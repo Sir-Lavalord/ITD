@@ -1,7 +1,7 @@
-﻿using ITD.Content.Tiles;
+﻿using ITD.Content.Tiles.LayersRework;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items.Placeable
 {
     public class Shale : ModItem
     {

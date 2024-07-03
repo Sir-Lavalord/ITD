@@ -5,13 +5,14 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
 using System.Collections.Generic;
+using ReLogic.Content;
 
-namespace ITD.Content.Projectiles
+namespace ITD.Content.Projectiles.Hostile
 {
     public class CosmicSludgeBomb : ModProjectile
     {
+        private readonly Asset<Texture2D> effect = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Hostile/CosmicSludgeBomb_Effect");
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
@@ -60,7 +61,7 @@ namespace ITD.Content.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Main.instance.LoadProjectile(Projectile.type);
-            Texture2D texture = Mod.Assets.Request<Texture2D>("Content/Projectiles/CosmicSludgeBomb_Effect").Value;
+            Texture2D texture = effect.Value;
             Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {

@@ -141,8 +141,8 @@ Items: {
 	}
 
 	Soulsnapper: {
-		Tooltip: "[c/{0}:Latch Effect:] Continuamente lanza escupitajos de corrupción"
 		DisplayName: Enganchaalmas
+		Tooltip: "[c/{0}:Latch Effect:] Continuamente lanza escupitajos de corrupción"
 	}
 
 	Spidermeal: {
@@ -290,7 +290,7 @@ Buffs: {
 
 	SandyBuff: {
 		DisplayName: Arenoso
-		Description: "Pica, pica, pica!"
+		Description: Pica, pica, pica!
 	}
 }
 

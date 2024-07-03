@@ -1,19 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using ITD.Content.Tiles;
-using ITD.Content.World.WorldGenUtils;
-using Terraria.Localization;
 using System;
 using ITD.Content.Walls;
+using ITD.Content.Tiles.DeepDesert;
 
 namespace ITD.Content.World
 {

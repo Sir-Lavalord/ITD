@@ -5,9 +5,9 @@ using Terraria.GameContent.Creative;
 using ITD.Content.Tiles;
 
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items.Materials
 {
-    internal class RhodiumBar : ModItem
+    public class RhodiumBar : ModItem
     {
         public override void SetStaticDefaults()
         {

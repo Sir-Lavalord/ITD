@@ -1,10 +1,10 @@
-﻿using ITD.Content.NPCs;
+﻿using ITD.Content.NPCs.Bosses;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items.BossSummons
 {
     public class SpacePrawn : ModItem
     {

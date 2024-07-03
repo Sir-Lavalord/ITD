@@ -7,7 +7,7 @@ using Terraria.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 
-namespace ITD.Content.Projectiles
+namespace ITD.Content.Projectiles.Hostile
 {
     public class CosmicVoidShard : ModProjectile
     {

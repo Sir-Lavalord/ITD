@@ -2,7 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items.Materials
 {
     public class EmberlionSclerite : ModItem
     {

@@ -1,7 +1,4 @@
-﻿using ITD.Content.Items;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
+﻿using ITD.Content.Items.Weapons.Melee;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;

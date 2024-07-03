@@ -2,20 +2,16 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.Server;
+using ITD.Content.NPCs.Bosses;
 using ITD.Physics;
 using Terraria.ID;
-using Terraria.DataStructures;
 using System;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria.ModLoader.IO;
 using System.IO;
 using Terraria.Audio;
-using ITD.Content.NPCs;
 using Terraria.Localization;
-using ITD.Content.Tiles;
-using Humanizer;
+using ITD.Content.Tiles.BlueshroomGroves;
+using ITD.Content.Tiles.DeepDesert;
 
 namespace ITD
 {

@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Tiles;
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items.Placeable
 {
     public class CosmicJellyfishTrophy : ModItem
     {

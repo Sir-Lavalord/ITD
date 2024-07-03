@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Terraria;
-using Terraria.ID;
-using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using ITD.Content.Tiles;
-using ITD.Content.World.WorldGenUtils;
 using Terraria.Localization;
 
 namespace ITD.Content.World

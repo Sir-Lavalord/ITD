@@ -1,10 +1,11 @@
-﻿using ITD.Content.NPCs;
+﻿using ITD.Content.NPCs.Bosses;
+using ITD.Content.Items.Materials;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items.Other
 {
     public class CosmicJellyfishBag : ModItem
     {

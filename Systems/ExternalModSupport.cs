@@ -1,10 +1,9 @@
-﻿using ITD.Content.Items;
-using ITD.Content.NPCs;
+﻿using ITD.Content.Items.Placeable;
+using ITD.Content.Items.PetSummons;
+using ITD.Content.Items.BossSummons;
+using ITD.Content.NPCs.Bosses;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static ITD.Downed;
