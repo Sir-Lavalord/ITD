@@ -13,6 +13,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Projectiles.Hostile;
+using ITD.Content.Items.Weapons.Melee;
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -21,6 +22,10 @@ namespace ITD.Content.NPCs.Bosses
     public class CosmicJellyfish : ModNPC
     {
         private readonly Asset<Texture2D> spriteBack = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/CosmicJellyfish_Back");
+        public static int[] oneFromOptionsDrops =
+        {
+            ModContent.ItemType<WormholeRipper>(),
+        };
         //private static List<CosmicJellyfish_Hand> hands = new List<CosmicJellyfish_Hand>();
         public float rotation = 0f;
         public bool SecondStage
@@ -68,18 +73,14 @@ namespace ITD.Content.NPCs.Bosses
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<CosmicJellyfishBag>()));
-
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CosmicJellyfishTrophy>(), 10));
-
             npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<CosmicJellyfishRelic>()));
-
             npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<CosmicJam>(), 4));
 
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
-
-
             //notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<CosmicJellyfishMask>(), 7));
             notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<VoidShard>(), 1, 7, 15));
+            notExpertRule.OnSuccess(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, oneFromOptionsDrops));
         }
 
         public override void OnSpawn(IEntitySource source)
