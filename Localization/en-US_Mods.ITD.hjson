@@ -36,7 +36,7 @@ Items: {
 
 	DashingFeather: {
 		DisplayName: Dashing Feather
-		Tooltip: ""
+		Tooltip: "Double tap any direction while on the ground to start a dash you can control for a short while"
 	}
 
 	DespoticSnaptrap: {
@@ -46,7 +46,7 @@ Items: {
 
 	EmberSlasher: {
 		DisplayName: Ember Slasher
-		Tooltip: ""
+		Tooltip: "Fires a spinning fireball that slowly gains speed and bounces off of walls"
 	}
 
 	Snaptrap: {
@@ -222,6 +222,12 @@ Items: {
 	Depthrock: {
 		Tooltip: ""
 		DisplayName: Depthrock
+	}
+
+	Skullmet: {
+		DisplayName: Skullmet
+		// Change tooltip after better implementation
+		Tooltip: "Makes some skeletal enemies passive until aggravated"
 	}
 }
 

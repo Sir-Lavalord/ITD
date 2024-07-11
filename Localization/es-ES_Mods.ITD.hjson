@@ -223,6 +223,11 @@ Items: {
 		Tooltip: ""
 		DisplayName: Profonrroca
 	}
+
+	Skullmet: {
+		DisplayName: Calavet
+		Tooltip: "Los esqueletos serán amistosos si no son atacados"
+	}
 }
 
 Projectiles: {
