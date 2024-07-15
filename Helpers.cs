@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ITD
 {
@@ -71,13 +72,27 @@ namespace ITD
         public static bool EdgeTileCross(int i, int j) => Framing.GetTileSafely(i, j).HasTile && (!Framing.GetTileSafely(i + 1, j).HasTile || !Framing.GetTileSafely(i - 1, j).HasTile || !Framing.GetTileSafely(i, j + 1).HasTile || !Framing.GetTileSafely(i, j - 1).HasTile);
         public static bool EdgeTileX(int i, int j) => Framing.GetTileSafely(i, j).HasTile && (!Framing.GetTileSafely(i + 1, j + 1).HasTile || !Framing.GetTileSafely(i + 1, j - 1).HasTile || !Framing.GetTileSafely(i - 1, j + 1).HasTile || !Framing.GetTileSafely(i - 1, j - 1).HasTile);
         public static bool EdgeTile(int i, int j) => EdgeTileCross(i, j) || EdgeTileX(i, j);
+        public static Vector2 CommonTileOffset => Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
+        public static Vector2 TileExtraPos(int i, int j, Vector2 extraOffset = default) => new Vector2(i, j) * 16 - Main.screenPosition + extraOffset + CommonTileOffset;
         public static bool AptForTree(int i, int j, int height)
         {
-            Rectangle rect = new(i, j - height, 5, height);
+            Rectangle rect = new(i - 2, j - height, 5, height);
+            if (Framing.GetTileSafely(i, j).HasTile)
+            {
+                return false;
+            }
+            for (int m = rect.Left+1; m < rect.Right-1; m++)
+            {
+                if (!Framing.GetTileSafely(m, rect.Bottom+1).HasTile)
+                {
+                    return false;
+                }
+            }
             for (int k = rect.Left; k < rect.Right; k++)
             {
                 for (int l = rect.Top; l < rect.Bottom; l++)
                 {
+                    //Dust.QuickBox(new Vector2(k, l)*16f, new Vector2(k, l)*16f + new Vector2(16, 16), 8, Color.White, null);
                     if (Framing.GetTileSafely(k, l).HasTile)
                     {
                         return false;
@@ -132,6 +147,96 @@ namespace ITD
         public static bool IsOnStandableGround(this Entity entity, float yOffset = 0f, bool onlySolid = false)
         {
             return IsOnStandableGround(entity.BottomLeft.X, entity.BottomLeft.Y + yOffset, entity.width, onlySolid);
+        }
+        /// <summary>
+        /// code from the verdant mod
+        /// </summary>
+        public static void DrawSlopedGlowMask(int i, int j, Texture2D texture, Color drawColor, Vector2 positionOffset, Rectangle? frameOverride = null)
+        {
+            Tile tile = Main.tile[i, j];
+            int frameX = tile.TileFrameX;
+            int frameY = tile.TileFrameY;
+
+            if (frameOverride is not null)
+            {
+                frameX = frameOverride.Value.X;
+                frameY = frameOverride.Value.Y;
+            }
+
+            Point frameSize = frameOverride is not null ? frameOverride.Value.Size().ToPoint() : new Point(16, 16);
+            int width = frameSize.X;
+            int height = frameSize.Y;
+
+            Vector2 location = new(i * 16, j * 16);
+            Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
+            Vector2 offsets = -Main.screenPosition + zero + positionOffset;
+            Vector2 drawCoordinates = location + offsets;
+
+            if ((tile.Slope == 0 && !tile.IsHalfBlock) || (Main.tileSolid[tile.TileType] && Main.tileSolidTop[tile.TileType])) //second one should be for platforms
+                Main.spriteBatch.Draw(texture, drawCoordinates, new Rectangle(frameX, frameY, width, height), drawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            else if (tile.IsHalfBlock)
+                Main.spriteBatch.Draw(texture, new Vector2(drawCoordinates.X, drawCoordinates.Y + 8), new Rectangle(frameX, frameY, width, 8), drawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            else
+            {
+                var slope = tile.Slope;
+                Rectangle frame;
+                Vector2 drawPos;
+
+                if (slope == SlopeType.SlopeDownLeft || slope == SlopeType.SlopeDownRight)
+                {
+                    int length;
+                    int height2;
+
+                    for (int a = 0; a < 8; ++a)
+                    {
+                        if (slope == SlopeType.SlopeDownRight)
+                        {
+                            length = 16 - a * 2 - 2;
+                            height2 = 14 - a * 2;
+                        }
+                        else
+                        {
+                            length = a * 2;
+                            height2 = 14 - length;
+                        }
+
+                        frame = new Rectangle(frameX + length, frameY, 2, height2);
+                        drawPos = new Vector2(i * 16 + length, j * 16 + a * 2) + offsets;
+                        Main.spriteBatch.Draw(texture, drawPos, frame, drawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+                    }
+
+                    frame = new Rectangle(frameX, frameY + 14, width, 2);
+                    drawPos = new Vector2(i * 16, j * 16 + 14) + offsets;
+                    Main.spriteBatch.Draw(texture, drawPos, frame, drawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+                }
+                else
+                {
+                    int length;
+                    int height2;
+
+                    for (int a = 0; a < 8; ++a)
+                    {
+                        if (slope == SlopeType.SlopeUpLeft)
+                        {
+                            length = a * 2;
+                            height2 = 16 - length;
+                        }
+                        else
+                        {
+                            length = 16 - a * 2 - 2;
+                            height2 = 16 - a * 2;
+                        }
+
+                        frame = new Rectangle(frameX + length, frameY + 16 - height2, 2, height2);
+                        drawPos = new Vector2(i * 16 + length, j * 16) + offsets;
+                        Main.spriteBatch.Draw(texture, drawPos, frame, drawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+                    }
+
+                    drawPos = new Vector2(i * 16, j * 16) + offsets;
+                    frame = new Rectangle(frameX, frameY, 16, 2);
+                    Main.spriteBatch.Draw(texture, drawPos, frame, drawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+                }
+            }
         }
         /// <summary>
         /// Attempts to recreate vanilla tile framing behaviour. I'm using this for pegmatite as I need pegmatite and diorite to merge properly and not look ugly.

@@ -226,7 +226,8 @@ Items: {
 
 	Skullmet: {
 		DisplayName: Calavet
-		Tooltip: "Los esqueletos serán amistosos si no son atacados"
+		// Change tooltip after better implementation
+		Tooltip: Los esqueletos serán amistosos si no son atacados
 	}
 }
 
@@ -307,6 +308,8 @@ WorldGen: {
 Tiles: {
 	BlueshroomSapling.MapEntry: Primordio de champizúl
 	CyaniteOreTile.MapEntry: Cianita
+	// BlueshroomTreeTest.MapEntry: Blueshroom Tree Test
+	// BlueshroomTree.MapEntry: Blueshroom Tree
 }
 
 Biomes: {

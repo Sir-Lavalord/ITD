@@ -50,14 +50,13 @@ namespace ITD.Content.Tiles.BlueshroomGroves
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            Tile thisTile = Framing.GetTileSafely(i, j);
-            Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
-            Vector2 offsets = -Main.screenPosition + zero;
-            spriteBatch.Draw(glowmask.Value, new Vector2(i*16, j*16) + offsets, new Rectangle(thisTile.TileFrameX, thisTile.TileFrameY, 16, 16), Color.White);
+            Helpers.DrawSlopedGlowMask(i, j, glowmask.Value, Color.White, Vector2.Zero);
         }
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            WorldGen.ReplaceTile(i, j, TileID.SnowBlock, 0);
+            if (fail)
+            {
+            }
         }
         public override void RandomUpdate(int i, int j)
         {

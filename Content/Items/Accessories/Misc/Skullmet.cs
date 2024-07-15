@@ -1,4 +1,5 @@
-﻿using Microsoft.Build.Construction;
+﻿using ITD.Content.Tiles;
+using Microsoft.Build.Construction;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;

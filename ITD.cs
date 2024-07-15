@@ -96,6 +96,11 @@ namespace ITD
                 ]);
                 RecipeGroup.RegisterGroup("IronOre", group);
             }
+            public override void PostUpdateDusts()
+            {
+                BlueshroomTree.sinElement += 0.02f;
+                BlueshroomTree.opac = ((float)Math.Sin(BlueshroomTree.sinElement) + 1f) / 2f;
+            }
         }
         public class ITDPlayer : ModPlayer
         {
@@ -104,7 +109,7 @@ namespace ITD
 
             bool cosJelCounter = false;
             int cosJelTimer = 0;
-            int cosJelTime = 60 * 80;
+            private readonly int cosJelTime = 60 * 80;
 
             public bool ZoneDeepDesert;
             public bool ZoneBlueshroomsUnderground;

@@ -1,68 +1,46 @@
-﻿using ITD.Content.Items.Materials;
-using ITD.Content.Tiles;
+﻿using ITD.Content.Dusts;
+using ITD.Content.Items.Materials;
+using static Terraria.ModLoader.ModContent;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
+using System;
 
-namespace ITD.Content.Tiles.BlueshroomGroves;
-
-public class BlueshroomTree : ModTree
+namespace ITD.Content.Tiles.BlueshroomGroves
 {
-    private Asset<Texture2D> texture;
-    private Asset<Texture2D> branchesTexture;
-    private Asset<Texture2D> topsTexture;
-
-    public override TreePaintingSettings TreeShaderSettings => new()
+    public class BlueshroomTree :  ITDTree
     {
-        UseSpecialGroups = true,
-        SpecialGroupMinimalHueValue = 11f / 72f,
-        SpecialGroupMaximumHueValue = 0.25f,
-        SpecialGroupMinimumSaturationValue = 0.88f,
-        SpecialGroupMaximumSaturationValue = 1f
-    };
-
-    public override void SetStaticDefaults()
-    {
-        GrowsOnTileId = [ModContent.TileType<Bluegrass>()];
-        texture = ModContent.Request<Texture2D>("ITD/Content/Tiles/BlueshroomGroves/BlueshroomTree");
-        branchesTexture = ModContent.Request<Texture2D>("ITD/Content/Tiles/BlueshroomGroves/BlueshroomBranches");
-        topsTexture = ModContent.Request<Texture2D>("ITD/Content/Tiles/BlueshroomGroves/BlueshroomTops");
-    }
-    public override Asset<Texture2D> GetTexture()
-    {
-        return texture;
-    }
-
-    public override int SaplingGrowthType(ref int style)
-    {
-        style = 0;
-        return ModContent.TileType<BlueshroomSapling>();
-    }
-
-    public override void SetTreeFoliageSettings(Tile tile, ref int xoffset, ref int treeFrame, ref int floorY, ref int topTextureFrameWidth, ref int topTextureFrameHeight)
-    {
-        
-    }
-
-    public override Asset<Texture2D> GetBranchTextures() => branchesTexture;
-
-    public override Asset<Texture2D> GetTopTextures() => topsTexture;
-
-    public override int DropWood()
-    {
-        return ModContent.ItemType<Blueshroom>();
-    }
-    public override bool CanDropAcorn()
-    {
-        return false;
-    }
-    public override bool Shake(int x, int y, ref bool createLeaves)
-    {
-        Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), new Vector2(x, y) * 16, ModContent.ItemType<Blueshroom>());
-        return false;
+        private readonly Asset<Texture2D> glow = Request<Texture2D>("ITD/Content/Tiles/BlueshroomGroves/BlueshroomTops_Glow");
+        private readonly Asset<Texture2D> branchGlow = Request<Texture2D>("ITD/Content/Tiles/BlueshroomGroves/BlueshroomBranches_Glow");
+        public static float sinElement = 0f;
+        public static float opac = 1f;
+        public override void SetStaticTreeDefaults()
+        {
+            DustType = DustType<BlueshroomSporesDust>();
+            MapColor = new Color(179, 167, 134);
+            WoodType = ItemType<Blueshroom>();
+        }
+        public override void PostDrawTreeTops(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, Color color, Rectangle sourceRect)
+        {
+            spriteBatch.Draw(glow.Value, position, sourceRect, Color.White * opac, 0f, origin, 1f, SpriteEffects.None, 0f);
+        }
+        public override void PostDrawBranch(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, Color color, Rectangle sourceRect, bool isLeftBranch)
+        {
+            spriteBatch.Draw(branchGlow.Value, position, sourceRect, Color.White * opac, 0f, origin, 1f, SpriteEffects.None, 0f);
+        }
+        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            if (IsTopTile(i, j))
+            {
+                Vector2 worldCoords = new Point(i, j).ToWorldCoordinates();
+                Lighting.AddLight(worldCoords, new Vector3(0f, 0.55f, 0.6f));
+                if (Main.rand.NextBool(12))
+                {
+                    int offset = 20;
+                    Dust.NewDust(worldCoords-new Vector2(offset, offset+64), 16+offset*2, 16+offset*2, DustType<BlueshroomSporesDust>());
+                }
+            }
+        }
     }
 }

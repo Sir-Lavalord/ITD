@@ -1,4 +1,6 @@
-﻿using ITD.Content.Dusts;
+﻿// This is commented out cuz now blueshrooms aren't modtrees
+/*
+using ITD.Content.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -81,3 +83,4 @@ namespace ITD.Content.Tiles.BlueshroomGroves
         }
     }
 }
+*/

@@ -1,4 +1,5 @@
-﻿using ITD.Content.Tiles.BlueshroomGroves;
+﻿using ITD.Content.Tiles;
+using ITD.Content.Tiles.BlueshroomGroves;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -26,10 +27,9 @@ namespace ITD.Content.Items.Materials
         }
         public override bool? UseItem(Player player)
         {
-            int i = (int)Main.MouseWorld.X;
-            int j = (int)Main.MouseWorld.Y;
-            WorldGen.PlaceObject(i, j, ModContent.TileType<BlueshroomSapling>());
-            WorldGen.GrowTree(i, j);
+            int i = (int)(Main.MouseWorld.X/16f);
+            int j = (int)(Main.MouseWorld.Y/16f);
+            ITDTree.Grow(i, j);
             return true;
         }
     }

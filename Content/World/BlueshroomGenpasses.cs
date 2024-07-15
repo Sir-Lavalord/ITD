@@ -6,14 +6,12 @@ using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using Terraria;
 using Microsoft.Xna.Framework;
+using ITD.Content.Tiles;
 
 namespace ITD.Content.World
 {
-    public class BlueshroomGrovesGenPass : GenPass
+    public class BlueshroomGrovesGenPass(string name, float loadWeight) : GenPass(name, loadWeight)
     {
-        public BlueshroomGrovesGenPass(string name, float loadWeight) : base(name, loadWeight)
-        {
-        }
         protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
             Point p = GetGenStartPoint();
@@ -22,8 +20,8 @@ namespace ITD.Content.World
 
         private Point GetGenStartPoint()
         {
-            Point iceBiomeStart = new Point(0, 0);
-            Point iceBiomeEnd = new Point(0, 0);
+            Point iceBiomeStart = new(0, 0);
+            Point iceBiomeEnd = new(0, 0);
             for (int i = 0; i < Main.maxTilesX && iceBiomeStart == Point.Zero; i++)
             {
                 for (int j = 0; j < Main.maxTilesY; j++)
@@ -146,8 +144,7 @@ namespace ITD.Content.World
                 {
                     if (Helpers.AptForTree(i, j, 16))
                     {
-                        WorldGen.PlaceObject(i, j, ModContent.TileType<BlueshroomSapling>());
-                        WorldGen.GrowTree(i, j);
+                        ITDTree.Grow(i, j, 0, 8, 14);
                     }
                 }
             }
@@ -155,10 +152,6 @@ namespace ITD.Content.World
             {
                 for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
                 {
-                    if (Helpers.TileType(i, j, ModContent.TileType<BlueshroomSapling>()))
-                    {
-                        WorldGen.KillTile(i, j);
-                    }
                     Helpers.GrowTallBluegrass(i, j);
                 }
             }

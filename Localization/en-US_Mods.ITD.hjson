@@ -36,7 +36,7 @@ Items: {
 
 	DashingFeather: {
 		DisplayName: Dashing Feather
-		Tooltip: "Double tap any direction while on the ground to start a dash you can control for a short while"
+		Tooltip: Double tap any direction while on the ground to start a dash you can control for a short while
 	}
 
 	DespoticSnaptrap: {
@@ -46,7 +46,7 @@ Items: {
 
 	EmberSlasher: {
 		DisplayName: Ember Slasher
-		Tooltip: "Fires a spinning fireball that slowly gains speed and bounces off of walls"
+		Tooltip: Fires a spinning fireball that slowly gains speed and bounces off of walls
 	}
 
 	Snaptrap: {
@@ -227,7 +227,7 @@ Items: {
 	Skullmet: {
 		DisplayName: Skullmet
 		// Change tooltip after better implementation
-		Tooltip: "Makes some skeletal enemies passive until aggravated"
+		Tooltip: Makes some skeletal enemies passive until aggravated
 	}
 }
 
@@ -308,6 +308,8 @@ WorldGen: {
 Tiles: {
 	BlueshroomSapling.MapEntry: Blueshroom Primordium
 	CyaniteOreTile.MapEntry: Cyanite
+	BlueshroomTreeTest.MapEntry: Blueshroom Tree Test
+	BlueshroomTree.MapEntry: Blueshroom Tree
 }
 
 Biomes: {
