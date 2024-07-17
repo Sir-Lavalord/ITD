@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria.Localization;
 using ITD.Content.Tiles.BlueshroomGroves;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ITD.Content.Tiles
 {
@@ -346,6 +347,7 @@ namespace ITD.Content.Tiles
                                 FrameToPoint(t, 108, 54);
                                 break;
                         }
+                        return;
                     }
                     SideGrowth branches = SideGrowth.None;
                     if (IsRightBranch(i + 1, j + 1) && Helpers.TileType(i + 1, j + 1, Type))

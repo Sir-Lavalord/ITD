@@ -8,6 +8,7 @@ using Terraria.Audio;
 using ITD.Content.Items.Placeable;
 using ITD.Content.Items.Materials;
 using Terraria.GameContent.ItemDropRules;
+using ITD.Utils;
 
 namespace ITD.Content.NPCs.BasicEnemies
 {
@@ -341,7 +342,7 @@ namespace ITD.Content.NPCs.BasicEnemies
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.GetModPlayer<ITD.ITDPlayer>().ZoneDeepDesert)
+            if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
             {
                 return 0.15f;
             }

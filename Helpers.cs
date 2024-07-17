@@ -31,21 +31,69 @@ namespace ITD
                 _ => new Color(v, p, q),
             };
         }
-        public static Vector2? RecursiveRaycast(Vector2 startWorldPos, float approxLengthTiles, float currentLengthTiles)
+        public static Vector2 QuickRaycast(Vector2 origin, Vector2 direction, float maxDistTiles = 64f)
         {
-            if (!(currentLengthTiles > approxLengthTiles))
+            origin /= 16f;
+            direction = direction.SafeNormalize(Vector2.UnitY);
+            Vector2 unitStepSize = new Vector2(
+                (float)Math.Sqrt(1 + (direction.Y / direction.X) * (direction.Y / direction.X)),
+                (float)Math.Sqrt(1 + (direction.X / direction.Y) * (direction.X / direction.Y))
+                );
+            Point tileCheck = origin.ToPoint();
+            Vector2 rayLength1D;
+            Point step;
+            float curDistPixels = 0f;
+            if (direction.X < 0)
             {
-                currentLengthTiles++;
-                if (Collision.SolidCollision(startWorldPos, 1, 1))
+                step.X = -1;
+                rayLength1D.X = (origin.X - (float)(tileCheck.X)) * unitStepSize.X;
+            }
+            else
+            {
+                step.X = 1;
+                rayLength1D.X = ((float)(tileCheck.X + 1) - origin.X) * unitStepSize.X;
+            }
+            if (direction.Y < 0)
+            {
+                step.Y = -1;
+                rayLength1D.Y = (origin.Y - (float)(tileCheck.Y)) * unitStepSize.Y;
+            }
+            else
+            {
+                step.Y = 1;
+                rayLength1D.Y = ((float)(tileCheck.Y + 1) - origin.Y) * unitStepSize.Y;
+            }
+            bool tileFound = false;
+            while (!tileFound && curDistPixels < maxDistTiles)
+            {
+                // Walk
+                if (rayLength1D.X < rayLength1D.Y)
                 {
-                    return startWorldPos;
+                    tileCheck.X += step.X;
+                    curDistPixels = rayLength1D.X;
+                    rayLength1D.X += unitStepSize.X;
                 }
                 else
                 {
-                    return RecursiveRaycast(startWorldPos + new Vector2(0f, 8f), approxLengthTiles, currentLengthTiles);
+                    tileCheck.Y += step.Y;
+                    curDistPixels = rayLength1D.Y;
+                    rayLength1D.Y += unitStepSize.Y;
+                }
+                if (SolidTile(tileCheck.X, tileCheck.Y))
+                {
+                    tileFound = true;
                 }
             }
-            return null;
+            Vector2 intersection = Vector2.Zero;
+            if (tileFound)
+            {
+                intersection = origin + direction * curDistPixels;
+            }
+            return intersection * 16f;
+        }
+        public static float Remap(float value, float oldMin, float oldMax, float newMin, float newMax)
+        {
+            return newMin + (value - oldMin) * (newMax - newMin) / (oldMax - oldMin);
         }
         public static void GrowBluegrass(int i, int j)
         {

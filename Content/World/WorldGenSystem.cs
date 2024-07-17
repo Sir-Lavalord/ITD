@@ -4,6 +4,8 @@ using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using Microsoft.Xna.Framework.Input;
 using Terraria.Localization;
+using Terraria.ID;
+using Microsoft.Xna.Framework;
 
 namespace ITD.Content.World
 {
@@ -37,9 +39,14 @@ namespace ITD.Content.World
 
         public override void PostUpdateWorld()
         {
-
-            //if (JustPressed(Keys.D1))
-                //TestMethod((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16);
+            /*
+            if (Main.keyState.IsKeyDown(Keys.D1))
+            {
+                Dust d = Dust.NewDustPerfect(Helpers.QuickRaycast(Main.LocalPlayer.Center, Main.MouseWorld - Main.LocalPlayer.Center, 12f), DustID.Torch);
+                d.noGravity = true;
+                d.velocity = Vector2.Zero;
+            }
+            */
         }
 
         private void TestMethod(int x, int y)

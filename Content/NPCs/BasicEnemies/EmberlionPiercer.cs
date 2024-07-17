@@ -8,6 +8,7 @@ using ReLogic.Content;
 using ITD.Content.Items.Materials;
 using ITD.Content.Items.Weapons.Melee;
 using Terraria.GameContent.ItemDropRules;
+using ITD.Utils;
 
 namespace ITD.Content.NPCs.BasicEnemies
 {
@@ -104,12 +105,12 @@ namespace ITD.Content.NPCs.BasicEnemies
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            spriteBatch.Draw(glowmask.Value, NPC.position - screenPos + new Vector2(0f, 2f), NPC.frame, Color.White * glowmaskOpacity, 0f, Vector2.Zero, 1f, NPC.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, default);
+            spriteBatch.Draw(glowmask.Value, NPC.position - screenPos + new Vector2(0f, 2f+NPC.gfxOffY), NPC.frame, Color.White * glowmaskOpacity, 0f, Vector2.Zero, 1f, NPC.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, default);
         }
         public override void FindFrame(int frameHeight)
         {
             NPC.spriteDirection = NPC.direction;
-            if (NPC.velocity.Y == 0f && AI_State == ActionState.Chasing)
+            if (NPC.IsOnStandableGround() && AI_State == ActionState.Chasing)
             {
                 NPC.frameCounter += 1f;
                 if (NPC.frameCounter > 5f)
@@ -126,7 +127,7 @@ namespace ITD.Content.NPCs.BasicEnemies
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.GetModPlayer<ITD.ITDPlayer>().ZoneDeepDesert)
+            if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
             {
                 return 0.15f;
             }

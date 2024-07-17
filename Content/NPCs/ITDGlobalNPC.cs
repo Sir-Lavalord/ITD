@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Items.Weapons.Melee;
+using ITD.Utils;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
@@ -22,7 +23,7 @@ namespace ITD.Content.NPCs
         }
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.GetModPlayer<ITD.ITDPlayer>().ZoneDeepDesert)
+            if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
             {
                 pool[NPCID.CaveBat] = 0f;
                 pool[NPCID.BlueSlime] = 0f;

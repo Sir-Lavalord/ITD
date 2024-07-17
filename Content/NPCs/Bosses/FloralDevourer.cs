@@ -27,8 +27,8 @@ namespace ITD.Content.NPCs.Bosses
         private int dipProgress = 0;
         private int dipProgLimit = 60;
         private int dipCooldown = 0;
-        private float raycastFloatLength = 18f;
-        private float defaultRaycastFloatLength = 18f;
+        private float raycastFloatLength = 8f;
+        private float defaultRaycastFloatLength = 8f;
         private bool dipping = false;
         public override void SetStaticDefaults()
         {
@@ -72,11 +72,10 @@ namespace ITD.Content.NPCs.Bosses
 
         public override void AI()
         {
-            var raycastCheck = Helpers.RecursiveRaycast(NPC.Center, raycastFloatLength, 0f);
-            if (raycastCheck != null)
+            var raycastCheck = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, raycastFloatLength);
+            if (raycastCheck != Vector2.Zero)
             {
                 NPC.velocity.Y = -2f;
-                //NPC.velocity.Y -= 1f;
             }
 
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
@@ -219,16 +218,8 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (hasLegs)
             {
-                var raycastCheck = Helpers.RecursiveRaycast(position, 24f, 0f);
-                if (raycastCheck != null)
-                {
-                    frontRayPosition = (Vector2)raycastCheck;
-                }
-                var raycastCheckBack = Helpers.RecursiveRaycast(position + new Vector2(direction.X * 32f, 0f), 24f, 0f);
-                if (raycastCheckBack != null)
-                {
-                    backRayPosition = (Vector2)raycastCheckBack;
-                }
+                frontRayPosition = Helpers.QuickRaycast(position, Vector2.UnitY, 24f);
+                backRayPosition = Helpers.QuickRaycast(position + new Vector2(direction.X * 32f, 0f), Vector2.UnitY, 24f);
                 float step = 80f;
                 if (legFront != null && legBack != null)
                 {

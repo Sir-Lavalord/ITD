@@ -44,10 +44,9 @@ namespace ITD.Content.NPCs.Bosses
         public override void SetStaticDefaults()
         {
             NPCID.Sets.MPAllowedEnemies[Type] = true;
-
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            Main.npcFrameCount[NPC.type] = 5;
         }
 
         public override void SetDefaults()
@@ -67,7 +66,6 @@ namespace ITD.Content.NPCs.Bosses
             NPC.boss = true;
             NPC.npcSlots = 10f;
             NPC.aiStyle = -1;
-            Main.npcFrameCount[NPC.type] = 5;
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)

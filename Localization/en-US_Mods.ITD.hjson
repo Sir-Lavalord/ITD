@@ -229,6 +229,22 @@ Items: {
 		// Change tooltip after better implementation
 		Tooltip: Makes some skeletal enemies passive until aggravated
 	}
+
+	AlloyHelmet: {
+		SetBonus: Mods.ITD.Items.AlloyHelmet.SetBonus
+		DisplayName: Alloy Helmet
+		Tooltip: ""
+	}
+
+	AlloyChestplate: {
+		DisplayName: Alloy Chestplate
+		Tooltip: ""
+	}
+
+	AlloyLeggings: {
+		DisplayName: Alloy Leggings
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -277,6 +293,7 @@ Projectiles: {
 	}
 
 	EvilSpitProjectile.DisplayName: Evil Spit
+	CicadianTreeEnd.DisplayName: Cicadian Tree End
 }
 
 NPCs: {
@@ -286,6 +303,8 @@ NPCs: {
 	EmberlionPiercer.DisplayName: Emberlion Piercer
 	DesertBat.DisplayName: Desert Bat
 	EmberlionMiner.DisplayName: Emberlion Miner
+	Cicadian.DisplayName: Cicadian
+	CicadianTree.DisplayName: Cicadian Tree
 }
 
 Buffs: {
