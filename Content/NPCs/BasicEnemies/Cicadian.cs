@@ -96,7 +96,7 @@ namespace ITD.Content.NPCs.BasicEnemies
             float velocityY = speed * (float)Math.Sin(angle);
             Vector2 velocity = new Vector2(velocityX, -velocityY);
             if (velocity.HasNaNs())
-                velocity = toPlayerNormalized * speed;
+                velocity = (toPlayerNormalized * speed) + new Vector2(0f, -5f);
 
             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, velocity, ModContent.ProjectileType<IcyBoulder>(), 30, 0.2f);
         }
