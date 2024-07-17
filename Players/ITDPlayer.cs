@@ -40,7 +40,7 @@ namespace ITD.Players
                 Player.endurance += 0.02f;
             }
         }
-        public override void PreUpdate() // I'm using this hook to simulate all of the physics
+        public override void PreUpdate()
         {
             ZoneBlueshroomsUnderground = ModContent.GetInstance<ITDSystem>().bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
             ZoneDeepDesert = ModContent.GetInstance<ITDSystem>().deepdesertTileCount > 50 && Player.ZoneRockLayerHeight;

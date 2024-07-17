@@ -28,7 +28,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             HitSound = SoundID.Item48;
             DustType = DustID.SnowBlock;
 
-            AddMapEntry(new Color(211, 236, 241));
+            AddMapEntry(new Color(0, 129, 227));
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num)
