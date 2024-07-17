@@ -13,6 +13,8 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\Gores\NPCs\" />
+    <Folder Include="Content\Gores\Projectiles\" />
     <Folder Include="Content\Tiles\Relics\" />
   </ItemGroup>
 </Project>

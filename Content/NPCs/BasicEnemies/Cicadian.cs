@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ITD.Content.Projectiles.Hostile;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.DataStructures;
@@ -22,6 +23,7 @@ namespace ITD.Content.NPCs.BasicEnemies
         private ActionState AI_State;
         private float transitionProgress;
         private Vector2 anchorPoint;
+        private int boulderCooldown = 0;
         public int tree;
         public bool chopped = false;
         public override void SetStaticDefaults()
@@ -51,6 +53,7 @@ namespace ITD.Content.NPCs.BasicEnemies
             if (!Main.npc[tree].active && !chopped)
             {
                 chopped = true;
+                NPC.defense -= 15;
                 if (AI_State == ActionState.Background)
                     AI_State = ActionState.Transition;
             }
@@ -76,6 +79,27 @@ namespace ITD.Content.NPCs.BasicEnemies
                     break;
             }
         }
+        private void LaunchIcyBoulder(Player player)
+        {
+            Vector2 toPlayer = player.Center - NPC.Center + player.velocity;
+            Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
+            int toPlayerDirection = Math.Sign(toPlayerNormalized.X);
+            float gravity = IcyBoulder.IcyBoulderGravity;
+            float distance = toPlayer.Length();
+            float speed = 14f;
+
+            float verticalDistance = Math.Abs(toPlayer.Y);
+
+            float angle = (float)Math.Atan((Math.Pow(speed, 2) + Math.Sqrt(Math.Pow(speed, 4) - gravity * (gravity * Math.Pow(distance, 2) + 2 * verticalDistance * Math.Pow(speed, 2)))) / (gravity * distance));
+
+            float velocityX = speed * (float)Math.Cos(angle) * toPlayerDirection;
+            float velocityY = speed * (float)Math.Sin(angle);
+            Vector2 velocity = new Vector2(velocityX, -velocityY);
+            if (velocity.HasNaNs())
+                velocity = toPlayerNormalized * speed;
+
+            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, velocity, ModContent.ProjectileType<IcyBoulder>(), 30, 0.2f);
+        }
         private void DoChase()
         {
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
@@ -90,6 +114,12 @@ namespace ITD.Content.NPCs.BasicEnemies
             NPC.direction = playerDirectionX;
             NPC.velocity.X = playerDirectionX * xSpeed;
             CheckForSideTiles();
+            boulderCooldown--;
+            if (boulderCooldown <= 0 && toPlayer.Length() > 400f && Math.Abs(toPlayer.Y) > 80f)
+            {
+                LaunchIcyBoulder(player);
+                boulderCooldown = 120;
+            }
         }
         private void CheckForSideTiles()
         {

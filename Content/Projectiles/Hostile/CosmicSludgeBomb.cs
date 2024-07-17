@@ -38,7 +38,7 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override Color? GetAlpha(Color lightColor)
         {
-            return Color.White;
+            return Color.White * (1f-(Projectile.alpha/255f));
         }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -60,7 +60,6 @@ namespace ITD.Content.Projectiles.Hostile
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Main.instance.LoadProjectile(Projectile.type);
             Texture2D texture = effect.Value;
             Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
             for (int k = 0; k < Projectile.oldPos.Length; k++)

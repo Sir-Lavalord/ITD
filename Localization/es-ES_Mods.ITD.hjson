@@ -294,6 +294,7 @@ Projectiles: {
 
 	EvilSpitProjectile.DisplayName: Escupitajo maligno
 	// CicadianTreeEnd.DisplayName: Cicadian Tree End
+	// IcyBoulder.DisplayName: Icy Boulder
 }
 
 NPCs: {
