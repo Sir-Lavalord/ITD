@@ -46,7 +46,7 @@ namespace ITD.Content.NPCs.BasicEnemies
             NPC.aiStyle = -1;
             NPC.noTileCollide = true;
         }
-        // this is a comment...
+        // this is a comment.
         public override void AI()
         {
             Main.npc[tree].ai[1] = NPC.Center.X + NPC.direction * 2f;
