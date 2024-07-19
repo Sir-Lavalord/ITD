@@ -36,8 +36,14 @@ namespace ITD.Content.NPCs.BasicEnemies
             NPC.value = 0;
             NPC.aiStyle = -1;
         }
+        public override void ModifyHoverBoundingBox(ref Rectangle boundingBox)
+        {
+            boundingBox = Rectangle.Empty;
+        }
         public override void OnSpawn(IEntitySource source)
         {
+            NPC.Center += new Vector2(0, 40);
+            NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Cicadian>(), NPC.whoAmI, NPC.whoAmI);
             BasePosition = NPC.Center;
         }
         public override void AI()

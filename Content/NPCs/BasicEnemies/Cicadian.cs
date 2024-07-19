@@ -1,8 +1,10 @@
 ﻿using ITD.Content.Projectiles.Hostile;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -18,7 +20,8 @@ namespace ITD.Content.NPCs.BasicEnemies
             Background,
             Transition,
             Chasing,
-
+            Charging,
+            Dashing,
         }
         private ActionState AI_State;
         private float transitionProgress;
@@ -28,7 +31,9 @@ namespace ITD.Content.NPCs.BasicEnemies
         public bool chopped = false;
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[NPC.type] = 7;
+            NPCID.Sets.TrailCacheLength[Type] = 5;
+            NPCID.Sets.TrailingMode[Type] = 0;
+            Main.npcFrameCount[Type] = 7;
         }
         public override void SetDefaults()
         {
@@ -46,11 +51,21 @@ namespace ITD.Content.NPCs.BasicEnemies
             NPC.aiStyle = -1;
             NPC.noTileCollide = true;
         }
-        // this is a comment.
+        public override void ModifyHoverBoundingBox(ref Rectangle boundingBox)
+        {
+            if (AI_State == ActionState.Background)
+            {
+                boundingBox = Rectangle.Empty;
+            }
+            else
+            {
+                boundingBox = NPC.getRect();
+            }
+        }
         public override void AI()
         {
-            Main.npc[tree].ai[1] = NPC.Center.X + NPC.direction * 2f;
-            Main.npc[tree].ai[2] = NPC.Center.Y - 54f;
+            Main.npc[tree].ai[1] = NPC.Center.X + NPC.direction * 4f;
+            Main.npc[tree].ai[2] = NPC.Center.Y - 50f;
             if (!Main.npc[tree].active && !chopped)
             {
                 chopped = true;
@@ -168,7 +183,9 @@ namespace ITD.Content.NPCs.BasicEnemies
         public override void OnSpawn(IEntitySource source)
         {
             anchorPoint = NPC.position + new Vector2(0f, NPC.height / 2f);
-            tree = NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<CicadianTree>(), ai0: 0f, ai1: NPC.Center.X, ai2: NPC.Center.Y);
+            tree = (int)NPC.ai[0];
+            //Main.NewText(NPC.whoAmI);
+            //tree = NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<CicadianTree>(), NPC.whoAmI - NPC.whoAmI == 0 ? 0 : 1, ai0: 0f, ai1: NPC.Center.X, ai2: NPC.Center.Y);
         }
         public override void HitEffect(NPC.HitInfo hit)
         {
@@ -206,7 +223,7 @@ namespace ITD.Content.NPCs.BasicEnemies
                     NPC.frameCounter = 0;
                     NPC.frame.Y += frameHeight;
 
-                    if (NPC.frame.Y > frameHeight * Main.npcFrameCount[Type] - 2)
+                    if (NPC.frame.Y > frameHeight * (Main.npcFrameCount[Type] - 2))
                     {
                         NPC.frame.Y = frameHeight;
                     }
@@ -214,8 +231,23 @@ namespace ITD.Content.NPCs.BasicEnemies
             }
             if (AI_State == ActionState.Background)
             {
-                NPC.frame.Y = 540;
+                NPC.frame.Y = 576;
             }
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            if (AI_State == ActionState.Dashing)
+            {
+                Texture2D texture = TextureAssets.Npc[Type].Value;
+                Vector2 drawOrigin = texture.Size() / 2f;
+                for (int k = 0; k < NPC.oldPos.Length; k++)
+                {
+                    Vector2 drawPos = NPC.oldPos[k] - screenPos + drawOrigin + new Vector2(0f, NPC.gfxOffY + DrawOffsetY);
+                    Color color = drawColor * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
+                    spriteBatch.Draw(texture, drawPos, null, color, 0f, drawOrigin, NPC.scale, SpriteEffects.None, 0);
+                }
+            }
+            return true;
         }
         public override Color? GetAlpha(Color drawColor)
         {
