@@ -27,7 +27,7 @@ namespace ITD.Content.NPCs.BasicEnemies
         private float transitionProgress;
         private Vector2 anchorPoint;
         private int boulderCooldown = 0;
-        public int tree;
+
         public bool chopped = false;
         public override void SetStaticDefaults()
         {
@@ -64,9 +64,7 @@ namespace ITD.Content.NPCs.BasicEnemies
         }
         public override void AI()
         {
-            Main.npc[tree].ai[1] = NPC.Center.X + NPC.direction * 4f;
-            Main.npc[tree].ai[2] = NPC.Center.Y - 50f;
-            if (!Main.npc[tree].active && !chopped)
+            if (!Main.npc[(int)NPC.ai[0]].active && !chopped)
             {
                 chopped = true;
                 NPC.defense -= 15;
@@ -78,11 +76,12 @@ namespace ITD.Content.NPCs.BasicEnemies
                 case ActionState.Background:
                     NPC.hide = true;
                     NPC.position = anchorPoint;
+                    NPC.velocity = Vector2.Zero;
                     break;
                 case ActionState.Transition:
                     transitionProgress += 0.02f;
                     SpawnDiggingDust();
-                    NPC.position = anchorPoint - new Vector2(0f, transitionProgress*(NPC.height/1.5f));
+                    NPC.velocity = new Vector2(0f, -1f);
                     if (transitionProgress >= 1f)
                         AI_State = ActionState.Chasing;
                     break;
@@ -183,7 +182,6 @@ namespace ITD.Content.NPCs.BasicEnemies
         public override void OnSpawn(IEntitySource source)
         {
             anchorPoint = NPC.position + new Vector2(0f, NPC.height / 2f);
-            tree = (int)NPC.ai[0];
             //Main.NewText(NPC.whoAmI);
             //tree = NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<CicadianTree>(), NPC.whoAmI - NPC.whoAmI == 0 ? 0 : 1, ai0: 0f, ai1: NPC.Center.X, ai2: NPC.Center.Y);
         }
@@ -191,10 +189,6 @@ namespace ITD.Content.NPCs.BasicEnemies
         {
             if (AI_State == ActionState.Background)
                 AI_State = ActionState.Transition;
-            if (NPC.life <= 0)
-            {
-                Main.npc[tree].ai[0] = 1f;
-            }
         }
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {

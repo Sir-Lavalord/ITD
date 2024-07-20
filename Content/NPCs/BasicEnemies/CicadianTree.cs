@@ -11,16 +11,6 @@ namespace ITD.Content.NPCs.BasicEnemies
 {
     public class CicadianTree : ModNPC
     {
-        public bool CicadianKilled
-        {
-            get => NPC.ai[0] == 1f;
-            set => NPC.ai[0] = value ? 1f : 0f;
-        }
-        public Vector2 BasePosition
-        {
-            get => new Vector2(NPC.ai[1], NPC.ai[2]);
-            set { NPC.ai[1] = value.X; NPC.ai[2] = value.Y; }
-        }
         public override void SetDefaults()
         {
             NPC.width = 20;
@@ -40,16 +30,32 @@ namespace ITD.Content.NPCs.BasicEnemies
         {
             boundingBox = Rectangle.Empty;
         }
-        public override void OnSpawn(IEntitySource source)
-        {
-            NPC.Center += new Vector2(0, 40);
-            NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Cicadian>(), NPC.whoAmI, NPC.whoAmI);
-            BasePosition = NPC.Center;
-        }
         public override void AI()
         {
-            NPC.Center = BasePosition - new Vector2(0f, NPC.height/2f);
-            if (CicadianKilled)
+            int otherNPC = -1;
+            Vector2 offsetFromOtherNPC = Vector2.Zero;
+            if (NPC.localAI[0] == 0f && Main.netMode != 1)
+            {
+                NPC.localAI[0] = 1f;
+                int newNPC = NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y + 40, ModContent.NPCType<Cicadian>(), NPC.whoAmI, NPC.whoAmI, 0f, 0f, 0f, 255);
+                NPC.ai[0] = newNPC;
+            }
+            int otherNPCCheck = (int)NPC.ai[0];
+            if (Main.npc[otherNPCCheck].active)
+            {
+                otherNPC = otherNPCCheck;
+                offsetFromOtherNPC = Vector2.UnitY * -89f;
+            }
+            if (otherNPC != -1)
+            {
+                NPC cicadian = Main.npc[otherNPC];
+                NPC.velocity = Vector2.Zero;
+                NPC.Center = cicadian.Center;
+                NPC.Center += offsetFromOtherNPC;
+                NPC.gfxOffY = cicadian.gfxOffY;
+                NPC.velocity = cicadian.velocity;
+            }
+            else
             {
                 NPC.StrikeInstantKill();
                 NPC.netUpdate = true;
