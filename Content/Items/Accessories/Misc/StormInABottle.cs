@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using System;
+using ITD.Utils;
 
 namespace ITD.Content.Items.Accessories.Misc
 {
@@ -183,7 +184,7 @@ namespace ITD.Content.Items.Accessories.Misc
             NPC targetNPC = FindNearestEnemy();
             if (targetNPC != null)
             {
-                CreateLightningEffects(lightningStart, targetNPC.Center);
+                MiscHelpers.CreateLightningEffects(lightningStart, targetNPC.Center);
                 DamageEnemy(targetNPC);
             }
         }
@@ -198,26 +199,7 @@ namespace ITD.Content.Items.Accessories.Misc
             return tornadoBase + new Vector2((float)Math.Cos(angle) * radius, -height); // Negative height to go upwards
         }
 
-        private void CreateLightningEffects(Vector2 start, Vector2 end)
-        {
-            Vector2 direction = Vector2.Normalize(end - start);
 
-            for (int j = 0; j < 30; j++)
-            {
-                Vector2 dustPos = start + direction * j * 10f + Main.rand.NextVector2Circular(10f, 10f);
-
-                Dust dust = Dust.NewDustPerfect(
-                    dustPos,
-                    DustID.Electric,
-                    Vector2.Zero,
-                    0,
-                    Color.White,
-                    Main.rand.NextFloat(1.5f, 2f)
-                );
-                dust.noGravity = true;
-                dust.fadeIn = 1f;
-            }
-        }
 
         private void DamageEnemy(NPC targetNPC)
         {

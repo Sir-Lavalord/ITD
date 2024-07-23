@@ -19,11 +19,10 @@ namespace ITD.Content.Items.Accessories.Misc
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<DashPlayer>().DashAccessoryEquipped = true;
+            player.GetModPlayer<FeatherDashPlayer>().DashAccessoryEquipped = true;
         }
     }
-
-    public class DashPlayer : ModPlayer
+    public class FeatherDashPlayer : ModPlayer
     {
         public const int DashDown = 0;
         public const int DashUp = 1;
@@ -58,7 +57,6 @@ namespace ITD.Content.Items.Accessories.Misc
                 DashDir = -1;
             }
         }
-
         public override void PreUpdateMovement()
         {
             if (CanUseDash() && DashDir != -1 && DashDelay == 0)

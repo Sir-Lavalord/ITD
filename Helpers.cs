@@ -90,6 +90,10 @@ namespace ITD
             {
                 intersection = origin + direction * curDistPixels;
             }
+            else
+            {
+                intersection = origin + direction * maxDistTiles;
+            }
             return intersection * 16f;
         }
         public static float Remap(float value, float oldMin, float oldMax, float newMin, float newMax)

@@ -14,6 +14,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Projectiles.Hostile;
 using ITD.Content.Items.Weapons.Melee;
+using Terraria.GameContent;
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -22,6 +23,7 @@ namespace ITD.Content.NPCs.Bosses
     public class CosmicJellyfish : ModNPC
     {
         private readonly Asset<Texture2D> spriteBack = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/CosmicJellyfish_Back");
+        private int hand = -1;
         public static int[] oneFromOptionsDrops =
         {
             ModContent.ItemType<WormholeRipper>(),
@@ -83,7 +85,7 @@ namespace ITD.Content.NPCs.Bosses
 
         public override void OnSpawn(IEntitySource source)
         {
-
+            hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 1, 0.1f);
         }
 
         public override void OnKill()
@@ -238,8 +240,26 @@ namespace ITD.Content.NPCs.Bosses
                 case States.Wandering:
                     break;
             }
+            HandleHand(player);
         }
-
+        private void HandleHand(Player player)
+        {
+            if (hand != -1)
+            {
+                Projectile projectile = Main.projectile[hand];
+                if (projectile.active && projectile.type == ModContent.ProjectileType<CosmicJellyfish_Hand>())
+                {
+                    projectile.timeLeft = 2;
+                    Vector2 extendOut = new Vector2((float)Math.Cos(NPC.rotation), (float)Math.Sin(NPC.rotation));
+                    projectile.Center = NPC.Center - extendOut * 110 + new Vector2(0f, NPC.velocity.Y);
+                    projectile.rotation = NPC.rotation;
+                }
+                else
+                {
+                    hand = -1;
+                }
+            }
+        }
         private void DoSecondStage(Player player)
         {
 
@@ -248,6 +268,13 @@ namespace ITD.Content.NPCs.Bosses
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             spriteBatch.Draw(spriteBack.Value, NPC.Center - screenPos - new Vector2(0f, 32f), NPC.frame, Color.White, rotation, new Vector2(spriteBack.Width() / 2f, spriteBack.Height() / Main.npcFrameCount[NPC.type] / 2f), 1f, SpriteEffects.None, default);
+            if (hand != -1)
+            {
+                Projectile projectile = Main.projectile[hand];
+                Texture2D tex = TextureAssets.Projectile[projectile.type].Value;
+                int vertSize = tex.Height / Main.projFrames[projectile.type];
+                spriteBatch.Draw(tex, projectile.Center - screenPos, new Rectangle(0, vertSize*projectile.frame, tex.Width, vertSize), Color.White, projectile.rotation, new Vector2(tex.Width/2f, tex.Height / 2f / Main.projFrames[projectile.type]), projectile.scale, SpriteEffects.None, 0f);
+            }
             return true;
         }
     }

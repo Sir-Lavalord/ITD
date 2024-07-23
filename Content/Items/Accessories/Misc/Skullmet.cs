@@ -44,7 +44,6 @@ namespace ITD.Content.Items.Accessories.Misc
                         {
                             bool check = projectile.TryGetGlobalProjectile(out SkullmetGlobalProjectile globalProjectile)
                                          && globalProjectile.shouldNotDamagePlayer;
-                            Main.NewText(check);
                             return check;
                         }
                     }

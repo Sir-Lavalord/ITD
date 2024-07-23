@@ -249,6 +249,11 @@ Items: {
 		DisplayName: Swimshield Wipers
 		Tooltip: Immunity to vision related debuffs
 	}
+
+	ThunderStaff: {
+		DisplayName: Thunder Staff
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -299,6 +304,7 @@ Projectiles: {
 	EvilSpitProjectile.DisplayName: Evil Spit
 	CicadianTreeEnd.DisplayName: Cicadian Tree End
 	IcyBoulder.DisplayName: Icy Boulder
+	LightningStaffStrike.DisplayName: Lightning Staff Strike
 }
 
 NPCs: {

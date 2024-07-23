@@ -24,19 +24,10 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.penetrate = -1;
             Projectile.timeLeft = 400;
             Projectile.ignoreWater = true;
-            Projectile.tileCollide = true;
-        }
-        public override Color? GetAlpha(Color lightColor)
-        {
-            return Color.White;
-        }
-        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-        {
-            behindNPCsAndTiles.Add(index);
+            Projectile.tileCollide = false;
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            Projectile.Kill();
             return false;
         }
         public override void OnKill(int timeLeft)
@@ -47,14 +38,17 @@ namespace ITD.Content.Projectiles.Hostile
             }
             SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
         }
-
         public override void AI()
         {
-            if (++Projectile.frameCounter >= 3)
+            if (++Projectile.frameCounter >= 6)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
             }
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            return false;
         }
     }
 }

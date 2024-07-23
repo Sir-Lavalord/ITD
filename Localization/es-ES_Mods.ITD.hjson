@@ -226,7 +226,6 @@ Items: {
 
 	Skullmet: {
 		DisplayName: Calavet
-		// Change tooltip after better implementation
 		Tooltip: Ciertos esqueletos no pueden herirte
 	}
 
@@ -249,6 +248,11 @@ Items: {
 	SwimshieldWipers: {
 		DisplayName: Limpiaparabrisas
 		Tooltip: Inmunidad a varios debuffs de visión
+	}
+
+	ThunderStaff: {
+		// DisplayName: Thunder Staff
+		// Tooltip: ""
 	}
 }
 
@@ -300,6 +304,7 @@ Projectiles: {
 	EvilSpitProjectile.DisplayName: Escupitajo maligno
 	// CicadianTreeEnd.DisplayName: Cicadian Tree End
 	// IcyBoulder.DisplayName: Icy Boulder
+	// LightningStaffStrike.DisplayName: Lightning Staff Strike
 }
 
 NPCs: {
