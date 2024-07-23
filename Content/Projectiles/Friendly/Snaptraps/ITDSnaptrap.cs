@@ -16,14 +16,14 @@ namespace ITD.Content.Projectiles
     public abstract class ITDSnaptrap : ModProjectile
     {
         public SoundStyle snaptrapMetal = new SoundStyle("ITD/Content/Sounds/SnaptrapMetal", SoundType.Sound);
-        SoundStyle snaptrapForcedRetract = new SoundStyle("ITD/Content/Sounds/SnaptrapForcedRetract", SoundType.Sound);
+        public SoundStyle snaptrapForcedRetract = new SoundStyle("ITD/Content/Sounds/SnaptrapForcedRetract", SoundType.Sound);
         SlotId chainUnwindSlot;
-        SoundStyle snaptrapChain = new SoundStyle("ITD/Content/Sounds/SnaptrapUnwind", SoundType.Sound)
+        public SoundStyle snaptrapChain = new SoundStyle("ITD/Content/Sounds/SnaptrapUnwind", SoundType.Sound)
         {
             IsLooped = true,
         };
         SlotId snaptrapWarningSlot;
-        SoundStyle snaptrapWarning = new SoundStyle("ITD/Content/Sounds/SnaptrapWarning", SoundType.Sound)
+        public SoundStyle snaptrapWarning = new SoundStyle("ITD/Content/Sounds/SnaptrapWarning", SoundType.Sound)
         {
             IsLooped = true,
         };
