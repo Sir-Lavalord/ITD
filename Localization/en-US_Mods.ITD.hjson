@@ -245,6 +245,11 @@ Items: {
 		DisplayName: Alloy Leggings
 		Tooltip: ""
 	}
+
+	SwimshieldWipers: {
+		DisplayName: Swimshield Wipers
+		Tooltip: "Immunity to vision related debuffs"
+	}
 }
 
 Projectiles: {
