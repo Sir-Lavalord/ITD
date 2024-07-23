@@ -1,5 +1,4 @@
-﻿using ITD.Content.Tiles;
-using Microsoft.Build.Construction;
+﻿using ITD.Content.Projectiles;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
@@ -12,11 +11,7 @@ namespace ITD.Content.Items.Accessories.Misc
     {
         public override void SetDefaults()
         {
-            Item.width = 20;
-            Item.height = 20;
-            Item.value = Item.buyPrice(10);
-            Item.rare = ItemRarityID.Green;
-            Item.accessory = true;
+            Item.DefaultToAccessory(30, 20);
             Item.defense = 2;
         }
 
@@ -33,11 +28,6 @@ namespace ITD.Content.Items.Accessories.Misc
     public class SkullmetPlayer : ModPlayer
     {
         public bool Active;
-        private static readonly int[] ignoredProjectiles =
-            [
-            ProjectileID.SkeletonBone,
-            ProjectileID.FlamingArrow,
-            ];
         public override void ResetEffects()
         {
             Active = false;
@@ -52,12 +42,43 @@ namespace ITD.Content.Items.Accessories.Misc
                     {
                         if (source is Projectile projectile)
                         {
-                            return ignoredProjectiles.Contains(projectile.type);
+                            bool check = projectile.TryGetGlobalProjectile(out SkullmetGlobalProjectile globalProjectile)
+                                         && globalProjectile.shouldNotDamagePlayer;
+                            Main.NewText(check);
+                            return check;
                         }
                     }
                 }
             }
             return false;
+        }
+    }
+    public class SkullmetGlobalProjectile : GlobalProjectile
+    {
+        public bool shouldNotDamagePlayer = false;
+        private static readonly int[] ignoredProjectiles =
+            [
+            ProjectileID.SkeletonBone,
+            ProjectileID.FlamingArrow,
+            ];
+        private static readonly int[] ignoredNPCs =
+            [
+            NPCID.SkeletonArcher,
+            ];
+        public override bool InstancePerEntity => true;
+        public override bool AppliesToEntity(Projectile entity, bool lateInstantiation)
+        {
+            return ignoredProjectiles.Contains(entity.type);
+        }
+        public override void OnSpawn(Projectile projectile, IEntitySource source)
+        {
+            if (source is EntitySource_Parent parent)
+            {
+                if (parent.Entity is NPC npc)
+                {
+                    shouldNotDamagePlayer = ignoredNPCs.Contains(npc.type);
+                }
+            }
         }
     }
 }

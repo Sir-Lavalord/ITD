@@ -226,8 +226,7 @@ Items: {
 
 	Skullmet: {
 		DisplayName: Skullmet
-		// Change tooltip after better implementation
-		Tooltip: Makes some skeletal enemies passive until aggravated
+		Tooltip: Makes some skeletal enemies unable to hurt you
 	}
 
 	AlloyHelmet: {

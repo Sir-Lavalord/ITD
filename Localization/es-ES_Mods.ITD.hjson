@@ -227,28 +227,28 @@ Items: {
 	Skullmet: {
 		DisplayName: Calavet
 		// Change tooltip after better implementation
-		Tooltip: Los esqueletos serán amistosos si no son atacados
+		Tooltip: Ciertos esqueletos no pueden herirte
 	}
 
 	AlloyHelmet: {
-		// SetBonus: Mods.ITD.Items.AlloyHelmet.SetBonus
-		// DisplayName: Alloy Helmet
-		// Tooltip: ""
+		SetBonus: Mods.ITD.Items.AlloyHelmet.SetBonus
+		DisplayName: Yelmo de aleación
+		Tooltip: ""
 	}
 
 	AlloyChestplate: {
-		// DisplayName: Alloy Chestplate
-		// Tooltip: ""
+		DisplayName: Cota de malla de aleación
+		Tooltip: ""
 	}
 
 	AlloyLeggings: {
-		// DisplayName: Alloy Leggings
-		// Tooltip: ""
+		DisplayName: Grebas de aleación
+		Tooltip: ""
 	}
 
 	SwimshieldWipers: {
 		DisplayName: Limpiaparabrisas
-		Tooltip: Inmunidad a varios debuffs de vision
+		Tooltip: Inmunidad a varios debuffs de visión
 	}
 }
 
