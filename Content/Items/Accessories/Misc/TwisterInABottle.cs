@@ -4,7 +4,6 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using System;
-using System.Collections.Generic;
 using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Accessories.Misc
@@ -22,24 +21,21 @@ namespace ITD.Content.Items.Accessories.Misc
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<TwisterDoubleJump>().hasTwisterJump = true;
+            player.GetModPlayer<TwisterPlayer>().hasTwisterJump = true;
         }
-
-        /*
-        public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient()
-                .Register();
-        }
-        */
     }
 
-    public class TwisterDoubleJump : ModPlayer
+    public class TwisterPlayer : ModPlayer
     {
-        public const int MaxTwisterDuration = 60;
+
+        public const int DamageInterval = 30; // 2 times per second (60 frames / 2)
+        public const int TotalDamage = 70;
+        public const int DamageDuration = 120; // 2 seconds (60 frames * 2)
+        private int damageCounter = 0;
+        public const int TwisterDuration = 60;
         public const float SpeedBoostMultiplier = 1.5f;
         public const float AccelerationRate = 0.05f;
+
 
         public bool hasTwisterJump;
         public bool canDoubleJump;
@@ -50,68 +46,44 @@ namespace ITD.Content.Items.Accessories.Misc
         public int spinTimer;
         public int spinDirection = 1;
         public Vector2 jumpPosition;
-        public Dictionary<int, uint> npcDamageTimes = new Dictionary<int, uint>();
         public float currentSpeedMultiplier = 1f;
 
-        public override void ResetEffects()
-        {
-            hasTwisterJump = false;
-        }
+        public override void ResetEffects() => hasTwisterJump = false;
 
         public override void PreUpdate()
         {
             HandleTwisterJump();
             UpdateTimers();
-
             if (isTwistering)
             {
                 Player.direction = spinDirection;
+                CreateTrail();
             }
         }
 
-        public override void PostUpdate()
-        {
-            UpdateTwisterDust();
-        }
+        public override void PostUpdate() => UpdateTwisterDust();
 
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
-            if (isTwistering)
-            {
-                drawInfo.drawPlayer.direction = spinDirection;
-            }
-        }
-        public void HandleTwisterJump()
-        {
-            ResetDoubleJumpAbility();
-            CheckJumpButtonRelease();
-            ActivateTwister();
+            if (isTwistering) drawInfo.drawPlayer.direction = spinDirection;
         }
 
-        public void ResetDoubleJumpAbility()
+        private void HandleTwisterJump()
         {
-            if (Player.velocity.Y == 0f || Player.sliding || (Player.autoJump && Player.justJumped))
+            if ((Player.velocity.Y == 0f || Player.sliding || (Player.autoJump && Player.justJumped)) && hasTwisterJump)
             {
                 canDoubleJump = true;
                 hasReleasedJumpButton = false;
             }
-        }
 
-        public void CheckJumpButtonRelease()
-        {
             if (!Player.controlJump && Player.velocity.Y != 0f && !hasReleasedJumpButton)
             {
                 hasReleasedJumpButton = true;
             }
-        }
 
-        public void ActivateTwister()
-        {
             if (canDoubleJump && hasTwisterJump && Player.controlJump && hasReleasedJumpButton && Player.velocity.Y != 0f)
             {
                 StartTwister();
-                canDoubleJump = false;
-                hasReleasedJumpButton = false;
             }
             else if (isTwistering && Player.controlJump && twisterTimer > 0)
             {
@@ -123,51 +95,47 @@ namespace ITD.Content.Items.Accessories.Misc
             }
         }
 
-        public void StartTwister()
+        private void StartTwister()
         {
             isTwistering = true;
-            twisterTimer = MaxTwisterDuration;
-            damageTimer = 15;
+            twisterTimer = TwisterDuration;
+            damageTimer = DamageInterval;
             jumpPosition = Player.Bottom;
             Player.velocity.Y = -Player.jumpSpeed * Player.gravDir;
             Player.jump = (int)Player.jumpHeight;
             spinTimer = 0;
             spinDirection = 1;
             currentSpeedMultiplier = 1f;
-            TwisterSFX();
+            canDoubleJump = false;
+            hasReleasedJumpButton = false;
+            damageCounter = 0;
+            SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/TwisterInABottle1"), Player.position);
         }
 
-        public void ContinueTwister()
+        private void ContinueTwister()
         {
             Player.velocity.Y = -Player.jumpSpeed * Player.gravDir;
             Player.fallStart = (int)(Player.position.Y / 16f);
-
             currentSpeedMultiplier = Math.Min(currentSpeedMultiplier + AccelerationRate, SpeedBoostMultiplier);
-
             ApplyHorizontalMovement();
-            CreateDustTrail();
             SpinPlayer();
         }
 
-        public void EndTwister()
+        private void EndTwister()
         {
             isTwistering = false;
             twisterTimer = 0;
         }
 
-        public void ApplyHorizontalMovement()
+        private void ApplyHorizontalMovement()
         {
             if (Player.controlLeft)
-            {
                 Player.velocity.X = -Player.maxRunSpeed * currentSpeedMultiplier;
-            }
             else if (Player.controlRight)
-            {
                 Player.velocity.X = Player.maxRunSpeed * currentSpeedMultiplier;
-            }
         }
 
-        public void SpinPlayer()
+        private void SpinPlayer()
         {
             spinTimer++;
             if (spinTimer % 3 == 0)
@@ -176,108 +144,47 @@ namespace ITD.Content.Items.Accessories.Misc
                 Player.direction = spinDirection;
                 spinDirection *= -1;
             }
-
-            Player.direction = spinDirection;
         }
 
-        public void CreateDustTrail()
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                CreateDustParticle();
-            }
-        }
-
-        public void CreateDustParticle()
-        {
-            float angle = Main.rand.NextFloat() * MathHelper.TwoPi;
-            Vector2 offset = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * Main.rand.Next(10, 41);
-            Vector2 dustPosition = Player.Center + offset;
-
-            Vector2 dustVelocity = offset.RotatedBy(MathHelper.PiOver2) * 0.05f;
-            dustVelocity.Y -= Main.rand.NextFloat(0.5f, 1f);
-
-            int dustType = Main.rand.NextBool(3) ? DustID.Cloud : DustID.Smoke;
-            float scale = Main.rand.NextFloat(0.8f, 1.2f);
-
-            Color dustColor = Color.Lerp(Color.White, Color.LightBlue, Main.rand.NextFloat());
-
-            Dust dust = Dust.NewDustPerfect(dustPosition, dustType, dustVelocity, 0, dustColor, scale);
-            dust.noGravity = true;
-            dust.fadeIn = Main.rand.NextFloat(0.8f, 1.2f);
-            dust.customData = new TwisterDustData
-            {
-                InitialPosition = dustPosition,
-                Angle = angle,
-                Radius = offset.Length(),
-                RotationSpeed = Main.rand.NextFloat(0.08f, 0.12f),
-                CreationTime = Main.GameUpdateCount,
-                NextDamageTime = Main.GameUpdateCount + 60
-            };
-        }
-
-        public void UpdateTwisterDust()
-        {
-            for (int i = 0; i < Main.maxDust; i++)
-            {
-                Dust dust = Main.dust[i];
-                if (dust.active && (dust.type == DustID.Cloud || dust.type == DustID.Smoke) && dust.customData is TwisterDustData data)
-                {
-                    UpdateDustPosition(dust, data);
-                    FadeDust(dust);
-                    DamageEnemy(dust);
-                }
-            }
-        }
-
-        public void UpdateDustPosition(Dust dust, TwisterDustData data)
-        {
-            float age = (Main.GameUpdateCount - data.CreationTime) / 60f;
-
-            data.Angle += data.RotationSpeed;
-
-            Vector2 newOffset = new Vector2(
-                (float)Math.Cos(data.Angle) * data.Radius,
-                dust.position.Y - jumpPosition.Y + dust.velocity.Y
-            );
-
-            dust.position = jumpPosition + newOffset;
-            dust.position += Main.rand.NextVector2Circular(1f, 1f);
-        }
-
-        public void FadeDust(Dust dust)
-        {
-            dust.scale *= 0.98f;
-            if (dust.scale <= 0.1f || dust.position.Y > jumpPosition.Y + 170f)
-            {
-                dust.active = false;
-            }
-        }
-
-        public void UpdateTimers()
+        private void UpdateTimers()
         {
             if (twisterTimer > 0)
             {
                 twisterTimer--;
                 Twister();
             }
-
-            if (damageTimer > 0)
-            {
-                damageTimer--;
-            }
+            if (damageTimer > 0) damageTimer--;
         }
 
-        public void Twister()
+        private void CreateTrail()
         {
-            float progress = (float)twisterTimer / MaxTwisterDuration;
-            for (int i = 0; i < 10; i++)
+            if (Main.rand.NextBool(2))
             {
-                TwisterDust(progress);
+                Vector2 position = Player.Center + new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-20f, 20f));
+                Vector2 velocity = Player.velocity * -0.2f + Main.rand.NextVector2Circular(1f, 1f);
+                Color color = Color.Lerp(Color.White, Color.Cyan, Main.rand.NextFloat(0.7f));
+
+                Dust dust = Dust.NewDustPerfect(
+                    position,
+                    DustID.Cloud,
+                    velocity,
+                    0,
+                    color,
+                    Main.rand.NextFloat(0.5f, 1f)
+                );
+
+                dust.noGravity = true;
+                dust.fadeIn = Main.rand.NextFloat(0.8f, 1.2f);
             }
         }
 
-        public void TwisterDust(float progress)
+        private void Twister()
+        {
+            float progress = (float)twisterTimer / TwisterDuration;
+            for (int i = 0; i < 10; i++) CreateTwisterDust(progress);
+        }
+
+        private void CreateTwisterDust(float progress)
         {
             float angle = Main.rand.NextFloat() * MathHelper.TwoPi;
             float radius = Main.rand.NextFloat(20f, 60f);
@@ -285,11 +192,9 @@ namespace ITD.Content.Items.Accessories.Misc
 
             Vector2 offset = new Vector2((float)Math.Cos(angle) * radius, height);
             Vector2 position = jumpPosition + offset;
-
             Vector2 velocity = new Vector2(-offset.X * Main.rand.NextFloat(0.03f, 0.07f), Main.rand.NextFloat(0.5f, 2.5f));
 
             int dustType = Main.rand.NextBool(3) ? DustID.Cloud : DustID.Smoke;
-
             Color dustColor = Color.Lerp(Color.White, Color.LightBlue, Main.rand.NextFloat(0.7f));
 
             Dust dust = Dust.NewDustPerfect(
@@ -314,55 +219,69 @@ namespace ITD.Content.Items.Accessories.Misc
                 NextDamageTime = Main.GameUpdateCount
             };
 
-            DamageEnemy(dust);
+            DamageEnemy(dust.position);
         }
 
-        public void DamageEnemy(Dust dust)
+        private void UpdateTwisterDust()
         {
-            if (dust.customData is TwisterDustData data && Main.GameUpdateCount >= data.NextDamageTime)
+            for (int i = 0; i < Main.maxDust; i++)
             {
-                for (int i = 0; i < Main.maxNPCs; i++)
+                Dust dust = Main.dust[i];
+                if (dust.active && (dust.type == DustID.Cloud || dust.type == DustID.Smoke) && dust.customData is TwisterDustData data)
                 {
-                    NPC npc = Main.npc[i];
-                    if (npc.active && !npc.friendly &&
-                        Vector2.Distance(npc.Center, dust.position) < 10f)
+                    UpdateDustPosition(dust, data);
+                    FadeDust(dust);
+
+                    if (Main.GameUpdateCount >= data.NextDamageTime && damageCounter < DamageDuration)
                     {
-                        if (!npcDamageTimes.ContainsKey(npc.whoAmI) || Main.GameUpdateCount >= npcDamageTimes[npc.whoAmI])
-                        {
-                            ApplyDamage(npc);
-                            npcDamageTimes[npc.whoAmI] = Main.GameUpdateCount + 60;
-                        }
+                        DamageEnemy(dust.position);
+                        data.NextDamageTime = Main.GameUpdateCount + DamageInterval;
+                        damageCounter += DamageInterval;
                     }
                 }
-                data.NextDamageTime = Main.GameUpdateCount + 60;
             }
         }
 
-        public void ApplyDamage(NPC npc)
+        private void UpdateDustPosition(Dust dust, TwisterDustData data)
         {
-            int damage = 70;
-            int knockback = 2;
-            int hitDirection = npc.Center.X < Player.Center.X ? -1 : 1;
-            bool crit = false;
+            data.Angle += data.RotationSpeed;
+            Vector2 newOffset = new Vector2(
+                (float)Math.Cos(data.Angle) * data.Radius,
+                dust.position.Y - jumpPosition.Y + dust.velocity.Y
+            );
+            dust.position = jumpPosition + newOffset + Main.rand.NextVector2Circular(1f, 1f);
+        }
 
-            var hitInfo = new NPC.HitInfo()
+        private void FadeDust(Dust dust)
+        {
+            dust.scale *= 0.98f;
+            if (dust.scale <= 0.1f || dust.position.Y > jumpPosition.Y + 170f)
             {
-                Damage = damage,
-                Knockback = knockback,
-                HitDirection = hitDirection,
-                Crit = crit,
-                DamageType = DamageClass.Default
-            };
-
-            npc.StrikeNPC(hitInfo);
+                dust.active = false;
+            }
         }
 
-        public void TwisterSFX()
+        private void DamageEnemy(Vector2 position)
         {
-            SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/TwisterInABottle1"), Player.position);
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                NPC npc = Main.npc[i];
+                if (npc.active && !npc.friendly && Vector2.Distance(npc.Center, position) < 10f)
+                {
+                    ApplyDamage(npc);
+                    break;
+                }
+            }
         }
 
-        public class TwisterDustData
+        private void ApplyDamage(NPC npc)
+        {
+            int direction = npc.Center.X < Player.Center.X ? -1 : 1;
+            int damage = TotalDamage / (DamageDuration / DamageInterval);
+            Player.ApplyDamageToNPC(npc, damage, 2f, direction, crit: false);
+        }
+
+        private class TwisterDustData
         {
             public Vector2 InitialPosition;
             public float Angle;

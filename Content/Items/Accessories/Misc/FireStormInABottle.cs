@@ -20,25 +20,17 @@ namespace ITD.Content.Items.Accessories.Misc
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<FireDoubleJump>().hasFireJump = true;
+            player.GetModPlayer<FirestormPlayer>().hasFireJump = true;
         }
-
-        /*
-        public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient()
-                .Register();
-        }
-        */
     }
 
-    public class FireDoubleJump : ModPlayer
+    public class FirestormPlayer : ModPlayer
     {
         public const int FireCloudDuration = 180;
         public const int FireTrailDuration = 60;
         public const int RainDuration = 120;
         public const int FireRainLifetime = 180;
+        public const int DamageInterval = 30;
 
         public bool hasFireJump;
         public bool canDoubleJump;
@@ -49,10 +41,7 @@ namespace ITD.Content.Items.Accessories.Misc
         public int damageTimer;
         public Vector2 jumpPosition;
 
-        public override void ResetEffects()
-        {
-            hasFireJump = false;
-        }
+        public override void ResetEffects() => hasFireJump = false;
 
         public override void PreUpdate()
         {
@@ -60,12 +49,9 @@ namespace ITD.Content.Items.Accessories.Misc
             UpdateTimers();
         }
 
-        public override void PostUpdate()
-        {
-            UpdateFireRain();
-        }
+        public override void PostUpdate() => UpdateFireRain();
 
-        public void HandleDoubleJump()
+        private void HandleDoubleJump()
         {
             if ((Player.velocity.Y == 0f || Player.sliding || (Player.autoJump && Player.justJumped)) && hasFireJump)
             {
@@ -80,7 +66,7 @@ namespace ITD.Content.Items.Accessories.Misc
             waitDoubleJump = Player.controlJump;
         }
 
-        public void PerformDoubleJump()
+        private void PerformDoubleJump()
         {
             if (Player.jump > 0) return;
 
@@ -88,62 +74,32 @@ namespace ITD.Content.Items.Accessories.Misc
             Player.jump = (int)Player.jumpHeight;
             canDoubleJump = false;
 
-            FirestormSFX();
+            SoundEngine.PlaySound(new SoundStyle($"ITD/Content/Sounds/FirestormInABottle{Main.rand.Next(1, 4)}"), Player.position);
 
             fireCloudTimer = FireCloudDuration;
             fireTrailTimer = FireTrailDuration;
             rainTimer = RainDuration;
-
-            damageTimer = 30;
-
+            damageTimer = DamageInterval;
             jumpPosition = Player.Bottom;
         }
 
-        public void UpdateTimers()
+        private void UpdateTimers()
         {
-            if (fireCloudTimer > 0)
-            {
-                fireCloudTimer--;
-                FireCloud();
-            }
-
-            if (fireTrailTimer > 0)
-            {
-                fireTrailTimer--;
-                FireTrail();
-            }
-
-            if (rainTimer > 0)
-            {
-                rainTimer--;
-                FireRain();
-            }
-
-            if (damageTimer > 0)
-            {
-                damageTimer--;
-            }
+            if (fireCloudTimer > 0) { fireCloudTimer--; FireCloud(); }
+            if (fireTrailTimer > 0) { fireTrailTimer--; FireTrail(); }
+            if (rainTimer > 0) { rainTimer--; FireRain(); }
+            if (damageTimer > 0) damageTimer--;
         }
 
-        public void FireCloud()
+        private void FireCloud()
         {
             float progress = (float)fireCloudTimer / FireCloudDuration;
-            for (int i = 0; i < 10; i++)
-            {
-                FireCloudDust(progress);
-            }
-            if (damageTimer <= 0)
-            {
-                DamageEnemy(jumpPosition, true);
-                damageTimer = 30;
-            }
-            else
-            {
-                DamageEnemy(jumpPosition, false);
-            }
+            for (int i = 0; i < 10; i++) CreateFireCloudDust(progress);
+            DamageEnemy(jumpPosition, damageTimer <= 0);
+            if (damageTimer <= 0) damageTimer = DamageInterval;
         }
 
-        public void FireCloudDust(float progress)
+        private void CreateFireCloudDust(float progress)
         {
             Vector2 speed = Main.rand.NextVector2Circular(5f * progress, 5f * progress);
             speed.Y -= Main.rand.NextFloat(2f * progress, 8f * progress);
@@ -173,16 +129,13 @@ namespace ITD.Content.Items.Accessories.Misc
             }
         }
 
-        public void FireTrail()
+        private void FireTrail()
         {
-            for (int i = 0; i < 3; i++)
-            {
-                FireTrailDust();
-            }
+            for (int i = 0; i < 3; i++) CreateFireTrailDust();
             DamageEnemy(Player.Bottom, false);
         }
 
-        public void FireTrailDust()
+        private void CreateFireTrailDust()
         {
             Vector2 speed = new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1.5f, -0.5f));
 
@@ -200,16 +153,13 @@ namespace ITD.Content.Items.Accessories.Misc
             dust.color = Color.Lerp(Color.OrangeRed, Color.Yellow, Main.rand.NextFloat(0.5f));
         }
 
-        public void FireRain()
+        private void FireRain()
         {
             float progress = (float)rainTimer / RainDuration;
-            for (int i = 0; i < 3; i++)
-            {
-                FireRainDust(progress);
-            }
+            for (int i = 0; i < 3; i++) CreateFireRainDust(progress);
         }
 
-        public void FireRainDust(float progress)
+        private void CreateFireRainDust(float progress)
         {
             Vector2 rainPosition = jumpPosition + new Vector2(Main.rand.Next(-50, 51), Main.rand.Next(-20, 0));
             Vector2 rainVelocity = new Vector2(Main.windSpeedCurrent * 0.3f, Main.rand.Next(2, 4));
@@ -230,7 +180,7 @@ namespace ITD.Content.Items.Accessories.Misc
             dust.customData = new FireRainData { InitialPosition = rainPosition, CreationTime = Main.GameUpdateCount };
         }
 
-        public void UpdateFireRain()
+        private void UpdateFireRain()
         {
             for (int i = 0; i < Main.maxDust; i++)
             {
@@ -248,21 +198,15 @@ namespace ITD.Content.Items.Accessories.Misc
                     {
                         dust.scale *= 0.9f;
                         dust.velocity = Vector2.Zero;
-                        if (dust.scale < 0.1f)
-                        {
-                            dust.active = false;
-                        }
+                        if (dust.scale < 0.1f) dust.active = false;
                     }
 
-                    if (dust.position.Y > data.InitialPosition.Y + 300)
-                    {
-                        dust.active = false;
-                    }
+                    if (dust.position.Y > data.InitialPosition.Y + 300) dust.active = false;
                 }
             }
         }
 
-        public bool IsTileCollision(Vector2 position)
+        private bool IsTileCollision(Vector2 position)
         {
             int tileX = (int)(position.X / 16f);
             int tileY = (int)(position.Y / 16f);
@@ -271,7 +215,7 @@ namespace ITD.Content.Items.Accessories.Misc
             return tile != null && Main.tileSolid[tile.TileType] && tile.HasTile;
         }
 
-        public void DamageEnemy(Vector2 position, bool dealDamage)
+        private void DamageEnemy(Vector2 position, bool dealDamage)
         {
             for (int i = 0; i < Main.maxNPCs; i++)
             {
@@ -284,39 +228,20 @@ namespace ITD.Content.Items.Accessories.Misc
 
                     if (dealDamage)
                     {
-                        int damage = Main.rand.Next(21, 30);
-                        int knockback = 0;
-                        int hitDirection = npc.direction;
-                        bool crit = false;
-
-                        var hitInfo = new NPC.HitInfo()
+                        npc.StrikeNPC(new NPC.HitInfo
                         {
-                            Damage = damage,
-                            Knockback = knockback,
-                            HitDirection = hitDirection,
-                            Crit = crit,
+                            Damage = Main.rand.Next(21, 30),
+                            Knockback = 0,
+                            HitDirection = npc.direction,
+                            Crit = false,
                             DamageType = DamageClass.Default
-                        };
-
-                        npc.StrikeNPC(hitInfo);
+                        });
                     }
                 }
             }
         }
 
-        public void FirestormSFX()
-        {
-            string soundPath = Main.rand.Next(3) switch
-            {
-                0 => "ITD/Content/Sounds/FirestormInABottle1",
-                1 => "ITD/Content/Sounds/FirestormInABottle2",
-                _ => "ITD/Content/Sounds/FirestormInABottle3"
-            };
-
-            SoundEngine.PlaySound(new SoundStyle(soundPath), Player.position);
-        }
-
-        public class FireRainData
+        private class FireRainData
         {
             public Vector2 InitialPosition;
             public uint CreationTime;

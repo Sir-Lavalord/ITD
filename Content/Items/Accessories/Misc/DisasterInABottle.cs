@@ -20,7 +20,7 @@ namespace ITD.Content.Items.Accessories.Misc
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<DisasterDoubleJump>().hasDisasterJump = true;
+            player.GetModPlayer<DisasterPlayer>().hasDisasterJump = true;
         }
 
         public override void AddRecipes()
@@ -33,22 +33,20 @@ namespace ITD.Content.Items.Accessories.Misc
         }
     }
 
-    public class DisasterDoubleJump : ModPlayer
+    public class DisasterPlayer : ModPlayer
     {
         public bool hasDisasterJump;
-        public bool canDoubleJump;
-        public bool waitDoubleJump;
-        public int jumpCount;
-
-        public FireDoubleJump fireJump;
-        public TwisterDoubleJump twisterJump;
-        public StormDoubleJump stormJump;
+        private bool canJump;
+        private int jumpCount;
+        private FirestormPlayer firestormPlayer;
+        private TwisterPlayer twisterPlayer;
+        private StormPlayer stormPlayer;
 
         public override void Initialize()
         {
-            fireJump = Player.GetModPlayer<FireDoubleJump>();
-            twisterJump = Player.GetModPlayer<TwisterDoubleJump>();
-            stormJump = Player.GetModPlayer<StormDoubleJump>();
+            firestormPlayer = Player.GetModPlayer<FirestormPlayer>();
+            twisterPlayer = Player.GetModPlayer<TwisterPlayer>();
+            stormPlayer = Player.GetModPlayer<StormPlayer>();
         }
 
         public override void ResetEffects()
@@ -64,48 +62,81 @@ namespace ITD.Content.Items.Accessories.Misc
             }
         }
 
-        public void HandleDisasterJump()
+        private void HandleDisasterJump()
         {
-            if ((Player.velocity.Y == 0f || Player.sliding || (Player.autoJump && Player.justJumped)))
+            if (Player.velocity.Y == 0f || Player.sliding || (Player.autoJump && Player.justJumped))
             {
-                canDoubleJump = true;
-                waitDoubleJump = true;
+                canJump = true;
                 jumpCount = 0;
             }
 
-            if (canDoubleJump && Player.controlJump && !waitDoubleJump)
+            if (canJump && Player.controlJump && Player.releaseJump)
             {
                 PerformDisasterJump();
             }
 
-            waitDoubleJump = Player.controlJump;
-
-            fireJump.hasFireJump = hasDisasterJump;
-            twisterJump.hasTwisterJump = hasDisasterJump;
-            stormJump.hasStormJump = hasDisasterJump;
+            UpdateSubPlayers();
         }
 
-        public void PerformDisasterJump()
+        private void UpdateSubPlayers()
         {
-            if (Player.jump > 0) return;
+            firestormPlayer.hasFireJump = hasDisasterJump;
+            twisterPlayer.hasTwisterJump = hasDisasterJump;
+            stormPlayer.hasStormJump = hasDisasterJump;
+        }
+
+        private void PerformDisasterJump()
+        {
+            if (Player.jump > 0 || jumpCount >= 2) return;
 
             jumpCount++;
-
             switch (jumpCount)
             {
                 case 1:
-                    fireJump.PerformDoubleJump();
+                    PerformFirestormTwisterJump();
                     break;
                 case 2:
-                    twisterJump.StartTwister();
-                    break;
-                case 3:
-                    stormJump.PerformDoubleJump();
-                    jumpCount = 0;
+                    PerformStormTornadoJump();
+                    canJump = false;
                     break;
             }
+        }
 
-            canDoubleJump = false;
+        private void PerformFirestormTwisterJump()
+        {
+            Player.velocity.Y = -Player.jumpSpeed * Player.gravDir;
+            Player.jump = (int)Player.jumpHeight;
+
+            // Firestorm
+            SoundEngine.PlaySound(new SoundStyle($"ITD/Content/Sounds/FirestormInABottle{Main.rand.Next(1, 4)}"), Player.position);
+            firestormPlayer.fireCloudTimer = FirestormPlayer.FireCloudDuration;
+            firestormPlayer.fireTrailTimer = FirestormPlayer.FireTrailDuration;
+            firestormPlayer.rainTimer = FirestormPlayer.RainDuration;
+            firestormPlayer.damageTimer = FirestormPlayer.DamageInterval;
+            firestormPlayer.jumpPosition = Player.Bottom;
+
+            // Twister
+            SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/TwisterInABottle1"), Player.position);
+            twisterPlayer.isTwistering = true;
+            twisterPlayer.twisterTimer = TwisterPlayer.TwisterDuration;
+            twisterPlayer.damageTimer = TwisterPlayer.DamageInterval;
+            twisterPlayer.jumpPosition = Player.Bottom;
+            twisterPlayer.spinTimer = 0;
+            twisterPlayer.spinDirection = 1;
+            twisterPlayer.currentSpeedMultiplier = 1f;
+        }
+
+        private void PerformStormTornadoJump()
+        {
+            Player.velocity.Y = -Player.jumpSpeed * 1.5f * Player.gravDir;
+            Player.jump = (int)(Player.jumpHeight * 1.5f);
+
+            // Storm
+            SoundEngine.PlaySound(new SoundStyle($"ITD/Content/Sounds/StormInABottle{Main.rand.Next(1, 3)}"), Player.position);
+            stormPlayer.tornadoTimer = StormPlayer.TornadoDuration;
+            stormPlayer.lightningTimer = StormPlayer.LightningInterval;
+            stormPlayer.tornadoBase = Player.Bottom + new Vector2(0, 40);
+            stormPlayer.AdjustTornadoBaseToGround();
         }
     }
 }

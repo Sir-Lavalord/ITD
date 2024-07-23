@@ -20,21 +20,11 @@ namespace ITD.Content.Items.Accessories.Misc
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<StormDoubleJump>().hasStormJump = true;
+            player.GetModPlayer<StormPlayer>().hasStormJump = true;
         }
-
-        /*
-        public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient()
-                .Register();
-        }
-        */
-
     }
 
-    public class StormDoubleJump : ModPlayer
+    public class StormPlayer : ModPlayer
     {
         public const int TornadoDuration = 180;
         public const int LightningInterval = 60;
@@ -48,10 +38,7 @@ namespace ITD.Content.Items.Accessories.Misc
         public int lightningTimer;
         public Vector2 tornadoBase;
 
-        public override void ResetEffects()
-        {
-            hasStormJump = false;
-        }
+        public override void ResetEffects() => hasStormJump = false;
 
         public override void PreUpdate()
         {
@@ -59,7 +46,7 @@ namespace ITD.Content.Items.Accessories.Misc
             UpdateTimers();
         }
 
-        public void HandleDoubleJump()
+        private void HandleDoubleJump()
         {
             if ((Player.velocity.Y == 0f || Player.sliding || (Player.autoJump && Player.justJumped)) && hasStormJump)
             {
@@ -74,7 +61,7 @@ namespace ITD.Content.Items.Accessories.Misc
             waitDoubleJump = Player.controlJump;
         }
 
-        public void PerformDoubleJump()
+        private void PerformDoubleJump()
         {
             if (Player.jump > 0) return;
 
@@ -82,16 +69,15 @@ namespace ITD.Content.Items.Accessories.Misc
             Player.jump = (int)(Player.jumpHeight * 2f);
             canDoubleJump = false;
 
-            StormSFX();
+            SoundEngine.PlaySound(new SoundStyle($"ITD/Content/Sounds/StormInABottle{Main.rand.Next(1, 3)}"), Player.position);
             InitializeTornado();
         }
 
-        public void InitializeTornado()
+        private void InitializeTornado()
         {
             tornadoTimer = TornadoDuration;
             lightningTimer = LightningInterval;
             tornadoBase = Player.Bottom + new Vector2(0, 40);
-
             AdjustTornadoBaseToGround();
         }
 
@@ -99,31 +85,26 @@ namespace ITD.Content.Items.Accessories.Misc
         {
             for (int i = 0; i < 20; i++)
             {
-                Vector2 tilePos = tornadoBase + new Vector2(0, i * 16);
-                Point tilePt = tilePos.ToTileCoordinates();
+                Point tilePt = (tornadoBase + new Vector2(0, i * 16)).ToTileCoordinates();
                 if (Main.tile[tilePt.X, tilePt.Y].HasTile && Main.tileSolid[Main.tile[tilePt.X, tilePt.Y].TileType])
                 {
-                    tornadoBase = new Vector2(tornadoBase.X, tilePt.Y * 16 - 8);
+                    tornadoBase.Y = tilePt.Y * 16 - 8;
                     break;
                 }
             }
         }
 
-        public void UpdateTimers()
+        private void UpdateTimers()
         {
             if (tornadoTimer > 0)
             {
                 tornadoTimer--;
                 Tornado();
 
-                if (lightningTimer > 0)
+                if (--lightningTimer <= 0)
                 {
-                    lightningTimer--;
-                    if (lightningTimer == 0)
-                    {
-                        Lightning();
-                        lightningTimer = LightningInterval;
-                    }
+                    Lightning();
+                    lightningTimer = LightningInterval;
                 }
             }
             else
@@ -132,42 +113,37 @@ namespace ITD.Content.Items.Accessories.Misc
             }
         }
 
-        public void Tornado()
+        private void Tornado()
         {
             float progress = (float)tornadoTimer / TornadoDuration;
             for (int i = 0; i < 20; i++)
             {
-                TornadoDust(progress);
+                CreateTornadoDust(progress);
             }
         }
 
-        public void TornadoDust(float progress)
+        private void CreateTornadoDust(float progress)
         {
             float heightProgress = Main.rand.NextFloat();
             float angle = Main.rand.NextFloat() * MathHelper.TwoPi;
+            float radius = MathHelper.Lerp(10f, 100f, heightProgress) * progress;
+            float height = TornadoHeight * heightProgress * progress;
 
-            float maxRadius = 10f * progress;
-            float minRadius = 100f * progress;
-            float radius = MathHelper.Lerp(maxRadius, minRadius, heightProgress);
-
-            float height = -TornadoHeight * heightProgress * progress;
-
-            Vector2 offset = new Vector2((float)Math.Cos(angle) * radius, height);
+            Vector2 offset = new Vector2((float)Math.Cos(angle) * radius, -height);
             Vector2 position = tornadoBase + offset;
-
             Vector2 velocity = new Vector2(-offset.X * 0.05f, Main.rand.NextFloat(-1f, 1f));
 
             if (Main.rand.NextFloat() < 0.01f)
             {
-                ElectricSpark(position, velocity, progress);
+                CreateElectricSpark(position, velocity, progress);
             }
             else
             {
-                SmokeDust(position, velocity, progress);
+                CreateSmokeDust(position, velocity, progress);
             }
         }
 
-        public void ElectricSpark(Vector2 position, Vector2 velocity, float progress)
+        private void CreateElectricSpark(Vector2 position, Vector2 velocity, float progress)
         {
             Dust spark = Dust.NewDustPerfect(
                 position,
@@ -182,7 +158,7 @@ namespace ITD.Content.Items.Accessories.Misc
             spark.fadeIn = 0.5f;
         }
 
-        public void SmokeDust(Vector2 position, Vector2 velocity, float progress)
+        private void CreateSmokeDust(Vector2 position, Vector2 velocity, float progress)
         {
             Color dustColor = Color.Lerp(Color.DarkGray, Color.Gray, Main.rand.NextFloat() * 0.3f);
 
@@ -199,7 +175,7 @@ namespace ITD.Content.Items.Accessories.Misc
             dust.fadeIn = Main.rand.NextFloat(0.8f, 1.2f) * progress;
         }
 
-        public void Lightning()
+        private void Lightning()
         {
             float progress = (float)tornadoTimer / TornadoDuration;
             Vector2 lightningStart = CalculateLightningStart(progress);
@@ -207,34 +183,28 @@ namespace ITD.Content.Items.Accessories.Misc
             NPC targetNPC = FindNearestEnemy();
             if (targetNPC != null)
             {
-                LightningEffects(lightningStart, targetNPC.Center);
+                CreateLightningEffects(lightningStart, targetNPC.Center);
                 DamageEnemy(targetNPC);
             }
         }
 
-        public Vector2 CalculateLightningStart(float progress)
+        private Vector2 CalculateLightningStart(float progress)
         {
-            float currentRadius = MathHelper.Lerp(100f, 10f, 1 - progress);
-            float currentHeight = TornadoHeight * progress;
-
             float heightProgress = Main.rand.NextFloat();
             float angle = Main.rand.NextFloat() * MathHelper.TwoPi;
+            float radius = MathHelper.Lerp(10f, MathHelper.Lerp(10f, 100f, progress), heightProgress);
+            float height = TornadoHeight * progress * heightProgress; // Changed to positive
 
-            float radius = MathHelper.Lerp(currentRadius, 10f, heightProgress);
-            float height = -currentHeight * heightProgress;
-
-            Vector2 offset = new Vector2((float)Math.Cos(angle) * radius, height);
-            return tornadoBase + offset;
+            return tornadoBase + new Vector2((float)Math.Cos(angle) * radius, -height); // Negative height to go upwards
         }
 
-        public void LightningEffects(Vector2 start, Vector2 end)
+        private void CreateLightningEffects(Vector2 start, Vector2 end)
         {
             Vector2 direction = Vector2.Normalize(end - start);
 
             for (int j = 0; j < 30; j++)
             {
-                Vector2 dustPos = start + direction * j * 10f;
-                dustPos += Main.rand.NextVector2Circular(10f, 10f);
+                Vector2 dustPos = start + direction * j * 10f + Main.rand.NextVector2Circular(10f, 10f);
 
                 Dust dust = Dust.NewDustPerfect(
                     dustPos,
@@ -249,11 +219,9 @@ namespace ITD.Content.Items.Accessories.Misc
             }
         }
 
-        // TO-DO add custom Electric DamageClass
-        public void DamageEnemy(NPC targetNPC)
+        private void DamageEnemy(NPC targetNPC)
         {
-            int damage = 300;
-            damage = (int)(damage * Player.GetDamage(DamageClass.Magic).Multiplicative);
+            int damage = (int)(300 * Player.GetDamage(DamageClass.Magic).Multiplicative);
 
             targetNPC.StrikeNPC(new NPC.HitInfo
             {
@@ -265,7 +233,7 @@ namespace ITD.Content.Items.Accessories.Misc
             });
         }
 
-        public NPC FindNearestEnemy()
+        private NPC FindNearestEnemy()
         {
             NPC nearestNPC = null;
             float nearestDistance = MaxLightningDistance;
@@ -285,17 +253,6 @@ namespace ITD.Content.Items.Accessories.Misc
             }
 
             return nearestNPC;
-        }
-
-        public void StormSFX()
-        {
-            string soundPath = Main.rand.Next(3) switch
-            {
-                0 => "ITD/Content/Sounds/StormInABottle1",
-                _ => "ITD/Content/Sounds/StormInABottle2",
-            };
-
-            SoundEngine.PlaySound(new SoundStyle(soundPath), Player.position);
         }
     }
 }

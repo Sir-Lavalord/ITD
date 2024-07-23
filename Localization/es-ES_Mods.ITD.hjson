@@ -247,8 +247,8 @@ Items: {
 	}
 
 	SwimshieldWipers: {
-		// DisplayName: Limpiaparabrisas
-		// Tooltip: "Inmunidad a varios debuffs de vision"
+		DisplayName: Limpiaparabrisas
+		Tooltip: Inmunidad a varios debuffs de vision
 	}
 }
 
