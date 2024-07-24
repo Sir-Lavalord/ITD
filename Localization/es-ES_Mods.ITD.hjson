@@ -254,6 +254,15 @@ Items: {
 		// DisplayName: Thunder Staff
 		// Tooltip: ""
 	}
+
+	VenusSnaptrap: {
+		// DisplayName: Venus Snaptrap
+		/* Tooltip:
+			'''
+			"Queen of the marsh"; Darwin's most beautiful plant
+			[c/{0}:Latch Effect:] Poisons enemies in your grip
+			''' */
+	}
 }
 
 Projectiles: {
@@ -305,6 +314,16 @@ Projectiles: {
 	// CicadianTreeEnd.DisplayName: Cicadian Tree End
 	// IcyBoulder.DisplayName: Icy Boulder
 	// LightningStaffStrike.DisplayName: Lightning Staff Strike
+
+	VenusSnaptrapProjectile: {
+		// OneTimeLatchMessage: Mods.ITD.Projectiles.VenusSnaptrapProjectile.OneTimeLatchMessage
+		// DisplayName: Venus Snaptrap Projectile
+	}
+}
+
+VenusSnaptrapProjectile: {
+	// OneTimeLatchMessage: Poisoned!
+	// DisplayName: Venus Snaptrap
 }
 
 NPCs: {

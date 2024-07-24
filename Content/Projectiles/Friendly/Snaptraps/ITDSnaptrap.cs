@@ -15,74 +15,72 @@ namespace ITD.Content.Projectiles
 {
     public abstract class ITDSnaptrap : ModProjectile
     {
-        public SoundStyle snaptrapMetal = new SoundStyle("ITD/Content/Sounds/SnaptrapMetal", SoundType.Sound);
-        public SoundStyle snaptrapForcedRetract = new SoundStyle("ITD/Content/Sounds/SnaptrapForcedRetract", SoundType.Sound);
+        public string toSnaptrapMetal = "ITD/Content/Sounds/SnaptrapMetal";
+        public SoundStyle snaptrapMetal;
+        public string toSnaptrapForcedRetract = "ITD/Content/Sounds/SnaptrapForcedRetract";
+        private SoundStyle snaptrapForcedRetract;
         SlotId chainUnwindSlot;
-        public SoundStyle snaptrapChain = new SoundStyle("ITD/Content/Sounds/SnaptrapUnwind", SoundType.Sound)
-        {
-            IsLooped = true,
-        };
+        public string toSnaptrapChain = "ITD/Content/Sounds/SnaptrapUnwind";
+        private SoundStyle snaptrapChain;
         SlotId snaptrapWarningSlot;
-        public SoundStyle snaptrapWarning = new SoundStyle("ITD/Content/Sounds/SnaptrapWarning", SoundType.Sound)
-        {
-            IsLooped = true,
-        };
+        public string toSnaptrapWarning = "ITD/Content/Sounds/SnaptrapWarning";
+        private SoundStyle snaptrapWarning;
 
         public static Player myPlayer;
         /// <summary>
         /// In pixels. Multiply by 16f to get the tile equivalent.
         /// </summary>
-        public float shootRange { get; set; } = 16f * 8f;
+        public float ShootRange { get; set; } = 16f * 8f;
         /// <summary>
         /// Acceleration of the Snaptrap while retracting.
         /// </summary>
-        public float retractAccel { get; set; } = 1.5f;
+        public float RetractAccel { get; set; } = 1.5f;
         /// <summary>
         /// Timer. The Snaptrap cannot retract until this value is equal or less than 0. (This is done in the AI)
         /// </summary>
-        public int framesUntilRetractable { get; set; } = 10;
+        public int FramesUntilRetractable { get; set; } = 10;
         /// <summary>
-        /// The amount of tiles you can go outside shootRange without forced retraction.
+        /// The amount of tiles you can go outside ShootRange without forced retraction.
         /// </summary>
-        public float extraFlexibility { get; set; } = 16f * 2f;
+        public float ExtraFlexibility { get; set; } = 16f * 2f;
         /// <summary>
         /// Amount of frames between each hit the Snaptrap gives. Less is faster.
         /// </summary>
-        public int framesBetweenHits { get; set; } = 60;
+        public int FramesBetweenHits { get; set; } = 60;
         /// <summary>
         /// Damage at the start, before reaching full power.
         /// </summary>
-        public int minDamage { get; set; } = 1;
+        public int MinDamage { get; set; } = 1;
         /// <summary>
         /// Damage when reaching full power.
         /// </summary>
-        public int maxDamage { get; set; } = 25;
+        public int MaxDamage { get; set; } = 25;
         /// <summary>
         /// Amount of hits it takes for the Snaptrap to reach full power.
         /// </summary>
-        public int fullPowerHitsAmount { get; set; } = 10;
+        public int FullPowerHitsAmount { get; set; } = 10;
         /// <summary>
         /// Amount of frames the warning sound should play for before forcefully retracting.
         /// </summary>
-        public int warningFrames { get; set; } = 60;
+        public int WarningFrames { get; set; } = 60;
         /// <summary>
         /// DustID of the dust that appears when the Snaptrap latches onto an enemy.
         /// </summary>
-        public int chompDust { get; set; } = DustID.Torch;
+        public int ChompDust { get; set; } = DustID.Torch;
         /// <summary>
         /// Chain texture. Override GetChainTexture(), GetChainColor(), and ExtraChainEffects() for customization.
         /// </summary>
-        public string toChainTexture {  get; set; } = "ITD/Content/Projectiles/Friendly/Snaptraps/SnaptrapChain";
+        public string ToChainTexture {  get; set; } = "ITD/Content/Projectiles/Friendly/Snaptraps/SnaptrapChain";
 
-        float staticRotation; //
+        private float staticRotation; //
         public bool retracting = false; //
-        int damageTimer = 0; //
-        int currentDamageAmount = 0; //
-        int warningTimer = 0; //
-        bool shouldBeWarning = false; //
-        bool hasDoneLatchEffect = false;
+        private int damageTimer = 0; //
+        private int currentDamageAmount = 0; //
+        private int warningTimer = 0; //
+        private bool shouldBeWarning = false; //
+        private bool hasDoneLatchEffect = false;
 
-        bool chainWeight = false;
+        private bool chainWeight = false;
 
         public bool IsStickingToTarget
         {
@@ -126,12 +124,22 @@ namespace ITD.Content.Projectiles
             DrawOriginOffsetY = -16;
             Projectile.hide = true;
             SetSnaptrapProperties();
+            snaptrapMetal = new SoundStyle(toSnaptrapMetal, SoundType.Sound);
+            snaptrapForcedRetract = new SoundStyle(toSnaptrapForcedRetract, SoundType.Sound);
+            snaptrapChain = new SoundStyle(toSnaptrapChain, SoundType.Sound)
+            {
+                IsLooped = true,
+            };
+            snaptrapWarning = new SoundStyle(toSnaptrapWarning, SoundType.Sound)
+            {
+                IsLooped = true,
+            };
         }
 
         public override Color? GetAlpha(Color lightColor)
         {
             var tileCoords = Projectile.Center.ToTileCoordinates();
-            return new Color(Color.White.ToVector4() * Lighting.GetColor(tileCoords.X, tileCoords.Y).ToVector4());
+            return Lighting.GetColor(tileCoords.X, tileCoords.Y);
         }
 
         private void SetSnaptrapPlayerFlags(SnaptrapPlayer snaptrapPlayer)
@@ -149,10 +157,10 @@ namespace ITD.Content.Projectiles
             }
             if (chainWeight)
             {
-                minDamage += minDamage / 10;
-                maxDamage += maxDamage / 10;
+                MinDamage += MinDamage / 10;
+                MaxDamage += MaxDamage / 10;
             }
-            Projectile.damage = minDamage;
+            Projectile.damage = MinDamage;
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
@@ -181,7 +189,7 @@ namespace ITD.Content.Projectiles
             return false;
         }
 
-        private int ReMapDamage(int currentHitNum, int maxHitNum, int minDmg, int maxDmg)
+        private static int ReMapDamage(int currentHitNum, int maxHitNum, int minDmg, int maxDmg)
         {
             return (int)(minDmg + ((maxDmg - minDmg) * ((currentHitNum - 1) / (float)(maxHitNum - 1))));
         }
@@ -230,7 +238,7 @@ namespace ITD.Content.Projectiles
                             SoundEngine.PlaySound(snaptrapMetal, Projectile.Center);
                             for (int i = 0; i < 6; ++i)
                             {
-                                Dust.NewDust(Projectile.Center, 6, 6, chompDust, 0f, 0f, 0, default(Color), 1);
+                                Dust.NewDust(Projectile.Center, 6, 6, ChompDust, 0f, 0f, 0, default, 1);
                             }
                         }
                     }
@@ -281,8 +289,8 @@ namespace ITD.Content.Projectiles
                 soundInstance.Position = myPlayer.position;
                 if (shouldBeWarning)
                 {
-                    soundInstance.Volume = 0f + ((float)warningTimer / (float)warningFrames);
-                    soundInstance.Pitch = 0f + ((float)warningTimer / (float)warningFrames);
+                    soundInstance.Volume = 0f + ((float)warningTimer / (float)WarningFrames);
+                    soundInstance.Pitch = 0f + ((float)warningTimer / (float)WarningFrames);
                 }
                 else
                 {
@@ -304,7 +312,7 @@ namespace ITD.Content.Projectiles
         {
             if (Main.myPlayer == Projectile.owner)
             {
-                if (--framesUntilRetractable <= 0)
+                if (--FramesUntilRetractable <= 0)
                 {
                     bool stillInUse = myPlayer.channel && !myPlayer.noItems && !myPlayer.CCed;
                     if (!stillInUse)
@@ -315,7 +323,7 @@ namespace ITD.Content.Projectiles
                     }
                 }
             }
-            if (chainLength >= shootRange)
+            if (chainLength >= ShootRange)
             {
                 Projectile.damage = 0;
                 Projectile.tileCollide = false;
@@ -324,10 +332,10 @@ namespace ITD.Content.Projectiles
             if (retracting)
             {
                 Vector2 towardsOwner = Projectile.DirectionTo(mountedCenter).SafeNormalize(Vector2.Zero);
-                retractAccel += 0.4f;
-                Projectile.velocity = towardsOwner*retractAccel;
+                RetractAccel += 0.4f;
+                Projectile.velocity = towardsOwner*RetractAccel;
                 Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
-                if (Projectile.Distance(mountedCenter) <= retractAccel)
+                if (Projectile.Distance(mountedCenter) <= RetractAccel)
                 {
                     Projectile.Kill(); // Kill the projectile once it is close enough to the player
                 }
@@ -369,10 +377,10 @@ namespace ITD.Content.Projectiles
                 retracting = true;
                 IsStickingToTarget = false;
             }
-            if (damageTimer >= framesBetweenHits)
+            if (damageTimer >= FramesBetweenHits)
             {
                 damageTimer = 0;
-                if (currentDamageAmount < fullPowerHitsAmount)
+                if (currentDamageAmount < FullPowerHitsAmount)
                 {
                     currentDamageAmount += 1;
                 }
@@ -385,18 +393,18 @@ namespace ITD.Content.Projectiles
                     }
                     PerHitLatchEffect();
                 }
-                int dmg = ReMapDamage(currentDamageAmount, fullPowerHitsAmount, minDamage, maxDamage);
+                int dmg = ReMapDamage(currentDamageAmount, FullPowerHitsAmount, MinDamage, MaxDamage);
                 Projectile.damage = dmg;
             }
-            if (chainLength-extraFlexibility >= shootRange)
+            if (chainLength-ExtraFlexibility >= ShootRange)
             {
                 warningTimer += 1;
-                if (warningTimer > warningFrames)
+                if (warningTimer > WarningFrames)
                 {
                     SoundEngine.PlaySound(snaptrapForcedRetract, Projectile.Center);
                     retracting = true;
                     IsStickingToTarget = false;
-                    warningTimer = warningFrames;
+                    warningTimer = WarningFrames;
                 }
                 shouldBeWarning = true;
             }
@@ -407,7 +415,7 @@ namespace ITD.Content.Projectiles
             }
             if (Main.myPlayer == Projectile.owner)
             {
-                if (--framesUntilRetractable <= 0)
+                if (--FramesUntilRetractable <= 0)
                 {
                     bool stillInUse = myPlayer.channel && !myPlayer.noItems && !myPlayer.CCed;
                     if (!stillInUse)
@@ -441,7 +449,7 @@ namespace ITD.Content.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Vector2 playerArmPosition = Main.GetPlayerArmPosition(Projectile);
-            Asset<Texture2D> chainTexture = ModContent.Request<Texture2D>(toChainTexture);
+            Asset<Texture2D> chainTexture = ModContent.Request<Texture2D>(ToChainTexture);
             Rectangle? chainSourceRectangle = null;
             float chainHeightAdjustment = 0f; // Use this to adjust the chain overlap. 
 

@@ -19,7 +19,7 @@ namespace ITD.Content.Items.Weapons.Mage
         }
         public override bool? UseItem(Player player)
         {
-            Vector2 startPos = new Vector2(Main.MouseWorld.X, Main.screenPosition.Y);
+            Vector2 startPos = new(Main.MouseWorld.X, Main.screenPosition.Y);
             Vector2 endPos = Helpers.QuickRaycast(startPos, Vector2.UnitY);
             MiscHelpers.CreateLightningEffects(startPos + new Vector2(Main.rand.NextFloat(-256f, 256f), 0f), endPos);
             Projectile.NewProjectile(Item.GetSource_FromThis(), endPos, Vector2.Zero, ModContent.ProjectileType<LightningStaffStrike>(), Item.damage, 0f);

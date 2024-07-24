@@ -20,17 +20,17 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
     {
         public override void SetSnaptrapProperties()
         {
-            shootRange = 16f * 8f;
-            retractAccel = 1.5f;
-            extraFlexibility = 16f * 2f;
-            framesBetweenHits = 16;
-            minDamage = 1;
-            maxDamage = 10;
-            fullPowerHitsAmount = 10;
-            warningFrames = 60;
-            chompDust = DustID.Iron;
-            toChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/SniptrapChain";
-            snaptrapMetal = new SoundStyle("ITD/Content/Sounds/SniptrapClose", SoundType.Sound);
+            ShootRange = 16f * 8f;
+            RetractAccel = 1.5f;
+            ExtraFlexibility = 16f * 2f;
+            FramesBetweenHits = 16;
+            MinDamage = 1;
+            MaxDamage = 10;
+            FullPowerHitsAmount = 10;
+            WarningFrames = 60;
+            ChompDust = DustID.Iron;
+            ToChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/SniptrapChain";
+            toSnaptrapMetal = "ITD/Content/Sounds/SniptrapClose";
         }
     }
 }

@@ -17,16 +17,16 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
         public override void SetSnaptrapProperties()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(SoulsnapperProjectile)}.OneTimeLatchMessage"));
-            shootRange = 16f * 16f;
-            retractAccel = 1.5f;
-            extraFlexibility = 16f * 2f;
-            framesBetweenHits = 24;
-            minDamage = 12;
-            maxDamage = 28;
-            fullPowerHitsAmount = 10;
-            warningFrames = 60;
-            chompDust = DustID.CorruptionThorns;
-            toChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/SoulsnapperChain";
+            ShootRange = 16f * 16f;
+            RetractAccel = 1.5f;
+            ExtraFlexibility = 16f * 2f;
+            FramesBetweenHits = 24;
+            MinDamage = 12;
+            MaxDamage = 28;
+            FullPowerHitsAmount = 10;
+            WarningFrames = 60;
+            ChompDust = DustID.CorruptionThorns;
+            ToChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/SoulsnapperChain";
             DrawOffsetX = -9;
             DrawOriginOffsetY = -16;
         }

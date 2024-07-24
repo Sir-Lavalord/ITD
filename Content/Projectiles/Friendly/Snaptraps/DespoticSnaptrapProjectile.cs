@@ -16,22 +16,22 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
         public static LocalizedText OneTimeLatchMessage { get; private set; }
         private const string ChainTextureExtraPath = "ITD/Content/Projectiles/Friendly/Snaptraps/DespoticSnaptrapChain1";
         private const string ChainTextureExtra2Path = "ITD/Content/Projectiles/Friendly/Snaptraps/DespoticSnaptrapChain2";
-        int constantEffectFrames = 200;
+        private readonly int constantEffectFrames = 200;
         int constantEffectTimer = 0;
         public override void SetSnaptrapProperties()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(DespoticSnaptrapProjectile)}.OneTimeLatchMessage"));
-            shootRange = 16f * 20f;
-            retractAccel = 1.5f;
-            framesUntilRetractable = 10;
-            extraFlexibility = 16f * 6f;
-            framesBetweenHits = 16;
-            minDamage = 3560;
-            maxDamage = 8900;
-            fullPowerHitsAmount = 10;
-            warningFrames = 200;
-            chompDust = DustID.IceTorch;
-            toChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/DespoticSnaptrapChain";
+            ShootRange = 16f * 20f;
+            RetractAccel = 1.5f;
+            FramesUntilRetractable = 10;
+            ExtraFlexibility = 16f * 6f;
+            FramesBetweenHits = 16;
+            MinDamage = 3560;
+            MaxDamage = 8900;
+            FullPowerHitsAmount = 10;
+            WarningFrames = 200;
+            ChompDust = DustID.IceTorch;
+            ToChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/DespoticSnaptrapChain";
             DrawOffsetX = -20;
             DrawOriginOffsetY = -24;
             Projectile.extraUpdates = 1;
@@ -45,7 +45,7 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
         }
         public override void PostAI()
         {
-            Dust.NewDust(Projectile.Center, 6, 6, chompDust, 0f, 0f, 0, default, 1f);
+            Dust.NewDust(Projectile.Center, 6, 6, ChompDust, 0f, 0f, 0, default, 1f);
             Dust.NewDust(Projectile.Center, 6, 6, DustID.MushroomTorch, 0f, 0f, 0, Color.Blue, 2f);
             if (!retracting)
             {
@@ -58,7 +58,7 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
         public override void OneTimeLatchEffect()
         {
             SoundEngine.PlaySound(snaptrapMetal, Projectile.Center);
-            AdvancedPopupRequest popupSettings = new AdvancedPopupRequest
+            AdvancedPopupRequest popupSettings = new()
             {
                 Text = OneTimeLatchMessage.Value,
                 //Text = "Munchity munch...",

@@ -21,21 +21,21 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
     {
         public override void SetSnaptrapProperties()
         {
-            shootRange = 16f * 20f;
-            retractAccel = 6.5f;
-            extraFlexibility = 16f * 2f;
-            framesBetweenHits = 20;
-            minDamage = 30;
-            maxDamage = 75;
-            fullPowerHitsAmount = 10;
-            warningFrames = 60;
-            chompDust = DustID.GemAmber;
+            ShootRange = 16f * 20f;
+            RetractAccel = 6.5f;
+            ExtraFlexibility = 16f * 2f;
+            FramesBetweenHits = 20;
+            MinDamage = 30;
+            MaxDamage = 75;
+            FullPowerHitsAmount = 10;
+            WarningFrames = 60;
+            ChompDust = DustID.GemAmber;
         }
 
         public override void OneTimeLatchEffect()
         {
             SoundEngine.PlaySound(snaptrapMetal, Projectile.Center);
-            AdvancedPopupRequest popupSettings = new AdvancedPopupRequest
+            AdvancedPopupRequest popupSettings = new()
             {
                 Text = "GET OVER HERE!",
                 Color = Color.Goldenrod,

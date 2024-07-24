@@ -24,15 +24,15 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
         public override void SetSnaptrapProperties()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(SnaptrapProjectile)}.OneTimeLatchMessage"));
-            shootRange = 16f * 16f;
-            retractAccel = 1.5f;
-            extraFlexibility = 16f * 2f;
-            framesBetweenHits = 22;
-            minDamage = 20;
-            maxDamage = 50;
-            fullPowerHitsAmount = 10;
-            warningFrames = 60;
-            chompDust = DustID.Titanium;
+            ShootRange = 16f * 16f;
+            RetractAccel = 1.5f;
+            ExtraFlexibility = 16f * 2f;
+            FramesBetweenHits = 22;
+            MinDamage = 20;
+            MaxDamage = 50;
+            FullPowerHitsAmount = 10;
+            WarningFrames = 60;
+            ChompDust = DustID.Titanium;
         }
         public override void OneTimeLatchEffect()
         {

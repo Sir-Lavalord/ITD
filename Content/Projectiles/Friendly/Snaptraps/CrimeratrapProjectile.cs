@@ -17,16 +17,16 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
         public override void SetSnaptrapProperties()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(CrimeratrapProjectile)}.OneTimeLatchMessage"));
-            shootRange = 16f * 16f;
-            retractAccel = 1.5f;
-            extraFlexibility = 16f * 2f;
-            framesBetweenHits = 24;
-            minDamage = 14;
-            maxDamage = 29;
-            fullPowerHitsAmount = 10;
-            warningFrames = 60;
-            chompDust = DustID.CrimsonPlants;
-            toChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/CrimeratrapChain";
+            ShootRange = 16f * 16f;
+            RetractAccel = 1.5f;
+            ExtraFlexibility = 16f * 2f;
+            FramesBetweenHits = 24;
+            MinDamage = 14;
+            MaxDamage = 29;
+            FullPowerHitsAmount = 10;
+            WarningFrames = 60;
+            ChompDust = DustID.CrimsonPlants;
+            ToChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/CrimeratrapChain";
             DrawOffsetX = -13;
             DrawOriginOffsetY = -19;
         }

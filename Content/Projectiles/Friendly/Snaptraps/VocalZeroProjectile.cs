@@ -26,17 +26,17 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
         public override void SetSnaptrapProperties()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(VocalZeroProjectile)}.OneTimeLatchMessage"));
-            shootRange = 16f * 12f;
-            retractAccel = 1.8f;
-            framesUntilRetractable = 10;
-            extraFlexibility = 16f * 4f;
-            framesBetweenHits = 16;
-            minDamage = 1280;
-            maxDamage = 3200;
-            fullPowerHitsAmount = 10;
-            warningFrames = 80;
-            chompDust = DustID.Blood;
-            toChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/VocalZeroChain";
+            ShootRange = 16f * 12f;
+            RetractAccel = 1.8f;
+            FramesUntilRetractable = 10;
+            ExtraFlexibility = 16f * 4f;
+            FramesBetweenHits = 16;
+            MinDamage = 1280;
+            MaxDamage = 3200;
+            FullPowerHitsAmount = 10;
+            WarningFrames = 80;
+            ChompDust = DustID.Blood;
+            ToChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/VocalZeroChain";
             DrawOffsetX = -22;
             DrawOriginOffsetY = -22;
         }
@@ -50,7 +50,7 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
                 {
                     effectCount += 1;
                     float damageToAdd = (float)maxDamageStatic / (100/percentageToAdd);
-                    maxDamage = maxDamageStatic + ((int)damageToAdd * effectCount);
+                    MaxDamage = maxDamageStatic + ((int)damageToAdd * effectCount);
                     AdvancedPopupRequest popupSettings = new AdvancedPopupRequest
                     {
                         //Text = "+10% damage!",
@@ -66,7 +66,7 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
 
         public override void PostAI()
         {
-            Dust.NewDust(Projectile.Center, 6, 6, chompDust, 0f, 0f, 0, default(Color), 1);
+            Dust.NewDust(Projectile.Center, 6, 6, ChompDust, 0f, 0f, 0, default(Color), 1);
         }
     }
 }

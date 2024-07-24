@@ -18,15 +18,15 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
         public override void SetSnaptrapProperties()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(MrSnapkinsProjectile)}.OneTimeLatchMessage"));
-            shootRange = 16f * 16f;
-            retractAccel = 1.5f;
-            extraFlexibility = 16f * 2f;
-            framesBetweenHits = 22;
-            minDamage = 20;
-            maxDamage = 50;
-            fullPowerHitsAmount = 5;
-            warningFrames = 60;
-            chompDust = DustID.Titanium;
+            ShootRange = 16f * 16f;
+            RetractAccel = 1.5f;
+            ExtraFlexibility = 16f * 2f;
+            FramesBetweenHits = 22;
+            MinDamage = 20;
+            MaxDamage = 50;
+            FullPowerHitsAmount = 5;
+            WarningFrames = 60;
+            ChompDust = DustID.Titanium;
         }
 
         private void LaunchBowties()
@@ -35,7 +35,7 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2((float)Math.Cos(MathHelper.PiOver4 * i) * 2f, (float)Math.Sin(MathHelper.PiOver4 * i) * 2f), ModContent.ProjectileType<SnapkinsBowtie>(), minDamage, 0.1f);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2((float)Math.Cos(MathHelper.PiOver4 * i) * 2f, (float)Math.Sin(MathHelper.PiOver4 * i) * 2f), ModContent.ProjectileType<SnapkinsBowtie>(), MinDamage, 0.1f);
                 }
             }
         }
