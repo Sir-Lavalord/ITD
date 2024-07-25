@@ -313,17 +313,12 @@ Projectiles: {
 	EvilSpitProjectile.DisplayName: Evil Spit
 	CicadianTreeEnd.DisplayName: Cicadian Tree End
 	IcyBoulder.DisplayName: Icy Boulder
-	LightningStaffStrike.DisplayName: Lightning Staff Strike
+	LightningStaffStrike.DisplayName: Lightning Strike
 
 	VenusSnaptrapProjectile: {
-		OneTimeLatchMessage: Mods.ITD.Projectiles.VenusSnaptrapProjectile.OneTimeLatchMessage
-		DisplayName: Venus Snaptrap Projectile
+		OneTimeLatchMessage: Poisoned!
+		DisplayName: Venus Snaptrap
 	}
-}
-
-VenusSnaptrapProjectile: {
-	OneTimeLatchMessage: Poisoned!
-	DisplayName: Venus Snaptrap
 }
 
 NPCs: {
@@ -333,7 +328,12 @@ NPCs: {
 	EmberlionPiercer.DisplayName: Emberlion Piercer
 	DesertBat.DisplayName: Desert Bat
 	EmberlionMiner.DisplayName: Emberlion Miner
-	Cicadian.DisplayName: Cicadian
+
+	Cicadian: {
+		DisplayName: Cicadian
+		Bestiary: A crab which has developed a symbiotic relationship with the Blueshrooms. The crab can lure prey easier while the Blueshroom gets protection.
+	}
+
 	CicadianTree.DisplayName: Cicadian Tree
 }
 
@@ -357,8 +357,7 @@ WorldGen: {
 Tiles: {
 	BlueshroomSapling.MapEntry: Blueshroom Primordium
 	CyaniteOreTile.MapEntry: Cyanite
-	BlueshroomTreeTest.MapEntry: Blueshroom Tree Test
-	BlueshroomTree.MapEntry: Blueshroom Tree
+	BlueshroomTree.MapEntry: Giant Blueshroom
 }
 
 Biomes: {

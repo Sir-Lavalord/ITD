@@ -6,6 +6,8 @@ namespace ITD.Content.Projectiles.Other
     public class CicadianTreeEnd : ModProjectile
     {
         private static readonly int lifetime = 80;
+        public override string Texture => "ITD/Content/NPCs/BasicEnemies/CicadianTree";
+        public override string GlowTexture => null;
         public override void SetDefaults()
         {
             Projectile.height = 12;

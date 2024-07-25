@@ -6,11 +6,23 @@ using Terraria.ID;
 using Terraria;
 using Terraria.DataStructures;
 using ITD.Content.Projectiles.Other;
+using ReLogic.Content;
+using ITD.Content.Tiles.BlueshroomGroves;
+using ITD.Content.Dusts;
 
 namespace ITD.Content.NPCs.BasicEnemies
 {
     public class CicadianTree : ModNPC
     {
+        private readonly Asset<Texture2D> glow = ModContent.Request<Texture2D>("ITD/Content/NPCs/BasicEnemies/CicadianTree_Glow");
+        public override void SetStaticDefaults()
+        {
+            NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Hide = true
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, bestiaryData);
+        }
         public override void SetDefaults()
         {
             NPC.width = 20;
@@ -71,5 +83,15 @@ namespace ITD.Content.NPCs.BasicEnemies
         }
         public override bool? CanBeHitByItem(Player player, Item item) => item.axe > 0;
         public override bool? CanBeHitByProjectile(Projectile projectile) => false;
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Vector2 offset = new Vector2(0f, NPC.gfxOffY - 22f);
+            spriteBatch.Draw(glow.Value, NPC.Center - screenPos + offset, null, Color.White * BlueshroomTree.opac, 0f, glow.Size()/2f, 1f, SpriteEffects.None, 0f);
+            if (Main.rand.NextBool(24))
+            {
+                int offset1 = 20;
+                Dust.NewDust(NPC.Center + offset - new Vector2(offset1, offset1 + 42), 16 + offset1 * 2, 16 + offset1 * 2, ModContent.DustType<BlueshroomSporesDust>());
+            }
+        }
     }
 }

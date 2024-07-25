@@ -142,7 +142,7 @@ Items: {
 
 	Soulsnapper: {
 		DisplayName: Enganchaalmas
-		Tooltip: "[c/{0}:Latch Effect:] Continuamente lanza escupitajos de corrupción"
+		Tooltip: "[c/{0}:Efecto de Enganche:] Continuamente lanza escupitajos de corrupción"
 	}
 
 	Spidermeal: {
@@ -156,7 +156,7 @@ Items: {
 
 	Crimeratrap: {
 		DisplayName: Carmengancho
-		Tooltip: "[c/{0}:Latch Effect:] Continuamente lanza escupitajos de carmesí"
+		Tooltip: "[c/{0}:Efecto de Enganche:] Continuamente lanza escupitajos de carmesí"
 	}
 
 	Diorite: {
@@ -251,17 +251,17 @@ Items: {
 	}
 
 	ThunderStaff: {
-		// DisplayName: Thunder Staff
-		// Tooltip: ""
+		DisplayName: Bastón del Trueno
+		Tooltip: ""
 	}
 
 	VenusSnaptrap: {
-		// DisplayName: Venus Snaptrap
-		/* Tooltip:
+		DisplayName: Venus Enganchamoscas
+		Tooltip:
 			'''
-			"Queen of the marsh"; Darwin's most beautiful plant
-			[c/{0}:Latch Effect:] Poisons enemies in your grip
-			''' */
+			"Reina del pantano"; La planta más bella de Darwin
+			[c/{0}:Efecto de Enganche:] Envenena al enemigo enganchado
+			'''
 	}
 }
 
@@ -311,19 +311,14 @@ Projectiles: {
 	}
 
 	EvilSpitProjectile.DisplayName: Escupitajo maligno
-	// CicadianTreeEnd.DisplayName: Cicadian Tree End
-	// IcyBoulder.DisplayName: Icy Boulder
-	// LightningStaffStrike.DisplayName: Lightning Staff Strike
+	CicadianTreeEnd.DisplayName: Cicadian Tree End
+	IcyBoulder.DisplayName: Roca de hielo
+	LightningStaffStrike.DisplayName: Relámpago
 
 	VenusSnaptrapProjectile: {
-		// OneTimeLatchMessage: Mods.ITD.Projectiles.VenusSnaptrapProjectile.OneTimeLatchMessage
-		// DisplayName: Venus Snaptrap Projectile
+		OneTimeLatchMessage: Envenenado!
+		DisplayName: Venus Enganchamoscas
 	}
-}
-
-VenusSnaptrapProjectile: {
-	// OneTimeLatchMessage: Poisoned!
-	// DisplayName: Venus Snaptrap
 }
 
 NPCs: {
@@ -333,8 +328,13 @@ NPCs: {
 	EmberlionPiercer.DisplayName: Brasaleón perforador
 	DesertBat.DisplayName: Murciélago del desierto
 	EmberlionMiner.DisplayName: Brasaleón minero
-	// Cicadian.DisplayName: Cicadian
-	// CicadianTree.DisplayName: Cicadian Tree
+
+	Cicadian: {
+		DisplayName: Cigarriano
+		Bestiary: Un cangrejo que ha desarrolado una relación simbiótica con los Champizules. El cangrejo puede fácilmente atraer a su presa mientras que el Champizúl obtiene protección.
+	}
+
+	CicadianTree.DisplayName: Árbol Cigarriano
 }
 
 Buffs: {
@@ -357,8 +357,7 @@ WorldGen: {
 Tiles: {
 	BlueshroomSapling.MapEntry: Primordio de champizúl
 	CyaniteOreTile.MapEntry: Cianita
-	// BlueshroomTreeTest.MapEntry: Blueshroom Tree Test
-	// BlueshroomTree.MapEntry: Blueshroom Tree
+	BlueshroomTree.MapEntry: Champizúl gigante
 }
 
 Biomes: {

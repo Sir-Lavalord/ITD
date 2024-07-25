@@ -1,19 +1,23 @@
-﻿using ITD.Content.Projectiles.Hostile;
+﻿using ITD.Content.Biomes;
+using ITD.Content.Projectiles.Friendly.Snaptraps;
+using ITD.Content.Projectiles.Hostile;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace ITD.Content.NPCs.BasicEnemies
 {
-    //wip
     public class Cicadian : ModNPC
     {
+        public static LocalizedText BestiaryEntry { get; private set; }
         private static float xSpeed = 2.2f;
         private enum ActionState
         {
@@ -34,6 +38,7 @@ namespace ITD.Content.NPCs.BasicEnemies
             NPCID.Sets.TrailCacheLength[Type] = 5;
             NPCID.Sets.TrailingMode[Type] = 0;
             Main.npcFrameCount[Type] = 7;
+            BestiaryEntry = Language.GetOrRegister(Mod.GetLocalizationKey($"NPCs.{nameof(Cicadian)}.Bestiary"));
         }
         public override void SetDefaults()
         {
@@ -50,6 +55,14 @@ namespace ITD.Content.NPCs.BasicEnemies
             NPC.value = Item.buyPrice(silver: 4);
             NPC.aiStyle = -1;
             NPC.noTileCollide = true;
+            SpawnModBiomes = [ModContent.GetInstance<BlueshroomGrovesBiome>().Type];
+        }
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(
+            [
+                new FlavorTextBestiaryInfoElement(BestiaryEntry.Value)
+            ]);
         }
         public override void ModifyHoverBoundingBox(ref Rectangle boundingBox)
         {
