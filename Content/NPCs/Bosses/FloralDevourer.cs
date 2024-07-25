@@ -27,8 +27,8 @@ namespace ITD.Content.NPCs.Bosses
         private int dipProgress = 0;
         private int dipProgLimit = 60;
         private int dipCooldown = 0;
-        private float raycastFloatLength = 8f;
-        private float defaultRaycastFloatLength = 8f;
+        private float raycastFloatLength = 32f;
+        private float defaultRaycastFloatLength = 32f;
         private bool dipping = false;
         public override void SetStaticDefaults()
         {
@@ -72,8 +72,9 @@ namespace ITD.Content.NPCs.Bosses
 
         public override void AI()
         {
-            var raycastCheck = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, raycastFloatLength);
-            if (raycastCheck != Vector2.Zero)
+            Vector2 raycastCheck = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, raycastFloatLength);
+            float length = (raycastCheck - NPC.Center).Length();
+            if (length < 150)
             {
                 NPC.velocity.Y = -2f;
             }
