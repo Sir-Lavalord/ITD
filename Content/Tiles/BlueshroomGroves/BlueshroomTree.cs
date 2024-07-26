@@ -13,7 +13,6 @@ namespace ITD.Content.Tiles.BlueshroomGroves
     {
         private readonly Asset<Texture2D> glow = Request<Texture2D>("ITD/Content/Tiles/BlueshroomGroves/BlueshroomTops_Glow");
         private readonly Asset<Texture2D> branchGlow = Request<Texture2D>("ITD/Content/Tiles/BlueshroomGroves/BlueshroomBranches_Glow");
-        public static float sinElement = 0f;
         public static float opac = 1f;
         public override void SetStaticTreeDefaults()
         {

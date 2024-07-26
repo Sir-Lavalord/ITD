@@ -98,8 +98,7 @@ namespace ITD
             }
             public override void PostUpdateDusts()
             {
-                BlueshroomTree.sinElement += 0.02f;
-                BlueshroomTree.opac = ((float)Math.Sin(BlueshroomTree.sinElement) + 1f) / 2f;
+                BlueshroomTree.opac = ((float)Math.Sin(Main.GameUpdateCount/40f) + 1f) / 2f;
             }
         }
     }

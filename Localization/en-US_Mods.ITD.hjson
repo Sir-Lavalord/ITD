@@ -263,6 +263,11 @@ Items: {
 			[c/{0}:Latch Effect:] Poisons enemies in your grip
 			'''
 	}
+
+	BlueshroomCapBlock: {
+		DisplayName: Blueshroom Cap Block
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

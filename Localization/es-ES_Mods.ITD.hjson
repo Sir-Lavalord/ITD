@@ -263,6 +263,11 @@ Items: {
 			[c/{0}:Efecto de Enganche:] Envenena al enemigo enganchado
 			'''
 	}
+
+	BlueshroomCapBlock: {
+		// DisplayName: Blueshroom Cap Block
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

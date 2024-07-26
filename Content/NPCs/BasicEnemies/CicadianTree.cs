@@ -38,6 +38,15 @@ namespace ITD.Content.NPCs.BasicEnemies
             NPC.value = 0;
             NPC.aiStyle = -1;
         }
+        public override Color? GetAlpha(Color drawColor)
+        {
+            NPC cicadian = Main.npc[(int)NPC.ai[0]];
+            if (cicadian.type == ModContent.NPCType<Cicadian>() && cicadian.active)
+            {
+                return Lighting.GetColor(cicadian.Center.ToTileCoordinates());
+            }
+            return drawColor;
+        }
         public override void ModifyHoverBoundingBox(ref Rectangle boundingBox)
         {
             boundingBox = Rectangle.Empty;

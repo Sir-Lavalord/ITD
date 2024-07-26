@@ -16,13 +16,14 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace ITD.Content.NPCs.Bosses
 {
-    // i'll change the FloralDevourerSegment class into a ModNPC when i get to it. this is a placeholder
     [AutoloadBossHead]
     public class FloralDevourer : ModNPC
     {
-        //private static List<Leg> legs = [];
-        //private static List<Leg> backLegs = [];
-        private List<FloralDevourerSegment> floralDevourerSegments = [];
+        // todo: make front legs actually draw in front of the segments
+        // (probably this class needs references to the front legs since i'm drawing the segments here)
+        private static readonly Asset<Texture2D> outline = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerSegmentOutline");
+        private static readonly Asset<Texture2D> segment = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerSegment");
+        private int[] floralDevourerSegments;
         private float xSpeed = 5f;
         private int dipProgress = 0;
         private int dipProgLimit = 60;
@@ -102,7 +103,6 @@ namespace ITD.Content.NPCs.Bosses
 
             if (toPlayer.Length() < 185f && dipping == false && dipCooldown < 0)
             {
-                //Main.NewText("dipping");
                 dipping = true;
                 dipCooldown = 200;
                 dipProgress = 0;
@@ -126,55 +126,90 @@ namespace ITD.Content.NPCs.Bosses
 
         public override void PostAI()
         {
-            if (floralDevourerSegments.Count > 0)
+            for (int i = 0; i < floralDevourerSegments.Length; i++)
             {
-                foreach (FloralDevourerSegment seg in floralDevourerSegments)
+                if (IsSegment(floralDevourerSegments[i], out NPC segment))
                 {
-                    seg.Enqueue(NPC.Center);
-                    seg.Update();
+                    Vector2 targetPosition;
+                    if (i == 0)
+                    {
+                        targetPosition = NPC.Center - NPC.velocity;
+                    }
+                    else
+                    {
+                        targetPosition = Main.npc[floralDevourerSegments[i - 1]].Center;
+                    }
+
+                    segment.ai[1] = targetPosition.X;
+                    segment.ai[2] = targetPosition.Y;
                 }
             }
         }
-
+        public bool IsSegment(int whoAmI, out NPC npc)
+        {
+            NPC nPC = Main.npc[whoAmI];
+            if (nPC.active && nPC.type == ModContent.NPCType<FloralDevourerSegment>())
+            {
+                npc = nPC;
+                return true;
+            }
+            npc = null;
+            return false;
+        }
         public override void OnSpawn(IEntitySource source)
         {
+            floralDevourerSegments = new int[6];
             for (int i = 0; i < 5; i++)
             {
-                floralDevourerSegments.Add(new FloralDevourerSegment(NPC.position, floralDevourerSegments.Count+1, true));
+                floralDevourerSegments[i] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<FloralDevourerSegment>(), NPC.whoAmI, i, NPC.Center.X, NPC.Center.Y, 1f);
             }
-            floralDevourerSegments.Add(new FloralDevourerSegment(NPC.position, floralDevourerSegments.Count+1, false));
+            floralDevourerSegments[5] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<FloralDevourerSegment>(), NPC.whoAmI, 5, NPC.Center.X, NPC.Center.Y, 0f);
         }
 
         public override void OnKill()
         {
-            foreach (FloralDevourerSegment seg in floralDevourerSegments)
+            for (int i = 0; i < floralDevourerSegments.Length; i++)
             {
-                seg.Dispose();
+                if (IsSegment(floralDevourerSegments[i], out NPC npc))
+                {
+                    npc.StrikeInstantKill();
+                }
             }
-            floralDevourerSegments.Clear();
+        }
+        public void PreDrawSegments(SpriteBatch spriteBatch, Vector2 screenPos)
+        {
+            for (int i = 0; i < floralDevourerSegments.Length; i++)
+            {
+                if (IsSegment(floralDevourerSegments[i], out NPC npc))
+                {
+                    Color color = Lighting.GetColor(npc.Center.ToTileCoordinates());
+                    SpriteEffects direction = npc.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                    spriteBatch.Draw(outline.Value, npc.Center - screenPos, null, color, 0f, outline.Size() / 2f, 1f, direction, 0f);
+                }
+            }
+        }
+        public void PostDrawSegments(SpriteBatch spriteBatch, Vector2 screenPos)
+        {
+            for (int i = 0; i < floralDevourerSegments.Length; i++)
+            {
+                if (IsSegment(floralDevourerSegments[i], out NPC npc))
+                {
+                    Color color = Lighting.GetColor(npc.Center.ToTileCoordinates());
+                    SpriteEffects direction = npc.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                    spriteBatch.Draw(segment.Value, npc.Center - screenPos, null, color, 0f, segment.Size() / 2f, 1f, direction, 0f);
+                }
+            }
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            foreach (FloralDevourerSegment seg in floralDevourerSegments)
-            {
-                seg.PreDraw(spriteBatch, screenPos);
-            }
-            foreach (FloralDevourerSegment seg in floralDevourerSegments)
-            {
-                seg.PostDraw(spriteBatch, screenPos);
-            }
-            foreach (FloralDevourerSegment seg in floralDevourerSegments)
-            {
-                seg.PostDrawLegs(spriteBatch, screenPos);
-            }
+            PreDrawSegments(spriteBatch, screenPos);
+            PostDrawSegments(spriteBatch, screenPos);
             return true;
         }
     }
 
-    public class FloralDevourerSegment : IDisposable
+    public class FloralDevourerSegment : ModNPC
     {
-        private Queue<Vector2> path = new();
-
         public Vector2 frontLegPosition;
         public Vector2 backLegPosition;
 
@@ -183,44 +218,69 @@ namespace ITD.Content.NPCs.Bosses
 
         public bool frontStepping = false;
         public bool backStepping = false;
-
-        public Vector2 position;
+        public Vector2 pathPosition
+        {
+            get { return new Vector2(NPC.ai[1], NPC.ai[2]); }
+            set { NPC.ai[1] = value.X; NPC.ai[2] = value.Y; } 
+        }
         public Vector2 direction;
 
-        public bool hasLegs = true;
+        public bool HasLegs
+        {
+            get => NPC.ai[3] == 1f;
+            set => NPC.ai[3] = value ? 1f : 0f;
+        }
         private Leg legFront;
         private Leg legBack;
         private int delay = 20;
         private int timer = 0;
-        public int ID = 0;
-        private Asset<Texture2D> outline;
-        private Asset<Texture2D> sprite;
-        public FloralDevourerSegment(Vector2 pos, int id, bool shouldHaveLegs)
+        public int ID
         {
-            outline = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerSegmentOutline");
-            sprite = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerSegment");
-            position = pos;
-            hasLegs = shouldHaveLegs;
-            if (shouldHaveLegs)
+            get => (int)NPC.ai[0];
+            set => NPC.ai[0] = value;
+        }
+        public override void SetDefaults()
+        {
+            NPC.width = 110;
+            NPC.height = 140;
+            NPC.damage = 8;
+            NPC.defense = 5;
+            NPC.lifeMax = 3000;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.knockBackResist = 0f;
+            NPC.noGravity = true;
+            NPC.noTileCollide = true;
+            NPC.value = Item.buyPrice(gold: 5);
+            NPC.SpawnWithHigherTime(30);
+            NPC.aiStyle = -1;
+            Main.npcFrameCount[NPC.type] = 1;
+            if (!Main.dedServ)
             {
-                legFront = new Leg(position.X, position.Y, 0f);
-                legBack = new Leg(position.X, position.Y, 0f);
+                Music = MusicLoader.GetMusicSlot(Mod, "Content/Music/WOMR");
             }
-            ID = id;
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (HasLegs)
+            {
+                legFront = new Leg(NPC.Center.X, NPC.Center.Y, 0f);
+                legBack = new Leg(NPC.Center.X, NPC.Center.Y, 0f);
+            }
             delay *= ID;
         }
-
-        public void Enqueue(Vector2 pos)
+        public override void AI()
         {
-            path.Enqueue(pos);
-        }
+            Vector2 targetPosition = new Vector2(NPC.ai[1], NPC.ai[2]);
+            NPC.Center = Vector2.Lerp(NPC.Center, targetPosition, 0.06f);
 
-        public void Update()
-        {
-            if (hasLegs)
+            NPC.position.Y += (float)Math.Sin(NPC.ai[0] + Main.GameUpdateCount / 10f) * 2f;
+
+            direction = (targetPosition - NPC.Center).SafeNormalize(Vector2.Zero);
+            if (HasLegs)
             {
-                frontRayPosition = Helpers.QuickRaycast(position, Vector2.UnitY, 24f);
-                backRayPosition = Helpers.QuickRaycast(position + new Vector2(direction.X * 32f, 0f), Vector2.UnitY, 24f);
+                frontRayPosition = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, 24f);
+                backRayPosition = Helpers.QuickRaycast(NPC.Center + new Vector2(direction.X * 32f, 0f), Vector2.UnitY, 24f);
                 float step = 80f;
                 if (legFront != null && legBack != null)
                 {
@@ -234,8 +294,6 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     if (frontStepping)
                     {
-                        // this is odd
-                        //frontLegPosition = Vector2.Lerp(frontLegPosition, frontRayPosition, 0.6f) + new Vector2(0f, -(float)Math.Sin((1-((frontRayPosition-frontLegPosition).Length()/step))*Math.PI)*32f);
                         frontLegPosition = Vector2.Lerp(frontLegPosition, frontRayPosition, 0.6f);
                         if ((frontRayPosition - frontLegPosition).Length() < 12f)
                         {
@@ -250,57 +308,23 @@ namespace ITD.Content.NPCs.Bosses
                             backStepping = false;
                         }
                     }
-                    //frontLegPosition = Vector2.Lerp(frontLegPosition, frontRayPosition, 0.1f);
-                    //backLegPosition = Vector2.Lerp(backLegPosition, backRayPosition, 0.1f);
                     legFront.Update(frontLegPosition);
                     legBack.Update(backLegPosition);
-                    legFront.legBase = position;
-                    legBack.legBase = position + new Vector2(direction.X * 32f, 0f);
+                    legFront.legBase = NPC.Center;
+                    legBack.legBase = NPC.Center + new Vector2(direction.X * 32f, 0f);
                 }
             }
-            
-            timer += 1;
-            if (path.Count != 0 && timer > delay)
-            {
-                var prev = position;
-                position = path.Peek() + new Vector2(0f, ((float)Math.Sin(timer/10f + ID))*20f);
-                direction = (position - prev).SafeNormalize(Vector2.Zero);
-                path.Dequeue();
-            }
         }
-
-        public void PostDrawLegs(SpriteBatch spriteBatch, Vector2 screenPos)
-        {
-            bool isFacingRight = direction.X > 0f;
-            legFront?.Draw(spriteBatch, screenPos, Color.White, isFacingRight);
-        }
-        public void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos)
-        {
-            bool isFacingRight = direction.X > 0f;
-            Point tileCoords = position.ToTileCoordinates();
-            spriteBatch.Draw(sprite.Value, position - screenPos, null, Lighting.GetColor(tileCoords), 0f, sprite.Size() / 2f, 1f, isFacingRight ? SpriteEffects.FlipHorizontally : SpriteEffects.None, default);
-        }
-
-        public void PreDraw(SpriteBatch spriteBatch, Vector2 screenPos)
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             bool isFacingRight = direction.X > 0f;
             legBack?.Draw(spriteBatch, screenPos, Color.Gray, isFacingRight);
-            Point tileCoords = position.ToTileCoordinates();
-            spriteBatch.Draw(outline.Value, position - screenPos, null, Lighting.GetColor(tileCoords), 0f, outline.Size() / 2f, 1f, isFacingRight ? SpriteEffects.FlipHorizontally : SpriteEffects.None, default);
+            return false;
         }
-
-        public void Dispose()
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            if (legFront != null)
-            {
-                legFront.Dispose();
-                legFront = null;
-            }
-            if (legBack != null)
-            {
-                legBack.Dispose();
-                legBack = null;
-            }
+            bool isFacingRight = direction.X > 0f;
+            legFront?.Draw(spriteBatch, screenPos, Color.White, isFacingRight);
         }
     }
     public class Leg : IDisposable
@@ -399,7 +423,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             Point tileCoords = new Vector2((a.X+b.X)/2f, (a.Y+b.Y)/2f).ToTileCoordinates();
             Texture2D textureToDraw = isFemur ? femurTexture.Value : tibiaTexture.Value;
-            spriteBatch.Draw(textureToDraw, a-screenPos, null, Lighting.GetColor(tileCoords.X, tileCoords.Y), Angle, new Vector2(0f, textureToDraw.Height / 2f), 1f, shouldBeMirrored? SpriteEffects.FlipVertically : SpriteEffects.None, default);
+            spriteBatch.Draw(textureToDraw, a-screenPos, null, Lighting.GetColor(tileCoords.X, tileCoords.Y).MultiplyRGB(color), Angle, new Vector2(0f, textureToDraw.Height / 2f), 1f, shouldBeMirrored? SpriteEffects.FlipVertically : SpriteEffects.None, default);
         }
     }
 }

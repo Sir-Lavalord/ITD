@@ -80,7 +80,7 @@ namespace ITD.Content.NPCs.BasicEnemies
             if (!Main.npc[(int)NPC.ai[0]].active && !chopped)
             {
                 chopped = true;
-                NPC.defense -= 15;
+                NPC.defense -= 25;
                 if (AI_State == ActionState.Background)
                     AI_State = ActionState.Transition;
             }
