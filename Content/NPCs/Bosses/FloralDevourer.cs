@@ -28,8 +28,8 @@ namespace ITD.Content.NPCs.Bosses
         private int dipProgress = 0;
         private int dipProgLimit = 60;
         private int dipCooldown = 0;
-        private float raycastFloatLength = 32f;
-        private float defaultRaycastFloatLength = 32f;
+        private float raycastFloatLength = 9f;
+        private float defaultRaycastFloatLength = 9f;
         private bool dipping = false;
         public override void SetStaticDefaults()
         {
@@ -75,7 +75,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             Vector2 raycastCheck = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, raycastFloatLength);
             float length = (raycastCheck - NPC.Center).Length();
-            if (length < 150)
+            if (length < raycastFloatLength*16f)
             {
                 NPC.velocity.Y = -2f;
             }
@@ -269,14 +269,16 @@ namespace ITD.Content.NPCs.Bosses
             }
             delay *= ID;
         }
+        public override bool? CanBeHitByItem(Player player, Item item) => false;
+        public override bool CanBeHitByNPC(NPC attacker) => false;
+        public override bool? CanBeHitByProjectile(Projectile projectile) => false;
         public override void AI()
         {
-            Vector2 targetPosition = new Vector2(NPC.ai[1], NPC.ai[2]);
-            NPC.Center = Vector2.Lerp(NPC.Center, targetPosition, 0.06f);
+            NPC.Center = Vector2.Lerp(NPC.Center, pathPosition, 0.06f);
 
-            NPC.position.Y += (float)Math.Sin(NPC.ai[0] + Main.GameUpdateCount / 10f) * 2f;
+            NPC.position.Y += (float)Math.Sin(ID + Main.GameUpdateCount / 10f) * 2f;
 
-            direction = (targetPosition - NPC.Center).SafeNormalize(Vector2.Zero);
+            direction = (pathPosition - NPC.Center).SafeNormalize(Vector2.Zero);
             if (HasLegs)
             {
                 frontRayPosition = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, 24f);
