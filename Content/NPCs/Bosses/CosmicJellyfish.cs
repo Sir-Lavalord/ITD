@@ -30,6 +30,8 @@ namespace ITD.Content.NPCs.Bosses
         };
         //private static List<CosmicJellyfish_Hand> hands = new List<CosmicJellyfish_Hand>();
         public float rotation = 0f;
+        public float handCharge = 0f;
+        public float handSling = 0f;
         public bool SecondStage
         {
             get => NPC.ai[0] == 1f;
@@ -41,7 +43,14 @@ namespace ITD.Content.NPCs.Bosses
             FollowingRegular,
             Wandering,
         }
+        private enum HandStates
+        {
+            Waiting,
+            Charging,
+            Slinging,
+        }
         private States actionID = 0;
+        private HandStates handState = HandStates.Waiting;
 
         public override void SetStaticDefaults()
         {
@@ -208,6 +217,8 @@ namespace ITD.Content.NPCs.Bosses
                     Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -8f);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity + projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 0, 0, -1);
                 }
+                if (handState == HandStates.Waiting)
+                    handState = HandStates.Charging;
             }
             if (sludgeTimer == 180)
             {
@@ -249,10 +260,39 @@ namespace ITD.Content.NPCs.Bosses
                 Projectile projectile = Main.projectile[hand];
                 if (projectile.active && projectile.type == ModContent.ProjectileType<CosmicJellyfish_Hand>())
                 {
+                    if (projectile.scale < 1f)
+                    {
+                        projectile.scale += 0.05f;
+                    }
                     projectile.timeLeft = 2;
                     Vector2 extendOut = new Vector2((float)Math.Cos(NPC.rotation), (float)Math.Sin(NPC.rotation));
-                    projectile.Center = NPC.Center - extendOut * 110 + new Vector2(0f, NPC.velocity.Y);
+                    Vector2 toPlayer = (player.Center - projectile.Center).SafeNormalize(Vector2.Zero);
+                    Vector2 normalCenter = NPC.Center - extendOut * 110 + new Vector2(0f, NPC.velocity.Y);
+                    Vector2 chargedPosition = NPC.Center - extendOut * 110 + new Vector2(0f, NPC.velocity.Y) - toPlayer*150f;
                     projectile.rotation = NPC.rotation;
+                    switch (handState)
+                    {
+                        case HandStates.Waiting:
+                            handSling = 0f;
+                            handCharge = 0f;
+                            projectile.Center = Vector2.Lerp(projectile.Center, normalCenter, 0.3f);
+                            break;
+                        case HandStates.Charging:
+                            if (handCharge < 1f)
+                                handCharge += 0.02f;
+                            else
+                                handState = HandStates.Slinging;
+                            projectile.Center = Vector2.Lerp(normalCenter, chargedPosition, handCharge);
+                            break;
+                        case HandStates.Slinging:
+                            handCharge = 0f;
+                            if (handSling < 1f)
+                                handSling += 0.05f;
+                            else
+                                handState = HandStates.Waiting;
+                            projectile.Center = Vector2.Lerp(normalCenter, player.Center, handSling);
+                            break;
+                    }
                 }
                 else
                 {
@@ -273,7 +313,19 @@ namespace ITD.Content.NPCs.Bosses
                 Projectile projectile = Main.projectile[hand];
                 Texture2D tex = TextureAssets.Projectile[projectile.type].Value;
                 int vertSize = tex.Height / Main.projFrames[projectile.type];
-                spriteBatch.Draw(tex, projectile.Center - screenPos, new Rectangle(0, vertSize*projectile.frame, tex.Width, vertSize), Color.White, projectile.rotation, new Vector2(tex.Width/2f, tex.Height / 2f / Main.projFrames[projectile.type]), projectile.scale, SpriteEffects.None, 0f);
+                Vector2 origin = new Vector2(tex.Width / 2f, tex.Height / 2f / Main.projFrames[projectile.type]);
+                Rectangle frameRect = new Rectangle(0, vertSize * projectile.frame, tex.Width, vertSize);
+                if (handState == HandStates.Slinging)
+                {
+                    for (int k = 0; k < projectile.oldPos.Length; k++)
+                    {
+                        Vector2 center = projectile.Size/2f;
+                        Vector2 drawPos = projectile.oldPos[k] - Main.screenPosition + center;
+                        Color color = projectile.GetAlpha(drawColor) * ((projectile.oldPos.Length - k) / (float)projectile.oldPos.Length);
+                        spriteBatch.Draw(tex, drawPos, frameRect, color, projectile.oldRot[k], origin, projectile.scale, SpriteEffects.None, 0f);
+                    }
+                }
+                spriteBatch.Draw(tex, projectile.Center - screenPos, frameRect, Color.White, projectile.rotation, origin, projectile.scale, SpriteEffects.None, 0f);
             }
             return true;
         }

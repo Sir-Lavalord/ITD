@@ -7,6 +7,7 @@ using Terraria.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using System.Collections.Generic;
+using Terraria.DataStructures;
 
 namespace ITD.Content.Projectiles.Hostile
 {
@@ -14,6 +15,8 @@ namespace ITD.Content.Projectiles.Hostile
     {
         public override void SetStaticDefaults()
         {
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording mode
             Main.projFrames[Projectile.type] = 5;
         }
         public override void SetDefaults()
@@ -29,6 +32,10 @@ namespace ITD.Content.Projectiles.Hostile
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             return false;
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.scale = 0.1f;
         }
         public override void OnKill(int timeLeft)
         {

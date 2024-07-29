@@ -75,7 +75,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             Vector2 raycastCheck = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, raycastFloatLength);
             float length = (raycastCheck - NPC.Center).Length();
-            if (length < raycastFloatLength*16f)
+            if (length < raycastFloatLength*15.8f)
             {
                 NPC.velocity.Y = -2f;
             }
