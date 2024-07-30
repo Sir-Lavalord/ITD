@@ -32,25 +32,29 @@ namespace ITD.Content.NPCs.Bosses
         public float rotation = 0f;
         public float handCharge = 0f;
         public float handSling = 0f;
+        public float handFollowThrough = 0f;
+        private Vector2 handTarget = Vector2.Zero;
+        private Vector2 handStatic = Vector2.Zero;
+        private bool targetPicked = false;
         public bool SecondStage
         {
             get => NPC.ai[0] == 1f;
             set => NPC.ai[0] = value ? 1f : 0f;
         }
 
-        private enum States
+        private enum ActionState
         {
             FollowingRegular,
             Wandering,
         }
-        private enum HandStates
+        private enum HandState
         {
             Waiting,
             Charging,
             Slinging,
         }
-        private States actionID = 0;
-        private HandStates handState = HandStates.Waiting;
+        private ActionState AI_State = ActionState.FollowingRegular;
+        private HandState handState = HandState.Waiting;
 
         public override void SetStaticDefaults()
         {
@@ -217,8 +221,8 @@ namespace ITD.Content.NPCs.Bosses
                     Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -8f);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity + projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 0, 0, -1);
                 }
-                if (handState == HandStates.Waiting)
-                    handState = HandStates.Charging;
+                if (handState == HandState.Waiting)
+                    handState = HandState.Charging;
             }
             if (sludgeTimer == 180)
             {
@@ -236,9 +240,9 @@ namespace ITD.Content.NPCs.Bosses
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1);
                 }
             }
-            switch (actionID)
+            switch (AI_State)
             {
-                case States.FollowingRegular:
+                case ActionState.FollowingRegular:
                     if (speed > 1.1f)
                     {
                         NPC.velocity = aboveNormalized * (speed + 1f) / 20;
@@ -248,7 +252,7 @@ namespace ITD.Content.NPCs.Bosses
                         NPC.velocity = Vector2.Zero;
                     }
                     break;
-                case States.Wandering:
+                case ActionState.Wandering:
                     break;
             }
             HandleHand(player);
@@ -267,32 +271,55 @@ namespace ITD.Content.NPCs.Bosses
                     projectile.timeLeft = 2;
                     Vector2 extendOut = new Vector2((float)Math.Cos(NPC.rotation), (float)Math.Sin(NPC.rotation));
                     Vector2 toPlayer = (player.Center - projectile.Center).SafeNormalize(Vector2.Zero);
+                    Vector2 chargedPosition = NPC.Center - extendOut * 110 + new Vector2(0f, NPC.velocity.Y) - toPlayer * 150f;
                     Vector2 normalCenter = NPC.Center - extendOut * 110 + new Vector2(0f, NPC.velocity.Y);
-                    Vector2 chargedPosition = NPC.Center - extendOut * 110 + new Vector2(0f, NPC.velocity.Y) - toPlayer*150f;
-                    projectile.rotation = NPC.rotation;
+                    float targetRotation = NPC.rotation;
                     switch (handState)
                     {
-                        case HandStates.Waiting:
+                        case HandState.Waiting:
                             handSling = 0f;
                             handCharge = 0f;
+                            handFollowThrough = 0f;
                             projectile.Center = Vector2.Lerp(projectile.Center, normalCenter, 0.3f);
                             break;
-                        case HandStates.Charging:
+                        case HandState.Charging:
                             if (handCharge < 1f)
-                                handCharge += 0.02f;
+                            {
+                                handCharge += 0.04f;
+                                targetRotation += handCharge;
+                            }
                             else
-                                handState = HandStates.Slinging;
-                            projectile.Center = Vector2.Lerp(normalCenter, chargedPosition, handCharge);
+                            {
+                                handState = HandState.Slinging;
+                                Vector2 toTarget = (player.Center - projectile.Center).SafeNormalize(Vector2.Zero);
+                                handTarget = player.Center + toTarget*120f;
+                                handStatic = projectile.Center;
+                            }
+                            projectile.Center = Vector2.Lerp(normalCenter, chargedPosition, (float)Math.Sin(handCharge * Math.PI));
                             break;
-                        case HandStates.Slinging:
+                        case HandState.Slinging:
+                            targetPicked = false;
                             handCharge = 0f;
                             if (handSling < 1f)
-                                handSling += 0.05f;
+                            {
+                                handSling += 0.03f;
+                                targetRotation -= handSling;
+                            }
                             else
-                                handState = HandStates.Waiting;
-                            projectile.Center = Vector2.Lerp(normalCenter, player.Center, handSling);
+                            {
+                                if (handFollowThrough < 1f)
+                                {
+                                    handFollowThrough += 0.1f;
+                                }
+                                else
+                                {
+                                    handState = HandState.Waiting;
+                                }
+                            }
+                            projectile.Center = Vector2.Lerp(normalCenter, handTarget, (float)Math.Sin(handSling * Math.PI));
                             break;
                     }
+                    projectile.rotation = MathHelper.Lerp(projectile.rotation, targetRotation, 0.3f);
                 }
                 else
                 {
@@ -315,7 +342,7 @@ namespace ITD.Content.NPCs.Bosses
                 int vertSize = tex.Height / Main.projFrames[projectile.type];
                 Vector2 origin = new Vector2(tex.Width / 2f, tex.Height / 2f / Main.projFrames[projectile.type]);
                 Rectangle frameRect = new Rectangle(0, vertSize * projectile.frame, tex.Width, vertSize);
-                if (handState == HandStates.Slinging)
+                if (handState == HandState.Slinging)
                 {
                     for (int k = 0; k < projectile.oldPos.Length; k++)
                     {
