@@ -1,0 +1,390 @@
+Items: {
+	ElectrumBar: {
+		DisplayName: Electrum Barren
+		Tooltip: ""
+	}
+
+	RhodiumBar: {
+		DisplayName: Rhodium Barren
+		Tooltip: ""
+	}
+
+	AlloySword: {
+		DisplayName: Legierungsschwert
+		Tooltip: ""
+	}
+
+	RhodiumBow: {
+		DisplayName: Rhodiumbogen
+		Tooltip: ""
+	}
+
+	RhodiumBroadsword: {
+		DisplayName: Rhodiumbreitschwert
+		Tooltip: ""
+	}
+
+	ElectrumSpear: {
+		Tooltip: ""
+		DisplayName: Electrumspeer
+	}
+
+	Blueshroom: {
+		DisplayName: Blaupilz
+		Tooltip: ""
+	}
+
+	DashingFeather: {
+		DisplayName: Stoßfeder
+		Tooltip: Tippe doppelt in eine Richtung, während du auf dem Boden bist, um einen Sprung, den du kurz kontrolieren kannst, zu starten
+	}
+
+	DespoticSnaptrap: {
+		DisplayName: Rachen der Tiefe
+		Tooltip: "[c/{0}:Greif Effekt:] Erzeugt Kiefer, die Schaden am Ziel und umliegenden Gegnern verursachen"
+	}
+
+	EmberSlasher: {
+		DisplayName: Bernstein Schlitzer
+		Tooltip: Feuert einen sich drehenden Feuerball, der langsam beschleunigt und an Wänden abprallt
+	}
+
+	Snaptrap: {
+		DisplayName: Schnappfalle
+		Tooltip:
+			'''
+			"'Hey 'bert! Ich hab' ne verdammte Bärenfalle an ne Kette gehangen! Juuuhuuu!"
+			[c/{0}:Greif Effekt:] Erhöht Chance auf kritischen Treffer um 4%
+			'''
+	}
+
+	SpacePrawn: {
+		DisplayName: Weltraumgarnele
+		Tooltip: Beschwört die Kosmische Qualle, wenn es Nachts verwendet wird
+	}
+
+	VocalZero: {
+		DisplayName: Stimmlos
+		Tooltip: "[c/{0}:Greif Effekt:] Erhöht den Schaden jede Sekunde um 10%, stoppt bei 100%"
+	}
+
+	WormholeRipper: {
+		DisplayName: Wurmloch Reißer
+		Tooltip:
+			'''
+			"Lichtgeschwindigkeit!"
+			Rechtsclick um nach vorne zu springen, hinterlässt ein Wurmloch
+			'''
+	}
+
+	VoidShard: {
+		Tooltip: ""
+		DisplayName: Splitter der Leere
+	}
+
+	CosmicJellyfishTrophy: {
+		Tooltip: ""
+		DisplayName: Kosmische-Qualle-Trophäe
+	}
+
+	CosmicJellyfishBag: {
+		Tooltip: ""
+		DisplayName: Schatzbeutel (Kosmische Qualle)
+	}
+
+	CosmicJam: {
+		Tooltip: Beschwört einen zahmen Jammyfisch
+		DisplayName: Kosmische Marmelade
+	}
+
+	ChainWeight: {
+		Tooltip: Beschwert die Ketten der Schnappfalle und erhöht deren Schaden um 10%
+		DisplayName: Kettengewicht
+	}
+
+	Sniptrap: {
+		Tooltip: Nur für PAPIER geeignet, kein Karton!
+		DisplayName: Schnipselfalle
+	}
+
+	MrSnapkins: {
+		DisplayName: Mr. Snapkins
+		Tooltip:
+			'''
+			"Mein liebster Snapkins..."
+			[c/{0}:Greif Effekt:] Beschwört regelmäßig Fliegen in acht verschiedene Richtungen
+			'''
+	}
+
+	TheScorpion: {
+		DisplayName: Der Skorpion
+		Tooltip:
+			'''
+			"KOMM HER!"
+			[c/{0}:Greif Effekt:] Zieht gegriffene Gegner zu dir hin
+			'''
+	}
+
+	CosmicJellyfishRelic: {
+		Tooltip: ""
+		DisplayName: Kosmische-Qualle-Relikt
+	}
+
+	Subfrost: {
+		Tooltip: Kann Erfrierungen verursachen
+		DisplayName: Unterfrost
+	}
+
+	CyaniteOre: {
+		DisplayName: Cyanit Erz
+		Tooltip: ""
+	}
+
+	Soulsnapper: {
+		DisplayName: Seelenschnapper
+		Tooltip: "[c/{0}:Greif Effekt:] Spuckt ständig Brocken der Verderbnis"
+	}
+
+	Spidermeal: {
+		Tooltip:
+			'''
+			Eignet sich gut, um Stadtbewohner zu ermorden
+			"Alles änderte sich, nachdem ich von einer radioaktiven Spinne gebissen wurde..."
+			'''
+		DisplayName: Spinnenmahl
+	}
+
+	Crimeratrap: {
+		DisplayName: Crimerafalle
+		Tooltip: "[c/{0}:Greif Effekt:] Spuckt ständig Brocken des Purpurnen"
+	}
+
+	Diorite: {
+		Tooltip: ""
+		DisplayName: Diorit
+	}
+
+	Pegmatite: {
+		DisplayName: Pegmatit
+		Tooltip: ""
+	}
+
+	EmberlionSclerite: {
+		DisplayName: Bernsteinlöwensklerit
+		Tooltip: ""
+	}
+
+	FirestormInABottle: {
+		DisplayName: Feuersturm in einer Flasche
+		Tooltip:
+			'''
+			Ermöglicht dem Träger einen Doppelsprung.
+			Beim Doppelsprung erscheint ein Feuersturm, der insgesamt 
+			50 Schaden pro Sekunde für 3 Sekunden verursacht, unter dem Spieler!
+			Verursacht zusätzlich 'In Brand stehen!'
+			'''
+	}
+
+	TwisterInABottle: {
+		DisplayName: Dreher in einer Flasche
+		Tooltip:
+			'''
+			Ermöglicht dem Träger einen verbesserten Doppelsprung 
+			und schnelles Wechseln der Richtung in der Luft
+			Beim Doppelsprung zierkuliert Wind, der insgesamt 
+			70 Schaden pro Sekunde für 2 Sekunden verursacht, unter dem Spieler
+			'''
+	}
+
+	StormInABottle: {
+		DisplayName: Sturm in einer Flasche
+		Tooltip:
+			'''
+			Ermöglicht dem Träger einen Doppelsprung.
+			Beim Doppelsprung wird ein Tornado, der Gegner mit Elektrizität 
+			trifft und 300 Schaden pro Treffer verursacht, unter dem Spieler erzeugt
+			'''
+	}
+
+	DisasterInABottle: {
+		DisplayName: Katastrophe in einer Flasche
+		Tooltip:
+			'''
+			Ermöglicht dem Träger einen Dreifachsprung.
+			Erster Sprung: Beschwört einen Feuersturm und zirkulierenden Wind unter dem Spieler
+			Zweiter Sprung: Beschwört einen Tornado, dessen Blitze elektrischen Schaden verursachen
+			'''
+	}
+
+	Shale: {
+		DisplayName: Schiefer
+		Tooltip: ""
+	}
+
+	Depthrock: {
+		Tooltip: ""
+		DisplayName: Tiefenstein
+	}
+
+	Skullmet: {
+		DisplayName: Schädelhelm
+		Tooltip: Einige Skelett-Gegner können dich nicht angreifen
+	}
+
+	AlloyHelmet: {
+		SetBonus: Mods.ITD.Items.AlloyHelmet.SetBonus
+		DisplayName: Legierungshelm
+		Tooltip: ""
+	}
+
+	AlloyChestplate: {
+		DisplayName: Legierungshemd
+		Tooltip: ""
+	}
+
+	AlloyLeggings: {
+		DisplayName: Legierungsbeinschützer
+		Tooltip: ""
+	}
+
+	SwimshieldWipers: {
+		DisplayName: Taucherbrillenwischer
+		Tooltip: Immun gegen sichteinschränkende Effekte
+	}
+
+	ThunderStaff: {
+		DisplayName: Donnerstab
+		Tooltip: ""
+	}
+
+	VenusSnaptrap: {
+		DisplayName: Venusfliegenfalle
+		Tooltip:
+			'''
+			"Königin des Moores"; Darwin's schönste Planze
+			[c/{0}:Greif Effekt:] Vergiftet gegriffene Gegner
+			'''
+	}
+
+	BlueshroomCapBlock: {
+		DisplayName: Blaupilz Hut Block
+		Tooltip: ""
+	}
+
+	TestItem: {
+		DisplayName: Test Item
+		Tooltip: ""
+	}
+}
+
+Projectiles: {
+	ElectrumSpearProjectile.DisplayName: Electrumspeer
+	CosmicSludgeBomb.DisplayName: Kosmische Schlammbombe
+	CosmicVoidShard.DisplayName: Kosmischer Splitter der Leere
+	EmberSlash.DisplayName: Bernsteinschlitzer
+	WRipperProjectile.DisplayName: Wurmlochreißer
+
+	DespoticSnaptrapProjectile: {
+		DisplayName: Kiefer der Tiefe
+		OneTimeLatchMessage: Mampf mampf...
+	}
+
+	SnaptrapProjectile: {
+		DisplayName: Schnappfalle
+		OneTimeLatchMessage: +{0}% Kritische Trefferchance!
+	}
+
+	VocalZeroProjectile: {
+		DisplayName: Stimmlos
+		OneTimeLatchMessage: +{0}% Schaden!
+	}
+
+	CosmicJamPet.DisplayName: Jammyfisch
+	SniptrapProjectile.DisplayName: Schnipselfalle
+
+	MrSnapkinsProjectile: {
+		DisplayName: Mr. Snapkins
+		OneTimeLatchMessage: Beginn das Schleifenbinden...
+	}
+
+	SnapkinsBowtie.DisplayName: Snapkins Schleife
+	TheScorpionProjectile.DisplayName: Der Skorpion
+	CosmicJellyfish_Hand.DisplayName: Kosmische Qualle
+	DespoticJawProjectile.DisplayName: Despotischer Kiefer
+
+	SoulsnapperProjectile: {
+		DisplayName: Seelenschnapper
+		OneTimeLatchMessage: Spucken...
+	}
+
+	CrimeratrapProjectile: {
+		OneTimeLatchMessage: Spucken...
+		DisplayName: Crimerafalle
+	}
+
+	EvilSpitProjectile.DisplayName: Verdorbene Spucke
+	CicadianTreeEnd.DisplayName: Zikadenbaumende
+	IcyBoulder.DisplayName: Gefrohrener Felsen
+	LightningStaffStrike.DisplayName: Blitzschlag
+
+	VenusSnaptrapProjectile: {
+		OneTimeLatchMessage: Vergiftet!
+		DisplayName: Venusfliegenfalle
+	}
+}
+
+NPCs: {
+	CosmicJellyfish.DisplayName: Kosmische Qualle
+	FloralDevourer.DisplayName: Floraler Verschlinger
+	FloralDevourerSegment.DisplayName: Floraler Verschlinger
+	EmberlionPiercer.DisplayName: Bernsteinlöwenstürmer
+	DesertBat.DisplayName: Wüstenfledermaus
+	EmberlionMiner.DisplayName: Bernsteinlöwengräber
+
+	Cicadian: {
+		DisplayName: Zikade
+		Bestiary: Eine Krabbe die eine symbiotische Beziehung mit den Blaupilzen entwickelt hat. Die Krabbe kann Beute einfacher anlocken, während die Pilze Schutz bekommen.
+	}
+
+	CicadianTree.DisplayName: Zikadenbaum
+}
+
+Buffs: {
+	CosmicJamBuff: {
+		Description: KOMM JETZT UND JAM!
+		DisplayName: Jammyfisch
+	}
+
+	SandyBuff: {
+		DisplayName: Sandy
+		Description: Es juckt.
+	}
+}
+
+WorldGen: {
+	BluesoilPassMessage: Blauifiziere das tiefe Eis...
+	DeepDesertPassMessage: Verdichten der Wüste...
+}
+
+Tiles: {
+	BlueshroomSapling.MapEntry: Blaupilz Primordium
+	CyaniteOreTile.MapEntry: Cyanit
+	BlueshroomTree.MapEntry: Riesen Blaupilz
+}
+
+Biomes: {
+	BlueshroomGrovesBiome: {
+		TownNPCDialogueName: die Blaupilzgrotten
+		DisplayName: Blaupilzgrotten
+	}
+
+	BlueshroomGrovesSurfaceBiome: {
+		TownNPCDialogueName: die überirdischen Blaupilzgrotten
+		DisplayName: überirdische Blaupilzgrotten
+	}
+
+	DeepDesertBiome: {
+		DisplayName: Tiefe Wüste
+		TownNPCDialogueName: die tiefe Wüste
+	}
+}
