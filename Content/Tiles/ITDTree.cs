@@ -174,9 +174,12 @@ namespace ITD.Content.Tiles
             {
                 for (int k = 0; k < height; k++)
                 {
+                    bool mp = Main.netMode != NetmodeID.SinglePlayer;
+
                     WorldGen.PlaceTile(i, j - k, type);
                     Tile tile = Framing.GetTileSafely(i, j - k);
                     FrameToPoint(tile, 0, 0);
+                    if (mp) NetMessage.SendTileSquare(-1, i, j - k, TileChangeType.None);
                     if (k == 0)
                     {
                         SideGrowth rootGrowth = SideGrowth.Both;
@@ -190,12 +193,14 @@ namespace ITD.Content.Tiles
                                 Tile leftRoot = Framing.GetTileSafely(i - 1, j);
                                 FrameToPoint(leftRoot, 18, 54);
                                 FrameToPoint(tile, 36, 54);
+                                if (mp) NetMessage.SendTileSquare(-1, i - 1, j, TileChangeType.None);
                                 break;
                             case SideGrowth.Right:
                                 WorldGen.PlaceTile(i + 1, j, type);
                                 Tile rightRoot = Framing.GetTileSafely(i + 1, j);
                                 FrameToPoint(rightRoot, 90, 54);
                                 FrameToPoint(tile, 72, 54);
+                                if (mp) NetMessage.SendTileSquare(-1, i + 1, j, TileChangeType.None);
                                 break;
                             default:
                                 WorldGen.PlaceTile(i - 1, j, type);
@@ -205,6 +210,11 @@ namespace ITD.Content.Tiles
                                 FrameToPoint(leftRoot1, 18, 54);
                                 FrameToPoint(rightRoot1, 90, 54);
                                 FrameToPoint(tile, 54, 54);
+                                if (mp)
+                                {
+                                    NetMessage.SendTileSquare(-1, i - 1, j, TileChangeType.None);
+                                    NetMessage.SendTileSquare(-1, i + 1, j, TileChangeType.None);
+                                }
                                 break;
                         }
                     }
@@ -221,12 +231,14 @@ namespace ITD.Content.Tiles
                                 Tile leftBranch = Framing.GetTileSafely(i - 1, j - k);
                                 FrameToPoint(leftBranch, 18, 0);
                                 FrameToPoint(tile, 36, 0);
+                                if (mp) NetMessage.SendTileSquare(-1, i - 1, j - k, TileChangeType.None);
                                 break;
                             case SideGrowth.Right:
                                 WorldGen.PlaceTile(i + 1, j - k, type);
                                 Tile rightBranch = Framing.GetTileSafely(i + 1, j - k);
                                 FrameToPoint(rightBranch, 90, 0);
                                 FrameToPoint(tile, 72, 0);
+                                if (mp) NetMessage.SendTileSquare(-1, i + 1, j - k, TileChangeType.None);
                                 break;
                             case SideGrowth.Both:
                                 WorldGen.PlaceTile(i - 1, j - k, type);
@@ -236,6 +248,11 @@ namespace ITD.Content.Tiles
                                 FrameToPoint(leftBranch1, 18, 0);
                                 FrameToPoint(rightBranch1, 90, 0);
                                 FrameToPoint(tile, 54, 0);
+                                if (mp)
+                                {
+                                    NetMessage.SendTileSquare(-1, i - 1, j - k, TileChangeType.None);
+                                    NetMessage.SendTileSquare(-1, i + 1, j - k, TileChangeType.None);
+                                }
                                 break;
                             default:
                                 break;
@@ -245,6 +262,7 @@ namespace ITD.Content.Tiles
                     else
                     {
                         FrameToPoint(tile, 180, 0);
+                        if (mp) NetMessage.SendTileSquare(-1, i, j - k, TileChangeType.None);
                     }
                 }
                 return true;
