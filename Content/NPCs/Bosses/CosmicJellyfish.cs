@@ -180,8 +180,8 @@ namespace ITD.Content.NPCs.Bosses
                 DoFirstStage(player);
             }
 
-            float maxRotation = MathHelper.Pi / 6; // Maximum rotation angle
-            float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f); // Adjust the divisor for rotation sensitivity
+            float maxRotation = MathHelper.Pi / 6;
+            float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);
 
             rotation = rotationFactor * maxRotation;
             NPC.rotation = rotation;

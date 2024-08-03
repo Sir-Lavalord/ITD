@@ -238,7 +238,7 @@ namespace ITD.Content.NPCs.BasicEnemies
             }
             if (AI_State == ActionState.Background)
             {
-                NPC.frame.Y = 576;
+                NPC.frame.Y = frameHeight * (Main.npcFrameCount[Type] - 1);
             }
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

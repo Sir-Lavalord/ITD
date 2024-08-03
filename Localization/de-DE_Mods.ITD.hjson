@@ -347,6 +347,11 @@ NPCs: {
 	}
 
 	CicadianTree.DisplayName: Zikadenbaum
+
+	CicadianHive: {
+		// Bestiary: Mods.ITD.NPCs.CicadianHive.Bestiary
+		// DisplayName: Cicadian Hive
+	}
 }
 
 Buffs: {
