@@ -150,8 +150,8 @@ namespace ITD.Content.Projectiles
         public override void OnSpawn(IEntitySource source)
         {
             myPlayer = Main.player[Projectile.owner];
-            myPlayer.TryGetModPlayer<SnaptrapPlayer>(out SnaptrapPlayer modPlayer);
-            if (modPlayer != null)
+            Projectile.netUpdate = true;
+            if (myPlayer.TryGetModPlayer(out SnaptrapPlayer modPlayer))
             {
                 SetSnaptrapPlayerFlags(modPlayer);
             }
@@ -164,7 +164,7 @@ namespace ITD.Content.Projectiles
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (retracting == false)
+            if (!retracting && !IsStickingToTarget)
             { 
                 staticRotation = Projectile.rotation;
                 IsStickingToTarget = true;
@@ -209,13 +209,17 @@ namespace ITD.Content.Projectiles
         }
         public override void AI()
         {
-            myPlayer.heldProj = Projectile.whoAmI;
-            myPlayer.itemTime = 2;
-            myPlayer.itemAnimation = 2;
-
             Vector2 mountedCenter = myPlayer.MountedCenter;
             Vector2 toOwner = mountedCenter - Projectile.Center;
-            myPlayer.ChangeDir(-Math.Sign(toOwner.X));
+
+            if (Main.myPlayer == Projectile.owner)
+            {
+                myPlayer.heldProj = Projectile.whoAmI;
+                myPlayer.itemTime = 2;
+                myPlayer.itemAnimation = 2;
+                myPlayer.ChangeDir(-Math.Sign(toOwner.X));
+            }
+
             float chainLength = toOwner.Length();
 
             if (chainWeight && !IsStickingToTarget)
