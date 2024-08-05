@@ -45,28 +45,6 @@ namespace ITD.Players
             ZoneBlueshroomsUnderground = ModContent.GetInstance<ITDSystem>().bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
             ZoneDeepDesert = ModContent.GetInstance<ITDSystem>().deepdesertTileCount > 50 && Player.ZoneRockLayerHeight;
 
-            List<VerletPoint> pointsList = PhysicsMethods.GetPoints();
-
-            foreach (VerletPoint point in pointsList) // Applies gravity to each point.
-            {
-                if (!point.isVerletPinned && point != null)
-                {
-                    Vector2 velocity = point.pos - point.oldPos;
-                    point.oldPos = point.pos;
-                    point.pos += velocity;
-                    point.pos += new Vector2(0, gravityForPhysics);
-                }
-            }
-            List<VerletStick> sticksList = PhysicsMethods.GetSticks();
-
-            foreach (VerletStick stick in sticksList) // Calculates the distance points should move, then changes their position according to that.
-            {
-                for (int i = 0; i < 20; i++)
-                {
-                    stick.Update();
-                }
-            }
-
             // Random boss spawns
 
             prevTime = curTime;
@@ -83,9 +61,9 @@ namespace ITD.Players
                             Tile tile = Main.tile[i, j];
                             if (tile.TileType == TileID.Meteorite)
                             {
-                                ITDSystem.hasMeteorFallen = true; // Set the flag to true
-                                found = true; // Break the outer loop
-                                break; // Break the inner loop
+                                ITDSystem.hasMeteorFallen = true;
+                                found = true;
+                                break;
                             }
                         }
                     }

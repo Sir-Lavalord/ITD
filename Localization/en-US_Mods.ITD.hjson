@@ -269,9 +269,9 @@ Items: {
 		Tooltip: ""
 	}
 
-	TestItem: {
-		DisplayName: Test Item
-		Tooltip: ""
+	SnowyLantern: {
+		DisplayName: Snowy Lantern
+		Tooltip: Summons a lantern-bearning Snowpoff
 	}
 }
 
@@ -329,6 +329,8 @@ Projectiles: {
 		OneTimeLatchMessage: Poisoned!
 		DisplayName: Venus Snaptrap
 	}
+
+	WingedSnowpoffPet.DisplayName: Winged Snowpoff
 }
 
 NPCs: {
@@ -347,7 +349,7 @@ NPCs: {
 	CicadianTree.DisplayName: Cicadian Tree
 
 	CicadianHive: {
-		Bestiary: Mods.ITD.NPCs.CicadianHive.Bestiary
+		Bestiary: When a female cicadian pupates, it grows wings and experiences rapid growth, becoming rotund and awkward. Once shedding its stomach and becoming hollow, the Hive will rapidly produce larvae- until eventually starving to death. 
 		DisplayName: Cicadian Hive
 	}
 }
@@ -361,6 +363,11 @@ Buffs: {
 	SandyBuff: {
 		DisplayName: Sandy
 		Description: You feel itchy.
+	}
+
+	SnowyLanternBuff: {
+		DisplayName: Winged Snowpoff
+		Description: A friendly Snowpoff lights your way
 	}
 }
 
