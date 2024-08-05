@@ -265,13 +265,13 @@ Items: {
 	}
 
 	BlueshroomCapBlock: {
-		// DisplayName: Blueshroom Cap Block
-		// Tooltip: ""
+		DisplayName: Bloque de sombrero de Champizúl
+		Tooltip: ""
 	}
 
-	TestItem: {
-		// DisplayName: Test Item
-		// Tooltip: ""
+	SnowyLantern: {
+		DisplayName: Linterna de nieve
+		Tooltip: Invoca un Montonieve que carga una linterna
 	}
 }
 
@@ -329,6 +329,8 @@ Projectiles: {
 		OneTimeLatchMessage: Envenenado!
 		DisplayName: Venus Enganchamoscas
 	}
+
+	WingedSnowpoffPet.DisplayName: Montonieve Alado
 }
 
 NPCs: {
@@ -340,15 +342,15 @@ NPCs: {
 	EmberlionMiner.DisplayName: Brasaleón minero
 
 	Cicadian: {
-		DisplayName: Cigarriano
+		DisplayName: Cigadiano
 		Bestiary: Un cangrejo que ha desarrolado una relación simbiótica con los Champizules. El cangrejo puede fácilmente atraer a su presa mientras que el Champizúl obtiene protección.
 	}
 
 	CicadianTree.DisplayName: Árbol Cigarriano
 
 	CicadianHive: {
-		// Bestiary: Mods.ITD.NPCs.CicadianHive.Bestiary
-		// DisplayName: Cicadian Hive
+		Bestiary: Cuando una cigadiana hembra pupa, experimenta un crecimiento acelerado de sus alas y cuerpo, volviendose rotunda y extraña. Cuando se deshace de su estomago, volviendose hueca, la Madre produce larvas rápidamente, hasta que se muere de hambre. 
+		DisplayName: Madre Cigadiana
 	}
 }
 
@@ -361,6 +363,11 @@ Buffs: {
 	SandyBuff: {
 		DisplayName: Arenoso
 		Description: Pica, pica, pica!
+	}
+
+	SnowyLanternBuff: {
+		DisplayName: Montonieve Alado
+		Description: Un Montonieve amigable ilumina tu camino
 	}
 }
 

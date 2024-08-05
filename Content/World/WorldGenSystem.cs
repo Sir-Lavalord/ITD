@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Terraria.Localization;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
+using ITD.Physics;
 
 namespace ITD.Content.World
 {
@@ -39,21 +40,17 @@ namespace ITD.Content.World
 
         public override void PostUpdateWorld()
         {
-            /*
-            if (Main.keyState.IsKeyDown(Keys.D1))
+            if (JustPressed(Keys.D1))
             {
-                Dust d = Dust.NewDustPerfect(Helpers.QuickRaycast(Main.LocalPlayer.Center, Main.MouseWorld - Main.LocalPlayer.Center, 12f), DustID.Torch);
-                d.noGravity = true;
-                d.velocity = Vector2.Zero;
+                TestMethod((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y);
             }
-            */
         }
 
         private void TestMethod(int x, int y)
         {
             //Dust.QuickBox(new Vector2(x, y) * 16, new Vector2(x + 1, y + 1) * 16, 2, Color.YellowGreen, null);
-            Tile thisTile = Framing.GetTileSafely(x, y); 
-            Main.NewText(thisTile.TileFrameX.ToString() + " " + thisTile.TileFrameY.ToString());
+            //Main.NewText("a");
+            //PhysicsMethods.CreateVerletChain(8, 16, Main.MouseWorld, Main.MouseWorld + Vector2.One, false);
             //Helpers.GrowTallBluegrass(x, y);
         }
     }

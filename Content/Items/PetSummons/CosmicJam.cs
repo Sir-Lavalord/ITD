@@ -8,13 +8,12 @@ namespace ITD.Content.Items.PetSummons
 {
     public class CosmicJam : ModItem
     {
-        // Names and descriptions of all ExamplePetX classes are defined using .hjson files in the Localization folder
         public override void SetDefaults()
         {
-            Item.CloneDefaults(ItemID.ZephyrFish); // Copy the Defaults of the Zephyr Fish Item.
+            Item.CloneDefaults(ItemID.ZephyrFish);
 
-            Item.shoot = ModContent.ProjectileType<CosmicJamPet>(); // "Shoot" your pet projectile.
-            Item.buffType = ModContent.BuffType<CosmicJamBuff>(); // Apply buff upon usage of the Item.
+            Item.shoot = ModContent.ProjectileType<CosmicJamPet>();
+            Item.buffType = ModContent.BuffType<CosmicJamBuff>();
         }
 
         public override bool? UseItem(Player player)

@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using System.Collections;
+﻿using ITD.Physics;
+using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using Terraria.ModLoader;
 using Terraria;
-using Terraria.GameContent.ItemDropRules;
+using Microsoft.Xna.Framework;
 
 namespace ITD.Physics
 {
@@ -12,7 +12,23 @@ namespace ITD.Physics
         public int ID { get; set; }
         public Vector2 pos { get; set; }
         public Vector2 oldPos { get; set; }
-        public bool isVerletPinned {  get; set; }
+        public bool isVerletPinned { get; set; }
+        public void Update()
+        {
+            if (!isVerletPinned)
+            {
+                Vector2 velocity = pos - oldPos;
+                oldPos = pos;
+                pos += velocity;
+                pos += new Vector2(0, PhysicsMethods.gravity);
+                /*
+                Main.NewText("point");
+                Dust d = Dust.NewDustPerfect(pos, 1);
+                d.velocity = Vector2.Zero;
+                d.noGravity = true;
+                */
+            }
+        }
     }
 
     public class VerletStick // Defines VerletStick
@@ -32,16 +48,16 @@ namespace ITD.Physics
                 float difference = length - distance;
                 if (distance > 0)
                 {
-                    float percent = difference / distance / 2;
+                    float percent = difference / distance / 2f;
                     float offsetX = dX * percent;
                     float offsetY = dY * percent;
-                    if (!pointA.isVerletPinned) // If a point is pinned it shouldn't be moved with the stick.
+                    if (!pointA.isVerletPinned)
                     {
-                        pointA.pos = pointA.pos - new Vector2(offsetX, offsetY);
+                        pointA.pos -= new Vector2(offsetX, offsetY);
                     }
                     if (!pointB.isVerletPinned)
                     {
-                        pointB.pos = pointB.pos + new Vector2(offsetX, offsetY);
+                        pointB.pos += new Vector2(offsetX, offsetY);
                     }
                 }
             }
@@ -60,18 +76,83 @@ namespace ITD.Physics
             {
                 startStick.pointA.pos = startPos;
                 endStick.pointB.pos = endPos;
+
+                // Ensure the constraints are satisfied multiple times per frame
+                for (int i = 0; i < PhysicsMethods.ConstraintIterations; i++)
+                {
+                    foreach (var stick in allSticks)
+                    {
+                        stick.Update();
+                    }
+                }
+            }
+        }
+
+        public void UpdateStart(Vector2 startPos)
+        {
+            if (this != null)
+            {
+                startStick.pointA.pos = startPos;
             }
         }
 
         public void Kill()
         {
+            foreach (VerletStick stick in allSticks)
+            {
+                stick.pointA = null;
+                stick.pointB = null;
+            }
             allSticks.Clear();
+            allSticks = null;
+            endStick = null;
+            startStick = null;
             PhysicsMethods.GetChains().Remove(this);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Vector2 screenPos, Texture2D texture, Color drawColor, bool useLighting, Texture2D texture2 = null, Texture2D startTexture = null, Texture2D endTexture = null)
+        {
+            bool hasAlternatingTexture = texture2 != null;
+            bool hasStartTexture = startTexture != null;
+            bool hasEndTexture = endTexture != null;
+            for (int i = 0; i < allSticks.Count; i++)
+            {
+                bool isStart = hasStartTexture && i == 0;
+                bool isEnd = hasEndTexture && i == allSticks.Count - 1;
+                if (hasAlternatingTexture && i % 2 == 0 && !isStart && !isEnd)
+                    continue;
+                VerletStick stick = allSticks[i];
+                Vector2 chainCenter = Vector2.Lerp(stick.pointA.pos, stick.pointB.pos, 0.5f);
+                float angle = (stick.pointB.pos - stick.pointA.pos).ToRotation();
+                Texture2D textureToDraw = texture;
+                Color lighting = Lighting.GetColor(chainCenter.ToTileCoordinates());
+                Color color = useLighting ? lighting : drawColor;
+                if (isStart)
+                    textureToDraw = startTexture;
+                if (isEnd)
+                    textureToDraw = endTexture;
+                spriteBatch.Draw(textureToDraw, chainCenter - screenPos, null, color, angle, textureToDraw.Size() / 2f, 1f, SpriteEffects.None, 0f);
+            }
+            if (hasAlternatingTexture)
+            {
+                for (int i = 0; i < allSticks.Count; i++)
+                {
+                    if (i % 2 == 0)
+                    {
+                        VerletStick stick = allSticks[i];
+                        Vector2 chainCenter = Vector2.Lerp(stick.pointA.pos, stick.pointB.pos, 0.5f);
+                        float angle = (stick.pointB.pos - stick.pointA.pos).ToRotation();
+                        spriteBatch.Draw(texture2, chainCenter - screenPos, null, drawColor, angle, texture2.Size() / 2f, 1f, SpriteEffects.None, 0f);
+                    }
+                }
+            }
         }
     }
 
     public static class PhysicsMethods
     {
+        public static readonly float gravity = 0.5f;
+        public static readonly int ConstraintIterations = 10;
         private static List<VerletPoint> points = new List<VerletPoint>();
 
         public static VerletPoint CreateVerletPoint(int ID, Vector2 pos, bool isVerletPinned)
@@ -90,7 +171,7 @@ namespace ITD.Physics
 
         public static VerletStick CreateVerletStick(int ID, VerletPoint pointA, VerletPoint pointB, float length)
         {
-            var stick = new VerletStick { ID = ID, pointA = pointA, pointB = pointB, length = length};
+            var stick = new VerletStick { ID = ID, pointA = pointA, pointB = pointB, length = length };
             sticks.Add(stick);
             return stick;
         }
@@ -101,7 +182,8 @@ namespace ITD.Physics
         }
 
         private static List<VerletChain> chains = new List<VerletChain>();
-        public static VerletChain CreateVerletChain(int segmentsNum, float segmentLength, Vector2 posStart, Vector2 posEnd)
+
+        public static VerletChain CreateVerletChain(int segmentsNum, float segmentLength, Vector2 posStart, Vector2 posEnd, bool pinEnd)
         {
             if (!(chains.Count > 0))
             {
@@ -113,21 +195,22 @@ namespace ITD.Physics
             List<VerletStick> chainSticks = new List<VerletStick>();
             VerletStick startStick = null;
             VerletStick endStick = null;
-            for (int i = 0; i < segmentsNum+1; i++)
+            for (int i = 0; i < segmentsNum + 1; i++)
             {
                 Vector2 pointPos = posStart + (segmentVector * i);
-                bool shouldBePinned = (i == 0 || i == segmentsNum);
-                var point = new VerletPoint { ID = 1, pos = pointPos, oldPos = pointPos, isVerletPinned = shouldBePinned};
+                bool shouldBePinned = (i == 0 || (i == segmentsNum && pinEnd));
+                var point = new VerletPoint { ID = 1, pos = pointPos, oldPos = pointPos, isVerletPinned = shouldBePinned };
                 points.Add(point);
                 chainPoints.Add(point);
             }
             for (int i = 0; i < segmentsNum; i++)
             {
-                var stick = new VerletStick { ID = (i % 2 == 0 ? 1 : 2), length = segmentLength, pointA = chainPoints[i], pointB = chainPoints[i+1] };
-                if (stick.pointA == chainPoints[0]){
+                var stick = new VerletStick { ID = (i % 2 == 0 ? 1 : 2), length = segmentLength, pointA = chainPoints[i], pointB = chainPoints[i + 1] };
+                if (stick.pointA == chainPoints[0])
+                {
                     startStick = stick;
                 }
-                else if (stick.pointA == chainPoints[segmentsNum-1])
+                else if (stick.pointA == chainPoints[segmentsNum - 1])
                 {
                     endStick = stick;
                 }

@@ -271,9 +271,9 @@ Items: {
 		Tooltip: ""
 	}
 
-	TestItem: {
-		DisplayName: Test Item
-		Tooltip: ""
+	SnowyLantern: {
+		// DisplayName: Snowy Lantern
+		// Tooltip: ""
 	}
 }
 
@@ -331,6 +331,8 @@ Projectiles: {
 		OneTimeLatchMessage: Vergiftet!
 		DisplayName: Venusfliegenfalle
 	}
+
+	// WingedSnowpoffPet.DisplayName: Winged Snowpoff Pet
 }
 
 NPCs: {
@@ -349,8 +351,8 @@ NPCs: {
 	CicadianTree.DisplayName: Zikadenbaum
 
 	CicadianHive: {
-		// Bestiary: Mods.ITD.NPCs.CicadianHive.Bestiary
-		// DisplayName: Zikadennest
+		Bestiary: Mods.ITD.NPCs.CicadianHive.Bestiary
+		DisplayName: Zikkadennest
 	}
 }
 
@@ -363,6 +365,11 @@ Buffs: {
 	SandyBuff: {
 		DisplayName: Sandy
 		Description: Es juckt.
+	}
+
+	SnowyLanternBuff: {
+		// DisplayName: Snowy Lantern Buff
+		// Description: Mods.ITD.Buffs.SnowyLanternBuff.Description
 	}
 }
 

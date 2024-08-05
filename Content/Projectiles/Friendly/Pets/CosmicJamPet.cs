@@ -9,9 +9,9 @@ namespace ITD.Content.Projectiles.Friendly.Pets
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 1;
-            Main.projPet[Projectile.type] = true;
-            ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Projectile.type], 6)
+            Main.projFrames[Type] = 1;
+            Main.projPet[Type] = true;
+            ProjectileID.Sets.CharacterPreviewAnimations[Type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Type], 6)
                 .WithOffset(-10, -20f)
                 .WithSpriteDirection(-1)
                 .WithCode(DelegateMethods.CharacterPreview.Float);
