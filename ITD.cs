@@ -12,12 +12,14 @@ using Terraria.Audio;
 using Terraria.Localization;
 using ITD.Content.Tiles.BlueshroomGroves;
 using ITD.Content.Tiles.DeepDesert;
+using static Terraria.Mount;
 
 namespace ITD
 {
     public class ITD : Mod
     {
         public static ITD Instance;
+        public static MountData[] defaultMountData;
         public ITD() => Instance = this;
         internal Mod wikithis = null;
         internal Mod bossChecklist = null;
@@ -38,6 +40,7 @@ namespace ITD
             {
                 wikithis?.Call("AddModURL", this, "https://itdmod.fandom.com/wiki/{}");
             }
+            defaultMountData = mounts;
         }
         public override void Unload()
         {

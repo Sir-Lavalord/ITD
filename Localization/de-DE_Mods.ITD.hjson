@@ -273,6 +273,11 @@ Items: {
 
 	SnowyLantern: {
 		// DisplayName: Snowy Lantern
+		// Tooltip: Summons a lantern-bearning Snowpoff
+	}
+
+	DriversIncense: {
+		// DisplayName: Drivers Incense
 		// Tooltip: ""
 	}
 }
@@ -332,7 +337,7 @@ Projectiles: {
 		DisplayName: Venusfliegenfalle
 	}
 
-	// WingedSnowpoffPet.DisplayName: Winged Snowpoff Pet
+	// WingedSnowpoffPet.DisplayName: Winged Snowpoff
 }
 
 NPCs: {
@@ -368,8 +373,8 @@ Buffs: {
 	}
 
 	SnowyLanternBuff: {
-		// DisplayName: Snowy Lantern Buff
-		// Description: Mods.ITD.Buffs.SnowyLanternBuff.Description
+		// DisplayName: Winged Snowpoff
+		// Description: A friendly Snowpoff lights your way
 	}
 }
 

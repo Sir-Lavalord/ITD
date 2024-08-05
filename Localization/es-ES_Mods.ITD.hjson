@@ -273,6 +273,11 @@ Items: {
 		DisplayName: Linterna de nieve
 		Tooltip: Invoca un Montonieve que carga una linterna
 	}
+
+	DriversIncense: {
+		DisplayName: Incienso de conducir
+		Tooltip: Permanentemente aumenta la velocidad de las monturas por un 10%
+	}
 }
 
 Projectiles: {
@@ -349,7 +354,7 @@ NPCs: {
 	CicadianTree.DisplayName: Árbol Cigarriano
 
 	CicadianHive: {
-		Bestiary: Cuando una cigadiana hembra pupa, experimenta un crecimiento acelerado de sus alas y cuerpo, volviendose rotunda y extraña. Cuando se deshace de su estomago, volviendose hueca, la Madre produce larvas rápidamente, hasta que se muere de hambre. 
+		Bestiary: Cuando una cigadiana hembra pupa, experimenta un crecimiento acelerado de sus alas y cuerpo, volviendose rotunda y extraña. Cuando se deshace de su estomago, volviendose hueca, la Madre produce larvas rápidamente, hasta que se muere de hambre.
 		DisplayName: Madre Cigadiana
 	}
 }
