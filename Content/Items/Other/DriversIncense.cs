@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
 
-namespace ITD.Content.Items.Accessories.Misc
+namespace ITD.Content.Items.Other
 {
     public class DriversIncense : ModItem
     {
