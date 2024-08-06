@@ -13,8 +13,6 @@ namespace ITD.Content.Items.Placeable
         public override void SetDefaults()
         {
             Item.DefaultToPlaceableTile(ModContent.TileType<BlueCatacombBrickTile>());
-            Item.width = 12;
-            Item.height = 12;
         }
     }
 }
