@@ -1,4 +1,4 @@
-﻿using ITD.Content.Tiles.LayersRework;
+﻿using ITD.Content.Tiles.Catacombs;
 using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable

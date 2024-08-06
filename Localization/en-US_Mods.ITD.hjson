@@ -278,6 +278,21 @@ Items: {
 		DisplayName: Driver's Incense
 		Tooltip: Permanently increases mount speed by 10%
 	}
+
+	BlueCatacombBrick: {
+		DisplayName: Blue Catacomb Brick
+		Tooltip: ""
+	}
+
+	GreenCatacombBrick: {
+		DisplayName: Green Catacomb Brick
+		Tooltip: ""
+	}
+
+	PinkCatacombBrick: {
+		DisplayName: Pink Catacomb Brick
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

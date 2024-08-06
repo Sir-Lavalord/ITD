@@ -278,6 +278,21 @@ Items: {
 		DisplayName: Incienso de conducir
 		Tooltip: Permanentemente aumenta la velocidad de las monturas por un 10%
 	}
+
+	BlueCatacombBrick: {
+		// DisplayName: Blue Catacomb Brick
+		// Tooltip: ""
+	}
+
+	GreenCatacombBrick: {
+		// DisplayName: Green Catacomb Brick
+		// Tooltip: ""
+	}
+
+	PinkCatacombBrick: {
+		// DisplayName: Pink Catacomb Brick
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
