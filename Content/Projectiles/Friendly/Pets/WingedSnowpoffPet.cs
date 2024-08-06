@@ -17,7 +17,7 @@ namespace ITD.Content.Projectiles.Friendly.Pets
         VerletChain lanternChain;
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Type] = 3;
+            Main.projFrames[Type] = 2;
             Main.projPet[Type] = true;
             ProjectileID.Sets.CharacterPreviewAnimations[Type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Type], 6)
                 .WithOffset(-10, -20f)
