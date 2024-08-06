@@ -106,13 +106,13 @@ namespace ITD
             {
                 if (!SolidTile(i - 1, j) || !SolidTile(i + 1, j) || !SolidTile(i, j - 1) || !SolidTile(i, j + 1) || !SolidTile(i - 1, j - 1) || !SolidTile(i + 1, j + 1) || !SolidTile(i + 1, j - 1) || !SolidTile(i - 1, j + 1))
                 {
-                    WorldGen.ReplaceTile(i, j, (ushort)ModContent.TileType<Bluegrass>(), default);
+                    WorldGen.ReplaceTile(i, j, (ushort)ModContent.TileType<BlueCatacombBricks>(), default);
                 }
             }
         }
         public static void GrowTallBluegrass(int i, int j)
         {
-            if (TileType(i, j + 1, ModContent.TileType<Bluegrass>()))
+            if (TileType(i, j + 1, ModContent.TileType<BlueCatacombBricks>()))
             {
                 //WorldGen.Place1x1(i, j, ModContent.TileType<BluegrassBlades>(), WorldGen._genRand.Next(2));
                 WorldGen.PlaceTile(i, j, ModContent.TileType<BluegrassBlades>(), true, false, -1, WorldGen._genRand.Next(3));
