@@ -1,9 +1,9 @@
-﻿using ITD.Content.Tiles.LayersRework;
+﻿using ITD.Content.Tiles.BlueshroomGroves;
 using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable
 {
-    public class Shale : ModItem
+    public class BlueshroomStem : ModItem
     {
         public override void SetStaticDefaults()
         {

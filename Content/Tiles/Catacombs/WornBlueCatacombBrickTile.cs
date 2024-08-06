@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace ITD.Content.Tiles.Catacombs
 {
-    public class BlueCatacombBrickTile : ModTile
+    public class WornBlueCatacombBrickTile : ModTile
     {
         public override void SetStaticDefaults()
         {
