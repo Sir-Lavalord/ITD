@@ -13,7 +13,7 @@ namespace ITD.Content.Tiles.Catacombs
             Main.tileSolid[Type] = true;
             HitSound = SoundID.Item101;
             DustType = DustID.Shadowflame;
-            AddMapEntry(Color(130, 53, 142));
+            AddMapEntry(new Color(130, 53, 142));
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
