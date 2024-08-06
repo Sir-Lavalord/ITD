@@ -11,10 +11,13 @@
     <None Remove="Content\Projectiles\TheScorpionProjectile.png" />
   </ItemGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Content\Gores\NPCs\" />
     <Folder Include="Content\Gores\Projectiles\" />
     <Folder Include="Content\Tiles\Relics\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="StructureHelper">
+      <HintPath>..\ModAssemblies\StructureHelper_v2.5.3.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

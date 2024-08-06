@@ -1,3 +1,4 @@
 displayName = Into The Depths
+modReferences = StructureHelper
 author = ITD Team
 version = 0.1
