@@ -1,9 +1,9 @@
 ﻿using ITD.Content.Tiles.Catacombs;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items.Placeable
+namespace ITD.Content.Items.Placeable.Catacombs
 {
-    public class WornBlueCatacombBrick : ModItem
+    public class GreenCatacombBrick : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -12,7 +12,7 @@ namespace ITD.Content.Items.Placeable
 
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<WornBlueCatacombBrickTile>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<GreenCatacombBrickTile>());
         }
     }
 }

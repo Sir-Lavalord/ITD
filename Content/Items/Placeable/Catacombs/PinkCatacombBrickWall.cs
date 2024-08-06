@@ -1,7 +1,7 @@
 ﻿using ITD.Content.Walls.Catacombs;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items.Placeable
+namespace ITD.Content.Items.Placeable.Catacombs
 {
     public class PinkCatacombBrickWall : ModItem
     {
