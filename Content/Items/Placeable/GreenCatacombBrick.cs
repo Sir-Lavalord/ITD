@@ -12,7 +12,7 @@ namespace ITD.Content.Items.Placeable
 
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<GreenCatacombBrickSafe>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<GreenCatacombBrickTile>());
         }
     }
 }
