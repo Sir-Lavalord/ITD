@@ -1,9 +1,9 @@
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace ITD.Content.Walls
+namespace ITD.Content.Walls.Catacombs
 {
-    public class GreenCatacombBrickWalls : ModWall
+    public class GreenCatacombBrickWall : ModWall
     {
         public override void SetStaticDefaults()
         {

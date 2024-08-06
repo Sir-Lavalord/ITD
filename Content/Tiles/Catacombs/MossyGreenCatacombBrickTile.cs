@@ -15,6 +15,7 @@ namespace ITD.Content.Tiles.Catacombs
             DustType = DustID.Shadowflame;
             AddMapEntry(new Color(69, 120, 80));
             MinPick = 120;
+            Main.tileMerge[ModContent.TileType<GreenCatacombBrickTile>()] = true;
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {

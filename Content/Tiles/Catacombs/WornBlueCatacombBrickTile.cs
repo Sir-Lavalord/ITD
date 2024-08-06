@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace ITD.Content.Tiles.Catacombs
 {
-    public class BlueCatacombBrickTile : ModTile
+    public class WornBlueCatacombBrickTile : ModTile
     {
         public override void SetStaticDefaults()
         {
@@ -15,6 +15,7 @@ namespace ITD.Content.Tiles.Catacombs
             DustType = DustID.Shadowflame;
             AddMapEntry(new Color(45, 45, 101));
             MinPick = 120;
+            Main.tileMerge[ModContent.TileType<BlueCatacombBrickTile>()] = true;
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
