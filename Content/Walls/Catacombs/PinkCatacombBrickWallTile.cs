@@ -3,11 +3,11 @@ using Microsoft.Xna.Framework;
 
 namespace ITD.Content.Walls.Catacombs
 {
-    public class GreenCatacombBrickWall : ModWall
+    public class PinkCatacombBrickWallTile : ModWall
     {
         public override void SetStaticDefaults()
         {
-            AddMapEntry(new Color(17, 31, 42));
+            AddMapEntry(new Color(98, 63, 89));
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
