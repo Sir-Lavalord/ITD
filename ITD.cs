@@ -56,7 +56,7 @@ namespace ITD
             public int deepdesertTileCount;
             public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
             {
-                bluegrassCount = tileCounts[ModContent.TileType<BlueCatacombBricks>()];
+                bluegrassCount = tileCounts[ModContent.TileType<Bluegrass>()];
                 deepdesertTileCount = tileCounts[ModContent.TileType<DioriteTile>()]+tileCounts[ModContent.TileType<PegmatiteTile>()];
             }
 
