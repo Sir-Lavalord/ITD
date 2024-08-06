@@ -10,16 +10,6 @@ namespace ITD.Content.Tiles.Catacombs
     {
         public override void SetStaticDefaults()
         {
-<<<<<<<<< Temporary merge branch 1
-        }
-        public override void SetDefaults() {
-=========
->>>>>>>>> Temporary merge branch 2
-<<<<<<<<< Temporary merge branch 1
-        }
-        public override void SetDefaults() {
-=========
->>>>>>>>> Temporary merge branch 2
             Main.tileSolid[Type] = true;
             HitSound = SoundID.Item101;
             DustType = DustID.Shadowflame;
