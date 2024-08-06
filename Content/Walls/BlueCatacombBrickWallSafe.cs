@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace ITD.Content.Walls
 {
-    public class BlueCatacombBrickWallTile : ModWall
+    public class BlueCatacombBrickWallSafe : ModWall
     {
         public override void SetStaticDefaults()
         {
