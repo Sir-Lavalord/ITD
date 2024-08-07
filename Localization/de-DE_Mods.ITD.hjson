@@ -295,6 +295,76 @@ Items: {
 		// DisplayName: Pink Catacomb Brick
 		// Tooltip: ""
 	}
+
+	BlueCatacombBrickWall: {
+		// DisplayName: Blue Catacomb Brick Wall
+		// Tooltip: ""
+	}
+
+	BlueCatacombChair: {
+		// DisplayName: Blue Catacomb Chair
+		// Tooltip: ""
+	}
+
+	BlueshroomStem: {
+		// DisplayName: Blueshroom Stem
+		// Tooltip: ""
+	}
+
+	Cryptite: {
+		// DisplayName: Cryptite
+		// Tooltip: ""
+	}
+
+	GreenCatacombBrickWall: {
+		// DisplayName: Green Catacomb Brick Wall
+		// Tooltip: ""
+	}
+
+	GreenCatacombChair: {
+		// DisplayName: Green Catacomb Chair
+		// Tooltip: ""
+	}
+
+	MonsoonCryptite: {
+		// DisplayName: Monsoon Cryptite
+		// Tooltip: ""
+	}
+
+	MossyGreenCatacombBrick: {
+		// DisplayName: Mossy Green Catacomb Brick
+		// Tooltip: ""
+	}
+
+	PinkCatacombBrickWall: {
+		// DisplayName: Pink Catacomb Brick Wall
+		// Tooltip: ""
+	}
+
+	PinkCatacombChair: {
+		// DisplayName: Pink Catacomb Chair
+		// Tooltip: ""
+	}
+
+	WornBlueCatacombBrick: {
+		// DisplayName: Worn Blue Catacomb Brick
+		// Tooltip: ""
+	}
+
+	BlueCatacombTable: {
+		// DisplayName: Blue Catacomb Table
+		// Tooltip: ""
+	}
+
+	GreenCatacombTable: {
+		// DisplayName: Green Catacomb Table
+		// Tooltip: ""
+	}
+
+	PinkCatacombTable: {
+		// DisplayName: Pink Catacomb Table
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
