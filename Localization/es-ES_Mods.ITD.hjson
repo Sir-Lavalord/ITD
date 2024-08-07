@@ -280,88 +280,103 @@ Items: {
 	}
 
 	BlueCatacombBrick: {
-		// DisplayName: Blue Catacomb Brick
-		// Tooltip: ""
+		DisplayName: Ladrillo de catacumba azul
+		Tooltip: ""
 	}
 
 	GreenCatacombBrick: {
-		// DisplayName: Green Catacomb Brick
-		// Tooltip: ""
+		DisplayName: Ladrillo de catacumba verde
+		Tooltip: ""
 	}
 
 	PinkCatacombBrick: {
-		// DisplayName: Pink Catacomb Brick
-		// Tooltip: ""
+		DisplayName: Ladrillo de catacumba rosa
+		Tooltip: ""
 	}
 
 	BlueCatacombBrickWall: {
-		// DisplayName: Blue Catacomb Brick Wall
-		// Tooltip: ""
+	    DisplayName: Pared de ladrillo de catacumba azul
+		Tooltip: ""
 	}
 
 	BlueCatacombChair: {
-		// DisplayName: Blue Catacomb Chair
-		// Tooltip: ""
+		DisplayName: Silla de catacumba azul
+		Tooltip: ""
 	}
 
 	BlueshroomStem: {
-		// DisplayName: Blueshroom Stem
-		// Tooltip: ""
+		DisplayName: Estipe de Champizúl
+		Tooltip: ""
 	}
 
 	Cryptite: {
-		// DisplayName: Cryptite
-		// Tooltip: ""
+		DisplayName: Criptita
+		Tooltip: ""
 	}
 
 	GreenCatacombBrickWall: {
-		// DisplayName: Green Catacomb Brick Wall
-		// Tooltip: ""
+		DisplayName: Pared de ladrillo de catacumba verde
+		Tooltip: ""
 	}
 
 	GreenCatacombChair: {
-		// DisplayName: Green Catacomb Chair
-		// Tooltip: ""
+		DisplayName: Silla de catacumba verde
+		Tooltip: ""
 	}
 
 	MonsoonCryptite: {
-		// DisplayName: Monsoon Cryptite
-		// Tooltip: ""
+		DisplayName: Criptita de monzón
+		Tooltip: ""
 	}
 
 	MossyGreenCatacombBrick: {
-		// DisplayName: Mossy Green Catacomb Brick
-		// Tooltip: ""
+		DisplayName: Ladrillo de catacumba verde musgoso
+		Tooltip: ""
 	}
 
 	PinkCatacombBrickWall: {
-		// DisplayName: Pink Catacomb Brick Wall
-		// Tooltip: ""
+		DisplayName: Pared de ladrillo de catacumba rosa
+		Tooltip: ""
 	}
 
 	PinkCatacombChair: {
-		// DisplayName: Pink Catacomb Chair
-		// Tooltip: ""
+		DisplayName: Silla de catacumba rosa
+		Tooltip: ""
 	}
 
 	WornBlueCatacombBrick: {
-		// DisplayName: Worn Blue Catacomb Brick
-		// Tooltip: ""
+	    DisplayName: Ladrillo de catacumba azul deteriorado
+		Tooltip: ""
 	}
 
 	BlueCatacombTable: {
-		// DisplayName: Blue Catacomb Table
-		// Tooltip: ""
+		DisplayName: Mesa de catacumba azul
+		Tooltip: ""
 	}
 
 	GreenCatacombTable: {
-		// DisplayName: Green Catacomb Table
-		// Tooltip: ""
+		DisplayName: Mesa de catacumba verde
+		Tooltip: ""
 	}
 
 	PinkCatacombTable: {
-		// DisplayName: Pink Catacomb Table
-		// Tooltip: ""
+		DisplayName: Mesa de catacumba rosa
+		Tooltip: ""
+	}
+
+	BlueCatacombLamp: {
+		DisplayName: Lámpara de catacumba azul
+		Tooltip: ""
+	}
+
+	GreenCatacombLamp: {
+		DisplayName: Lámpara de catacumba verde
+		Tooltip: ""
+	}
+
+	PinkCatacombLamp: {
+		DisplayName: Lámpara de catacumba rosa
+		Tooltip: ""
 	}
 }
 

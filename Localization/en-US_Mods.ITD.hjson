@@ -363,6 +363,21 @@ Items: {
 		DisplayName: Pink Catacomb Table
 		Tooltip: ""
 	}
+
+	BlueCatacombLamp: {
+		DisplayName: Blue Catacomb Lamp
+		Tooltip: ""
+	}
+
+	GreenCatacombLamp: {
+		DisplayName: Green Catacomb Lamp
+		Tooltip: ""
+	}
+
+	PinkCatacombLamp: {
+		DisplayName: Pink Catacomb Lamp
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
