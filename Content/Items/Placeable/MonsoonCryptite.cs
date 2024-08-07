@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable
 {
-    public class WornBlueCatacombBrick : ModItem
+    public class MonsoonCryptite : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -12,7 +12,7 @@ namespace ITD.Content.Items.Placeable
 
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<WornBlueCatacombBrickTile>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<MonsoonCryptiteTile>());
         }
     }
 }

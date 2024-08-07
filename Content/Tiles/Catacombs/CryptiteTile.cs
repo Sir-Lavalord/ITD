@@ -6,13 +6,13 @@ using Microsoft.Xna.Framework;
 
 namespace ITD.Content.Tiles.Catacombs
 {
-    public class BlueCatacombBrickTile : ModTile
+    public class CryptiteTile : ModTile
     {
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
-            HitSound = SoundID.Item101;
-            DustType = DustID.Shadowflame;
+            HitSound = SoundID.Tink;
+            DustType = DustID.Stone;
             AddMapEntry(new Color(45, 45, 101));
             MinPick = 120;
         }
