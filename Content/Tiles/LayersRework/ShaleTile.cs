@@ -35,6 +35,7 @@ namespace ITD.Content.Tiles.LayersRework
             Helpers.VanillaTileFraming(ref thisTile, up, upLeft, upRight, down, downLeft, downRight, left, right);
             Helpers.VanillaTileMergeWithOther(ref thisTile, TileID.Dirt, up, upLeft, upRight, down, downLeft, downRight, left, right);
             Helpers.VanillaTileMergeWithOther(ref thisTile, TileID.Stone, up, upLeft, upRight, down, downLeft, downRight, left, right, 180, 270);
+            Helpers.VanillaTileMergeWithOther(ref thisTile, ModContent.TileType<DepthrockTile>(), up, upLeft, upRight, down, downLeft, downRight, left, right, 180, 270);
             return false;
         }
     }
