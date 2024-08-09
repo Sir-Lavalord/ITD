@@ -1,9 +1,9 @@
-﻿using ITD.Content.Tiles.BlueshroomGroves;
+﻿using ITD.Content.Tiles.Catacombs;
 using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable
 {
-    public class BlueshroomStem : ModItem
+    public class MonsoonCryptite : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -12,9 +12,7 @@ namespace ITD.Content.Items.Placeable
 
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<BlueshroomStemTile>());
-            Item.width = 12;
-            Item.height = 12;
+            Item.DefaultToPlaceableTile(ModContent.TileType<MonsoonCryptiteTile>());
         }
     }
 }
