@@ -22,12 +22,12 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = false;
         }
-            public override void AddRecipes()
-           {
-               Recipe recipe = CreateRecipe();
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ModContent.ItemType<RhodiumBar>(), 11);
             recipe.AddTile(TileID.Anvils);
-               recipe.Register();
-           } 
+            recipe.Register();
+        } 
     }
 }

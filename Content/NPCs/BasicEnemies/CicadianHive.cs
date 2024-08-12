@@ -17,6 +17,7 @@ namespace ITD.Content.NPCs.BasicEnemies
             Escaping
         }
         private ActionState AI_State;
+        private int timeBetweenFrames;
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 7;
@@ -25,6 +26,7 @@ namespace ITD.Content.NPCs.BasicEnemies
         public override void SetDefaults()
         {
             AI_State = ActionState.Hovering;
+            timeBetweenFrames = 4;
             NPC.width = 66;
             NPC.height = 82;
             NPC.damage = 30;
@@ -41,7 +43,7 @@ namespace ITD.Content.NPCs.BasicEnemies
         public override void FindFrame(int frameHeight)
         {
             NPC.frameCounter += 1f;
-            if (NPC.frameCounter > 4f)
+            if (NPC.frameCounter > timeBetweenFrames)
             {
                 NPC.frameCounter = 0;
                 NPC.frame.Y += frameHeight;
@@ -78,6 +80,7 @@ namespace ITD.Content.NPCs.BasicEnemies
             switch (AI_State)
             {
                 case ActionState.Hovering:
+                    timeBetweenFrames = 4;
                     Vector2 ground = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, 32);
                     Vector2 hoverPoint = ground - new Vector2(0f, hoverDistance * 16);
                     Vector2 toHoverPoint = (hoverPoint - NPC.Center) / 32f;
@@ -88,6 +91,7 @@ namespace ITD.Content.NPCs.BasicEnemies
                     }
                     break;
                 case ActionState.Escaping:
+                    timeBetweenFrames = 2;
                     float speed = 800f;
                     Vector2 toPlayer = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * speed;
                     Vector2 escapeVector = -toPlayer / (Vector2.Distance(NPC.Center, player.Center) * 1f);

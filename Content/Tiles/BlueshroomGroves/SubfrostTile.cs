@@ -33,6 +33,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
         public override void FloorVisuals(Player player)
         {
             player.slippy2 = true;
+            player.AddBuff(BuffID.Frostburn, 60);
         }
 
         public override void RandomUpdate(int i, int j)

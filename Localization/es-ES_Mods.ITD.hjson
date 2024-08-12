@@ -295,7 +295,7 @@ Items: {
 	}
 
 	BlueCatacombBrickWall: {
-	    DisplayName: Pared de ladrillo de catacumba azul
+		DisplayName: Pared de ladrillo de catacumba azul
 		Tooltip: ""
 	}
 
@@ -345,7 +345,7 @@ Items: {
 	}
 
 	WornBlueCatacombBrick: {
-	    DisplayName: Ladrillo de catacumba azul deteriorado
+		DisplayName: Ladrillo de catacumba azul deteriorado
 		Tooltip: ""
 	}
 
