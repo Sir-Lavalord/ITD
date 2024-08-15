@@ -1,7 +1,9 @@
 ﻿using ITD.Content.Projectiles.Friendly.Misc;
+using ITD.Players;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
@@ -19,46 +21,70 @@ namespace ITD.Content.Items.Weapons.Melee
         {
             Item.autoReuse = true;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.useAnimation = 20;
-            Item.useTime = 8;
-            Item.knockBack = 4f;
+            Item.useAnimation = 15;
+            Item.useTime = 15;
+            Item.knockBack = 6f;
             Item.width = 30;
             Item.height = 10;
-            Item.damage = 16;
-            Item.shoot = ProjectileID.None;
+            Item.damage = 24;
+            Item.shoot = ModContent.ProjectileType<WRipperSlash>();
+			Item.shootSpeed = 4;
             Item.UseSound = SoundID.Item1;
             Item.rare = ItemRarityID.LightRed;
             Item.value = Item.sellPrice(0, 0, 25);
             Item.DamageType = DamageClass.Melee;
-            Item.noMelee = false;
-            Item.noUseGraphic = false;
+            Item.noMelee = true;
+            Item.noUseGraphic = true;
             Item.channel = true;
         }
 
         public override bool AltFunctionUse(Player player)
         {
-            return true;
+			ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
+            return modPlayer.itemVar[0] == 3;
         }
 
         public override bool? UseItem(Player player)
         {
             if (player.altFunctionUse == 2)
-            { //heldproj code
+            { //wormhole dash
+				ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
+				
+				modPlayer.itemVar[0] = 0;
                 Item.useStyle = ItemUseStyleID.Shoot;
-                Item.shoot = ModContent.ProjectileType<WRipperProjectile>();
-                Item.noMelee = true;
-                Item.noUseGraphic = true;
+                Item.shoot = ModContent.ProjectileType<WRipperRift>();
+				
+				player.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 14f;
+				for (int index1 = 0; index1 < 15; ++index1)
+				{
+					int index2 = Dust.NewDust(player.position, player.width, player.height, 204, 0.0f, 0.0f, 100, new Color(), 1f);
+					Main.dust[index2].velocity = player.velocity*Main.rand.Next(10)*0.1f;
+					Main.dust[index2].scale *= 1f + Main.rand.Next(40) * 0.01f;
+				}
+				
                 return true;
             }
             else
-            { //regular behavior
+            { //regular swing
                 Item.useStyle = ItemUseStyleID.Swing;
-                Item.noUseGraphic = false;
-                Item.shoot = ProjectileID.None;
-                Item.noMelee = false;
+                Item.shoot = ModContent.ProjectileType<WRipperSlash>();
                 return true;
             }
         }
+		
+		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+			if (Item.shoot == ModContent.ProjectileType<WRipperRift>())
+			{
+				velocity *=0;
+				knockback *= 0.5f;
+			}
+			Vector2 randomSpread = velocity.RotatedByRandom(MathHelper.ToRadians(10));
+            int proj = Projectile.NewProjectile(source, position.X, position.Y, randomSpread.X, randomSpread.Y, Item.shoot, (int)(damage * 0.6), knockback, player.whoAmI);
+			Main.projectile[proj].spriteDirection = player.direction;
+            return false;
+        }
+		
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
@@ -67,7 +93,7 @@ namespace ITD.Content.Items.Weapons.Melee
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.Register();
         }
-
+		
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             base.ModifyTooltips(tooltips);

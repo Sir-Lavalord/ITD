@@ -1,10 +1,12 @@
 ﻿using ITD.Content.NPCs.Bosses;
+using ITD.Content.Items.Weapons.Melee;
 using ITD.Physics;
 using System.Collections.Generic;
 using static ITD.ITD;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 using Terraria;
 using Microsoft.Xna.Framework;
 
@@ -12,6 +14,9 @@ namespace ITD.Players
 {
     public class ITDPlayer : ModPlayer
     {
+		public float[] itemVar = new float[4];
+		int heldItem;
+		
         bool prevTime = false;
         bool curTime = false;
 
@@ -27,6 +32,11 @@ namespace ITD.Players
         readonly float gravityForPhysics = 0.5f;
         public override void ResetEffects()
         {
+			if (heldItem != Player.inventory[Player.selectedItem].type)
+			{
+				itemVar = new float[4];
+				heldItem = Player.inventory[Player.selectedItem].type;
+			}
             setAlloy = false;
         }
         public override void PostUpdateEquips()
@@ -105,5 +115,22 @@ namespace ITD.Players
             cosJelTimer = 0;
             PhysicsMethods.ClearAll();
         }
+		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+        {
+			if (heldItem == ModContent.ItemType<WormholeRipper>())
+            {
+				if (itemVar[0] > 0)
+				{
+					int dustType = 58;
+					if (itemVar[0] == 3)
+						dustType = 204;
+					int dust = Dust.NewDust(Player.Center - new Vector2(0f, 40f), 0, 0, dustType, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default(Color), 1f + itemVar[0] * 0.5f);
+					Main.dust[dust].noGravity = true;
+					Main.dust[dust].velocity.X = 0f;
+					Main.dust[dust].velocity.Y = -3f;
+					drawInfo.DustCache.Add(dust);
+				}
+            }
+		}
     }
 }

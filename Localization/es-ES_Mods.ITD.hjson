@@ -385,7 +385,6 @@ Projectiles: {
 	CosmicSludgeBomb.DisplayName: Bomba de lodo cósmico
 	CosmicVoidShard.DisplayName: Fragmento del vacío
 	EmberSlash.DisplayName: Tajadora de llamarada
-	WRipperProjectile.DisplayName: Desgarrador del Espaciotiempo
 
 	DespoticSnaptrapProjectile: {
 		DisplayName: Fauces del Abísmo
@@ -436,6 +435,8 @@ Projectiles: {
 	}
 
 	WingedSnowpoffPet.DisplayName: Montonieve Alado
+	WRipperSlash.DisplayName: Desgarrador del Espaciotiempo
+	WRipperRift.DisplayName: Desgarrador del Espaciotiempo
 }
 
 NPCs: {

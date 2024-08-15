@@ -385,7 +385,6 @@ Projectiles: {
 	CosmicSludgeBomb.DisplayName: Cosmic Sludge Bomb
 	CosmicVoidShard.DisplayName: Cosmic Void Shard
 	EmberSlash.DisplayName: Ember Slasher
-	WRipperProjectile.DisplayName: Wormhole Ripper
 
 	DespoticSnaptrapProjectile: {
 		DisplayName: Maw of the Deep
@@ -436,6 +435,8 @@ Projectiles: {
 	}
 
 	WingedSnowpoffPet.DisplayName: Winged Snowpoff
+	WRipperSlash.DisplayName: Wormhole Ripper
+	WRipperRift.DisplayName: Wormhole Ripper
 }
 
 NPCs: {

@@ -387,7 +387,6 @@ Projectiles: {
 	CosmicSludgeBomb.DisplayName: Kosmische Schlammbombe
 	CosmicVoidShard.DisplayName: Kosmischer Splitter der Leere
 	EmberSlash.DisplayName: Bernsteinschlitzer
-	WRipperProjectile.DisplayName: Wurmlochreißer
 
 	DespoticSnaptrapProjectile: {
 		DisplayName: Kiefer der Tiefe
@@ -438,6 +437,8 @@ Projectiles: {
 	}
 
 	// WingedSnowpoffPet.DisplayName: Winged Snowpoff
+	WRipperSlash.DisplayName: Wurmlochreißer
+	WRipperRift.DisplayName: Wurmlochreißer
 }
 
 NPCs: {
