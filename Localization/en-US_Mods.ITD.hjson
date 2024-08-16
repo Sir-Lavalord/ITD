@@ -73,7 +73,8 @@ Items: {
 		Tooltip:
 			'''
 			"Lightspeed!"
-			Right click to dash forward, leaving behind a wormhole
+			Swing at enemies to charge the sword.
+			Once charged, right click to dash, leaving behind a wormhole
 			'''
 	}
 
@@ -395,6 +396,16 @@ Items: {
 
 	StarlitBar: {
 		DisplayName: Starlit Bar
+		Tooltip: ""
+	}
+
+	Electroshroom: {
+		DisplayName: Electroshroom
+		Tooltip: ""
+	}
+
+	RefinedCyanite: {
+		DisplayName: Refined Cyanite
 		Tooltip: ""
 	}
 }

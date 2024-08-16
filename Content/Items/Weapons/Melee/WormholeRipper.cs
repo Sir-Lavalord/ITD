@@ -7,16 +7,13 @@ using Terraria.DataStructures;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
+using ITD.Utils;
+using Terraria.Audio;
 
 namespace ITD.Content.Items.Weapons.Melee
 {
     public class WormholeRipper : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-
-        }
-
         public override void SetDefaults()
         {
             Item.autoReuse = true;
@@ -48,17 +45,17 @@ namespace ITD.Content.Items.Weapons.Melee
         {
             if (player.altFunctionUse == 2)
             { //wormhole dash
-				ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
-				
-				modPlayer.itemVar[0] = 0;
+				player.GetITDPlayer().itemVar[0] = 0;
                 Item.useStyle = ItemUseStyleID.Shoot;
                 Item.shoot = ModContent.ProjectileType<WRipperRift>();
 				
 				player.jump = 0;
 				player.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 14f;
-				for (int index1 = 0; index1 < 15; ++index1)
+                SoundStyle wRipperRip = new SoundStyle("ITD/Content/Sounds/WRipperRip");
+                SoundEngine.PlaySound(wRipperRip, player.Center);
+                for (int index1 = 0; index1 < 15; ++index1)
 				{
-					int index2 = Dust.NewDust(player.position, player.width, player.height, 204, 0.0f, 0.0f, 100, new Color(), 1f);
+					int index2 = Dust.NewDust(player.position, player.width, player.height, DustID.TreasureSparkle, 0.0f, 0.0f, 100, new Color(), 1f);
 					Main.dust[index2].velocity = player.velocity*Main.rand.Next(10)*0.1f;
 					Main.dust[index2].scale *= 1f + Main.rand.Next(40) * 0.01f;
 				}
@@ -81,28 +78,9 @@ namespace ITD.Content.Items.Weapons.Melee
 				knockback *= 0.5f;
 			}
 			Vector2 randomSpread = velocity.RotatedByRandom(MathHelper.ToRadians(10));
-            int proj = Projectile.NewProjectile(source, position.X, position.Y, randomSpread.X, randomSpread.Y, Item.shoot, (int)(damage * 0.6), knockback, player.whoAmI);
-			Main.projectile[proj].spriteDirection = player.direction;
+            Projectile proj = Projectile.NewProjectileDirect(source, position, randomSpread, Item.shoot, (int)(damage * 0.6), knockback, player.whoAmI);
+			proj.spriteDirection = player.direction;
             return false;
-        }
-		
-        public override void AddRecipes()
-        {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.IronBar, 6);
-            recipe.AddIngredient(ItemID.Chain, 16);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.Register();
-        }
-		
-        public override void ModifyTooltips(List<TooltipLine> tooltips)
-        {
-            base.ModifyTooltips(tooltips);
-            float pulseAmount = Main.mouseTextColor / 255f;
-            Color textColor = Color.LightPink * pulseAmount;
-            var line = tooltips.First(x => x.Name == "Tooltip0");
-            string coloredText = string.Format(line.Text, textColor.Hex3());
-            line.Text = coloredText;
         }
     }
 }

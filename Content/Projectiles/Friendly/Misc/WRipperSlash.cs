@@ -1,6 +1,6 @@
 ﻿using ITD.Players;
 using Terraria;
-using System;
+using ITD.Utils;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
@@ -36,11 +36,14 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
 			Player player = Main.player[Projectile.owner];
-            ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
+            ITDPlayer modPlayer = player.GetITDPlayer();
 			if (modPlayer.itemVar[0] < 3)
 			{
 				if (modPlayer.itemVar[0] == 2)
-					SoundEngine.PlaySound(SoundID.MaxMana, player.Center);
+                {
+                    SoundStyle wRipperCharge = new SoundStyle("ITD/Content/Sounds/WRipperCharge");
+                    SoundEngine.PlaySound(wRipperCharge, player.Center);
+                }
 				modPlayer.itemVar[0]++;
 			}
         }

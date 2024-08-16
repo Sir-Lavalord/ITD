@@ -16,7 +16,7 @@ namespace ITD.Players
 {
     public class ITDPlayer : ModPlayer
     {
-		public float[] itemVar = new float[4];
+        public float[] itemVar = new float[4];  // used for storing info about held items, like wormhole ripper's current charge
 		int heldItem;
 		
         bool prevTime = false;
@@ -33,8 +33,6 @@ namespace ITD.Players
 		public bool dreadBlock = false;
 
         public bool setAlloy = false;
-
-        readonly float gravityForPhysics = 0.5f;
         public override void ResetEffects()
         {
 			if (heldItem != Player.inventory[Player.selectedItem].type)
@@ -156,7 +154,7 @@ namespace ITD.Players
 						Vector2 spawnPos = Player.Center + offset - new Vector2(4, 0);
 						Dust dust = Main.dust[Dust.NewDust(
 							spawnPos, 0, 0,
-							235, 0, 0, 100, Color.White, 1.5f
+							DustID.LifeDrain, 0, 0, 100, Color.White, 1.5f
 							)];
 						dust.noGravity = true;
 					}
@@ -173,12 +171,14 @@ namespace ITD.Players
         {
 			if (heldItem == ModContent.ItemType<WormholeRipper>())
             {
-				if (itemVar[0] > 0)
+                if (itemVar[0] > 0)
 				{
 					int dustType = ModContent.DustType<StarlitDust>();
 					if (itemVar[0] == 3)
-						dustType = 204;
-					int dust = Dust.NewDust(Player.MountedCenter - new Vector2(4f, 40f), 0, 0, dustType, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default(Color), 1f + itemVar[0] * 0.5f);
+                    {
+                        dustType = 204;
+                    }
+					int dust = Dust.NewDust(Player.MountedCenter - new Vector2(4f, 40f), 0, 0, dustType, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default, 1f + itemVar[0] * 0.5f);
 					Main.dust[dust].noGravity = true;
 					Main.dust[dust].velocity.X = 0f;
 					Main.dust[dust].velocity.Y = -3f;

@@ -145,7 +145,7 @@ namespace ITD.Content.NPCs.Bosses
                 }
             }
         }
-        public bool IsSegment(int whoAmI, out NPC npc)
+        public static bool IsSegment(int whoAmI, out NPC npc)
         {
             NPC nPC = Main.npc[whoAmI];
             if (nPC.active && nPC.type == ModContent.NPCType<FloralDevourerSegment>())
@@ -232,8 +232,6 @@ namespace ITD.Content.NPCs.Bosses
         }
         private Leg legFront;
         private Leg legBack;
-        private int delay = 20;
-        private int timer = 0;
         public int ID
         {
             get => (int)NPC.ai[0];
@@ -267,7 +265,6 @@ namespace ITD.Content.NPCs.Bosses
                 legFront = new Leg(NPC.Center.X, NPC.Center.Y, 0f);
                 legBack = new Leg(NPC.Center.X, NPC.Center.Y, 0f);
             }
-            delay *= ID;
         }
         public override bool? CanBeHitByItem(Player player, Item item) => false;
         public override bool CanBeHitByNPC(NPC attacker) => false;
@@ -378,6 +375,7 @@ namespace ITD.Content.NPCs.Bosses
         public void Dispose()
         {
             segments = null;
+            GC.SuppressFinalize(this);
         }
     }
 

@@ -124,13 +124,13 @@ namespace ITD.Content.Projectiles
             DrawOriginOffsetY = -16;
             Projectile.hide = true;
             SetSnaptrapProperties();
-            snaptrapMetal = new SoundStyle(toSnaptrapMetal, SoundType.Sound);
-            snaptrapForcedRetract = new SoundStyle(toSnaptrapForcedRetract, SoundType.Sound);
-            snaptrapChain = new SoundStyle(toSnaptrapChain, SoundType.Sound)
+            snaptrapMetal = new SoundStyle(toSnaptrapMetal);
+            snaptrapForcedRetract = new SoundStyle(toSnaptrapForcedRetract);
+            snaptrapChain = new SoundStyle(toSnaptrapChain)
             {
                 IsLooped = true,
             };
-            snaptrapWarning = new SoundStyle(toSnaptrapWarning, SoundType.Sound)
+            snaptrapWarning = new SoundStyle(toSnaptrapWarning)
             {
                 IsLooped = true,
             };

@@ -73,7 +73,8 @@ Items: {
 		Tooltip:
 			'''
 			"A velocidad luz!"
-			Haz clic derecho para embestir hacia delante, dejando atrás un agujero de gusano
+			Ataca a enemigos para cargar la espada.
+			Una vez cargada, haz clic derecho para embestir, dejando atrás un agujero de gusano
 			'''
 	}
 
@@ -380,22 +381,32 @@ Items: {
 	}
 
 	DreadShell: {
-		// DisplayName: Dread Shell
-		/* Tooltip:
+		DisplayName: Caparazón horrible
+		Tooltip:
 			'''
-			10% chance to block attacks
-			Releases a blast of red ink that confuses enemies when damage is blocked
-			''' */
+			Una probabilidad del 10% de bloquear un ataque
+			Crea una explosión de tinta roja que confunde a los enemigos al bloquear
+			'''
 	}
 
 	StarlitOre: {
-		// DisplayName: Starlit Ore
-		// Tooltip: ""
+		DisplayName: Mineral de estralumbre
+		Tooltip: ""
 	}
 
 	StarlitBar: {
-		// DisplayName: Starlit Bar
-		// Tooltip: ""
+		DisplayName: Lingote de estralumbre
+		Tooltip: ""
+	}
+
+	Electroshroom: {
+		DisplayName: Champiléctrico
+		Tooltip: ""
+	}
+
+	RefinedCyanite: {
+		DisplayName: Cianita refinada
+		Tooltip: ""
 	}
 }
 
@@ -505,7 +516,7 @@ Tiles: {
 	BlueshroomSapling.MapEntry: Primordio de champizúl
 	CyaniteOreTile.MapEntry: Cianita
 	BlueshroomTree.MapEntry: Champizúl gigante
-	// StarlitOreTile.MapEntry: Starlit Ore
+    StarlitOreTile.MapEntry: Mineral de estralumbre
 }
 
 Biomes: {

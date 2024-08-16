@@ -399,6 +399,16 @@ Items: {
 		// DisplayName: Starlit Bar
 		// Tooltip: ""
 	}
+
+	Electroshroom: {
+		// DisplayName: Electroshroom
+		// Tooltip: ""
+	}
+
+	RefinedCyanite: {
+		// DisplayName: Refined Cyanite
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
