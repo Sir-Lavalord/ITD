@@ -378,6 +378,15 @@ Items: {
 		DisplayName: Lámpara de catacumba rosa
 		Tooltip: ""
 	}
+
+	DreadShell: {
+		// DisplayName: Dread Shell
+		/* Tooltip:
+			'''
+			10% chance to block attacks
+			Releases a blast of red ink that confuses enemies when damage is blocked
+			''' */
+	}
 }
 
 Projectiles: {

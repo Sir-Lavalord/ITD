@@ -54,6 +54,7 @@ namespace ITD.Content.Items.Weapons.Melee
                 Item.useStyle = ItemUseStyleID.Shoot;
                 Item.shoot = ModContent.ProjectileType<WRipperRift>();
 				
+				player.jump = 0;
 				player.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 14f;
 				for (int index1 = 0; index1 < 15; ++index1)
 				{

@@ -51,7 +51,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             }
 				
 			Player player = Main.player[Projectile.owner];
-			Projectile.Center = player.Center + Projectile.velocity * (11-Projectile.timeLeft);
+			Projectile.Center = player.MountedCenter + Projectile.velocity * (11-Projectile.timeLeft);
 			if (Projectile.spriteDirection == 1)
 				Projectile.rotation = Projectile.velocity.ToRotation();
 			else

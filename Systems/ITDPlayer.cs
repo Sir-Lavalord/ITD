@@ -1,6 +1,7 @@
 ﻿using ITD.Content.NPCs.Bosses;
 using ITD.Content.Items.Weapons.Melee;
 using ITD.Physics;
+using System;
 using System.Collections.Generic;
 using static ITD.ITD;
 using Terraria.Audio;
@@ -27,6 +28,9 @@ namespace ITD.Players
         public bool ZoneDeepDesert;
         public bool ZoneBlueshroomsUnderground;
 
+		public float blockChance = 0f;
+		public bool dreadBlock = false;
+
         public bool setAlloy = false;
 
         readonly float gravityForPhysics = 0.5f;
@@ -37,8 +41,15 @@ namespace ITD.Players
 				itemVar = new float[4];
 				heldItem = Player.inventory[Player.selectedItem].type;
 			}
+			blockChance = 0f;
+			dreadBlock = false;
+			
             setAlloy = false;
         }
+		public override void UpdateDead()
+        {
+			itemVar = new float[4];
+		}
         public override void PostUpdateEquips()
         {
             if (setAlloy)
@@ -109,6 +120,48 @@ namespace ITD.Players
                 }
             }
         }
+		public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+        {
+			if (modifiers.Dodgeable && Main.rand.NextFloat(1f) < blockChance) // Chance to block attacks
+			{
+				SoundEngine.PlaySound(SoundID.NPCHit4, Player.Center);
+				modifiers.DisableSound();
+				modifiers.SetMaxDamage(1);
+				if (dreadBlock) // Dread Shell block ability
+				{
+					for (int i = 0; i < Main.maxNPCs; i++)
+					{
+					NPC target = Main.npc[i];
+						if (target.CanBeChasedBy() && target.Distance(Player.Center) < 200)
+						{
+							int damage = (int)(200 * Player.GetDamage(DamageClass.Melee).Multiplicative);
+							target.StrikeNPC(new NPC.HitInfo
+							{
+								Damage = damage,
+								Knockback = 2f,
+								HitDirection = target.Center.X < Player.Center.X ? -1 : 1,
+								Crit = false,
+								DamageType = DamageClass.Melee
+							});
+							target.AddBuff(BuffID.Confused, 300, false);
+						}
+					}
+					for (int i = 0; i < 60; i++)
+					{
+						Vector2 offset = new Vector2();
+						double angle = Main.rand.NextDouble() * 2d * Math.PI;
+						offset.X += (float)(Math.Sin(angle) * 200);
+						offset.Y += (float)(Math.Cos(angle) * 200);
+						Vector2 spawnPos = Player.Center + offset - new Vector2(4, 0);
+						Dust dust = Main.dust[Dust.NewDust(
+							spawnPos, 0, 0,
+							235, 0, 0, 100, Color.White, 1.5f
+							)];
+						dust.noGravity = true;
+					}
+				}
+			}
+		}
         public override void OnEnterWorld()
         {
             cosJelCounter = false;
@@ -124,7 +177,7 @@ namespace ITD.Players
 					int dustType = 58;
 					if (itemVar[0] == 3)
 						dustType = 204;
-					int dust = Dust.NewDust(Player.Center - new Vector2(0f, 40f), 0, 0, dustType, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default(Color), 1f + itemVar[0] * 0.5f);
+					int dust = Dust.NewDust(Player.MountedCenter - new Vector2(4f, 40f), 0, 0, dustType, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default(Color), 1f + itemVar[0] * 0.5f);
 					Main.dust[dust].noGravity = true;
 					Main.dust[dust].velocity.X = 0f;
 					Main.dust[dust].velocity.Y = -3f;
