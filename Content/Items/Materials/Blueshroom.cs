@@ -20,7 +20,7 @@ namespace ITD.Content.Items.Materials
             Item.useTime = 20;
             Item.useAnimation = 20;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.rare = ItemRarityID.Green;
+            Item.rare = ItemRarityID.Blue;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.maxStack = Item.CommonMaxStack;

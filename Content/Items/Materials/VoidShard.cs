@@ -15,7 +15,7 @@ namespace ITD.Content.Items.Materials
         {
             Item.width = 12;
             Item.height = 24;
-
+			Item.rare = ItemRarityID.Blue;
             Item.maxStack = Item.CommonMaxStack;
             Item.value = Item.buyPrice(silver: 1);
         }

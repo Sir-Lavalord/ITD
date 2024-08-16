@@ -23,7 +23,16 @@ namespace ITD.Content.Items.Materials
             Item.width = 30;
             Item.height = 24;
             Item.maxStack = 99;
-            Item.value = Item.buyPrice(silver: 5);
+			Item.rare = ItemRarityID.Blue;
+            Item.value = Item.sellPrice(silver: 10);
+			
+			Item.useStyle = ItemUseStyleID.Swing;
+            Item.useTurn = true;
+            Item.useAnimation = 15;
+            Item.useTime = 10;
+            Item.autoReuse = true;
+
+            Item.createTile = ModContent.TileType<StarlitBars>();
         }
 
         public override void AddRecipes()

@@ -1,5 +1,6 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 using ITD.Content.Tiles.BlueshroomGroves;
 
 namespace ITD.Content.Items.Placeable
@@ -14,8 +15,9 @@ namespace ITD.Content.Items.Placeable
         public override void SetDefaults()
         {
             Item.DefaultToPlaceableTile(ModContent.TileType<CyaniteOreTile>());
-            Item.width = 12;
-            Item.height = 12;
+            Item.width = 14;
+            Item.height = 18;
+			Item.rare = ItemRarityID.Cyan;
         }
     }
 }
