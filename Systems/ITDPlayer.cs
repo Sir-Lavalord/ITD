@@ -1,5 +1,6 @@
 ﻿using ITD.Content.NPCs.Bosses;
 using ITD.Content.Items.Weapons.Melee;
+using ITD.Content.Dusts;
 using ITD.Physics;
 using System;
 using System.Collections.Generic;
@@ -174,7 +175,7 @@ namespace ITD.Players
             {
 				if (itemVar[0] > 0)
 				{
-					int dustType = 58;
+					int dustType = ModContent.DustType<StarlitDust>();
 					if (itemVar[0] == 3)
 						dustType = 204;
 					int dust = Dust.NewDust(Player.MountedCenter - new Vector2(4f, 40f), 0, 0, dustType, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default(Color), 1f + itemVar[0] * 0.5f);

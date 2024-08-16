@@ -93,6 +93,7 @@ namespace ITD.Content.NPCs.Bosses
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
             //notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<CosmicJellyfishMask>(), 7));
             notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<VoidShard>(), 1, 7, 15));
+			notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<StarlitOre>(), 1, 15, 30));
             notExpertRule.OnSuccess(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, oneFromOptionsDrops));
         }
 
