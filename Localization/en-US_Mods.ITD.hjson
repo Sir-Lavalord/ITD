@@ -387,6 +387,16 @@ Items: {
 			Releases a blast of red ink that confuses enemies when damage is blocked
 			'''
 	}
+
+	StarlitOre: {
+		DisplayName: Starlit Ore
+		Tooltip: ""
+	}
+
+	StarlitBar: {
+		DisplayName: Starlit Bar
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -495,6 +505,7 @@ Tiles: {
 	BlueshroomSapling.MapEntry: Blueshroom Primordium
 	CyaniteOreTile.MapEntry: Cyanite
 	BlueshroomTree.MapEntry: Giant Blueshroom
+	StarlitOreTile.MapEntry: Starlit Ore
 }
 
 Biomes: {
