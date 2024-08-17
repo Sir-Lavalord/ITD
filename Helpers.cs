@@ -32,7 +32,7 @@ namespace ITD
                 _ => new Color(v, p, q),
             };
         }
-        public static Vector2 QuickRaycast(Vector2 origin, Vector2 direction, float maxDistTiles = 64f)
+        public static Vector2 QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, float maxDistTiles = 64f)
         {
             origin /= 16f;
             direction = direction.SafeNormalize(Vector2.UnitY);
@@ -83,6 +83,17 @@ namespace ITD
                 if (SolidTile(tileCheck.X, tileCheck.Y))
                 {
                     tileFound = true;
+                }
+                if (shouldHitNPCs)
+                {
+                    Vector2 worldPosition = tileCheck.ToVector2() * 16f;
+                    foreach (var npc in Main.ActiveNPCs)
+                    {
+                        if (npc.getRect().Contains(worldPosition.ToPoint()))
+                        {
+                            tileFound = true;
+                        }
+                    }
                 }
             }
             Vector2 intersection = Vector2.Zero;
