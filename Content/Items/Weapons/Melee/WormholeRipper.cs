@@ -78,7 +78,7 @@ namespace ITD.Content.Items.Weapons.Melee
 				knockback *= 0.5f;
 			}
 			Vector2 randomSpread = velocity.RotatedByRandom(MathHelper.ToRadians(10));
-            Projectile proj = Projectile.NewProjectileDirect(source, position, randomSpread, Item.shoot, (int)(damage * 0.6), knockback, player.whoAmI);
+            Projectile proj = Projectile.NewProjectileDirect(source, position, randomSpread, Item.shoot, damage, knockback, player.whoAmI);
 			proj.spriteDirection = player.direction;
             return false;
         }

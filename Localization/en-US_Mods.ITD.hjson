@@ -408,6 +408,16 @@ Items: {
 		DisplayName: Refined Cyanite
 		Tooltip: ""
 	}
+
+	BadassSunglasses: {
+		DisplayName: Bad@$$ Sunglasses
+		Tooltip:
+			'''
+			Rapidly builds up critical strike chance
+			Landing a non-lethal hit resets the critical strike chance bonus
+			'''
+		KillMessage: Nice!
+	}
 }
 
 Projectiles: {

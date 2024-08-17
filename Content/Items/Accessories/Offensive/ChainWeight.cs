@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items.Accessories.Melee
+namespace ITD.Content.Items.Accessories.Offensive
 {
     public class ChainWeight : ModItem
     {
