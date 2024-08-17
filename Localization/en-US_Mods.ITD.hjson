@@ -503,6 +503,8 @@ NPCs: {
 		Bestiary: When a female cicadian pupates, it grows wings and experiences rapid growth, becoming rotund and awkward. Once shedding its stomach and becoming hollow, the Hive will rapidly produce larvae- until eventually starving to death.
 		DisplayName: Cicadian Hive
 	}
+
+	FlamingSkull.DisplayName: Flaming Skull
 }
 
 Buffs: {

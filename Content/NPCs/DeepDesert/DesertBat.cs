@@ -5,7 +5,7 @@ using ITD.Content.Buffs.Debuffs;
 using Terraria.GameContent.ItemDropRules;
 using ITD.Utils;
 
-namespace ITD.Content.NPCs.BasicEnemies
+namespace ITD.Content.NPCs.DeepDesert
 {
     public class DesertBat : ModNPC
     {

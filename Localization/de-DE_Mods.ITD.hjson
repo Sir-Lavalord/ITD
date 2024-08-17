@@ -504,6 +504,8 @@ NPCs: {
 		Bestiary: Mods.ITD.NPCs.CicadianHive.Bestiary
 		DisplayName: Zikkadennest
 	}
+
+	// FlamingSkull.DisplayName: Flaming Skull
 }
 
 Buffs: {

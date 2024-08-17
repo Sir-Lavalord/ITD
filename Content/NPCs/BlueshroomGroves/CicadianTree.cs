@@ -10,11 +10,11 @@ using ReLogic.Content;
 using ITD.Content.Tiles.BlueshroomGroves;
 using ITD.Content.Dusts;
 
-namespace ITD.Content.NPCs.BasicEnemies
+namespace ITD.Content.NPCs.BlueshroomGroves
 {
     public class CicadianTree : ModNPC
     {
-        private readonly Asset<Texture2D> glow = ModContent.Request<Texture2D>("ITD/Content/NPCs/BasicEnemies/CicadianTree_Glow");
+        private readonly Asset<Texture2D> glow = ModContent.Request<Texture2D>("ITD/Content/NPCs/BlueshroomGroves/CicadianTree_Glow");
         public override void SetStaticDefaults()
         {
             NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers()

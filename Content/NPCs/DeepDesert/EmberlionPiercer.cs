@@ -10,11 +10,11 @@ using ITD.Content.Items.Weapons.Melee;
 using Terraria.GameContent.ItemDropRules;
 using ITD.Utils;
 
-namespace ITD.Content.NPCs.BasicEnemies
+namespace ITD.Content.NPCs.DeepDesert
 {
     public class EmberlionPiercer : ModNPC
     {
-        private readonly Asset<Texture2D> glowmask = ModContent.Request<Texture2D>("ITD/Content/NPCs/BasicEnemies/EmberlionPiercer_Glow");
+        private readonly Asset<Texture2D> glowmask = ModContent.Request<Texture2D>("ITD/Content/NPCs/DeepDesert/EmberlionPiercer_Glow");
         private enum ActionState
         {
             Asleep,

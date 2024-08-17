@@ -13,7 +13,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace ITD.Content.NPCs.BasicEnemies
+namespace ITD.Content.NPCs.BlueshroomGroves
 {
     public class Cicadian : ModNPC
     {

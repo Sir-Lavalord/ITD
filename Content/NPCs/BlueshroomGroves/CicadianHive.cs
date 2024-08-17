@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace ITD.Content.NPCs.BasicEnemies
+namespace ITD.Content.NPCs.BlueshroomGroves
 {
     public class CicadianHive : ModNPC
     {

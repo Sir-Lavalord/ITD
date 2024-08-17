@@ -503,6 +503,8 @@ NPCs: {
 		Bestiary: Cuando una cigadiana hembra pupa, experimenta un crecimiento acelerado de sus alas y cuerpo, volviendose rotunda y extraña. Cuando se deshace de su estomago, volviendose hueca, la Madre produce larvas rápidamente, hasta que se muere de hambre.
 		DisplayName: Madre Cigadiana
 	}
+
+	// FlamingSkull.DisplayName: Flaming Skull
 }
 
 Buffs: {
