@@ -1,6 +1,6 @@
 Items: {
 	ElectrumBar: {
-		DisplayName: Electrum Barren
+		DisplayName: Elektrum Barren
 		Tooltip: ""
 	}
 
@@ -26,7 +26,7 @@ Items: {
 
 	ElectrumSpear: {
 		Tooltip: ""
-		DisplayName: Electrumspeer
+		DisplayName: Elektrumspeer
 	}
 
 	Blueshroom: {
@@ -272,147 +272,147 @@ Items: {
 	}
 
 	SnowyLantern: {
-		// DisplayName: Snowy Lantern
-		// Tooltip: Summons a lantern-bearning Snowpoff
+		DisplayName: Eingeschneite Laterne
+		Tooltip: Beschwört ein Laternen-tragendes Schneewölkchen
 	}
 
 	DriversIncense: {
-		// DisplayName: Driver's Incense
-		// Tooltip: Permanently increases mount speed by 10%
+		DisplayName: Weihrauch für Fahrer
+		Tooltip: Erhöht die Bewegungsgeschwindigkeit von Reittieren permanent um 10%
 	}
 
 	BlueCatacombBrick: {
-		// DisplayName: Blue Catacomb Brick
-		// Tooltip: ""
+		DisplayName: Blauer Katakombenziegel
+		Tooltip: ""
 	}
 
 	GreenCatacombBrick: {
-		// DisplayName: Green Catacomb Brick
-		// Tooltip: ""
+		DisplayName: Grüner Katakombenziegel
+		Tooltip: ""
 	}
 
 	PinkCatacombBrick: {
-		// DisplayName: Pink Catacomb Brick
-		// Tooltip: ""
+		DisplayName: Rosa Katakombenziegel
+		Tooltip: ""
 	}
 
 	BlueCatacombBrickWall: {
-		// DisplayName: Blue Catacomb Brick Wall
-		// Tooltip: ""
+		DisplayName: Blaue Katakombenziegelwand
+		Tooltip: ""
 	}
 
 	BlueCatacombChair: {
-		// DisplayName: Blue Catacomb Chair
-		// Tooltip: ""
+		DisplayName: Blauer Katakombenstuhl
+		Tooltip: ""
 	}
 
 	BlueshroomStem: {
-		// DisplayName: Blueshroom Stem
-		// Tooltip: ""
+		DisplayName: Blaupilz Stamm
+		Tooltip: ""
 	}
 
 	Cryptite: {
-		// DisplayName: Cryptite
-		// Tooltip: ""
+		DisplayName: Kryptit
+		Tooltip: ""
 	}
 
 	GreenCatacombBrickWall: {
-		// DisplayName: Green Catacomb Brick Wall
-		// Tooltip: ""
+		DisplayName: Grüne Katakombenziegelwand
+		Tooltip: ""
 	}
 
 	GreenCatacombChair: {
-		// DisplayName: Green Catacomb Chair
-		// Tooltip: ""
+		DisplayName: Grüner Katakombenstuhl
+		Tooltip: ""
 	}
 
 	MonsoonCryptite: {
-		// DisplayName: Monsoon Cryptite
-		// Tooltip: ""
+		DisplayName: Monsun Kryptit
+		Tooltip: ""
 	}
 
 	MossyGreenCatacombBrick: {
-		// DisplayName: Mossy Green Catacomb Brick
-		// Tooltip: ""
+		DisplayName: Mosiger Grüner Katakombenziegel
+		Tooltip: ""
 	}
 
 	PinkCatacombBrickWall: {
-		// DisplayName: Pink Catacomb Brick Wall
-		// Tooltip: ""
+		DisplayName: Rosa Katakombenziegelwand
+		Tooltip: ""
 	}
 
 	PinkCatacombChair: {
-		// DisplayName: Pink Catacomb Chair
-		// Tooltip: ""
+		DisplayName: Rosa Katakombenstuhl
+		Tooltip: ""
 	}
 
 	WornBlueCatacombBrick: {
-		// DisplayName: Worn Blue Catacomb Brick
-		// Tooltip: ""
+		DisplayName: Abgetragener Blauer Katakombenziegel
+		Tooltip: ""
 	}
 
 	BlueCatacombTable: {
-		// DisplayName: Blue Catacomb Table
-		// Tooltip: ""
+		DisplayName: Blauer Katakombentisch
+		Tooltip: ""
 	}
 
 	GreenCatacombTable: {
-		// DisplayName: Green Catacomb Table
-		// Tooltip: ""
+		DisplayName: Grüner Katakombentisch
+		Tooltip: ""
 	}
 
 	PinkCatacombTable: {
-		// DisplayName: Pink Catacomb Table
-		// Tooltip: ""
+		DisplayName: Rosa Katakombentisch
+		Tooltip: ""
 	}
 
 	BlueCatacombLamp: {
-		// DisplayName: Blue Catacomb Lamp
-		// Tooltip: ""
+		DisplayName: Blaue Katakombenlampe
+		Tooltip: ""
 	}
 
 	GreenCatacombLamp: {
-		// DisplayName: Green Catacomb Lamp
-		// Tooltip: ""
+		DisplayName: Grüne Katakombenlampe
+		Tooltip: ""
 	}
 
 	PinkCatacombLamp: {
-		// DisplayName: Pink Catacomb Lamp
-		// Tooltip: ""
+		DisplayName: Rosa Katakombenlampe
+		Tooltip: ""
 	}
 
 	DreadShell: {
-		// DisplayName: Dread Shell
-		/* Tooltip:
+		DisplayName: Schreckensmuschel
+		Tooltip:
 			'''
-			10% chance to block attacks
-			Releases a blast of red ink that confuses enemies when damage is blocked
-			''' */
+			10% Chance Angriffe abzuwehren
+			Setzt rote Tinte frei, die Gegner verwirrt wenn ein Angriff abgewehrt wurde
+			'''
 	}
 
 	StarlitOre: {
-		// DisplayName: Starlit Ore
-		// Tooltip: ""
+		DisplayName: Sternenglanz Erz
+		Tooltip: ""
 	}
 
 	StarlitBar: {
-		// DisplayName: Starlit Bar
-		// Tooltip: ""
+		DisplayName: Sternenglanz Barren
+		Tooltip: ""
 	}
 
 	Electroshroom: {
-		// DisplayName: Electroshroom
-		// Tooltip: ""
+		DisplayName: Schockpilz
+		Tooltip: ""
 	}
 
 	RefinedCyanite: {
-		// DisplayName: Refined Cyanite
-		// Tooltip: ""
+		DisplayName: Verarbeitetes Cyanit
+		Tooltip: ""
 	}
 }
 
 Projectiles: {
-	ElectrumSpearProjectile.DisplayName: Electrumspeer
+	ElectrumSpearProjectile.DisplayName: Elektrumspeer
 	CosmicSludgeBomb.DisplayName: Kosmische Schlammbombe
 	CosmicVoidShard.DisplayName: Kosmischer Splitter der Leere
 	EmberSlash.DisplayName: Bernsteinschlitzer
@@ -465,7 +465,7 @@ Projectiles: {
 		DisplayName: Venusfliegenfalle
 	}
 
-	// WingedSnowpoffPet.DisplayName: Winged Snowpoff
+	WingedSnowpoffPet.DisplayName: Geflügeltes Schneewölkchen
 	WRipperSlash.DisplayName: Wurmlochreißer
 	WRipperRift.DisplayName: Wurmlochreißer
 }
@@ -503,21 +503,21 @@ Buffs: {
 	}
 
 	SnowyLanternBuff: {
-		// DisplayName: Winged Snowpoff
-		// Description: A friendly Snowpoff lights your way
+		DisplayName: Geflügeltes Schneewölkchen
+		Description: Ein freundliches Schneewölkchen beleuchtet dir den Weg
 	}
 }
 
 WorldGen: {
 	BluesoilPassMessage: Blauifiziere das tiefe Eis...
-	DeepDesertPassMessage: Verdichten der Wüste...
+	DeepDesertPassMessage: Wüsten müssen verdichtet werden...
 }
 
 Tiles: {
 	BlueshroomSapling.MapEntry: Blaupilz Primordium
 	CyaniteOreTile.MapEntry: Cyanit
 	BlueshroomTree.MapEntry: Riesen Blaupilz
-	// StarlitOreTile.MapEntry: Starlit Ore
+	StarlitOreTile.MapEntry: Sternenglanz Erz
 }
 
 Biomes: {
