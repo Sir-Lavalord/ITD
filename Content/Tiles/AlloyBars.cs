@@ -7,7 +7,7 @@ using Terraria.Localization;
 
 namespace ITD.Content.Tiles
 {
-    internal class ElectrumBars : ModTile
+    internal class AlloyBars : ModTile
     {
         public override void SetStaticDefaults()
         {

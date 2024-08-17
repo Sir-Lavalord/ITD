@@ -408,6 +408,21 @@ Items: {
 		DisplayName: Cianita refinada
 		Tooltip: ""
 	}
+
+	BadassSunglasses: {
+		// DisplayName: Bad@$$ Sunglasses
+		/* Tooltip:
+			'''
+			Rapidly builds up critical strike chance
+			Landing a non-lethal hit resets the critical strike chance bonus
+			''' */
+
+		KillMessages: {
+			// 0: Nice!
+			// 1: Sick!
+			// 2: Gnarly!
+		}
+	}
 }
 
 Projectiles: {
@@ -516,7 +531,7 @@ Tiles: {
 	BlueshroomSapling.MapEntry: Primordio de champizúl
 	CyaniteOreTile.MapEntry: Cianita
 	BlueshroomTree.MapEntry: Champizúl gigante
-    StarlitOreTile.MapEntry: Mineral de estralumbre
+	StarlitOreTile.MapEntry: Mineral de estralumbre
 }
 
 Biomes: {

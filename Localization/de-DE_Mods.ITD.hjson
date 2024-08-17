@@ -409,6 +409,21 @@ Items: {
 		DisplayName: Verarbeitetes Cyanit
 		Tooltip: ""
 	}
+
+	BadassSunglasses: {
+		// DisplayName: Bad@$$ Sunglasses
+		/* Tooltip:
+			'''
+			Rapidly builds up critical strike chance
+			Landing a non-lethal hit resets the critical strike chance bonus
+			''' */
+
+		KillMessages: {
+			// 0: Nice!
+			// 1: Sick!
+			// 2: Gnarly!
+		}
+	}
 }
 
 Projectiles: {

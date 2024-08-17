@@ -28,7 +28,7 @@ namespace ITD.Content.Items.Materials
             Item.useTime = 10;
             Item.autoReuse = true;
 
-            Item.createTile = ModContent.TileType<ElectrumBars>();
+            Item.createTile = ModContent.TileType<AlloyBars>();
             Item.placeStyle = 0;
         }
 
@@ -36,7 +36,7 @@ namespace ITD.Content.Items.Materials
         {
             CreateRecipe(1)
                 .AddIngredient(ItemID.GoldOre, 5)
-                .AddRecipeGroup("IronOre", 10)
+                .AddIngredient(ItemID.SilverOre, 10)
                 .AddTile(TileID.Furnaces)
                 .Register();
         }

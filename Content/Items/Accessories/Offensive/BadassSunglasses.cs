@@ -45,6 +45,10 @@ namespace ITD.Content.Items.Accessories.Offensive
 				sunglassesCharge = 0;
             sunglassesOn = false;
         }
+		public override void UpdateDead()
+        {
+			sunglassesCharge = 0;
+		}
 		
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {

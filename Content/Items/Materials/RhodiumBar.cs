@@ -29,14 +29,14 @@ namespace ITD.Content.Items.Materials
             Item.useTime = 10;
             Item.autoReuse = true;
 
-            Item.createTile = ModContent.TileType<RhodiumBars>();
-            Item.placeStyle = 0;
+            Item.createTile = ModContent.TileType<AlloyBars>();
+            Item.placeStyle = 1;
         }
         public override void AddRecipes()
         {
             CreateRecipe(1)
                 .AddIngredient(ItemID.PlatinumOre, 5)
-                .AddRecipeGroup("IronOre", 10)
+                .AddIngredient(ItemID.TungstenOre, 10)
                 .AddTile(TileID.Furnaces)
                 .Register();
         }
