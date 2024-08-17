@@ -67,14 +67,8 @@ namespace ITD.Content.Items.Accessories.Offensive
 				if (sunglassesCharge > 100)
 				{
 					SoundEngine.PlaySound(SoundID.Item94, Player.Center);
-					AdvancedPopupRequest popupSettings = new()
-					{
-						Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(BadassSunglasses)}.KillMessage")).Value,
-						Color = Color.Yellow,
-						DurationInFrames = 60,
-						Velocity = new Vector2(0f, 8f),
-					};
-					PopupText.NewText(popupSettings, target.Center + new Vector2(0f, -50));
+					string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(BadassSunglasses)}.KillMessages."+Main.rand.Next(3))).Value;
+					CombatText.NewText(new Microsoft.Xna.Framework.Rectangle((int) target.position.X, (int) target.position.Y, target.width, target.height), Color.Yellow, Text);
 				}
 			}
         }

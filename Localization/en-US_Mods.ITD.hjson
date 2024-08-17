@@ -416,7 +416,12 @@ Items: {
 			Rapidly builds up critical strike chance
 			Landing a non-lethal hit resets the critical strike chance bonus
 			'''
-		KillMessage: Nice!
+
+		KillMessages: {
+			0: Nice!
+			1: Sick!
+			2: Gnarly!
+		}
 	}
 }
 
