@@ -1,9 +1,6 @@
-using Terraria;
-using Terraria.ModLoader;
-
 namespace ITD.Utils.Placeholders
 {
-    internal class Placeholder : ModSystem
+    internal class Placeholder
     {
         /* In case there is content without a sprite put following into the code:
          
