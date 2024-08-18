@@ -444,6 +444,11 @@ Items: {
 		// DisplayName: Ectoblade
 		// Tooltip: ""
 	}
+
+	Houndboom: {
+		// DisplayName: Houndboom
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
