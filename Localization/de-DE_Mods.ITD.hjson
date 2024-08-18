@@ -411,33 +411,33 @@ Items: {
 	}
 
 	BadassSunglasses: {
-		// DisplayName: Bad@$$ Sunglasses
-		/* Tooltip:
+		DisplayName: Knallharte Sonnenbrille
+		Tooltip:
 			'''
-			Rapidly builds up critical strike chance
-			Landing a non-lethal hit resets the critical strike chance bonus
-			''' */
+			Baut schnell kritische Trefferchance auf
+			Das Landen eines nichttödlichen Treffers setzt den Bonus für die kritische Trefferchance zurück
+			'''
 
 		KillMessages: {
-			// 0: Nice!
-			// 1: Sick!
-			// 2: Gnarly!
+			0: Schön!
+			1: Krank!
+			2: Krass!
 		}
 	}
 
 	BlueCatacombDoor: {
-		// DisplayName: Blue Catacomb Door
-		// Tooltip: ""
+		DisplayName: Blaue Katakombentür
+		Tooltip: ""
 	}
 
 	GreenCatacombDoor: {
-		// DisplayName: Green Catacomb Door
-		// Tooltip: ""
+		DisplayName: Grüne Katakombentür
+		Tooltip: ""
 	}
 
 	PinkCatacombDoor: {
-		// DisplayName: Pink Catacomb Door
-		// Tooltip: ""
+		DisplayName: Rosa Katakombentür
+		Tooltip: ""
 	}
 }
 
