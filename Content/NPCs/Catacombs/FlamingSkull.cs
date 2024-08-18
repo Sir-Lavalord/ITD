@@ -38,7 +38,7 @@ namespace ITD.Content.NPCs.Catacombs
 			
 			NPC.velocity += toPlayer*0.1f;
 			NPC.velocity *= 0.98f;
-			NPC.spriteDirection = (NPC.velocity.X > 0).ToDirectionInt();;
+			NPC.spriteDirection = (NPC.velocity.X > 0).ToDirectionInt();
 			
 			if (NPC.spriteDirection == 1)
 				NPC.rotation = NPC.velocity.ToRotation();

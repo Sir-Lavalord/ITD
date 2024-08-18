@@ -439,6 +439,11 @@ Items: {
 		// DisplayName: Pink Catacomb Door
 		// Tooltip: ""
 	}
+
+	Ectoblade: {
+		// DisplayName: Ectoblade
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -498,6 +503,7 @@ Projectiles: {
 	WingedSnowpoffPet.DisplayName: Geflügeltes Schneewölkchen
 	WRipperSlash.DisplayName: Wurmlochreißer
 	WRipperRift.DisplayName: Wurmlochreißer
+	// GhostlyBlade.DisplayName: Ghostly Blade
 }
 
 NPCs: {

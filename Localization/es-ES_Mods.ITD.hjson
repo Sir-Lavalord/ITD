@@ -438,6 +438,11 @@ Items: {
 		// DisplayName: Pink Catacomb Door
 		// Tooltip: ""
 	}
+
+	Ectoblade: {
+		// DisplayName: Ectoblade
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -497,6 +502,7 @@ Projectiles: {
 	WingedSnowpoffPet.DisplayName: Montonieve Alado
 	WRipperSlash.DisplayName: Desgarrador del Espaciotiempo
 	WRipperRift.DisplayName: Desgarrador del Espaciotiempo
+	// GhostlyBlade.DisplayName: Ghostly Blade
 }
 
 NPCs: {

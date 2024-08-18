@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
 
-namespace ITD.Content.Items.Weapons.Melee
+namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {
     public class DespoticSnaptrap : ModItem
     {

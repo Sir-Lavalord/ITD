@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
 
-namespace ITD.Content.Items.Weapons.Melee
+namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {
-    public class Soulsnapper : ModItem
+    public class Crimeratrap : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -20,12 +20,12 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.autoReuse = false;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.useAnimation = 20;
-            Item.useTime = 16;
+            Item.useTime = 22;
             Item.knockBack = 0f;
             Item.width = 30;
             Item.height = 10;
-            Item.damage = 34;
-            Item.shoot = ModContent.ProjectileType<SoulsnapperProjectile>();
+            Item.damage = 50;
+            Item.shoot = ModContent.ProjectileType<CrimeratrapProjectile>();
             Item.shootSpeed = 12f;
             Item.UseSound = SoundID.Item1;
             Item.rare = ItemRarityID.LightRed;
