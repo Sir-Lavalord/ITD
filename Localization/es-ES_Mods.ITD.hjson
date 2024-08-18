@@ -423,6 +423,21 @@ Items: {
 			// 2: Gnarly!
 		}
 	}
+
+	BlueCatacombDoor: {
+		// DisplayName: Blue Catacomb Door
+		// Tooltip: ""
+	}
+
+	GreenCatacombDoor: {
+		// DisplayName: Green Catacomb Door
+		// Tooltip: ""
+	}
+
+	PinkCatacombDoor: {
+		// DisplayName: Pink Catacomb Door
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

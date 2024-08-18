@@ -31,16 +31,16 @@ namespace ITD.Content.NPCs.Catacombs
         }
         public override bool PreAI()
         {
-			NPC.TargetClosest(true);
+			NPC.TargetClosest(false);
 			Player player = Main.player[NPC.target];
             Vector2 toPlayerTotal = player.Center - NPC.Center;
             Vector2 toPlayer = toPlayerTotal.SafeNormalize(Vector2.Zero);
 			
 			NPC.velocity += toPlayer*0.1f;
 			NPC.velocity *= 0.98f;
-			NPC.spriteDirection = NPC.direction;
+			NPC.spriteDirection = (NPC.velocity.X > 0).ToDirectionInt();;
 			
-			if (NPC.direction == 1)
+			if (NPC.spriteDirection == 1)
 				NPC.rotation = NPC.velocity.ToRotation();
 			else
 				NPC.rotation = NPC.velocity.ToRotation() + MathHelper.PiOver2*2;

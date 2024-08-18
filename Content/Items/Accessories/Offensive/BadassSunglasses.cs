@@ -71,7 +71,7 @@ namespace ITD.Content.Items.Accessories.Offensive
 				if (sunglassesCharge > 100)
 				{
 					SoundEngine.PlaySound(SoundID.Item94, Player.Center);
-					string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(BadassSunglasses)}.KillMessages."+Main.rand.Next(3))).Value;
+					string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(BadassSunglasses)}.KillMessages.{Main.rand.Next(3)}")).Value;
 					CombatText.NewText(new Microsoft.Xna.Framework.Rectangle((int) target.position.X, (int) target.position.Y, target.width, target.height), Color.Yellow, Text);
 				}
 			}
