@@ -531,6 +531,7 @@ NPCs: {
 	}
 
 	// FlamingSkull.DisplayName: Flaming Skull
+	// AmbushBones.DisplayName: Ambush Bones
 }
 
 Buffs: {
