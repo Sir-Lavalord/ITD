@@ -28,7 +28,7 @@ namespace ITD.Players
 
         public bool ZoneDeepDesert;
         public bool ZoneBlueshroomsUnderground;
-		public bool Catacombs;
+		public bool ZoneCatacombs;
 
 		public float blockChance = 0f;
 		public bool dreadBlock = false;

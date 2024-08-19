@@ -50,7 +50,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 		public override bool PreDraw(ref Color lightColor) {
 			Vector2 position = Projectile.Center - Main.screenPosition;
 			Texture2D texture = TextureAssets.Projectile[Type].Value;
-			Rectangle sourceRectangle = texture.Frame(1, 1); // The sourceRectangle says which frame to use.
+			Rectangle sourceRectangle = texture.Frame(1, 1);
 			Vector2 origin = sourceRectangle.Size() / 2f;
 			
 			Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(36, 12, 34), -Projectile.rotation, origin, Projectile.ai[0]*1.5f, SpriteEffects.FlipVertically, 0f);

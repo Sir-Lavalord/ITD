@@ -19,6 +19,7 @@ namespace ITD.Content.NPCs.Catacombs
         {
             NPC.damage = 26;
             NPC.aiStyle = NPCAIStyleID.Fighter;
+			AIType = NPCID.AngryBones;
 			AnimationType = NPCID.AngryBones;
             NPC.width = 26;
             NPC.height = 40;
@@ -41,7 +42,7 @@ namespace ITD.Content.NPCs.Catacombs
             if (NPC.life > 0)
 			{
 				int i = 0;
-				while (i < hit.Damage / NPC.lifeMax * 50.0)
+				while ((double)i < hit.Damage / (double)NPC.lifeMax * 50.0)
 				{
 					Dust.NewDust(NPC.position, NPC.width, NPC.height, 26, hit.HitDirection, -1f, 0, default, 1f);
 					i++;
@@ -61,7 +62,7 @@ namespace ITD.Content.NPCs.Catacombs
 		
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.GetITDPlayer().Catacombs)
+            if (spawnInfo.Player.GetITDPlayer().ZoneCatacombs)
             {
                 return 0.25f;
             }
