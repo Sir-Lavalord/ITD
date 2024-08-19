@@ -73,7 +73,8 @@ Items: {
 		Tooltip:
 			'''
 			"Lightspeed!"
-			Right click to dash forward, leaving behind a wormhole
+			Swing at enemies to charge the sword.
+			Once charged, right click to dash, leaving behind a wormhole
 			'''
 	}
 
@@ -378,6 +379,80 @@ Items: {
 		DisplayName: Pink Catacomb Lamp
 		Tooltip: ""
 	}
+
+	DreadShell: {
+		DisplayName: Dread Shell
+		Tooltip:
+			'''
+			10% chance to block attacks
+			Releases a blast of red ink that confuses enemies when damage is blocked
+			'''
+	}
+
+	StarlitOre: {
+		DisplayName: Starlit Ore
+		Tooltip: ""
+	}
+
+	StarlitBar: {
+		DisplayName: Starlit Bar
+		Tooltip: ""
+	}
+
+	Electroshroom: {
+		DisplayName: Electroshroom
+		Tooltip: ""
+	}
+
+	RefinedCyanite: {
+		DisplayName: Refined Cyanite
+		Tooltip: ""
+	}
+
+	BadassSunglasses: {
+		DisplayName: Bad@$$ Sunglasses
+		Tooltip:
+			'''
+			Rapidly builds up critical strike chance
+			Landing a non-lethal hit resets the critical strike chance bonus
+			'''
+
+		KillMessages: {
+			0: Nice!
+			1: Sick!
+			2: Gnarly!
+		}
+	}
+
+	BlueCatacombDoor: {
+		DisplayName: Blue Catacomb Door
+		Tooltip: ""
+	}
+
+	GreenCatacombDoor: {
+		DisplayName: Green Catacomb Door
+		Tooltip: ""
+	}
+
+	PinkCatacombDoor: {
+		DisplayName: Pink Catacomb Door
+		Tooltip: ""
+	}
+
+	Ectoblade: {
+		DisplayName: Ectoblade
+		Tooltip: ""
+	}
+
+	Houndboom: {
+		DisplayName: Houndboom
+		Tooltip: ""
+	}
+
+	ImpulseShackles: {
+		DisplayName: Impulse Shackles
+		Tooltip: Empowers your first jump
+	}
 }
 
 Projectiles: {
@@ -385,7 +460,6 @@ Projectiles: {
 	CosmicSludgeBomb.DisplayName: Cosmic Sludge Bomb
 	CosmicVoidShard.DisplayName: Cosmic Void Shard
 	EmberSlash.DisplayName: Ember Slasher
-	WRipperProjectile.DisplayName: Wormhole Ripper
 
 	DespoticSnaptrapProjectile: {
 		DisplayName: Maw of the Deep
@@ -436,6 +510,9 @@ Projectiles: {
 	}
 
 	WingedSnowpoffPet.DisplayName: Winged Snowpoff
+	WRipperSlash.DisplayName: Wormhole Ripper
+	WRipperRift.DisplayName: Wormhole Ripper
+	GhostlyBlade.DisplayName: Ghostly Blade
 }
 
 NPCs: {
@@ -457,6 +534,10 @@ NPCs: {
 		Bestiary: When a female cicadian pupates, it grows wings and experiences rapid growth, becoming rotund and awkward. Once shedding its stomach and becoming hollow, the Hive will rapidly produce larvae- until eventually starving to death.
 		DisplayName: Cicadian Hive
 	}
+
+	FlamingSkull.DisplayName: Flaming Skull
+	AmbushBones.DisplayName: Ambush Bones
+	ShroomishSlime.DisplayName: Shroomish Slime
 }
 
 Buffs: {
@@ -485,6 +566,7 @@ Tiles: {
 	BlueshroomSapling.MapEntry: Blueshroom Primordium
 	CyaniteOreTile.MapEntry: Cyanite
 	BlueshroomTree.MapEntry: Giant Blueshroom
+	StarlitOreTile.MapEntry: Starlit Ore
 }
 
 Biomes: {

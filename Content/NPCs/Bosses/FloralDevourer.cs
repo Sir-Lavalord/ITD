@@ -73,7 +73,7 @@ namespace ITD.Content.NPCs.Bosses
 
         public override void AI()
         {
-            Vector2 raycastCheck = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, raycastFloatLength);
+            Vector2 raycastCheck = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, false, raycastFloatLength);
             float length = (raycastCheck - NPC.Center).Length();
             if (length < raycastFloatLength*15.8f)
             {
@@ -145,7 +145,7 @@ namespace ITD.Content.NPCs.Bosses
                 }
             }
         }
-        public bool IsSegment(int whoAmI, out NPC npc)
+        public static bool IsSegment(int whoAmI, out NPC npc)
         {
             NPC nPC = Main.npc[whoAmI];
             if (nPC.active && nPC.type == ModContent.NPCType<FloralDevourerSegment>())
@@ -232,8 +232,6 @@ namespace ITD.Content.NPCs.Bosses
         }
         private Leg legFront;
         private Leg legBack;
-        private int delay = 20;
-        private int timer = 0;
         public int ID
         {
             get => (int)NPC.ai[0];
@@ -267,7 +265,6 @@ namespace ITD.Content.NPCs.Bosses
                 legFront = new Leg(NPC.Center.X, NPC.Center.Y, 0f);
                 legBack = new Leg(NPC.Center.X, NPC.Center.Y, 0f);
             }
-            delay *= ID;
         }
         public override bool? CanBeHitByItem(Player player, Item item) => false;
         public override bool CanBeHitByNPC(NPC attacker) => false;
@@ -281,8 +278,8 @@ namespace ITD.Content.NPCs.Bosses
             direction = (pathPosition - NPC.Center).SafeNormalize(Vector2.Zero);
             if (HasLegs)
             {
-                frontRayPosition = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, 24f);
-                backRayPosition = Helpers.QuickRaycast(NPC.Center + new Vector2(direction.X * 32f, 0f), Vector2.UnitY, 24f);
+                frontRayPosition = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, false, 24f);
+                backRayPosition = Helpers.QuickRaycast(NPC.Center + new Vector2(direction.X * 32f, 0f), Vector2.UnitY, false, 24f);
                 float step = 80f;
                 if (legFront != null && legBack != null)
                 {
@@ -378,6 +375,7 @@ namespace ITD.Content.NPCs.Bosses
         public void Dispose()
         {
             segments = null;
+            GC.SuppressFinalize(this);
         }
     }
 

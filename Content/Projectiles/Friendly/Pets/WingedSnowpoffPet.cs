@@ -6,20 +6,20 @@ using ITD.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using rail;
 
 namespace ITD.Content.Projectiles.Friendly.Pets
 {
     public class WingedSnowpoffPet : ModProjectile
     {
-        // someone pls fix the animation for me idk why it does that (the flashing)
         private readonly Asset<Texture2D> lanternSprite = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Pets/WingedSnowpoffLantern");
         private readonly Asset<Texture2D> chainSprite = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Pets/WingedSnowpoffChain");
         VerletChain lanternChain;
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Type] = 3;
-            Main.projPet[Type] = true;
-            ProjectileID.Sets.CharacterPreviewAnimations[Type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Type], 6)
+            Main.projFrames[Projectile.type] = 4;
+            Main.projPet[Projectile.type] = true;
+            ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Projectile.type], 6)
                 .WithOffset(-10, -20f)
                 .WithSpriteDirection(-1)
                 .WithCode(DelegateMethods.CharacterPreview.Float);
@@ -50,11 +50,12 @@ namespace ITD.Content.Projectiles.Friendly.Pets
             }
             if (lanternChain != null)
             {
-                lanternChain.UpdateStart(Projectile.Center + Vector2.UnitY * Projectile.height/2);
+                lanternChain.UpdateStart(Projectile.Center + Vector2.UnitY * Projectile.height / 2);
                 Vector2 lanternCenter = Vector2.Lerp(lanternChain.endStick.pointA.pos, lanternChain.endStick.pointB.pos, 0.5f);
                 Lighting.AddLight(lanternCenter, new Vector3(0f, 0.8f, 1.2f));
             }
         }
+
         public override void PostDraw(Color lightColor)
         {
             lanternChain?.Draw(Main.spriteBatch, Main.screenPosition, chainSprite.Value, Color.White, true, null, null, lanternSprite.Value);

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using System;
+using ITD.Content.Items.Placeable;
 
 namespace ITD.Content.Tiles.BlueshroomGroves
 {
@@ -18,7 +19,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
         {
             DustType = DustType<BlueshroomSporesDust>();
             MapColor = new Color(179, 167, 134);
-            WoodType = ItemType<Blueshroom>();
+            WoodType = ItemType<BlueshroomStem>();
         }
         public override void PostDrawTreeTops(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, Color color, Rectangle sourceRect)
         {

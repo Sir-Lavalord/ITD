@@ -48,6 +48,7 @@ namespace ITD.Content.Items.Weapons.Melee
             CreateRecipe()
                 .AddCustomShimmerResult(ItemID.GoldBroadsword)
                 .AddCustomShimmerResult(ItemID.Stinkbug, 5)
+                .AddCondition(new Condition("", () => false))
                 .Register();
         }
     }

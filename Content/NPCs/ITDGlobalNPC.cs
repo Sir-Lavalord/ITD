@@ -1,4 +1,4 @@
-﻿using ITD.Content.Items.Weapons.Melee;
+﻿using ITD.Content.Items.Weapons.Melee.Snaptraps;
 using ITD.Utils;
 using System.Collections.Generic;
 using Terraria;

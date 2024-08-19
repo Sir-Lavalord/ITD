@@ -2,6 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Items.Materials;
+using Microsoft.Xna.Framework;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {
@@ -27,7 +28,6 @@ namespace ITD.Content.Items.Weapons.Ranger
             Item.useAmmo = AmmoID.Arrow;
             Item.autoReuse = false;
         }
-
         public override bool? UseItem(Player player)
         {
             return base.UseItem(player);

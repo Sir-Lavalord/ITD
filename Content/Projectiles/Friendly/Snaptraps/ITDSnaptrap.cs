@@ -1,5 +1,5 @@
 ﻿using ITD.Content.Items;
-using ITD.Content.Items.Accessories.Melee;
+using ITD.Content.Items.Accessories.Offensive;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -124,13 +124,13 @@ namespace ITD.Content.Projectiles
             DrawOriginOffsetY = -16;
             Projectile.hide = true;
             SetSnaptrapProperties();
-            snaptrapMetal = new SoundStyle(toSnaptrapMetal, SoundType.Sound);
-            snaptrapForcedRetract = new SoundStyle(toSnaptrapForcedRetract, SoundType.Sound);
-            snaptrapChain = new SoundStyle(toSnaptrapChain, SoundType.Sound)
+            snaptrapMetal = new SoundStyle(toSnaptrapMetal);
+            snaptrapForcedRetract = new SoundStyle(toSnaptrapForcedRetract);
+            snaptrapChain = new SoundStyle(toSnaptrapChain)
             {
                 IsLooped = true,
             };
-            snaptrapWarning = new SoundStyle(toSnaptrapWarning, SoundType.Sound)
+            snaptrapWarning = new SoundStyle(toSnaptrapWarning)
             {
                 IsLooped = true,
             };

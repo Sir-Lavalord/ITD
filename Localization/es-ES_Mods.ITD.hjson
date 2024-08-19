@@ -73,7 +73,8 @@ Items: {
 		Tooltip:
 			'''
 			"A velocidad luz!"
-			Haz clic derecho para embestir hacia delante, dejando atrás un agujero de gusano
+			Ataca a enemigos para cargar la espada.
+			Una vez cargada, haz clic derecho para embestir, dejando atrás un agujero de gusano
 			'''
 	}
 
@@ -295,7 +296,7 @@ Items: {
 	}
 
 	BlueCatacombBrickWall: {
-	    DisplayName: Pared de ladrillo de catacumba azul
+		DisplayName: Pared de ladrillo de catacumba azul
 		Tooltip: ""
 	}
 
@@ -345,7 +346,7 @@ Items: {
 	}
 
 	WornBlueCatacombBrick: {
-	    DisplayName: Ladrillo de catacumba azul deteriorado
+		DisplayName: Ladrillo de catacumba azul deteriorado
 		Tooltip: ""
 	}
 
@@ -378,6 +379,80 @@ Items: {
 		DisplayName: Lámpara de catacumba rosa
 		Tooltip: ""
 	}
+
+	DreadShell: {
+		DisplayName: Caparazón horrible
+		Tooltip:
+			'''
+			Una probabilidad del 10% de bloquear un ataque
+			Crea una explosión de tinta roja que confunde a los enemigos al bloquear
+			'''
+	}
+
+	StarlitOre: {
+		DisplayName: Mineral de estralumbre
+		Tooltip: ""
+	}
+
+	StarlitBar: {
+		DisplayName: Lingote de estralumbre
+		Tooltip: ""
+	}
+
+	Electroshroom: {
+		DisplayName: Champiléctrico
+		Tooltip: ""
+	}
+
+	RefinedCyanite: {
+		DisplayName: Cianita refinada
+		Tooltip: ""
+	}
+
+	BadassSunglasses: {
+		// DisplayName: Bad@$$ Sunglasses
+		/* Tooltip:
+			'''
+			Rapidly builds up critical strike chance
+			Landing a non-lethal hit resets the critical strike chance bonus
+			''' */
+
+		KillMessages: {
+			// 0: Nice!
+			// 1: Sick!
+			// 2: Gnarly!
+		}
+	}
+
+	BlueCatacombDoor: {
+		// DisplayName: Blue Catacomb Door
+		// Tooltip: ""
+	}
+
+	GreenCatacombDoor: {
+		// DisplayName: Green Catacomb Door
+		// Tooltip: ""
+	}
+
+	PinkCatacombDoor: {
+		// DisplayName: Pink Catacomb Door
+		// Tooltip: ""
+	}
+
+	Ectoblade: {
+		// DisplayName: Ectoblade
+		// Tooltip: ""
+	}
+
+	Houndboom: {
+		// DisplayName: Houndboom
+		// Tooltip: ""
+	}
+
+	ImpulseShackles: {
+		// DisplayName: Impulse Shackles
+		// Tooltip: Empowers your first jump
+	}
 }
 
 Projectiles: {
@@ -385,7 +460,6 @@ Projectiles: {
 	CosmicSludgeBomb.DisplayName: Bomba de lodo cósmico
 	CosmicVoidShard.DisplayName: Fragmento del vacío
 	EmberSlash.DisplayName: Tajadora de llamarada
-	WRipperProjectile.DisplayName: Desgarrador del Espaciotiempo
 
 	DespoticSnaptrapProjectile: {
 		DisplayName: Fauces del Abísmo
@@ -436,6 +510,9 @@ Projectiles: {
 	}
 
 	WingedSnowpoffPet.DisplayName: Montonieve Alado
+	WRipperSlash.DisplayName: Desgarrador del Espaciotiempo
+	WRipperRift.DisplayName: Desgarrador del Espaciotiempo
+	// GhostlyBlade.DisplayName: Ghostly Blade
 }
 
 NPCs: {
@@ -457,6 +534,10 @@ NPCs: {
 		Bestiary: Cuando una cigadiana hembra pupa, experimenta un crecimiento acelerado de sus alas y cuerpo, volviendose rotunda y extraña. Cuando se deshace de su estomago, volviendose hueca, la Madre produce larvas rápidamente, hasta que se muere de hambre.
 		DisplayName: Madre Cigadiana
 	}
+
+	// FlamingSkull.DisplayName: Flaming Skull
+	// AmbushBones.DisplayName: Ambush Bones
+	// ShroomishSlime.DisplayName: Shroomish Slime
 }
 
 Buffs: {
@@ -485,6 +566,7 @@ Tiles: {
 	BlueshroomSapling.MapEntry: Primordio de champizúl
 	CyaniteOreTile.MapEntry: Cianita
 	BlueshroomTree.MapEntry: Champizúl gigante
+	StarlitOreTile.MapEntry: Mineral de estralumbre
 }
 
 Biomes: {

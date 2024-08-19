@@ -1,5 +1,8 @@
 ﻿using ITD.Content.Tiles;
 using ITD.Content.Tiles.BlueshroomGroves;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,6 +11,7 @@ namespace ITD.Content.Items.Materials
 {
     public class Blueshroom : ModItem
     {
+        private readonly Asset<Texture2D> glowmask = ModContent.Request<Texture2D>("ITD/Content/Items/Materials/Blueshroom_Glow");
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 100;
@@ -25,10 +29,16 @@ namespace ITD.Content.Items.Materials
             Item.autoReuse = true;
             Item.maxStack = Item.CommonMaxStack;
         }
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            spriteBatch.Draw(glowmask.Value, Item.Center - Main.screenPosition, null, Color.White * BlueshroomTree.opac, rotation, glowmask.Size() / 2f, scale, SpriteEffects.None, 0f);
+        }
+
+        // this is purely for testing, remove on release pls
         public override bool? UseItem(Player player)
         {
-            int i = (int)(Main.MouseWorld.X/16f);
-            int j = (int)(Main.MouseWorld.Y/16f);
+            int i = (int)(Main.MouseWorld.X / 16f);
+            int j = (int)(Main.MouseWorld.Y / 16f);
             ITDTree.Grow(i, j);
             return true;
         }
