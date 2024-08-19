@@ -448,6 +448,11 @@ Items: {
 		DisplayName: Houndboom
 		Tooltip: ""
 	}
+
+	ImpulseShackles: {
+		DisplayName: Impulse Shackles
+		Tooltip: Empowers your first jump
+	}
 }
 
 Projectiles: {
