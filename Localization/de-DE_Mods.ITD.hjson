@@ -525,6 +525,7 @@ Projectiles: {
 	WRipperRift.DisplayName: Wurmlochreißer
 	// GhostlyBlade.DisplayName: Ghostly Blade
 	// DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
+	// ElectrifiedArrow.DisplayName: Electrified Arrow
 }
 
 NPCs: {

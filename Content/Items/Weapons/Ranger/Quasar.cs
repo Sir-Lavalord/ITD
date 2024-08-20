@@ -34,7 +34,7 @@ namespace ITD.Content.Items.Weapons.Ranger
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
 			Projectile proj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
-			proj.GetGlobalProjectile<ITDGlobalProjectile>().quasarAura = true;
+			proj.GetGlobalProjectile<ITDGlobalProjectile>().aura = 1;
 			
 			for (int i = 0; i < 16; i++) {
 				int dust = Dust.NewDust(position-new Vector2(6, 6), 12, 12, ModContent.DustType<StarlitDust>(), 0f, 0f, 0, default, 2f);

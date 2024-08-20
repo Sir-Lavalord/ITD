@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Items.Weapons.Melee.Snaptraps;
+using ITD.Content.Items.Accessories.Defensive;
 using ITD.Utils;
 using System.Collections.Generic;
 using Terraria;
@@ -19,6 +20,10 @@ namespace ITD.Content.NPCs
             if (npc.type == NPCID.Crimera || npc.type == NPCID.LittleCrimera || npc.type == NPCID.BigCrimera)
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Crimeratrap>(), 50));
+            }
+			if (npc.type == 618)
+            {
+                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DreadShell>(), 10));
             }
         }
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)

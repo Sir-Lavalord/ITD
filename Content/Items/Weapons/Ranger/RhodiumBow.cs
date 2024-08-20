@@ -1,7 +1,9 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 using ITD.Content.Items.Materials;
+using ITD.Content.Projectiles.Friendly.Ammo;
 using Microsoft.Xna.Framework;
 
 namespace ITD.Content.Items.Weapons.Ranger
@@ -11,16 +13,16 @@ namespace ITD.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            Item.damage = 7;
+            Item.damage = 12;
             Item.DamageType = DamageClass.Ranged;
-            Item.width = 20;
-            Item.height = 40;
-            Item.useTime = 30;
-            Item.useAnimation = 30;
+            Item.width = 16;
+            Item.height = 30;
+            Item.useTime = 40;
+            Item.useAnimation = 40;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 2;
-            Item.value = Item.sellPrice(silver: 5);
+            Item.value = Item.sellPrice(silver: 50);
             Item.rare = ItemRarityID.Blue;
             Item.UseSound = SoundID.Item5;
             Item.shoot = ProjectileID.WoodenArrowFriendly;
@@ -28,10 +30,15 @@ namespace ITD.Content.Items.Weapons.Ranger
             Item.useAmmo = AmmoID.Arrow;
             Item.autoReuse = false;
         }
-        public override bool? UseItem(Player player)
+		
+		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            return base.UseItem(player);
+			if (type == 1)
+				type = ModContent.ProjectileType<ElectrifiedArrow>();
+			Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
+			return false;
         }
+		
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
