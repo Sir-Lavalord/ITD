@@ -16,7 +16,7 @@ Items: {
 
 	RhodiumBow: {
 		DisplayName: Rhodium Bow
-		Tooltip: ""
+		Tooltip: Electrifies wooden arrows
 	}
 
 	RhodiumBroadsword: {
@@ -529,7 +529,7 @@ Projectiles: {
 	WRipperRift.DisplayName: Wormhole Ripper
 	GhostlyBlade.DisplayName: Ghostly Blade
 	DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
-	StarlightProj.DisplayName: Starlight Proj
+	ElectrifiedArrow.DisplayName: Electrified Arrow
 }
 
 NPCs: {
