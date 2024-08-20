@@ -12,7 +12,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 	public class ElectrumSpearProjectile : ModProjectile
 	{
 		protected virtual float HoldoutRangeMin => 24f;
-		protected virtual float HoldoutRangeMax => 64f;
+		protected virtual float HoldoutRangeMax => 80f;
 
 		public override void SetDefaults()
 		{

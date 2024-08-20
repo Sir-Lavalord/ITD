@@ -454,6 +454,16 @@ Items: {
 		// DisplayName: Impulse Shackles
 		// Tooltip: Empowers your first jump
 	}
+
+	Dunebarrel: {
+		// DisplayName: Dunebarrel
+		// Tooltip: ""
+	}
+
+	Quasar: {
+		// DisplayName: Quasar
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -514,6 +524,7 @@ Projectiles: {
 	WRipperSlash.DisplayName: Wurmlochreißer
 	WRipperRift.DisplayName: Wurmlochreißer
 	// GhostlyBlade.DisplayName: Ghostly Blade
+	// DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
 }
 
 NPCs: {

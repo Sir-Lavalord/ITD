@@ -32,7 +32,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 				
 		public override void AI()
         {
-			Projectile.rotation += 0.1f;
+			Projectile.rotation += 0.05f;
 			if (Projectile.timeLeft > 110)
 			{
 				Projectile.ai[0] += 0.1f;
@@ -53,9 +53,9 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 			Rectangle sourceRectangle = texture.Frame(1, 1);
 			Vector2 origin = sourceRectangle.Size() / 2f;
 			
-			Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(36, 12, 34), -Projectile.rotation, origin, Projectile.ai[0]*1.5f, SpriteEffects.FlipVertically, 0f);
-			Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(133, 50, 88), Projectile.rotation, origin, Projectile.ai[0]*1.25f, SpriteEffects.None, 0f);
-			Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(255, 244, 191), -Projectile.rotation, origin, Projectile.ai[0], SpriteEffects.FlipVertically, 0f);
+			Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(36, 12, 34), Projectile.rotation, origin, Projectile.ai[0]*1.5f, SpriteEffects.None, 0f);
+			Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(133, 50, 88), Projectile.rotation*1.5f, origin, Projectile.ai[0]*1.25f, SpriteEffects.None, 0f);
+			Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(255, 244, 191), Projectile.rotation*2f, origin, Projectile.ai[0], SpriteEffects.None, 0f);
 			
 			return false;
 		}

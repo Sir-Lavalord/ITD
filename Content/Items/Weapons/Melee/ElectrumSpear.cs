@@ -19,7 +19,7 @@ namespace ITD.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            Item.damage = 16;
+            Item.damage = 18;
 			Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
@@ -41,7 +41,7 @@ namespace ITD.Content.Items.Weapons.Melee
 			for (int i = 0; i < 3; i++)
             {
                 Vector2 rotatedVelocity = velocity.RotatedBy(MathHelper.ToRadians(-15+15*i));
-				Projectile proj = Projectile.NewProjectileDirect(source, position, rotatedVelocity, Item.shoot, damage, knockback, player.whoAmI);
+				Projectile proj = Projectile.NewProjectileDirect(source, position, rotatedVelocity, type, damage, knockback, player.whoAmI);
 				proj.timeLeft += i*5;
 				if (i == 2)
 					proj.ai[0] = 1;

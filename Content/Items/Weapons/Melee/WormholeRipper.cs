@@ -28,7 +28,7 @@ namespace ITD.Content.Items.Weapons.Melee
 			Item.shootSpeed = 4;
             Item.UseSound = SoundID.Item1;
             Item.rare = ItemRarityID.LightRed;
-            Item.value = Item.sellPrice(0, 0, 25);
+            Item.value = Item.sellPrice(gold: 1);
             Item.DamageType = DamageClass.Melee;
             Item.noMelee = true;
             Item.noUseGraphic = true;
