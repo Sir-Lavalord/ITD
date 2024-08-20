@@ -45,7 +45,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-
+            Gun1Position = player.itemLocation;
             Projectile.timeLeft = 60;
 
             // Animation code could go here if the projectile was animated. 
@@ -134,11 +134,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     }
                 }
             }
-        }
-
-        public static void SetPosition(Vector2 position)
-        {
-            Gun1Position = position;
         }
     }
 }

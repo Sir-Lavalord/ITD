@@ -78,11 +78,6 @@ Items: {
 			'''
 	}
 
-	VoidShard: {
-		Tooltip: ""
-		DisplayName: Void Shard
-	}
-
 	CosmicJellyfishTrophy: {
 		Tooltip: ""
 		DisplayName: Cosmic Jellyfish Trophy
@@ -530,6 +525,7 @@ Projectiles: {
 	GhostlyBlade.DisplayName: Ghostly Blade
 	DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
 	ElectrifiedArrow.DisplayName: Electrified Arrow
+	StarlightProj.DisplayName: Starlight Proj
 }
 
 NPCs: {
