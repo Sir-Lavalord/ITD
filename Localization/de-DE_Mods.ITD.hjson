@@ -464,6 +464,11 @@ Items: {
 		// DisplayName: Quasar
 		// Tooltip: ""
 	}
+
+	StarlightStaff: {
+		// DisplayName: Starlight Staff
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -525,6 +530,7 @@ Projectiles: {
 	WRipperRift.DisplayName: Wurmlochreißer
 	// GhostlyBlade.DisplayName: Ghostly Blade
 	// DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
+	// StarlightProj.DisplayName: Starlight Proj
 }
 
 NPCs: {
