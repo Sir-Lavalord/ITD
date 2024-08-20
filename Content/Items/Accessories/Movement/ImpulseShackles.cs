@@ -44,7 +44,7 @@ namespace ITD.Content.Items.Accessories.Movement
 					
 					for (int i = 0; i < 20; i++)
 					{
-						int dust = Dust.NewDust(player.MountedCenter+new Vector2(-44f, player.height/2), 80, 0, 255, 0f, 0f, 0, default, 1.5f);
+						int dust = Dust.NewDust(player.MountedCenter + new Vector2(-44f, player.height/2), 80, 0, 255, 0f, 0f, 0, default, 1.5f);
 						Main.dust[dust].noGravity = true;
 						Main.dust[dust].velocity.X = 0;
 					}
@@ -54,7 +54,7 @@ namespace ITD.Content.Items.Accessories.Movement
 			
 			if (modPlayer.impulseJump > 0)
 			{				
-				int dust = Dust.NewDust(player.MountedCenter - new Vector2(4f, 0) - player.velocity, 0, 0, 255, 0, 0, 100, default, 1.5f);
+				int dust = Dust.NewDust(player.MountedCenter + new Vector2(-4f, 0), 0, 0, 255, 0, 0, 100, default, 1.5f);
 				Main.dust[dust].noGravity = true;
 				Main.dust[dust].velocity = player.velocity/2f;
 			
