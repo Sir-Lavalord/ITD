@@ -441,28 +441,28 @@ Items: {
 	}
 
 	Ectoblade: {
-		// DisplayName: Ectoblade
-		// Tooltip: ""
+		DisplayName: Ektoschwert
+		Tooltip: ""
 	}
 
 	Houndboom: {
-		// DisplayName: Houndboom
-		// Tooltip: ""
+		DisplayName: Jagdböller
+		Tooltip: ""
 	}
 
 	ImpulseShackles: {
-		// DisplayName: Impulse Shackles
-		// Tooltip: Empowers your first jump
+		DisplayName: Impulsfesseln
+		Tooltip: Verstärkt deinen ersten Sprung
 	}
 
 	Dunebarrel: {
-		// DisplayName: Dunebarrel
-		// Tooltip: ""
+		DisplayName: Dünenrohr
+		Tooltip: ""
 	}
 
 	Quasar: {
-		// DisplayName: Quasar
-		// Tooltip: ""
+		DisplayName: Quasar
+		Tooltip: ""
 	}
 }
 
@@ -523,9 +523,14 @@ Projectiles: {
 	WingedSnowpoffPet.DisplayName: Geflügeltes Schneewölkchen
 	WRipperSlash.DisplayName: Wurmlochreißer
 	WRipperRift.DisplayName: Wurmlochreißer
+<<<<<<< HEAD
 	// GhostlyBlade.DisplayName: Ghostly Blade
 	// DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
 	// ElectrifiedArrow.DisplayName: Electrified Arrow
+=======
+	GhostlyBlade.DisplayName: Geisterhaftes Schwert
+	DunebarrelRightGun.DisplayName: Rechte Waffe vom Dünenrohr
+>>>>>>> 2702b8fdd8edf267654f803d1613f48a937d3642
 }
 
 NPCs: {
@@ -548,9 +553,9 @@ NPCs: {
 		DisplayName: Zikkadennest
 	}
 
-	// FlamingSkull.DisplayName: Flaming Skull
-	// AmbushBones.DisplayName: Ambush Bones
-	// ShroomishSlime.DisplayName: Shroomish Slime
+	FlamingSkull.DisplayName: Brennender Schädel
+	AmbushBones.DisplayName: Überfallskelett
+	/ShroomishSlime.DisplayName: Pilzschleim
 }
 
 Buffs: {
