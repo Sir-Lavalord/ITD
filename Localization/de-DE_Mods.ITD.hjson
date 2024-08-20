@@ -523,14 +523,9 @@ Projectiles: {
 	WingedSnowpoffPet.DisplayName: Geflügeltes Schneewölkchen
 	WRipperSlash.DisplayName: Wurmlochreißer
 	WRipperRift.DisplayName: Wurmlochreißer
-<<<<<<< HEAD
-	// GhostlyBlade.DisplayName: Ghostly Blade
-	// DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
-	// ElectrifiedArrow.DisplayName: Electrified Arrow
-=======
 	GhostlyBlade.DisplayName: Geisterhaftes Schwert
 	DunebarrelRightGun.DisplayName: Rechte Waffe vom Dünenrohr
->>>>>>> 2702b8fdd8edf267654f803d1613f48a937d3642
+	// ElectrifiedArrow.DisplayName: Electrified Arrow
 }
 
 NPCs: {
@@ -555,7 +550,7 @@ NPCs: {
 
 	FlamingSkull.DisplayName: Brennender Schädel
 	AmbushBones.DisplayName: Überfallskelett
-	/ShroomishSlime.DisplayName: Pilzschleim
+	ShroomishSlime.DisplayName: Pilzschleim
 }
 
 Buffs: {
