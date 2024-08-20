@@ -464,6 +464,11 @@ Items: {
 		DisplayName: Quasar
 		Tooltip: ""
 	}
+
+	StarlightStaff: {
+		// DisplayName: Starlight Staff
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
