@@ -15,6 +15,8 @@ using Terraria.ModLoader;
 using ITD.Content.Projectiles.Hostile;
 using ITD.Content.Items.Weapons.Melee;
 using Terraria.GameContent;
+using ITD.Content.Items.Weapons.Mage;
+using ITD.Content.Items.Weapons.Ranger;
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -27,6 +29,8 @@ namespace ITD.Content.NPCs.Bosses
         public static int[] oneFromOptionsDrops =
         {
             ModContent.ItemType<WormholeRipper>(),
+            ModContent.ItemType<StarlightStaff>(),
+            ModContent.ItemType<Quasar>(),
         };
         //private static List<CosmicJellyfish_Hand> hands = new List<CosmicJellyfish_Hand>();
         public float rotation = 0f;
@@ -92,7 +96,6 @@ namespace ITD.Content.NPCs.Bosses
 
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
             //notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<CosmicJellyfishMask>(), 7));
-            notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<VoidShard>(), 1, 7, 15));
 			notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<StarlitOre>(), 1, 15, 30));
             notExpertRule.OnSuccess(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, oneFromOptionsDrops));
         }

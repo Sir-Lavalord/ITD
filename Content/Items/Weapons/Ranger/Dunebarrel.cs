@@ -46,7 +46,6 @@ namespace ITD.Content.Items.Weapons.Ranger
 
             Item.useAmmo = AmmoID.Bullet;
         }
-
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
 
@@ -54,16 +53,5 @@ namespace ITD.Content.Items.Weapons.Ranger
 
             return false;
         }
-        public void TrackPosition(Player player)
-        {
-            Vector2 position = player.itemLocation;
-            DunebarrelRightGun.SetPosition(position);
-        }
-
-        public override void HoldItem(Player player)
-        {
-            TrackPosition(player);
-        }
-
     }
 }

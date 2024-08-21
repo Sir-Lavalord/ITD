@@ -466,8 +466,8 @@ Items: {
 	}
 
 	StarlightStaff: {
-		// DisplayName: Starlight Staff
-		// Tooltip: ""
+		DisplayName: Sternenlichtstab
+		Tooltip: ""
 	}
 }
 
@@ -530,7 +530,8 @@ Projectiles: {
 	WRipperRift.DisplayName: Wurmlochreißer
 	GhostlyBlade.DisplayName: Geisterhaftes Schwert
 	DunebarrelRightGun.DisplayName: Rechte Waffe vom Dünenrohr
-	// ElectrifiedArrow.DisplayName: Electrified Arrow
+	ElectrifiedArrow.DisplayName: Elektrifizierter Pfeil
+	StarlightProj.DisplayName: Sternenlicht Projektil
 }
 
 NPCs: {
