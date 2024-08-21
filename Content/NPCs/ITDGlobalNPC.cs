@@ -11,6 +11,15 @@ namespace ITD.Content.NPCs
 {
     public class ITDGlobalNPC : GlobalNPC
     {
+		public override bool InstancePerEntity => true;
+		
+		public bool zapped;
+		
+		public override void ResetEffects(NPC npc)
+        {
+			zapped = false;
+		}
+		
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
             if (npc.type == NPCID.EaterofSouls || npc.type == NPCID.BigEater || npc.type == NPCID.LittleEater)

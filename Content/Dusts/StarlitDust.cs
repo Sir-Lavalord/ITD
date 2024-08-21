@@ -15,7 +15,9 @@ namespace ITD.Content.Dusts
         }
 		
 		public override Color? GetAlpha(Dust dust, Color lightColor) {
-			return Color.White;
+			Color color = Color.White;
+			color.A = 100;
+			return color*0.8f;
 		}
 
         public override bool Update(Dust dust)

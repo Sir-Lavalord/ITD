@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
+using ITD.Content.NPCs;
 
 namespace ITD.Utils
 {
@@ -32,6 +33,55 @@ namespace ITD.Utils
                 dust.noGravity = true;
                 dust.fadeIn = 1f;
             }
+        }
+				
+		public static void Zap(Vector2 origin, Player player, int damage, int critChance, int chain)
+        {
+			NPC target = null;
+			float reach = 300;
+			
+			for (int i = 0; i < Main.maxNPCs; i++)
+			{
+				NPC npc = Main.npc[i];
+				if (npc.active && !npc.friendly && npc.CanBeChasedBy())
+				{
+					float distance = Vector2.Distance(npc.Center, origin);
+					if (distance < reach && !npc.GetGlobalNPC<ITDGlobalNPC>().zapped)
+					{
+						reach = distance;
+						target = npc;
+					}
+				}
+			}
+			if (target != null)
+			{
+				damage = Main.DamageVar(damage, player.luck);
+
+				bool crit = false;
+				if (Main.rand.Next(1, 101) <= critChance)
+				{
+					crit = true;
+				}
+
+				target.StrikeNPC(new NPC.HitInfo
+				{
+					Damage = damage,
+					Knockback = 1f,
+					HitDirection = target.Center.X < origin.X ? -1 : 1,
+					Crit = crit
+				});
+
+				target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
+
+				CreateLightningEffects(origin, target.Center);
+				if (chain > 0)
+				{
+					origin = target.Center;
+					damage = (int)(damage*0.5f);
+					chain--;
+					Zap(origin, player, damage, critChance, chain);
+				}
+			}
         }
     }
 }

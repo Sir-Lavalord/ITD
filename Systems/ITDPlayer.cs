@@ -134,14 +134,13 @@ namespace ITD.Players
 					NPC target = Main.npc[i];
 						if (target.CanBeChasedBy() && target.Distance(Player.Center) < 200)
 						{
-							int damage = (int)(200 * Player.GetDamage(DamageClass.Melee).Multiplicative);
+							int damage = Main.DamageVar(200, Player.luck);
 							target.StrikeNPC(new NPC.HitInfo
 							{
 								Damage = damage,
 								Knockback = 2f,
 								HitDirection = target.Center.X < Player.Center.X ? -1 : 1,
-								Crit = false,
-								DamageType = DamageClass.Melee
+								Crit = false
 							});
 							target.AddBuff(BuffID.Confused, 300, false);
 						}
@@ -155,7 +154,7 @@ namespace ITD.Players
 						Vector2 spawnPos = Player.Center + offset - new Vector2(4, 0);
 						Dust dust = Main.dust[Dust.NewDust(
 							spawnPos, 0, 0,
-							DustID.LifeDrain, 0, 0, 100, Color.White, 1.5f
+							DustID.LifeDrain, 0, 0, 100, default, 1.5f
 							)];
 						dust.noGravity = true;
 					}

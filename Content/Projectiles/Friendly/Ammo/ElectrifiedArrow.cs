@@ -4,6 +4,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
+using ITD.Content.NPCs;
+using ITD.Utils;
 
 namespace ITD.Content.Projectiles.Friendly.Ammo
 {
@@ -18,37 +20,11 @@ namespace ITD.Content.Projectiles.Friendly.Ammo
             return Color.White;
         }
 
-		public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            Projectile.ai[2]++;
-            if (Projectile.ai[2] > 1)
-            {
-                Projectile.Kill();
-            }
-
-            else
-            {
-				for (int i = 0; i < 5; i++)
-				{
-					int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.Electric, 0f, 0f, 0, default, 1f);
-					Main.dust[dust].noGravity = true;
-					Main.dust[dust].velocity *= 2f;
-				}
-				SoundEngine.PlaySound(SoundID.Item94, Projectile.position);
-
-                if (Math.Abs(Projectile.velocity.X - oldVelocity.X) > float.Epsilon)
-                {
-                    Projectile.velocity.X = -oldVelocity.X;
-                }
-
-                if (Math.Abs(Projectile.velocity.Y - oldVelocity.Y) > float.Epsilon)
-                {
-                    Projectile.velocity.Y = -oldVelocity.Y;
-                }
-            }
-
-            return false;
-        }
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+		{
+			target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
+			MiscHelpers.Zap(target.Center, Main.player[Projectile.owner], Projectile.damage, Projectile.CritChance, 0);
+		}
 		
         public override void AI()
         {

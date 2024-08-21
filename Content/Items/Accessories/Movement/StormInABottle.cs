@@ -181,12 +181,7 @@ namespace ITD.Content.Items.Accessories.Movement
             float progress = (float)tornadoTimer / TornadoDuration;
             Vector2 lightningStart = CalculateLightningStart(progress);
 
-            NPC targetNPC = FindNearestEnemy();
-            if (targetNPC != null)
-            {
-                MiscHelpers.CreateLightningEffects(lightningStart, targetNPC.Center);
-                DamageEnemy(targetNPC);
-            }
+            MiscHelpers.Zap(lightningStart, Player, 300, 0, 0);
         }
 
         private Vector2 CalculateLightningStart(float progress)
@@ -197,44 +192,6 @@ namespace ITD.Content.Items.Accessories.Movement
             float height = TornadoHeight * progress * heightProgress; // Changed to positive
 
             return tornadoBase + new Vector2((float)Math.Cos(angle) * radius, -height); // Negative height to go upwards
-        }
-
-
-
-        private void DamageEnemy(NPC targetNPC)
-        {
-            int damage = (int)(300 * Player.GetDamage(DamageClass.Magic).Multiplicative);
-
-            targetNPC.StrikeNPC(new NPC.HitInfo
-            {
-                Damage = damage,
-                Knockback = 2f,
-                HitDirection = targetNPC.Center.X < tornadoBase.X ? -1 : 1,
-                Crit = false,
-                DamageType = DamageClass.Magic
-            });
-        }
-
-        private NPC FindNearestEnemy()
-        {
-            NPC nearestNPC = null;
-            float nearestDistance = MaxLightningDistance;
-
-            for (int i = 0; i < Main.maxNPCs; i++)
-            {
-                NPC npc = Main.npc[i];
-                if (npc.active && !npc.friendly && npc.CanBeChasedBy())
-                {
-                    float distance = Vector2.Distance(npc.Center, tornadoBase);
-                    if (distance < nearestDistance)
-                    {
-                        nearestDistance = distance;
-                        nearestNPC = npc;
-                    }
-                }
-            }
-
-            return nearestNPC;
         }
     }
 }

@@ -3,7 +3,9 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ITD.Content.Projectiles.Friendly.Misc;
+using ITD.Systems;
 using System;
 
 namespace ITD.Content.Items.Weapons.Melee
@@ -12,6 +14,14 @@ namespace ITD.Content.Items.Weapons.Melee
 	{
 		public int attackType = 0;
 		
+		public override void SetStaticDefaults()
+        {
+            HeldItemLayer.RegisterData(Item.type, new DrawLayerData()
+            {
+                Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),
+                Color = () => new Color(255, 255, 255, 50) * 0.7f
+            });
+        }
 		public override void SetDefaults()
 		{
 			Item.damage = 28;
@@ -29,12 +39,7 @@ namespace ITD.Content.Items.Weapons.Melee
 			Item.shoot = ModContent.ProjectileType<GhostlyBlade>();
 			Item.shootSpeed = 20;
 		}
-		
-		public override Color? GetAlpha(Color lightColor)
-        {
-            return Color.White;
-        }
-		
+				
 		private void GetPointOnSwungItemPath(Player player, float spriteWidth, float spriteHeight, float normalizedPointOnPath, float itemScale, out Vector2 location, out Vector2 outwardDirection)
 		{
 			float scaleFactor = (float)Math.Sqrt((double)(spriteWidth * spriteWidth + spriteHeight * spriteHeight));
@@ -60,5 +65,13 @@ namespace ITD.Content.Items.Weapons.Melee
 			attackType = ++attackType % 2;
 			return attackType == 1;
 		}
+		
+		public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+
+            spriteBatch.Draw(texture, new Vector2(Item.position.X - Main.screenPosition.X + Item.width * 0.5f, Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height * 0.5f),
+                new Rectangle(0, 0, texture.Width, texture.Height), new Color(255, 255, 255, 50) * 0.7f, rotation, texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+        }
 	}
 }
