@@ -77,11 +77,23 @@ namespace ITD.Utils
 				if (chain > 0)
 				{
 					origin = target.Center;
-					damage = (int)(damage*0.5f);
+					damage = (int)(damage*0.75f);
 					chain--;
 					Zap(origin, player, damage, critChance, chain);
 				}
 			}
         }
+		
+		public static void GetPointOnSwungItemPath(Player player, float spriteWidth, float spriteHeight, float normalizedPointOnPath, float itemScale, out Vector2 location, out Vector2 outwardDirection)
+		{
+			float scaleFactor = (float)Math.Sqrt((double)(spriteWidth * spriteWidth + spriteHeight * spriteHeight));
+			float num = (float)(player.direction == 1).ToInt() * 1.57079637f;
+			if (player.gravDir == -1f)
+			{
+				num += 1.57079637f * (float)player.direction;
+			}
+			outwardDirection = player.itemRotation.ToRotationVector2().RotatedBy((double)(3.926991f + num), default(Vector2));
+			location = player.RotatedRelativePoint(player.itemLocation + outwardDirection * scaleFactor * normalizedPointOnPath * itemScale, false, true);
+		}
     }
 }

@@ -526,6 +526,7 @@ Projectiles: {
 	DunebarrelRightGun.DisplayName: Cañón de dunas
 	ElectrifiedArrow.DisplayName: Flecha electrificada
 	StarlightProj.DisplayName: Luz Astral
+	// RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
 }
 
 NPCs: {

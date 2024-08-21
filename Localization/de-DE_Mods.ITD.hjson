@@ -77,11 +77,6 @@ Items: {
 			'''
 	}
 
-	VoidShard: {
-		Tooltip: ""
-		DisplayName: Splitter der Leere
-	}
-
 	CosmicJellyfishTrophy: {
 		Tooltip: ""
 		DisplayName: Kosmische-Qualle-Trophäe
@@ -532,6 +527,7 @@ Projectiles: {
 	DunebarrelRightGun.DisplayName: Rechte Waffe vom Dünenrohr
 	ElectrifiedArrow.DisplayName: Elektrifizierter Pfeil
 	StarlightProj.DisplayName: Sternenlicht Projektil
+	// RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
 }
 
 NPCs: {

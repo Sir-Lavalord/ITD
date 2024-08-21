@@ -27,7 +27,7 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.useAnimation = 40;
 			Item.useStyle = 5;
             Item.knockBack = 7;
-            Item.value = 500;
+            Item.value = Item.sellPrice(gold: 1);
 			Item.rare = ItemRarityID.Blue;
             Item.autoReuse = false;
             Item.noMelee = true;

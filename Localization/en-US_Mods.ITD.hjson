@@ -21,7 +21,7 @@ Items: {
 
 	RhodiumBroadsword: {
 		DisplayName: Rhodium Broadsword
-		Tooltip: ""
+		Tooltip: Shoots a bolt of lightning
 	}
 
 	ElectrumSpear: {
@@ -526,6 +526,7 @@ Projectiles: {
 	DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
 	ElectrifiedArrow.DisplayName: Electrified Arrow
 	StarlightProj.DisplayName: Starlight Proj
+	RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
 }
 
 NPCs: {

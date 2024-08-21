@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Systems;
+using ITD.Utils;
 using System;
 
 namespace ITD.Content.Items.Weapons.Melee
@@ -39,24 +40,12 @@ namespace ITD.Content.Items.Weapons.Melee
 			Item.shoot = ModContent.ProjectileType<GhostlyBlade>();
 			Item.shootSpeed = 20;
 		}
-				
-		private void GetPointOnSwungItemPath(Player player, float spriteWidth, float spriteHeight, float normalizedPointOnPath, float itemScale, out Vector2 location, out Vector2 outwardDirection)
-		{
-			float scaleFactor = (float)Math.Sqrt((double)(spriteWidth * spriteWidth + spriteHeight * spriteHeight));
-			float num = (float)(player.direction == 1).ToInt() * 1.57079637f;
-			if (player.gravDir == -1f)
-			{
-				num += 1.57079637f * (float)player.direction;
-			}
-			outwardDirection = player.itemRotation.ToRotationVector2().RotatedBy((double)(3.926991f + num), default(Vector2));
-			location = player.RotatedRelativePoint(player.itemLocation + outwardDirection * scaleFactor * normalizedPointOnPath * itemScale, false, true);
-		}
 		
 		public override void MeleeEffects (Player player, Rectangle hitbox)
         {
 			Vector2 position;
 			Vector2 spinningpoint;
-			GetPointOnSwungItemPath(player, 60f, 60f, 0.2f + 0.8f * Main.rand.NextFloat(), player.GetAdjustedItemScale(Item), out position, out spinningpoint);
+			MiscHelpers.GetPointOnSwungItemPath(player, 60f, 60f, 0.2f + 0.8f * Main.rand.NextFloat(), player.GetAdjustedItemScale(Item), out position, out spinningpoint);
 			Vector2 value = spinningpoint.RotatedBy((double)(1.57079637f * (float)player.direction * player.gravDir), default(Vector2));
 			Dust.NewDustPerfect(position, 180, new Vector2?(value * 4f), 100, default(Color), 1.5f).noGravity = true;
         }
