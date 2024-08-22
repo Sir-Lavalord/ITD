@@ -463,6 +463,11 @@ Items: {
 		DisplayName: Bastón de Luz Astral
 		Tooltip: ""
 	}
+
+	BluegrassSeeds: {
+		// DisplayName: Bluegrass Seeds
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
