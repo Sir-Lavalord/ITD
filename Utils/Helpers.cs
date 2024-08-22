@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 
-namespace ITD
+namespace ITD.Utils
 {
     public static class Helpers
     {
@@ -37,8 +37,8 @@ namespace ITD
             origin /= 16f;
             direction = direction.SafeNormalize(Vector2.UnitY);
             Vector2 unitStepSize = new Vector2(
-                (float)Math.Sqrt(1 + (direction.Y / direction.X) * (direction.Y / direction.X)),
-                (float)Math.Sqrt(1 + (direction.X / direction.Y) * (direction.X / direction.Y))
+                (float)Math.Sqrt(1 + direction.Y / direction.X * (direction.Y / direction.X)),
+                (float)Math.Sqrt(1 + direction.X / direction.Y * (direction.X / direction.Y))
                 );
             Point tileCheck = origin.ToPoint();
             Vector2 rayLength1D;
@@ -47,22 +47,22 @@ namespace ITD
             if (direction.X < 0)
             {
                 step.X = -1;
-                rayLength1D.X = (origin.X - (float)(tileCheck.X)) * unitStepSize.X;
+                rayLength1D.X = (origin.X - tileCheck.X) * unitStepSize.X;
             }
             else
             {
                 step.X = 1;
-                rayLength1D.X = ((float)(tileCheck.X + 1) - origin.X) * unitStepSize.X;
+                rayLength1D.X = (tileCheck.X + 1 - origin.X) * unitStepSize.X;
             }
             if (direction.Y < 0)
             {
                 step.Y = -1;
-                rayLength1D.Y = (origin.Y - (float)(tileCheck.Y)) * unitStepSize.Y;
+                rayLength1D.Y = (origin.Y - tileCheck.Y) * unitStepSize.Y;
             }
             else
             {
                 step.Y = 1;
-                rayLength1D.Y = ((float)(tileCheck.Y + 1) - origin.Y) * unitStepSize.Y;
+                rayLength1D.Y = (tileCheck.Y + 1 - origin.Y) * unitStepSize.Y;
             }
             bool tileFound = false;
             while (!tileFound && curDistPixels < maxDistTiles)
@@ -150,9 +150,9 @@ namespace ITD
             {
                 return false;
             }
-            for (int m = rect.Left+1; m < rect.Right-1; m++)
+            for (int m = rect.Left + 1; m < rect.Right - 1; m++)
             {
-                if (!Framing.GetTileSafely(m, rect.Bottom+1).HasTile)
+                if (!Framing.GetTileSafely(m, rect.Bottom + 1).HasTile)
                 {
                     return false;
                 }
@@ -173,7 +173,7 @@ namespace ITD
         public static Point? GetTreeTopPosition(int i, int j)
         {
             Tile thisTile = Framing.GetTileSafely(i, j);
-            bool isStump = (thisTile.TileFrameX == 0 && thisTile.TileFrameY >= 198) || thisTile.TileFrameX == 132 || (thisTile.TileFrameX == 110 && thisTile.TileFrameY <= 44) || thisTile.TileFrameX == 154;
+            bool isStump = thisTile.TileFrameX == 0 && thisTile.TileFrameY >= 198 || thisTile.TileFrameX == 132 || thisTile.TileFrameX == 110 && thisTile.TileFrameY <= 44 || thisTile.TileFrameX == 154;
             if (isStump)
                 return null;
             if (!TileType(i, j - 1, TileID.Trees))
@@ -253,7 +253,7 @@ namespace ITD
             Vector2 offsets = -Main.screenPosition + zero + positionOffset;
             Vector2 drawCoordinates = location + offsets;
 
-            if ((tile.Slope == 0 && !tile.IsHalfBlock) || (Main.tileSolid[tile.TileType] && Main.tileSolidTop[tile.TileType])) //second one should be for platforms
+            if (tile.Slope == 0 && !tile.IsHalfBlock || Main.tileSolid[tile.TileType] && Main.tileSolidTop[tile.TileType]) //second one should be for platforms
                 Main.spriteBatch.Draw(texture, drawCoordinates, new Rectangle(frameX, frameY, width, height), drawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             else if (tile.IsHalfBlock)
                 Main.spriteBatch.Draw(texture, new Vector2(drawCoordinates.X, drawCoordinates.Y + 8), new Rectangle(frameX, frameY, width, 8), drawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
@@ -338,14 +338,14 @@ namespace ITD
             void FrameToHori(Tile tile, Point16 point)
             {
                 int r = Main.rand.Next(3);
-                tile.TileFrameX = (short)(point.X + (r * 18));
+                tile.TileFrameX = (short)(point.X + r * 18);
                 tile.TileFrameY = point.Y;
             }
             void FrameToVert(Tile tile, Point16 point)
             {
                 int r = Main.rand.Next(3);
                 tile.TileFrameX = point.X;
-                tile.TileFrameY = (short)(point.Y + (r * 18));
+                tile.TileFrameY = (short)(point.Y + r * 18);
             }
             Point16 noSurroundingHori = new(162, 54);
             Point16 allSurroundingHori = new(18, 18);
@@ -520,7 +520,7 @@ namespace ITD
             void FrameTo(Tile tile, Point16 point)
             {
                 int r = Main.rand.Next(3);
-                tile.TileFrameX = (short)(point.X + (r * 18));
+                tile.TileFrameX = (short)(point.X + r * 18);
                 tile.TileFrameY = (short)(point.Y + yOffset);
             }
             if (!upHas && !upHasOther && leftHas && rightHas && downHasOther)
@@ -567,14 +567,14 @@ namespace ITD
             void FrameToHori(Tile tile, Point16 point)
             {
                 int r = Main.rand.Next(3);
-                tile.TileFrameX = (short)(point.X + (r * 18));
+                tile.TileFrameX = (short)(point.X + r * 18);
                 tile.TileFrameY = (short)(point.Y + yOffset);
             }
             void FrameToVert(Tile tile, Point16 point)
             {
                 int r = Main.rand.Next(3);
                 tile.TileFrameX = point.X;
-                tile.TileFrameY = (short)(point.Y + (r * 18) + yOffset);
+                tile.TileFrameY = (short)(point.Y + r * 18 + yOffset);
             }
             Point16 allSurroundingIsOtherHori = new(108, 198);
             //
