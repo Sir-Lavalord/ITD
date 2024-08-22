@@ -111,22 +111,27 @@ namespace ITD
         {
             return newMin + (value - oldMin) * (newMax - newMin) / (oldMax - oldMin);
         }
-        public static void GrowBluegrass(int i, int j)
+        public static bool GrowBluegrass(int i, int j)
         {
             if (Main.tile[i, j].TileType == TileID.SnowBlock)
             {
                 if (!SolidTile(i - 1, j) || !SolidTile(i + 1, j) || !SolidTile(i, j - 1) || !SolidTile(i, j + 1) || !SolidTile(i - 1, j - 1) || !SolidTile(i + 1, j + 1) || !SolidTile(i + 1, j - 1) || !SolidTile(i - 1, j + 1))
                 {
-                    WorldGen.ReplaceTile(i, j, (ushort)ModContent.TileType<Bluegrass>(), default);
+                    Main.tile[i, j].TileType = (ushort)ModContent.TileType<Bluegrass>();
+                    WorldGen.SquareTileFrame(i, j);
+                    NetMessage.SendTileSquare(-1, i, j, 1);
+                    return true;
                 }
             }
+            return false;
         }
         public static void GrowTallBluegrass(int i, int j)
         {
             if (TileType(i, j + 1, ModContent.TileType<Bluegrass>()))
             {
                 //WorldGen.Place1x1(i, j, ModContent.TileType<BluegrassBlades>(), WorldGen._genRand.Next(2));
-                WorldGen.PlaceTile(i, j, ModContent.TileType<BluegrassBlades>(), true, false, -1, WorldGen._genRand.Next(3));
+                if (WorldGen.PlaceTile(i, j, ModContent.TileType<BluegrassBlades>(), true, false, -1, WorldGen._genRand.Next(3)))
+                    NetMessage.SendTileSquare(-1, i, j, 1);
             }
         }
         public static bool TileType(int i, int j, int t) => Framing.GetTileSafely(i, j).HasTile && Framing.GetTileSafely(i, j).TileType == t;
@@ -179,6 +184,18 @@ namespace ITD
             {
                 return GetTreeTopPosition(i, j - 1);
             }
+        }
+        public static void DefaultToSeeds(this Item item)
+        {
+            item.width = 22;
+            item.height = 18;
+            item.consumable = true;
+            item.maxStack = Item.CommonMaxStack;
+            item.useStyle = ItemUseStyleID.Swing;
+            item.holdStyle = ItemHoldStyleID.None;
+            item.useAnimation = item.useTime = 15;
+            item.useTurn = true;
+            item.autoReuse = true;
         }
         /// <summary>
         /// If any of the tiles right below this are standable, return true

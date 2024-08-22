@@ -464,6 +464,11 @@ Items: {
 		DisplayName: Sternenlichtstab
 		Tooltip: ""
 	}
+
+	BluegrassSeeds: {
+		// DisplayName: Bluegrass Seeds
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

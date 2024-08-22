@@ -12,6 +12,9 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 using ITD.Content.Items.Materials;
+using System.Collections.Generic;
+using ITD.Content.Items.Placeable;
+using System.Linq;
 
 namespace ITD.Content.Tiles.BlueshroomGroves
 {
@@ -19,10 +22,10 @@ namespace ITD.Content.Tiles.BlueshroomGroves
     // This example also shows how to spawn a projectile on death like Beehive and Boulder trap.
     public class BluegrassBlades : ModTile
     {
-        private Asset<Texture2D> glowmask;
+        private readonly Asset<Texture2D> glowmask = Request<Texture2D>("ITD/Content/Tiles/BlueshroomGroves/BluegrassBlades_Glow");
+        private static readonly int[] stylesThatDropBlueshrooms = [2];
         public override void SetStaticDefaults()
         {
-            glowmask = Request<Texture2D>("ITD/Content/Tiles/BlueshroomGroves/BluegrassBlades_Glow");
             Main.tileFrameImportant[Type] = true;
             Main.tileObsidianKill[Type] = true;
             Main.tileNoFail[Type] = true;
@@ -48,8 +51,6 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             TileID.Sets.IgnoredInHouseScore[Type] = true;
             TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
             TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Plant"]);
-            int[] stylesThatDropBlueshrooms = new int[] { 2 };
-            RegisterItemDrop(ItemType<Blueshroom>(), stylesThatDropBlueshrooms);
 
             HitSound = SoundID.Grass;
             DustType = DustType<BluegrassBladesDust>();
@@ -75,6 +76,19 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             Vector2 offsets = -Main.screenPosition + zero;
             spriteBatch.Draw(glowmask.Value, new Vector2(i * 16, j * 16) + offsets, new Rectangle(thisTile.TileFrameX, thisTile.TileFrameY, 16, 16), Color.White);
             */
+        }
+        public override IEnumerable<Item> GetItemDrops(int i, int j)
+        {
+            Tile tile = Framing.GetTileSafely(i, j);
+            if (Main.rand.NextBool(8))
+            {
+                yield return new Item(ItemType<BluegrassSeeds>());
+            }
+            int style = tile.TileFrameX / 18;
+            if (stylesThatDropBlueshrooms.Contains(style))
+            {
+                yield return new Item(ItemType<Blueshroom>());
+            }
         }
     }
 }
