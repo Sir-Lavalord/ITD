@@ -19,7 +19,7 @@ namespace ITD.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            Item.damage = 18;
+            Item.damage = 19;
 			Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;

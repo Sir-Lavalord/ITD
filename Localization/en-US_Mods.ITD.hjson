@@ -527,6 +527,8 @@ Projectiles: {
 	ElectrifiedArrow.DisplayName: Electrified Arrow
 	StarlightProj.DisplayName: Starlight Proj
 	RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
+	ElectrumSpearBeam.DisplayName: Electrum Spear Beam
+	StarlightStaffProj.DisplayName: Starlight Staff Proj
 }
 
 NPCs: {

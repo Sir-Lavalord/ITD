@@ -13,12 +13,12 @@ namespace ITD.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            Item.damage = 12;
+            Item.damage = 14;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 16;
             Item.height = 30;
-            Item.useTime = 40;
-            Item.useAnimation = 40;
+            Item.useTime = 30;
+            Item.useAnimation = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 2;

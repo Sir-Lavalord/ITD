@@ -54,7 +54,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 
 			if (Projectile.timeLeft == 20)
 			{
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity*4f, 732, (int)(Projectile.damage * 1.25), Projectile.knockBack * 0.5f, Projectile.owner);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity*4f, ModContent.ProjectileType<ElectrumSpearBeam>(), (int)(Projectile.damage * 1.25), Projectile.knockBack * 0.5f, Projectile.owner);
 				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 			}
 			
