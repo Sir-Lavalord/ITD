@@ -26,7 +26,6 @@ namespace ITD.Content.Projectiles.Friendly
         }
         Vector2 vSpawnposdefault;
         Vector2 vSpawnveldefault;
-
         public override void OnSpawn(IEntitySource source)
         {
             vSpawnposdefault = Main.MouseWorld;
@@ -70,14 +69,14 @@ namespace ITD.Content.Projectiles.Friendly
                 if (Main.myPlayer == Projectile.owner)
                 {
                     SoundEngine.PlaySound(SoundID.Item89, Projectile.Center);
-                    SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
+                    SoundEngine.PlaySound(SoundID.Thunder, Projectile.Center);
 
                     for (int i = 0; i < 10; i++)
                     {
-                        Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Electric, vSpawnveldefault.X / 3, vSpawnveldefault.Y / 3, 60, default, Main.rand.NextFloat(1f, 1.7f));
+                        Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Electric, -vSpawnveldefault.X / 3, -vSpawnveldefault.Y / 3, 60, default, Main.rand.NextFloat(1f, 1.7f));
                         dust.noGravity = true;
                         dust.velocity *= 4f;
-                        Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Electric, vSpawnveldefault.X / 3, vSpawnveldefault.Y / 3, 60, default, Main.rand.NextFloat(1f, 1.7f));
+                        Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Electric, -vSpawnveldefault.X / 3, -vSpawnveldefault.Y / 3, 60, default, Main.rand.NextFloat(1f, 1.7f));
 
                     }
 
@@ -100,16 +99,7 @@ namespace ITD.Content.Projectiles.Friendly
 
                 }
             }
-            Projectile.velocity *= 0;
-            if (vSpawnposdefault.Y > Projectile.Center.Y)
-            {
-                return true;
-            }
-            else
-            {
                 return false;
-            }
-
         }
 
         public override bool? Colliding(Rectangle myRect, Rectangle targetRect)
@@ -141,10 +131,7 @@ namespace ITD.Content.Projectiles.Friendly
         {
             width = 15;
             height = 15;
-
-            if (Projectile.ai[1] == 1) ; // uhh whats this do
-            Tile tile = Framing.GetTileSafely(Projectile.Center); // this tile ref isn't used anywhere
-            fallThrough = vSpawnposdefault.Y >= Projectile.Bottom.Y - 10 && !bStopfalling;
+            fallThrough = vSpawnposdefault.Y >= Projectile.Bottom.Y - 20 && !bStopfalling;
             return true;
         }
         public override bool PreDraw(ref Color lightColor)
@@ -190,7 +177,7 @@ namespace ITD.Content.Projectiles.Friendly
         int iStartCol;
         public override void AI()
         {
-            if (iStartCol++ >= 8)
+            if (iStartCol++ >= 10)
             {
                 Projectile.tileCollide = true;
             }
@@ -227,13 +214,9 @@ namespace ITD.Content.Projectiles.Friendly
                             flag = false;
                         }
                     }
-                    if (flag)
-                    {
-                        Projectile.Kill();
-                        return;
-                    }
                 }
-                if (Main.rand.NextBool(Projectile.extraUpdates))
+
+                    if (Main.rand.NextBool(Projectile.extraUpdates))
                 {
                     for (int j = 0; j < 2; j++)
                     {
