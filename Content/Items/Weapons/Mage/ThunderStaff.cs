@@ -43,7 +43,7 @@ namespace ITD.Content.Items.Weapons.Mage
 
             float ai = Main.rand.Next(200,400);
 
-                Projectile proj = Projectile.NewProjectileDirect(Item.GetSource_FromThis(),vSpawnpos,new Vector2(0,-20),
+                Projectile proj = Projectile.NewProjectileDirect(Item.GetSource_FromThis(),vSpawnpos,new Vector2(0,20),
                   ModContent.ProjectileType<LightningStaffStrike>(), Item.damage, Item.knockBack, player.whoAmI,
                   rotationVector2.ToRotation(), ai);
             proj.tileCollide = false;
