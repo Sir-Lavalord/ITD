@@ -7,6 +7,7 @@ using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
 using ITD.Content.NPCs;
+using static Terraria.Mount;
 
 namespace ITD.Utils
 {

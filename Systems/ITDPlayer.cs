@@ -4,7 +4,7 @@ using ITD.Content.Dusts;
 using ITD.Physics;
 using System;
 using System.Collections.Generic;
-using static ITD.ITD;
+using ITD.Systems;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;

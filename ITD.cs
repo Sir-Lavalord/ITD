@@ -1,25 +1,11 @@
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
-using ITD.Content.NPCs.Bosses;
-using ITD.Physics;
-using Terraria.ID;
-using System;
-using Terraria.ModLoader.IO;
-using System.IO;
-using Terraria.Audio;
-using Terraria.Localization;
-using ITD.Content.Tiles.BlueshroomGroves;
-using ITD.Content.Tiles.DeepDesert;
-using static Terraria.Mount;
 
 namespace ITD
 {
     public class ITD : Mod
     {
         public static ITD Instance;
-        public static MountData[] defaultMountData;
         public ITD() => Instance = this;
         internal Mod wikithis = null;
         internal Mod bossChecklist = null;
@@ -40,7 +26,6 @@ namespace ITD
             {
                 wikithis?.Call("AddModURL", this, "https://itdmod.fandom.com/wiki/{}");
             }
-            defaultMountData = mounts;
         }
         public override void Unload()
         {
@@ -48,61 +33,6 @@ namespace ITD
             bossChecklist = null;
             musicDisplay = null;
             Instance = null;
-        }
-        public class ITDSystem : ModSystem
-        {
-            public static bool hasMeteorFallen;
-            public int bluegrassCount;
-            public int deepdesertTileCount;
-            public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
-            {
-                bluegrassCount = tileCounts[ModContent.TileType<Bluegrass>()];
-                deepdesertTileCount = tileCounts[ModContent.TileType<DioriteTile>()]+tileCounts[ModContent.TileType<PegmatiteTile>()];
-            }
-
-            public override void ClearWorld()
-            {
-                hasMeteorFallen = false;
-            }
-            public override void SaveWorldData(TagCompound tag)
-            {
-                if (hasMeteorFallen)
-                {
-                    tag["hasMeteorFallen"] = true;
-                }
-            }
-
-            public override void LoadWorldData(TagCompound tag)
-            {
-                hasMeteorFallen = tag.ContainsKey("hasMeteorFallen");
-            }
-
-            public override void NetSend(BinaryWriter writer)
-            {
-                var flags = new BitsByte();
-                flags[0] = hasMeteorFallen;
-                writer.Write(flags);
-            }
-
-            public override void NetReceive(BinaryReader reader)
-            {
-                BitsByte flags = reader.ReadByte();
-                hasMeteorFallen = flags[0];
-            }
-
-            public override void AddRecipeGroups()
-            {
-                RecipeGroup group = new(() => Language.GetTextValue("LegacyMisc.37") + " Iron Ore",
-                [
-                ItemID.IronOre,
-                ItemID.LeadOre
-                ]);
-                RecipeGroup.RegisterGroup("IronOre", group);
-            }
-            public override void PostUpdateDusts()
-            {
-                BlueshroomTree.opac = ((float)Math.Sin(Main.GameUpdateCount/40f) + 1f) / 2f;
-            }
         }
     }
 }
