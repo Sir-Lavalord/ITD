@@ -11,6 +11,7 @@ using Terraria.Localization;
 using System.Linq;
 using System.Collections.Generic;
 using ITD.Content.Items.Other;
+using ITD.Content.Items.Weapons.Melee;
 
 namespace ITD.Systems
 {
@@ -58,18 +59,9 @@ namespace ITD.Systems
             BitsByte flags = reader.ReadByte();
             hasMeteorFallen = flags[0];
         }
-
-        public override void AddRecipeGroups()
-        {
-            RecipeGroup group = new(() => Language.GetTextValue("LegacyMisc.37") + " Iron Ore",
-            [
-            ItemID.IronOre,
-                ItemID.LeadOre
-            ]);
-            RecipeGroup.RegisterGroup("IronOre", group);
-        }
         public override void PostUpdateDusts()
         {
+            //Main.NewText(Main.hardMode);
             BlueshroomTree.opac = ((float)Math.Sin(Main.GameUpdateCount / 40f) + 1f) / 2f;
         }
     }
