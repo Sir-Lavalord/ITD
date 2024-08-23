@@ -60,7 +60,7 @@ namespace ITD.Content.Items.Weapons.Mage
 
             float ai = Main.rand.Next(200,400);
 
-                int projID = Projectile.NewProjectile(Item.GetSource_FromThis(),vSpawnpos,new Vector2(0,-20),
+                int projID = Projectile.NewProjectile(Item.GetSource_FromThis(),vSpawnpos,new Vector2(0,20),
                   ModContent.ProjectileType<Projectiles.Friendly.LightningStaffStrike2>(), Item.damage, Item.knockBack, player.whoAmI,
                   rotationVector2.ToRotation(), ai);
             Main.projectile[projID].tileCollide = false;

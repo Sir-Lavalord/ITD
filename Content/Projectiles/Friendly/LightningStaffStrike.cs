@@ -95,7 +95,7 @@ namespace ITD.Content.Projectiles.Friendly
                 if (Main.myPlayer == Projectile.owner)
                 {
                     SoundEngine.PlaySound(SoundID.Item89, Projectile.Center);
-                    SoundEngine.PlaySound(SoundID.Thunder, Projectile.Center);
+                    SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
                     for (int i = 0; i < 10; i++)
                     {
