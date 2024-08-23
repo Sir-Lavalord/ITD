@@ -7,19 +7,12 @@ using ITD.Systems;
 
 namespace ITD.Content.Items.Other
 {
-    public class SimpleMountData
+    public class SimpleMountData(float run, float dash, float jump, float swim)
     {
-        public float runSpeed { get; set; }
-        public float dashSpeed {  get; set; }
-        public float jumpSpeed {  get; set; }
-        public float swimSpeed {  get; set; }
-        public SimpleMountData(float run, float dash, float jump, float swim)
-        {
-            runSpeed = run;
-            dashSpeed = dash;
-            jumpSpeed = jump;
-            swimSpeed = swim;
-        }
+        public float runSpeed { get; set; } = run;
+        public float dashSpeed { get; set; } = dash;
+        public float jumpSpeed { get; set; } = jump;
+        public float swimSpeed { get; set; } = swim;
     }
     public static class MountHelpers
     {
@@ -58,7 +51,7 @@ namespace ITD.Content.Items.Other
     public class DriversIncensePlayer : ModPlayer
     {
         public bool DriversIncenseConsumed = false;
-        private void ResetMountSpeeds()
+        private static void ResetMountSpeeds()
         {
             for (int i = 0; i < mounts.Length - 1; i++)
             {
@@ -69,7 +62,7 @@ namespace ITD.Content.Items.Other
                 mount.jumpSpeed = ITDSystem.defaultMountData[i].jumpSpeed;
             }
         }
-        private void ApplyDriversIncenseBonus()
+        private static void ApplyDriversIncenseBonus()
         {
             for (int i = 0; i < mounts.Length - 1; i++)
             {

@@ -465,8 +465,8 @@ Items: {
 	}
 
 	BluegrassSeeds: {
-		// DisplayName: Bluegrass Seeds
-		// Tooltip: ""
+		DisplayName: Semillas de césped azul
+		Tooltip: ""
 	}
 }
 
@@ -531,12 +531,11 @@ Projectiles: {
 	DunebarrelRightGun.DisplayName: Cañón de dunas
 	ElectrifiedArrow.DisplayName: Flecha electrificada
 	StarlightProj.DisplayName: Luz Astral
-	// RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
-	// ElectrumSpearBeam.DisplayName: Electrum Spear Beam
-	// StarlightStaffProj.DisplayName: Starlight Staff Proj
-	// LightningStaffStrike2.DisplayName: Lightning Staff Strike2
-	// BlankExplosion.DisplayName: Blank Explosion
-	// DunebarrelRotate.DisplayName: Dunebarrel Rotate
+	RhodiumSwordBeam.DisplayName: Espada de rodio
+	ElectrumSpearBeam.DisplayName: Lanza de electro
+	StarlightStaffProj.DisplayName: Bastón de Luz Astral
+	BlankExplosion.DisplayName: Explosión
+	DunebarrelRotate.DisplayName: Cañón de dunas
 }
 
 NPCs: {

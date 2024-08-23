@@ -17,32 +17,7 @@ using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Projectiles.Friendly
 {
-    //Revertable because i'm a nice guy?!
     public class LightningStaffStrike : ModProjectile
-    {
-        public override string Texture => "ITD/Content/Projectiles/BlankTexture";
-        public override void SetDefaults()
-        {
-            Projectile.height = 64; Projectile.width = 64;
-            Projectile.tileCollide = false;
-            Projectile.timeLeft = 10;
-            Projectile.friendly = true;
-            Projectile.hostile = false;
-            Projectile.penetrate = -1;
-        }
-        public override void AI()
-        {
-            if (Main.rand.NextBool())
-            {
-                for (int i = 0; i < 8; i++)
-                {
-                    Dust d = Dust.NewDustDirect(Projectile.Center, 1, 1, DustID.Electric, (float)Math.Cos(MathHelper.PiOver4 * i) * 6f, (float)Math.Sin(MathHelper.PiOver4 * i) * 6f);
-                    d.noGravity = true;
-                }
-            }
-        }
-    }
-    public class LightningStaffStrike2 : ModProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -99,10 +74,10 @@ namespace ITD.Content.Projectiles.Friendly
 
                     for (int i = 0; i < 10; i++)
                     {
-                        Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, 226, vSpawnveldefault.X / 3, vSpawnveldefault.Y / 3, 60, default, Main.rand.NextFloat(1f, 1.7f));
+                        Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Electric, vSpawnveldefault.X / 3, vSpawnveldefault.Y / 3, 60, default, Main.rand.NextFloat(1f, 1.7f));
                         dust.noGravity = true;
                         dust.velocity *= 4f;
-                        Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, 226, vSpawnveldefault.X / 3, vSpawnveldefault.Y / 3, 60, default, Main.rand.NextFloat(1f, 1.7f));
+                        Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Electric, vSpawnveldefault.X / 3, vSpawnveldefault.Y / 3, 60, default, Main.rand.NextFloat(1f, 1.7f));
 
                     }
 
@@ -115,7 +90,7 @@ namespace ITD.Content.Projectiles.Friendly
                         Dust dust = Dust.NewDustDirect(Main.projectile[projID].position, Main.projectile[projID].width, Main.projectile[projID].height, DustID.SilverCoin, 0, 0, 120, default, Main.rand.NextFloat(1f, 1.7f));
                         dust.noGravity = true;
                         dust.velocity *= 4f;
-                        Dust.NewDustDirect(Main.projectile[projID].position, Main.projectile[projID].width, Main.projectile[projID].height, 226, 0, 0, 120, default, Main.rand.NextFloat(1f, 1.2f));
+                        Dust.NewDustDirect(Main.projectile[projID].position, Main.projectile[projID].width, Main.projectile[projID].height, DustID.Electric, 0, 0, 120, default, Main.rand.NextFloat(1f, 1.2f));
 
                     }
                     for (int i = 0; i < 6; i++)
@@ -167,10 +142,10 @@ namespace ITD.Content.Projectiles.Friendly
             width = 15;
             height = 15;
 
-            if (Projectile.ai[1] == 1) ;
-            Tile tile = Framing.GetTileSafely(Projectile.Center);
+            if (Projectile.ai[1] == 1) ; // uhh whats this do
+            Tile tile = Framing.GetTileSafely(Projectile.Center); // this tile ref isn't used anywhere
             fallThrough = vSpawnposdefault.Y >= Projectile.Bottom.Y - 10 && !bStopfalling;
-            return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+            return true;
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -258,21 +233,21 @@ namespace ITD.Content.Projectiles.Friendly
                         return;
                     }
                 }
-                if (Main.rand.Next(Projectile.extraUpdates) == 0)
+                if (Main.rand.NextBool(Projectile.extraUpdates))
                 {
                     for (int j = 0; j < 2; j++)
                     {
-                        float num = Projectile.rotation + ((Main.rand.Next(2) == 1) ? (-1f) : 1f) * ((float)Math.PI / 3f);
+                        float num = Projectile.rotation + ((Main.rand.NextBool()) ? (-1f) : 1f) * ((float)Math.PI / 3f);
                         float num2 = (float)Main.rand.NextDouble() * 0.8f + 1f;
                         Vector2 vector = new Vector2((float)Math.Cos(num) * num2, (float)Math.Sin(num) * num2);
-                        int num3 = Dust.NewDust(Projectile.Center, 0, 0, 226, vector.X, vector.Y);
+                        int num3 = Dust.NewDust(Projectile.Center, 0, 0, DustID.Electric, vector.X, vector.Y);
                         Main.dust[num3].noGravity = true;
                         Main.dust[num3].scale = 1.2f;
                     }
-                    if (Main.rand.Next(5) == 0)
+                    if (Main.rand.NextBool(5))
                     {
                         Vector2 vector2 = Projectile.velocity.RotatedBy(1.5707963705062866) * ((float)Main.rand.NextDouble() - 0.5f) * Projectile.width;
-                        int num4 = Dust.NewDust(Projectile.Center + vector2 - Vector2.One * 4f, 8, 8, 31, 0f, 0f, 100, default(Color), 1.5f);
+                        int num4 = Dust.NewDust(Projectile.Center + vector2 - Vector2.One * 4f, 8, 8, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
                         Dust dust = Main.dust[num4];
                         dust.velocity *= 0.5f;
                         Main.dust[num4].velocity.Y = 0f - Math.Abs(Main.dust[num4].velocity.Y);
@@ -342,12 +317,12 @@ namespace ITD.Content.Projectiles.Friendly
         }
         public override void OnKill(int timeLeft)
         {
-            if (Main.rand.Next(50) == 0)
+            if (Main.rand.NextBool(50))
             {
-                float num = Projectile.rotation + ((Main.rand.Next(2) == 1) ? (-1f) : 1f) * ((float)Math.PI / 2f);
+                float num = Projectile.rotation + ((Main.rand.NextBool()) ? (-1f) : 1f) * ((float)Math.PI / 2f);
                 float num2 = (float)Main.rand.NextDouble() * 0.8f + 1f;
                 Vector2 vector = new Vector2((float)Math.Cos(num) * num2, (float)Math.Sin(num) * num2);
-                int num3 = Dust.NewDust(Projectile.Center, 0, 0, 226, vector.X, vector.Y);
+                int num3 = Dust.NewDust(Projectile.Center, 0, 0, DustID.Electric, vector.X, vector.Y);
                 Main.dust[num3].noGravity = true;
                 Main.dust[num3].scale = 1.2f;
             }
