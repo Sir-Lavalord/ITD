@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
+using Terraria.ModLoader;
+using Microsoft.Build.Evaluation;
+using Terraria.DataStructures;
+using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace ITD.Utils
 {

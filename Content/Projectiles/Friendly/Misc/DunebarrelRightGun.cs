@@ -1,7 +1,9 @@
-﻿using ITD.Content.Projectiles;
+﻿using ITD.Content.Items.Weapons.Ranger;
+using ITD.Content.Projectiles;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using Terraria;
 using Terraria.Audio;
@@ -30,10 +32,9 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
-            Projectile.DamageType = DamageClass.Melee;
+            Projectile.DamageType = DamageClass.Ranged;
             Projectile.ownerHitCheck = true;
             Projectile.aiStyle = -1; // Replace with 20 if you do not want custom code
-            Projectile.hide = true; // Hides the projectile, so it will draw in the player's hand when we set the player's heldProj to this one.
             Projectile.scale = 0.65f;
             Projectile.damage = 0;
 
@@ -109,33 +110,35 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 
                     var source = player.GetSource_ItemUse_WithPotentialAmmo(item, usedAmmoItemId);
                     Vector2 vec = Main.MouseWorld;
-                    Vector2 vector = vec - Projectile.Center;
-                    float mag = vector.Length();
-                    if (mag > speed)
-                    {
-                        mag = speed / mag;
-                        vector *= mag;
-                    }
+                    Vector2 vector = Projectile.DirectionTo(Main.MouseWorld) * 10f;
 
                     Vector2 perturbedSpeed = vector.RotatedByRandom(MathHelper.ToRadians(2));
                     vector = perturbedSpeed;
 
-                    Vector2 finalvector = vector * 0.12f;  
+                    Vector2 finalvector = vector;
 
+                    var vPlayer = player.GetModPlayer<DunebarrelStackPlayer>();
                     if (GunToShoot == 1)
                     {
-                        Projectile.NewProjectile(source, Projectile.Center, finalvector, projToShoot, damage, knockBack, Projectile.owner);
+                        vPlayer.iCurrentStack--;
+
+                        Projectile.NewProjectile(source, Projectile.Center, finalvector, projToShoot, (int)(damage * vPlayer.fDamageIncrease), knockBack, Projectile.owner);
                         GunToShoot = 2;
                     }
                     else
                     {
-                        Projectile.NewProjectile(source, Gun1Position, finalvector, projToShoot, damage, knockBack, Projectile.owner);
+                        vPlayer.iCurrentStack--;
+                        Projectile.NewProjectile(source, Gun1Position, finalvector, projToShoot, (int)(damage * vPlayer.fDamageIncrease), knockBack, Projectile.owner);
                         GunToShoot = 1;
                     }
                 }
             }
         }
-
+        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+        {
+            overPlayers.Remove(index);
+            behindProjectiles.Add(index);
+        }
         public static void SetPosition(Vector2 position)
         {
             Gun1Position = position;

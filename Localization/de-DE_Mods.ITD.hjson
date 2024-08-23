@@ -531,6 +531,10 @@ Projectiles: {
 	GhostlyBlade.DisplayName: Geisterhaftes Schwert
 	DunebarrelRightGun.DisplayName: Rechte Waffe vom Dünenrohr
 	// ElectrifiedArrow.DisplayName: Electrified Arrow
+	// StarlightProj.DisplayName: Starlight Proj
+	// LightningStaffStrike2.DisplayName: Lightning Staff Strike2
+	// BlankExplosion.DisplayName: Blank Explosion
+	// DunebarrelRotate.DisplayName: Dunebarrel Rotate
 }
 
 NPCs: {

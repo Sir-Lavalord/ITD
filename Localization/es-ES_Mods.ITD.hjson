@@ -529,6 +529,11 @@ Projectiles: {
 	WRipperRift.DisplayName: Desgarrador del Espaciotiempo
 	// GhostlyBlade.DisplayName: Ghostly Blade
 	// DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
+	// ElectrifiedArrow.DisplayName: Electrified Arrow
+	// StarlightProj.DisplayName: Starlight Proj
+	// LightningStaffStrike2.DisplayName: Lightning Staff Strike2
+	// BlankExplosion.DisplayName: Blank Explosion
+	// DunebarrelRotate.DisplayName: Dunebarrel Rotate
 }
 
 NPCs: {

@@ -13,6 +13,8 @@ namespace ITD.Content.Projectiles.Friendly.Misc
     {
         public override void SetStaticDefaults()
         {
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
             Main.projFrames[Projectile.type] = 5;
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
