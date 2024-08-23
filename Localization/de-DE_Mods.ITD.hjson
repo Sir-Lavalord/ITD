@@ -535,6 +535,8 @@ Projectiles: {
 	// RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
 	// ElectrumSpearBeam.DisplayName: Electrum Spear Beam
 	// StarlightStaffProj.DisplayName: Starlight Staff Proj
+	// BlankExplosion.DisplayName: Blank Explosion
+	// DunebarrelRotate.DisplayName: Dunebarrel Rotate
 }
 
 NPCs: {
