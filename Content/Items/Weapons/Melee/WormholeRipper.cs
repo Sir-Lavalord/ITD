@@ -48,12 +48,12 @@ namespace ITD.Content.Items.Weapons.Melee
 				player.GetITDPlayer().itemVar[0] = 0;
                 Item.useStyle = ItemUseStyleID.Shoot;
                 Item.shoot = ModContent.ProjectileType<WRipperRift>();
-				
+				player.armorEffectDrawShadow = true;
 				player.jump = 0;
 				player.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 14f;
                 SoundStyle wRipperRip = new SoundStyle("ITD/Content/Sounds/WRipperRip");
                 SoundEngine.PlaySound(wRipperRip, player.Center);
-                for (int index1 = 0; index1 < 15; ++index1)
+                for (int index1 = 0; index1 < 12; ++index1)
 				{
 					int index2 = Dust.NewDust(player.position, player.width, player.height, DustID.TreasureSparkle, 0.0f, 0.0f, 100, new Color(), 1f);
 					Main.dust[index2].velocity = player.velocity*Main.rand.Next(10)*0.1f;
