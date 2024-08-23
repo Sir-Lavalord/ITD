@@ -78,11 +78,6 @@ Items: {
 			'''
 	}
 
-	VoidShard: {
-		Tooltip: ""
-		DisplayName: Fragmento del vacío
-	}
-
 	CosmicJellyfishTrophy: {
 		Tooltip: ""
 		DisplayName: Trofeo de Medusa Cósmica
@@ -410,62 +405,67 @@ Items: {
 	}
 
 	BadassSunglasses: {
-		// DisplayName: Bad@$$ Sunglasses
-		/* Tooltip:
+		DisplayName: Lentes de sol bad@$$
+		Tooltip:
 			'''
-			Rapidly builds up critical strike chance
-			Landing a non-lethal hit resets the critical strike chance bonus
-			''' */
+			Rapidamente incrementa la probabilidad de ataque crítico
+			Al realizar un golpe no-letal, este bonus se reinicia
+			'''
 
 		KillMessages: {
-			// 0: Nice!
-			// 1: Sick!
-			// 2: Gnarly!
+			0: ¡Bien!
+			1: ¡Cool!
+			2: ¡Radical!
 		}
 	}
 
 	BlueCatacombDoor: {
-		// DisplayName: Blue Catacomb Door
-		// Tooltip: ""
+		DisplayName: Puerta de catacumba azul
+		Tooltip: ""
 	}
 
 	GreenCatacombDoor: {
-		// DisplayName: Green Catacomb Door
-		// Tooltip: ""
+		DisplayName: Puerta de catacumba verde
+		Tooltip: ""
 	}
 
 	PinkCatacombDoor: {
-		// DisplayName: Pink Catacomb Door
-		// Tooltip: ""
+		DisplayName: Puerta de catacumba rosa
+		Tooltip: ""
 	}
 
 	Ectoblade: {
-		// DisplayName: Ectoblade
-		// Tooltip: ""
+		DisplayName: Ectoespada
+		Tooltip: ""
 	}
 
 	Houndboom: {
-		// DisplayName: Houndboom
-		// Tooltip: ""
+		DisplayName: Explocazadora
+		Tooltip: ""
 	}
 
 	ImpulseShackles: {
-		// DisplayName: Impulse Shackles
-		// Tooltip: Empowers your first jump
+		DisplayName: Esposas de impulso
+		Tooltip: Apodera tu primer salto
 	}
 
 	Dunebarrel: {
-		// DisplayName: Dunebarrel
-		// Tooltip: ""
+		DisplayName: Dunebarrel
+		Tooltip: Cañón de dunas
 	}
 
 	Quasar: {
-		// DisplayName: Quasar
-		// Tooltip: ""
+		DisplayName: Cuásar
+		Tooltip: ""
 	}
 
 	StarlightStaff: {
-		// DisplayName: Starlight Staff
+		DisplayName: Bastón de Luz Astral
+		Tooltip: ""
+	}
+
+	BluegrassSeeds: {
+		// DisplayName: Bluegrass Seeds
 		// Tooltip: ""
 	}
 }
@@ -483,12 +483,12 @@ Projectiles: {
 
 	SnaptrapProjectile: {
 		DisplayName: Enganchadora
-		OneTimeLatchMessage: +{0}% de porcentaje de ataque crítico!
+		OneTimeLatchMessage: ¡+{0}% de porcentaje de ataque crítico!
 	}
 
 	VocalZeroProjectile: {
 		DisplayName: Vocal Zero
-		OneTimeLatchMessage: +{0}% de daño!
+		OneTimeLatchMessage: ¡+{0}% de daño!
 	}
 
 	CosmicJamPet.DisplayName: Medusilla
@@ -520,20 +520,20 @@ Projectiles: {
 	LightningStaffStrike.DisplayName: Relámpago
 
 	VenusSnaptrapProjectile: {
-		OneTimeLatchMessage: Envenenado!
+		OneTimeLatchMessage: ¡Envenenado!
 		DisplayName: Venus Enganchamoscas
 	}
 
 	WingedSnowpoffPet.DisplayName: Montonieve Alado
 	WRipperSlash.DisplayName: Desgarrador del Espaciotiempo
 	WRipperRift.DisplayName: Desgarrador del Espaciotiempo
-	// GhostlyBlade.DisplayName: Ghostly Blade
-	// DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
-	// ElectrifiedArrow.DisplayName: Electrified Arrow
-	// StarlightProj.DisplayName: Starlight Proj
-	// LightningStaffStrike2.DisplayName: Lightning Staff Strike2
-	// BlankExplosion.DisplayName: Blank Explosion
-	// DunebarrelRotate.DisplayName: Dunebarrel Rotate
+	GhostlyBlade.DisplayName: Cuchilla fantasmagórica
+	DunebarrelRightGun.DisplayName: Cañón de dunas
+	ElectrifiedArrow.DisplayName: Flecha electrificada
+	StarlightProj.DisplayName: Luz Astral
+	// RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
+	// ElectrumSpearBeam.DisplayName: Electrum Spear Beam
+	// StarlightStaffProj.DisplayName: Starlight Staff Proj
 }
 
 NPCs: {
@@ -556,9 +556,9 @@ NPCs: {
 		DisplayName: Madre Cigadiana
 	}
 
-	// FlamingSkull.DisplayName: Flaming Skull
-	// AmbushBones.DisplayName: Ambush Bones
-	// ShroomishSlime.DisplayName: Shroomish Slime
+	FlamingSkull.DisplayName: Calavera en llamas
+	AmbushBones.DisplayName: Huesitos acechantes
+	ShroomishSlime.DisplayName: Slime champizúl
 }
 
 Buffs: {

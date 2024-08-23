@@ -77,11 +77,6 @@ Items: {
 			'''
 	}
 
-	VoidShard: {
-		Tooltip: ""
-		DisplayName: Splitter der Leere
-	}
-
 	CosmicJellyfishTrophy: {
 		Tooltip: ""
 		DisplayName: Kosmische-Qualle-Trophäe
@@ -466,7 +461,12 @@ Items: {
 	}
 
 	StarlightStaff: {
-		// DisplayName: Starlight Staff
+		DisplayName: Sternenlichtstab
+		Tooltip: ""
+	}
+
+	BluegrassSeeds: {
+		// DisplayName: Bluegrass Seeds
 		// Tooltip: ""
 	}
 }
@@ -530,11 +530,11 @@ Projectiles: {
 	WRipperRift.DisplayName: Wurmlochreißer
 	GhostlyBlade.DisplayName: Geisterhaftes Schwert
 	DunebarrelRightGun.DisplayName: Rechte Waffe vom Dünenrohr
-	// ElectrifiedArrow.DisplayName: Electrified Arrow
-	// StarlightProj.DisplayName: Starlight Proj
-	// LightningStaffStrike2.DisplayName: Lightning Staff Strike2
-	// BlankExplosion.DisplayName: Blank Explosion
-	// DunebarrelRotate.DisplayName: Dunebarrel Rotate
+	ElectrifiedArrow.DisplayName: Elektrifizierter Pfeil
+	StarlightProj.DisplayName: Sternenlicht Projektil
+	// RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
+	// ElectrumSpearBeam.DisplayName: Electrum Spear Beam
+	// StarlightStaffProj.DisplayName: Starlight Staff Proj
 }
 
 NPCs: {

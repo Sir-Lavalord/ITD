@@ -21,7 +21,7 @@ namespace ITD.Content.Items.Weapons.Mage
                 Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),
                 Color = () => new Color(255, 255, 255, 50) * 0.7f
             });
-            Terraria.GameContent.Creative.CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
             Item.staff[Type] = true;
         }
@@ -36,22 +36,17 @@ namespace ITD.Content.Items.Weapons.Mage
             Item.height = 56;
             Item.useTime = 14;
             Item.useAnimation = 14;
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 1f;
             Item.value = Item.buyPrice(silver: 10);
-            Item.rare = 3;
-            Item.UseSound = SoundID.Item1;
+            Item.rare = ItemRarityID.Orange;
+            Item.UseSound = SoundID.Item43;
             Item.autoReuse = true;
-            Item.shoot = ProjectileID.PurificationPowder;
+            Item.shoot = ModContent.ProjectileType<StarlightStaffProj>();
             Item.shootSpeed = 8f;
         }
 
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
-            int proj = Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<StarlightProj>(), damage, knockback, player.whoAmI);
-            return false;
-        }
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             Texture2D texture = (Texture2D)Mod.Assets.Request<Texture2D>("Content/Items/Weapons/Mage/StarlightStaff_Glow");

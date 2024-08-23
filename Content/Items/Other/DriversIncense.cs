@@ -3,9 +3,31 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
+using ITD.Systems;
 
 namespace ITD.Content.Items.Other
 {
+    public class SimpleMountData
+    {
+        public float runSpeed { get; set; }
+        public float dashSpeed {  get; set; }
+        public float jumpSpeed {  get; set; }
+        public float swimSpeed {  get; set; }
+        public SimpleMountData(float run, float dash, float jump, float swim)
+        {
+            runSpeed = run;
+            dashSpeed = dash;
+            jumpSpeed = jump;
+            swimSpeed = swim;
+        }
+    }
+    public static class MountHelpers
+    {
+        public static SimpleMountData ToSimple(this MountData data)
+        {
+            return new SimpleMountData(data.runSpeed, data.dashSpeed, data.jumpSpeed, data.swimSpeed);
+        }
+    }
     public class DriversIncense : ModItem
     {
         public override void SetStaticDefaults()
@@ -41,10 +63,10 @@ namespace ITD.Content.Items.Other
             for (int i = 0; i < mounts.Length - 1; i++)
             {
                 MountData mount = mounts[i];
-                mount.runSpeed = ITD.defaultMountData[i].runSpeed;
-                mount.dashSpeed = ITD.defaultMountData[i].dashSpeed;
-                mount.swimSpeed = ITD.defaultMountData[i].swimSpeed;
-                mount.jumpSpeed = ITD.defaultMountData[i].jumpSpeed;
+                mount.runSpeed = ITDSystem.defaultMountData[i].runSpeed;
+                mount.dashSpeed = ITDSystem.defaultMountData[i].dashSpeed;
+                mount.swimSpeed = ITDSystem.defaultMountData[i].swimSpeed;
+                mount.jumpSpeed = ITDSystem.defaultMountData[i].jumpSpeed;
             }
         }
         private void ApplyDriversIncenseBonus()
@@ -52,10 +74,10 @@ namespace ITD.Content.Items.Other
             for (int i = 0; i < mounts.Length - 1; i++)
             {
                 MountData mount = mounts[i];
-                mount.runSpeed = ITD.defaultMountData[i].runSpeed * 1.1f;
-                mount.dashSpeed = ITD.defaultMountData[i].dashSpeed * 1.1f;
-                mount.swimSpeed = ITD.defaultMountData[i].swimSpeed * 1.1f;
-                mount.jumpSpeed = ITD.defaultMountData[i].jumpSpeed * 1.1f;
+                mount.runSpeed = ITDSystem.defaultMountData[i].runSpeed * 1.1f;
+                mount.dashSpeed = ITDSystem.defaultMountData[i].dashSpeed * 1.1f;
+                mount.swimSpeed = ITDSystem.defaultMountData[i].swimSpeed * 1.1f;
+                mount.jumpSpeed = ITDSystem.defaultMountData[i].jumpSpeed * 1.1f;
             }
         }
         public override void PostUpdateEquips()

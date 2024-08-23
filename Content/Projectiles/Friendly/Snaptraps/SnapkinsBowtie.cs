@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
+using ITD.Utils;
 
 namespace ITD.Content.Projectiles.Friendly.Snaptraps.Extra
 {

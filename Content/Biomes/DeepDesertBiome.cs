@@ -1,9 +1,7 @@
-﻿using ITD.Content.Backgrounds;
-using Microsoft.Xna.Framework;
-using System;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using ITD;
+using ITD.Systems;
 
 namespace ITD.Content.Biomes
 {
@@ -20,7 +18,7 @@ namespace ITD.Content.Biomes
         // Calculate when the biome is active.
         public override bool IsBiomeActive(Player player)
         {
-            return ModContent.GetInstance<ITD.ITDSystem>().deepdesertTileCount >= 50 && (player.ZoneDirtLayerHeight || player.ZoneRockLayerHeight);
+            return ModContent.GetInstance<ITDSystem>().deepdesertTileCount >= 50 && (player.ZoneDirtLayerHeight || player.ZoneRockLayerHeight);
         }
     }
 }

@@ -21,7 +21,7 @@ Items: {
 
 	RhodiumBroadsword: {
 		DisplayName: Rhodium Broadsword
-		Tooltip: ""
+		Tooltip: Shoots a bolt of lightning
 	}
 
 	ElectrumSpear: {
@@ -76,11 +76,6 @@ Items: {
 			Swing at enemies to charge the sword.
 			Once charged, right click to dash, leaving behind a wormhole
 			'''
-	}
-
-	VoidShard: {
-		Tooltip: ""
-		DisplayName: Void Shard
 	}
 
 	CosmicJellyfishTrophy: {
@@ -468,6 +463,11 @@ Items: {
 		DisplayName: Starlight Staff
 		Tooltip: ""
 	}
+
+	BluegrassSeeds: {
+		DisplayName: Bluegrass Seeds
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -531,9 +531,9 @@ Projectiles: {
 	DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
 	ElectrifiedArrow.DisplayName: Electrified Arrow
 	StarlightProj.DisplayName: Starlight Proj
-	LightningStaffStrike2.DisplayName: Lightning Staff Strike2
-	BlankExplosion.DisplayName: Blank Explosion
-	DunebarrelRotate.DisplayName: Dunebarrel Rotate
+	RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
+	ElectrumSpearBeam.DisplayName: Electrum Spear Beam
+	StarlightStaffProj.DisplayName: Starlight Staff Proj
 }
 
 NPCs: {
