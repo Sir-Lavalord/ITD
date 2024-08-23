@@ -7,10 +7,6 @@ namespace ITD.Content.Items.Weapons.Melee
 {
     public class Spidermeal : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            ItemID.Sets.ShimmerTransformToItem[ItemID.Flymeal] = Type;
-        }
         public override void SetDefaults()
         {
             Item.damage = 30;
@@ -39,9 +35,14 @@ namespace ITD.Content.Items.Weapons.Melee
         {
             if (target.isLikeATownNPC)
                 return true;
-            else if (!Main.hardMode)
-                return false;
-            else return null;
+            return null;
+        }
+        public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if (target.isLikeATownNPC)
+            {
+                modifiers.ScalingArmorPenetration += 1f;
+            }
         }
         public override void AddRecipes()
         {
