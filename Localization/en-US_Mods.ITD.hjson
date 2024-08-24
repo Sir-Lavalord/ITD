@@ -542,6 +542,7 @@ Projectiles: {
 	BlankExplosion.DisplayName: Blank Explosion
 	DunebarrelRotate.DisplayName: Dunebarrel Rotate
 	SandSpike.DisplayName: Sand Spike
+	SandberusSkull.DisplayName: Sandberus Skull
 }
 
 NPCs: {

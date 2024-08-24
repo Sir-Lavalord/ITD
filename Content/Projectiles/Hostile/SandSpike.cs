@@ -28,7 +28,7 @@ namespace ITD.Content.Projectiles.Hostile
 		
 		public override void AI()
         {
-            int dustType = 32;
+            int dustType = 0;
 			int num2 = 5;
 			int num3 = 5;
 			int num4 = 0;
@@ -91,13 +91,9 @@ namespace ITD.Content.Projectiles.Hostile
         {
 			for (float num19 = 0f; num19 < 1f; num19 += 0.025f)
 			{
-				Dust dust8 = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16f, 16f) * Projectile.scale + Projectile.velocity.SafeNormalize(Vector2.UnitY) * num19 * 200f * Projectile.scale, 32, new Vector2?(Main.rand.NextVector2Circular(3f, 3f)), 0, default(Color), 1f);
-				Dust var_53_AF0_cp_0_cp_0 = dust8;
-				var_53_AF0_cp_0_cp_0.velocity.Y = var_53_AF0_cp_0_cp_0.velocity.Y + -0.3f;
-				Dust dust2 = dust8;
-				dust2.velocity += Projectile.velocity * 0.2f;
-				dust8.scale = 1f;
-				dust8.alpha = 100;
+				Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16f, 16f) * Projectile.scale + Projectile.velocity.SafeNormalize(Vector2.UnitY) * num19 * 200f * Projectile.scale, 0, new Vector2?(Main.rand.NextVector2Circular(3f, 3f)), 0, default(Color), 1f);
+				dust.velocity.Y *= 0.2f;
+				dust.velocity += Projectile.velocity * 0.2f;
 			}
         }
 		

@@ -25,6 +25,7 @@ namespace ITD.Content.NPCs.Bosses
         }
 		private ActionState AI_State;
 		private int StateTimer = 200;
+		private int AttackCycle = 0;
 		public override void SetStaticDefaults()
         {
             NPCID.Sets.TrailCacheLength[Type] = 5;
@@ -113,27 +114,35 @@ namespace ITD.Content.NPCs.Bosses
 					break;
 				case ActionState.Cooking:
 					Player player = Main.player[NPC.target];
-					if (player.position.Y < NPC.position.Y)
+					AttackCycle = ++AttackCycle % 4;
+					switch (AttackCycle)
 					{
-						AI_State = ActionState.Leaping;
-						StateTimer = 60;
-                        Vector2 distance;
-						distance = player.Center - NPC.Center;
-						distance.X = distance.X / StateTimer;
-                        distance.Y = distance.Y / StateTimer - 0.18f * StateTimer;
-						NPC.ai[1] = distance.X;
-                        NPC.ai[2] = distance.Y;
-					}
-					else if (Math.Abs(player.Center.X-NPC.Center.X) > 300)
-					{
-						AI_State = ActionState.Dashing;
-						StateTimer = 80;
-					}
-					else
-					{
-						AI_State = ActionState.Clawing;
-						StateTimer = 20;
-						NPC.velocity.X = NPC.direction * 8f;
+						case 0:
+							AI_State = ActionState.Clawing;
+							StateTimer = 20;
+							NPC.velocity.X = NPC.direction * 8f;
+							break;
+						case 1:
+							AI_State = ActionState.Leaping;
+							StateTimer = 60;
+							Vector2 distance;
+							distance = player.Center - NPC.Center;
+							distance.X = distance.X / StateTimer;
+							distance.Y = distance.Y / StateTimer - 0.18f * StateTimer;
+							NPC.ai[1] = distance.X;
+							NPC.ai[2] = distance.Y;
+							break;
+						case 2:
+							AI_State = ActionState.Dashing;
+							StateTimer = 80;
+							break;
+						case 3:
+							Vector2 toPlayer = player.Center - NPC.Center;
+							toPlayer.Normalize();
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, toPlayer * 4f, ModContent.ProjectileType<SandberusSkull>(), 20, 0, -1);
+							AI_State = ActionState.Chasing;
+							StateTimer = 60;
+							break;
 					}
 					SoundEngine.PlaySound(SoundID.Roar, NPC.Center);
 					break;
