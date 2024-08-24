@@ -177,7 +177,7 @@ namespace ITD.Content.Projectiles.Friendly
         int iStartCol;
         public override void AI()
         {
-            if (iStartCol++ >= 10)
+            if (iStartCol++ >= 12)
             {
                 Projectile.tileCollide = true;
             }
