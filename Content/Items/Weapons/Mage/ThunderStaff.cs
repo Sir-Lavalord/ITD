@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Projectiles.Friendly;
-using ITD.Utils;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;

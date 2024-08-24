@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using ITD.Content.NPCs;
 using static Terraria.Mount;
 
-namespace ITD.Utils
+namespace ITD.Utilities
 {
     public static class MiscHelpers
     {

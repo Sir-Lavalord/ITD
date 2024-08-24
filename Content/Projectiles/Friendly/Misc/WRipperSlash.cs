@@ -1,6 +1,6 @@
 ﻿using ITD.Players;
 using Terraria;
-using ITD.Utils;
+using ITD.Utilities;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 
-namespace ITD.Utils
+namespace ITD.Utilities
 {
     public static class Helpers
     {

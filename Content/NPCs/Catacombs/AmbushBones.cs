@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.ItemDropRules;
-using ITD.Utils;
+using ITD.Utilities;
 
 namespace ITD.Content.NPCs.Catacombs
 {

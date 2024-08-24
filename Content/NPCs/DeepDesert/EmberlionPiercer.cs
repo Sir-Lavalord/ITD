@@ -8,7 +8,7 @@ using ReLogic.Content;
 using ITD.Content.Items.Materials;
 using ITD.Content.Items.Weapons.Melee;
 using Terraria.GameContent.ItemDropRules;
-using ITD.Utils;
+using ITD.Utilities;
 
 namespace ITD.Content.NPCs.DeepDesert
 {

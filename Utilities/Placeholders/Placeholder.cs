@@ -1,4 +1,4 @@
-namespace ITD.Utils.Placeholders
+namespace ITD.Utilities.Placeholders
 {
     internal class Placeholder
     {

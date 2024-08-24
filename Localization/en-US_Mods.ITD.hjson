@@ -541,6 +541,7 @@ Projectiles: {
 	StarlightStaffProj.DisplayName: Starlight Staff Proj
 	BlankExplosion.DisplayName: Blank Explosion
 	DunebarrelRotate.DisplayName: Dunebarrel Rotate
+	SandSpike.DisplayName: Sand Spike
 }
 
 NPCs: {
@@ -566,6 +567,7 @@ NPCs: {
 	FlamingSkull.DisplayName: Flaming Skull
 	AmbushBones.DisplayName: Ambush Bones
 	ShroomishSlime.DisplayName: Shroomish Slime
+	Sandberus.DisplayName: Sandberus
 }
 
 Buffs: {

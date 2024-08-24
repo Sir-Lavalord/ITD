@@ -541,6 +541,7 @@ Projectiles: {
 	StarlightStaffProj.DisplayName: Bastón de Luz Astral
 	BlankExplosion.DisplayName: Explosión
 	DunebarrelRotate.DisplayName: Cañón de dunas
+	// SandSpike.DisplayName: Sand Spike
 }
 
 NPCs: {
@@ -566,6 +567,7 @@ NPCs: {
 	FlamingSkull.DisplayName: Calavera en llamas
 	AmbushBones.DisplayName: Huesitos acechantes
 	ShroomishSlime.DisplayName: Slime champizúl
+	// Sandberus.DisplayName: Sandberus
 }
 
 Buffs: {

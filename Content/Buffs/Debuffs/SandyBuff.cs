@@ -1,4 +1,4 @@
-﻿using ITD.Utils;
+﻿using ITD.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

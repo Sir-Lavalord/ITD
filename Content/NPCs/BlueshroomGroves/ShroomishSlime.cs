@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.ItemDropRules;
-using ITD.Utils;
+using ITD.Utilities;
 using ITD.Content.Tiles.BlueshroomGroves;
 using ITD.Content.Dusts;
 

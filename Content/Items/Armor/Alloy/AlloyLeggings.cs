@@ -1,7 +1,6 @@
 ﻿using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
-using ITD.Utils;
 
 namespace ITD.Content.Items.Armor.Alloy
 {

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria.Localization;
 using ITD.Content.Tiles.BlueshroomGroves;
 using Microsoft.Xna.Framework.Graphics;
-using ITD.Utils;
+using ITD.Utilities;
 
 namespace ITD.Content.Tiles
 {

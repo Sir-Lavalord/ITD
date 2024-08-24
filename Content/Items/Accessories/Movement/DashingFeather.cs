@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using System;
-using ITD.Utils;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Accessories.Movement
 {

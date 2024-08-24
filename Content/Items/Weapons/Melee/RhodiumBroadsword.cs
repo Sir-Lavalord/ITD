@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Content.Items.Materials;
-using ITD.Utils;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Weapons.Melee
 {

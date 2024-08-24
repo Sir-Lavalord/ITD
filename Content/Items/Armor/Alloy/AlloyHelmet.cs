@@ -1,7 +1,7 @@
 ﻿using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
-using ITD.Utils;
+using ITD.Utilities;
 using Terraria.Localization;
 
 namespace ITD.Content.Items.Armor.Alloy

@@ -1,7 +1,7 @@
 ﻿using ITD.Players;
 using Terraria;
 
-namespace ITD.Utils
+namespace ITD.Utilities
 {
     public static class PlayerHelpers
     {

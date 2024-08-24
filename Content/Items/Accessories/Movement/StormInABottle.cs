@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using System;
-using ITD.Utils;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Accessories.Movement
 {

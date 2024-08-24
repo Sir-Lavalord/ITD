@@ -1,5 +1,5 @@
 ﻿using ITD.Content.Biomes;
-using ITD.Utils;
+using ITD.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;

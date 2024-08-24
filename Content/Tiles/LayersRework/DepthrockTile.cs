@@ -1,4 +1,4 @@
-﻿using ITD.Utils;
+﻿using ITD.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
