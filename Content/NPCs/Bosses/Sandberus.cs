@@ -26,6 +26,7 @@ namespace ITD.Content.NPCs.Bosses
 		private ActionState AI_State;
 		private int StateTimer = 200;
 		private int AttackCycle = 0;
+		private int ShootCycle = 0;
 		public override void SetStaticDefaults()
         {
             NPCID.Sets.TrailCacheLength[Type] = 5;
@@ -52,11 +53,12 @@ namespace ITD.Content.NPCs.Bosses
 			{
 				return;
 			}
-
+						
 			switch (AI_State)
             {
 				case ActionState.Chasing:
-					NPC.TargetClosest(true);
+					NPC.TargetClosest(false);
+					NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();
 					NPC.spriteDirection = NPC.direction;
 					NPC.velocity.X += NPC.direction * 0.1f;
 					NPC.velocity.X = Math.Clamp(NPC.velocity.X, -4f, 4f);
@@ -66,13 +68,22 @@ namespace ITD.Content.NPCs.Bosses
 					//	NPC.velocity.Y = -8f;
                     break;
 				case ActionState.Cooking:
-					NPC.TargetClosest(true);
+					NPC.TargetClosest(false);
+					NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();
 					NPC.spriteDirection = NPC.direction;
 					NPC.velocity *= 0.9f;
+					if (StateTimer == 12 && ShootCycle == 0 && NPC.life < NPC.lifeMax*0.66f && Main.expertMode)
+						ShootAttack();
+					if (StateTimer == 4 && ShootCycle == 0 && NPC.life < NPC.lifeMax*0.33f && Main.expertMode)
+						ShootAttack();
                     break;
 				case ActionState.Dashing:
-					if (StateTimer > 30)
+					if (StateTimer > 30 && (StateTimer < 70 || Main.expertMode))
+					{
 						NPC.velocity.X = NPC.direction * 10f;
+						if (Main.expertMode)
+							NPC.velocity.X *= 1.2f;
+					}
 					else
 						NPC.velocity.X *= 0.9f;
 					NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
@@ -88,7 +99,21 @@ namespace ITD.Content.NPCs.Bosses
 					else if (NPC.noTileCollide)
 						NPC.noTileCollide = Collision.SolidCollision(NPC.position, NPC.width, NPC.height);
 					if (NPC.velocity.Y == 0f)
+					{
 						StateTimer = 1;
+						for (int i = 0; i < 20; i++)
+						{
+							int dust = Dust.NewDust(NPC.position + new Vector2(-NPC.width*0.33f+(NPC.width*Math.Min(NPC.direction, 0)*0.5f), NPC.height), NPC.width*2, 0, DustID.Dirt, 0f, 0f, 0, default, 1.5f);
+							Main.dust[dust].noGravity = true;
+							Main.dust[dust].velocity.Y = -5f * Main.rand.NextFloat();
+						}
+						for (int j = 0; j < 10; j++)
+						{
+							Vector2 position = NPC.position + new Vector2(-NPC.width*0.33f+(NPC.width*Math.Min(NPC.direction, 0)*0.5f)+(NPC.width*0.2f*j), NPC.height);
+							Gore.NewGore(NPC.GetSource_FromThis(), position, new Vector2(0, -Main.rand.NextFloat()), 61 + j % 3);
+						}
+						SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
+					}
 					else if (StateTimer < 10)
 						StateTimer = 10;
 					break;
@@ -111,46 +136,53 @@ namespace ITD.Content.NPCs.Bosses
 				case ActionState.Chasing:
 					AI_State = ActionState.Cooking;
 					StateTimer = 20;
+					if (Main.expertMode)
+						ShootCycle = ++ShootCycle % 2;
+					else
+						ShootCycle = ++ShootCycle % 3;
+					if (ShootCycle == 0)
+						ShootAttack();
 					break;
 				case ActionState.Cooking:
-					Player player = Main.player[NPC.target];
-					AttackCycle = ++AttackCycle % 4;
+					AttackCycle = ++AttackCycle % 3;
 					switch (AttackCycle)
 					{
 						case 0:
 							AI_State = ActionState.Clawing;
 							StateTimer = 20;
 							NPC.velocity.X = NPC.direction * 8f;
+							SoundEngine.PlaySound(SoundID.Item74, NPC.Center);
 							break;
 						case 1:
+							AI_State = ActionState.Dashing;
+							StateTimer = 80;
+							SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
+							break;
+						case 2:
 							AI_State = ActionState.Leaping;
 							StateTimer = 60;
 							Vector2 distance;
-							distance = player.Center - NPC.Center;
+							distance = Main.player[NPC.target].Center - NPC.Center;
 							distance.X = distance.X / StateTimer;
 							distance.Y = distance.Y / StateTimer - 0.18f * StateTimer;
 							NPC.ai[1] = distance.X;
 							NPC.ai[2] = distance.Y;
-							break;
-						case 2:
-							AI_State = ActionState.Dashing;
-							StateTimer = 80;
-							break;
-						case 3:
-							Vector2 toPlayer = player.Center - NPC.Center;
-							toPlayer.Normalize();
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, toPlayer * 4f, ModContent.ProjectileType<SandberusSkull>(), 20, 0, -1);
-							AI_State = ActionState.Chasing;
-							StateTimer = 60;
+							SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
 							break;
 					}
-					SoundEngine.PlaySound(SoundID.Roar, NPC.Center);
 					break;
 				default:
 					AI_State = ActionState.Chasing;
 					StateTimer = 100;
 					break;
 			}
+		}
+		
+		private void ShootAttack()
+		{
+			Vector2 toPlayer = Main.player[NPC.target].Center - NPC.Center;
+			toPlayer.Normalize();
+			Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, toPlayer * 4f, ModContent.ProjectileType<SandberusSkull>(), 20, 0, -1);
 		}
 		
 		private void SpikeAttack(int i)

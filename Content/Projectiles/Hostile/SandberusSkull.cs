@@ -31,13 +31,13 @@ namespace ITD.Content.Projectiles.Hostile
         {
 			int target = (int)Player.FindClosest(Projectile.Center, 1, 1);
 			Projectile.ai[1] += 1f;
-			if (Projectile.ai[1] < 110f && Projectile.ai[1] > 30f)
+			if (Projectile.ai[1] < 110f)
 			{
 				float scaleFactor = Projectile.velocity.Length();
 				Vector2 distance = Main.player[target].Center - Projectile.Center;
 				distance.Normalize();
 				distance *= scaleFactor;
-				Projectile.velocity = (Projectile.velocity * 24f + distance) / 25f;
+				Projectile.velocity = (Projectile.velocity * 14f + distance) / 15f;
 				Projectile.velocity.Normalize();
 				Projectile.velocity *= scaleFactor;
 			}

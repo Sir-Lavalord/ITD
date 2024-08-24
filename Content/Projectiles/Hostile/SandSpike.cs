@@ -87,7 +87,7 @@ namespace ITD.Content.Projectiles.Hostile
 			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity.SafeNormalize(-Vector2.UnitY) * 200f * Projectile.scale, 22f * Projectile.scale, ref num32);
 		}
 		
-		public override void OnKill(int timeLeft)
+		/*public override void OnKill(int timeLeft)
         {
 			for (float num19 = 0f; num19 < 1f; num19 += 0.025f)
 			{
@@ -95,7 +95,7 @@ namespace ITD.Content.Projectiles.Hostile
 				dust.velocity.Y *= 0.2f;
 				dust.velocity += Projectile.velocity * 0.2f;
 			}
-        }
+        }*/
 		
 		public override bool PreDraw(ref Color lightColor)
         {
