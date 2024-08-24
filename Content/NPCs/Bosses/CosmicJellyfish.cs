@@ -17,6 +17,7 @@ using ITD.Content.Items.Weapons.Melee;
 using Terraria.GameContent;
 using ITD.Content.Items.Weapons.Mage;
 using ITD.Content.Items.Weapons.Ranger;
+using ITD.Content.Items.Armor.Vanity.Masks;
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -95,7 +96,7 @@ namespace ITD.Content.NPCs.Bosses
             npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<CosmicJam>(), 4));
 
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
-            //notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<CosmicJellyfishMask>(), 7));
+            notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<CosmicJellyfishMask>(), 7));
 			notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<StarlitOre>(), 1, 15, 30));
             notExpertRule.OnSuccess(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, oneFromOptionsDrops));
         }
