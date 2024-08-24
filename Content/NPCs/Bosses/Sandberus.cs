@@ -60,9 +60,9 @@ namespace ITD.Content.NPCs.Bosses
 					NPC.velocity.X += NPC.direction * 0.1f;
 					NPC.velocity.X = Math.Clamp(NPC.velocity.X, -4f, 4f);
 					NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
-					Player player = Main.player[NPC.target];
-					if (NPC.velocity.Y == 0f && player.position.Y < NPC.position.Y)
-						NPC.velocity.Y = -8f;
+					//Player player = Main.player[NPC.target];
+					//if (NPC.velocity.Y == 0f && player.position.Y < NPC.position.Y)
+					//	NPC.velocity.Y = -8f;
                     break;
 				case ActionState.Cooking:
 					NPC.TargetClosest(true);
@@ -73,7 +73,7 @@ namespace ITD.Content.NPCs.Bosses
 					if (StateTimer > 30)
 						NPC.velocity.X = NPC.direction * 10f;
 					else
-						NPC.velocity.X *= 0.95f;
+						NPC.velocity.X *= 0.9f;
 					NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
 					break;
 				case ActionState.Leaping:
@@ -124,19 +124,22 @@ namespace ITD.Content.NPCs.Bosses
 						NPC.ai[1] = distance.X;
                         NPC.ai[2] = distance.Y;
 					}
-					else
+					else if (Math.Abs(player.Center.X-NPC.Center.X) > 300)
 					{
 						AI_State = ActionState.Dashing;
 						StateTimer = 80;
-						//AI_State = ActionState.Clawing;
-						//StateTimer = 20;
-						//NPC.velocity.X = NPC.direction * 8f;
+					}
+					else
+					{
+						AI_State = ActionState.Clawing;
+						StateTimer = 20;
+						NPC.velocity.X = NPC.direction * 8f;
 					}
 					SoundEngine.PlaySound(SoundID.Roar, NPC.Center);
 					break;
 				default:
 					AI_State = ActionState.Chasing;
-					StateTimer = 200;
+					StateTimer = 100;
 					break;
 			}
 		}
@@ -145,7 +148,6 @@ namespace ITD.Content.NPCs.Bosses
 		{
 			Point point = NPC.Bottom.ToTileCoordinates();
 			point.X += NPC.direction * 3;
-				//this.AI_123_Deerclops_TryMakingSpike(ref point, NPC.direction, 20, i, i);
 				
 			int num = 13;
 			int num2 = point.X + i * NPC.direction;
@@ -162,29 +164,6 @@ namespace ITD.Content.NPCs.Bosses
 		private int SpikeAttackFindBestY(ref Point sourceTileCoords, int x)
 		{
 			int num = sourceTileCoords.Y;
-			Player player = Main.player[NPC.target];
-				Vector2 vector = new Vector2(player.Center.X, player.Bottom.Y);
-				int expr_4B = (int)(vector.Y / 16f);
-				int num2 = Math.Sign(expr_4B - num);
-				int num3 = expr_4B + num2 * 15;
-				int? num4 = null;
-				float num5 = float.PositiveInfinity;
-				for (int num6 = num; num6 != num3; num6 += num2)
-				{
-					if (WorldGen.ActiveAndWalkableTile(x, num6))
-					{
-						float num7 = new Point(x, num6).ToWorldCoordinates(8f, 8f).Distance(vector);
-						if (!num4.HasValue || num7 < num5)
-						{
-							num4 = new int?(num6);
-							num5 = num7;
-						}
-					}
-				}
-				if (num4.HasValue)
-				{
-					num = num4.Value;
-				}
 			int num8 = 0;
 			while (num8 < 20 && num >= 10 && WorldGen.SolidTile(x, num, false))
 			{

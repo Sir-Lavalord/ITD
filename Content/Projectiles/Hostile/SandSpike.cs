@@ -5,6 +5,7 @@ using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Hostile
 {
@@ -18,11 +19,86 @@ namespace ITD.Content.Projectiles.Hostile
         {
             Projectile.width = 32;
 			Projectile.height = 32;
-			Projectile.aiStyle = 157;
+			Projectile.aiStyle = -1;
 			Projectile.hostile = true;
 			Projectile.alpha = 255;
 			Projectile.tileCollide = false;
 			Projectile.ignoreWater = true;
+        }
+		
+		public override void AI()
+        {
+            int dustType = 32;
+			int num2 = 5;
+			int num3 = 5;
+			int num4 = 0;
+			int num5 = 0;
+			int num6 = 20;
+			int num7 = 20;
+			int num8 = 30;
+			int maxValue = 6;
+			bool flag = Projectile.ai[0] < (float)num6;
+			bool flag2 = Projectile.ai[0] >= (float)num7;
+			bool flag3 = Projectile.ai[0] >= (float)num8;
+			Projectile.ai[0] += 1f;
+			Projectile.position -= Projectile.velocity;
+			if (Projectile.localAI[0] == 0f)
+			{
+				Projectile.localAI[0] = 1f;
+				Projectile.rotation = Projectile.velocity.ToRotation();
+				Projectile.frame = Main.rand.Next(maxValue);
+				for (int i = 0; i < num2; i++)
+				{
+					Dust expr_148 = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24f, 24f), dustType, Projectile.velocity * Projectile.ai[1] * 4f * Main.rand.NextFloat(), 0, default(Color), 0.8f + Main.rand.NextFloat() * 0.5f);
+				}
+				for (int j = 0; j < num3; j++)
+				{
+					Dust expr_21B = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24f, 24f), dustType, Projectile.velocity * Projectile.ai[1] * 4f * Main.rand.NextFloat(), 0, default(Color), 0.8f + Main.rand.NextFloat() * 0.5f);
+					expr_21B.fadeIn = 1f;
+				}
+				SoundEngine.PlaySound(SoundID.Item60, Projectile.Center);
+			}
+			if (flag)
+			{
+				Projectile.Opacity += 0.1f;
+				Projectile.scale = Projectile.Opacity * Projectile.ai[1];
+				for (int k = 0; k < num4; k++)
+				{
+					Dust expr_33F = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16f, 16f), dustType, Projectile.velocity * Projectile.ai[1] * 4f * Main.rand.NextFloat(), 0, default(Color), 0.8f + Main.rand.NextFloat() * 0.5f);
+				}
+			}
+			if (flag2)
+			{
+				Projectile.Opacity -= 0.2f;
+				for (int l = 0; l < num5; l++)
+				{
+					Dust expr_429 = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16f, 16f), dustType, Projectile.velocity * Projectile.ai[1] * 4f * Main.rand.NextFloat(), 0, default(Color), 0.8f + Main.rand.NextFloat() * 0.5f);
+				}
+			}
+			if (flag3)
+			{
+				Projectile.Kill();
+			}
+        }
+		
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			float num32 = 0f;
+			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity.SafeNormalize(-Vector2.UnitY) * 200f * Projectile.scale, 22f * Projectile.scale, ref num32);
+		}
+		
+		public override void OnKill(int timeLeft)
+        {
+			for (float num19 = 0f; num19 < 1f; num19 += 0.025f)
+			{
+				Dust dust8 = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16f, 16f) * Projectile.scale + Projectile.velocity.SafeNormalize(Vector2.UnitY) * num19 * 200f * Projectile.scale, 32, new Vector2?(Main.rand.NextVector2Circular(3f, 3f)), 0, default(Color), 1f);
+				Dust var_53_AF0_cp_0_cp_0 = dust8;
+				var_53_AF0_cp_0_cp_0.velocity.Y = var_53_AF0_cp_0_cp_0.velocity.Y + -0.3f;
+				Dust dust2 = dust8;
+				dust2.velocity += Projectile.velocity * 0.2f;
+				dust8.scale = 1f;
+				dust8.alpha = 100;
+			}
         }
 		
 		public override bool PreDraw(ref Color lightColor)
