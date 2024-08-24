@@ -28,19 +28,11 @@ namespace ITD.Content.Items.Materials
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.maxStack = Item.CommonMaxStack;
+            Item.createTile = ModContent.TileType<BlueshroomSapling>();
         }
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             spriteBatch.Draw(glowmask.Value, Item.Center - Main.screenPosition, null, Color.White * BlueshroomTree.opac, rotation, glowmask.Size() / 2f, scale, SpriteEffects.None, 0f);
-        }
-
-        // this is purely for testing, remove on release pls
-        public override bool? UseItem(Player player)
-        {
-            int i = (int)(Main.MouseWorld.X / 16f);
-            int j = (int)(Main.MouseWorld.Y / 16f);
-            ITDTree.Grow(i, j);
-            return true;
         }
     }
 }

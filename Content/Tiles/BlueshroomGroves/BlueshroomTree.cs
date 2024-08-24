@@ -20,6 +20,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             DustType = DustType<BlueshroomSporesDust>();
             MapColor = new Color(179, 167, 134);
             WoodType = ItemType<BlueshroomStem>();
+            DropAcorns = ItemType<Blueshroom>();
         }
         public override void PostDrawTreeTops(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, Color color, Rectangle sourceRect)
         {

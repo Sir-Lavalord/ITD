@@ -34,7 +34,7 @@ namespace ITD.Content.Items.Weapons.Mage
         }
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Vector2 vSpawnpos = new Vector2(Main.MouseWorld.X,player.Center.Y - 500);
+            Vector2 vSpawnpos = new Vector2(Main.MouseWorld.X, player.Center.Y - 570);
             Vector2 vMousepos = Main.MouseWorld;
             
             Vector2 rotationVector2 =  vMousepos - vSpawnpos;

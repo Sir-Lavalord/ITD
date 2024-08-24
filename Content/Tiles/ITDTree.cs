@@ -6,13 +6,19 @@ using Terraria.Localization;
 using ITD.Content.Tiles.BlueshroomGroves;
 using Microsoft.Xna.Framework.Graphics;
 using ITD.Utilities;
+using Terraria.DataStructures;
 
 namespace ITD.Content.Tiles
 {
     public abstract class ITDTree : ModTile
     {
+        // holy, this code sucks. if you have any sanity left please don't read this it will instantly suck it out of you
         public Color MapColor { get; set; }
         public int WoodType {  get; set; }
+        /// <summary>
+        /// Leave null for no acorn drops
+        /// </summary>
+        public int? DropAcorns { get; set; } = null;
         public static bool IsTopTile(int i, int j)
         {
             Tile t = Framing.GetTileSafely(i, j);
@@ -27,10 +33,9 @@ namespace ITD.Content.Tiles
             Tile t = Framing.GetTileSafely(i, j);
             return IsLeftBranch(t);
         }
-        public static bool IsLeftBranch(Tile t)
-        {
-            return t.TileFrameX == 18 && t.TileFrameY <= 36;
-        }
+        public static bool IsLeftBranch(Tile t) => t.TileFrameX == 18 && t.TileFrameY <= 36;
+        public static bool IsLeftBranchNormal(int i, int j) => IsLeftBranchNormal(Framing.GetTileSafely(i, j));
+        public static bool IsLeftBranchNormal(Tile t) => t.TileFrameX == 198;
         public static bool IsRightBranch(int i, int j)
         {
             Tile t = Framing.GetTileSafely(i, j);
@@ -40,6 +45,8 @@ namespace ITD.Content.Tiles
         {
             return t.TileFrameX == 90 && t.TileFrameY <= 36;
         }
+        public static bool IsRightBranchNormal(int i, int j) => IsRightBranchNormal(Framing.GetTileSafely(i, j));
+        public static bool IsRightBranchNormal(Tile t) => t.TileFrameX == 216;
         public static bool IsBranch(int i, int j)
         {
             Tile t = Framing.GetTileSafely(i, j);
@@ -102,13 +109,14 @@ namespace ITD.Content.Tiles
             None
         }
         /// <summary>
-        /// Override to set dust type, map color and wood type.
+        /// Override to set dust type, map color, wood type, and acorn type.
         /// </summary>
         public virtual void SetStaticTreeDefaults()
         {
             DustType = DustID.WoodFurniture;
             MapColor = Color.White;
             WoodType = ItemID.Wood;
+            DropAcorns = ItemID.Acorn;
         }
         public override void SetStaticDefaults()
         {
@@ -164,14 +172,14 @@ namespace ITD.Content.Tiles
         /// <summary>
         /// Grow a tree of a type at the given coordinates
         /// </summary>
-        public static bool Grow(int i, int j, int type = 0, int minHeight = 5, int maxHeight = 10)
+        public static bool Grow(int i, int j, int type = 0, int minHeight = 5, int maxHeight = 10, int? saplingType = null)
         {
             if (type == 0)
             {
                 type = ModContent.TileType<BlueshroomTree>();
             }
             int height = Main.rand.Next(minHeight, maxHeight + 1);
-            if (Helpers.AptForTree(i, j, height))
+            if (Helpers.AptForTree(i, j, height, saplingType))
             {
                 for (int k = 0; k < height; k++)
                 {
@@ -225,19 +233,21 @@ namespace ITD.Content.Tiles
                         SideGrowth branchGrowth = SideGrowth.None;
                         if (Main.rand.NextBool())
                             branchGrowth = (SideGrowth)Main.rand.Next(4);
+                        short leftBranchFrame = Main.rand.NextBool() ? (short)18 : (short)198;
+                        short rightBranchFrame = Main.rand.NextBool() ? (short)90 : (short)216;
                         switch (branchGrowth)
                         {
                             case SideGrowth.Left:
                                 WorldGen.PlaceTile(i - 1, j - k, type);
                                 Tile leftBranch = Framing.GetTileSafely(i - 1, j - k);
-                                FrameToPoint(leftBranch, 18, 0);
+                                FrameToPoint(leftBranch, leftBranchFrame, 0);
                                 FrameToPoint(tile, 36, 0);
                                 if (mp) NetMessage.SendTileSquare(-1, i - 1, j - k, TileChangeType.None);
                                 break;
                             case SideGrowth.Right:
                                 WorldGen.PlaceTile(i + 1, j - k, type);
                                 Tile rightBranch = Framing.GetTileSafely(i + 1, j - k);
-                                FrameToPoint(rightBranch, 90, 0);
+                                FrameToPoint(rightBranch, rightBranchFrame, 0);
                                 FrameToPoint(tile, 72, 0);
                                 if (mp) NetMessage.SendTileSquare(-1, i + 1, j - k, TileChangeType.None);
                                 break;
@@ -246,8 +256,8 @@ namespace ITD.Content.Tiles
                                 WorldGen.PlaceTile(i + 1, j - k, type);
                                 Tile leftBranch1 = Framing.GetTileSafely(i - 1, j - k);
                                 Tile rightBranch1 = Framing.GetTileSafely(i + 1, j - k);
-                                FrameToPoint(leftBranch1, 18, 0);
-                                FrameToPoint(rightBranch1, 90, 0);
+                                FrameToPoint(leftBranch1, leftBranchFrame, 0);
+                                FrameToPoint(rightBranch1, rightBranchFrame, 0);
                                 FrameToPoint(tile, 54, 0);
                                 if (mp)
                                 {
@@ -322,13 +332,17 @@ namespace ITD.Content.Tiles
                     WorldGen.KillTile(i, j - 1);
                 }
             }
+            if (IsTopTile(i, j) && DropAcorns != null)
+            {
+                Item.NewItem(new EntitySource_ShakeTree(i, j), new Point(i, j).ToWorldCoordinates(), (int)DropAcorns, WorldGen.genRand.Next(1, 3));
+            }
             if (IsCenterTrunk(i, j))
             {
-                if (IsLeftBranch(i - 1, j))
+                if (IsLeftBranch(i - 1, j) || IsLeftBranchNormal(i - 1, j))
                 {
                     WorldGen.KillTile(i - 1, j);
                 }
-                if (IsRightBranch(i + 1, j))
+                if (IsRightBranch(i + 1, j) || IsRightBranchNormal(i + 1, j))
                 {
                     WorldGen.KillTile(i + 1, j);
                 }
@@ -368,11 +382,11 @@ namespace ITD.Content.Tiles
                         return;
                     }
                     SideGrowth branches = SideGrowth.None;
-                    if (IsRightBranch(i + 1, j + 1) && Helpers.TileType(i + 1, j + 1, Type))
+                    if ((IsRightBranch(i + 1, j + 1) || IsRightBranchNormal(i + 1, j + 1)) && Helpers.TileType(i + 1, j + 1, Type))
                     {
                         branches = SideGrowth.Right;
                     }
-                    if (IsLeftBranch(i - 1, j + 1) && Helpers.TileType(i - 1, j + 1, Type))
+                    if ((IsLeftBranch(i - 1, j + 1) || IsLeftBranchNormal(i - 1, j + 1)) && Helpers.TileType(i - 1, j + 1, Type))
                     {
                         branches = branches == SideGrowth.Right ? SideGrowth.Both : SideGrowth.Left;
                     }

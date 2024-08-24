@@ -143,13 +143,15 @@ namespace ITD.Utilities
         public static bool EdgeTile(int i, int j) => EdgeTileCross(i, j) || EdgeTileX(i, j);
         public static Vector2 CommonTileOffset => Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
         public static Vector2 TileExtraPos(int i, int j, Vector2 extraOffset = default) => new Vector2(i, j) * 16 - Main.screenPosition + extraOffset + CommonTileOffset;
-        public static bool AptForTree(int i, int j, int height)
+        public static bool AptForTree(int i, int j, int height, int? saplingType = null)
         {
             Rectangle rect = new(i - 2, j - height, 5, height);
-            if (Framing.GetTileSafely(i, j).HasTile)
+            // check if tile it's trying to grow on is empty
+            if (Framing.GetTileSafely(i, j).HasTile && saplingType == null)
             {
                 return false;
             }
+            // check for solid ground
             for (int m = rect.Left + 1; m < rect.Right - 1; m++)
             {
                 if (!Framing.GetTileSafely(m, rect.Bottom + 1).HasTile)
@@ -157,6 +159,7 @@ namespace ITD.Utilities
                     return false;
                 }
             }
+            // check if space is completely empty
             for (int k = rect.Left; k < rect.Right; k++)
             {
                 for (int l = rect.Top; l < rect.Bottom; l++)
@@ -164,6 +167,8 @@ namespace ITD.Utilities
                     //Dust.QuickBox(new Vector2(k, l)*16f, new Vector2(k, l)*16f + new Vector2(16, 16), 8, Color.White, null);
                     if (Framing.GetTileSafely(k, l).HasTile)
                     {
+                        if (saplingType != null && Framing.GetTileSafely(k, l).TileType == (int)saplingType)
+                            return true;
                         return false;
                     }
                 }
