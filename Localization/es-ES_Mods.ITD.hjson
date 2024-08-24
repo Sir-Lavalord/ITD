@@ -468,6 +468,11 @@ Items: {
 		DisplayName: Semillas de césped azul
 		Tooltip: ""
 	}
+
+	CosmicJellyfishMask: {
+		// DisplayName: Cosmic Jellyfish Mask
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

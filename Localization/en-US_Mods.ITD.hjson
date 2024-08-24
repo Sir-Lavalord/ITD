@@ -468,6 +468,11 @@ Items: {
 		DisplayName: Bluegrass Seeds
 		Tooltip: ""
 	}
+
+	CosmicJellyfishMask: {
+		DisplayName: Cosmic Jellyfish Mask
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

@@ -466,8 +466,13 @@ Items: {
 	}
 
 	BluegrassSeeds: {
-		// DisplayName: Bluegrass Seeds
-		// Tooltip: ""
+		DisplayName: Blaugras-Saat
+		Tooltip: ""
+	}
+
+	CosmicJellyfishMask: {
+		DisplayName: Kosmische-Qualle-Maske
+		Tooltip: ""
 	}
 }
 
@@ -532,11 +537,11 @@ Projectiles: {
 	DunebarrelRightGun.DisplayName: Rechte Waffe vom Dünenrohr
 	ElectrifiedArrow.DisplayName: Elektrifizierter Pfeil
 	StarlightProj.DisplayName: Sternenlicht Projektil
-	// RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
-	// ElectrumSpearBeam.DisplayName: Electrum Spear Beam
-	// StarlightStaffProj.DisplayName: Starlight Staff Proj
-	// BlankExplosion.DisplayName: Blank Explosion
-	// DunebarrelRotate.DisplayName: Dunebarrel Rotate
+	RhodiumSwordBeam.DisplayName: Rhodiumschwert-Strahl
+	ElectrumSpearBeam.DisplayName: Elektrumspeer-Strahl
+	StarlightStaffProj.DisplayName: Sternenlichtstab-Projektil
+	BlankExplosion.DisplayName: Pure Explosion
+	DunebarrelRotate.DisplayName: Dünenrohr Drehung
 }
 
 NPCs: {
