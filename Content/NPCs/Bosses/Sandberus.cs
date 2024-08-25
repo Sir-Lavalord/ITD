@@ -49,7 +49,7 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override void AI()
         {
-			if (Main.netMode == 1)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				return;
 			}
