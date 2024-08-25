@@ -28,6 +28,7 @@ namespace ITD.Content.Items.Materials
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.maxStack = Item.CommonMaxStack;
+            Item.consumable = true;
             Item.createTile = ModContent.TileType<BlueshroomSapling>();
         }
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
