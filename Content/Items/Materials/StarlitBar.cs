@@ -32,6 +32,7 @@ namespace ITD.Content.Items.Materials
             Item.useTime = 10;
             Item.autoReuse = true;
 
+            Item.consumable = true;
             Item.createTile = ModContent.TileType<StarlitBars>();
         }
 

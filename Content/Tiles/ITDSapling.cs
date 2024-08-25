@@ -78,10 +78,10 @@ namespace ITD.Content.Tiles
             if (WorldGen.genRand.NextBool(GrowSlow))
             {
                 Tile tile = Framing.GetTileSafely(i, j);
-                bool growSucess;
+                bool growSuccess;
 
-                growSucess = ITDTree.Grow(i, j, GrowsIntoTreeType, MinGrowHeight, MaxGrowHeight, Type);
-                Main.NewText(growSucess);
+                growSuccess = ITDTree.Grow(i, j, GrowsIntoTreeType, MinGrowHeight, MaxGrowHeight, Type);
+                //Main.NewText(growSucess);
                 // A flag to check if a player is near the sapling
                 bool isPlayerNear = WorldGen.PlayerLOS(i, j);
 
