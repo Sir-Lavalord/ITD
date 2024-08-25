@@ -544,6 +544,7 @@ Projectiles: {
 	DunebarrelRotate.DisplayName: Dünenrohr Drehung
 	// SandSpike.DisplayName: Sand Spike
 	// SandberusSkull.DisplayName: Sandberus Skull
+	// SandBoulder.DisplayName: Sand Boulder
 }
 
 NPCs: {

@@ -31,8 +31,6 @@ namespace ITD.Content.Projectiles.Hostile
             int dustType = 0;
 			int num2 = 5;
 			int num3 = 5;
-			int num4 = 0;
-			int num5 = 0;
 			int num6 = 20;
 			int num7 = 20;
 			int num8 = 30;
@@ -47,11 +45,11 @@ namespace ITD.Content.Projectiles.Hostile
 				Projectile.localAI[0] = 1f;
 				Projectile.rotation = Projectile.velocity.ToRotation();
 				Projectile.frame = Main.rand.Next(maxValue);
-				for (int i = 0; i < num2; i++)
+				for (int i = 0; i < num2 * Projectile.ai[1]; i++)
 				{
 					Dust expr_148 = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24f, 24f), dustType, Projectile.velocity * Projectile.ai[1] * 4f * Main.rand.NextFloat(), 0, default(Color), 0.8f + Main.rand.NextFloat() * 0.5f);
 				}
-				for (int j = 0; j < num3; j++)
+				for (int j = 0; j < num3 * Projectile.ai[1]; j++)
 				{
 					Dust expr_21B = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24f, 24f), dustType, Projectile.velocity * Projectile.ai[1] * 4f * Main.rand.NextFloat(), 0, default(Color), 0.8f + Main.rand.NextFloat() * 0.5f);
 					expr_21B.fadeIn = 1f;
@@ -62,18 +60,10 @@ namespace ITD.Content.Projectiles.Hostile
 			{
 				Projectile.Opacity += 0.1f;
 				Projectile.scale = Projectile.Opacity * Projectile.ai[1];
-				for (int k = 0; k < num4; k++)
-				{
-					Dust expr_33F = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16f, 16f), dustType, Projectile.velocity * Projectile.ai[1] * 4f * Main.rand.NextFloat(), 0, default(Color), 0.8f + Main.rand.NextFloat() * 0.5f);
-				}
 			}
 			if (flag2)
 			{
 				Projectile.Opacity -= 0.2f;
-				for (int l = 0; l < num5; l++)
-				{
-					Dust expr_429 = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(16f, 16f), dustType, Projectile.velocity * Projectile.ai[1] * 4f * Main.rand.NextFloat(), 0, default(Color), 0.8f + Main.rand.NextFloat() * 0.5f);
-				}
 			}
 			if (flag3)
 			{

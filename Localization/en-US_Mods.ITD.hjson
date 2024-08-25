@@ -543,6 +543,7 @@ Projectiles: {
 	DunebarrelRotate.DisplayName: Dunebarrel Rotate
 	SandSpike.DisplayName: Sand Spike
 	SandberusSkull.DisplayName: Sandberus Skull
+	SandBoulder.DisplayName: Sand Boulder
 }
 
 NPCs: {

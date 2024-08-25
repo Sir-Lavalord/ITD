@@ -46,6 +46,10 @@ namespace ITD.Content.NPCs.Bosses
             NPC.DeathSound = SoundID.NPCDeath1;
 			NPC.boss = true;
             NPC.npcSlots = 10f;
+			if (!Main.dedServ)
+            {
+                Music = MusicLoader.GetMusicSlot(Mod, "Content/Music/DuneBearer");
+            }
         }
         public override void AI()
         {
@@ -86,6 +90,8 @@ namespace ITD.Content.NPCs.Bosses
 					}
 					else
 						NPC.velocity.X *= 0.9f;
+					if (Math.Abs(NPC.velocity.X) > 6)
+						SpikeTrail();
 					NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
 					break;
 				case ActionState.Leaping:
@@ -96,21 +102,28 @@ namespace ITD.Content.NPCs.Bosses
 						NPC.velocity.Y = NPC.ai[2];
 						NPC.ai[2] += 0.3f;
 					}
-					else if (NPC.noTileCollide)
+					else if (NPC.noTileCollide && NPC.ai[3] == 0f)
 						NPC.noTileCollide = Collision.SolidCollision(NPC.position, NPC.width, NPC.height);
 					if (NPC.velocity.Y == 0f)
 					{
 						StateTimer = 1;
 						for (int i = 0; i < 20; i++)
 						{
-							int dust = Dust.NewDust(NPC.position + new Vector2(-NPC.width*0.33f+(NPC.width*Math.Min(NPC.direction, 0)*0.5f), NPC.height), NPC.width*2, 0, DustID.Dirt, 0f, 0f, 0, default, 1.5f);
-							Main.dust[dust].noGravity = true;
-							Main.dust[dust].velocity.Y = -5f * Main.rand.NextFloat();
+							int landingDust = Dust.NewDust(NPC.Center + new Vector2(-NPC.width, NPC.height*0.5f), NPC.width*2, 0, DustID.Dirt, 0f, 0f, 0, default, 1.5f);
+							Main.dust[landingDust].noGravity = true;
+							Main.dust[landingDust].velocity.Y = -5f * Main.rand.NextFloat();
 						}
 						for (int j = 0; j < 10; j++)
 						{
-							Vector2 position = NPC.position + new Vector2(-NPC.width*0.33f+(NPC.width*Math.Min(NPC.direction, 0)*0.5f)+(NPC.width*0.2f*j), NPC.height);
+							Vector2 position = NPC.Center + new Vector2(-NPC.width+(NPC.width*0.2f*j), NPC.height*0.5f);
 							Gore.NewGore(NPC.GetSource_FromThis(), position, new Vector2(0, -Main.rand.NextFloat()), 61 + j % 3);
+						}
+						if (Main.expertMode)
+						{
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width, NPC.height*0.5f), new Vector2(4f, -12f), ModContent.ProjectileType<SandBoulder>(), 20, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(-NPC.width, NPC.height*0.5f), new Vector2(-4f, -12f), ModContent.ProjectileType<SandBoulder>(), 20, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*0.5f, NPC.height*0.5f), new Vector2(2f, -16f), ModContent.ProjectileType<SandBoulder>(), 20, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(-NPC.width*0.5f, NPC.height*0.5f), new Vector2(-2f, -16f), ModContent.ProjectileType<SandBoulder>(), 20, 0, -1);
 						}
 						SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
 					}
@@ -123,6 +136,11 @@ namespace ITD.Content.NPCs.Bosses
 					NPC.velocity *= 0.9f;
 					break;
 			}
+			
+		int dust = Dust.NewDust(NPC.position + new Vector2(0f, NPC.height), NPC.width, 0, DustID.Dirt, 0f, 0f, 0, default, 1.5f);
+		Main.dust[dust].noGravity = true;
+		Main.dust[dust].velocity.X = NPC.velocity.X *0.5f;
+		Main.dust[dust].velocity.Y = -2f * Main.rand.NextFloat();
 			
 			StateTimer--;
 			if (StateTimer == 0)
@@ -161,6 +179,11 @@ namespace ITD.Content.NPCs.Bosses
 						case 2:
 							AI_State = ActionState.Leaping;
 							StateTimer = 60;
+							NPC.TargetClosest(false);
+							if (Main.player[NPC.target].dead)
+								NPC.ai[3] = 1f;
+							NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();
+							NPC.spriteDirection = NPC.direction;
 							Vector2 distance;
 							distance = Main.player[NPC.target].Center - NPC.Center;
 							distance.X = distance.X / StateTimer;
@@ -185,21 +208,35 @@ namespace ITD.Content.NPCs.Bosses
 			Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, toPlayer * 4f, ModContent.ProjectileType<SandberusSkull>(), 20, 0, -1);
 		}
 		
+		private void SpikeTrail()
+		{
+			Point point = NPC.Bottom.ToTileCoordinates();
+			point.X += -NPC.direction * 3;
+				
+			int bestY = SpikeAttackFindBestY(ref point, point.X);
+			if (!WorldGen.ActiveAndWalkableTile(point.X, bestY))
+			{
+				return;
+			}
+			Vector2 position = new Vector2((float)(point.X * 16 + 8), (float)(bestY * 16 - 8));
+			Vector2 velocity = new Vector2(0f, -1f).RotatedBy((double)((float)(20 * -NPC.direction) * 0.7f * (0.7853982f / 20f)), default(Vector2));
+			Projectile.NewProjectile(NPC.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<SandSpike>(), 20, 0f, -1, 0f, 0.4f + Main.rand.NextFloat() * 0.2f, 0f);
+		}
+		
 		private void SpikeAttack(int i)
 		{
 			Point point = NPC.Bottom.ToTileCoordinates();
 			point.X += NPC.direction * 3;
 				
-			int num = 13;
-			int num2 = point.X + i * NPC.direction;
-			int num3 = SpikeAttackFindBestY(ref point, num2);
-			if (!WorldGen.ActiveAndWalkableTile(num2, num3))
+			int num = point.X + i * NPC.direction;
+			int bestY = SpikeAttackFindBestY(ref point, num);
+			if (!WorldGen.ActiveAndWalkableTile(num, bestY))
 			{
 				return;
 			}
-			Vector2 position = new Vector2((float)(num2 * 16 + 8), (float)(num3 * 16 - 8));
+			Vector2 position = new Vector2((float)(num * 16 + 8), (float)(bestY * 16 - 8));
 			Vector2 velocity = new Vector2(0f, -1f).RotatedBy((double)((float)(i * NPC.direction) * 0.7f * (0.7853982f / 20f)), default(Vector2));
-			Projectile.NewProjectile(NPC.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<SandSpike>(), num, 0f, Main.myPlayer, 0f, 0.1f + Main.rand.NextFloat() * 0.1f + (float)i * 1.1f / 20f, 0f);
+			Projectile.NewProjectile(NPC.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<SandSpike>(), 20, 0f, -1, 0f, 0.1f + Main.rand.NextFloat() * 0.1f + (float)i * 1.1f / 20f, 0f);
 		}
 		
 		private int SpikeAttackFindBestY(ref Point sourceTileCoords, int x)
