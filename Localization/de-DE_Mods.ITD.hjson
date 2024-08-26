@@ -474,6 +474,16 @@ Items: {
 		DisplayName: Kosmische-Qualle-Maske
 		Tooltip: ""
 	}
+
+	WindCape: {
+		// DisplayName: Windstrumican Cape
+		/* Tooltip:
+			'''
+			10% increased movement speed
+			Wind follows your step
+			Expert
+			''' */
+	}
 }
 
 Projectiles: {

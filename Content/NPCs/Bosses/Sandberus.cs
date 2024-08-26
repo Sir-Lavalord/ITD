@@ -52,12 +52,7 @@ namespace ITD.Content.NPCs.Bosses
             }
         }
         public override void AI()
-        {
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				return;
-			}
-						
+        {						
 			switch (AI_State)
             {
 				case ActionState.Chasing:
@@ -76,9 +71,9 @@ namespace ITD.Content.NPCs.Bosses
 					NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();
 					NPC.spriteDirection = NPC.direction;
 					NPC.velocity *= 0.9f;
-					if (StateTimer == 12 && ShootCycle == 0 && NPC.life < NPC.lifeMax*0.66f && Main.expertMode)
+					if (StateTimer == 12 && ShootCycle == 0 && NPC.life < NPC.lifeMax*0.66f && Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
 						ShootAttack();
-					if (StateTimer == 4 && ShootCycle == 0 && NPC.life < NPC.lifeMax*0.33f && Main.expertMode)
+					if (StateTimer == 4 && ShootCycle == 0 && NPC.life < NPC.lifeMax*0.33f && Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
 						ShootAttack();
                     break;
 				case ActionState.Dashing:
@@ -90,7 +85,7 @@ namespace ITD.Content.NPCs.Bosses
 					}
 					else
 						NPC.velocity.X *= 0.9f;
-					if (Math.Abs(NPC.velocity.X) > 6)
+					if (Math.Abs(NPC.velocity.X) > 6 && Main.netMode != NetmodeID.MultiplayerClient)
 						SpikeTrail();
 					NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
 					break;
@@ -118,7 +113,7 @@ namespace ITD.Content.NPCs.Bosses
 							Vector2 position = NPC.Center + new Vector2(-NPC.width+(NPC.width*0.2f*j), NPC.height*0.5f);
 							Gore.NewGore(NPC.GetSource_FromThis(), position, new Vector2(0, -Main.rand.NextFloat()), 61 + j % 3);
 						}
-						if (Main.expertMode)
+						if (Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
 						{
 							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width, NPC.height*0.5f), new Vector2(4f, -12f), ModContent.ProjectileType<SandBoulder>(), 20, 0, -1);
 							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(-NPC.width, NPC.height*0.5f), new Vector2(-4f, -12f), ModContent.ProjectileType<SandBoulder>(), 20, 0, -1);
@@ -131,7 +126,7 @@ namespace ITD.Content.NPCs.Bosses
 						StateTimer = 10;
 					break;
 				case ActionState.Clawing:
-					if (StateTimer < 18)
+					if (StateTimer < 18 && Main.netMode != NetmodeID.MultiplayerClient)
 						SpikeAttack(20-StateTimer);
 					NPC.velocity *= 0.9f;
 					break;
@@ -158,32 +153,29 @@ namespace ITD.Content.NPCs.Bosses
 						ShootCycle = ++ShootCycle % 2;
 					else
 						ShootCycle = ++ShootCycle % 3;
-					if (ShootCycle == 0)
+					if (ShootCycle == 0 && Main.netMode != NetmodeID.MultiplayerClient)
 						ShootAttack();
 					break;
 				case ActionState.Cooking:
 					AttackCycle = ++AttackCycle % 3;
+					NPC.TargetClosest(false);
+					if (Main.player[NPC.target].dead)
+					{
+						NPC.ai[3] = 1f;
+						AttackCycle = 1;
+					}
+					NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();
+					NPC.spriteDirection = NPC.direction;
 					switch (AttackCycle)
 					{
 						case 0:
-							AI_State = ActionState.Clawing;
-							StateTimer = 20;
-							NPC.velocity.X = NPC.direction * 8f;
-							SoundEngine.PlaySound(SoundID.Item74, NPC.Center);
-							break;
-						case 1:
 							AI_State = ActionState.Dashing;
 							StateTimer = 80;
 							SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
 							break;
-						case 2:
+						case 1:
 							AI_State = ActionState.Leaping;
 							StateTimer = 60;
-							NPC.TargetClosest(false);
-							if (Main.player[NPC.target].dead)
-								NPC.ai[3] = 1f;
-							NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();
-							NPC.spriteDirection = NPC.direction;
 							Vector2 distance;
 							distance = Main.player[NPC.target].Center - NPC.Center;
 							distance.X = distance.X / StateTimer;
@@ -192,6 +184,13 @@ namespace ITD.Content.NPCs.Bosses
 							NPC.ai[2] = distance.Y;
 							SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
 							break;
+						case 2:
+							AI_State = ActionState.Clawing;
+							StateTimer = 20;
+							NPC.velocity.X = NPC.direction * 8f;
+							SoundEngine.PlaySound(SoundID.Item74, NPC.Center);
+							break;
+
 					}
 					break;
 				default:
