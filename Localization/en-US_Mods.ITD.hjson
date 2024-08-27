@@ -480,12 +480,8 @@ Items: {
 			'''
 			10% increased movement speed
 			Wind follows your step
+			Expert
 			'''
-	}
-
-	SandberusBag: {
-		DisplayName: Sandberus Bag
-		Tooltip: ""
 	}
 }
 
@@ -558,6 +554,11 @@ Projectiles: {
 	SandSpike.DisplayName: Sand Spike
 	SandberusSkull.DisplayName: Sandberus Skull
 	SandBoulder.DisplayName: Sand Boulder
+	CosmicJellyfishMiniProj.DisplayName: Cosmic Jellyfish Mini Proj
+	CosmicLightningOrb.DisplayName: Cosmic Lightning Orb
+	CosmicRay.DisplayName: Cosmic Ray
+	CosmicRayWarn.DisplayName: Cosmic Ray Warn
+	TouhouBullet.DisplayName: Touhou Bullet
 }
 
 NPCs: {
@@ -583,6 +584,7 @@ NPCs: {
 	FlamingSkull.DisplayName: Flaming Skull
 	AmbushBones.DisplayName: Ambush Bones
 	ShroomishSlime.DisplayName: Shroomish Slime
+	CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
 	Sandberus.DisplayName: Sandberus
 }
 

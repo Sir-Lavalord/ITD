@@ -31,11 +31,17 @@ namespace ITD.Content.Items.Weapons.Mage
             Item.crit = 20;
             Item.staff[Type] = true;
         }
+        //lazy af fix
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Vector2 vSpawnpos = new Vector2(Main.MouseWorld.X, player.Center.Y - 570);
             Vector2 vMousepos = Main.MouseWorld;
-            
+            Vector2 vSpawnpos = new Vector2(vMousepos.X, player.Center.Y - 600);
+            //magic code please do not touch
+            if (vMousepos.Y <= player.Center.Y - 600)
+            {
+                vMousepos.Y = player.Center.Y - 599;
+            }
+
             Vector2 rotationVector2 =  vMousepos - vSpawnpos;
             rotationVector2.Normalize();
 
