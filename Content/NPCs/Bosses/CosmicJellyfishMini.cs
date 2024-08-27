@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -64,42 +65,88 @@ namespace ITD.Content.NPCs.Bosses
                 NPC.TargetClosest();
             }
             NPC.TargetClosest();
-
-            Player player = Main.player[NPC.target];
-            Vector2 idlePosition = player.Center + new Vector2(NPC.ai[1], NPC.ai[2]);
-            Vector2 vectorToIdlePosition = idlePosition - NPC.Center;
-            Vector2 vectorToIdlePositionNorm = vectorToIdlePosition.SafeNormalize(Vector2.UnitY);
-            distanceToIdlePosition = vectorToIdlePosition.Length();
-            //speed is dependant on attack
-            if (distanceToIdlePosition > 10f)
+            if (!IsDashing)
             {
-                vectorToIdlePosition.Normalize();
-                vectorToIdlePosition *= speed;
-            }
-            NPC.velocity = (NPC.velocity * (inertia - 2) + vectorToIdlePosition) / inertia;
+                if (NPC.localAI[2]++ >= 150)
+                {
+                    NPC.velocity *= 0.9f;
+                    if (NPC.localAI[2]++ >= 200)//Have to stop first
+                    {
 
-            NPC.netUpdate = true;
-            NPC.rotation = NPC.velocity.X / 50;
-            if (Main.player[NPC.target].Distance(NPC.Center) < 250f)
-            {
-                speed = 6;
+                        IsDashing = true;
+                    }
+                }
+                else
+                {
+                }
             }
             else
             {
-                speed = 9;
+                Dash(1, 10, 20, 30, 1);
             }
-            Vector2 velo = Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
-            NPC.rotation = (float)Math.Atan2((double)velo.Y, (double)velo.X) + 1.57f;
+        }
+        Vector2 dashvel;
+        public bool IsDashing;
+        public void Dash(int time1, int time2, int time3, int reset, int attackID)
+        {
+            IsDashing = true;
+            Player player = Main.player[NPC.target];
+            NPC.localAI[1]++;
+            //very hard coded
+            if (NPC.localAI[1] == time1)//set where to dash
+            {
+                dashvel = Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
+                NPC.velocity = dashvel;
+                NPC.netUpdate = true;
+            }
+
+            if (NPC.localAI[1] > time1 && NPC.localAI[1] < time2)//xcel
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    NPC.netUpdate = true;
+
+                    NPC.velocity *= 1.18f;
+                    NPC.netUpdate = true;
+                }
+            }
+            if (NPC.localAI[1] > time3) //Decelerate 
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    NPC.netUpdate = true;
+
+                    NPC.velocity *= 0.96f;
+                    NPC.netUpdate = true;
+
+                }
+            }
+            if (NPC.localAI[1] >= reset)//
+            {
+                NPC.localAI[0] = 0;
+                NPC.localAI[1] = 0;
+                NPC.localAI[2] = 0;
+                IsDashing = false;
+            }
 
         }
-        int dustcolor;
         public override void HitEffect(NPC.HitInfo hit)
         {
             if (NPC.life <= 0)          //this make so when the npc has 0 life(dead) he will spawn this
             {
             }
         }
-
+        public override void OnSpawn(IEntitySource source)
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                Dust dust = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.ShimmerTorch, 0, 0f, 40, default, Main.rand.NextFloat(2f, 3f));
+                dust.velocity *= 2f;
+                Dust dust2 = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.ShimmerTorch, 0, 0f, 40, default, Main.rand.NextFloat(2f, 3f));
+                dust2.velocity *= 1f;
+                dust2.noGravity = true;
+            }
+        }
         public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
         {
             forcedkill = true;

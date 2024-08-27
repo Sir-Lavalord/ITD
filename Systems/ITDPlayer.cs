@@ -43,9 +43,14 @@ namespace ITD.Players
         public bool CosJellSuffocated;
         public const int CosJellEscapeMax = 10;
         public int CosJellEscapeCurrent;
+        //Screenshake
+        public int Screenshake;
 
         public override void ResetEffects()
         {
+            //Screenshake
+            if (Screenshake > 0)
+                Screenshake--;
             //Suffocrap
             if (CosJellSuffocated)
             {
@@ -159,6 +164,13 @@ namespace ITD.Players
                 //Suffocation Here
                 
             }
+        public override void ModifyScreenPosition()
+        {
+            if (Screenshake > 0)
+            {
+                Main.screenPosition += Main.rand.NextVector2Circular(4, 4);
+            }
+        }
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
 			if (modifiers.Dodgeable && Main.rand.NextFloat(1f) < blockChance) // Chance to block attacks
