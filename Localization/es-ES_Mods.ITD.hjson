@@ -468,6 +468,21 @@ Items: {
 		DisplayName: Semillas de césped azul
 		Tooltip: ""
 	}
+
+	CosmicJellyfishMask: {
+		// DisplayName: Cosmic Jellyfish Mask
+		// Tooltip: ""
+	}
+
+	WindCape: {
+		// DisplayName: Windstrumican Cape
+		/* Tooltip:
+			'''
+			10% increased movement speed
+			Wind follows your step
+			Expert
+			''' */
+	}
 }
 
 Projectiles: {
@@ -536,11 +551,9 @@ Projectiles: {
 	StarlightStaffProj.DisplayName: Bastón de Luz Astral
 	BlankExplosion.DisplayName: Explosión
 	DunebarrelRotate.DisplayName: Cañón de dunas
-	// CosmicJellyfishMiniProj.DisplayName: Cosmic Jellyfish Mini Proj
-	// CosmicLightningOrb.DisplayName: Cosmic Lightning Orb
-	// CosmicRay.DisplayName: Cosmic Ray
-	// CosmicRayWarn.DisplayName: Cosmic Ray Warn
-	// TouhouBullet.DisplayName: Touhou Bullet
+	// SandSpike.DisplayName: Sand Spike
+	// SandberusSkull.DisplayName: Sandberus Skull
+	// SandBoulder.DisplayName: Sand Boulder
 }
 
 NPCs: {
@@ -566,7 +579,6 @@ NPCs: {
 	FlamingSkull.DisplayName: Calavera en llamas
 	AmbushBones.DisplayName: Huesitos acechantes
 	ShroomishSlime.DisplayName: Slime champizúl
-	// CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
 }
 
 Buffs: {

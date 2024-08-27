@@ -1,5 +1,5 @@
 ﻿using ITD.Content.Dusts;
-using ITD.Utils;
+using ITD.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;

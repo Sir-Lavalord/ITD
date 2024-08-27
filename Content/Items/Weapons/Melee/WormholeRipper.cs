@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
-using ITD.Utils;
+using ITD.Utilities;
 using Terraria.Audio;
 
 namespace ITD.Content.Items.Weapons.Melee

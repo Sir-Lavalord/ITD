@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Projectiles.Friendly;
-using ITD.Utils;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -31,7 +30,6 @@ namespace ITD.Content.Items.Weapons.Mage
             Item.autoReuse = true;
             Item.crit = 20;
             Item.staff[Type] = true;
-            Item.useTurn = true;
         }
         //lazy af fix
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

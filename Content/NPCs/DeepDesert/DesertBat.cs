@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Buffs.Debuffs;
 using Terraria.GameContent.ItemDropRules;
-using ITD.Utils;
+using ITD.Utilities;
 
 namespace ITD.Content.NPCs.DeepDesert
 {

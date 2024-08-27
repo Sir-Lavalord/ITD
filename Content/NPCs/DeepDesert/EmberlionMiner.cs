@@ -8,7 +8,7 @@ using Terraria.Audio;
 using ITD.Content.Items.Placeable;
 using ITD.Content.Items.Materials;
 using Terraria.GameContent.ItemDropRules;
-using ITD.Utils;
+using ITD.Utilities;
 
 namespace ITD.Content.NPCs.DeepDesert
 {

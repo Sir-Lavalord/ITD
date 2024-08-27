@@ -27,8 +27,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 Projectile.ai[2] = value == null ? 0 : value.whoAmI + 1;
             }
         }
-        public bool bCollapse;
-
         public override void SetDefaults()
         {
             Projectile.width = 30;
@@ -50,7 +48,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         {
             float maxDetectRadius = 200f;
 
-            if (!bCollapse)
+            if (Projectile.timeLeft > 36)
             {				
                 if (HomingTarget == null)
                 {
@@ -76,17 +74,16 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 Projectile.velocity *= 0f;
                 int frameSpeed = 6;
                 Projectile.frameCounter++;
-                if (Projectile.frameCounter >= frameSpeed && Projectile.timeLeft > 20)
+                if (Projectile.frameCounter >= frameSpeed && Projectile.timeLeft > 10)
                 {
                     Projectile.frameCounter = 0;
                     Projectile.frame++;
                     if (Projectile.frame >= Main.projFrames[Projectile.type])
                     {
 						SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
-                        Projectile.timeLeft = 10;
                     }
                 }
-                if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 20)
+                if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 10)
                 {
                     Projectile.Resize(200, 200);
 
@@ -99,7 +96,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         }
         public override bool? CanDamage()
         {
-            if (Projectile.timeLeft <= 10 || !bCollapse)
+            if (Projectile.timeLeft <= 10 || Projectile.timeLeft > 36)
             {
                 return true;
             }
@@ -111,22 +108,21 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!bCollapse)
+            if (Projectile.timeLeft > 36)
             {
-                Projectile.timeLeft = 99999;
+                Projectile.timeLeft = 36;
                 Projectile.frame = 1;
-                bCollapse = true;
             }
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-			Projectile.position = Projectile.oldPos[0];
+			if (Projectile.oldPos[0] != new Vector2())
+				Projectile.position = Projectile.oldPos[0];
 			
-            if (!bCollapse)
+            if (Projectile.timeLeft > 36)
             {
-                Projectile.timeLeft = 99999;
+                Projectile.timeLeft = 36;
                 Projectile.frame = 1;
-                bCollapse = true;
             }
             return false;
         }
@@ -164,7 +160,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         }
         public override bool PreDraw(ref Color lightColor)
         {
-			if (Projectile.timeLeft > 20)
+			if (Projectile.timeLeft > 10)
 			{
 				Texture2D trailTexture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Misc/StarlightStaffProj_Trail").Value;
 				Vector2 origin = trailTexture.Frame(1, 1).Size() / 2f;

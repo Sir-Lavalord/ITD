@@ -466,8 +466,23 @@ Items: {
 	}
 
 	BluegrassSeeds: {
-		// DisplayName: Bluegrass Seeds
-		// Tooltip: ""
+		DisplayName: Blaugras-Saat
+		Tooltip: ""
+	}
+
+	CosmicJellyfishMask: {
+		DisplayName: Kosmische-Qualle-Maske
+		Tooltip: ""
+	}
+
+	WindCape: {
+		// DisplayName: Windstrumican Cape
+		/* Tooltip:
+			'''
+			10% increased movement speed
+			Wind follows your step
+			Expert
+			''' */
 	}
 }
 
@@ -532,16 +547,14 @@ Projectiles: {
 	DunebarrelRightGun.DisplayName: Rechte Waffe vom Dünenrohr
 	ElectrifiedArrow.DisplayName: Elektrifizierter Pfeil
 	StarlightProj.DisplayName: Sternenlicht Projektil
-	// RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
-	// ElectrumSpearBeam.DisplayName: Electrum Spear Beam
-	// StarlightStaffProj.DisplayName: Starlight Staff Proj
-	// BlankExplosion.DisplayName: Blank Explosion
-	// DunebarrelRotate.DisplayName: Dunebarrel Rotate
-	// CosmicJellyfishMiniProj.DisplayName: Cosmic Jellyfish Mini Proj
-	// CosmicLightningOrb.DisplayName: Cosmic Lightning Orb
-	// CosmicRay.DisplayName: Cosmic Ray
-	// CosmicRayWarn.DisplayName: Cosmic Ray Warn
-	// TouhouBullet.DisplayName: Touhou Bullet
+	RhodiumSwordBeam.DisplayName: Rhodiumschwert-Strahl
+	ElectrumSpearBeam.DisplayName: Elektrumspeer-Strahl
+	StarlightStaffProj.DisplayName: Sternenlichtstab-Projektil
+	BlankExplosion.DisplayName: Pure Explosion
+	DunebarrelRotate.DisplayName: Dünenrohr Drehung
+	// SandSpike.DisplayName: Sand Spike
+	// SandberusSkull.DisplayName: Sandberus Skull
+	// SandBoulder.DisplayName: Sand Boulder
 }
 
 NPCs: {
@@ -567,7 +580,6 @@ NPCs: {
 	FlamingSkull.DisplayName: Brennender Schädel
 	AmbushBones.DisplayName: Überfallskelett
 	ShroomishSlime.DisplayName: Pilzschleim
-	// CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
 }
 
 Buffs: {

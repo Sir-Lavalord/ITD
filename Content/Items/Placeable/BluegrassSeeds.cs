@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 using Terraria.Audio;
-using ITD.Utils;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Placeable
 {

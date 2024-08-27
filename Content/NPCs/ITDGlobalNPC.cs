@@ -1,6 +1,6 @@
 ﻿using ITD.Content.Items.Weapons.Melee.Snaptraps;
 using ITD.Content.Items.Accessories.Defensive;
-using ITD.Utils;
+using ITD.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
