@@ -579,7 +579,6 @@ NPCs: {
 	FlamingSkull.DisplayName: Calavera en llamas
 	AmbushBones.DisplayName: Huesitos acechantes
 	ShroomishSlime.DisplayName: Slime champizúl
-	// Sandberus.DisplayName: Sandberus
 }
 
 Buffs: {

@@ -579,7 +579,6 @@ NPCs: {
 	FlamingSkull.DisplayName: Flaming Skull
 	AmbushBones.DisplayName: Ambush Bones
 	ShroomishSlime.DisplayName: Shroomish Slime
-	Sandberus.DisplayName: Sandberus
 }
 
 Buffs: {

@@ -580,7 +580,6 @@ NPCs: {
 	FlamingSkull.DisplayName: Brennender Schädel
 	AmbushBones.DisplayName: Überfallskelett
 	ShroomishSlime.DisplayName: Pilzschleim
-	// Sandberus.DisplayName: Sandberus
 }
 
 Buffs: {

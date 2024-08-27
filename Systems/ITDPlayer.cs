@@ -37,9 +37,38 @@ namespace ITD.Players
 		public bool dreadBlock = false;
 
         public bool setAlloy = false;
+        //Drawlayer nonsense
+        public int frameCounter = 0;
+        public int frameEffect = 0;
+        public bool CosJellSuffocated;
+        public const int CosJellEscapeMax = 10;
+        public int CosJellEscapeCurrent;
+
         public override void ResetEffects()
         {
-			if (heldItem != Player.inventory[Player.selectedItem].type)
+            //Suffocrap
+            if (CosJellSuffocated)
+            {
+                Player.velocity *= 0;
+                Player.RemoveAllGrapplingHooks();
+                if (CosJellEscapeCurrent <= 0)
+                {
+                    CosJellSuffocated = false;
+                    Player.immune = true;//probably op
+                    Player.immuneTime = 180;
+                }
+            }
+            if ((Player.controlJump && Player.releaseJump))
+            {
+                CosJellEscapeCurrent--;
+
+                if (CosJellEscapeCurrent <= 0)
+                {
+                    CosJellEscapeCurrent = 0;
+                }
+            }
+
+            if (heldItem != Player.inventory[Player.selectedItem].type)
 			{
 				itemVar = new float[4];
 				heldItem = Player.inventory[Player.selectedItem].type;
@@ -127,8 +156,10 @@ namespace ITD.Players
                     }
                 }
             }
-        }
-		public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+                //Suffocation Here
+                
+            }
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
 			if (modifiers.Dodgeable && Main.rand.NextFloat(1f) < blockChance) // Chance to block attacks
 			{
