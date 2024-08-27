@@ -19,6 +19,9 @@ namespace ITD.Players
         public float[] itemVar = new float[4];  // used for storing info about held items, like wormhole ripper's current charge
 		int heldItem;
 		
+		public float recoilFront = 0f;
+		public float recoilBack = 0f;
+		
         bool prevTime = false;
         bool curTime = false;
 
@@ -41,6 +44,11 @@ namespace ITD.Players
 				itemVar = new float[4];
 				heldItem = Player.inventory[Player.selectedItem].type;
 			}
+			if (recoilFront > 0f)
+				recoilFront -= 0.02f;
+			if (recoilBack > 0f)
+				recoilBack -= 0.02f;
+
 			blockChance = 0f;
 			dreadBlock = false;
 			

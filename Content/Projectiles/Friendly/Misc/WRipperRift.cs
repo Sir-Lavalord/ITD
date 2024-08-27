@@ -12,11 +12,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 {
     public class WRipperRift : ModProjectile
     {
-        //public override void SetStaticDefaults()
-        //{
-        //    Main.projFrames[Projectile.type] = 8;
-        //}
-
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Melee;

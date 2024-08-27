@@ -1,25 +1,28 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ITD.Content.Items;
-using ITD.Content.Projectiles;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using ITD.Content;
+using Terraria.GameContent;
+
+using ITD.Systems;
+using ITD.Players;
+
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.Drawing.Text;
-using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {
     public class Dunebarrel : ModItem
     {
-        public override void SetStaticDefaults()
+		public int attackCycle = 0;
+		
+		public override void SetStaticDefaults()
         {
-            //Why though?
-            ItemID.Sets.IsDrill[Type] = false;
+            FrontGunLayer.RegisterData(Item.type);
+			BackGunLayer.RegisterData(Item.type);
         }
-
         public override void SetDefaults()
         {
 
@@ -28,145 +31,65 @@ namespace ITD.Content.Items.Weapons.Ranger
             Item.width = 20;
             Item.height = 12;
 
-            Item.useTime = 4;
+            Item.useTime = 15;
             Item.useAnimation = 15;
-            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.useStyle = -1;//ItemUseStyleID.Shoot;
             Item.knockBack = 0.5f;
             Item.value = Item.buyPrice(gold: 12, silver: 60);
             Item.rare = ItemRarityID.LightRed;
-            Item.UseSound = SoundID.Item23;
+            Item.UseSound = SoundID.Item40;
             Item.shoot = ProjectileID.PurificationPowder;
-            Item.shootSpeed = 65f;
+            Item.shootSpeed = 12f;
             Item.noMelee = true;
             Item.noUseGraphic = false;
-            Item.channel = true;
             Item.autoReuse = true;
 
-            Item.noMelee = false;
-            Item.scale = 0.65f;
+            //Item.scale = 0.65f;
 
             Item.useAmmo = AmmoID.Bullet;
         }
-        public override bool AltFunctionUse(Player player)
-        {
-            return true;
-        }
-        public override bool CanUseItem(Player player)
-        {
-            if (player.altFunctionUse == 2)
-            {
 
-                Item.useTime = 1;
-                Item.useAnimation = 30;
-                Item.useAmmo = 0;
-                Item.useTurn = false;
-            }
-            else
-            {
-                Item.useTurn = true;
-                Item.useTime = 4;
-                Item.useAnimation = 15;
-                Item.useAmmo = AmmoID.Bullet;
-
-            }
-            return true;
-        }
-        int iDegree;
-
-        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-        {
-            if (player.altFunctionUse == 2)
-            {
-                velocity = velocity.RotatedBy(MathHelper.ToRadians(iDegree));
-            }
-        }
-        public override void UseItemFrame(Player player)     //this defines what frame the player use when this weapon is used
-        {
-            if (player.altFunctionUse == 2)
-            {
-                player.bodyFrame.Y = 3 * player.bodyFrame.Height;
-            }
-        }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (player.altFunctionUse == 2)
-            {
-                iDegree += 12;
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<DunebarrelRotate>()] < 1)
-                {
-                    player.GetModPlayer<DunebarrelStackPlayer>().iCurrentStack += 10;
-
-                    Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<DunebarrelRotate>(), damage, knockback, player.whoAmI);
-                }
-                return false;
-            }
-            else
-            {
-                iDegree = 0;
-                var vPlayer = player.GetModPlayer<DunebarrelStackPlayer>();
-                vPlayer.iCurrentStack--;
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<DunebarrelRightGun>()] < 1)
-                {
-                    Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<DunebarrelRightGun>(), (int)(damage * vPlayer.fDamageIncrease), knockback, player.whoAmI);
-                }
-                return false;
-            }
-        }
-        public void TrackPosition(Player player)
-        {
-            Vector2 position = player.itemLocation;
-            DunebarrelRightGun.SetPosition(position);
-            DunebarrelRotate.SetPosition(position);
-
+            ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
+			attackCycle = ++attackCycle % 2;
+			if (attackCycle == 1)
+			{
+				modPlayer.recoilFront = 0.2f;
+			}
+			else
+			{
+				modPlayer.recoilBack = 0.2f;
+			}
+            return true;
         }
 
-        public override void HoldItem(Player player)
+		public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
-            TrackPosition(player);
+			if (Main.MouseWorld.X < player.Center.X)
+				player.direction = -1;
+			else
+				player.direction = 1;
+			
+			ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
+			
+			float rotation = (Vector2.Normalize(Main.MouseWorld - player.MountedCenter)*player.direction).ToRotation();
+			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation - modPlayer.recoilFront * player.direction - MathHelper.PiOver2 * player.direction);
+			player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, rotation - modPlayer.recoilBack * player.direction - MathHelper.PiOver2 * player.direction);
         }
 
-    }
-    public class DunebarrelStackPlayer : ModPlayer
-    {
-        public float fDamageIncrease = 1f;
-        public int iCurrentStack;
-        public const int iMaxStack = 40;
-        public override void UpdateDead()
+		public override void HoldStyle(Player player, Rectangle heldItemFrame)
         {
-            iCurrentStack = 0;
-        }
-        //Actual yandereDev behaviour, i'm sorry
-        public override void PostUpdate()
-        {
-            if (iCurrentStack >= iMaxStack)
-            {
-                iCurrentStack = iMaxStack;
-            }
-            if (iCurrentStack <= 0)
-            {
-                iCurrentStack = 0;
-            }
-            if (iCurrentStack > 30 && iCurrentStack <= 40)
-            {
-                fDamageIncrease = 2f;
-            }
-            else if (iCurrentStack > 20 && iCurrentStack <= 30)
-            {
-                fDamageIncrease = 1.75f;
-            }
-            else if (iCurrentStack > 10 && iCurrentStack <= 20)
-            {
-                fDamageIncrease = 1.5f;
-            }
-            else if (iCurrentStack > 0 && iCurrentStack <= 10)
-            {
-                fDamageIncrease = 1.25f;
-            }
-            else
-            {
-                fDamageIncrease = 1f;
-
-            }
+			if (Main.MouseWorld.X < player.Center.X)
+				player.direction = -1;
+			else
+				player.direction = 1;
+			
+			ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
+			
+			float rotation = (Vector2.Normalize(Main.MouseWorld - player.MountedCenter)*player.direction).ToRotation();
+			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation - modPlayer.recoilFront * player.direction - MathHelper.PiOver2 * player.direction);
+			player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, rotation - modPlayer.recoilBack * player.direction - MathHelper.PiOver2 * player.direction);
         }
     }
 }
