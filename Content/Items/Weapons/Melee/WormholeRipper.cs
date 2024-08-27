@@ -50,7 +50,9 @@ namespace ITD.Content.Items.Weapons.Melee
                 Item.shoot = ModContent.ProjectileType<WRipperRift>();
 				player.armorEffectDrawShadow = true;
 				player.jump = 0;
-				player.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 14f;
+                player.immune = true;//probably op
+                player.immuneTime = 30;
+                player.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 14f;
                 SoundStyle wRipperRip = new SoundStyle("ITD/Content/Sounds/WRipperRip");
                 SoundEngine.PlaySound(wRipperRip, player.Center);
                 for (int index1 = 0; index1 < 12; ++index1)

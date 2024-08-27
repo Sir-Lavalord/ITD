@@ -554,6 +554,11 @@ Projectiles: {
 	// SandSpike.DisplayName: Sand Spike
 	// SandberusSkull.DisplayName: Sandberus Skull
 	// SandBoulder.DisplayName: Sand Boulder
+	// CosmicJellyfishMiniProj.DisplayName: Cosmic Jellyfish Mini Proj
+	// CosmicLightningOrb.DisplayName: Cosmic Lightning Orb
+	// CosmicRay.DisplayName: Cosmic Ray
+	// CosmicRayWarn.DisplayName: Cosmic Ray Warn
+	// TouhouBullet.DisplayName: Touhou Bullet
 }
 
 NPCs: {
@@ -579,6 +584,8 @@ NPCs: {
 	FlamingSkull.DisplayName: Calavera en llamas
 	AmbushBones.DisplayName: Huesitos acechantes
 	ShroomishSlime.DisplayName: Slime champizúl
+	// CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
+	// Sandberus.DisplayName: Sandberus
 }
 
 Buffs: {
