@@ -7,6 +7,7 @@ using Terraria.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using ReLogic.Content;
+using ITD.Content.NPCs.Bosses;
 
 namespace ITD.Content.Projectiles.Hostile
 {
@@ -57,7 +58,19 @@ namespace ITD.Content.Projectiles.Hostile
             isStuck = true;
             return false;
         }
-
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            NPC CosJel = Main.npc[(int)Projectile.ai[0]];
+            if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+            {
+                Player player = Main.player[CosJel.target];
+                width = 15;
+                height = 15;
+                fallThrough = player.Center.Y >= Projectile.Bottom.Y;
+            }
+            return true;
+                
+        }
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = effect.Value;

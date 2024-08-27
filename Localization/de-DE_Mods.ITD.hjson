@@ -537,6 +537,11 @@ Projectiles: {
 	// StarlightStaffProj.DisplayName: Starlight Staff Proj
 	// BlankExplosion.DisplayName: Blank Explosion
 	// DunebarrelRotate.DisplayName: Dunebarrel Rotate
+	// CosmicJellyfishMiniProj.DisplayName: Cosmic Jellyfish Mini Proj
+	// CosmicLightningOrb.DisplayName: Cosmic Lightning Orb
+	// CosmicRay.DisplayName: Cosmic Ray
+	// CosmicRayWarn.DisplayName: Cosmic Ray Warn
+	// TouhouBullet.DisplayName: Touhou Bullet
 }
 
 NPCs: {
@@ -562,6 +567,7 @@ NPCs: {
 	FlamingSkull.DisplayName: Brennender Schädel
 	AmbushBones.DisplayName: Überfallskelett
 	ShroomishSlime.DisplayName: Pilzschleim
+	// CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
 }
 
 Buffs: {
