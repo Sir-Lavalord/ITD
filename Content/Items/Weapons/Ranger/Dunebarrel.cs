@@ -26,7 +26,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         public override void SetDefaults()
         {
 
-            Item.damage = 27;
+            Item.damage = 18;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 20;
             Item.height = 12;
@@ -41,10 +41,10 @@ namespace ITD.Content.Items.Weapons.Ranger
             Item.shoot = ProjectileID.PurificationPowder;
             Item.shootSpeed = 12f;
             Item.noMelee = true;
-            Item.noUseGraphic = false;
+            Item.noUseGraphic = true;
             Item.autoReuse = true;
 
-            //Item.scale = 0.65f;
+            Item.scale = 0.75f;
 
             Item.useAmmo = AmmoID.Bullet;
         }
@@ -74,8 +74,8 @@ namespace ITD.Content.Items.Weapons.Ranger
 			ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
 			
 			float rotation = (Vector2.Normalize(Main.MouseWorld - player.MountedCenter)*player.direction).ToRotation();
-			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation - modPlayer.recoilFront * player.direction - MathHelper.PiOver2 * player.direction);
-			player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, rotation - modPlayer.recoilBack * player.direction - MathHelper.PiOver2 * player.direction);
+			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilFront * player.direction - MathHelper.PiOver2 * player.direction);
+			player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilBack * player.direction - MathHelper.PiOver2 * player.direction);
         }
 
 		public override void HoldStyle(Player player, Rectangle heldItemFrame)
@@ -88,8 +88,8 @@ namespace ITD.Content.Items.Weapons.Ranger
 			ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
 			
 			float rotation = (Vector2.Normalize(Main.MouseWorld - player.MountedCenter)*player.direction).ToRotation();
-			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation - modPlayer.recoilFront * player.direction - MathHelper.PiOver2 * player.direction);
-			player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, rotation - modPlayer.recoilBack * player.direction - MathHelper.PiOver2 * player.direction);
+			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilFront * player.direction - MathHelper.PiOver2 * player.direction);
+			player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilBack * player.direction - MathHelper.PiOver2 * player.direction);
         }
     }
 }

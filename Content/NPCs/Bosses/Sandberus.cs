@@ -8,6 +8,9 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
+using ITD.Content.Items.Accessories.Defensive;
+using ITD.Content.Items.Weapons.Ranger;
+using ITD.Content.Items.Other;
 using ITD.Content.Projectiles.Hostile;
 using ITD.Utilities;
 
@@ -281,7 +284,14 @@ namespace ITD.Content.NPCs.Bosses
 		
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ItemID.SandBlock, 1, 20, 30));
+			LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+			notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<Skullmet>(), 1));
+			notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<Dunebarrel>(), 5));
+			notExpertRule.OnSuccess(ItemDropRule.Common(ItemID.SandBlock, 1, 20, 30));
+            notExpertRule.OnSuccess(ItemDropRule.Common(ItemID.DesertFossil, 1, 5, 15));
+			notExpertRule.OnSuccess(ItemDropRule.Common(ItemID.FossilOre, 1, 5, 8));
+			npcLoot.Add(notExpertRule);
+			npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<SandberusBag>()));
         }
     }
 }

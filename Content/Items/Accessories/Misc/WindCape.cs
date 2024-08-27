@@ -12,7 +12,7 @@ namespace ITD.Content.Items.Accessories.Misc
             Item.width = 24;
             Item.height = 24;
             Item.value = Item.sellPrice(50000);
-            Item.rare = ItemRarityID.Expert;
+			Item.expert = true;
             Item.accessory = true;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)

@@ -481,8 +481,12 @@ Items: {
 			'''
 			10% increased movement speed
 			Wind follows your step
-			Expert
 			''' */
+	}
+
+	SandberusBag: {
+		// DisplayName: Sandberus Bag
+		// Tooltip: ""
 	}
 }
 

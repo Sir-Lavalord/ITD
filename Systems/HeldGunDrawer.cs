@@ -86,23 +86,37 @@ namespace ITD.Systems
 			Texture2D texture = TextureAssets.Item[heldItem.type].Value;
 			Rectangle sourceRectangle = texture.Frame(1, 1);
 			
-			Vector2 position = new Vector2((float)((int)(drawInfo.Position.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(drawInfo.Position.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f))) + drawPlayer.bodyPosition + new Vector2((float)(drawPlayer.bodyFrame.Width / 2), (float)(drawPlayer.bodyFrame.Height / 2)) - new Vector2(drawPlayer.direction*5f, 0f);//Player.MountedCenter - new Vector2(Player.direction*4f, Player.gravDir*2f);
-			float rotation = (Vector2.Normalize(Main.MouseWorld - drawPlayer.MountedCenter)*drawPlayer.direction).ToRotation();
-
-			drawPlayer.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation - MathHelper.PiOver2 * drawPlayer.direction);
+			Color drawColor = Lighting.GetColor((int)((double)drawInfo.Position.X + (double)drawPlayer.width * 0.5) / 16, (int)(((double)drawInfo.Position.Y + (double)drawPlayer.height * 0.5) / 16.0));
 			
+			Vector2 position = new Vector2((float)((int)(drawInfo.Position.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(drawInfo.Position.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f))) + drawPlayer.bodyPosition + new Vector2((float)(drawPlayer.bodyFrame.Width / 2), (float)(drawPlayer.bodyFrame.Height / 2)) - new Vector2(drawPlayer.direction*5f, 0f);//Player.MountedCenter - new Vector2(Player.direction*4f, Player.gravDir*2f);
 			position = position - Main.screenPosition;
 			
-			Vector2 origin = new Vector2(0, texture.Height);
+			Vector2 value = Main.OffsetsPlayerHeadgear[drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height];
+			value.Y -= 2f;
+			position += value * drawPlayer.gravDir;
+			
+			if (drawInfo.compFrontArmFrame.X / drawInfo.compFrontArmFrame.Width >= 7)
+			{
+				position += new Vector2(drawPlayer.direction, drawPlayer.gravDir);
+			}
+			
+			float rotation = (Vector2.Normalize(Main.MouseWorld - drawPlayer.MountedCenter)*drawPlayer.direction).ToRotation();
+			
+			Vector2 origin = new Vector2(0f, texture.Height);
 			SpriteEffects effects = SpriteEffects.None;
 			if (drawPlayer.direction == -1)
 			{
-				origin = new Vector2(texture.Width, texture.Height);
+				origin += new Vector2(texture.Width, 0f);
 				effects = SpriteEffects.FlipHorizontally;
 			}
+			if (drawPlayer.gravDir == -1)
+			{
+				origin -= new Vector2(0f, texture.Height);
+				effects = effects | SpriteEffects.FlipVertically;
+			}
 			
-			//Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(225, 225, 225), rotation - recoilBack * Player.direction, origin, 1f, effects, 0f);
-			DrawData drawData = new DrawData(texture, position, sourceRectangle, new Color(255, 255, 255), rotation - modPlayer.recoilFront * drawPlayer.direction, origin - new Vector2(0, 10f), 1f, effects, 0f);
+			float adjustedItemScale = drawPlayer.GetAdjustedItemScale(heldItem);
+			DrawData drawData = new DrawData(texture, position, sourceRectangle, drawColor, rotation - modPlayer.recoilFront * drawPlayer.direction * drawPlayer.gravDir, origin - new Vector2(8f * drawPlayer.direction, 10f * drawPlayer.gravDir), adjustedItemScale, effects, 0f);
             drawInfo.DrawDataCache.Add(drawData);
         }
     }
@@ -131,7 +145,7 @@ namespace ITD.Systems
 
         public override Position GetDefaultPosition()
         {
-            return new AfterParent(PlayerDrawLayers.OffhandAcc);
+            return new AfterParent(PlayerDrawLayers.Skin);
         }
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
@@ -171,23 +185,37 @@ namespace ITD.Systems
 			Texture2D texture = TextureAssets.Item[heldItem.type].Value;
 			Rectangle sourceRectangle = texture.Frame(1, 1);
 			
-			Vector2 position = new Vector2((float)((int)(drawInfo.Position.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(drawInfo.Position.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f))) + drawPlayer.bodyPosition + new Vector2((float)(drawPlayer.bodyFrame.Width / 2), (float)(drawPlayer.bodyFrame.Height / 2)) - new Vector2(drawPlayer.direction*6f, 0f);//Player.MountedCenter - new Vector2(Player.direction*4f, Player.gravDir*2f);
-			float rotation = (Vector2.Normalize(Main.MouseWorld - drawPlayer.MountedCenter)*drawPlayer.direction).ToRotation();
-
-			drawPlayer.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation - MathHelper.PiOver2 * drawPlayer.direction);
+			Color drawColor = Lighting.GetColor((int)((double)drawInfo.Position.X + (double)drawPlayer.width * 0.5) / 16, (int)(((double)drawInfo.Position.Y + (double)drawPlayer.height * 0.5) / 16.0));
 			
+			Vector2 position = new Vector2((float)((int)(drawInfo.Position.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(drawInfo.Position.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f))) + drawPlayer.bodyPosition + new Vector2((float)(drawPlayer.bodyFrame.Width / 2), (float)(drawPlayer.bodyFrame.Height / 2)) + new Vector2(drawPlayer.direction*6f, drawPlayer.gravDir*2f);//Player.MountedCenter - new Vector2(Player.direction*4f, Player.gravDir*2f);
 			position = position - Main.screenPosition;
 			
-			Vector2 origin = new Vector2(0, texture.Height);
+			Vector2 value = Main.OffsetsPlayerHeadgear[drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height];
+			value.Y -= 2f;
+			position += value * drawPlayer.gravDir;
+			
+			if (drawInfo.compFrontArmFrame.X / drawInfo.compFrontArmFrame.Width >= 7)
+			{
+				position += new Vector2(drawPlayer.direction, drawPlayer.gravDir);
+			}
+			
+			float rotation = (Vector2.Normalize(Main.MouseWorld - drawPlayer.MountedCenter)*drawPlayer.direction).ToRotation();
+			
+			Vector2 origin = new Vector2(0f, texture.Height);
 			SpriteEffects effects = SpriteEffects.None;
 			if (drawPlayer.direction == -1)
 			{
-				origin = new Vector2(texture.Width, texture.Height);
+				origin += new Vector2(texture.Width, 0f);
 				effects = SpriteEffects.FlipHorizontally;
 			}
+			if (drawPlayer.gravDir == -1)
+			{
+				origin -= new Vector2(0f, texture.Height);
+				effects = effects | SpriteEffects.FlipVertically;
+			}
 			
-			//Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(225, 225, 225), rotation - recoilBack * Player.direction, origin, 1f, effects, 0f);
-			DrawData drawData = new DrawData(texture, position, sourceRectangle, new Color(225, 225, 225), rotation - modPlayer.recoilBack * drawPlayer.direction, origin - new Vector2(drawPlayer.direction*2f, 8f), 1f, effects, 0f);
+			float adjustedItemScale = drawPlayer.GetAdjustedItemScale(heldItem);
+			DrawData drawData = new DrawData(texture, position, sourceRectangle, drawColor, rotation - modPlayer.recoilBack * drawPlayer.direction * drawPlayer.gravDir, origin - new Vector2(4f * drawPlayer.direction, 6f * drawPlayer.gravDir), adjustedItemScale, effects, 0f);
             drawInfo.DrawDataCache.Add(drawData);
         }
     }
