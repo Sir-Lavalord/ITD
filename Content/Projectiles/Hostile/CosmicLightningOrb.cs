@@ -42,7 +42,7 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.ignoreWater = true;
             Projectile.light = 1f;
             Projectile.tileCollide = true;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 400;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
@@ -65,12 +65,12 @@ namespace ITD.Content.Projectiles.Hostile
 
                 float length = Projectile.velocity.Length();
                 float targetAngle = Projectile.AngleTo(HomingTarget.Center);
-                if (iStart++ >= 10 && !bStop)
+                if (iStart++ >= 120 && !bStop)
                 {
                     Projectile.velocity = Projectile.velocity.ToRotation().AngleTowards(targetAngle, MathHelper.ToRadians(1)).ToRotationVector2() * length;
                     Projectile.Center += Main.rand.NextVector2Circular(2, 2);
                 }
-                else if (iStart >= Projectile.timeLeft * 5 / 6)
+                else if (iStart >= 300)
                 {
                     bStop = true;
                 }

@@ -73,10 +73,10 @@ namespace ITD.Content.Projectiles.Hostile
             //num804 += 1.57079637f;
             //Projectile.velocity = num804.ToRotationVector2();
 
-            if (iTimer++ <= 200)
+            if (iTimer++ <= Projectile.ai[0] - 40)
             {
-                Projectile.velocity = Projectile.velocity.ToRotation().AngleLerp(CosJel.DirectionTo(Main.player[CosJel.target].Center + Main.player[CosJel.target].velocity * 15).ToRotation(), 0.2f).ToRotationVector2();
-                Projectile.rotation = Projectile.velocity.ToRotation() - (float)Math.PI / 2;
+                Projectile.velocity = Projectile.velocity.ToRotation().AngleLerp(CosJel.DirectionTo(Main.player[CosJel.target].Center + Main.player[CosJel.target].velocity * 20).ToRotation(), .1f).ToRotationVector2();
+                Projectile.rotation = Projectile.velocity.ToRotation() - (float)Math.PI /2;
             }
 
             float num805 = 3f;

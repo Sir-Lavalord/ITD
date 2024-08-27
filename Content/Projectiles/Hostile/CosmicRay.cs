@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 using ITD.Content.Projectiles;
 using Terraria.Map;
 using ITD.Content.NPCs.Bosses;
+using ITD.Utilities;
 namespace ITD.Content.Projectiles.Hostile
 {
     //TODO: MUST BE RE-WRITTEN ENTIRELY, ELSE REMOVE BEFORE RELEASE
@@ -41,10 +42,13 @@ namespace ITD.Content.Projectiles.Hostile
                 Projectile.velocity = -Vector2.UnitY;
             }
             NPC CosJel = Main.npc[(int)Projectile.ai[1]];
+            Player player = Main.player[CosJel.target];
+            player.GetITDPlayer().Screenshake = 20;
             if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
             {
                 if (CosJel != null && !CosJel.dontTakeDamage)
                 {
+                    CosJel.velocity =  -(Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(CosJel.Center.X, CosJel.Center.Y))) * 0.5f;
                     Projectile.Center = CosJel.Center;
                 }
                 else
@@ -59,9 +63,13 @@ namespace ITD.Content.Projectiles.Hostile
                     SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/Zombie_104") { Volume = 0.5f }, Projectile.Center);
                 spawnPos = Projectile.Center;
             }
-
-
-            float num801 = 3f;
+            
+            if (Main.expertMode||Main.masterMode)
+            {
+                Projectile.velocity = Projectile.velocity.ToRotation().AngleLerp(CosJel.DirectionTo(Main.player[CosJel.target].Center + Main.player[CosJel.target].velocity * 6).ToRotation(), 0.005f).ToRotationVector2();
+                Projectile.rotation = Projectile.velocity.ToRotation() - (float)Math.PI / 6;
+            }
+            float num801 = 2f;
             Projectile.localAI[0] += 1f;
 
             if (Projectile.localAI[0] >= maxTime)
