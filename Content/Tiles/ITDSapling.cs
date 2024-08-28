@@ -81,7 +81,6 @@ namespace ITD.Content.Tiles
                 bool growSuccess;
 
                 growSuccess = ITDTree.Grow(i, j, GrowsIntoTreeType, MinGrowHeight, MaxGrowHeight, Type);
-                //Main.NewText(growSucess);
                 // A flag to check if a player is near the sapling
                 bool isPlayerNear = WorldGen.PlayerLOS(i, j);
 
