@@ -487,6 +487,16 @@ Items: {
 		DisplayName: Sandberus Bag
 		Tooltip: ""
 	}
+
+	RazedWine: {
+		DisplayName: Razed Wine
+		Tooltip:
+			'''
+			Increases all damage by 10%
+			Automatically throws glass bottles at nearby enemies
+			Struck enemies have increased damage, decreased defense, and take damage over time
+			'''
+	}
 }
 
 Projectiles: {
@@ -563,6 +573,8 @@ Projectiles: {
 	CosmicRay.DisplayName: Cosmic Ray
 	CosmicRayWarn.DisplayName: Cosmic Ray
 	TouhouBullet.DisplayName: Cosmic Orb
+	RazedWineBottle.DisplayName: Razed Wine Bottle
+	EmberSlashOld.DisplayName: Ember Slash Old
 }
 
 NPCs: {
@@ -606,6 +618,11 @@ Buffs: {
 	SnowyLanternBuff: {
 		DisplayName: Winged Snowpoff
 		Description: A friendly Snowpoff lights your way
+	}
+
+	ToastedBuff: {
+		DisplayName: Toasted Buff
+		Description: Mods.ITD.Buffs.ToastedBuff.Description
 	}
 }
 

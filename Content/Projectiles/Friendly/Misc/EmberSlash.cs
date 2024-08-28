@@ -72,11 +72,11 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 			float fromMax = num + num2;
 			Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 			Texture2D texture2 = ModContent.Request<Texture2D>(Texture + "_Flame").Value;
-			Microsoft.Xna.Framework.Color value2 = Microsoft.Xna.Framework.Color.Transparent;
-			Microsoft.Xna.Framework.Color color = new Microsoft.Xna.Framework.Color(255, 80, 20, 200);
-			Microsoft.Xna.Framework.Color color2 = new Microsoft.Xna.Framework.Color(255, 255, 20, 70);
-			Microsoft.Xna.Framework.Color color3 = Microsoft.Xna.Framework.Color.Lerp(new Microsoft.Xna.Framework.Color(255, 80, 20, 100), color2, 0.25f);
-			Microsoft.Xna.Framework.Color color4 = new Microsoft.Xna.Framework.Color(80, 80, 80, 100);
+			Color value2 = Color.Transparent;
+			Color color = new Color(255, 80, 20, 200);
+			Color color2 = new Color(255, 255, 20, 70);
+			Color color3 = Color.Lerp(new Color(255, 80, 20, 100), color2, 0.25f);
+			Color color4 = new Color(80, 80, 80, 100);
 			float num3 = 0.35f;
 			float num4 = 0.7f;
 			float num5 = 0.85f;
@@ -94,13 +94,13 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 					{
 						if (num8 < 0.1f)
 						{
-							value2 = Microsoft.Xna.Framework.Color.Lerp(Microsoft.Xna.Framework.Color.Transparent, color, Utils.GetLerpValue(0f, 0.1f, num8, true));
+							value2 = Color.Lerp(Color.Transparent, color, Utils.GetLerpValue(0f, 0.1f, num8, true));
 						}
 						else
 						{
 							if (num8 < 0.2f)
 							{
-								value2 = Microsoft.Xna.Framework.Color.Lerp(color, color2, Utils.GetLerpValue(0.1f, 0.2f, num8, true));
+								value2 = Color.Lerp(color, color2, Utils.GetLerpValue(0.1f, 0.2f, num8, true));
 							}
 							else
 							{
@@ -112,23 +112,23 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 								{
 									if (num8 < num4)
 									{
-										value2 = Microsoft.Xna.Framework.Color.Lerp(color2, color3, Utils.GetLerpValue(num3, num4, num8, true));
+										value2 = Color.Lerp(color2, color3, Utils.GetLerpValue(num3, num4, num8, true));
 									}
 									else
 									{
 										if (num8 < num5)
 										{
-											value2 = Microsoft.Xna.Framework.Color.Lerp(color3, color4, Utils.GetLerpValue(num4, num5, num8, true));
+											value2 = Color.Lerp(color3, color4, Utils.GetLerpValue(num4, num5, num8, true));
 										}
 										else
 										{
 											if (num8 < 1f)
 											{
-												value2 = Microsoft.Xna.Framework.Color.Lerp(color4, Microsoft.Xna.Framework.Color.Transparent, Utils.GetLerpValue(num5, 1f, num8, true));
+												value2 = Color.Lerp(color4, Color.Transparent, Utils.GetLerpValue(num5, 1f, num8, true));
 											}
 											else
 											{
-												value2 = Microsoft.Xna.Framework.Color.Transparent;
+												value2 = Color.Transparent;
 											}
 										}
 									}
@@ -137,8 +137,8 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 						}
 						float num11 = (1f - num10) * Utils.Remap(num8, 0f, 0.2f, 0f, 1f, true);
 						Vector2 position = Projectile.Center - Main.screenPosition;
-						Microsoft.Xna.Framework.Color color5 = value2 * num11;
-						Microsoft.Xna.Framework.Color value3 = color5;
+						Color color5 = value2 * num11;
+						Color value3 = color5;
 							value3.G /= 2;
 							value3.B /= 2;
 							value3.A = (byte)Math.Min((float)color5.A + 80f * num11, 255f);

@@ -11,6 +11,8 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terraria;
 using Microsoft.Xna.Framework;
+using System.Linq;
+using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Players
 {
@@ -35,6 +37,9 @@ namespace ITD.Players
 
 		public float blockChance = 0f;
 		public bool dreadBlock = false;
+
+        public bool razedWine = false;
+        public int razedCooldown = 0;
 
         public bool setAlloy = false;
         //Drawlayer nonsense
@@ -85,6 +90,8 @@ namespace ITD.Players
 
 			blockChance = 0f;
 			dreadBlock = false;
+
+            razedWine = false;
 			
             setAlloy = false;
         }
@@ -102,13 +109,20 @@ namespace ITD.Players
                 Player.GetDamage(DamageClass.Summon) += 0.06f;
                 Player.endurance += 0.02f;
             }
+            if (razedWine)
+            {
+                if (razedCooldown > 0)
+                {
+                    razedCooldown--;
+                }
+            }
         }
         public override void PreUpdate()
         {
             ZoneBlueshroomsUnderground = ModContent.GetInstance<ITDSystem>().bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
             ZoneDeepDesert = ModContent.GetInstance<ITDSystem>().deepdesertTileCount > 50 && Player.ZoneRockLayerHeight;
 
-            // Random boss spawns
+            // Random boss spawns (MOVE THIS TO ITDSYSTEM TO PREVENT MP FUNKYNESS)
 
             prevTime = curTime;
             curTime = Main.dayTime;
@@ -212,6 +226,20 @@ namespace ITD.Players
 				}
 			}
 		}
+        public NPC[] GetNearbyNPCs(float distance, bool ignoreFriendly = true)
+        {
+            List<NPC> npcs = [];
+            foreach (var npc in Main.ActiveNPCs)
+            {
+                if (npc.WithinRange(Player.Center, distance))
+                {
+                    if (npc.friendly && ignoreFriendly)
+                        continue;
+                    npcs.Add(npc);
+                }
+            }
+            return [.. npcs];
+        }
         public override void OnEnterWorld()
         {
             cosJelCounter = false;

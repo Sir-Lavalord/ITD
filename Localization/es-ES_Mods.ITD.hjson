@@ -487,6 +487,16 @@ Items: {
 		DisplayName: Bolsa del tesoro (Desierbero)
 		Tooltip: ""
 	}
+
+	RazedWine: {
+		DisplayName: Vino arrasado
+		Tooltip:
+			'''
+			Daño aumentado por un 10%
+			Automaticamente lanza botellas de vidrio a los enemigos cercanos
+			Los enemigos afectados tienen un daño aumentado, defensa reducida, y toman daño con el tiempo
+			'''
+	}
 }
 
 Projectiles: {
@@ -563,6 +573,8 @@ Projectiles: {
 	CosmicRay.DisplayName: Rayo cósmico
 	CosmicRayWarn.DisplayName: Rayo cósmico
 	TouhouBullet.DisplayName: Órbe cósmica
+	RazedWineBottle.DisplayName: Vino arrasado
+	EmberSlashOld.DisplayName: Tajadora de llamarada
 }
 
 NPCs: {
@@ -606,6 +618,11 @@ Buffs: {
 	SnowyLanternBuff: {
 		DisplayName: Montonieve Alado
 		Description: Un Montonieve amigable ilumina tu camino
+	}
+
+	ToastedBuff: {
+		DisplayName: Brindis
+		Description: Mods.ITD.Buffs.ToastedBuff.Description
 	}
 }
 

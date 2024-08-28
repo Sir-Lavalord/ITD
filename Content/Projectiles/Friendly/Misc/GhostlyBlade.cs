@@ -29,7 +29,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 
         public override void AI()
         {
-			int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 180, 0, 0, 100, default, 1.5f);
+			int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.DungeonSpirit, 0, 0, 100, default, 1.5f);
 			Main.dust[dust].noGravity = true;
 			Main.dust[dust].velocity = Projectile.velocity/5f;
 			
@@ -48,7 +48,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         {
             for (int i = 0; i < 20; i++)
             {
-                int dust = Dust.NewDust(Projectile.Center, 1, 1, 180, 0f, 0f, 0, default, 1.5f);
+                int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.DungeonSpirit, 0f, 0f, 0, default, 1.5f);
 				Main.dust[dust].noGravity = true;
 				Main.dust[dust].velocity *= 4f;
             }
