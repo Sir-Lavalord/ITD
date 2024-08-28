@@ -46,7 +46,7 @@ Items: {
 
 	EmberSlasher: {
 		DisplayName: Ember Slasher
-		Tooltip: Fires a spinning fireball that slowly gains speed and bounces off of walls
+		Tooltip: Creates a fiery explosion
 	}
 
 	Snaptrap: {
