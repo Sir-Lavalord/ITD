@@ -126,6 +126,8 @@ namespace ITD.Content.Tiles
             const float TwoPi = (float)Math.PI * 2f;
             float offset = (float)Math.Sin(Main.GlobalTimeWrappedHourly * TwoPi / 5f);
             Vector2 drawPos = worldPos + offScreen - Main.screenPosition + new Vector2(0f, -40f) + new Vector2(0f, offset * 4f);
+            float snapTo = 1f;
+            drawPos.Y = (float)Math.Ceiling(drawPos.Y / snapTo) * snapTo;
 
             // Draw the main texture
             spriteBatch.Draw(texture, drawPos, frame, color, 0f, origin, 1f, effects, 0f);

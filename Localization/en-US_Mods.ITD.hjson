@@ -46,7 +46,7 @@ Items: {
 
 	EmberSlasher: {
 		DisplayName: Ember Slasher
-		Tooltip: Creates a fiery explosion
+		Tooltip: Fires a spinning fireball that slowly gains speed and bounces off of walls
 	}
 
 	Snaptrap: {
@@ -554,16 +554,15 @@ Projectiles: {
 	ElectrumSpearBeam.DisplayName: Electrum Spear Beam
 	StarlightStaffProj.DisplayName: Starlight Staff Proj
 	BlankExplosion.DisplayName: Blank Explosion
-	DunebarrelRotate.DisplayName: Dunebarrel Rotate
+	DunebarrelRotate.DisplayName: Dunebarrel
 	SandSpike.DisplayName: Sand Spike
 	SandberusSkull.DisplayName: Sandberus Skull
 	SandBoulder.DisplayName: Sand Boulder
-	CosmicJellyfishMiniProj.DisplayName: Cosmic Jellyfish Mini Proj
+	CosmicJellyfishMiniProj.DisplayName: Cosmic Jellyfish
 	CosmicLightningOrb.DisplayName: Cosmic Lightning Orb
 	CosmicRay.DisplayName: Cosmic Ray
-	CosmicRayWarn.DisplayName: Cosmic Ray Warn
-	TouhouBullet.DisplayName: Touhou Bullet
-	EmberSlashOld.DisplayName: Ember Slash Old
+	CosmicRayWarn.DisplayName: Cosmic Ray
+	TouhouBullet.DisplayName: Cosmic Orb
 }
 
 NPCs: {

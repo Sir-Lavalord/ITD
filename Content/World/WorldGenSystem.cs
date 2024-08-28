@@ -49,7 +49,6 @@ namespace ITD.Content.World
         private void TestMethod(int x, int y)
         {
             //Dust.QuickBox(new Vector2(x, y) * 16, new Vector2(x + 1, y + 1) * 16, 2, Color.YellowGreen, null);
-            //Main.NewText("a");
             //PhysicsMethods.CreateVerletChain(8, 16, Main.MouseWorld, Main.MouseWorld + Vector2.One, false);
             //Helpers.GrowTallBluegrass(x, y);
         }

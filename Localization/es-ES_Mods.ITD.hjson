@@ -211,7 +211,7 @@ Items: {
 	}
 
 	Shale: {
-		DisplayName: Esquisto
+		DisplayName: Esquistón
 		Tooltip: ""
 	}
 
@@ -470,22 +470,22 @@ Items: {
 	}
 
 	CosmicJellyfishMask: {
-		// DisplayName: Cosmic Jellyfish Mask
-		// Tooltip: ""
+		DisplayName: Máscara de Medusa Cósmica
+		Tooltip: ""
 	}
 
 	WindCape: {
-		// DisplayName: Windstrumican Cape
-		/* Tooltip:
+		DisplayName: Capa Ventiscípula
+		Tooltip:
 			'''
-			10% increased movement speed
-			Wind follows your step
-			''' */
+			Velocidad de movimiento incrementada por un 10%
+			El viento te sigue
+			'''
 	}
 
 	SandberusBag: {
-		// DisplayName: Sandberus Bag
-		// Tooltip: ""
+		DisplayName: Bolsa del tesoro (Desierbero)
+		Tooltip: ""
 	}
 }
 
@@ -555,15 +555,14 @@ Projectiles: {
 	StarlightStaffProj.DisplayName: Bastón de Luz Astral
 	BlankExplosion.DisplayName: Explosión
 	DunebarrelRotate.DisplayName: Cañón de dunas
-	// SandSpike.DisplayName: Sand Spike
-	// SandberusSkull.DisplayName: Sandberus Skull
-	// SandBoulder.DisplayName: Sand Boulder
-	// CosmicJellyfishMiniProj.DisplayName: Cosmic Jellyfish Mini Proj
-	// CosmicLightningOrb.DisplayName: Cosmic Lightning Orb
-	// CosmicRay.DisplayName: Cosmic Ray
-	// CosmicRayWarn.DisplayName: Cosmic Ray Warn
-	// TouhouBullet.DisplayName: Touhou Bullet
-	// EmberSlashOld.DisplayName: Ember Slash Old
+	SandSpike.DisplayName: Estaca de arena
+	SandberusSkull.DisplayName: Calavera de Desierbero
+	SandBoulder.DisplayName: Roca de arena
+	CosmicJellyfishMiniProj.DisplayName: Medusa Cósmica
+	CosmicLightningOrb.DisplayName: Órbe de relámpago cósmico
+	CosmicRay.DisplayName: Rayo cósmico
+	CosmicRayWarn.DisplayName: Rayo cósmico
+	TouhouBullet.DisplayName: Órbe cósmica
 }
 
 NPCs: {
@@ -579,7 +578,7 @@ NPCs: {
 		Bestiary: Un cangrejo que ha desarrolado una relación simbiótica con los Champizules. El cangrejo puede fácilmente atraer a su presa mientras que el Champizúl obtiene protección.
 	}
 
-	CicadianTree.DisplayName: Árbol Cigarriano
+	CicadianTree.DisplayName: Árbol Cigadiano
 
 	CicadianHive: {
 		Bestiary: Cuando una cigadiana hembra pupa, experimenta un crecimiento acelerado de sus alas y cuerpo, volviendose rotunda y extraña. Cuando se deshace de su estomago, volviendose hueca, la Madre produce larvas rápidamente, hasta que se muere de hambre.
@@ -589,8 +588,8 @@ NPCs: {
 	FlamingSkull.DisplayName: Calavera en llamas
 	AmbushBones.DisplayName: Huesitos acechantes
 	ShroomishSlime.DisplayName: Slime champizúl
-	// CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
-	// Sandberus.DisplayName: Sandberus
+	CosmicJellyfishMini.DisplayName: Medusa neptuniana
+	Sandberus.DisplayName: Desierbero
 }
 
 Buffs: {
