@@ -20,7 +20,7 @@ namespace ITD.Content.Items.Weapons.Melee
             HeldItemLayer.RegisterData(Item.type, new DrawLayerData()
             {
                 Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),
-                Color = () => new Color(255, 255, 255, 50) * 0.7f
+                Color = () => Color.White
             });
         }
 		public override void SetDefaults()
@@ -60,7 +60,7 @@ namespace ITD.Content.Items.Weapons.Melee
             Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
 
             spriteBatch.Draw(texture, new Vector2(Item.position.X - Main.screenPosition.X + Item.width * 0.5f, Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height * 0.5f),
-                new Rectangle(0, 0, texture.Width, texture.Height), new Color(255, 255, 255, 50) * 0.7f, rotation, texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+                new Rectangle(0, 0, texture.Width, texture.Height), Color.White, rotation, texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
         }
 	}
 }

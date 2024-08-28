@@ -1,14 +1,24 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ITD.Content.Projectiles.Friendly.Misc;
+using ITD.Systems;
 
 namespace ITD.Content.Items.Weapons.Melee
 {
 	public class EmberSlasher : ModItem
 	{
-        // The Display Name and Tooltip of this item can be edited in the Localization/en-US_Mods.ITDQTest.hjson file.
-
+		public override void SetStaticDefaults()
+        {
+            HeldItemLayer.RegisterData(Item.type, new DrawLayerData()
+            {
+                Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),
+                Color = () => Color.White
+            });
+        }
+		
 		public override void SetDefaults()
 		{
 			Item.damage = 15;
@@ -26,12 +36,13 @@ namespace ITD.Content.Items.Weapons.Melee
 			Item.shoot = ModContent.ProjectileType<EmberSlash>();
 			Item.shootSpeed = 0.2f;
 		}
-        public override void AddRecipes()
-		{
-			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.DirtBlock, 10);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.Register();
-		}
+				
+		public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+
+            spriteBatch.Draw(texture, new Vector2(Item.position.X - Main.screenPosition.X + Item.width * 0.5f, Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height * 0.5f),
+                new Rectangle(0, 0, texture.Width, texture.Height), Color.White, rotation, texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+        }
 	}
 }

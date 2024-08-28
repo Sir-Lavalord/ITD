@@ -34,17 +34,17 @@ namespace ITD.Content.Items.Accessories.Movement
 			
 			if (player.controlJump && player.releaseJump)
             {
-				if (modPlayer.impulseJump > 0)
+				/*if (modPlayer.impulseJump > 0)
 				{
 					modPlayer.impulseJump =  0f;
 				}
-				else if (modPlayer.impulseShackles)
+				else */if (modPlayer.impulseShackles)
 				{
-					modPlayer.impulseJump =  3f;
+					modPlayer.impulseJump =  4f;
 					
 					for (int i = 0; i < 20; i++)
 					{
-						int dust = Dust.NewDust(player.MountedCenter + new Vector2(-44f, player.height/2), 80, 0, 255, 0f, 0f, 0, default, 1.5f);
+						int dust = Dust.NewDust(player.MountedCenter + new Vector2(-44f, player.height*0.5f), 80, 0, 255, 0f, 0f, 0, default, 1.5f);
 						Main.dust[dust].noGravity = true;
 						Main.dust[dust].velocity.X = 0;
 					}
@@ -52,17 +52,17 @@ namespace ITD.Content.Items.Accessories.Movement
 				}
             }
 			
-			if (modPlayer.impulseJump > 0)
+			if (modPlayer.impulseJump > 0f)
 			{				
-				int dust = Dust.NewDust(player.MountedCenter + new Vector2(-4f, 0), 0, 0, 255, 0, 0, 100, default, 1.5f);
+				/*int dust = Dust.NewDust(player.MountedCenter + new Vector2(-4f, 0), 0, 0, 255, 0, 0, 100, default, 1.5f);
 				Main.dust[dust].noGravity = true;
-				Main.dust[dust].velocity = player.velocity/2f;
+				Main.dust[dust].velocity = player.velocity/2f;*/
 			
 				player.jumpSpeedBoost += modPlayer.impulseJump;
 				
-				player.runAcceleration *= 2f;
-				player.maxRunSpeed *= 2f;
-				player.runSlowdown *= 2f;
+				player.runAcceleration *= 1f + modPlayer.impulseJump;
+				player.maxRunSpeed *= 1f + modPlayer.impulseJump;
+				player.runSlowdown *= 1f + modPlayer.impulseJump;
 				
 				modPlayer.impulseJump *= 0.95f;
 			}

@@ -482,6 +482,11 @@ Items: {
 			Wind follows your step
 			'''
 	}
+
+	SandberusBag: {
+		DisplayName: Sandberus Bag
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
