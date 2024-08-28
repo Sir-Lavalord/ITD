@@ -2,97 +2,161 @@
 using System;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {
     public class EmberSlash : ModProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[Projectile.type] = 8;
-        }
-
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Melee;
-            Projectile.width = 16; Projectile.height = 16;
+            Projectile.width = 32; Projectile.height = 32;
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.penetrate = 4;
-            Projectile.timeLeft = 180;
-            Projectile.light = 0.5f;
-            Projectile.ignoreWater = false;
-            Projectile.tileCollide = true;
+            Projectile.penetrate = -1;
+            Projectile.tileCollide = false;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = -1;
+			Projectile.ownerHitCheck = true;
         }
-
-        public override Color? GetAlpha(Color lightColor)
-        {
-            return Color.White;
-        }
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            Projectile.penetrate--;
-            if (Projectile.penetrate <= 0)
-            {
-                Projectile.Kill();
-            }
-
-            else
-            {
-                Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
-                SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
-
-                // If the projectile hits the left or right side of the tile, reverse the X velocity
-                if (Math.Abs(Projectile.velocity.X - oldVelocity.X) > float.Epsilon)
-                {
-                    Projectile.velocity.X = -oldVelocity.X;
-                }
-
-                // If the projectile hits the top or bottom side of the tile, reverse the Y velocity
-                if (Math.Abs(Projectile.velocity.Y - oldVelocity.Y) > float.Epsilon)
-                {
-                    Projectile.velocity.Y = -oldVelocity.Y;
-                }
-            }
-
-            return false;
-        }
-
+		
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             target.AddBuff(BuffID.OnFire, 120, false);
         }
+		
+		public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        {
+            hitbox.Inflate((int)(32*Projectile.ai[0]), (int)(32*Projectile.ai[0]));
+        }
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			return projHitbox.Intersects(targetHitbox) && Collision.CanHit(Projectile.Center, 0, 0, targetHitbox.Center.ToVector2(), 0, 0);
+		}
+		
         public override void AI()
         {
-            if (Projectile.timeLeft < 20)
-            { Projectile.Kill(); }
-            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-            if (++Projectile.frameCounter >= 3)
-            {
-                Projectile.frameCounter = 0;
-                Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
-            }
-            float accel = 1.05f;
-            if (Math.Abs(Projectile.velocity.Y) < 10f)
-            {
-                if (Math.Abs(Projectile.velocity.X) < 10f)
-                {
-                    Projectile.velocity *= accel;
-                }
-            }
-            int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.InfernoFork, 0f, 0f, 0, default(Color), 1f);
-        }
+			Projectile.localAI[0] += 1f;
+			float fromMax = 24;
 
-        public override void OnKill(int timeLeft)
-        {
-            for (int i = 0; i < 20; i++)
-            {
-                Dust.NewDust(Projectile.Center, 1, 1, DustID.InfernoFork, 0f, 0f, 0, default(Color), 1.5f);
-            }
-            Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
-            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
-        }
+			if (Projectile.localAI[0] >= fromMax)
+				Projectile.Kill();
+						
+			Player player = Main.player[Projectile.owner];
+			Projectile.Center = player.MountedCenter + Projectile.velocity;
+			
+			if (Projectile.ai[1] == 0)
+			{
+				if (Projectile.localAI[0] == 8)
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 25f, Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.ai[0]*1.4f, 1f);
+			}
+			
+			double angle = Main.rand.NextDouble() * 2d * Math.PI;
+			Vector2 offset = new Vector2((float)(Math.Sin(angle)), (float)(Math.Cos(angle))) * 40f * Projectile.ai[0] * (0.5f + Main.rand.NextFloat(0.5f));
+			Vector2 velocity = offset.RotatedBy(90*Projectile.direction);
+			velocity.Normalize();
+			
+			Dust dust = Dust.NewDustPerfect(Projectile.Center + Projectile.velocity + offset, 6, velocity*2f, 100, default, 2f);
+			dust.noGravity = true;
+		}
+		
+		public override bool PreDraw(ref Color lightColor) 
+		{
+			float num = 20f;
+			float num2 = 4f;
+			float fromMax = num + num2;
+			Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+			Texture2D texture2 = ModContent.Request<Texture2D>(Texture + "_Flame").Value;
+			Microsoft.Xna.Framework.Color value2 = Microsoft.Xna.Framework.Color.Transparent;
+			Microsoft.Xna.Framework.Color color = new Microsoft.Xna.Framework.Color(255, 80, 20, 200);
+			Microsoft.Xna.Framework.Color color2 = new Microsoft.Xna.Framework.Color(255, 255, 20, 70);
+			Microsoft.Xna.Framework.Color color3 = Microsoft.Xna.Framework.Color.Lerp(new Microsoft.Xna.Framework.Color(255, 80, 20, 100), color2, 0.25f);
+			Microsoft.Xna.Framework.Color color4 = new Microsoft.Xna.Framework.Color(80, 80, 80, 100);
+			float num3 = 0.35f;
+			float num4 = 0.7f;
+			float num5 = 0.85f;
+			float num6 = (Projectile.localAI[0] > num - 10f) ? 0.175f : 0.2f;
+			float scale = Utils.Remap(Projectile.localAI[0], num, fromMax, 1f, 0f, true);
+			float num7 = Math.Min(Projectile.localAI[0], 20f);
+			float num8 = Utils.Remap(Projectile.localAI[0], 0f, fromMax, 0f, 1f, true);
+			float num9 = Utils.Remap(num8, 0.2f, 0.5f, 0.5f*Projectile.ai[0], 1f*Projectile.ai[0], true);
+			Rectangle rectangle = texture.Frame(1, 1);
+			if (num8 < 1f)
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					for (float num10 = 1f; num10 >= 0f; num10 -= num6)
+					{
+						if (num8 < 0.1f)
+						{
+							value2 = Microsoft.Xna.Framework.Color.Lerp(Microsoft.Xna.Framework.Color.Transparent, color, Utils.GetLerpValue(0f, 0.1f, num8, true));
+						}
+						else
+						{
+							if (num8 < 0.2f)
+							{
+								value2 = Microsoft.Xna.Framework.Color.Lerp(color, color2, Utils.GetLerpValue(0.1f, 0.2f, num8, true));
+							}
+							else
+							{
+								if (num8 < num3)
+								{
+									value2 = color2;
+								}
+								else
+								{
+									if (num8 < num4)
+									{
+										value2 = Microsoft.Xna.Framework.Color.Lerp(color2, color3, Utils.GetLerpValue(num3, num4, num8, true));
+									}
+									else
+									{
+										if (num8 < num5)
+										{
+											value2 = Microsoft.Xna.Framework.Color.Lerp(color3, color4, Utils.GetLerpValue(num4, num5, num8, true));
+										}
+										else
+										{
+											if (num8 < 1f)
+											{
+												value2 = Microsoft.Xna.Framework.Color.Lerp(color4, Microsoft.Xna.Framework.Color.Transparent, Utils.GetLerpValue(num5, 1f, num8, true));
+											}
+											else
+											{
+												value2 = Microsoft.Xna.Framework.Color.Transparent;
+											}
+										}
+									}
+								}
+							}
+						}
+						float num11 = (1f - num10) * Utils.Remap(num8, 0f, 0.2f, 0f, 1f, true);
+						Vector2 position = Projectile.Center - Main.screenPosition;
+						Microsoft.Xna.Framework.Color color5 = value2 * num11;
+						Microsoft.Xna.Framework.Color value3 = color5;
+							value3.G /= 2;
+							value3.B /= 2;
+							value3.A = (byte)Math.Min((float)color5.A + 80f * num11, 255f);
+							Utils.Remap(Projectile.localAI[0], 20f, fromMax, 0f, 1f, true);
+						float num12 = 1f / num6 * (num10 + 1f);
+						float rotation = Projectile.rotation + num10 * 1.57079637f + Main.GlobalTimeWrappedHourly * num12 * 2f * Projectile.direction;
+						if (i == 0)
+						{
+							Main.EntitySpriteDraw(texture2, position, new Microsoft.Xna.Framework.Rectangle?(rectangle), value3 * scale, rotation * 0.5f, rectangle.Size() / 2f, num9, SpriteEffects.None, 0f);
+						}
+						else if (i == 1)
+						{
+							Main.EntitySpriteDraw(texture, position, new Microsoft.Xna.Framework.Rectangle?(rectangle), color5 * scale, rotation + 1.57079637f, rectangle.Size() / 2f, num9 * 0.75f, SpriteEffects.None, 0f);
+						}
+					}
+				}
+			}
+			return false;
+		}
     }
 }

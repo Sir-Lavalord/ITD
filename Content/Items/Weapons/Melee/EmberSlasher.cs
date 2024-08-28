@@ -1,6 +1,8 @@
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ITD.Content.Projectiles.Friendly.Misc;
@@ -31,12 +33,19 @@ namespace ITD.Content.Items.Weapons.Melee
 			Item.knockBack = 5;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Green;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = SoundID.Item20;
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<EmberSlash>();
-			Item.shootSpeed = 0.2f;
+			Item.shootSpeed = 1f;
 		}
-				
+		
+		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+			float adjustedItemScale = player.GetAdjustedItemScale(player.inventory[player.selectedItem]);
+			Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 1.75f * adjustedItemScale);
+            return false;
+        }
+		
 		public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
