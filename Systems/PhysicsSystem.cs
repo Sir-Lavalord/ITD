@@ -12,6 +12,7 @@ namespace ITD.Systems
 {
     public class PhysicsSystem : ModSystem
     {
+        public static readonly int ConstraintIterations = 16;
         public override void PostUpdateProjectiles()
         {
             List<VerletPoint> pointsList = PhysicsMethods.GetPoints();
@@ -23,7 +24,7 @@ namespace ITD.Systems
 
             List<VerletStick> sticksList = PhysicsMethods.GetSticks();
 
-            for (int i = 0; i < PhysicsMethods.ConstraintIterations; i++)
+            for (int i = 0; i < ConstraintIterations; i++)
             {
                 foreach (VerletStick stick in sticksList)
                 {

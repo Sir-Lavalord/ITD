@@ -90,7 +90,7 @@ namespace ITD.Content.Projectiles.Friendly.Pets
         public override void OnSpawn(IEntitySource source)
         {
             Vector2 chainStart = Projectile.Center + Vector2.UnitY * Projectile.height / 2;
-            lanternChain = PhysicsMethods.CreateVerletChain(6, 10, chainStart, chainStart + Vector2.One, false);
+            lanternChain = PhysicsMethods.CreateVerletChain(4, 10, chainStart, chainStart + Vector2.One, endLength: 44);
         }
         public override void OnKill(int timeLeft)
         {

@@ -183,22 +183,24 @@ namespace ITD.Physics
 
         private static List<VerletChain> chains = new List<VerletChain>();
 
-        public static VerletChain CreateVerletChain(int segmentsNum, float segmentLength, Vector2 posStart, Vector2 posEnd, bool pinEnd)
+        public static VerletChain CreateVerletChain(int segmentsNum, float segmentLength, Vector2 posStart, Vector2 posEnd, bool pinStart = true, bool pinEnd = false, float startLength = 0f, float endLength = 0f)
         {
+            startLength = startLength == 0f ? segmentLength : startLength;
+            endLength = endLength == 0f ? segmentLength : endLength;
             if (!(chains.Count > 0))
             {
                 ClearAll();
             }
             Vector2 chainLength = posEnd - posStart;
             Vector2 segmentVector = chainLength / segmentsNum;
-            List<VerletPoint> chainPoints = new List<VerletPoint>();
-            List<VerletStick> chainSticks = new List<VerletStick>();
+            List<VerletPoint> chainPoints = [];
+            List<VerletStick> chainSticks = [];
             VerletStick startStick = null;
             VerletStick endStick = null;
             for (int i = 0; i < segmentsNum + 1; i++)
             {
                 Vector2 pointPos = posStart + (segmentVector * i);
-                bool shouldBePinned = (i == 0 || (i == segmentsNum && pinEnd));
+                bool shouldBePinned = (i == 0 && pinStart) || (i == segmentsNum && pinEnd);
                 var point = new VerletPoint { ID = 1, pos = pointPos, oldPos = pointPos, isVerletPinned = shouldBePinned };
                 points.Add(point);
                 chainPoints.Add(point);
@@ -208,10 +210,12 @@ namespace ITD.Physics
                 var stick = new VerletStick { ID = (i % 2 == 0 ? 1 : 2), length = segmentLength, pointA = chainPoints[i], pointB = chainPoints[i + 1] };
                 if (stick.pointA == chainPoints[0])
                 {
+                    stick.length = startLength;
                     startStick = stick;
                 }
                 else if (stick.pointA == chainPoints[segmentsNum - 1])
                 {
+                    stick.length = endLength;
                     endStick = stick;
                 }
                 sticks.Add(stick);
