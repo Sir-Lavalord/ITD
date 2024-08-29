@@ -497,6 +497,15 @@ Items: {
 			Los enemigos afectados tienen un daño aumentado, defensa reducida, y toman daño con el tiempo
 			'''
 	}
+
+	GravityBoots: {
+		// DisplayName: Zero Gravity Dancers
+		/* Tooltip:
+			'''
+			Hold jump to reduce gravity
+			'Take a walk on cosmic lane!'
+			''' */
+	}
 }
 
 Projectiles: {

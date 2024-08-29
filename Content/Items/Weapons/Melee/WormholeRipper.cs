@@ -53,6 +53,7 @@ namespace ITD.Content.Items.Weapons.Melee
                 player.immune = true;//probably op
                 player.immuneTime = 30;
                 player.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 14f;
+				player.fallStart = (int)(player.position.Y / 16f);
                 SoundStyle wRipperRip = new SoundStyle("ITD/Content/Sounds/WRipperRip");
                 SoundEngine.PlaySound(wRipperRip, player.Center);
                 for (int index1 = 0; index1 < 12; ++index1)

@@ -498,6 +498,15 @@ Items: {
 			Struck enemies have increased damage, decreased defense, and take damage over time
 			''' */
 	}
+
+	GravityBoots: {
+		// DisplayName: Zero Gravity Dancers
+		/* Tooltip:
+			'''
+			Hold jump to reduce gravity
+			'Take a walk on cosmic lane!'
+			''' */
+	}
 }
 
 Projectiles: {

@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using System;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Accessories.Movement
 {
@@ -14,7 +15,7 @@ namespace ITD.Content.Items.Accessories.Movement
             Item.width = 24;
             Item.height = 28;
             Item.value = Item.sellPrice(gold: 2);
-            Item.rare = ItemRarityID.Green;
+            Item.rare = ItemRarityID.Blue;
             Item.accessory = true;
         }
 
@@ -22,7 +23,7 @@ namespace ITD.Content.Items.Accessories.Movement
         {
 			ImpulseShacklesPlayer modPlayer = player.GetModPlayer<ImpulseShacklesPlayer>();
 			
-            if (player.jump <= 0 && player.velocity.Y == 0f)
+            if (player.IsOnStandableGround() && player.velocity.Y == 0f)
             {
                 modPlayer.impulseShackles = true;
 				modPlayer.impulseJump =  0f;
@@ -61,8 +62,8 @@ namespace ITD.Content.Items.Accessories.Movement
 				player.jumpSpeedBoost += modPlayer.impulseJump;
 				
 				player.runAcceleration *= 1f + modPlayer.impulseJump;
-				player.maxRunSpeed *= 1f + modPlayer.impulseJump;
 				player.runSlowdown *= 1f + modPlayer.impulseJump;
+				player.maxRunSpeed += modPlayer.impulseJump;
 				
 				modPlayer.impulseJump *= 0.95f;
 			}
