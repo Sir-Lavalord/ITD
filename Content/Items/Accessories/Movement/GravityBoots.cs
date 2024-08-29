@@ -32,16 +32,15 @@ namespace ITD.Content.Items.Accessories.Movement
         public bool gravityBoots = false;
 		public int gravityBootsCharge = 0;
 		public int gravityBootsSound = 0;
-
-        public override void ResetEffects()
+		
+		public override void ResetEffects()
         {
-            gravityBoots = false;
-            gravityBootsCharge = 0;
-            gravityBootsSound = 0;
+			if (!gravityBoots && gravityBootsCharge > 0)
+				gravityBootsCharge--;
+			gravityBoots = false;
         }
-        
-
-        public override void UpdateEquips()
+		
+		public override void UpdateEquips()
         {
 			if (gravityBoots)
 			{
@@ -67,7 +66,7 @@ namespace ITD.Content.Items.Accessories.Movement
 							
 							Vector2 position = Player.Center + new Vector2(direction*12f, (Player.height + 2f) * Player.gravDir * 0.5f);
 
-							Dust dust = Dust.NewDustDirect(position - new Vector2(4f, 4f*Player.gravDir), 0, 0, 255, 0f, 0f, 0, default, 1f);
+							Dust dust = Dust.NewDustDirect(position - new Vector2(4f, 4f), 0, 0, 255, 0f, 0f, 0, default, 1f);
 							dust.noGravity = true;
 							dust.velocity = Player.velocity + new Vector2(direction*2f, Player.gravDir*2f);
 						}
