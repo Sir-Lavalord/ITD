@@ -14,6 +14,7 @@ using System.Collections;
 using Terraria.GameContent.Animations;
 using Microsoft.Extensions.Logging.Abstractions;
 using ITD.Utilities;
+using Terraria.GameContent.Bestiary;
 
 namespace ITD.Content.NPCs.Bosses
 {
@@ -203,8 +204,11 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            PreDrawSegments(spriteBatch, screenPos);
-            PostDrawSegments(spriteBatch, screenPos);
+            if (!NPC.IsABestiaryIconDummy)
+            {
+                PreDrawSegments(spriteBatch, screenPos);
+                PostDrawSegments(spriteBatch, screenPos);
+            }
             return true;
         }
     }
@@ -237,6 +241,14 @@ namespace ITD.Content.NPCs.Bosses
         {
             get => (int)NPC.ai[0];
             set => NPC.ai[0] = value;
+        }
+        public override void SetStaticDefaults()
+        {
+            NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Hide = true
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, bestiaryData);
         }
         public override void SetDefaults()
         {

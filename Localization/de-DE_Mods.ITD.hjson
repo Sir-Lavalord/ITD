@@ -491,7 +491,12 @@ Items: {
 
 	RazedWine: {
 		// DisplayName: Razed Wine
-		// Tooltip: ""
+		/* Tooltip:
+			'''
+			Increases all damage by 10%
+			Automatically throws glass bottles at nearby enemies
+			Struck enemies have increased damage, decreased defense, and take damage over time
+			''' */
 	}
 }
 
