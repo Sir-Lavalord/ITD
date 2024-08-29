@@ -3,6 +3,7 @@ using System;
 using Terraria.ModLoader;
 using Terraria;
 using ITD.Content.NPCs.Bosses;
+using Terraria.ID;
 
 namespace ITD.Content.Projectiles.Hostile
 {
@@ -43,6 +44,10 @@ namespace ITD.Content.Projectiles.Hostile
                     Projectile.Kill();
                     return;
                 }
+            }
+            else
+            {
+                Projectile.Kill();
             }
             if (Projectile.velocity.HasNaNs() || Projectile.velocity == Vector2.Zero)
             {
@@ -127,7 +132,14 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override void Kill(int timeLeft)
         {
-            Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<CosmicRay>(), Projectile.damage, Projectile.knockBack, -1, Projectile.ai[0], Projectile.ai[1]);
+            NPC CosJel = Main.npc[(int)Projectile.ai[1]];
+            if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<CosmicRay>(), Projectile.damage, Projectile.knockBack, -1, Projectile.ai[0], Projectile.ai[1]);
+                }
+            }
         }
     }
 }

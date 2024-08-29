@@ -66,7 +66,7 @@ namespace ITD.Content.Projectiles.Hostile
                 Player player = Main.player[CosJel.target];
                 width = 15;
                 height = 15;
-                fallThrough = player.Center.Y >= Projectile.Bottom.Y;
+                fallThrough = player.Center.Y >= Projectile.Bottom.Y + 20;
             }
             return true;
                 
@@ -96,7 +96,7 @@ namespace ITD.Content.Projectiles.Hostile
             }
             if (isStuck == false)
             {
-                Projectile.velocity.Y = Projectile.velocity.Y + 0.2f;
+                Projectile.velocity.Y += 0.2f;
             }
             if (++Projectile.frameCounter >= 3)
             {
@@ -107,16 +107,17 @@ namespace ITD.Content.Projectiles.Hostile
 
         public override void OnKill(int timeLeft)
         {
+            //Be considerate with the dusting
             SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
             // Smoke Dust spawn
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 25; i++)
             {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
                 dust.velocity *= 1.4f;
             }
 
             // Fire Dust spawn
-            for (int i = 0; i < 80; i++)
+            for (int i = 0; i < 40; i++)
             {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.ShimmerTorch, 0f, 0f, 100, default, 3f);
                 dust.noGravity = true;

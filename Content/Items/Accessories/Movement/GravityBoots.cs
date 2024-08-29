@@ -32,8 +32,16 @@ namespace ITD.Content.Items.Accessories.Movement
         public bool gravityBoots = false;
 		public int gravityBootsCharge = 0;
 		public int gravityBootsSound = 0;
-		
-		public override void UpdateEquips()
+
+        public override void ResetEffects()
+        {
+            gravityBoots = false;
+            gravityBootsCharge = 0;
+            gravityBootsSound = 0;
+        }
+        
+
+        public override void UpdateEquips()
         {
 			if (gravityBoots)
 			{
