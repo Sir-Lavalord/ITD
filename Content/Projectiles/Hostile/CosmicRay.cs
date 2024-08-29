@@ -48,7 +48,7 @@ namespace ITD.Content.Projectiles.Hostile
             {
                 if (CosJel != null && !CosJel.dontTakeDamage)
                 {
-                    CosJel.velocity =  -(Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(CosJel.Center.X, CosJel.Center.Y))) * 0.5f;
+                    CosJel.velocity =  -(Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(CosJel.Center.X, CosJel.Center.Y))) * 2f;
                     Projectile.Center = CosJel.Center;
                 }
                 else
@@ -56,6 +56,10 @@ namespace ITD.Content.Projectiles.Hostile
                     Projectile.Kill();
                     return;
                 }
+            }
+            else
+            {
+                Projectile.Kill();
             }
             if (Projectile.localAI[0] == 0f)
             {
@@ -66,10 +70,18 @@ namespace ITD.Content.Projectiles.Hostile
             
             if (Main.expertMode||Main.masterMode)
             {
-                Projectile.velocity = Projectile.velocity.ToRotation().AngleLerp(CosJel.DirectionTo(Main.player[CosJel.target].Center + Main.player[CosJel.target].velocity * 6).ToRotation(), 0.005f).ToRotationVector2();
+                Projectile.velocity = Projectile.velocity.ToRotation().AngleLerp(CosJel.DirectionTo(Main.player[CosJel.target].Center + Main.player[CosJel.target].velocity * 6).ToRotation(), 0.01f).ToRotationVector2();
                 Projectile.rotation = Projectile.velocity.ToRotation() - (float)Math.PI / 6;
             }
             float num801 = 2f;
+            if (Main.expertMode)
+            {
+                num801 = 4f;
+            }
+            else if (Main.masterMode)
+            {
+                num801 = 6f;
+            }
             Projectile.localAI[0] += 1f;
 
             if (Projectile.localAI[0] >= maxTime)
