@@ -47,7 +47,7 @@ namespace ITD.Content.NPCs.Bosses
         private Vector2 handTarget2 = Vector2.Zero;
 
         private Vector2 handTarget = Vector2.Zero;
-        private Vector2 handStatic = Vector2.Zero;
+
         private bool targetPicked = false;
         public override void SetStaticDefaults()
         {
@@ -574,7 +574,6 @@ namespace ITD.Content.NPCs.Bosses
                                     handState = HandState.Slinging;
                                     Vector2 toTarget = (LockedIn - projectile.Center).SafeNormalize(Vector2.Zero);
                                     handTarget = LockedIn + toTarget * 120f;
-                                    handStatic = projectile.Center;
                                 }
                             }
                             projectile.Center = Vector2.Lerp(normalCenter, chargedPosition, (float)Math.Sin(handCharge * Math.PI));
@@ -684,7 +683,6 @@ namespace ITD.Content.NPCs.Bosses
                                     handState2 = HandState.Slinging;
                                     Vector2 toTarget = (LockedIn - projectile2.Center).SafeNormalize(Vector2.Zero);
                                     handTarget2 = LockedIn + toTarget * 120f;
-                                    handStatic = projectile2.Center;
                                 }
                             }
                             projectile2.Center = Vector2.Lerp(normalCenter, chargedPosition, (float)Math.Sin(handCharge2 * Math.PI));

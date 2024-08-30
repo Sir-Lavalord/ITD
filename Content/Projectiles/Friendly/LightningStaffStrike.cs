@@ -230,7 +230,7 @@ namespace ITD.Content.Projectiles.Friendly
                     if (Main.rand.NextBool(5))
                     {
                         Vector2 vector2 = Projectile.velocity.RotatedBy(1.5707963705062866) * ((float)Main.rand.NextDouble() - 0.5f) * Projectile.width;
-                        int num4 = Dust.NewDust(Projectile.Center + vector2 - Vector2.One * 4f, 8, 8, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
+                        int num4 = Dust.NewDust(Projectile.Center + vector2 - Vector2.One * 4f, 8, 8, DustID.Smoke, 0f, 0f, 100, default, 1.5f);
                         Dust dust = Main.dust[num4];
                         dust.velocity *= 0.5f;
                         Main.dust[num4].velocity.Y = 0f - Math.Abs(Main.dust[num4].velocity.Y);

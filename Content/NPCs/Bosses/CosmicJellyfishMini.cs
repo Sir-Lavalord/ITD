@@ -27,6 +27,7 @@ namespace ITD.Content.NPCs.Bosses
             {
                 Hide = true
             };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, bestiaryData);
         }
         public override void SetDefaults()
         {
