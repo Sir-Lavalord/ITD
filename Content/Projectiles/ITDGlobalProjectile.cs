@@ -46,7 +46,7 @@ namespace ITD.Content.Projectiles
 				switch(aura)
 				{
 					case 1:
-						Texture2D texture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Misc/WRipperRift").Value;
+						Texture2D texture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Melee/WRipperRift").Value;
 						Rectangle sourceRectangle = texture.Frame(1, 1);
 						Vector2 origin = sourceRectangle.Size() / 2f;
 						Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(36, 12, 34), timer*0.05f, origin, 2f, SpriteEffects.None, 0f);

@@ -28,6 +28,10 @@ namespace ITD.Content.Items.Accessories.Offensive
         {
 			BadassPlayer modPlayer = player.GetModPlayer<BadassPlayer>();
             modPlayer.sunglassesOn = true;
+			
+			if (!hideVisual)
+				modPlayer.sunglassesSocial = true;
+			
 			if (modPlayer.sunglassesCharge < 200)
 				modPlayer.sunglassesCharge++;
 			player.GetCritChance(DamageClass.Generic) += Math.Max(modPlayer.sunglassesCharge-100, 0);
@@ -37,6 +41,7 @@ namespace ITD.Content.Items.Accessories.Offensive
 	public class BadassPlayer : ModPlayer
     {
         public bool sunglassesOn;
+		public bool sunglassesSocial;
 		public int sunglassesCharge = 0;
 		
         public override void ResetEffects()
@@ -44,6 +49,7 @@ namespace ITD.Content.Items.Accessories.Offensive
 			if (!sunglassesOn)
 				sunglassesCharge = 0;
             sunglassesOn = false;
+			sunglassesSocial = false;
         }
 		public override void UpdateDead()
         {
@@ -79,16 +85,19 @@ namespace ITD.Content.Items.Accessories.Offensive
 		
 		public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
-			Vector2 position = Player.Center - Main.screenPosition - new Vector2(0f, 8f);
-			Asset<Texture2D> texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Offensive/BadassSunglasses_Aura");
-			Rectangle sourceRectangle = texture.Frame(1, 1);
-			Vector2 origin = sourceRectangle.Size() / 2f;
-			Color color = Color.White;
-			float opacity = Math.Max(sunglassesCharge-100, 0)*0.005f;
-			color.A = (byte)(color.A*opacity);
-			
-			Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color*opacity, 0, origin, 0.5f+Main.essScale*0.5f, SpriteEffects.None, 0f);
-			Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color*opacity, 0, origin, 1.2f-Main.essScale*0.5f, SpriteEffects.None, 0f);
+			if (sunglassesSocial)
+			{
+				Vector2 position = Player.Center - Main.screenPosition - new Vector2(0f, 8f);
+				Asset<Texture2D> texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Offensive/BadassSunglasses_Aura");
+				Rectangle sourceRectangle = texture.Frame(1, 1);
+				Vector2 origin = sourceRectangle.Size() / 2f;
+				Color color = Color.White;
+				float opacity = Math.Max(sunglassesCharge-100, 0)*0.005f;
+				color.A = (byte)(color.A*opacity);
+				
+				Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color*opacity, 0, origin, 0.5f+Main.essScale*0.5f, SpriteEffects.None, 0f);
+				Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color*opacity, 0, origin, 1.2f-Main.essScale*0.5f, SpriteEffects.None, 0f);
+			}
         }
     }
 }
