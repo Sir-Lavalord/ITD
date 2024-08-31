@@ -548,6 +548,22 @@ Items: {
 			Leicht erhöhte Sprunghöhe
 			'''
 	}
+
+	CupOJoe: {
+		// DisplayName: Cup O' Joe
+		Tooltip: Imunität gegen Eis-Debuffs, die keinen Schaden verursachen
+	}
+
+	RooksBrew: {
+		DisplayName: Rooks Brew
+		Tooltip:
+			'''
+			Imunität gegen Eis-Debuffs, die keinen Schaden verursachen
+			8% erhöhte Bewegungsgeschwindigkeit
+			Leicht erhöhte Sprunghöhe
+			Tippe doppelt in eine Richtung, während du auf dem Boden bist, um einen Sprung, den du kurz kontrolieren kannst, zu starten
+			'''
+	}
 }
 
 Projectiles: {

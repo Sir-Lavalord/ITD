@@ -546,6 +546,22 @@ Items: {
 			Slightly increases Jump Height
 			''' */
 	}
+
+	CupOJoe: {
+		// DisplayName: Cup O' Joe
+		// Tooltip: Grants immunity to non-damaging Ice Themed Debuffs
+	}
+
+	RooksBrew: {
+		// DisplayName: Rooks Brew
+		/* Tooltip:
+			'''
+			Grants immunity to non-damaging Ice Themed Debuffs
+			8% increased Movement Speed
+			Slightly increases Jump Height
+			Double tap any direction while on the ground to start a dash you can control for a short while
+			''' */
+	}
 }
 
 Projectiles: {
