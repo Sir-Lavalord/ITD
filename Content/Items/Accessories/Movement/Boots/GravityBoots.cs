@@ -99,7 +99,7 @@ namespace ITD.Content.Items.Accessories.Movement.Boots
         {
             if (gravityBootsCharge > 0)
             {
-                Texture2D texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Movement/GravityBoots_Propulsion").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Movement/Boots/GravityBoots_Propulsion").Value;
                 Rectangle sourceRectangle = texture.Frame(1, 1);
                 Vector2 origin = sourceRectangle.Size() / 2f;
 
