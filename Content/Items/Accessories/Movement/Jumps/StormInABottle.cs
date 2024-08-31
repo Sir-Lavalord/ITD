@@ -6,7 +6,7 @@ using Terraria.Audio;
 using System;
 using ITD.Utilities;
 
-namespace ITD.Content.Items.Accessories.Movement.Bottles
+namespace ITD.Content.Items.Accessories.Movement.Jumps
 {
     public class StormInABottle : ModItem
     {

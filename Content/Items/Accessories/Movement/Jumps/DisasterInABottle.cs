@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using System;
 
-namespace ITD.Content.Items.Accessories.Movement.Bottles
+namespace ITD.Content.Items.Accessories.Movement.Jumps
 {
     public class DisasterInABottle : ModItem
     {

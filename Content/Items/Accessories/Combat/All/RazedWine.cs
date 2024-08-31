@@ -12,7 +12,7 @@ using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Content.NPCs;
 using ITD.Players;
 
-namespace ITD.Content.Items.Accessories.Offensive.Damage
+namespace ITD.Content.Items.Accessories.Combat.All
 {
     public class RazedWine : ModItem
     {

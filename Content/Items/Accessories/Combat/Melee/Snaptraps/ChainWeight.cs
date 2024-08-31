@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items.Accessories.Offensive.Melee.Snaptraps
+namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps
 {
     public class ChainWeight : ModItem
     {

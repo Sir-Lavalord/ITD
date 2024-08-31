@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using Terraria.ID;
 
-namespace ITD.Content.Items.Accessories.Misc.Mana
+namespace ITD.Content.Items.Accessories.Misc
 {
     internal class CorruptAntidote : ModItem
     {

@@ -10,7 +10,7 @@ using Terraria.Localization;
 using System;
 using ReLogic.Content;
 
-namespace ITD.Content.Items.Accessories.Offensive.Crit
+namespace ITD.Content.Items.Accessories.Combat.All
 {
     [AutoloadEquip(EquipType.Face)]
     public class BadassSunglasses : ModItem
@@ -71,7 +71,7 @@ namespace ITD.Content.Items.Accessories.Offensive.Crit
                     SoundEngine.PlaySound(SoundID.Item101, Player.Center);
                     for (int i = 0; i < 15; ++i)
                     {
-                        int dustId = Dust.NewDust(Player.Center, 0, 0, 228, 0.0f, 0.0f, 100, new Color(), 2f);
+                        int dustId = Dust.NewDust(Player.Center, 0, 0, DustID.GoldFlame, 0.0f, 0.0f, 100, new Color(), 2f);
                         Main.dust[dustId].noGravity = true;
                         Main.dust[dustId].velocity *= 5f;
                     }
@@ -94,7 +94,7 @@ namespace ITD.Content.Items.Accessories.Offensive.Crit
             if (sunglassesVanity)
             {
                 Vector2 position = drawInfo.Position - Main.screenPosition + new Vector2(Player.width * 0.5f, Player.height * 0.5f - 8f);
-                Asset<Texture2D> texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Offensive/Crit/BadassSunglasses_Aura");
+                Asset<Texture2D> texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Combat/All/BadassSunglasses_Aura");
                 Rectangle sourceRectangle = texture.Frame(1, 1);
                 Vector2 origin = sourceRectangle.Size() / 2f;
                 Color color = Color.White;

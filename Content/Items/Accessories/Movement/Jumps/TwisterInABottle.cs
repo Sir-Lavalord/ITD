@@ -6,7 +6,7 @@ using Terraria.Audio;
 using System;
 using Terraria.DataStructures;
 
-namespace ITD.Content.Items.Accessories.Movement.Bottles
+namespace ITD.Content.Items.Accessories.Movement.Jumps
 {
     public class TwisterInABottle : ModItem
     {

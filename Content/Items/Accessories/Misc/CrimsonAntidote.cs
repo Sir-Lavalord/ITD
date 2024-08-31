@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using System.Security.Cryptography.Pkcs;
 
-namespace ITD.Content.Items.Accessories.Misc.Health
+namespace ITD.Content.Items.Accessories.Misc
 {
     internal class CrimsonAntidote : ModItem
     {
