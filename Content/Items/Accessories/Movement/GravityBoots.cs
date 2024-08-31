@@ -5,11 +5,13 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 using System;
 using ITD.Utilities;
 
 namespace ITD.Content.Items.Accessories.Movement
 {
+	[AutoloadEquip(EquipType.Shoes)]
     public class GravityBoots : ModItem
     {
         public override void SetDefaults()
@@ -69,6 +71,7 @@ namespace ITD.Content.Items.Accessories.Movement
 								Vector2 position = Player.Center + new Vector2(direction*12f, (Player.height + 2f) * Player.gravDir * 0.5f);
 
 								Dust dust = Dust.NewDustDirect(position - new Vector2(4f, 4f), 0, 0, 255, 0f, 0f, 0, default, 1f);
+								//dust.shader = GameShaders.Armor.GetSecondaryShader(Player.cShoe, Player);
 								dust.noGravity = true;
 								dust.velocity = Player.velocity + new Vector2(direction*2f, Player.gravDir*2f);
 							}
@@ -92,7 +95,7 @@ namespace ITD.Content.Items.Accessories.Movement
 			}
         }
 		
-		public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
+		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
 			if (gravityBootsCharge > 0)
 			{

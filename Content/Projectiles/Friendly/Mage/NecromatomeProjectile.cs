@@ -129,7 +129,8 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 						float rotation = Projectile.rotation + num10 * 1.57079637f + Main.GlobalTimeWrappedHourly * num12 * 2f * Projectile.direction;
 						if (i == 0)
 						{
-							Main.EntitySpriteDraw(texture, position, new Rectangle?(rectangle), value3 * opacity, rotation * 0.5f, rectangle.Size() / 2f, scale * 1f, SpriteEffects.None, 0f);
+							Main.EntitySpriteDraw(texture, position + Projectile.velocity * -num7 * num6, new Rectangle?(rectangle), value3 * opacity * 0.5f, rotation + 0.5f, rectangle.Size() / 2f, scale, SpriteEffects.None, 0f);
+							Main.EntitySpriteDraw(texture, position, new Rectangle?(rectangle), value3 * opacity, rotation * 0.5f, rectangle.Size() / 2f, scale, SpriteEffects.None, 0f);
 						}
 						else if (i == 1)
 						{
