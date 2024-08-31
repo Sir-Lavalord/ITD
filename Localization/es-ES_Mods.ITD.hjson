@@ -537,6 +537,15 @@ Items: {
 			Reduces the effect of Mana Sickness by 15%
 			''' */
 	}
+
+	JumpingBean: {
+		// DisplayName: Jumping Bean
+		/* Tooltip:
+			'''
+			8% increased Movement Speed
+			Slightly increases Jump Height
+			''' */
+	}
 }
 
 Projectiles: {

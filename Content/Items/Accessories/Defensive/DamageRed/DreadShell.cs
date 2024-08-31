@@ -6,7 +6,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items.Accessories.Defensive
+namespace ITD.Content.Items.Accessories.Defensive.DamageRed
 {
     public class DreadShell : ModItem
     {
@@ -22,8 +22,8 @@ namespace ITD.Content.Items.Accessories.Defensive
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
-			modPlayer.blockChance += 0.1f;
-			modPlayer.dreadBlock = true;
+            modPlayer.blockChance += 0.1f;
+            modPlayer.dreadBlock = true;
         }
     }
 }

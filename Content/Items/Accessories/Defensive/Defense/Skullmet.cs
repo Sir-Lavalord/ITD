@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items.Accessories.Defensive
+namespace ITD.Content.Items.Accessories.Defensive.Defense
 {
     public class Skullmet : ModItem
     {

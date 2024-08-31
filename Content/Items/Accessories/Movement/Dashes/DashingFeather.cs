@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using System;
 using ITD.Utilities;
 
-namespace ITD.Content.Items.Accessories.Movement
+namespace ITD.Content.Items.Accessories.Movement.Dashes
 {
     public class DashingFeather : ModItem
     {

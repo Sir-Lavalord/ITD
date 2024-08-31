@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using System.Security.Cryptography.Pkcs;
 
-namespace ITD.Content.Items.Accessories.Misc
+namespace ITD.Content.Items.Accessories.Misc.Health
 {
     internal class CrimsonAntidote : ModItem
     {
@@ -70,12 +70,12 @@ namespace ITD.Content.Items.Accessories.Misc
         }
         public override void PreUpdate()
         {
-            
+
             if (resetToTime != 0 && !hasCrimsonAntidote)
             {
                 Player.ClearBuff(BuffID.PotionSickness);
-                Player.potionDelay = (int)(resetToTime);
-                Player.AddBuff(BuffID.PotionSickness, (int)(resetToTime));
+                Player.potionDelay = resetToTime;
+                Player.AddBuff(BuffID.PotionSickness, resetToTime);
                 resetToTime = 0;
             }
         }

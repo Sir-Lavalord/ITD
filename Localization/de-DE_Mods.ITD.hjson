@@ -539,6 +539,15 @@ Items: {
 			Verringert die Auswirkenungen von Manakrankheit um 15%
 			'''
 	}
+
+	JumpingBean: {
+		DisplayName: Sprungbohne
+		Tooltip:
+			'''
+			8% erhöhte Bewegungsgeschwindigkeit
+			Leicht erhöhte Sprunghöhe
+			'''
+	}
 }
 
 Projectiles: {

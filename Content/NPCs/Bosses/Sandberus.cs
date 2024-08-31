@@ -8,11 +8,11 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
-using ITD.Content.Items.Accessories.Defensive;
 using ITD.Content.Items.Weapons.Ranger;
 using ITD.Content.Items.Other;
 using ITD.Content.Projectiles.Hostile;
 using ITD.Utilities;
+using ITD.Content.Items.Accessories.Defensive.Defense;
 
 namespace ITD.Content.NPCs.Bosses
 {

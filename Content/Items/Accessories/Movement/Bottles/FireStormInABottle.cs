@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using System;
 
-namespace ITD.Content.Items.Accessories.Movement
+namespace ITD.Content.Items.Accessories.Movement.Bottles
 {
     public class FirestormInABottle : ModItem
     {
@@ -53,7 +53,7 @@ namespace ITD.Content.Items.Accessories.Movement
 
         private void HandleDoubleJump()
         {
-            if ((Player.velocity.Y == 0f || Player.sliding || (Player.autoJump && Player.justJumped)) && hasFireJump)
+            if ((Player.velocity.Y == 0f || Player.sliding || Player.autoJump && Player.justJumped) && hasFireJump)
             {
                 canDoubleJump = true;
                 waitDoubleJump = true;
@@ -71,7 +71,7 @@ namespace ITD.Content.Items.Accessories.Movement
             if (Player.jump > 0) return;
 
             Player.velocity.Y = -Player.jumpSpeed * Player.gravDir;
-            Player.jump = (int)Player.jumpHeight;
+            Player.jump = Player.jumpHeight;
             canDoubleJump = false;
 
             SoundEngine.PlaySound(new SoundStyle($"ITD/Content/Sounds/FirestormInABottle{Main.rand.Next(1, 4)}"), Player.position);

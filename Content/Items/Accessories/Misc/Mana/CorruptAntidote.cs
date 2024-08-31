@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using Terraria.ID;
 
-namespace ITD.Content.Items.Accessories.Misc
+namespace ITD.Content.Items.Accessories.Misc.Mana
 {
     internal class CorruptAntidote : ModItem
     {
@@ -21,7 +21,7 @@ namespace ITD.Content.Items.Accessories.Misc
         {
             player.GetModPlayer<CorruptAntidotePlayer>().hasCorruptAntidote = true;
             player.manaSickReduction *= 0.85f;
-            
+
         }
     }
 

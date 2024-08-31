@@ -12,7 +12,7 @@ using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Content.NPCs;
 using ITD.Players;
 
-namespace ITD.Content.Items.Accessories.Offensive
+namespace ITD.Content.Items.Accessories.Offensive.Damage
 {
     public class RazedWine : ModItem
     {
@@ -36,7 +36,7 @@ namespace ITD.Content.Items.Accessories.Offensive
                 NPC target = npcs.OrderByDescending(npc => npc.lifeMax).FirstOrDefault();
                 Projectile.NewProjectile(player.GetSource_Accessory(Item), player.Center + player.velocity, Vector2.Zero, ModContent.ProjectileType<RazedWineBottle>(), 1, 0.1f, player.whoAmI, target.whoAmI);
                 itdPlayer.razedCooldown = cooldownMax;
-			}
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ using Terraria.Audio;
 using System;
 using Terraria.DataStructures;
 
-namespace ITD.Content.Items.Accessories.Movement
+namespace ITD.Content.Items.Accessories.Movement.Bottles
 {
     public class TwisterInABottle : ModItem
     {
@@ -70,7 +70,7 @@ namespace ITD.Content.Items.Accessories.Movement
 
         private void HandleTwisterJump()
         {
-            if ((Player.velocity.Y == 0f || Player.sliding || (Player.autoJump && Player.justJumped)) && hasTwisterJump)
+            if ((Player.velocity.Y == 0f || Player.sliding || Player.autoJump && Player.justJumped) && hasTwisterJump)
             {
                 canDoubleJump = true;
                 hasReleasedJumpButton = false;
@@ -102,7 +102,7 @@ namespace ITD.Content.Items.Accessories.Movement
             damageTimer = DamageInterval;
             jumpPosition = Player.Bottom;
             Player.velocity.Y = -Player.jumpSpeed * Player.gravDir;
-            Player.jump = (int)Player.jumpHeight;
+            Player.jump = Player.jumpHeight;
             spinTimer = 0;
             spinDirection = 1;
             currentSpeedMultiplier = 1f;

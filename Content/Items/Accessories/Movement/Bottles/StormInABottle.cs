@@ -6,7 +6,7 @@ using Terraria.Audio;
 using System;
 using ITD.Utilities;
 
-namespace ITD.Content.Items.Accessories.Movement
+namespace ITD.Content.Items.Accessories.Movement.Bottles
 {
     public class StormInABottle : ModItem
     {
@@ -49,7 +49,7 @@ namespace ITD.Content.Items.Accessories.Movement
 
         private void HandleDoubleJump()
         {
-            if ((Player.velocity.Y == 0f || Player.sliding || (Player.autoJump && Player.justJumped)) && hasStormJump)
+            if ((Player.velocity.Y == 0f || Player.sliding || Player.autoJump && Player.justJumped) && hasStormJump)
             {
                 canDoubleJump = true;
                 waitDoubleJump = true;

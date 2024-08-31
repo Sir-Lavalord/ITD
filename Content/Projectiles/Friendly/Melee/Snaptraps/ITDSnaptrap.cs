@@ -1,5 +1,5 @@
 ﻿using ITD.Content.Items;
-using ITD.Content.Items.Accessories.Offensive;
+using ITD.Content.Items.Accessories.Offensive.Melee.Snaptraps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;

@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Items.Weapons.Melee.Snaptraps;
-using ITD.Content.Items.Accessories.Defensive;
 using ITD.Utilities;
 using System.Collections.Generic;
 using Terraria;
@@ -8,6 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
+using ITD.Content.Items.Accessories.Defensive.DamageRed;
 
 namespace ITD.Content.NPCs
 {
