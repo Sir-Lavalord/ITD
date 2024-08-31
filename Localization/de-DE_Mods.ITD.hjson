@@ -53,7 +53,7 @@ Items: {
 		DisplayName: Schnappfalle
 		Tooltip:
 			'''
-			"'Hey 'bert! Ich hab' ne verdammte Bärenfalle an ne Kette gehangen! Juuuhuuu!"
+			"Hey 'bert! Ich hab' ne verdammte Bärenfalle an ne Kette gehangen! Juuuhuuu!"
 			[c/{0}:Greif Effekt:] Erhöht Chance auf kritischen Treffer um 4%
 			'''
 	}
@@ -83,7 +83,7 @@ Items: {
 	}
 
 	CosmicJellyfishBag: {
-		Tooltip: ""
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 		DisplayName: Schatzbeutel (Kosmische Qualle)
 	}
 
@@ -476,47 +476,68 @@ Items: {
 	}
 
 	WindCape: {
-		// DisplayName: Windstrumican Cape
-		/* Tooltip:
+		DisplayName: Umhang des Sturmwanderers
+		Tooltip:
 			'''
-			10% increased movement speed
-			Wind follows your step
-			''' */
+			10% erhöhte Bewegungsgeschwindigkeit
+			Wind weist dir den Weg
+			'''
 	}
 
 	SandberusBag: {
-		// DisplayName: Sandberus Bag
-		// Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+		DisplayName: Schatzbeutel (Dünenfürst)
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 	}
 
 	RazedWine: {
-		// DisplayName: Razed Wine
-		/* Tooltip:
+		DisplayName: Gesprungene Weinflasche
+		Tooltip:
 			'''
-			Increases all damage by 10%
-			Automatically throws glass bottles at nearby enemies
-			Struck enemies have increased damage, decreased defense, and take damage over time
-			''' */
+			Erhöht Schaden um 10%
+			Wirft automatisch Glasflaschen auf Gegner in deiner Nähe
+			Getroffene Gegner verursachen mehr Schaden, haben verringerte Verteidigung und nehmen über Zeit Schaden
+			'''
 	}
 
 	GravityBoots: {
-		// DisplayName: Zero Gravity Dancers
-		/* Tooltip:
+		DisplayName: Anti-Gravitations-Tanzschuhe
+		Tooltip:
 			'''
-			Hold jump to reduce gravity
-			Increased air mobility
-			'Take a walk on cosmic lane!'
-			''' */
+			Halte Springen um die Gravitation zu verringern
+			Erhöhte Mobilität in der Luft
+			"Zeit für 'nen Spaziergang über die Milchstraße"
+			'''
 	}
 
 	Necromatome: {
-		// DisplayName: Necromatome
-		// Tooltip: Releases clouds of miasma
+		DisplayName: Zauber der Untoten
+		Tooltip: Erzeugt Wolken aus Miasma
 	}
 
 	Fishbacker: {
-		// DisplayName: Fishbacker
-		// Tooltip: ""
+		DisplayName: Fangnessel
+		Tooltip: ""
+	}
+
+	CrimsonAntidote: {
+		DisplayName: Purpurnes Gegenmittel
+		Tooltip:
+			'''
+			Heilungsgegenstände heilen 20% mehr Leben
+			Erhöht die Regeneration extrem, wenn ein Heilungsgegenstand benutzt wird
+			Reduziert die Abklingzeit von Tränken um 15%
+			'''
+	}
+
+	CorruptAntidote: {
+		DisplayName: Verdorbenes Gegenmittel
+		Tooltip:
+			'''
+			Managegenstände stellen 20% mehr Mana wieder her
+			Verringert den Manaverbrauch um 25%, wenn ein Managegenstand benutzt wird
+			Erhöht magischen Schaden um 25%, wenn ein Managegenstand benutzt wird
+			Verringert die Auswirkenungen von Manakrankheit um 15%
+			'''
 	}
 }
 
@@ -586,18 +607,18 @@ Projectiles: {
 	StarlightStaffProj.DisplayName: Sternenlichtstab-Projektil
 	BlankExplosion.DisplayName: Pure Explosion
 	DunebarrelRotate.DisplayName: Dünenrohr Drehung
-	// SandSpike.DisplayName: Sand Spike
-	// SandberusSkull.DisplayName: Sandberus Skull
-	// SandBoulder.DisplayName: Sand Boulder
-	// CosmicJellyfishMiniProj.DisplayName: Cosmic Jellyfish
-	// CosmicLightningOrb.DisplayName: Cosmic Lightning Orb
-	// CosmicRay.DisplayName: Cosmic Ray
-	// CosmicRayWarn.DisplayName: Cosmic Ray
-	// TouhouBullet.DisplayName: Cosmic Orb
-	// RazedWineBottle.DisplayName: Razed Wine Bottle
-	// EmberSlashOld.DisplayName: Ember Slash Old
-	// NecromatomeProjectile.DisplayName: Necromatome Projectile
-	// FishbackerProj.DisplayName: Fishbacker Proj
+	SandSpike.DisplayName: Sandstachel
+	SandberusSkull.DisplayName: Dünenfürstschädel
+	SandBoulder.DisplayName: Sandsteinfelsen
+	CosmicJellyfishMiniProj.DisplayName: Kosmische Qualle
+	CosmicLightningOrb.DisplayName: Weißer Zwerg
+	CosmicRay.DisplayName: Gammablitz
+	CosmicRayWarn.DisplayName: Gammablitz
+	TouhouBullet.DisplayName: Roter Zwerg
+	RazedWineBottle.DisplayName: Gesprungene Weinflasche
+	EmberSlashOld.DisplayName: Bernsteinschlitzer(alt)
+	NecromatomeProjectile.DisplayName: Zauber der Untoten
+	FishbackerProj.DisplayName: Fangnessel
 }
 
 NPCs: {
@@ -623,8 +644,8 @@ NPCs: {
 	FlamingSkull.DisplayName: Brennender Schädel
 	AmbushBones.DisplayName: Überfallskelett
 	ShroomishSlime.DisplayName: Pilzschleim
-	// CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
-	// Sandberus.DisplayName: Sandberus
+	CosmicJellyfishMini.DisplayName: Diener der Qualle
+	Sandberus.DisplayName: Dünenfürst
 }
 
 Buffs: {

@@ -517,6 +517,26 @@ Items: {
 		DisplayName: Fishbacker
 		Tooltip: ""
 	}
+
+	CrimsonAntidote: {
+		DisplayName: Crimson Antidote
+		Tooltip:
+			'''
+			Healing items heal 20% more HP
+			Upon using a healing item, grants massively increased life regeneration for 4 seconds
+			Reduces the effect of Potion Sickness by 15%
+			'''
+	}
+
+	CorruptAntidote: {
+		DisplayName: Corrupt Antidote
+		Tooltip:
+			'''
+			Mana items grant 20% more Mana
+			Upon using a Mana Item, grants -25% Mana Usage and +25% Magic Damage for 4 seconds
+			Reduces the effect of Mana Sickness by 15%
+			'''
+	}
 }
 
 Projectiles: {
