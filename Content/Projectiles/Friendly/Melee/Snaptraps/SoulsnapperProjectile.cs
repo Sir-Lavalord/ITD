@@ -5,9 +5,9 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using ITD.Content.Projectiles.Friendly.Snaptraps.Extra;
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 
-namespace ITD.Content.Projectiles.Friendly.Snaptraps
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
     public class SoulsnapperProjectile : ITDSnaptrap
     {
@@ -26,7 +26,7 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
             FullPowerHitsAmount = 10;
             WarningFrames = 60;
             ChompDust = DustID.CorruptionThorns;
-            ToChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/SoulsnapperChain";
+            ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/SoulsnapperChain";
             DrawOffsetX = -9;
             DrawOriginOffsetY = -16;
         }

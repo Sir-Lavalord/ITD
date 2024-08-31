@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
-using ITD.Content.Projectiles.Friendly.Misc;
+using ITD.Content.Projectiles.Friendly.Mage;
 using ITD.Systems;
 using Microsoft.Xna.Framework.Graphics;
 

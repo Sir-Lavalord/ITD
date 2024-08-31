@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using ITD.Content.Dusts;
 
-namespace ITD.Content.Projectiles.Friendly.Misc
+namespace ITD.Content.Projectiles.Friendly.Mage
 {
     public class StarlightStaffProj : ModProjectile
     {
@@ -162,7 +162,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         {
 			if (Projectile.timeLeft > 10)
 			{
-				Texture2D trailTexture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Misc/StarlightStaffProj_Trail").Value;
+				Texture2D trailTexture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Mage/StarlightStaffProj_Trail").Value;
 				Vector2 origin = trailTexture.Frame(1, 1).Size() / 2f;
 				for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
 				{
@@ -173,7 +173,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 			else
 			{
 				Vector2 position = Projectile.Center - Main.screenPosition;
-				Texture2D texture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Misc/WRipperRift").Value;
+				Texture2D texture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Melee/WRipperRift").Value;
 				Rectangle sourceRectangle = texture.Frame(1, 1);
 				Vector2 origin = sourceRectangle.Size() / 2f;
 				

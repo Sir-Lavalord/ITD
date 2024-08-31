@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
 
-namespace ITD.Content.Projectiles.Friendly.Misc
+namespace ITD.Content.Projectiles.Friendly.Melee
 {
     public class GhostlyBlade : ModProjectile
     {

@@ -1,4 +1,4 @@
-using ITD.Content.Projectiles.Friendly.Snaptraps;
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

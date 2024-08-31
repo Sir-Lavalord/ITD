@@ -17,7 +17,8 @@ namespace ITD.Content.Projectiles.Friendly.Pets
         private readonly Asset<Texture2D> lanternSprite = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Pets/WingedSnowpoffLantern");
         private readonly Asset<Texture2D> chainSprite = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Pets/WingedSnowpoffChain");
         VerletChain lanternChain;
-        int lastDir;
+        float lastDir;
+        int targetDir;
         Vector2 randomWander;
         int wanderTimer;
         public override void SetStaticDefaults()
@@ -47,10 +48,11 @@ namespace ITD.Content.Projectiles.Friendly.Pets
         {
             Player player = Main.player[Projectile.owner];
             int sign = Math.Sign(player.velocity.X);
-            if (sign != 0)
+            if (sign != 0f)
             {
-                lastDir = sign;
+                targetDir = sign;
             }
+            lastDir = MathHelper.Lerp(lastDir, targetDir, 0.1f);
             if (!player.dead && player.HasBuff(ModContent.BuffType<SnowyLanternBuff>()))
             {
                 Projectile.timeLeft = 2;
@@ -74,14 +76,14 @@ namespace ITD.Content.Projectiles.Friendly.Pets
             Vector2 toPlayer = targetPoint - Projectile.Center;
             Vector2 toPlayerNormalized = toPlayer.SafeNormalize(Vector2.Zero);
             float speed = toPlayer.Length();
-            Projectile.direction = Projectile.spriteDirection = lastDir;
+            Projectile.direction = Projectile.spriteDirection = Math.Sign(lastDir);
             wanderTimer++;
             if (wanderTimer > 32)
             {
                 randomWander = Main.rand.NextVector2Circular(2f, 4f);
                 wanderTimer = 0;
             }
-            Projectile.velocity = toPlayerNormalized * (speed / 8f) + randomWander;
+            Projectile.velocity = toPlayerNormalized * (speed / 8) + randomWander;
         }
         public override void PostDraw(Color lightColor)
         {

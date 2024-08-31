@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using ITD.Content.Items.Materials;
-using ITD.Content.Projectiles.Friendly.Ammo;
+using ITD.Content.Projectiles.Friendly.Ranger.Ammo;
 using Microsoft.Xna.Framework;
 
 namespace ITD.Content.Items.Weapons.Ranger

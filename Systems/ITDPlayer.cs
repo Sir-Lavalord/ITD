@@ -233,7 +233,7 @@ namespace ITD.Players
             {
                 if (npc.WithinRange(Player.Center, distance))
                 {
-                    if (npc.friendly && ignoreFriendly)
+                    if (!npc.CanBeChasedBy() && ignoreFriendly)
                         continue;
                     npcs.Add(npc);
                 }

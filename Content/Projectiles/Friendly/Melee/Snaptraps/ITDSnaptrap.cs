@@ -70,7 +70,7 @@ namespace ITD.Content.Projectiles
         /// <summary>
         /// Chain texture. Override GetChainTexture(), GetChainColor(), and ExtraChainEffects() for customization.
         /// </summary>
-        public string ToChainTexture {  get; set; } = "ITD/Content/Projectiles/Friendly/Snaptraps/SnaptrapChain";
+        public string ToChainTexture {  get; set; } = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/SnaptrapChain";
 
         private float staticRotation; //
         public bool retracting = false; //

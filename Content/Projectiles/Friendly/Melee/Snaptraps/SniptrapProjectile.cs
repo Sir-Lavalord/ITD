@@ -14,7 +14,7 @@ using Terraria.ID;
 using Terraria.Map;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Projectiles.Friendly.Snaptraps
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
     public class SniptrapProjectile : ITDSnaptrap
     {
@@ -29,7 +29,7 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
             FullPowerHitsAmount = 10;
             WarningFrames = 60;
             ChompDust = DustID.Iron;
-            ToChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/SniptrapChain";
+            ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/SniptrapChain";
             toSnaptrapMetal = "ITD/Content/Sounds/SniptrapClose";
         }
     }

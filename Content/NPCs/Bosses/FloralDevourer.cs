@@ -339,19 +339,14 @@ namespace ITD.Content.NPCs.Bosses
             legFront?.Draw(spriteBatch, screenPos, Color.White, isFacingRight);
         }
     }
-    public class Leg : IDisposable
+    public class Leg(float x, float y, float angle) : IDisposable
     {
-        public Segment[] segments;
-        public Vector2 legBase;
-        public Leg(float x, float y, float angle)
-        {
-            legBase = new Vector2(x, y);
-            segments =
+        public Segment[] segments =
             [
                 new Segment(x, y, angle, 97f, false),
                 new Segment(x, y, angle, 81f, true),
             ];
-        }
+        public Vector2 legBase = new Vector2(x, y);
 
         public void Update(Vector2 targetPos)
         {
@@ -392,25 +387,17 @@ namespace ITD.Content.NPCs.Bosses
         }
     }
 
-    public class Segment
+    public class Segment(float x, float y, float angle, float length, bool femur)
     {
         private static Asset<Texture2D> femurTexture = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerFemur");
         private static Asset<Texture2D> tibiaTexture = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerTibia");
-        public Vector2 a { get; set; }
+        public Vector2 a { get; set; } = new Vector2(x, y);
         public Vector2 b { get; set; }
-        public float Length {  get; set; }
-        public float Angle {  get; set; }
+        public float Length { get; set; } = length;
+        public float Angle { get; set; } = angle;
 
-        public Vector2 Target {  get; set; }
-        public bool isFemur { get; set; } = true;
-        public Segment(float x, float y, float angle, float length, bool femur)
-        {
-            isFemur = femur;
-            Target = Main.MouseWorld;
-            a = new Vector2(x, y);
-            Angle = angle;
-            Length = length;
-        }
+        public Vector2 Target { get; set; } = Main.MouseWorld;
+        public bool isFemur { get; set; } = femur;
 
         public void FollowSegment(Segment child)
         {

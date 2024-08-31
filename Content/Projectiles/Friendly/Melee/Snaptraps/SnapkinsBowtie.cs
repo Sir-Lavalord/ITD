@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using ITD.Utilities;
 
-namespace ITD.Content.Projectiles.Friendly.Snaptraps.Extra
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
 {
     public class SnapkinsBowtie : ModProjectile
     {

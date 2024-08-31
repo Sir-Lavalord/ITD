@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ITD.Content.Projectiles.Friendly.Misc;
+using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Content.Items.Materials;
 using ITD.Utilities;
 

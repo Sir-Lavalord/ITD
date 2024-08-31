@@ -508,9 +508,9 @@ Items: {
 			''' */
 	}
 
-	Fishbacker: {
-		// Tooltip: ""
-		// DisplayName: Fishbacker
+	Necromatome: {
+		// DisplayName: Necromatome
+		// Tooltip: Releases clouds of miasma
 	}
 }
 
@@ -590,7 +590,7 @@ Projectiles: {
 	TouhouBullet.DisplayName: Órbe cósmica
 	RazedWineBottle.DisplayName: Vino arrasado
 	EmberSlashOld.DisplayName: Tajadora de llamarada
-	// FishbackerProj.DisplayName: Fishbacker Proj
+	// NecromatomeProjectile.DisplayName: Necromatome Projectile
 }
 
 NPCs: {

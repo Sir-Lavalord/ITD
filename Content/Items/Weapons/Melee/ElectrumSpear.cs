@@ -4,7 +4,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
-using ITD.Content.Projectiles.Friendly.Misc;
+using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Content.Items.Materials;
 
 namespace ITD.Content.Items.Weapons.Melee
