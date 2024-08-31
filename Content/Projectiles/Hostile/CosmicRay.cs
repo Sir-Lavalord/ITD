@@ -76,11 +76,11 @@ namespace ITD.Content.Projectiles.Hostile
             float num801 = 2f;
             if (Main.expertMode)
             {
-                num801 = 4f;
+                num801 = 3f;
             }
             else if (Main.masterMode)
             {
-                num801 = 6f;
+                num801 = 5f;
             }
             Projectile.localAI[0] += 1f;
 
