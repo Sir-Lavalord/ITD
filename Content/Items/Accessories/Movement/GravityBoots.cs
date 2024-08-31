@@ -19,7 +19,7 @@ namespace ITD.Content.Items.Accessories.Movement
             Item.width = 24;
             Item.height = 28;
             Item.value = Item.sellPrice(gold: 2);
-            Item.rare = ItemRarityID.Expert;
+            Item.expert = true;
             Item.accessory = true;
         }
 

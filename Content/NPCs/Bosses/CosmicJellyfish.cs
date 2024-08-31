@@ -4,6 +4,7 @@ using ITD.Content.Items.Placeable;
 using ITD.Content.Items.Weapons.Mage;
 using ITD.Content.Items.Weapons.Melee;
 using ITD.Content.Items.Weapons.Ranger;
+using ITD.Content.Items.Weapons.Summoner;
 using ITD.Content.Projectiles.Hostile;
 using ITD.Players;
 using ITD.Utilities;
@@ -34,6 +35,7 @@ namespace ITD.Content.NPCs.Bosses
             ModContent.ItemType<WormholeRipper>(),
             ModContent.ItemType<StarlightStaff>(),
             ModContent.ItemType<Quasar>(),
+            ModContent.ItemType<Fishbacker>(),
         };
         //private static List<CosmicJellyfish_Hand> hands = new List<CosmicJellyfish_Hand>();
         public float rotation = 0f;
@@ -193,7 +195,6 @@ namespace ITD.Content.NPCs.Bosses
                 {
                     NPC.ai[3] = 1;
                 }
-                return;
             }
             else
             {
@@ -226,6 +227,8 @@ namespace ITD.Content.NPCs.Bosses
                 NPC.netUpdate = true;
                 Main.NewText("ACKK STUDIO II: CRESCENDO. IN THE JELLY OF THE FISH.", Color.Crimson);
             }
+            return;
+
         }
         //TODO: FIX CODE FOR MULTIPLAYER
         private void Attacks(Player player)//___________________________________________________________________________________________________________________________________________________
@@ -414,6 +417,7 @@ namespace ITD.Content.NPCs.Bosses
                         AI_State = MovementState.Ram;
                     if (NPC.localAI[0] > 2 && !SecondStage || NPC.localAI[0] > 5 && SecondStage)
                     {
+                        //can't believe i have to do this, since the checking doesn't even fucking work
                         NPC.ai[3]++;
                         NPC.localAI[1] = 0;
                         NPC.localAI[0] = 0;
@@ -823,14 +827,12 @@ namespace ITD.Content.NPCs.Bosses
 
                         }
                     }
-                    if (NPC.localAI[2] >= 80)//Dash Thrice, epic
+                    if (NPC.localAI[2] >= 80)
                     {
-                        if (NPC.localAI[0]++ <= 3)
-                        {
-
+                        NPC.localAI[0]++;
+                            NPC.localAI[1] = 0;
                             NPC.localAI[2] = 0;
                             AI_State = MovementState.FollowingRegular;
-                        }
                     }
                     break;
                 case MovementState.Suffocate:
@@ -845,14 +847,6 @@ namespace ITD.Content.NPCs.Bosses
                         NPC.ai[3] ++;
                         AI_State = MovementState.FollowingRegular;
 
-                    }
-                    else
-                    {
-                        if (NPC.ai[2]++ >= 90)
-                        {
-                            NPC.ai[2] = 0;
-                            suffer.CosJellEscapeCurrent--;
-                        }
                     }
                     break;
 

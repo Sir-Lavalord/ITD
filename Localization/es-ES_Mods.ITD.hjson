@@ -512,6 +512,11 @@ Items: {
 		// DisplayName: Necromatome
 		// Tooltip: Releases clouds of miasma
 	}
+
+	Fishbacker: {
+		// DisplayName: Fishbacker
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -591,6 +596,7 @@ Projectiles: {
 	RazedWineBottle.DisplayName: Vino arrasado
 	EmberSlashOld.DisplayName: Tajadora de llamarada
 	// NecromatomeProjectile.DisplayName: Necromatome Projectile
+	// FishbackerProj.DisplayName: Fishbacker Proj
 }
 
 NPCs: {
