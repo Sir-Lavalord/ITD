@@ -26,7 +26,7 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.jumpSpeedBoost += 1;
-            player.moveSpeed *= 1.08f;
+            player.moveSpeed += 0.08f;
         }
     }
 }

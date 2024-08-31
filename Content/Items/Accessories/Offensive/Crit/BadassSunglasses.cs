@@ -94,7 +94,7 @@ namespace ITD.Content.Items.Accessories.Offensive.Crit
             if (sunglassesVanity)
             {
                 Vector2 position = drawInfo.Position - Main.screenPosition + new Vector2(Player.width * 0.5f, Player.height * 0.5f - 8f);
-                Asset<Texture2D> texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Offensive/BadassSunglasses_Aura");
+                Asset<Texture2D> texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Offensive/Crit/BadassSunglasses_Aura");
                 Rectangle sourceRectangle = texture.Frame(1, 1);
                 Vector2 origin = sourceRectangle.Size() / 2f;
                 Color color = Color.White;
