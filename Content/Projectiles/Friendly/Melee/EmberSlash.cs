@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 
-namespace ITD.Content.Projectiles.Friendly.Misc
+namespace ITD.Content.Projectiles.Friendly.Melee
 {
     public class EmberSlash : ModProjectile
     {
@@ -50,7 +50,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 			Player player = Main.player[Projectile.owner];
 			Projectile.Center = player.MountedCenter + Projectile.velocity;
 			
-			if (Projectile.ai[1] == 0)
+			if (Projectile.ai[1] == 0 && Main.myPlayer == Projectile.owner)
 			{
 				if (Projectile.localAI[0] == 8)
 					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 25f, Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.ai[0]*1.4f, 1f);
@@ -81,10 +81,10 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 			float num4 = 0.7f;
 			float num5 = 0.85f;
 			float num6 = (Projectile.localAI[0] > num - 10f) ? 0.175f : 0.2f;
-			float scale = Utils.Remap(Projectile.localAI[0], num, fromMax, 1f, 0f, true);
+			float opacity = Utils.Remap(Projectile.localAI[0], num, fromMax, 1f, 0f, true);
 			float num7 = Math.Min(Projectile.localAI[0], 20f);
 			float num8 = Utils.Remap(Projectile.localAI[0], 0f, fromMax, 0f, 1f, true);
-			float num9 = Utils.Remap(num8, 0.2f, 0.5f, 0.5f*Projectile.ai[0], 1f*Projectile.ai[0], true);
+			float scale = Utils.Remap(num8, 0.2f, 0.5f, 0.5f*Projectile.ai[0], 1f*Projectile.ai[0], true);
 			Rectangle rectangle = texture.Frame(1, 1);
 			if (num8 < 1f)
 			{
@@ -147,11 +147,11 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 						float rotation = Projectile.rotation + num10 * 1.57079637f + Main.GlobalTimeWrappedHourly * num12 * 2f * Projectile.direction;
 						if (i == 0)
 						{
-							Main.EntitySpriteDraw(texture2, position, new Microsoft.Xna.Framework.Rectangle?(rectangle), value3 * scale, rotation * 0.5f, rectangle.Size() / 2f, num9, SpriteEffects.None, 0f);
+							Main.EntitySpriteDraw(texture2, position, new Rectangle?(rectangle), value3 * opacity, rotation * 0.5f, rectangle.Size() / 2f, scale, SpriteEffects.None, 0f);
 						}
 						else if (i == 1)
 						{
-							Main.EntitySpriteDraw(texture, position, new Microsoft.Xna.Framework.Rectangle?(rectangle), color5 * scale, rotation + 1.57079637f, rectangle.Size() / 2f, num9 * 0.75f, SpriteEffects.None, 0f);
+							Main.EntitySpriteDraw(texture, position, new Rectangle?(rectangle), color5 * opacity, rotation + 1.57079637f, rectangle.Size() / 2f, scale * 0.75f, SpriteEffects.None, 0f);
 						}
 					}
 				}

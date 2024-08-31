@@ -4,10 +4,10 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ITD.Content.Projectiles.Friendly.Snaptraps.Extra;
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 using Terraria.Localization;
 
-namespace ITD.Content.Projectiles.Friendly.Snaptraps
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
     public class MrSnapkinsProjectile : ITDSnaptrap
     {

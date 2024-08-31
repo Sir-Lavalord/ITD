@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
 
-namespace ITD.Content.Projectiles.Friendly.Snaptraps.Extra
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
 {
     public class DespoticJawProjectile : ModProjectile
     {

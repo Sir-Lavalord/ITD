@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ITD.Content.Projectiles.Friendly.Misc;
+using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Systems;
 
 namespace ITD.Content.Items.Weapons.Melee

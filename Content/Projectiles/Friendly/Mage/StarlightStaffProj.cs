@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using ITD.Content.Dusts;
 
-namespace ITD.Content.Projectiles.Friendly.Misc
+namespace ITD.Content.Projectiles.Friendly.Mage
 {
     public class StarlightStaffProj : ModProjectile
     {

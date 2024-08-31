@@ -7,7 +7,7 @@ using Terraria.Audio;
 using ITD.Content.NPCs;
 using ITD.Utilities;
 
-namespace ITD.Content.Projectiles.Friendly.Misc
+namespace ITD.Content.Projectiles.Friendly.Melee
 {
     public class ElectrumSpearBeam : ModProjectile
     {

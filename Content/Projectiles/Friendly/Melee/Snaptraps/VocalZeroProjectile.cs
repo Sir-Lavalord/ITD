@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 using ITD.Content.Dusts;
 using Terraria.Localization;
 
-namespace ITD.Content.Projectiles.Friendly.Snaptraps
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
     public class VocalZeroProjectile : ITDSnaptrap
     {
@@ -36,7 +36,7 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
             FullPowerHitsAmount = 10;
             WarningFrames = 80;
             ChompDust = DustID.Blood;
-            ToChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/VocalZeroChain";
+            ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/VocalZeroChain";
             DrawOffsetX = -22;
             DrawOriginOffsetY = -22;
         }

@@ -7,26 +7,23 @@ using Terraria.Audio;
 using ITD.Content.NPCs;
 using ITD.Utilities;
 
-namespace ITD.Content.Projectiles.Friendly.Misc
+namespace ITD.Content.Projectiles.Friendly.Ranger.Ammo
 {
-    public class RhodiumSwordBeam : ModProjectile
+    public class ElectrifiedArrow : ModProjectile
     {
         public override void SetDefaults()
         {
-            Projectile.DamageType = DamageClass.Melee;
-            Projectile.width = 16; Projectile.height = 16;
-            Projectile.friendly = true;
-            Projectile.hostile = false;
-            Projectile.timeLeft = 60;
-			Projectile.extraUpdates = 11;
-            Projectile.ignoreWater = false;
-            Projectile.tileCollide = true;
+            Projectile.CloneDefaults(1);
+        }
+		public override Color? GetAlpha(Color lightColor)
+        {
+            return Color.White;
         }
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
-			MiscHelpers.Zap(target.Center, Main.player[Projectile.owner], (int)(Projectile.damage * 0.75f), Projectile.CritChance, 2);
+			MiscHelpers.Zap(target.Center, Main.player[Projectile.owner], (int)(Projectile.damage * 0.75f), Projectile.CritChance, 1);
 		}
 		
         public override void AI()
@@ -39,7 +36,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         {
             for (int i = 0; i < 10; i++)
             {
-                int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.Electric, 0f, 0f, 0, default, 1.5f);
+                int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.Electric, 0f, 0f, 0, default, 1f);
 				Main.dust[dust].noGravity = true;
 				Main.dust[dust].velocity *= 2f;
             }

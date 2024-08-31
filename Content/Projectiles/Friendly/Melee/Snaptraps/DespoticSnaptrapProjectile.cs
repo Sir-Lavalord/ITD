@@ -7,15 +7,15 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Dusts;
 using Terraria.Localization;
-using ITD.Content.Projectiles.Friendly.Snaptraps.Extra;
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 
-namespace ITD.Content.Projectiles.Friendly.Snaptraps
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
     public class DespoticSnaptrapProjectile : ITDSnaptrap
     {
         public static LocalizedText OneTimeLatchMessage { get; private set; }
-        private const string ChainTextureExtraPath = "ITD/Content/Projectiles/Friendly/Snaptraps/DespoticSnaptrapChain1";
-        private const string ChainTextureExtra2Path = "ITD/Content/Projectiles/Friendly/Snaptraps/DespoticSnaptrapChain2";
+        private const string ChainTextureExtraPath = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/DespoticSnaptrapChain1";
+        private const string ChainTextureExtra2Path = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/DespoticSnaptrapChain2";
         private readonly int constantEffectFrames = 200;
         int constantEffectTimer = 0;
         public override void SetSnaptrapProperties()
@@ -31,7 +31,7 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
             FullPowerHitsAmount = 10;
             WarningFrames = 200;
             ChompDust = DustID.IceTorch;
-            ToChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/DespoticSnaptrapChain";
+            ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/DespoticSnaptrapChain";
             DrawOffsetX = -20;
             DrawOriginOffsetY = -24;
             Projectile.extraUpdates = 1;

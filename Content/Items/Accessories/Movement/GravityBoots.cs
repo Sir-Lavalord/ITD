@@ -44,7 +44,7 @@ namespace ITD.Content.Items.Accessories.Movement
         {
 			if (gravityBoots)
 			{
-				if (!Player.IsOnStandableGround() && Player.velocity.Y != 0f)
+				if (!Player.IsOnStandableGround() || Player.velocity.Y != 0f)
 				{
 					Player.runAcceleration *= 2f;
 					Player.runSlowdown *= 2f;
@@ -60,16 +60,20 @@ namespace ITD.Content.Items.Accessories.Movement
 						}
 						Player.fallStart = (int)(Player.position.Y / 16f);
 						
-						for (int i = 0; i < 2; i++)
+						if (gravityBootsCharge == 10)
 						{
-							int direction = (i == 0) ? 1 : -1;
-							
-							Vector2 position = Player.Center + new Vector2(direction*12f, (Player.height + 2f) * Player.gravDir * 0.5f);
+							for (int i = 0; i < 2; i++)
+							{
+								int direction = (i == 0) ? 1 : -1;
+								
+								Vector2 position = Player.Center + new Vector2(direction*12f, (Player.height + 2f) * Player.gravDir * 0.5f);
 
-							Dust dust = Dust.NewDustDirect(position - new Vector2(4f, 4f), 0, 0, 255, 0f, 0f, 0, default, 1f);
-							dust.noGravity = true;
-							dust.velocity = Player.velocity + new Vector2(direction*2f, Player.gravDir*2f);
+								Dust dust = Dust.NewDustDirect(position - new Vector2(4f, 4f), 0, 0, 255, 0f, 0f, 0, default, 1f);
+								dust.noGravity = true;
+								dust.velocity = Player.velocity + new Vector2(direction*2f, Player.gravDir*2f);
+							}
 						}
+						
 						gravityBootsSound = ++gravityBootsSound % 10;
 						if (gravityBootsSound == 0)
 							SoundEngine.PlaySound(SoundID.Item24, Player.Center);

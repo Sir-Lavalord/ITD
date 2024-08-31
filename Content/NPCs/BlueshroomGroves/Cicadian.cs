@@ -1,5 +1,5 @@
 ﻿using ITD.Content.Biomes;
-using ITD.Content.Projectiles.Friendly.Snaptraps;
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using ITD.Content.Projectiles.Hostile;
 using ITD.Utilities;
 using Microsoft.Xna.Framework;

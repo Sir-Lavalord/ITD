@@ -15,7 +15,7 @@ using Terraria.Localization;
 using Terraria.Map;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Projectiles.Friendly.Snaptraps
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
     public class SnaptrapProjectile : ITDSnaptrap
     {

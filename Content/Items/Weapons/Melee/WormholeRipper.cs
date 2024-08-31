@@ -1,4 +1,4 @@
-﻿using ITD.Content.Projectiles.Friendly.Misc;
+﻿using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Players;
 using Terraria;
 using Terraria.ID;

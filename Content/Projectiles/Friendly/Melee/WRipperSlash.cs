@@ -8,7 +8,7 @@ using Terraria.Audio;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ITD.Content.Projectiles.Friendly.Misc
+namespace ITD.Content.Projectiles.Friendly.Melee
 {
     public class WRipperSlash : ModProjectile
     {

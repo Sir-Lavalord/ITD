@@ -5,9 +5,9 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using ITD.Content.Projectiles.Friendly.Snaptraps.Extra;
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 
-namespace ITD.Content.Projectiles.Friendly.Snaptraps
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
     public class CrimeratrapProjectile : ITDSnaptrap
     {
@@ -26,7 +26,7 @@ namespace ITD.Content.Projectiles.Friendly.Snaptraps
             FullPowerHitsAmount = 10;
             WarningFrames = 60;
             ChompDust = DustID.CrimsonPlants;
-            ToChainTexture = "ITD/Content/Projectiles/Friendly/Snaptraps/CrimeratrapChain";
+            ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/CrimeratrapChain";
             DrawOffsetX = -13;
             DrawOriginOffsetY = -19;
         }

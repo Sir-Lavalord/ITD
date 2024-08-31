@@ -5,7 +5,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Projectiles.Friendly.Snaptraps.Extra
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
 {
     public class EvilSpitProjectile : ModProjectile
     {

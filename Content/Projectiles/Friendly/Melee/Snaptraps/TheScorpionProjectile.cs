@@ -15,7 +15,7 @@ using Terraria.Map;
 using Terraria.ModLoader;
 using ITD.Content.Projectiles;
 
-namespace ITD.Content.Projectiles.Friendly.Snaptraps
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
     public class TheScorpionProjectile : ITDSnaptrap
     {
