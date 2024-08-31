@@ -486,7 +486,7 @@ Items: {
 
 	SandberusBag: {
 		// DisplayName: Sandberus Bag
-		// Tooltip: ""
+		// Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 	}
 
 	RazedWine: {
@@ -512,6 +512,11 @@ Items: {
 	Necromatome: {
 		// DisplayName: Necromatome
 		// Tooltip: Releases clouds of miasma
+	}
+
+	Fishbacker: {
+		// DisplayName: Fishbacker
+		// Tooltip: ""
 	}
 }
 
@@ -592,6 +597,7 @@ Projectiles: {
 	// RazedWineBottle.DisplayName: Razed Wine Bottle
 	// EmberSlashOld.DisplayName: Ember Slash Old
 	// NecromatomeProjectile.DisplayName: Necromatome Projectile
+	// FishbackerProj.DisplayName: Fishbacker Proj
 }
 
 NPCs: {
