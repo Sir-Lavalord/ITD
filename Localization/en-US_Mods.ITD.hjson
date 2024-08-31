@@ -507,6 +507,11 @@ Items: {
 			'Take a walk on cosmic lane!'
 			'''
 	}
+
+	Fishbacker: {
+		Tooltip: ""
+		DisplayName: Fishbacker
+	}
 }
 
 Projectiles: {
@@ -585,6 +590,7 @@ Projectiles: {
 	TouhouBullet.DisplayName: Cosmic Orb
 	RazedWineBottle.DisplayName: Razed Wine Bottle
 	EmberSlashOld.DisplayName: Ember Slash Old
+	FishbackerProj.DisplayName: Fishbacker Proj
 }
 
 NPCs: {
