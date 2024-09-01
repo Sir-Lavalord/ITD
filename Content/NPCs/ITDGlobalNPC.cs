@@ -46,6 +46,9 @@ namespace ITD.Content.NPCs
                     npc.lifeRegen = 0;
                 }
                 npc.lifeRegen -= 60;
+				
+				if (damage < 10)
+                    damage = 10;
             }
         }
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)

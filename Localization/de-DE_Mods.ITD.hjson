@@ -564,6 +564,11 @@ Items: {
 			Tippe doppelt in eine Richtung, während du auf dem Boden bist, um einen Sprung, den du kurz kontrolieren kannst, zu starten
 			'''
 	}
+
+	CyaniteBoomerang: {
+		// DisplayName: Cyanite Boomerang
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -644,6 +649,7 @@ Projectiles: {
 	EmberSlashOld.DisplayName: Bernsteinschlitzer(alt)
 	NecromatomeProjectile.DisplayName: Zauber der Untoten
 	FishbackerProj.DisplayName: Fangnessel
+	// CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang Projectile
 }
 
 NPCs: {

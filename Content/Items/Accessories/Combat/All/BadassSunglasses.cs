@@ -60,6 +60,7 @@ namespace ITD.Content.Items.Accessories.Combat.All
         public override void UpdateDead()
         {
             sunglassesCharge = 0;
+			sunglassesVanity = false;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -93,7 +94,7 @@ namespace ITD.Content.Items.Accessories.Combat.All
         {
             if (sunglassesVanity)
             {
-                Vector2 position = drawInfo.Position - Main.screenPosition + new Vector2(Player.width * 0.5f, Player.height * 0.5f - 8f);
+                Vector2 position = drawInfo.Position - Main.screenPosition + new Vector2(Player.width * 0.5f, Player.height * 0.5f - 8f * Player.gravDir);
                 Asset<Texture2D> texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Combat/All/BadassSunglasses_Aura");
                 Rectangle sourceRectangle = texture.Frame(1, 1);
                 Vector2 origin = sourceRectangle.Size() / 2f;
@@ -110,9 +111,16 @@ namespace ITD.Content.Items.Accessories.Combat.All
                 int scale3 = (int)(Main.GlobalTimeWrappedHourly * 30 + 20) % 30;
 
                 Main.CurrentDrawnEntityShader = Player.cFace;
-                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * opacity * ((30 - scale1) * 0.025f), 0, origin, 0.6f + scale1 * 0.02f, SpriteEffects.None, 0f);
-                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * opacity * ((30 - scale2) * 0.025f), 0, origin, 0.6f + scale2 * 0.02f, SpriteEffects.None, 0f);
-                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * opacity * ((30 - scale3) * 0.025f), 0, origin, 0.6f + scale3 * 0.02f, SpriteEffects.None, 0f);
+				
+				SpriteEffects effects;
+				if (Player.gravDir == 1)
+					effects = SpriteEffects.None;
+				else
+					effects = SpriteEffects.FlipVertically;
+				
+                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * opacity * ((30 - scale1) * 0.025f), 0, origin, 0.6f + scale1 * 0.02f, effects, 0f);
+                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * opacity * ((30 - scale2) * 0.025f), 0, origin, 0.6f + scale2 * 0.02f, effects, 0f);
+                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * opacity * ((30 - scale3) * 0.025f), 0, origin, 0.6f + scale3 * 0.02f, effects, 0f);
                 Main.CurrentDrawnEntityShader = 0;
             }
         }

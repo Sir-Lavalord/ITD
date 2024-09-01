@@ -562,6 +562,11 @@ Items: {
 			Double tap any direction while on the ground to start a dash you can control for a short while
 			''' */
 	}
+
+	CyaniteBoomerang: {
+		// DisplayName: Cyanite Boomerang
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -642,6 +647,7 @@ Projectiles: {
 	EmberSlashOld.DisplayName: Tajadora de llamarada
 	// NecromatomeProjectile.DisplayName: Necromatome Projectile
 	// FishbackerProj.DisplayName: Fishbacker Proj
+	// CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang Projectile
 }
 
 NPCs: {
