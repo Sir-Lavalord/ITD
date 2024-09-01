@@ -566,8 +566,8 @@ Items: {
 	}
 
 	CyaniteBoomerang: {
-		// DisplayName: Cyanite Boomerang
-		// Tooltip: ""
+		DisplayName: Cyanit Bumerang
+		Tooltip: ""
 	}
 }
 
@@ -649,7 +649,7 @@ Projectiles: {
 	EmberSlashOld.DisplayName: Bernsteinschlitzer(alt)
 	NecromatomeProjectile.DisplayName: Zauber der Untoten
 	FishbackerProj.DisplayName: Fangnessel
-	// CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang Projectile
+	CyaniteBoomerangProjectile.DisplayName: Cyanit Bumerang Projektil
 }
 
 NPCs: {
