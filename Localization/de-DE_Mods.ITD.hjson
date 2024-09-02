@@ -569,6 +569,11 @@ Items: {
 		DisplayName: Cyanit Bumerang
 		Tooltip: ""
 	}
+
+	CyaniteSpear: {
+		// DisplayName: Cyanite Spear
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -650,6 +655,7 @@ Projectiles: {
 	NecromatomeProjectile.DisplayName: Zauber der Untoten
 	FishbackerProj.DisplayName: Fangnessel
 	CyaniteBoomerangProjectile.DisplayName: Cyanit Bumerang Projektil
+	// CyaniteSpearProjectile.DisplayName: Cyanite Spear Projectile
 }
 
 NPCs: {

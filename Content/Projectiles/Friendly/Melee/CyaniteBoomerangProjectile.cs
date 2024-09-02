@@ -27,6 +27,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.hostile = false;
             Projectile.penetrate = -1;
 			Projectile.timeLeft = 150;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = -1;
         }
 		
 		public override void ModifyDamageHitbox(ref Rectangle hitbox)
@@ -52,10 +54,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.ai[0] = 24;
         }
 
-        public override void AI()
+        public override void PostAI()
         {
 			Projectile.ai[0]++;
-			if (Projectile.ai[0] >= 24)
+			if (Projectile.ai[0] > 24)
 			{
 				Projectile.tileCollide = false;
 
@@ -67,11 +69,15 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 				if (player.Distance(Projectile.Center) < 32)
 					Projectile.Kill();
 			}
-			else if (Projectile.ai[0] % 8 == 0 && Main.myPlayer == Projectile.owner)
+			if (Projectile.ai[0] % 8 == 0)
 			{
-				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.RotatedBy(0.5f), Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.ai[0]);
-				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.RotatedBy(-0.5f), Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.ai[0]);
-				Projectile.Kill();
+				SoundEngine.PlaySound(SoundID.Item7, Projectile.position);
+				if (Projectile.ai[0] < 24 && Main.myPlayer == Projectile.owner)
+				{
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity.RotatedBy(MathHelper.ToRadians(45)), Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.ai[0]);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity.RotatedBy(MathHelper.ToRadians(-45)), Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.ai[0]);
+					Projectile.Kill();
+				}
 			}
 			
 			int dust = Dust.NewDust(Projectile.Center - new Vector2(16f, 16f), 32, 32, 135, 0f, 0f, 0, default, 2f);

@@ -52,7 +52,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 				player.heldProj = Projectile.whoAmI;
 			}
 
-			if (Projectile.timeLeft == 20)
+			if (Projectile.timeLeft == 20 && Main.myPlayer == Projectile.owner)
 			{
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity*4f, ModContent.ProjectileType<ElectrumSpearBeam>(), (int)(Projectile.damage * 1.25), Projectile.knockBack * 0.5f, Projectile.owner);
 				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);

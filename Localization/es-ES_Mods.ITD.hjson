@@ -567,6 +567,11 @@ Items: {
 		// DisplayName: Cyanite Boomerang
 		// Tooltip: ""
 	}
+
+	CyaniteSpear: {
+		// DisplayName: Cyanite Spear
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -648,6 +653,7 @@ Projectiles: {
 	// NecromatomeProjectile.DisplayName: Necromatome Projectile
 	// FishbackerProj.DisplayName: Fishbacker Proj
 	// CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang Projectile
+	// CyaniteSpearProjectile.DisplayName: Cyanite Spear Projectile
 }
 
 NPCs: {
