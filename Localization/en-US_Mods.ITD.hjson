@@ -546,6 +546,17 @@ Items: {
 			Slightly increases Jump Height
 			'''
 	}
+
+	EoWTail: {
+		DisplayName: Tail of the Eater
+		Tooltip:
+			'''
+			Split your life into two
+			Fatal damage does not carry onto next life
+			This can only happen once every minute
+			Cooldown only reduces when you have max life
+			'''
+	}
 }
 
 Projectiles: {
@@ -626,6 +637,7 @@ Projectiles: {
 	EmberSlashOld.DisplayName: Ember Slash Old
 	NecromatomeProjectile.DisplayName: Necromatome Projectile
 	FishbackerProj.DisplayName: Fishbacker Proj
+	FishbackerReflectProj.DisplayName: Fishbacker Reflect Proj
 }
 
 NPCs: {

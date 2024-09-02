@@ -9,6 +9,10 @@
     <None Remove="Content\Items\Weapons\Electrum\ElectrumSpear.png" />
     <None Remove="Content\Items\Weapons\Electrum\ElectrumSpearProjectile.png" />
     <None Remove="Content\Projectiles\TheScorpionProjectile.png" />
+    <None Remove="Effects\BarsLifeOverlay_Fill.png" />
+    <None Remove="Effects\BarsLifeOverlay_Panel.png" />
+    <None Remove="Effects\ClassicLifeOverlay.png" />
+    <None Remove="Effects\FancyLifeOverlay_Panel.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Gores\NPCs\" />

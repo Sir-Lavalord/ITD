@@ -546,6 +546,11 @@ Items: {
 			Slightly increases Jump Height
 			''' */
 	}
+
+	EoWTail: {
+		// DisplayName: Eo W Tail
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -626,6 +631,7 @@ Projectiles: {
 	EmberSlashOld.DisplayName: Tajadora de llamarada
 	// NecromatomeProjectile.DisplayName: Necromatome Projectile
 	// FishbackerProj.DisplayName: Fishbacker Proj
+	// FishbackerReflectProj.DisplayName: Fishbacker Reflect Proj
 }
 
 NPCs: {

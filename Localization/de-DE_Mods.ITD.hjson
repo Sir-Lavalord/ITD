@@ -548,6 +548,11 @@ Items: {
 			Leicht erhöhte Sprunghöhe
 			'''
 	}
+
+	EoWTail: {
+		// DisplayName: Eo W Tail
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -628,6 +633,7 @@ Projectiles: {
 	EmberSlashOld.DisplayName: Bernsteinschlitzer(alt)
 	NecromatomeProjectile.DisplayName: Zauber der Untoten
 	FishbackerProj.DisplayName: Fangnessel
+	// FishbackerReflectProj.DisplayName: Fishbacker Reflect Proj
 }
 
 NPCs: {

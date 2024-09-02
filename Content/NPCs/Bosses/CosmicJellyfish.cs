@@ -223,9 +223,10 @@ namespace ITD.Content.NPCs.Bosses
                         NPC.ai[3]++;
                         //Gore MUST goes here (else it will fuck up multiplayer)
                     }
+                    Main.NewText("ACKK STUDIO II: CRUSTACEANDO. IN THE JELLY OF THE FISH.", Color.Crimson);
+                    NPC.netUpdate = true;
+
                 }
-                NPC.netUpdate = true;
-                Main.NewText("ACKK STUDIO II: CRESCENDO. IN THE JELLY OF THE FISH.", Color.Crimson);
             }
             return;
 
