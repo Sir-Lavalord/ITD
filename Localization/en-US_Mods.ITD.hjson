@@ -547,15 +547,30 @@ Items: {
 			'''
 	}
 
-	EoWTail: {
-		DisplayName: Tail of the Eater
+	CupOJoe: {
+		DisplayName: Cup O' Joe
+		Tooltip: Grants immunity to non-damaging Ice Themed Debuffs
+	}
+
+	RooksBrew: {
+		DisplayName: Rooks Brew
 		Tooltip:
 			'''
-			Split your life into two
-			Fatal damage does not carry onto next life
-			This can only happen once every minute
-			Cooldown only reduces when you have max life
+			Grants immunity to non-damaging Ice Themed Debuffs
+			8% increased Movement Speed
+			Slightly increases Jump Height
+			Double tap any direction while on the ground to start a dash you can control for a short while
 			'''
+	}
+
+	CyaniteBoomerang: {
+		DisplayName: Cyanite Boomerang
+		Tooltip: ""
+	}
+
+	CyaniteSpear: {
+		DisplayName: Cyanite Spear
+		Tooltip: ""
 	}
 }
 
@@ -637,7 +652,8 @@ Projectiles: {
 	EmberSlashOld.DisplayName: Ember Slash Old
 	NecromatomeProjectile.DisplayName: Necromatome Projectile
 	FishbackerProj.DisplayName: Fishbacker Proj
-	FishbackerReflectProj.DisplayName: Fishbacker Reflect Proj
+	CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang Projectile
+	CyaniteSpearProjectile.DisplayName: Cyanite Spear Projectile
 }
 
 NPCs: {

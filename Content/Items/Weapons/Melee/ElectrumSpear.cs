@@ -25,7 +25,7 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.height = 40;
             Item.useTime = 40;
             Item.useAnimation = 40;
-			Item.useStyle = 5;
+			Item.useStyle = ItemUseStyleID.Shoot;
             Item.knockBack = 7;
             Item.value = Item.sellPrice(gold: 1);
 			Item.rare = ItemRarityID.Blue;
@@ -52,7 +52,7 @@ namespace ITD.Content.Items.Weapons.Melee
 		public override void AddRecipes()
 		{
 			CreateRecipe(1)
-                .AddIngredient(4061, 1)
+                .AddIngredient(ItemID.ThunderSpear, 1)
                 .AddIngredient(ModContent.ItemType<ElectrumBar>(), 10)
                 .AddTile(TileID.Anvils)
                 .Register();

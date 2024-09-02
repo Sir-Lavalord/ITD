@@ -86,6 +86,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			float num8 = Utils.Remap(Projectile.localAI[0], 0f, fromMax, 0f, 1f, true);
 			float scale = Utils.Remap(num8, 0.2f, 0.5f, 0.5f*Projectile.ai[0], 1f*Projectile.ai[0], true);
 			Rectangle rectangle = texture.Frame(1, 1);
+			Rectangle rectangle2 = texture2.Frame(1, 1);
 			if (num8 < 1f)
 			{
 				for (int i = 0; i < 2; i++)
@@ -147,11 +148,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 						float rotation = Projectile.rotation + num10 * 1.57079637f + Main.GlobalTimeWrappedHourly * num12 * 2f * Projectile.direction;
 						if (i == 0)
 						{
-							Main.EntitySpriteDraw(texture2, position, new Rectangle?(rectangle), value3 * opacity, rotation * 0.5f, rectangle.Size() / 2f, scale, SpriteEffects.None, 0f);
+							Main.EntitySpriteDraw(texture2, position, new Rectangle?(rectangle2), value3 * opacity, rotation * 0.5f, rectangle2.Size() / 2f, scale, SpriteEffects.None, 0f);
 						}
 						else if (i == 1)
 						{
-							Main.EntitySpriteDraw(texture, position, new Rectangle?(rectangle), color5 * opacity, rotation + 1.57079637f, rectangle.Size() / 2f, scale * 0.75f, SpriteEffects.None, 0f);
+							Main.EntitySpriteDraw(texture, position, new Rectangle?(rectangle), color5 * opacity, rotation + 1.57079637f, rectangle.Size() / 2f, scale * 0.45f, SpriteEffects.None, 0f);
 						}
 					}
 				}

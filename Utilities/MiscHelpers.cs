@@ -13,6 +13,41 @@ namespace ITD.Utilities
 {
     public static class MiscHelpers
     {
+        public static NPC FindClosestNPCDirect(this Projectile projectile, float maxDetectDistance)
+        {
+            return Main.npc[projectile.FindClosestNPC(maxDetectDistance)];
+        }
+        public static int FindClosestNPC(this Projectile projectile, float maxDetectDistance)
+        {
+            NPC closestNPC = null;
+
+            float sqrMaxDetectDistance = maxDetectDistance * maxDetectDistance;
+
+            foreach (var target in Main.ActiveNPCs)
+            {
+                if (projectile.IsValidTarget(target))
+                {
+                    float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, projectile.Center);
+
+                    if (sqrDistanceToTarget < sqrMaxDetectDistance)
+                    {
+						//Main.NewText(target.type);
+                        sqrMaxDetectDistance = sqrDistanceToTarget;
+                        closestNPC = target;
+                    }
+                }
+            }
+			if (closestNPC != null)
+			{
+                return closestNPC.whoAmI;
+            }
+			return -1;
+        }
+        //Make the invul boss part untargetable please
+        public static bool IsValidTarget(this Projectile projectile, NPC target)
+        {
+            return target.CanBeChasedBy() && Collision.CanHit(projectile.Center, 1, 1, target.position, target.width, target.height);
+        }
         public static void CreateLightningEffects(Vector2 start, Vector2 end)
         {
             Vector2 direction = Vector2.Normalize(end - start);

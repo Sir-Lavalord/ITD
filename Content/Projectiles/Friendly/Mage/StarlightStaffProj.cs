@@ -6,7 +6,7 @@ using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
-using ITD.Content.Dusts;
+using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Mage
 {
@@ -52,10 +52,10 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             {				
                 if (HomingTarget == null)
                 {
-                    HomingTarget = FindClosestNPC(maxDetectRadius);
+                    HomingTarget = Projectile.FindClosestNPCDirect(maxDetectRadius);
                 }
 
-                if (HomingTarget != null && !IsValidTarget(HomingTarget))
+                if (HomingTarget != null && !Projectile.IsValidTarget(HomingTarget))
                 {
                     HomingTarget = null;
                 }
@@ -130,33 +130,6 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;
-        }
-        public NPC FindClosestNPC(float maxDetectDistance)
-        {
-            NPC closestNPC = null;
-
-            float sqrMaxDetectDistance = maxDetectDistance * maxDetectDistance;
-
-            foreach (var target in Main.ActiveNPCs)
-            {
-                if (IsValidTarget(target))
-                {
-                    float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, Projectile.Center);
-
-                    if (sqrDistanceToTarget < sqrMaxDetectDistance)
-                    {
-                        sqrMaxDetectDistance = sqrDistanceToTarget;
-                        closestNPC = target;
-                    }
-                }
-            }
-
-            return closestNPC;
-        }
-        //Make the invul boss part untargetable please
-        public bool IsValidTarget(NPC target)
-        {
-            return target.CanBeChasedBy() && Collision.CanHit(Projectile.Center, 1, 1, target.position, target.width, target.height);
         }
         public override bool PreDraw(ref Color lightColor)
         {

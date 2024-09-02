@@ -54,7 +54,7 @@ namespace ITD.Systems
             Player drawPlayer = drawInfo.drawPlayer;
             Item heldItem = drawInfo.heldItem;
 
-            if (drawInfo.shadow != 0f || drawPlayer.JustDroppedAnItem || drawPlayer.frozen || drawPlayer.pulley || !drawPlayer.CanVisuallyHoldItem(heldItem) || heldItem.type <= 0 || drawPlayer.dead || drawPlayer.wet && heldItem.noWet)
+            if (drawInfo.shadow != 0f || drawPlayer.JustDroppedAnItem || drawPlayer.frozen || drawPlayer.pulley || !drawPlayer.CanVisuallyHoldItem(heldItem) || heldItem.type <= ItemID.None || drawPlayer.dead || drawPlayer.wet && heldItem.noWet)
             {
                 return false;
             }
@@ -153,7 +153,7 @@ namespace ITD.Systems
             Player drawPlayer = drawInfo.drawPlayer;
             Item heldItem = drawInfo.heldItem;
 
-            if (drawInfo.shadow != 0f || drawPlayer.JustDroppedAnItem || drawPlayer.frozen || drawPlayer.pulley || !drawPlayer.CanVisuallyHoldItem(heldItem) || heldItem.type <= 0 || drawPlayer.dead || drawPlayer.wet && heldItem.noWet)
+            if (drawInfo.shadow != 0f || drawPlayer.JustDroppedAnItem || drawPlayer.frozen || drawPlayer.pulley || !drawPlayer.CanVisuallyHoldItem(heldItem) || heldItem.type <= ItemID.None || drawPlayer.dead || drawPlayer.wet && heldItem.noWet)
             {
                 return false;
             }

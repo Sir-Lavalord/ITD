@@ -106,12 +106,12 @@ namespace ITD.Content.Items.Accessories.Movement.Boots
                 for (int i = 0; i < 2; i++)
                 {
                     int direction = i == 0 ? 1 : -1;
-                    Vector2 position = Player.Center - Main.screenPosition + new Vector2(direction * 12f, (Player.height + 2f) * Player.gravDir * 0.5f);
+                    Vector2 position = drawInfo.Position - Main.screenPosition + new Vector2(Player.width * 0.5f + direction * 12f, Player.height * (Player.gravDir == 1 ? 1 : 0) + 2f * Player.gravDir);
                     float sine = (float)Math.Sin(Main.GlobalTimeWrappedHourly * 10);
 
-                    Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(110, 38, 94, 50) * 0.1f * gravityBootsCharge, Main.GlobalTimeWrappedHourly * -direction, origin, 1.25f + sine * 0.05f, SpriteEffects.None, 0f);
-                    Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(192, 59, 166, 100) * 0.1f * gravityBootsCharge, Main.GlobalTimeWrappedHourly * -direction * 1.5f, origin, 0.75f + sine * 0.25f, SpriteEffects.None, 0f);
-                    Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(240, 135, 112, 100) * 0.1f * gravityBootsCharge, Main.GlobalTimeWrappedHourly * -direction * 2f, origin, 0.75f - sine * 0.25f, SpriteEffects.None, 0f);
+                    Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(110, 38, 94, 50) * 0.1f * gravityBootsCharge, Main.GlobalTimeWrappedHourly * -direction * Player.gravDir, origin, 1.25f + sine * 0.05f, drawInfo.itemEffect, 0f);
+                    Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(192, 59, 166, 100) * 0.1f * gravityBootsCharge, Main.GlobalTimeWrappedHourly * -direction * Player.gravDir * 1.5f, origin, 0.75f + sine * 0.25f, drawInfo.itemEffect, 0f);
+                    Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(240, 135, 112, 100) * 0.1f * gravityBootsCharge, Main.GlobalTimeWrappedHourly * -direction * Player.gravDir * 2f, origin, 0.75f - sine * 0.25f, drawInfo.itemEffect, 0f);
                 }
             }
         }

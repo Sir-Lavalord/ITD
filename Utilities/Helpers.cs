@@ -115,7 +115,7 @@ namespace ITD.Utilities
         {
             if (Main.tile[i, j].TileType == TileID.SnowBlock)
             {
-                if (!SolidTile(i - 1, j) || !SolidTile(i + 1, j) || !SolidTile(i, j - 1) || !SolidTile(i, j + 1) || !SolidTile(i - 1, j - 1) || !SolidTile(i + 1, j + 1) || !SolidTile(i + 1, j - 1) || !SolidTile(i - 1, j + 1))
+                if (EdgeTile(i ,j))
                 {
                     Main.tile[i, j].TileType = (ushort)ModContent.TileType<Bluegrass>();
                     WorldGen.SquareTileFrame(i, j);

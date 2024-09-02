@@ -55,7 +55,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
         {
             int otherNPC = -1;
             Vector2 offsetFromOtherNPC = Vector2.Zero;
-            if (NPC.localAI[0] == 0f && Main.netMode != 1)
+            if (NPC.localAI[0] == 0f && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 NPC.localAI[0] = 1f;
                 int newNPC = NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y + 40, ModContent.NPCType<Cicadian>(), NPC.whoAmI, NPC.whoAmI, 0f, 0f, 0f, 255);

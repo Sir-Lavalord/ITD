@@ -1,3 +1,5 @@
+using ITD.Content.Items.PetSummons;
+
 namespace ITD.Utilities.Placeholders
 {
     internal class Placeholder
@@ -56,10 +58,7 @@ namespace ITD.Utilities.Placeholders
         public const string PHBuff = "ITD/Utilities/Placeholders/PHBuff";
         public const string PHDebuff = "ITD/Utilities/Placeholders/PHDebuff";
 
-        //Mounts
-        public const string PHMount = "ITD/Utilities/Placeholders/PHMount";
-
-        //NPCs
-        public const string PHPerson = "ITD/Utilities/Placeholders/PHPerson";
+        //Accessories
+        public const string PHBottle = "ITD/Utilities/Placeholders/PHBottle";
     }
 }
