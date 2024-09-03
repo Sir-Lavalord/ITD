@@ -23,6 +23,10 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 Projectile.ai[2] = value == null ? -1 : value.whoAmI;
             }
         }
+
+        private const float homingDistance = 750f;
+        private const float chargeDistance = 150f;
+
         public float rotation = 0f;
         public float handCharge = 0f;
         public float handSling = 0f;
@@ -71,10 +75,10 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             }
             if (HomingTarget == null)
             {
-                HomingTarget = Projectile.FindClosestNPCDirect(300);
+                HomingTarget = Projectile.FindClosestNPCDirect(homingDistance);
             }
 
-            if (HomingTarget != null && !Projectile.IsValidTarget(HomingTarget))
+            if (HomingTarget != null && Projectile.Distance(HomingTarget.Center) > homingDistance)
             {
                 HomingTarget = null;
             }
@@ -90,8 +94,15 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Vector2 normalCenter = player.Center + offset + new Vector2(0f, player.velocity.Y);
             if (HomingTarget != null)
             {
-                toTarget = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
-                chargedPosition = player.Center + offset + new Vector2(0f, player.velocity.Y) - toTarget * 150f;
+                if (Projectile.Distance(HomingTarget.Center) > homingDistance + chargeDistance && handState == HandState.Default)
+                {
+                    HomingTarget = null;
+                }
+                else
+                {
+                    toTarget = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
+                    chargedPosition = player.Center + offset + new Vector2(0f, player.velocity.Y) - toTarget * chargeDistance;
+                }
             }
             switch (handState)
             {
@@ -108,8 +119,13 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
                     break;
                 case HandState.Charging:
-                    Projectile.frame = Main.projFrames[Type] - 1;
 
+                    if (HomingTarget == null)
+                    {
+                        handState = HandState.Default;
+                        break;
+                    }
+                    Projectile.frame = Main.projFrames[Type] - 1;
                     if (handCharge < 0.6f)
                     {
                         handCharge += 0.04f;
