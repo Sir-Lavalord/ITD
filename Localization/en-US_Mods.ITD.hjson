@@ -588,6 +588,15 @@ Items: {
 			Cooldown only reduces when you have max life
 			'''
 	}
+
+	Prophylaxis: {
+		DisplayName: Prophylaxis
+		Tooltip:
+			'''
+			Using a healing item causes you to bleed out
+			Losing life gained and reducing damage taken
+			'''
+	}
 }
 
 Projectiles: {
@@ -719,7 +728,22 @@ Buffs: {
 
 	ToastedBuff: {
 		DisplayName: Toasted Buff
-		Description: Mods.ITD.Buffs.ToastedBuff.Description
+		Description: aaaaAAAaaaAAAAAH it BURNS!!!!
+	}
+
+	BloodlettingBuff: {
+		DisplayName: Bloodletting
+		Description: Your blood is shielding you from damage
+	}
+
+	CrimsonAntidoteBuff: {
+		DisplayName: Crimson Antidote Buff
+		Description: Massively increased life regeneration
+	}
+
+	CorruptAntidoteBuff: {
+		DisplayName: Corrupt Antidote Buff
+		Description: -25% Mana Usage and +25% Magic Damage
 	}
 }
 

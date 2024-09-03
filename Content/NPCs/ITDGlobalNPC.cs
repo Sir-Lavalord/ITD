@@ -7,7 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
-using ITD.Content.Items.Accessories.Defensive.DamageRed;
+using ITD.Content.Items.Accessories.Defensive;
 
 namespace ITD.Content.NPCs
 {

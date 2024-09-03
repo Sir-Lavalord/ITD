@@ -579,8 +579,23 @@ Items: {
 	}
 
 	EoWTail: {
-		// DisplayName: Eo W Tail
-		// Tooltip: ""
+		// DisplayName: Tail of the Eater
+		/* Tooltip:
+			'''
+			Split your life into two
+			Fatal damage does not carry onto next life
+			This can only happen every 1 minute
+			Cooldown only reduces when you have max life
+			''' */
+	}
+
+	Prophylaxis: {
+		// DisplayName: Prophylaxis
+		/* Tooltip:
+			'''
+			Using a healing item causes you to bleed out
+			Losing life gained and reducing damage taken
+			''' */
 	}
 }
 
@@ -660,12 +675,12 @@ Projectiles: {
 	TouhouBullet.DisplayName: Órbe cósmica
 	RazedWineBottle.DisplayName: Vino arrasado
 	EmberSlashOld.DisplayName: Tajadora de llamarada
-	// NecromatomeProjectile.DisplayName: Necromatome Projectile
-	// FishbackerProj.DisplayName: Fishbacker Proj
-	// CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang Projectile
-	// CyaniteSpearProjectile.DisplayName: Cyanite Spear Projectile
-	// GalacticJellyBeanHand.DisplayName: Galactic Jelly Bean Hand
-	// FishbackerReflectProj.DisplayName: Fishbacker Reflect Proj
+	// NecromatomeProjectile.DisplayName: Necromatome
+	// FishbackerProj.DisplayName: Fishbacker
+	// CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang
+	// CyaniteSpearProjectile.DisplayName: Cyanite Spear
+	// GalacticJellyBeanHand.DisplayName: Cosmic Hand
+	// FishbackerReflectProj.DisplayName: How did you get this?
 }
 
 NPCs: {
@@ -714,6 +729,21 @@ Buffs: {
 	ToastedBuff: {
 		DisplayName: Brindis
 		Description: Mods.ITD.Buffs.ToastedBuff.Description
+	}
+
+	BloodlettingBuff: {
+		// DisplayName: Bloodletting
+		// Description: Your blood is shielding you from damage
+	}
+
+	CrimsonAntidoteBuff: {
+		// DisplayName: Crimson Antidote Buff
+		// Description: Massively increased life regeneration
+	}
+
+	CorruptAntidoteBuff: {
+		// DisplayName: Corrupt Antidote Buff
+		// Description: -25% Mana Usage and +25% Magic Damage
 	}
 }
 

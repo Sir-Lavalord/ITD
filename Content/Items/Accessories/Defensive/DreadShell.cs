@@ -6,7 +6,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items.Accessories.Defensive.DamageRed
+namespace ITD.Content.Items.Accessories.Defensive
 {
     public class DreadShell : ModItem
     {

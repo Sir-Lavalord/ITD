@@ -581,8 +581,23 @@ Items: {
 	}
 
 	EoWTail: {
-		// DisplayName: Eo W Tail
-		// Tooltip: ""
+		// DisplayName: Tail of the Eater
+		/* Tooltip:
+			'''
+			Split your life into two
+			Fatal damage does not carry onto next life
+			This can only happen every 1 minute
+			Cooldown only reduces when you have max life
+			''' */
+	}
+
+	Prophylaxis: {
+		// DisplayName: Prophylaxis
+		/* Tooltip:
+			'''
+			Using a healing item causes you to bleed out
+			Losing life gained and reducing damage taken
+			''' */
 	}
 }
 
@@ -665,9 +680,9 @@ Projectiles: {
 	NecromatomeProjectile.DisplayName: Zauber der Untoten
 	FishbackerProj.DisplayName: Fangnessel
 	CyaniteBoomerangProjectile.DisplayName: Cyanit Bumerang Projektil
-	// CyaniteSpearProjectile.DisplayName: Cyanite Spear Projectile
-	// GalacticJellyBeanHand.DisplayName: Galactic Jelly Bean Hand
-	// FishbackerReflectProj.DisplayName: Fishbacker Reflect Proj
+	// CyaniteSpearProjectile.DisplayName: Cyanite Spear
+	// GalacticJellyBeanHand.DisplayName: Cosmic Hand
+	// FishbackerReflectProj.DisplayName: How did you get this?
 }
 
 NPCs: {
@@ -715,7 +730,22 @@ Buffs: {
 
 	ToastedBuff: {
 		// DisplayName: Toasted Buff
-		// Description: Mods.ITD.Buffs.ToastedBuff.Description
+		// Description: aaaaAAAaaaAAAAAH it BURNS!!!!
+	}
+
+	BloodlettingBuff: {
+		// DisplayName: Bloodletting
+		// Description: Your blood is shielding you from damage
+	}
+
+	CrimsonAntidoteBuff: {
+		// DisplayName: Crimson Antidote Buff
+		// Description: Massively increased life regeneration
+	}
+
+	CorruptAntidoteBuff: {
+		// DisplayName: Corrupt Antidote Buff
+		// Description: -25% Mana Usage and +25% Magic Damage
 	}
 }
 

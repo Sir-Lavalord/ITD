@@ -1,6 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using ITD.Content.Buffs.AccessoryBuffs;
 
 namespace ITD.Content.Items.Accessories.Misc
 {
@@ -28,8 +29,6 @@ namespace ITD.Content.Items.Accessories.Misc
     internal class CorruptAntidotePlayer : ModPlayer
     {
         public bool hasCorruptAntidote;
-        public bool consumedManaPotion;
-        public int buffTimer;
 
         public override void ResetEffects()
         {
@@ -43,49 +42,18 @@ namespace ITD.Content.Items.Accessories.Misc
                 healValue = (int)(healValue * 1.2f);
             }
         }
-
-        public override void PreUpdate()
-        {
-            if (consumedManaPotion && hasCorruptAntidote)
-            {
-                buffTimer = 60 * 4;
-                consumedManaPotion = false;
-            }
-            else
-            {
-                consumedManaPotion = false;
-            }
-        }
-
-        public override void UpdateEquips()
-        {
-            if (buffTimer > 0)
-            {
-                Player.GetDamage(DamageClass.Magic) *= 1.25f;
-                Player.manaCost *= 0.85f;
-                buffTimer--;
-            }
-        }
     }
 
     internal class CorruptAntidoteManaItem : GlobalItem
     {
 
-        public override bool ConsumeItem(Item item, Player player)
+        public override bool? UseItem(Item item, Player player)
         {
-            if (IsManaItem(item))
+            if (item.healMana > 0 &&  player.GetModPlayer<CorruptAntidotePlayer>().hasCorruptAntidote)
             {
-                player.GetModPlayer<CorruptAntidotePlayer>().consumedManaPotion = true;
+				player.AddBuff(ModContent.BuffType<CorruptAntidoteBuff>(), 60 * 5, false);
             }
             return true;
-        }
-
-        private bool IsManaItem(Item item)
-        {
-            return item.type == ItemID.LesserManaPotion ||
-                   item.type == ItemID.ManaPotion ||
-                   item.type == ItemID.GreaterManaPotion ||
-                   item.type == ItemID.SuperManaPotion;
         }
     }
 }

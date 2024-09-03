@@ -4,6 +4,7 @@ using Terraria.ID;
 using System.Security.Cryptography.Pkcs;
 using System.Net.Http.Headers;
 using System;
+using ITD.Content.Buffs.AccessoryBuffs;
 
 namespace ITD.Content.Items.Accessories.Misc
 {
@@ -28,7 +29,6 @@ namespace ITD.Content.Items.Accessories.Misc
     internal class CrimsonAntidotePlayer : ModPlayer
     {
         public bool hasCrimsonAntidote;
-        public int RegBoostTimer;
         public bool shortSickness = false;
         public float buffTimeRemaining;
 
@@ -42,15 +42,6 @@ namespace ITD.Content.Items.Accessories.Misc
             if (hasCrimsonAntidote)
             {
                 healValue = (int)(healValue * 1.2f);
-            }
-        }
-
-        public override void UpdateLifeRegen()
-        {
-            if (hasCrimsonAntidote && RegBoostTimer > 0)
-            {
-                Player.lifeRegen += 5;
-                RegBoostTimer--;
             }
         }
 
@@ -89,9 +80,9 @@ namespace ITD.Content.Items.Accessories.Misc
     {
         public override bool? UseItem(Item item, Player player)
         {
-            if (item.healLife > 0)
+            if (item.healLife > 0 && player.GetModPlayer<CrimsonAntidotePlayer>().hasCrimsonAntidote)
             {
-                player.GetModPlayer<CrimsonAntidotePlayer>().RegBoostTimer = 60 * 4;
+				player.AddBuff(ModContent.BuffType<CrimsonAntidoteBuff>(), 60 * 5, false);
             }
             return true;
         }
