@@ -61,6 +61,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
         }
         public override void RandomUpdate(int i, int j)
         {
+            Helpers.GrowTallBluegrass(i, j - 1);
             if (Main.rand.NextBool(250))
             {
                 Helpers.GrowBluegrass(i - 1, j);

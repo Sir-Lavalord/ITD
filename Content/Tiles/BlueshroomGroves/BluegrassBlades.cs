@@ -15,6 +15,8 @@ using ITD.Content.Items.Materials;
 using System.Collections.Generic;
 using ITD.Content.Items.Placeable;
 using System.Linq;
+using ITD.Systems;
+using Terraria.GameContent;
 
 namespace ITD.Content.Tiles.BlueshroomGroves
 {
@@ -68,14 +70,14 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, DustType<BlueshroomSporesDust>());
         }
 
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            WeatherSystem.DrawGrassSway(spriteBatch, TextureAssets.Tile[Type].Value, i, j, Lighting.GetColor(i, j));
+            return false;
+        }
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            /* doesn't work aaa
-            Tile thisTile = Framing.GetTileSafely(i, j);
-            Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
-            Vector2 offsets = -Main.screenPosition + zero;
-            spriteBatch.Draw(glowmask.Value, new Vector2(i * 16, j * 16) + offsets, new Rectangle(thisTile.TileFrameX, thisTile.TileFrameY, 16, 16), Color.White);
-            */
+            WeatherSystem.DrawGrassSway(spriteBatch, glowmask.Value, i, j, Color.White * BlueshroomTree.opac);
         }
         public override IEnumerable<Item> GetItemDrops(int i, int j)
         {

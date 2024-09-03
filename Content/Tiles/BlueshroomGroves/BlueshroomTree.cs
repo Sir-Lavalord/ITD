@@ -7,6 +7,7 @@ using ReLogic.Content;
 using Terraria;
 using System;
 using ITD.Content.Items.Placeable;
+using ITD.Systems;
 
 namespace ITD.Content.Tiles.BlueshroomGroves
 {
@@ -22,9 +23,9 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             WoodType = ItemType<BlueshroomStem>();
             DropAcorns = ItemType<Blueshroom>();
         }
-        public override void PostDrawTreeTops(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, Color color, Rectangle sourceRect)
+        public override void PostDrawTreeTops(int i, int j, Rectangle sourceRect, Vector2 offset, Vector2 origin, Color color)
         {
-            spriteBatch.Draw(glow.Value, position, sourceRect, Color.White * opac, 0f, origin, 1f, SpriteEffects.None, 0f);
+            WeatherSystem.DrawTreeSway(i, j, glow.Value, sourceRect, offset, origin);
         }
         public override void PostDrawBranch(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, Color color, Rectangle sourceRect, bool isLeftBranch)
         {

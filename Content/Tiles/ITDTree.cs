@@ -7,6 +7,7 @@ using ITD.Content.Tiles.BlueshroomGroves;
 using Microsoft.Xna.Framework.Graphics;
 using ITD.Utilities;
 using Terraria.DataStructures;
+using ITD.Systems;
 
 namespace ITD.Content.Tiles
 {
@@ -155,7 +156,7 @@ namespace ITD.Content.Tiles
         /// <param name="origin"></param>
         /// <param name="color"></param>
         /// <param name="sourceRect"></param>
-        public virtual void PostDrawTreeTops(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, Color color, Rectangle sourceRect)
+        public virtual void PostDrawTreeTops(int i, int j, Rectangle sourceRect, Vector2 offset, Vector2 origin, Color color)
         {
 
         }
@@ -436,10 +437,10 @@ namespace ITD.Content.Tiles
             {
                 int frame = tile.TileFrameY / 18;
                 Rectangle sourceRect = new Rectangle(82*frame, 0, 80, 80);
-                Vector2 position = Helpers.TileExtraPos(i, j, new Vector2(9f, 0f));
-                Vector2 origin = new Vector2(GetTreeTops().Width / 2f / 3f, GetTreeTops().Height - 2);
-                spriteBatch.Draw(GetTreeTops(), position, sourceRect, color, 0f, origin, 1f, SpriteEffects.None, 0f);
-                PostDrawTreeTops(spriteBatch, position, origin, color, sourceRect);
+                Vector2 origin = new Vector2(GetTreeTops().Width / 2f / 3f + 4, GetTreeTops().Height - 2);
+                Vector2 offset = new Vector2(13f, 0f);
+                WeatherSystem.DrawTreeSway(i, j, GetTreeTops(), sourceRect, offset, origin);
+                PostDrawTreeTops(i, j, sourceRect, offset, origin, color);
             }
             return true;
         }

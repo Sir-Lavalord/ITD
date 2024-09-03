@@ -127,7 +127,7 @@ namespace ITD.Utilities
         }
         public static void GrowTallBluegrass(int i, int j)
         {
-            if (TileType(i, j + 1, ModContent.TileType<Bluegrass>()))
+            if (TileType(i, j + 1, ModContent.TileType<Bluegrass>()) && !SolidTile(i, j) && !TileType(i, j, ModContent.TileType<BluegrassBlades>()))
             {
                 //WorldGen.Place1x1(i, j, ModContent.TileType<BluegrassBlades>(), WorldGen._genRand.Next(2));
                 if (WorldGen.PlaceTile(i, j, ModContent.TileType<BluegrassBlades>(), true, false, -1, WorldGen._genRand.Next(3)))
