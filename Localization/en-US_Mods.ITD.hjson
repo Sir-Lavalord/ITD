@@ -577,6 +577,17 @@ Items: {
 		DisplayName: Galactic Jelly Bean
 		Tooltip: ""
 	}
+
+	EoWTail: {
+		DisplayName: Tail of the Eater
+		Tooltip:
+			'''
+			Split your life into two
+			Fatal damage does not carry onto next life
+			This can only happen every 1 minute
+			Cooldown only reduces when you have max life
+			'''
+	}
 }
 
 Projectiles: {
@@ -642,7 +653,7 @@ Projectiles: {
 	StarlightProj.DisplayName: Starlight Proj
 	RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
 	ElectrumSpearBeam.DisplayName: Electrum Spear Beam
-	StarlightStaffProj.DisplayName: Starlight Staff Proj
+	StarlightStaffProj.DisplayName: Collapsing Star
 	BlankExplosion.DisplayName: Blank Explosion
 	DunebarrelRotate.DisplayName: Dunebarrel
 	SandSpike.DisplayName: Sand Spike
@@ -655,11 +666,12 @@ Projectiles: {
 	TouhouBullet.DisplayName: Cosmic Orb
 	RazedWineBottle.DisplayName: Razed Wine Bottle
 	EmberSlashOld.DisplayName: Ember Slash Old
-	NecromatomeProjectile.DisplayName: Necromatome Projectile
-	FishbackerProj.DisplayName: Fishbacker Proj
-	CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang Projectile
-	CyaniteSpearProjectile.DisplayName: Cyanite Spear Projectile
-	GalacticJellyBeanHand.DisplayName: Galactic Jelly Bean Hand
+	NecromatomeProjectile.DisplayName: Necromatome
+	FishbackerProj.DisplayName: Fishbacker
+	CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang
+	CyaniteSpearProjectile.DisplayName: Cyanite Spear
+	GalacticJellyBeanHand.DisplayName: Cosmic Hand
+	FishbackerReflectProj.DisplayName: How did you get this?
 }
 
 NPCs: {

@@ -7,25 +7,34 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using ITD.Utilities;
+using ITD.Content.Items.Accessories.Expert;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.ID;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {
     public class GalacticJellyBeanHand : ModProjectile
     {
-        private int targetNPC;
-        private int slapCooldown;
-        private int returnDelay = 20;
-        private ref float handWindUp => ref Projectile.ai[0];
-        private ref float handSling => ref Projectile.ai[1];
-        private ref float handReturnIntensity => ref Projectile.ai[2];
+        private NPC HomingTarget
+        {
+            get => Projectile.ai[2] == 0 ? null : Main.npc[(int)Projectile.ai[2] - 1];
+            set
+            {
+                Projectile.ai[2] = value == null ? 0 : value.whoAmI + 1;
+            }
+        }
+        public float rotation = 0f;
+        public float handCharge = 0f;
+        public float handSling = 0f;
+        public float handFollowThrough = 0f;
         private enum HandState
         {
-            OnPlayer,
-            WindUp,
-            Slap,
-            Returning,
+            Default,
+            Charging,
+            Slinging,
         }
-        private HandState handState;
+
+        private HandState handState = HandState.Default;
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 5;
@@ -37,144 +46,131 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.height = 32; Projectile.width = 32;
             Projectile.damage = 75;
             Projectile.ignoreWater = true;
-            handState = HandState.OnPlayer;
             Projectile.tileCollide = false;
+            Projectile.penetrate = -1;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 30;
         }
+        private Vector2 handTarget = Vector2.Zero;
+
         public override void AI()
         {
-            float maxDetectRadius = 600f;
-            NPC target = null;
-            if (targetNPC > -1)
+            Player player = Main.player[Projectile.owner];
+            if (!CheckActive(player))
             {
-                target = Main.npc[targetNPC];
+                return;
             }
-            //Main.NewText(handState);
+            if (HomingTarget != null)
+            {
+                if (Projectile.ai[0]++ >= 240)
+                {
+                    Projectile.ai[0] = 0;
+                    if (handState == HandState.Default)
+                        handState = HandState.Charging;
+                }
+            }
+            if (HomingTarget == null)
+            {
+                HomingTarget = Projectile.FindClosestNPCDirect(300);
+            }
+
+            if (HomingTarget != null && !Projectile.IsValidTarget(HomingTarget))
+            {
+                HomingTarget = null;
+            }
+                Target();
+
+        }
+        Vector2 toTarget;
+        Vector2 chargedPosition;
+        public void Target()
+        {
+            Player player = Main.player[Projectile.owner];
+            Vector2 offset = new Vector2(player.direction == -1 ? 18 : -14, -32f + player.gfxOffY);
+            Vector2 normalCenter = player.Center + offset + new Vector2(0f, player.velocity.Y);
+            if (HomingTarget != null)
+            {
+                toTarget = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
+                chargedPosition = player.Center + offset + new Vector2(0f, player.velocity.Y) - toTarget * 150f;
+            }
             switch (handState)
             {
-                case HandState.OnPlayer:
-                    handWindUp = 0f;
-                    handSling = 0f;
-                    handReturnIntensity = 0f;
-                    Player owner = Main.player[Projectile.owner];
-                    Projectile.spriteDirection = Projectile.direction = owner.direction;
-                    Vector2 offset = new Vector2(owner.direction == -1 ? 18 : -14, -32f + owner.gfxOffY);
-                    Projectile.velocity = Vector2.Zero;
-                    Projectile.Center = owner.Center + offset;// + owner.velocity;
+                case HandState.Default:
                     if (++Projectile.frameCounter >= 5)
                     {
                         Projectile.frameCounter = 0;
                         Projectile.frame = ++Projectile.frame % (Main.projFrames[Type] - 1);
                     }
-                    if (--slapCooldown <= 0)
-                    {
-                        if (targetNPC == -1)
-                        {
-                            targetNPC = Projectile.FindClosestNPC(maxDetectRadius);
-                        }
-                        if (targetNPC != -1)
-                        {
-                            target = Main.npc[targetNPC];
-                            slapCooldown = 60;
-                            handState = HandState.WindUp;
-                        }
-                    }
+                    Projectile.spriteDirection = Projectile.direction = player.direction;
+                    handSling = 0f;
+                    handCharge = 0f;
+                    handFollowThrough = 0f;
+                    Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
                     break;
-                case HandState.WindUp:
+                case HandState.Charging:
                     Projectile.frame = Main.projFrames[Type] - 1;
-                    if (target != null)
+
+                    if (handCharge < 0.6f)
                     {
-                        if (!target.active)
-                        {
-                            handState = HandState.Returning;
-                            target = null;
-                            targetNPC = -1;
-                        }
-                        else
-                        {
-                            float dist = 128f/16f;
-                            Vector2 fromTarget = (Projectile.Center - target.Center).SafeNormalize(Vector2.Zero) * dist;
-                            float mult = (float)Math.Sin(handWindUp * Math.PI);
-                            Projectile.velocity = fromTarget * mult;
-                            handWindUp += 0.05f;
-                            if (handWindUp >= 1f)
-                            {
-                                handState = HandState.Slap;
-                                handWindUp = 0f;
-                            }
-                        }
+                        handCharge += 0.04f;
                     }
                     else
                     {
-                        handState = HandState.Returning;
+                        handState = HandState.Slinging;
+                        handTarget = HomingTarget.Center + toTarget * 120f;
+
                     }
+                    Projectile.Center = Vector2.Lerp(normalCenter, chargedPosition, (float)Math.Sin(handCharge * Math.PI));
                     break;
-                case HandState.Slap:
-                    if (target != null)
+                case HandState.Slinging:
+                    handCharge = 0f;
+                    if (handSling < 0.8f)
                     {
-                        if (!target.active)
-                        {
-                            handState = HandState.Returning;
-                            target = null;
-                            targetNPC = -1;
-                        }
-                        else
-                        {
-                            Vector2 toTarget = (target.Center - Projectile.Center);
-                            float dist = (toTarget.Length() + 32f)/16f;
-                            Vector2 norm2 = (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * dist;
-                            if (norm2 == Vector2.Zero)
-                            {
-                                Main.NewText("a");
-                                handState = HandState.Returning;
-                            }
-                            else
-                            {
-                                Projectile.velocity = norm2 * (float)Math.Sin(handSling * Math.PI);
-                                handSling += 0.05f;
-                                if (handSling >= 1f)
-                                {
-                                    handState = HandState.Returning;
-                                    handSling = 0f;
-                                }
-                            }
-                        }
+                        handSling += 0.03f;
                     }
                     else
                     {
-                        handState = HandState.Returning;
+                        if (handFollowThrough < 0.8f)
+                        {
+                            handFollowThrough += 0.1f;
+                        }
+                        else
+                        {
+                            handState = HandState.Default;
+                        }
                     }
-                    break;
-                case HandState.Returning:
-                    targetNPC = -1;
-                    Player owner2 = Main.player[Projectile.owner];
-                    Vector2 offset2 = new Vector2(owner2.direction == -1 ? 18 : -14, -32f + owner2.gfxOffY);
-                    Vector2 toPlayer = (owner2.Center + offset2) - Projectile.Center;
-                    //Main.NewText("Distance to player: " + toPlayer.Length());
-                    Vector2 norm = toPlayer.SafeNormalize(Vector2.Zero);
-                    Projectile.velocity = norm * handReturnIntensity;
-                    handReturnIntensity += 0.1f;
-                    if (toPlayer.Length() < 8f)
-                    {
-                        returnDelay = 20;
-                        handReturnIntensity = 0f;
-                        handState = HandState.OnPlayer;
-                    }
-                    break;
-                default:
+                    Projectile.Center = Vector2.Lerp(normalCenter, handTarget, (float)Math.Sin(handSling * Math.PI));
                     break;
             }
         }
+        private bool CheckActive(Player owner)
+        {
+            if (owner.dead || !owner.active)
+            {
+                owner.GetModPlayer<CosmicHandMinionPlayer>().Active = false;
+
+                return false;
+            }
+
+            if (owner.GetModPlayer<CosmicHandMinionPlayer>().Active)
+            {
+                Projectile.timeLeft = 2;
+            }
+
+            return true;
+        }
+
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             modifiers.ScalingArmorPenetration += 1f;
         }
         public override bool? CanHitNPC(NPC target)
         {
-            return target.whoAmI == targetNPC && handState == HandState.Slap;
+            return handState == HandState.Slinging;
         }
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        public override Color? GetAlpha(Color lightColor)
         {
-            handState = HandState.Returning;
+            return Color.White;
         }
     }
 }

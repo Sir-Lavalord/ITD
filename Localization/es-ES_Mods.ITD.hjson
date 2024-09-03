@@ -16,12 +16,12 @@ Items: {
 
 	RhodiumBow: {
 		DisplayName: Arco de rodio
-		Tooltip: "Electrifica a las flechas de madera"
+		Tooltip: ""
 	}
 
 	RhodiumBroadsword: {
 		DisplayName: Espada de rodio
-		Tooltip: "Dispara un rayo eléctrico"
+		Tooltip: ""
 	}
 
 	ElectrumSpear: {
@@ -36,7 +36,7 @@ Items: {
 
 	DashingFeather: {
 		DisplayName: Pluma airosa
-		Tooltip: "Toca cualquier dirección 2 veces en el suelo para comenzar un dash que puedes controlar por un corto tiempo"
+		Tooltip: ""
 	}
 
 	DespoticSnaptrap: {
@@ -46,7 +46,7 @@ Items: {
 
 	EmberSlasher: {
 		DisplayName: Tajadora de llamarada
-		Tooltip: "Crea una explosión de fuego"
+		Tooltip: ""
 	}
 
 	Snaptrap: {
@@ -84,7 +84,7 @@ Items: {
 	}
 
 	CosmicJellyfishBag: {
-		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+		Tooltip: ""
 		DisplayName: Bolsa del tesoro (Medusa Cósmica)
 	}
 
@@ -405,7 +405,7 @@ Items: {
 	}
 
 	BadassSunglasses: {
-		DisplayName: Lentes de sol Bad@$$
+		DisplayName: Lentes de sol bad@$$
 		Tooltip:
 			'''
 			Rapidamente incrementa la probabilidad de ataque crítico
@@ -478,7 +478,7 @@ Items: {
 		DisplayName: Capa Ventiscípula
 		Tooltip:
 			'''
-			Velocidad de movimiento aumentada por un 10%
+			Velocidad de movimiento incrementada por un 10%
 			El viento te sigue
 			'''
 	}
@@ -499,83 +499,88 @@ Items: {
 	}
 
 	GravityBoots: {
-		DisplayName: Danzantes de Gravedad Zero
-		Tooltip:
+		// DisplayName: Zero Gravity Dancers
+		/* Tooltip:
 			'''
-			Mantén presionado el salto para reducir la gravedad
-			Movilidad aérea aumentada
-			'¡Paséate por la calle cósmica!'
-			'''
+			Hold jump to reduce gravity
+			Increased air mobility
+			'Take a walk on cosmic lane!'
+			''' */
 	}
 
 	Necromatome: {
-		DisplayName: Necromatomo
-		Tooltip: Expulsa nubes de miasma
+		// DisplayName: Necromatome
+		// Tooltip: Releases clouds of miasma
 	}
 
 	Fishbacker: {
-		DisplayName: Fishbacker
-		Tooltip: ""
+		// DisplayName: Fishbacker
+		// Tooltip: ""
 	}
 
 	CrimsonAntidote: {
-		DisplayName: Antídoto carmesí
-		Tooltip:
+		// DisplayName: Crimson Antidote
+		/* Tooltip:
 			'''
-			Los objetos de curación son más efectivos por un 20%
-			Al usar un objeto de curación, aumenta la regeneración masivamente por 4 segundos
-			Reduce el efecto de la Enfermedad de poción por un 15%
-			'''
+			Healing items heal 20% more HP
+			Upon using a healing item, grants massively increased life regeneration for 4 seconds
+			Reduces the effect of Potion Sickness by 15%
+			''' */
 	}
 
 	CorruptAntidote: {
-		DisplayName: Antídoto corrupto
-		Tooltip:
+		// DisplayName: Corrupt Antidote
+		/* Tooltip:
 			'''
-			Los objetos de maná dan 20% más maná
-			Al usar un objeto de maná, el uso de maná se reduce por un 25% y el daño mágico se aumenta por un 25% por 4 segundos 
-			Reduce el efecto de la Locura de maná por un 15%
-			'''
+			Mana items grant 20% more Mana
+			Upon using a Mana Item, grants -25% Mana Usage and +25% Magic Damage for 4 seconds
+			Reduces the effect of Mana Sickness by 15%
+			''' */
 	}
 
 	JumpingBean: {
-		DisplayName: Frijol saltarín
-		Tooltip:
+		// DisplayName: Jumping Bean
+		/* Tooltip:
 			'''
-			Velocidad de movimiento aumentada por un 8%
-			Aumenta la altura de salto
-			'''
+			8% increased Movement Speed
+			Slightly increases Jump Height
+			''' */
 	}
 
 	CupOJoe: {
-		DisplayName: Taza de café
-		Tooltip: Otorga inmunidad a los efectos negativos relacionados con el hielo que no hacen daño
+		// DisplayName: Cup O' Joe
+		// Tooltip: Grants immunity to non-damaging Ice Themed Debuffs
 	}
 
 	RooksBrew: {
-		DisplayName: Rooks Brew
-		Tooltip:
+		// DisplayName: Rooks Brew
+		/* Tooltip:
 			'''
-			Otorga inmunidad a los efectos negativos relacionados con el hielo que no hacen daño
-			Velocidad de movimiento aumentada por un 8%
-			Aumenta la altura de salto
-			Toca cualquier dirección 2 veces en el suelo para comenzar un dash que puedes controlar por un corto tiempo
-			'''
+			Grants immunity to non-damaging Ice Themed Debuffs
+			8% increased Movement Speed
+			Slightly increases Jump Height
+			Double tap any direction while on the ground to start a dash you can control for a short while
+			''' */
 	}
 
 	CyaniteBoomerang: {
-		DisplayName: Bumerán de cianita
-		Tooltip: ""
+		// DisplayName: Cyanite Boomerang
+		// Tooltip: ""
 	}
 
 	CyaniteSpear: {
-		DisplayName: Lanza de cianita
-		Tooltip: ""
+		// DisplayName: Cyanite Spear
+		// Tooltip: ""
 	}
 
 	GalacticJellyBean: {
-		DisplayName: Gomita galáctica
-		Tooltip: ""
+		// DisplayName: Galactic Jelly Bean
+		// Tooltip: ""
+	}
+
+	EoWTail: {
+		// DisplayName: Eo W Tail
+		// Tooltip: ""
 	}
 }
 
@@ -655,11 +660,12 @@ Projectiles: {
 	TouhouBullet.DisplayName: Órbe cósmica
 	RazedWineBottle.DisplayName: Vino arrasado
 	EmberSlashOld.DisplayName: Tajadora de llamarada
-	NecromatomeProjectile.DisplayName: Necromatomo
-	FishbackerProj.DisplayName: Fishbacker
-	CyaniteBoomerangProjectile.DisplayName: Bumerán de cianita
-	CyaniteSpearProjectile.DisplayName: Lanza de cianita
-	GalacticJellyBeanHand.DisplayName: Mano galáctica
+	// NecromatomeProjectile.DisplayName: Necromatome Projectile
+	// FishbackerProj.DisplayName: Fishbacker Proj
+	// CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang Projectile
+	// CyaniteSpearProjectile.DisplayName: Cyanite Spear Projectile
+	// GalacticJellyBeanHand.DisplayName: Galactic Jelly Bean Hand
+	// FishbackerReflectProj.DisplayName: Fishbacker Reflect Proj
 }
 
 NPCs: {
