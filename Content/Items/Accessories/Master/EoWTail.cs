@@ -50,7 +50,7 @@ namespace ITD.Content.Items.Accessories.Master
         {
             if (eowMasterAcc)
             {
-                eowLifeCap = Player.statLifeMax / 2;
+                eowLifeCap = Player.statLifeMax2 / 2;
                 if (revtime >= 0 && Player.statLife == eowLifeCap && !eowFirstBar)
                 {
                     if (Main.rand.NextBool(8))

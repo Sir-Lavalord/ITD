@@ -572,6 +572,16 @@ Items: {
 		// DisplayName: Cyanite Spear
 		// Tooltip: ""
 	}
+
+	GalacticJellyBean: {
+		// DisplayName: Galactic Jelly Bean
+		// Tooltip: ""
+	}
+
+	EoWTail: {
+		// DisplayName: Eo W Tail
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -654,6 +664,8 @@ Projectiles: {
 	// FishbackerProj.DisplayName: Fishbacker Proj
 	// CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang Projectile
 	// CyaniteSpearProjectile.DisplayName: Cyanite Spear Projectile
+	// GalacticJellyBeanHand.DisplayName: Galactic Jelly Bean Hand
+	// FishbackerReflectProj.DisplayName: Fishbacker Reflect Proj
 }
 
 NPCs: {
