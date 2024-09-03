@@ -17,10 +17,10 @@ namespace ITD.Content.Projectiles.Friendly.Misc
     {
         private NPC HomingTarget
         {
-            get => Projectile.ai[2] == 0 ? null : Main.npc[(int)Projectile.ai[2] - 1];
+            get => Projectile.ai[2] == -1 ? null : Main.npc[(int)Projectile.ai[2]];
             set
             {
-                Projectile.ai[2] = value == null ? 0 : value.whoAmI + 1;
+                Projectile.ai[2] = value == null ? -1 : value.whoAmI;
             }
         }
         public float rotation = 0f;
@@ -44,7 +44,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.height = 32; Projectile.width = 32;
-            Projectile.damage = 75;
+            Projectile.damage = 50;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;

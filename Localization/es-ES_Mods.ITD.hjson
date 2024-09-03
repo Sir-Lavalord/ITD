@@ -16,12 +16,12 @@ Items: {
 
 	RhodiumBow: {
 		DisplayName: Arco de rodio
-		Tooltip: ""
+		Tooltip: Electrifica a las flechas de madera
 	}
 
 	RhodiumBroadsword: {
 		DisplayName: Espada de rodio
-		Tooltip: ""
+		Tooltip: Dispara un rayo eléctrico
 	}
 
 	ElectrumSpear: {
@@ -36,7 +36,7 @@ Items: {
 
 	DashingFeather: {
 		DisplayName: Pluma airosa
-		Tooltip: ""
+		Tooltip: Toca cualquier dirección 2 veces en el suelo para comenzar un dash que puedes controlar por un corto tiempo
 	}
 
 	DespoticSnaptrap: {
@@ -46,7 +46,7 @@ Items: {
 
 	EmberSlasher: {
 		DisplayName: Tajadora de llamarada
-		Tooltip: ""
+		Tooltip: Crea una explosión de fuego
 	}
 
 	Snaptrap: {
@@ -84,7 +84,7 @@ Items: {
 	}
 
 	CosmicJellyfishBag: {
-		Tooltip: ""
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 		DisplayName: Bolsa del tesoro (Medusa Cósmica)
 	}
 
@@ -405,7 +405,7 @@ Items: {
 	}
 
 	BadassSunglasses: {
-		DisplayName: Lentes de sol bad@$$
+		DisplayName: Lentes de sol Bad@$$
 		Tooltip:
 			'''
 			Rapidamente incrementa la probabilidad de ataque crítico
@@ -478,7 +478,7 @@ Items: {
 		DisplayName: Capa Ventiscípula
 		Tooltip:
 			'''
-			Velocidad de movimiento incrementada por un 10%
+			Velocidad de movimiento aumentada por un 10%
 			El viento te sigue
 			'''
 	}
@@ -499,103 +499,103 @@ Items: {
 	}
 
 	GravityBoots: {
-		// DisplayName: Zero Gravity Dancers
-		/* Tooltip:
+		DisplayName: Danzantes de Gravedad Zero
+		Tooltip:
 			'''
-			Hold jump to reduce gravity
-			Increased air mobility
-			'Take a walk on cosmic lane!'
-			''' */
+			Mantén presionado el salto para reducir la gravedad
+			Movilidad aérea aumentada
+			'¡Paséate por la calle cósmica!'
+			'''
 	}
 
 	Necromatome: {
-		// DisplayName: Necromatome
-		// Tooltip: Releases clouds of miasma
+		DisplayName: Necromatomo
+		Tooltip: Expulsa nubes de miasma
 	}
 
 	Fishbacker: {
-		// DisplayName: Fishbacker
-		// Tooltip: ""
+		DisplayName: Fishbacker
+		Tooltip: ""
 	}
 
 	CrimsonAntidote: {
-		// DisplayName: Crimson Antidote
-		/* Tooltip:
+		DisplayName: Antídoto carmesí
+		Tooltip:
 			'''
-			Healing items heal 20% more HP
-			Upon using a healing item, grants massively increased life regeneration for 4 seconds
-			Reduces the effect of Potion Sickness by 15%
-			''' */
+			Los objetos de curación son más efectivos por un 20%
+			Al usar un objeto de curación, aumenta la regeneración masivamente por 4 segundos
+			Reduce el efecto de la Enfermedad de poción por un 15%
+			'''
 	}
 
 	CorruptAntidote: {
-		// DisplayName: Corrupt Antidote
-		/* Tooltip:
+		DisplayName: Antídoto corrupto
+		Tooltip:
 			'''
-			Mana items grant 20% more Mana
-			Upon using a Mana Item, grants -25% Mana Usage and +25% Magic Damage for 4 seconds
-			Reduces the effect of Mana Sickness by 15%
-			''' */
+			Los objetos de maná dan 20% más maná
+			Al usar un objeto de maná, el uso de maná se reduce por un 25% y el daño mágico se aumenta por un 25% por 4 segundos 
+			Reduce el efecto de la Locura de maná por un 15%
+			'''
 	}
 
 	JumpingBean: {
-		// DisplayName: Jumping Bean
-		/* Tooltip:
+		DisplayName: Frijol saltarín
+		Tooltip:
 			'''
-			8% increased Movement Speed
-			Slightly increases Jump Height
-			''' */
+			Velocidad de movimiento aumentada por un 8%
+			Aumenta la altura de salto
+			'''
 	}
 
 	CupOJoe: {
-		// DisplayName: Cup O' Joe
-		// Tooltip: Grants immunity to non-damaging Ice Themed Debuffs
+		DisplayName: Taza de café
+		Tooltip: Otorga inmunidad a los efectos negativos relacionados con el hielo que no hacen daño
 	}
 
 	RooksBrew: {
-		// DisplayName: Rooks Brew
-		/* Tooltip:
+		DisplayName: Rooks Brew
+		Tooltip:
 			'''
-			Grants immunity to non-damaging Ice Themed Debuffs
-			8% increased Movement Speed
-			Slightly increases Jump Height
-			Double tap any direction while on the ground to start a dash you can control for a short while
-			''' */
+			Otorga inmunidad a los efectos negativos relacionados con el hielo que no hacen daño
+			Velocidad de movimiento aumentada por un 8%
+			Aumenta la altura de salto
+			Toca cualquier dirección 2 veces en el suelo para comenzar un dash que puedes controlar por un corto tiempo
+			'''
 	}
 
 	CyaniteBoomerang: {
-		// DisplayName: Cyanite Boomerang
-		// Tooltip: ""
+		DisplayName: Bumerán de cianita
+		Tooltip: ""
 	}
 
 	CyaniteSpear: {
-		// DisplayName: Cyanite Spear
-		// Tooltip: ""
+		DisplayName: Lanza de cianita
+		Tooltip: ""
 	}
 
 	GalacticJellyBean: {
-		// DisplayName: Galactic Jelly Bean
-		// Tooltip: ""
+		DisplayName: Gomita galáctica
+		Tooltip: ""
 	}
 
 	EoWTail: {
-		// DisplayName: Tail of the Eater
-		/* Tooltip:
+		DisplayName: Cola del Devoramundos
+		Tooltip:
 			'''
-			Split your life into two
-			Fatal damage does not carry onto next life
-			This can only happen every 1 minute
-			Cooldown only reduces when you have max life
-			''' */
+			Rompe tu barra de vida en dos
+			La primera barra de vida te protege del daño fatal
+			Este efecto solo puede suceder cada minuto
+			El tiempo de espera solo reduce cuando tienes la máxima cantidad de vida
+			'''
 	}
 
 	Prophylaxis: {
-		// DisplayName: Prophylaxis
-		/* Tooltip:
+		DisplayName: Prophylaxis
+		Tooltip:
 			'''
 			Using a healing item causes you to bleed out
 			Losing life gained and reducing damage taken
-			''' */
+			'''
 	}
 }
 
@@ -675,12 +675,12 @@ Projectiles: {
 	TouhouBullet.DisplayName: Órbe cósmica
 	RazedWineBottle.DisplayName: Vino arrasado
 	EmberSlashOld.DisplayName: Tajadora de llamarada
-	// NecromatomeProjectile.DisplayName: Necromatome
-	// FishbackerProj.DisplayName: Fishbacker
-	// CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang
-	// CyaniteSpearProjectile.DisplayName: Cyanite Spear
-	// GalacticJellyBeanHand.DisplayName: Cosmic Hand
-	// FishbackerReflectProj.DisplayName: How did you get this?
+	NecromatomeProjectile.DisplayName: Necromatomo
+	FishbackerProj.DisplayName: Fishbacker
+	CyaniteBoomerangProjectile.DisplayName: Bumerán de cianita
+	CyaniteSpearProjectile.DisplayName: Lanza de cianita
+	GalacticJellyBeanHand.DisplayName: Mano galáctica
+	FishbackerReflectProj.DisplayName: Wow, que mala suerte
 }
 
 NPCs: {

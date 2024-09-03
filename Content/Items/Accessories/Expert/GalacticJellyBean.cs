@@ -31,7 +31,7 @@ namespace ITD.Content.Items.Accessories.Expert
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<GalacticJellyBeanHand>()] <= 0)
                 {
                     Projectile.NewProjectile(Player.GetSource_FromThis(),Player.Center,Vector2.Zero,
-                        ModContent.ProjectileType<GalacticJellyBeanHand>(),20,0f,Player.whoAmI);
+                        ModContent.ProjectileType<GalacticJellyBeanHand>(),50,0f,Player.whoAmI);
                 }
             }
         }
