@@ -184,8 +184,7 @@ namespace ITD.Content.Projectiles
         {
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
             SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
-            Projectile.damage = 0;
-            retracting = true;
+            Retract();
             return false;
         }
 
@@ -206,6 +205,12 @@ namespace ITD.Content.Projectiles
         public virtual void ConstantLatchEffect()
         {
 
+        }
+        private void Retract()
+        {
+            retracting = true;
+            Projectile.tileCollide = false;
+            Projectile.damage = 0;
         }
         public override void AI()
         {
@@ -321,17 +326,13 @@ namespace ITD.Content.Projectiles
                     bool stillInUse = myPlayer.channel && !myPlayer.noItems && !myPlayer.CCed;
                     if (!stillInUse)
                     {
-                        Projectile.damage = 0;
-                        Projectile.tileCollide = false;
-                        retracting = true;
+                        Retract();
                     }
                 }
             }
             if (chainLength >= ShootRange)
             {
-                Projectile.damage = 0;
-                Projectile.tileCollide = false;
-                retracting = true;
+                Retract();
             }
             if (retracting)
             {
