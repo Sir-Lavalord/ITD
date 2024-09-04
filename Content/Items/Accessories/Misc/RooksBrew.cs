@@ -11,8 +11,6 @@ namespace ITD.Content.Items.Accessories.Misc
 {
     internal class RooksBrew : ModItem
     {
-        public override string Texture => Placeholder.PHBottle;
-
         public override void SetDefaults()
         {
             Item.width = 32;

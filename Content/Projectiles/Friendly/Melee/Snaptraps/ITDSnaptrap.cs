@@ -184,8 +184,7 @@ namespace ITD.Content.Projectiles
         {
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
             SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
-            Projectile.damage = 0;
-            retracting = true;
+            Retract();
             return false;
         }
 
@@ -207,6 +206,12 @@ namespace ITD.Content.Projectiles
         {
 
         }
+        private void Retract()
+        {
+            retracting = true;
+            Projectile.tileCollide = false;
+            Projectile.damage = 0;
+        }
         public override void AI()
         {
             Vector2 mountedCenter = myPlayer.MountedCenter;
@@ -218,6 +223,11 @@ namespace ITD.Content.Projectiles
                 myPlayer.itemTime = 2;
                 myPlayer.itemAnimation = 2;
                 myPlayer.ChangeDir(-Math.Sign(toOwner.X));
+            }
+
+            if (retracting)
+            {
+                Projectile.tileCollide = false;
             }
 
             float chainLength = toOwner.Length();
@@ -321,17 +331,13 @@ namespace ITD.Content.Projectiles
                     bool stillInUse = myPlayer.channel && !myPlayer.noItems && !myPlayer.CCed;
                     if (!stillInUse)
                     {
-                        Projectile.damage = 0;
-                        Projectile.tileCollide = false;
-                        retracting = true;
+                        Retract();
                     }
                 }
             }
             if (chainLength >= ShootRange)
             {
-                Projectile.damage = 0;
-                Projectile.tileCollide = false;
-                retracting = true;
+                Retract();
             }
             if (retracting)
             {
