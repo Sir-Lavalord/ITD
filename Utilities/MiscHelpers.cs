@@ -12,10 +12,6 @@ namespace ITD.Utilities
     {
 		public static bool SnaptrapUseCondition(int playerID)
 		{
-			//bool cond = Main.projectile.Any(proj.GetType().BaseType == typeof(ITDSnaptrap) && proj.owner == playerID);
-			//Main.NewText()
-            //bool cond = !Main.projectile.Any(proj => proj.active && proj.ModProjectile is ITDSnaptrap && proj.owner == playerID);
-            //Main.NewText(cond);
             return !Main.projectile.Any(proj => proj.active && proj.ModProjectile is ITDSnaptrap && proj.owner == playerID);
 		}
         public static NPC FindClosestNPCDirect(this Projectile projectile, float maxDetectDistance)

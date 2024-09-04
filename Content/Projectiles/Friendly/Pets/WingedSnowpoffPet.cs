@@ -23,7 +23,7 @@ namespace ITD.Content.Projectiles.Friendly.Pets
         int wanderTimer;
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Type] = 4;
+            Main.projFrames[Type] = 5;
             Main.projPet[Type] = true;
             ProjectileID.Sets.LightPet[Type] = true;
             ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Projectile.type], 6)
@@ -39,8 +39,8 @@ namespace ITD.Content.Projectiles.Friendly.Pets
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.netImportant = true;
-            DrawOffsetX = -26;
-            DrawOriginOffsetY = -2;
+            DrawOffsetX = -16;
+            DrawOriginOffsetY = 2;
             lastDir = 0;
             randomWander = Vector2.Zero;
         }
