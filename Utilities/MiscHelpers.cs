@@ -15,10 +15,7 @@ namespace ITD.Utilities
     {
         public static NPC FindClosestNPCDirect(this Projectile projectile, float maxDetectDistance)
         {
-            int index = projectile.FindClosestNPC(maxDetectDistance);
-            if (index != -1)
-                return Main.npc[index];
-            return null;
+            return Main.npc[projectile.FindClosestNPC(maxDetectDistance)];
         }
         public static int FindClosestNPC(this Projectile projectile, float maxDetectDistance)
         {
