@@ -53,7 +53,7 @@ namespace ITD.Content.Items.Accessories.Misc
             {
 				player.AddBuff(ModContent.BuffType<CorruptAntidoteBuff>(), 60 * 5, false);
             }
-            return true;
+            return null;
         }
     }
 }

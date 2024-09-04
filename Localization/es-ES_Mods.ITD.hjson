@@ -597,6 +597,15 @@ Items: {
 			Losing life gained and reducing damage taken
 			'''
 	}
+
+	BottomlessSandBucket: {
+		// DisplayName: Bottomless Sand Bucket
+		/* Tooltip:
+			'''
+			Contains an endless amount of sand
+			Can be poured out
+			''' */
+	}
 }
 
 Projectiles: {
