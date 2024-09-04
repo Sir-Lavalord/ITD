@@ -211,7 +211,7 @@ Items: {
 	}
 
 	Shale: {
-		DisplayName: Shale
+		DisplayName: Shalestone
 		Tooltip: ""
 	}
 
@@ -598,9 +598,13 @@ Items: {
 			'''
 	}
 
-	KSGland: {
-		DisplayName: K S Gland
-		Tooltip: ""
+	BottomlessSandBucket: {
+		DisplayName: Bottomless Sand Bucket
+		Tooltip:
+			'''
+			Contains an endless amount of sand
+			Can be poured out
+			'''
 	}
 }
 
@@ -713,7 +717,6 @@ NPCs: {
 	ShroomishSlime.DisplayName: Shroomish Slime
 	CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
 	Sandberus.DisplayName: Sandberus
-	KSGlandNPC.DisplayName: K S Gland N P C
 }
 
 Buffs: {

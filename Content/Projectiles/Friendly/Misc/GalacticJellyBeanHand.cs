@@ -10,7 +10,6 @@ using ITD.Utilities;
 using ITD.Content.Items.Accessories.Expert;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ID;
-using Microsoft.Build.Evaluation;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {
@@ -18,12 +17,16 @@ namespace ITD.Content.Projectiles.Friendly.Misc
     {
         private NPC HomingTarget
         {
-            get => Projectile.ai[2] == 0 ? null : Main.npc[(int)Projectile.ai[2] - 1];
+            get => Projectile.ai[2] == -1 ? null : Main.npc[(int)Projectile.ai[2]];
             set
             {
-                Projectile.ai[2] = value == null ? 0 : value.whoAmI + 1;
+                Projectile.ai[2] = value == null ? -1 : value.whoAmI;
             }
         }
+
+        private const float homingDistance = 750f;
+        private const float chargeDistance = 150f;
+
         public float rotation = 0f;
         public float handCharge = 0f;
         public float handSling = 0f;
@@ -45,7 +48,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.height = 32; Projectile.width = 32;
-            Projectile.damage = 75;
+            Projectile.damage = 50;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
@@ -72,14 +75,15 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             }
             if (HomingTarget == null)
             {
-                HomingTarget = Projectile.FindClosestNPCDirect(500);
+                HomingTarget = Projectile.FindClosestNPCDirect(homingDistance);
             }
 
-            if (HomingTarget != null && !Projectile.IsValidTarget(HomingTarget))
+            if (HomingTarget != null && Projectile.Distance(HomingTarget.Center) > homingDistance)
             {
                 HomingTarget = null;
             }
                 Target();
+
         }
         Vector2 toTarget;
         Vector2 chargedPosition;
@@ -88,19 +92,17 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Player player = Main.player[Projectile.owner];
             Vector2 offset = new Vector2(player.direction == -1 ? 18 : -14, -32f + player.gfxOffY);
             Vector2 normalCenter = player.Center + offset + new Vector2(0f, player.velocity.Y);
-            if (HomingTarget == null)
-            {
-                handState = HandState.Default;
-            }
-
             if (HomingTarget != null)
             {
-                if (Projectile.Distance(HomingTarget.Center) > 500f && handState == HandState.Default)
+                if (Projectile.Distance(HomingTarget.Center) > homingDistance + chargeDistance && handState == HandState.Default)
                 {
                     HomingTarget = null;
                 }
-                toTarget = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
-                chargedPosition = player.Center + offset + new Vector2(0f, player.velocity.Y) - toTarget * 150f;
+                else
+                {
+                    toTarget = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
+                    chargedPosition = player.Center + offset + new Vector2(0f, player.velocity.Y) - toTarget * chargeDistance;
+                }
             }
             switch (handState)
             {
@@ -117,8 +119,13 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
                     break;
                 case HandState.Charging:
-                    Projectile.frame = Main.projFrames[Type] - 1;
 
+                    if (HomingTarget == null)
+                    {
+                        handState = HandState.Default;
+                        break;
+                    }
+                    Projectile.frame = Main.projFrames[Type] - 1;
                     if (handCharge < 0.6f)
                     {
                         handCharge += 0.04f;

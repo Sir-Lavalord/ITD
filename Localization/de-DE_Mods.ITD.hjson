@@ -600,9 +600,13 @@ Items: {
 			''' */
 	}
 
-	KSGland: {
-		// DisplayName: K S Gland
-		// Tooltip: ""
+	BottomlessSandBucket: {
+		// DisplayName: Bottomless Sand Bucket
+		/* Tooltip:
+			'''
+			Contains an endless amount of sand
+			Can be poured out
+			''' */
 	}
 }
 
@@ -715,7 +719,6 @@ NPCs: {
 	ShroomishSlime.DisplayName: Pilzschleim
 	CosmicJellyfishMini.DisplayName: Diener der Qualle
 	Sandberus.DisplayName: Dünenfürst
-	// KSGlandNPC.DisplayName: K S Gland N P C
 }
 
 Buffs: {

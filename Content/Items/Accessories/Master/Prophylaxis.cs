@@ -76,7 +76,7 @@ namespace ITD.Content.Items.Accessories.Master
 				modPlayer.lifeDegen = Math.Min(player.GetHealLife(item), player.statLifeMax2-player.statLife);
 				player.AddBuff(ModContent.BuffType<BloodlettingBuff>(), 600, false);
             }
-            return true;
+            return null;
         }
     }
 }

@@ -2,7 +2,6 @@
 using Terraria;
 using Terraria.ModLoader;
 using ITD.Content.Projectiles.Friendly.Misc;
-using Terraria.ID;
 
 namespace ITD.Content.Items.Accessories.Expert
 {
@@ -31,11 +30,8 @@ namespace ITD.Content.Items.Accessories.Expert
             {
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<GalacticJellyBeanHand>()] <= 0)
                 {
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero,
-                        ModContent.ProjectileType<GalacticJellyBeanHand>(), 20, 0f, Player.whoAmI);
-                    }
+                    Projectile.NewProjectile(Player.GetSource_FromThis(),Player.Center,Vector2.Zero,
+                        ModContent.ProjectileType<GalacticJellyBeanHand>(),50,0f,Player.whoAmI);
                 }
             }
         }
