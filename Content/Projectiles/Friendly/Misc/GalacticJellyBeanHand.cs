@@ -10,6 +10,7 @@ using ITD.Utilities;
 using ITD.Content.Items.Accessories.Expert;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ID;
+using Microsoft.Build.Evaluation;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {
@@ -71,7 +72,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             }
             if (HomingTarget == null)
             {
-                HomingTarget = Projectile.FindClosestNPCDirect(300);
+                HomingTarget = Projectile.FindClosestNPCDirect(500);
             }
 
             if (HomingTarget != null && !Projectile.IsValidTarget(HomingTarget))
@@ -79,7 +80,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 HomingTarget = null;
             }
                 Target();
-
         }
         Vector2 toTarget;
         Vector2 chargedPosition;
@@ -88,8 +88,17 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Player player = Main.player[Projectile.owner];
             Vector2 offset = new Vector2(player.direction == -1 ? 18 : -14, -32f + player.gfxOffY);
             Vector2 normalCenter = player.Center + offset + new Vector2(0f, player.velocity.Y);
+            if (HomingTarget == null)
+            {
+                handState = HandState.Default;
+            }
+
             if (HomingTarget != null)
             {
+                if (Projectile.Distance(HomingTarget.Center) > 500f && handState == HandState.Default)
+                {
+                    HomingTarget = null;
+                }
                 toTarget = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
                 chargedPosition = player.Center + offset + new Vector2(0f, player.velocity.Y) - toTarget * 150f;
             }

@@ -109,7 +109,19 @@ namespace ITD.Content.NPCs.Bosses
             notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<StarlitOre>(), 1, 15, 30));
             notExpertRule.OnSuccess(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, oneFromOptionsDrops));
         }
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
+        {
+            if (!Main.masterMode)
+            {
+                NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * bossAdjustment);
+            }
+            else
+            {
+                NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * bossAdjustment);
 
+            }
+            NPC.damage = (int)(NPC.damage * 0.7f);
+        }
         public override void OnKill()
         {
             DownedBossSystem.downedCosJel = true;
