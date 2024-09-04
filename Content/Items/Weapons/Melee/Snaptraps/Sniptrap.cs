@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
+using ITD.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,17 +8,11 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {
     public class Sniptrap : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-
-        }
-
         public override void SetDefaults()
         {
             Item.autoReuse = false;
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.useAnimation = 20;
-            Item.useTime = 22;
+            Item.useAnimation = Item.useTime = 22;
             Item.knockBack = 0f;
             Item.width = 30;
             Item.height = 10;
@@ -32,12 +27,10 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
             Item.noUseGraphic = true;
             Item.channel = true;
         }
-
         public override bool CanUseItem(Player player)
         {
-            return (player.ownedProjectileCounts[Item.shoot] <= 0);
+            return MiscHelpers.SnaptrapUseCondition(player.whoAmI);
         }
-
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();

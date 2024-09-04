@@ -5,22 +5,17 @@ using Terraria.ModLoader;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {
     public class VocalZero : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-
-        }
-
         public override void SetDefaults()
         {
             Item.autoReuse = false;
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.useAnimation = 20;
-            Item.useTime = 16;
+            Item.useAnimation = Item.useTime = 16;
             Item.knockBack = 0f;
             Item.width = 30;
             Item.height = 10;
@@ -35,7 +30,10 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
             Item.noUseGraphic = true;
             Item.channel = true;
         }
-
+        public override bool CanUseItem(Player player)
+        {
+            return MiscHelpers.SnaptrapUseCondition(player.whoAmI);
+        }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             float pulseAmount = Main.mouseTextColor / 255f;

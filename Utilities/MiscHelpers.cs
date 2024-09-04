@@ -1,18 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
 using ITD.Content.NPCs;
-using static Terraria.Mount;
+using ITD.Content.Projectiles;
 
 namespace ITD.Utilities
 {
     public static class MiscHelpers
     {
+		public static bool SnaptrapUseCondition(int playerID)
+		{
+			//bool cond = Main.projectile.Any(proj.GetType().BaseType == typeof(ITDSnaptrap) && proj.owner == playerID);
+			//Main.NewText()
+            //bool cond = !Main.projectile.Any(proj => proj.active && proj.ModProjectile is ITDSnaptrap && proj.owner == playerID);
+            //Main.NewText(cond);
+            return !Main.projectile.Any(proj => proj.active && proj.ModProjectile is ITDSnaptrap && proj.owner == playerID);
+		}
         public static NPC FindClosestNPCDirect(this Projectile projectile, float maxDetectDistance)
         {
             int index = projectile.FindClosestNPC(maxDetectDistance);

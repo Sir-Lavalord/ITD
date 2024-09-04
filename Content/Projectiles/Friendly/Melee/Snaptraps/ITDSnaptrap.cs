@@ -122,7 +122,7 @@ namespace ITD.Content.Projectiles
             Projectile.DamageType = DamageClass.Melee;
             DrawOffsetX = -12;
             DrawOriginOffsetY = -16;
-            Projectile.hide = true;
+            //Projectile.hide = true;
             SetSnaptrapProperties();
             snaptrapMetal = new SoundStyle(toSnaptrapMetal);
             snaptrapForcedRetract = new SoundStyle(toSnaptrapForcedRetract);
@@ -184,7 +184,7 @@ namespace ITD.Content.Projectiles
         {
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
             SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
-            Retract();
+            retracting = true;
             return false;
         }
 
@@ -206,28 +206,16 @@ namespace ITD.Content.Projectiles
         {
 
         }
-        private void Retract()
-        {
-            retracting = true;
-            Projectile.tileCollide = false;
-            Projectile.damage = 0;
-        }
         public override void AI()
         {
             Vector2 mountedCenter = myPlayer.MountedCenter;
             Vector2 toOwner = mountedCenter - Projectile.Center;
 
-            if (Main.myPlayer == Projectile.owner)
-            {
-                myPlayer.heldProj = Projectile.whoAmI;
-                myPlayer.itemTime = 2;
-                myPlayer.itemAnimation = 2;
-                myPlayer.ChangeDir(-Math.Sign(toOwner.X));
-            }
-
             if (retracting)
             {
+                IsStickingToTarget = false;
                 Projectile.tileCollide = false;
+                Projectile.damage = 0;
             }
 
             float chainLength = toOwner.Length();
@@ -260,12 +248,6 @@ namespace ITD.Content.Projectiles
                 if (!retracting)
                 {
                     StickyAI(chainLength);
-                }
-                else
-                {
-                    Projectile.damage = 0;
-                    Projectile.tileCollide = false;
-                    IsStickingToTarget = false;
                 }
             }
             else
@@ -324,20 +306,9 @@ namespace ITD.Content.Projectiles
 
         private void NormalAI(Vector2 mountedCenter, float chainLength)
         {
-            if (Main.myPlayer == Projectile.owner)
-            {
-                if (--FramesUntilRetractable <= 0)
-                {
-                    bool stillInUse = myPlayer.channel && !myPlayer.noItems && !myPlayer.CCed;
-                    if (!stillInUse)
-                    {
-                        Retract();
-                    }
-                }
-            }
             if (chainLength >= ShootRange)
             {
-                Retract();
+                retracting = true;
             }
             if (retracting)
             {
@@ -370,7 +341,6 @@ namespace ITD.Content.Projectiles
             if (StickTimer >= StickTime || npcTarget < 0 || npcTarget >= 200)
             {
                 retracting = true;
-                IsStickingToTarget = false;
             }
             else if (Main.npc[npcTarget].active && !Main.npc[npcTarget].dontTakeDamage)
             {
@@ -385,7 +355,6 @@ namespace ITD.Content.Projectiles
             else
             {
                 retracting = true;
-                IsStickingToTarget = false;
             }
             if (damageTimer >= FramesBetweenHits)
             {
@@ -413,7 +382,6 @@ namespace ITD.Content.Projectiles
                 {
                     SoundEngine.PlaySound(snaptrapForcedRetract, Projectile.Center);
                     retracting = true;
-                    IsStickingToTarget = false;
                     warningTimer = WarningFrames;
                 }
                 shouldBeWarning = true;
@@ -422,17 +390,6 @@ namespace ITD.Content.Projectiles
             {
                 shouldBeWarning = false;
                 warningTimer = 0;
-            }
-            if (Main.myPlayer == Projectile.owner)
-            {
-                if (--FramesUntilRetractable <= 0)
-                {
-                    bool stillInUse = myPlayer.channel && !myPlayer.noItems && !myPlayer.CCed;
-                    if (!stillInUse)
-                    {
-                        retracting = true;
-                    }
-                }
             }
         }
         /// <summary>

@@ -1,5 +1,8 @@
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace ITD
 {
@@ -13,6 +16,7 @@ namespace ITD
         public override void PostSetupContent()
         {
             ExternalModSupport.Init();
+            ITDSets.Init();
         }
         public override void Load()
         {
