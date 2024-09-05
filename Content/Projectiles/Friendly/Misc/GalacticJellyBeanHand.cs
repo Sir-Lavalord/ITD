@@ -73,10 +73,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                         handState = HandState.Charging;
                 }
             }
-            if (HomingTarget == null)
-            {
-                HomingTarget = Projectile.FindClosestNPCDirect(homingDistance);
-            }
+            HomingTarget ??= Projectile.FindClosestNPCDirect(homingDistance);
 
             if (HomingTarget != null && Projectile.Distance(HomingTarget.Center) > homingDistance)
             {

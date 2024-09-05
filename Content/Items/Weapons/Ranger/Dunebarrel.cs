@@ -12,14 +12,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Drawing.Text;
 using System.IO;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {
     public class Dunebarrel : ModItem
     {
 		public int attackCycle = 0;
-        public float localMouseX = 0f;
-        public float localMouseY = 0f;
 		public override void SetStaticDefaults()
         {
             FrontGunLayer.RegisterData(Item.type);
@@ -65,42 +64,32 @@ namespace ITD.Content.Items.Weapons.Ranger
 			}
             return true;
         }
-        public override void NetSend(BinaryWriter writer)
-        {
-            writer.Write(Main.MouseWorld.X);
-            writer.Write(Main.MouseWorld.Y);
-        }
-        public override void NetReceive(BinaryReader reader)
-        {
-            localMouseX = reader.ReadSingle();
-            localMouseY = reader.ReadSingle();
-        }
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
-            Vector2 localMouse = Main.netMode == NetmodeID.MultiplayerClient ? new Vector2(localMouseX, localMouseY) : Main.MouseWorld;
-            if (localMouse.X < player.Center.X)
+            ITDPlayer modPlayer = player.GetITDPlayer();
+            Vector2 mouse = modPlayer.MousePosition;
+
+            if (mouse.X < player.Center.X)
 				player.direction = -1;
 			else
 				player.direction = 1;
 			
-			ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
-			
-			float rotation = (Vector2.Normalize(localMouse - player.MountedCenter)*player.direction).ToRotation();
+			float rotation = (Vector2.Normalize(mouse - player.MountedCenter)*player.direction).ToRotation();
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilFront * player.direction - MathHelper.PiOver2 * player.direction);
 			player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilBack * player.direction - MathHelper.PiOver2 * player.direction);
         }
 
 		public override void HoldStyle(Player player, Rectangle heldItemFrame)
         {
-            Vector2 localMouse = Main.netMode == NetmodeID.MultiplayerClient ? new Vector2(localMouseX, localMouseY) : Main.MouseWorld;
-            if (localMouse.X < player.Center.X)
+            ITDPlayer modPlayer = player.GetITDPlayer();
+            Vector2 mouse = modPlayer.MousePosition;
+
+            if (mouse.X < player.Center.X)
 				player.direction = -1;
 			else
 				player.direction = 1;
 			
-			ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
-			
-			float rotation = (Vector2.Normalize(localMouse - player.MountedCenter)*player.direction).ToRotation();
+			float rotation = (Vector2.Normalize(mouse - player.MountedCenter)*player.direction).ToRotation();
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilFront * player.direction - MathHelper.PiOver2 * player.direction);
 			player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilBack * player.direction - MathHelper.PiOver2 * player.direction);
         }

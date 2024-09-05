@@ -51,7 +51,7 @@ namespace ITD.Content.Projectiles.Hostile
 				SoundEngine.PlaySound(SoundID.Item8, Projectile.position);
 				for (int i = 0; i < 10; i++)
 				{
-					int spawnDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 0, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 2f);
+					int spawnDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Dirt, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 2f);
 					Main.dust[spawnDust].noGravity = true;
 					Main.dust[spawnDust].velocity = Projectile.Center - Main.dust[spawnDust].position;
 					Main.dust[spawnDust].velocity.Normalize();
@@ -72,7 +72,7 @@ namespace ITD.Content.Projectiles.Hostile
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
 				
-				int trailDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 0, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 1.5f);
+				int trailDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Dirt, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 1.5f);
 				Main.dust[trailDust].noGravity = true;
 				Main.dust[trailDust].velocity *= 0f;
             }
