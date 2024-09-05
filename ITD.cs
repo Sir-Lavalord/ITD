@@ -1,5 +1,11 @@
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
+using ITD.Networking;
+using Microsoft.Xna.Framework.Content;
+using System.IO;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace ITD
 {
@@ -13,7 +19,9 @@ namespace ITD
         public override void PostSetupContent()
         {
             ExternalModSupport.Init();
+            ITDSets.Init();
         }
+        public override void HandlePacket(BinaryReader reader, int whoAmI) => NetSystem.HandlePacket(reader, whoAmI);
         public override void Load()
         {
             wikithis = null;

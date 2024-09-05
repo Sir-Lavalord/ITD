@@ -5,21 +5,16 @@ using Terraria.ModLoader;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
+using ITD.Utilities;
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {
     public class VenusSnaptrap : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-
-        }
-
         public override void SetDefaults()
         {
             Item.autoReuse = false;
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.useAnimation = 20;
-            Item.useTime = 22;
+            Item.useAnimation = Item.useTime = 22;
             Item.knockBack = 0f;
             Item.width = 30;
             Item.height = 10;
@@ -35,12 +30,11 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
             Item.channel = true;
             
         }
-
         public override bool CanUseItem(Player player)
         {
-            return (player.ownedProjectileCounts[Item.shoot] <= 0);
+            return MiscHelpers.SnaptrapUseCondition(player.whoAmI);
         }
-  public override void AddRecipes()
+        public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.JungleSpores, 10);

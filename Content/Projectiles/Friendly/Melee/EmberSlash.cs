@@ -58,7 +58,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			
 			double angle = Main.rand.NextDouble() * 2d * Math.PI;
 			Vector2 offset = new Vector2((float)(Math.Sin(angle)), (float)(Math.Cos(angle))) * 40f * Projectile.ai[0] * (0.5f + Main.rand.NextFloat(0.5f));
-			Vector2 velocity = offset.RotatedBy(90*Projectile.direction);
+			Vector2 velocity = offset.RotatedBy(MathHelper.PiOver2*Projectile.direction);
 			velocity.Normalize();
 			
 			Dust dust = Dust.NewDustPerfect(Projectile.Center + Projectile.velocity + offset, 6, velocity*2f, 100, default, 2f);

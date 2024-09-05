@@ -697,6 +697,7 @@ Projectiles: {
 	// CyaniteSpearProjectile.DisplayName: Cyanite Spear
 	// GalacticJellyBeanHand.DisplayName: Cosmic Hand
 	// FishbackerReflectProj.DisplayName: How did you get this?
+	// SuffocationAura.DisplayName: Suffocation Aura
 }
 
 NPCs: {

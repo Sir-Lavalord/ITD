@@ -13,6 +13,9 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using System.Linq;
 using ITD.Content.Projectiles.Friendly.Misc;
+using ITD.Utilities;
+using ITD.Networking;
+using ITD.Networking.Packets;
 
 namespace ITD.Players
 {
@@ -23,6 +26,8 @@ namespace ITD.Players
 		
 		public float recoilFront = 0f;
 		public float recoilBack = 0f;
+
+        public Vector2 MousePosition = Vector2.Zero;
 		
         bool prevTime = false;
         bool curTime = false;
@@ -122,10 +127,13 @@ namespace ITD.Players
             ZoneBlueshroomsUnderground = ModContent.GetInstance<ITDSystem>().bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
             ZoneDeepDesert = ModContent.GetInstance<ITDSystem>().deepdesertTileCount > 50 && Player.ZoneRockLayerHeight;
 
+            UpdateMouse();
+
             // Random boss spawns (MOVE THIS TO ITDSYSTEM TO PREVENT MP FUNKYNESS)
 
             prevTime = curTime;
             curTime = Main.dayTime;
+
             if (prevTime && !curTime) // It has just turned into nighttime
             {
                 if (!ITDSystem.hasMeteorFallen) // If the hasMeteorFallen flag is false, it checks for a meteor
@@ -176,8 +184,18 @@ namespace ITD.Players
                 }
             }
                 //Suffocation Here
-                
+        }
+        public void UpdateMouse()
+        {
+            if (Player.IsLocalPlayer())
+            {
+                MousePosition = Main.MouseWorld;
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    NetSystem.SendPacket(new MousePositionPacket(Player));
+                }
             }
+        }
         public override void ModifyScreenPosition()
         {
             if (Screenshake > 0)
