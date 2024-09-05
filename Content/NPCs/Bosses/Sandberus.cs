@@ -284,6 +284,7 @@ namespace ITD.Content.NPCs.Bosses
 		
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
+			npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<BottomlessSandBucket>(), 1));
 			LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
 			notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<Skullmet>(), 1));
 			notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<Dunebarrel>(), 5));
