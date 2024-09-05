@@ -606,6 +606,11 @@ Items: {
 			Can be poured out
 			'''
 	}
+
+	KSGland: {
+		DisplayName: K S Gland
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -717,6 +722,7 @@ NPCs: {
 	ShroomishSlime.DisplayName: Shroomish Slime
 	CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
 	Sandberus.DisplayName: Sandberus
+	KSGlandNPC.DisplayName: K S Gland N P C
 }
 
 Buffs: {

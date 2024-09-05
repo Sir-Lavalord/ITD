@@ -568,6 +568,7 @@ namespace ITD.Content.NPCs.Bosses
                     switch (handState)
                     {
                         case HandState.Waiting:
+                            projectile.frame = 1;
                             Timer = 0;
                             handSling = 0f;
                             handCharge = 0f;

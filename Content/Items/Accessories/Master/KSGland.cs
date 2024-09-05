@@ -33,7 +33,6 @@ namespace ITD.Content.Items.Accessories.Master
         public int RegrowCD = 0;
         public override void ResetEffects()
         {
-            RegrowCD = 0;
             ksMasterAcc = false;
         }
         public override void UpdateDead()
@@ -52,14 +51,14 @@ namespace ITD.Content.Items.Accessories.Master
                         NPC.NewNPCDirect(Player.GetSource_FromThis(), Player.Center, ModContent.NPCType<KSGlandNPC>(), 0, Player.whoAmI);
                     }
                 }
-                if (RegrowCD >=0)
-                {
-                    RegrowCD--;
-                }
-                else
-                {
-                    RegrowCD = 0;
-                }
+            }
+            if (RegrowCD >= 0)
+            {
+                RegrowCD--;
+            }
+            else
+            {
+                RegrowCD = 0;
             }
         }
     }

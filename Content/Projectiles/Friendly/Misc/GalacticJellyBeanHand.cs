@@ -94,7 +94,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Vector2 normalCenter = player.Center + offset + new Vector2(0f, player.velocity.Y);
             if (HomingTarget != null)
             {
-                if (Projectile.Distance(HomingTarget.Center) > homingDistance + chargeDistance && handState == HandState.Default)
+                if ((Projectile.Distance(HomingTarget.Center) > homingDistance + chargeDistance && handState == HandState.Default))
                 {
                     HomingTarget = null;
                 }
@@ -102,6 +102,10 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 {
                     toTarget = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
                     chargedPosition = player.Center + offset + new Vector2(0f, player.velocity.Y) - toTarget * chargeDistance;
+                }
+                if (!HomingTarget.active || HomingTarget.life <= 0)
+                {
+                    HomingTarget = null;
                 }
             }
             switch (handState)

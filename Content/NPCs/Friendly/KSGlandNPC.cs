@@ -50,6 +50,7 @@ namespace ITD.Content.NPCs.Friendly
             NPC.scale = 1.25f;
             NPC.aiStyle = -1;
             NPC.gfxOffY = -10;
+            NPC.alpha = 30;
         }
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
@@ -65,7 +66,7 @@ namespace ITD.Content.NPCs.Friendly
         }
         public override bool? CanBeHitByProjectile(Projectile projectile)
         {
-            if (projectile.hostile)
+            if (projectile.hostile || !projectile.friendly)
                 return iRetardedIframe <= 0;
             else return false;
         }
@@ -86,6 +87,7 @@ namespace ITD.Content.NPCs.Friendly
             NPC.spriteDirection =NPC.direction= -player.direction;
             iRetardedIframe = player.immuneTime;
             NPC.Center = player.Center;
+            player.AddBuff(BuffID.Slimed, 5);
             NPC.netUpdate = true;
             
         }
@@ -104,11 +106,11 @@ namespace ITD.Content.NPCs.Friendly
         }
         public override void OnSpawn(IEntitySource source)
         {
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 8; i++)
             {
-                Dust dust = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.t_Slime, 0, 0f, 40, Color.LightSkyBlue, Main.rand.NextFloat(2f, 3f));
+                Dust dust = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.t_Slime, 0, 0f, 40, Color.LightSkyBlue, Main.rand.NextFloat(1f, 2f));
                 dust.velocity *= 2f;
-                Dust dust2 = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.ShimmerTorch, 0, 0f, 40, Color.LightSkyBlue, Main.rand.NextFloat(2f, 3f));
+                Dust dust2 = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.t_Slime, 0, 0f, 40, Color.LightSkyBlue, Main.rand.NextFloat(1f, 2f));
                 dust2.velocity *= 1f;
                 dust2.noGravity = true;
             }
@@ -116,12 +118,16 @@ namespace ITD.Content.NPCs.Friendly
         public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
         {
         }
-        public override Color? GetAlpha(Color drawColor)
-        {
-            return Color.White;
-        }
         public override void OnKill()
         {
+            for (int i = 0; i < 8; i++)
+            {
+                Dust dust = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.t_Slime, 0, 0f, 40, Color.LightSkyBlue, Main.rand.NextFloat(1f, 2f));
+                dust.velocity *= 2f;
+                Dust dust2 = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.t_Slime, 0, 0f, 40, Color.LightSkyBlue, Main.rand.NextFloat(1f, 2f));
+                dust2.velocity *= 1f;
+                dust2.noGravity = true;
+            }
             Player player = Main.player[(int)NPC.ai[0]];
             player.GetModPlayer<KSGlandPlayer>().RegrowCD = 600;
         }
@@ -156,6 +162,7 @@ namespace ITD.Content.NPCs.Friendly
         {
             if (owner.dead || !owner.active)
             {
+                owner.GetModPlayer<KSGlandPlayer>().RegrowCD = 600;
                 owner.GetModPlayer<KSGlandPlayer>().ksMasterAcc = false;
                 NPC.life = 0;
                 NPC.checkDead();
