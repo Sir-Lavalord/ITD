@@ -48,7 +48,7 @@ namespace ITD.Content.Projectiles.Hostile
 			if (Projectile.localAI[0] == 0f)
 			{
 				Projectile.localAI[0] = 1f;
-				SoundEngine.PlaySound(SoundID.Item8, Projectile.position);
+				SoundEngine.PlaySound(SoundID.NPCDeath13, Projectile.position);
 				for (int i = 0; i < 10; i++)
 				{
 					int spawnDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Dirt, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 2f);

@@ -11,6 +11,8 @@ namespace ITD.Content.Projectiles.Hostile
 {
     public class SandBoulder : ModProjectile
     {
+		private bool CanBounce = true;
+		
         public override void SetDefaults()
         {
             Projectile.width = 28; Projectile.height = 28;
@@ -23,8 +25,23 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            Projectile.Kill();
-            return false;
+			if (Main.expertMode && CanBounce)
+			{
+				if (oldVelocity.X != Projectile.velocity.X) {
+					Projectile.velocity.X = (0f - oldVelocity.X);
+				}
+				if (oldVelocity.Y != Projectile.velocity.Y) {
+					Projectile.velocity.Y = (0f - oldVelocity.Y);
+				}
+				
+				SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
+				
+				CanBounce = false;
+				
+				return false;
+			}
+			
+            return true;
         }
         public override void OnKill(int timeLeft)
         {

@@ -41,7 +41,11 @@ namespace ITD.Content.Items.Accessories.Movement.Boots
                 gravityBootsCharge--;
             gravityBoots = false;
         }
-
+		public override void UpdateDead()
+        {
+            gravityBootsCharge = 0;
+        }
+		
         public override void UpdateEquips()
         {
             if (gravityBoots)

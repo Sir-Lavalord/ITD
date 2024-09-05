@@ -690,6 +690,7 @@ Projectiles: {
 	CyaniteSpearProjectile.DisplayName: Lanza de cianita
 	GalacticJellyBeanHand.DisplayName: Mano galáctica
 	FishbackerReflectProj.DisplayName: Wow, que mala suerte
+	// SuffocationAura.DisplayName: Suffocation Aura
 }
 
 NPCs: {
