@@ -10,6 +10,7 @@ using System;
 using ReLogic.Content;
 
 using ITD.Players;
+using ITD.Utilities;
 
 namespace ITD.Systems
 {
@@ -100,7 +101,7 @@ namespace ITD.Systems
 				position += new Vector2(drawPlayer.direction, drawPlayer.gravDir);
 			}
 			
-			float rotation = (Vector2.Normalize(Main.MouseWorld - drawPlayer.MountedCenter)*drawPlayer.direction).ToRotation();
+			float rotation = (Vector2.Normalize(modPlayer.MousePosition - drawPlayer.MountedCenter)*drawPlayer.direction).ToRotation();
 			
 			Vector2 origin = new Vector2(0f, texture.Height);
 			SpriteEffects effects = SpriteEffects.None;
@@ -199,7 +200,7 @@ namespace ITD.Systems
 				position += new Vector2(drawPlayer.direction, drawPlayer.gravDir);
 			}
 			
-			float rotation = (Vector2.Normalize(Main.MouseWorld - drawPlayer.MountedCenter)*drawPlayer.direction).ToRotation();
+			float rotation = (Vector2.Normalize(modPlayer.MousePosition - drawPlayer.MountedCenter)*drawPlayer.direction).ToRotation();
 			
 			Vector2 origin = new Vector2(0f, texture.Height);
 			SpriteEffects effects = SpriteEffects.None;
