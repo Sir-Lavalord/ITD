@@ -17,7 +17,7 @@ namespace ITD.Content.Projectiles.Hostile
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording mode
-            Main.projFrames[Projectile.type] = 5;
+            Main.projFrames[Projectile.type] = 6;
         }
         public override void SetDefaults()
         {
@@ -47,11 +47,6 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override void AI()
         {
-            if (++Projectile.frameCounter >= 6)
-            {
-                Projectile.frameCounter = 0;
-                Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
-            }
         }
         public override bool PreDraw(ref Color lightColor)
         {

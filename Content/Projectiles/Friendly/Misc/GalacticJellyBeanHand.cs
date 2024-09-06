@@ -183,7 +183,9 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         }
         public override bool? CanHitNPC(NPC target)
         {
-            return handState == HandState.Slinging;
+            if (!target.friendly)
+                return handState == HandState.Slinging;
+            else return false;
         }
         public override Color? GetAlpha(Color lightColor)
         {

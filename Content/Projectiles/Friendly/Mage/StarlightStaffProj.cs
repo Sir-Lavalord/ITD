@@ -50,7 +50,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 
             if (Projectile.timeLeft > 36)
             {				
-                HomingTarget ??= Projectile.FindClosestNPCDirect(maxDetectRadius);
+                HomingTarget = Projectile.FindClosestNPCDirect(maxDetectRadius);
 
                 if (HomingTarget != null && !Projectile.IsValidTarget(HomingTarget))
                 {

@@ -20,10 +20,6 @@ namespace ITD.Content.NPCs.Friendly
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 3;
-
-            NPCID.Sets.DontDoHardmodeScaling[Type] = true;
-            NPCID.Sets.CantTakeLunchMoney[Type] = true;
-            NPCID.Sets.BossBestiaryPriority.Add(Type);
             NPCID.Sets.ImmuneToAllBuffs[Type] = true;
             //
             NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers()
@@ -46,7 +42,6 @@ namespace ITD.Content.NPCs.Friendly
             NPC.knockBackResist = 0.3f;
             NPC.netAlways = true;
             NPC.friendly = true;
-            NPC.dontTakeDamageFromHostiles = false;
             NPC.scale = 1.25f;
             NPC.aiStyle = -1;
             NPC.gfxOffY = -10;
@@ -66,7 +61,7 @@ namespace ITD.Content.NPCs.Friendly
         }
         public override bool? CanBeHitByProjectile(Projectile projectile)
         {
-            if (projectile.hostile || !projectile.friendly)
+            if (projectile.hostile && !projectile.friendly)
                 return iRetardedIframe <= 0;
             else return false;
         }
@@ -189,17 +184,6 @@ namespace ITD.Content.NPCs.Friendly
     }
     public class KSGlandGlobalNPC : GlobalNPC
     {
-        public override void OnHitNPC(NPC npc, NPC target, NPC.HitInfo hit)
-        {
-            if (!npc.friendly)
-            {
-                if (target.type == ModContent.NPCType<KSGlandNPC>())
-                {
-                    target.immune[npc.whoAmI] = 120;
-                }
-            }
-            
-        }
         public override void ModifyHitNPC(NPC npc, NPC target, ref NPC.HitModifiers modifiers)
         {
             if (!npc.friendly)

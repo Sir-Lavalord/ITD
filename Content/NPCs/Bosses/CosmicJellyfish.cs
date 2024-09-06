@@ -8,6 +8,7 @@ using ITD.Content.Items.Weapons.Summoner;
 using ITD.Content.Projectiles.Hostile;
 using ITD.Players;
 using ITD.Utilities;
+using Microsoft.Build.Evaluation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -72,7 +73,9 @@ namespace ITD.Content.NPCs.Bosses
             Waiting,
             Charging,
             Slinging,
-            DownToSize
+            DownToSize,
+            VoidShard,
+            StarShard
         }
 
         private HandState handState = HandState.Waiting;
@@ -233,9 +236,17 @@ namespace ITD.Content.NPCs.Bosses
 
                         NPC.localAI[2] = 0;
                         NPC.ai[3]++;
+                        if (hand != -1)
+                        {
+                            handState = HandState.DownToSize;
+                        }
+                        if (hand2 != -1)
+                        {
+                            handState2 = HandState.DownToSize;
+                        }
                         //Gore MUST goes here (else it will fuck up multiplayer)
                     }
-                    Main.NewText("ACKK STUDIO II: CRUSTACEANDO. IN THE JELLY OF THE FISH.", Color.Crimson);
+                    Main.NewText("Fish Your Eyes", Color.Goldenrod);
                     NPC.netUpdate = true;
 
                 }
@@ -247,12 +258,9 @@ namespace ITD.Content.NPCs.Bosses
         private void Attacks(Player player)//___________________________________________________________________________________________________________________________________________________
         {
             //TODO: Change this??
-            float distanceAbove = 275f;
             Vector2 toPlayer = player.Center - NPC.Center;
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
-            Vector2 abovePlayer = toPlayer + new Vector2(0f, -distanceAbove);
-            Vector2 aboveNormalized = Vector2.Normalize(abovePlayer);
-            float speed = abovePlayer.Length();
+
 
             if (NPC.ai[3] == 0)//No attack begin trasition
             {
@@ -266,14 +274,14 @@ namespace ITD.Content.NPCs.Bosses
             if (NPC.ai[3] == 1)//Sludge
             {
                 NPC.localAI[1]++;
-                if (NPC.localAI[1] == 180 || NPC.localAI[1] == 120 && SecondStage)
+                if (NPC.localAI[1] == 180 || NPC.localAI[1] == 60 && SecondStage)
                 {
                     if (Main.expertMode || Main.masterMode)
                     {
                         NPC.localAI[0]++;
                         if (NPC.localAI[0] < 2 && !SecondStage || NPC.localAI[0] < 3 && !SecondStage)
                         {
-                            NPC.localAI[1] = 90;
+                            NPC.localAI[1] = 20;
                         }
                         else
                         {
@@ -308,38 +316,17 @@ namespace ITD.Content.NPCs.Bosses
             }
             if (NPC.ai[3] == 2)//Crystal Meth
             {
-                NPC.localAI[1]++;
-                if (NPC.localAI[1] == 150 || (NPC.localAI[1] == 100 || NPC.localAI[1] == 150) && SecondStage)
+                if (NPC.localAI[0]++ >= 200)
                 {
-
-                    if (NPC.localAI[1]++ >= 150)
+                    NPC.localAI[0] = 0;
+                    if (handState == HandState.Waiting && hand != -1)
+                        handState = HandState.VoidShard;
+                }
+                else
+                {
+                    if (hand == -1)
                     {
-                        NPC.ai[3]++;
-                        NPC.localAI[1] = 0;
-                    }
-
-                    SoundEngine.PlaySound(SoundID.Item20, NPC.Center);
-                    //P2 stat garbage here
-                    int projectileAmount = Main.rand.Next(5, 11);
-                    float radius = 6.5f;
-                    float sector = MathHelper.ToRadians(80f);
-                    //Full circle
-                    if (Main.expertMode || Main.masterMode)
-                    {
-                        projectileAmount = Main.rand.Next(18, 24);
-                        sector =(float)(MathHelper.TwoPi);
-                    }
-                    float sectorOfSector = sector / projectileAmount;
-                    float towardsAngle = toPlayer.ToRotation();
-                    float startAngle = towardsAngle - sectorOfSector * (projectileAmount - 1) / 2;
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        for (int i = 0; i < projectileAmount; i++)
-                        {
-                            float angle = startAngle + sectorOfSector * i;
-                            Vector2 projectileVelo = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * radius;
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1);
-                        }
+                        hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 1, 0.1f);
                     }
                 }
             }
@@ -565,10 +552,25 @@ namespace ITD.Content.NPCs.Bosses
                     Vector2 chargedPosition = NPC.Center - extendOut * 110 + new Vector2(0f, NPC.velocity.Y) - toPlayer * 150f;
                     Vector2 normalCenter = NPC.Center - extendOut * 110 + new Vector2(0f, NPC.velocity.Y);
                     float targetRotation = NPC.rotation;
+                    if (handState != HandState.Charging && handState != HandState.Slinging)
+                    {
+                        if (projectile.frameCounter++ >= 6)
+                        {
+                            projectile.frameCounter = 0;
+                            projectile.frame++;
+                            if (projectile.frame >= 4)
+                            {
+                                projectile.frame =0;
+                            }
+                        }
+                    }
+                    else
+                    {
+                            projectile.frame = 5;
+                    }
                     switch (handState)
                     {
                         case HandState.Waiting:
-                            projectile.frame = 1;
                             Timer = 0;
                             handSling = 0f;
                             handCharge = 0f;
@@ -631,6 +633,44 @@ namespace ITD.Content.NPCs.Bosses
                                 projectile.Kill();
                             }
                             break;
+                        case HandState.VoidShard:
+                            NPC.localAI[1]++;
+                            if (NPC.localAI[1] == 150 || (NPC.localAI[1] == 100 || NPC.localAI[1] == 150) && SecondStage)
+                            {
+
+                                if (NPC.localAI[1] >= 150)
+                                {
+                                    handState = HandState.DownToSize;
+                                    NPC.ai[3]++;
+                                    NPC.localAI[1] = 0;
+                                }
+
+                                SoundEngine.PlaySound(SoundID.Item20, projectile.Center);
+                                //P2 stat garbage here
+                                int projectileAmount = Main.rand.Next(5, 11);
+                                float radius = 6.5f;
+                                float sector = MathHelper.ToRadians(80f);
+                                //Full circle
+                                if (Main.expertMode || Main.masterMode)
+                                {
+                                    projectileAmount = Main.rand.Next(18, 24);
+                                    sector = (float)(MathHelper.TwoPi);
+                                }
+                                float sectorOfSector = sector / projectileAmount;
+                                float towardsAngle = toPlayer.ToRotation();
+                                float startAngle = towardsAngle - sectorOfSector * (projectileAmount - 1) / 2;
+                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                {
+                                    for (int i = 0; i < projectileAmount; i++)
+                                    {
+                                        float angle = startAngle + sectorOfSector * i;
+                                        Vector2 projectileVelo = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * radius;
+                                        Projectile.NewProjectile(projectile.GetSource_FromAI(), projectile.Center, projectileVelo, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1);
+                                    }
+                                }
+                            }
+                            projectile.Center = Vector2.Lerp(projectile.Center, normalCenter, 0.3f);
+                            break;
                     }
                     projectile.rotation = MathHelper.Lerp(projectile.rotation, targetRotation, 0.3f);
                     for (int i = 0; i < Main.maxProjectiles; i++)
@@ -679,6 +719,23 @@ namespace ITD.Content.NPCs.Bosses
                     Vector2 chargedPosition = NPC.Center - extendOut * -110 + new Vector2(0f, NPC.velocity.Y) - toPlayer * 150f;
                     Vector2 normalCenter = NPC.Center - extendOut * -110 + new Vector2(0f, NPC.velocity.Y);
                     float targetRotation = NPC.rotation;
+                    if (handState2 != HandState.Charging && handState2 != HandState.Slinging)
+                    {
+                        if (projectile2.frameCounter++ >= 6)
+                        {
+                            projectile2.frameCounter = 0;
+                            projectile2.frame++;
+                            if (projectile2.frame >= 4)
+                            {
+
+                                projectile2.frame = 0;
+                            }
+                        }
+                    }
+                    else
+                    {
+                            projectile2.frame = 5;
+                    }
                     switch (handState2)
                     {
                         case HandState.Waiting:
@@ -784,13 +841,13 @@ namespace ITD.Content.NPCs.Bosses
         //a fuck you when despawn is epic
         private void Movement(Player player)//___________________________________________________________________________________________________________________________________________________
         {
-            float distanceAbove = 275f;
+            float distanceAbove = 200f;//True melee
             Vector2 toPlayer = player.Center - NPC.Center;
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
             Vector2 abovePlayer = toPlayer + new Vector2(0f, -distanceAbove);
             Vector2 aboveNormalized = Vector2.Normalize(abovePlayer);
             Vector2 dashvel;
-            float speed = abovePlayer.Length();
+            float speed = abovePlayer.Length()/1.25f;//True melee
             switch (AI_State)
             {
                 case MovementState.FollowingRegular:
