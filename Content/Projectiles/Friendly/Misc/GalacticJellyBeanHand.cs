@@ -66,14 +66,14 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             }
             if (HomingTarget != null)
             {
-                if (Projectile.ai[0]++ >= 240)
+                if (Projectile.ai[0]++ >= 180)
                 {
                     Projectile.ai[0] = 0;
                     if (handState == HandState.Default)
                         handState = HandState.Charging;
                 }
             }
-            HomingTarget ??= Projectile.FindClosestNPCDirect(homingDistance);
+            HomingTarget ??= Projectile.FindClosestNPC(homingDistance);
 
             if (HomingTarget != null && Projectile.Distance(HomingTarget.Center) > homingDistance)
             {
@@ -91,7 +91,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Vector2 normalCenter = player.Center + offset + new Vector2(0f, player.velocity.Y);
             if (HomingTarget != null)
             {
-                if (Projectile.Distance(HomingTarget.Center) > homingDistance + chargeDistance && handState == HandState.Default)
+                if ((Projectile.Distance(HomingTarget.Center) > homingDistance + chargeDistance && handState == HandState.Default))
                 {
                     HomingTarget = null;
                 }
@@ -99,6 +99,10 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 {
                     toTarget = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
                     chargedPosition = player.Center + offset + new Vector2(0f, player.velocity.Y) - toTarget * chargeDistance;
+                }
+                if (!HomingTarget.active || HomingTarget.life <= 0)
+                {
+                    HomingTarget = null;
                 }
             }
             switch (handState)
@@ -125,7 +129,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     Projectile.frame = Main.projFrames[Type] - 1;
                     if (handCharge < 0.6f)
                     {
-                        handCharge += 0.04f;
+                        handCharge += 0.05f;
                     }
                     else
                     {
@@ -139,7 +143,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     handCharge = 0f;
                     if (handSling < 0.8f)
                     {
-                        handSling += 0.03f;
+                        handSling += 0.05f;
                     }
                     else
                     {
@@ -179,7 +183,9 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         }
         public override bool? CanHitNPC(NPC target)
         {
-            return handState == HandState.Slinging;
+            if (!target.friendly)
+                return handState == HandState.Slinging;
+            else return false;
         }
         public override Color? GetAlpha(Color lightColor)
         {

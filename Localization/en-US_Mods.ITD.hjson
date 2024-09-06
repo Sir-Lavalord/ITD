@@ -515,7 +515,12 @@ Items: {
 
 	Fishbacker: {
 		DisplayName: Fishbacker
-		Tooltip: ""
+		Tooltip:
+			'''
+			8 summon tag damage
+			Can reflect projectiles
+			Reflected projectiles tag enemy on hit
+			'''
 	}
 
 	CrimsonAntidote: {
@@ -604,6 +609,15 @@ Items: {
 			'''
 			Contains an endless amount of sand
 			Can be poured out
+			'''
+	}
+
+	KSGland: {
+		DisplayName: Slime Secretion Gland
+		Tooltip:
+			'''
+			Creates a slimy coating which absorbs half of all incoming damage
+			Coating massively increases your hitbox size
 			'''
 	}
 }
@@ -718,6 +732,7 @@ NPCs: {
 	ShroomishSlime.DisplayName: Shroomish Slime
 	CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
 	Sandberus.DisplayName: Sandberus
+	KSGlandNPC.DisplayName: K S Gland N P C
 }
 
 Buffs: {
@@ -754,6 +769,11 @@ Buffs: {
 	CorruptAntidoteBuff: {
 		DisplayName: Corrupt Antidote Buff
 		Description: -25% Mana Usage and +25% Magic Damage
+	}
+
+	FishbackerTagDebuff: {
+		DisplayName: Fishbacker Tag Debuff
+		Description: Mods.ITD.Buffs.FishbackerTagDebuff.Description
 	}
 }
 

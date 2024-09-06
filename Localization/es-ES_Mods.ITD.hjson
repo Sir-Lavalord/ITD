@@ -606,6 +606,15 @@ Items: {
 			Can be poured out
 			''' */
 	}
+
+	KSGland: {
+		// DisplayName: Slime Secretion Gland
+		/* Tooltip:
+			'''
+			Creates a slimy coating which absorbs half of all incoming damage
+			Coating massively increases your hitbox size
+			''' */
+	}
 }
 
 Projectiles: {
@@ -718,6 +727,7 @@ NPCs: {
 	ShroomishSlime.DisplayName: Slime champizúl
 	CosmicJellyfishMini.DisplayName: Medusa neptuniana
 	Sandberus.DisplayName: Desierbero
+	// KSGlandNPC.DisplayName: K S Gland N P C
 }
 
 Buffs: {
@@ -754,6 +764,11 @@ Buffs: {
 	CorruptAntidoteBuff: {
 		// DisplayName: Corrupt Antidote Buff
 		// Description: -25% Mana Usage and +25% Magic Damage
+	}
+
+	FishbackerTagDebuff: {
+		// DisplayName: Fishbacker Tag Debuff
+		// Description: Mods.ITD.Buffs.FishbackerTagDebuff.Description
 	}
 }
 
