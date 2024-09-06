@@ -66,14 +66,14 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             }
             if (HomingTarget != null)
             {
-                if (Projectile.ai[0]++ >= 240)
+                if (Projectile.ai[0]++ >= 180)
                 {
                     Projectile.ai[0] = 0;
                     if (handState == HandState.Default)
                         handState = HandState.Charging;
                 }
             }
-            HomingTarget ??= Projectile.FindClosestNPCDirect(homingDistance);
+            HomingTarget ??= Projectile.FindClosestNPC(homingDistance);
 
             if (HomingTarget != null && Projectile.Distance(HomingTarget.Center) > homingDistance)
             {
@@ -129,7 +129,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     Projectile.frame = Main.projFrames[Type] - 1;
                     if (handCharge < 0.6f)
                     {
-                        handCharge += 0.04f;
+                        handCharge += 0.05f;
                     }
                     else
                     {
@@ -143,7 +143,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     handCharge = 0f;
                     if (handSling < 0.8f)
                     {
-                        handSling += 0.03f;
+                        handSling += 0.05f;
                     }
                     else
                     {

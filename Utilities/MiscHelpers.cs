@@ -14,11 +14,7 @@ namespace ITD.Utilities
 		{
             return !Main.projectile.Any(proj => proj.active && proj.ModProjectile is ITDSnaptrap && proj.owner == playerID);
 		}
-        public static NPC FindClosestNPCDirect(this Projectile projectile, float maxDetectDistance)
-        {
-            return Main.npc[projectile.FindClosestNPC(maxDetectDistance)];
-        }
-        public static int FindClosestNPC(this Projectile projectile, float maxDetectDistance)
+        public static NPC FindClosestNPC(this Projectile projectile, float maxDetectDistance)
         {
             NPC closestNPC = null;
 
@@ -38,11 +34,7 @@ namespace ITD.Utilities
                     }
                 }
             }
-			if (closestNPC != null)
-			{
-                return closestNPC.whoAmI;
-            }
-			return -1;
+			return closestNPC;
         }
         //Make the invul boss part untargetable please
         public static bool IsValidTarget(this Projectile projectile, NPC target)

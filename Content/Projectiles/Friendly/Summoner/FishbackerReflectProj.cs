@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Audio;
 using Terraria.GameContent.Drawing;
+using ITD.Content.Buffs.Debuffs;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner
 {
@@ -39,18 +40,18 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         }
         public override bool? CanDamage()
         {
-                return false;
+            return false;
         }
         int dustoffset;
         public override void AI()
         {
             if (Projectile.scale <= 1.2f)
             {
-                dustoffset+=4;
+                dustoffset += 4;
 
                 Projectile.scale += 0.06f;
             }
-            else 
+            else
             {
                 Projectile.alpha += 10;
 
@@ -62,20 +63,21 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             {
                 Projectile.Kill();
             }
-/*            if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<FishbackerProj>()] <=0)
-            {
-                Projectile.Kill();
-            }*/
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
                 Projectile other = Main.projectile[i];
 
-                if (i != Projectile.whoAmI && other.hostile && 
-                    !other.friendly && other.active && other.aiStyle != -100 && Math.Abs(Projectile.position.X - other.position.X)
+                if (i != Projectile.whoAmI && other.hostile &&
+                    !other.friendly && other.active && 
+                    //TODO: Change this
+                    other.aiStyle != -100
+
+                    && Math.Abs(Projectile.position.X - other.position.X)
                     + Math.Abs(Projectile.position.Y - other.position.Y) < dustoffset)
                 {
                     if (!Main.dedServ)
                     {
+                        other.GetGlobalProjectile<FishbackerReflectedProj>().IsReflected = true;
                         other.owner = Main.myPlayer;
                         other.velocity.X *= -2f;
                         other.velocity.Y *= -1f;
@@ -87,7 +89,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
                         other.friendly = true;
                         other.hostile = false;
-                        other.damage *= 10;
+                        other.damage *= 2;
                         other.netUpdate = true;
                     }
                 }
@@ -106,6 +108,18 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             Projectile.velocity *= 0;
             Projectile.Kill();
             return true;
+        }
+    }
+    public class FishbackerReflectedProj : GlobalProjectile
+    {
+        public override bool InstancePerEntity => true;
+        public bool IsReflected;
+        public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (IsReflected)
+            {
+                target.AddBuff(ModContent.BuffType<FishbackerTagDebuff>(),300);
+            }
         }
     }
 }

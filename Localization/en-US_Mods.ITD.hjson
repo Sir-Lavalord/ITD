@@ -515,7 +515,12 @@ Items: {
 
 	Fishbacker: {
 		DisplayName: Fishbacker
-		Tooltip: ""
+		Tooltip:
+			'''
+			8 summon tag damage
+			Can reflect projectiles
+			Reflected projectiles tag enemy on hit
+			'''
 	}
 
 	CrimsonAntidote: {
@@ -608,8 +613,12 @@ Items: {
 	}
 
 	KSGland: {
-		DisplayName: K S Gland
-		Tooltip: ""
+		DisplayName: Slime Secretion Gland
+		Tooltip:
+			'''
+			Creates a slimy coating which absorbs half of all incoming damage
+			Coating massively increases your hitbox size
+			'''
 	}
 }
 
@@ -760,6 +769,11 @@ Buffs: {
 	CorruptAntidoteBuff: {
 		DisplayName: Corrupt Antidote Buff
 		Description: -25% Mana Usage and +25% Magic Damage
+	}
+
+	FishbackerTagDebuff: {
+		DisplayName: Fishbacker Tag Debuff
+		Description: Mods.ITD.Buffs.FishbackerTagDebuff.Description
 	}
 }
 

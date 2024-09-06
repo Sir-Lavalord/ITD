@@ -47,6 +47,16 @@ namespace ITD.Content.Projectiles.Hostile
         {
             return Color.White * Projectile.Opacity;
         }
+        public override bool? CanDamage()
+        {
+            if (Projectile.ai[1] == 2)
+            {
+                if (Projectile.ai[2]++ >= 30)
+                    return true;
+                else return false;
+            }
+            return true;
+        }
         public override void AI()
         {
             {

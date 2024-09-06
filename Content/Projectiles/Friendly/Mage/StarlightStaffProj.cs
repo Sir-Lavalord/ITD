@@ -21,10 +21,10 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         }
         private NPC HomingTarget
         {
-            get => Projectile.ai[2] == 0 ? null : Main.npc[(int)Projectile.ai[2] - 1];
+            get => Projectile.ai[0] == 0 ? null : Main.npc[(int)Projectile.ai[0] - 1];
             set
             {
-                Projectile.ai[2] = value == null ? 0 : value.whoAmI + 1;
+                Projectile.ai[0] = value == null ? 0 : value.whoAmI + 1;
             }
         }
         public override void SetDefaults()
@@ -50,12 +50,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 
             if (Projectile.timeLeft > 36)
             {				
-                HomingTarget = Projectile.FindClosestNPCDirect(maxDetectRadius);
-
-                if (HomingTarget != null && !Projectile.IsValidTarget(HomingTarget))
-                {
-                    HomingTarget = null;
-                }
+                HomingTarget ??= Projectile.FindClosestNPC(maxDetectRadius);
 
                 if (HomingTarget == null)
                     return;

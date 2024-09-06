@@ -9,9 +9,11 @@ using ITD.Content.Projectiles.Hostile;
 using ITD.Players;
 using ITD.Utilities;
 using Microsoft.Build.Evaluation;
+using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using SteelSeries.GameSense;
 using System;
 using Terraria;
 using Terraria.Audio;
@@ -316,9 +318,9 @@ namespace ITD.Content.NPCs.Bosses
             }
             if (NPC.ai[3] == 2)//Crystal Meth
             {
-                if (NPC.localAI[0]++ >= 200)
+                if (NPC.localAI[1]++ >= 100)
                 {
-                    NPC.localAI[0] = 0;
+                    NPC.localAI[1] = 0;
                     if (handState == HandState.Waiting && hand != -1)
                         handState = HandState.VoidShard;
                 }
@@ -359,21 +361,19 @@ namespace ITD.Content.NPCs.Bosses
             }
             if (NPC.ai[3] == 4)//FTHOF
             {
-                if (NPC.localAI[1]++ >= 200)
-                {
-                    NPC.ai[3]++;
-                    NPC.localAI[1] = 0;
-                    if (handState2 == HandState.Waiting && hand2 != -1)
-                        handState2 = HandState.Charging;
-                    if (handState == HandState.Waiting && hand != -1)
-                        handState = HandState.Charging;
-                }
-                else
-                {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         if (!SecondStage)
                         {
+                            if (NPC.localAI[1]++ >= 200)
+                            {
+                                NPC.ai[3]++;
+                                NPC.localAI[1] = 0;
+                                if (handState2 == HandState.Waiting && hand2 != -1)
+                                    handState2 = HandState.Charging;
+                                if (handState == HandState.Waiting && hand != -1)
+                                    handState = HandState.Charging;
+                            }
                             if (hand == -1 && hand2 == -1)
                             {
                                 if (Main.rand.NextBool(2))
@@ -394,6 +394,21 @@ namespace ITD.Content.NPCs.Bosses
                         }
                         else
                         {
+                        if (NPC.localAI[1]++ == 100)
+                        {
+                            if (handState == HandState.Waiting && hand != -1)
+                                handState = HandState.Charging;
+                        }
+                        if (NPC.localAI[2] >6)
+                        {
+                            NPC.localAI[1] = 0;
+                            NPC.localAI[2] = 0;
+                            NPC.ai[3]++;
+                            if (handState == HandState.Waiting && hand != -1)
+                                handState = HandState.DownToSize;
+                            if (handState2 == HandState.Waiting && hand2 != -1)
+                                handState2 = HandState.DownToSize;
+                        }
                             if (hand == -1)
                             {
                                 hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 1, 0.1f);
@@ -405,8 +420,6 @@ namespace ITD.Content.NPCs.Bosses
                         }
 
                     }
-
-                }
             }
                 if (NPC.ai[3] == 5)//Suffocate, actual retarded attack but i'm not the boss here
             {
@@ -456,11 +469,14 @@ namespace ITD.Content.NPCs.Bosses
                          ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 240, NPC.whoAmI);
                     }
                 }
-                else if (NPC.localAI[1] >= 300)
+                else if (NPC.localAI[1] >= 180)
                 {
                     NPC.ai[3]++;
                     NPC.localAI[1] = 0;
+                    NPC.localAI[2] = 0;
+                    NPC.localAI[0] = 0;
                     NPC.netUpdate = true;
+
                 }
             }
             if (NPC.ai[3] == -1)//Subterranean Sun
@@ -589,7 +605,7 @@ namespace ITD.Content.NPCs.Bosses
                                 {
                                     LockedIn = player.Center;
                                 }
-                                else if (Timer >= 5 && SecondStage || Timer >= 0 && !SecondStage)
+                                else if (Timer >= 5 && NPC.localAI[2] > 6 || Timer >= 0 && NPC.localAI[2] <=6)
                                 {
                                     Timer = 0;
                                     handState = HandState.Slinging;
@@ -616,7 +632,15 @@ namespace ITD.Content.NPCs.Bosses
                                 }
                                 else
                                 {
-                                    projectile.Kill();
+                                    if (NPC.localAI[2]++ <= 6 && SecondStage)
+                                    {
+                                        if (handState2 == HandState.Waiting && hand2 != -1)
+                                            handState2 = HandState.Charging;
+                                    }
+                                    if (NPC.localAI[2] > 6 || !SecondStage)
+                                    {
+                                        projectile.Kill();
+                                    }
                                     handState = HandState.Waiting;
                                 }
                             }
@@ -634,15 +658,16 @@ namespace ITD.Content.NPCs.Bosses
                             }
                             break;
                         case HandState.VoidShard:
-                            NPC.localAI[1]++;
-                            if (NPC.localAI[1] == 150 || (NPC.localAI[1] == 100 || NPC.localAI[1] == 150) && SecondStage)
+                            if (NPC.localAI[0]++>= 100)
                             {
-
-                                if (NPC.localAI[1] >= 150)
+                                NPC.localAI[0] = 0;
+                                if (NPC.localAI[2]++ >= 5)
                                 {
-                                    handState = HandState.DownToSize;
                                     NPC.ai[3]++;
+                                    handState = HandState.DownToSize;
+                                    NPC.localAI[2] = 0;
                                     NPC.localAI[1] = 0;
+                                    NPC.localAI[0] = 0;
                                 }
 
                                 SoundEngine.PlaySound(SoundID.Item20, projectile.Center);
@@ -653,7 +678,7 @@ namespace ITD.Content.NPCs.Bosses
                                 //Full circle
                                 if (Main.expertMode || Main.masterMode)
                                 {
-                                    projectileAmount = Main.rand.Next(18, 24);
+                                    projectileAmount = Main.rand.Next(16, 20);
                                     sector = (float)(MathHelper.TwoPi);
                                 }
                                 float sectorOfSector = sector / projectileAmount;
@@ -755,7 +780,7 @@ namespace ITD.Content.NPCs.Bosses
                             {
                                 if (Timer2++ == 0)
                                 {
-                                    LockedIn = player.Center;
+                                        LockedIn = player.Center;
                                 }
                                 else if (Timer2 >= 5 && SecondStage || Timer2 >= 0 && !SecondStage)
                                 {
@@ -784,7 +809,15 @@ namespace ITD.Content.NPCs.Bosses
                                 }
                                 else
                                 {
-                                    projectile2.Kill();
+                                    if (NPC.localAI[2]++ <= 6 && SecondStage)
+                                    {
+                                        if (handState == HandState.Waiting && hand != -1)
+                                            handState = HandState.Charging;
+                                    }
+                                    if (NPC.localAI[2] > 6 || !SecondStage)
+                                    {
+                                        projectile2.Kill();
+                                    }
                                     handState2 = HandState.Waiting;
                                 }
                                 
@@ -841,13 +874,13 @@ namespace ITD.Content.NPCs.Bosses
         //a fuck you when despawn is epic
         private void Movement(Player player)//___________________________________________________________________________________________________________________________________________________
         {
-            float distanceAbove = 200f;//True melee
+            float distanceAbove = 250f;//True melee
             Vector2 toPlayer = player.Center - NPC.Center;
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
             Vector2 abovePlayer = toPlayer + new Vector2(0f, -distanceAbove);
             Vector2 aboveNormalized = Vector2.Normalize(abovePlayer);
             Vector2 dashvel;
-            float speed = abovePlayer.Length()/1.25f;//True melee
+            float speed = abovePlayer.Length()/1.3f;//True melee
             switch (AI_State)
             {
                 case MovementState.FollowingRegular:
@@ -944,6 +977,14 @@ namespace ITD.Content.NPCs.Bosses
                 NPC.dontTakeDamage = true;
                 NPC.netUpdate = true;
                 DesperateAttack = true;
+                if (hand != -1)
+                {
+                    handState = HandState.DownToSize;
+                }
+                if (hand2 != -1)
+                {
+                    handState2 = HandState.DownToSize;
+                }
                 AI_State = MovementState.Explode;
                 Main.NewText("Subterranean Sun.", Color.Orange);
                 return false;
