@@ -25,7 +25,7 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-			if (Main.expertMode && CanBounce)
+			if (Main.masterMode && CanBounce)
 			{
 				if (oldVelocity.X != Projectile.velocity.X) {
 					Projectile.velocity.X = (0f - oldVelocity.X);

@@ -1,13 +1,16 @@
-﻿using ITD.Content.Items.Weapons.Melee.Snaptraps;
-using ITD.Utilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ITD.Content.Buffs.Debuffs;
 using Microsoft.Xna.Framework;
+
+using ITD.Utilities;
+using ITD.Content.Buffs.Debuffs;
+
 using ITD.Content.Items.Accessories.Defensive;
+using ITD.Content.Items.Accessories.Master;
+using ITD.Content.Items.Weapons.Melee.Snaptraps;
 
 namespace ITD.Content.NPCs
 {
@@ -64,6 +67,16 @@ namespace ITD.Content.NPCs
 			if (npc.type == NPCID.BloodNautilus)
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DreadShell>(), 10));
+            }
+			if (npc.type == NPCID.EaterofWorldsHead || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail)
+            {
+				LeadingConditionRule IsABoss = new LeadingConditionRule(new Conditions.LegacyHack_IsABoss());
+				IsABoss.OnSuccess(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<EoWTail>()));
+				npcLoot.Add(IsABoss);
+            }
+			if (npc.type == NPCID.BrainofCthulhu)
+            {
+                npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<Prophylaxis>()));
             }
         }
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)

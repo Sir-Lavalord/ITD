@@ -16,6 +16,8 @@ using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Utilities;
 using ITD.Networking;
 using ITD.Networking.Packets;
+using ReLogic.Graphics;
+using Terraria.GameContent;
 
 namespace ITD.Players
 {
@@ -27,7 +29,7 @@ namespace ITD.Players
 		public float recoilFront = 0f;
 		public float recoilBack = 0f;
 
-        public Vector2 MousePosition = Vector2.Zero;
+        public Vector2 MousePosition { get; set; }
 		
         bool prevTime = false;
         bool curTime = false;
@@ -266,7 +268,9 @@ namespace ITD.Players
         }
 		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
-			if (heldItem == ModContent.ItemType<WormholeRipper>())
+            //Main.spriteBatch.DrawString(FontAssets.MouseText.Value, Player.name, MousePosition - Main.screenPosition, Color.White);
+            //Dust.NewDustPerfect(MousePosition, 0);
+            if (heldItem == ModContent.ItemType<WormholeRipper>())
             {
                 if (itemVar[0] > 0)
 				{

@@ -23,9 +23,9 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             WoodType = ItemType<BlueshroomStem>();
             DropAcorns = ItemType<Blueshroom>();
         }
-        public override void PostDrawTreeTops(int i, int j, Rectangle sourceRect, Vector2 offset, Vector2 origin, Color color)
+        public override void PostDrawTreeTops(int i, int j, SpriteBatch spriteBatch, Rectangle sourceRect, Vector2 offset, Vector2 origin, Color color)
         {
-            WeatherSystem.DrawTreeSway(i, j, glow.Value, sourceRect, offset, origin);
+            WeatherSystem.DrawTreeSway(i, j, spriteBatch, glow.Value, sourceRect, offset, origin);
         }
         public override void PostDrawBranch(SpriteBatch spriteBatch, Vector2 position, Vector2 origin, Color color, Rectangle sourceRect, bool isLeftBranch)
         {

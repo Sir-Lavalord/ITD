@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.ModLoader;
 using ITD.Content.Projectiles.Friendly.Misc;
+using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Accessories.Expert
 {

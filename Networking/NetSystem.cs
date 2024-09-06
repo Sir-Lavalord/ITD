@@ -25,6 +25,7 @@ namespace ITD.Networking
 
         public override void Load()
         {
+            // registers the packets into the packets list and the dictionary
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ITDPacket))))
             {
                 var instance = (ITDPacket)RuntimeHelpers.GetUninitializedObject(type);
@@ -49,7 +50,7 @@ namespace ITD.Networking
 
         public static T GetPacket<T>() where T : ITDPacket
             => ModContent.GetInstance<T>();
-        public static void SendPacket<T>(T packet) where T : ITDPacket
+        public static void SendPacket<T>(T packet, int ignoreClient = -1) where T : ITDPacket
         {
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
@@ -64,6 +65,11 @@ namespace ITD.Networking
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 packetToSend.Send();
+            }
+            else if (Main.netMode == NetmodeID.Server)
+            {
+                // Send to all clients except ignoreClient
+                packetToSend.Send(ignoreClient: ignoreClient);
             }
         }
         internal static void HandlePacket(BinaryReader reader, int sender)

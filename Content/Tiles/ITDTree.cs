@@ -156,7 +156,7 @@ namespace ITD.Content.Tiles
         /// <param name="origin"></param>
         /// <param name="color"></param>
         /// <param name="sourceRect"></param>
-        public virtual void PostDrawTreeTops(int i, int j, Rectangle sourceRect, Vector2 offset, Vector2 origin, Color color)
+        public virtual void PostDrawTreeTops(int i, int j, SpriteBatch spriteBatch, Rectangle sourceRect, Vector2 offset, Vector2 origin, Color color)
         {
 
         }
@@ -439,8 +439,8 @@ namespace ITD.Content.Tiles
                 Rectangle sourceRect = new Rectangle(82*frame, 0, 80, 80);
                 Vector2 origin = new Vector2(GetTreeTops().Width / 2f / 3f + 4, GetTreeTops().Height - 2);
                 Vector2 offset = new Vector2(13f, 0f);
-                WeatherSystem.DrawTreeSway(i, j, GetTreeTops(), sourceRect, offset, origin);
-                PostDrawTreeTops(i, j, sourceRect, offset, origin, color);
+                WeatherSystem.DrawTreeSway(i, j, spriteBatch, GetTreeTops(), sourceRect, offset, origin);
+                PostDrawTreeTops(i, j, spriteBatch, sourceRect, offset, origin, color);
             }
             return true;
         }
