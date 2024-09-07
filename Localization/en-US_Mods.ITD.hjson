@@ -625,6 +625,11 @@ Items: {
 		DisplayName: Gravekeeper's Shovel
 		Tooltip: Digs up skeletons to fight for you
 	}
+
+	PetPigSummon: {
+		DisplayName: Pet Pig Summon
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -711,6 +716,7 @@ Projectiles: {
 	FishbackerReflectProj.DisplayName: How did you get this?
 	SuffocationAura.DisplayName: Suffocation Aura
 	TheUnburied.DisplayName: The Unburied
+	PetPigPet.DisplayName: Pet Pig Pet
 }
 
 NPCs: {
@@ -780,6 +786,11 @@ Buffs: {
 	FishbackerTagDebuff: {
 		DisplayName: Fishbacker Tag Debuff
 		Description: Mods.ITD.Buffs.FishbackerTagDebuff.Description
+	}
+
+	PetPigBuff: {
+		DisplayName: Pet Pig Buff
+		Description: Mods.ITD.Buffs.PetPigBuff.Description
 	}
 }
 
