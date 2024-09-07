@@ -735,7 +735,7 @@ NPCs: {
 	ShroomishSlime.DisplayName: Pilzschleim
 	CosmicJellyfishMini.DisplayName: Diener der Qualle
 	Sandberus.DisplayName: Dünenfürst
-	// KSGlandNPC.DisplayName: K S Gland N P C
+	// KSGlandNPC.DisplayName: Slimy Coating
 }
 
 Buffs: {
