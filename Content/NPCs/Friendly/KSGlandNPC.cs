@@ -55,9 +55,7 @@ namespace ITD.Content.NPCs.Friendly
         int iRetardedIframe;
         public override bool CanBeHitByNPC(NPC attacker)
         {
-            if (!NPC.friendly)
                 return iRetardedIframe <= 0;
-            else return false;
         }
         public override bool? CanBeHitByProjectile(Projectile projectile)
         {
@@ -91,13 +89,13 @@ namespace ITD.Content.NPCs.Friendly
         {
             Player player = Main.player[(int)NPC.ai[0]];
             player.Hurt(PlayerDeathReason.ByCustomReason(player.name +
-                " was crushed by the aftershock"), hit.Damage,hit.HitDirection,false,false,-1,false,0,0,hit.Knockback);
+                " was crushed by the aftershock"), (int)(hit.Damage),0);
             player.immune = true;
             player.immuneTime = 60;
         }
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
-            projectile.damage /= 2;
+            projectile.damage = (int)(projectile.damage/2);
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -109,9 +107,6 @@ namespace ITD.Content.NPCs.Friendly
                 dust2.velocity *= 1f;
                 dust2.noGravity = true;
             }
-        }
-        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
-        {
         }
         public override void OnKill()
         {
@@ -190,7 +185,7 @@ namespace ITD.Content.NPCs.Friendly
             {
                 if (target.type == ModContent.NPCType<KSGlandNPC>())
                 {
-                    npc.damage /= 2;
+                    npc.damage = (int)(npc.damage / 2);
                 }
             }
            

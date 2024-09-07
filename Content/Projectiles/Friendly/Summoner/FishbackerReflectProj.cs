@@ -8,6 +8,7 @@ using Terraria.GameContent;
 using Terraria.Audio;
 using Terraria.GameContent.Drawing;
 using ITD.Content.Buffs.Debuffs;
+using ITD.Players;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner
 {
@@ -77,6 +78,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 {
                     if (!Main.dedServ)
                     {
+                        CombatText.NewText(Projectile.Hitbox, Color.LimeGreen, "PARRY", true);
+                        Main.player[Projectile.owner].GetModPlayer<ITDPlayer>().Screenshake = 20;
                         other.GetGlobalProjectile<FishbackerReflectedProj>().IsReflected = true;
                         other.owner = Main.myPlayer;
                         other.velocity.X *= -2f;

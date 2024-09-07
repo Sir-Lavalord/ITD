@@ -27,14 +27,18 @@ namespace ITD.Content.Items.Weapons.Summoner
         }
         public override void SetDefaults()
         {
-            Item.DefaultToWhip(ModContent.ProjectileType<FishbackerProj>(), 20, 1, 6, 30);
-            Item.width = 36;
-            Item.height = 38;
-            Item.maxStack = 1;
-            Item.value = Item.sellPrice(0, 2, 0, 0);
-            Item.rare = ItemRarityID.Blue;
             Item.DamageType = DamageClass.SummonMeleeSpeed;
+            Item.damage = 18;
+            Item.knockBack = 2;
+            Item.rare = ItemRarityID.Blue;
+            Item.shoot = ModContent.ProjectileType<FishbackerProj>();
+            Item.shootSpeed = 4;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.useTime = 35;
+            Item.useAnimation = 35;
+            Item.UseSound = SoundID.Item152;
             Item.noMelee = true;
+            Item.noUseGraphic = true;
         }
         public override bool MeleePrefix()
         {
@@ -42,11 +46,6 @@ namespace ITD.Content.Items.Weapons.Summoner
         }
         public override void AddRecipes()
         {
-        }
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
-            Projectile.NewProjectile(source, position, velocity * 2, ModContent.ProjectileType<FishbackerReflectProj>(), 0, 0, player.whoAmI);
-            return true;
         }
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
