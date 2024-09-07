@@ -1,4 +1,5 @@
-﻿using ITD.Players;
+﻿using ITD.Content.Buffs.Debuffs;
+using ITD.Players;
 using Microsoft.Build.Evaluation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -39,7 +40,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             set => Projectile.ai[0] = value;
         }
         Color dustCol;
-        bool CanParry;
+        bool CanParry = true;
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner];
@@ -189,6 +190,18 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;
+        }
+    }
+    public class FishbackerReflectedProj : GlobalProjectile
+    {
+        public override bool InstancePerEntity => true;
+        public bool IsReflected;
+        public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (IsReflected)
+            {
+                target.AddBuff(ModContent.BuffType<FishbackerTagDebuff>(), 300);
+            }
         }
     }
 }

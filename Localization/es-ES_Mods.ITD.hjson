@@ -733,7 +733,7 @@ NPCs: {
 	ShroomishSlime.DisplayName: Slime champizúl
 	CosmicJellyfishMini.DisplayName: Medusa neptuniana
 	Sandberus.DisplayName: Desierbero
-	// KSGlandNPC.DisplayName: K S Gland N P C
+	// KSGlandNPC.DisplayName: Slimy Coating
 }
 
 Buffs: {
