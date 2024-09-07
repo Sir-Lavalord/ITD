@@ -13,7 +13,7 @@ namespace ITD.Content.Items.Weapons.Melee
 {
 	public class Ectoblade : ModItem
 	{
-		public int attackType = 0;
+		public int attackCycle = 0;
 		
 		public override void SetStaticDefaults()
         {
@@ -34,7 +34,7 @@ namespace ITD.Content.Items.Weapons.Melee
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.knockBack = 5;
 			Item.value = 10000;
-			Item.rare = ItemRarityID.Green;
+			Item.rare = ItemRarityID.Blue;
 			Item.UseSound = SoundID.Item15;
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<GhostlyBlade>();
@@ -51,8 +51,8 @@ namespace ITD.Content.Items.Weapons.Melee
         }
 		
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-			attackType = ++attackType % 2;
-			return attackType == 1;
+			attackCycle = ++attackCycle % 2;
+			return attackCycle == 1;
 		}
 		
 		public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)

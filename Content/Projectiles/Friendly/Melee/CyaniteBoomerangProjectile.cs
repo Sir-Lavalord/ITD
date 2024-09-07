@@ -37,6 +37,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         }
 		
 		public override bool OnTileCollide(Vector2 oldVelocity) {
+			Collision.HitTiles(Projectile.position, oldVelocity, Projectile.width, Projectile.height);
+			
 			if (oldVelocity.X != Projectile.velocity.X) {
 				Projectile.velocity.X = (0f - oldVelocity.X);
 			}

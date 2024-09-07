@@ -24,7 +24,7 @@ namespace ITD.Content.Items.Weapons.Mage
             Item.noMelee = true;
             Item.knockBack = 1f;
             Item.value = Item.buyPrice(silver: 10);
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.Blue;
             Item.UseSound = SoundID.Item103;
             Item.shoot = ModContent.ProjectileType<NecromatomeProjectile>();
             Item.shootSpeed = 14f;

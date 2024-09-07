@@ -615,6 +615,11 @@ Items: {
 			Coating massively increases your hitbox size
 			''' */
 	}
+
+	KeepersShovel: {
+		// DisplayName: Gravekeeper's Shovel
+		// Tooltip: Digs up skeletons to fight for you
+	}
 }
 
 Projectiles: {
@@ -700,6 +705,7 @@ Projectiles: {
 	GalacticJellyBeanHand.DisplayName: Mano galáctica
 	FishbackerReflectProj.DisplayName: Wow, que mala suerte
 	// SuffocationAura.DisplayName: Suffocation Aura
+	// TheUnburied.DisplayName: The Unburied
 }
 
 NPCs: {
