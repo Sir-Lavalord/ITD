@@ -29,6 +29,7 @@ namespace ITD.Content.Items.Accessories.Master
         public bool hasProphylaxis;
 		public bool bloodletting;
 		public int lifeDegen;
+		public int bloodShield;
 
         public override void ResetEffects()
         {
@@ -45,14 +46,14 @@ namespace ITD.Content.Items.Accessories.Master
 				
 				Player.lifeRegenTime = 0;
 				 
-				Player.lifeRegen -= (int)(lifeDegen*0.2f);
+				Player.lifeRegen -= lifeDegen;
 			}
 		}
 		
 		public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
 			if (bloodletting)
-				modifiers.FinalDamage.Base -= lifeDegen;
+				modifiers.FinalDamage.Base -= bloodShield;
 		}
 		
 		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
@@ -68,15 +69,15 @@ namespace ITD.Content.Items.Accessories.Master
 	
 	internal class ProphylaxisHealItem : GlobalItem
     {
-        public override bool? UseItem(Item item, Player player)
+		public override void UseAnimation(Item item, Player player)
         {
 			ProphylaxisPlayer modPlayer = player.GetModPlayer<ProphylaxisPlayer>();
             if (item.healLife > 0 && modPlayer.hasProphylaxis)
             {
-				modPlayer.lifeDegen = Math.Min(player.GetHealLife(item), player.statLifeMax2-player.statLife);
+				modPlayer.lifeDegen = (int)(Math.Min(player.GetHealLife(item), player.statLifeMax2-player.statLife)*0.2f);
+				modPlayer.bloodShield = player.GetHealLife(item);
 				player.AddBuff(ModContent.BuffType<BloodlettingBuff>(), 600, false);
             }
-            return null;
         }
-    }
+	}
 }
