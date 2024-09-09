@@ -273,7 +273,7 @@ Items: {
 	DriversIncense: {
 		DisplayName: Incienso de conducir
 		Tooltip: Permanentemente aumenta la velocidad de las monturas por un 10%
-		// MunchiesExplanation: Mods.ITD.Items.DriversIncense.MunchiesExplanation
+		MunchiesExplanation: Transforma en Fulgor una llave de otro mundo
 	}
 
 	BlueCatacombBrick: {
@@ -600,26 +600,26 @@ Items: {
 	}
 
 	BottomlessSandBucket: {
-		// DisplayName: Bottomless Sand Bucket
-		/* Tooltip:
+		DisplayName: Cubo de arena sin fondo
+		Tooltip:
 			'''
-			Contains an endless amount of sand
-			Can be poured out
-			''' */
+			Contiene una cantidad ilimitada de arena
+			Puede ser vertida
+			'''
 	}
 
 	KSGland: {
-		// DisplayName: Slime Secretion Gland
-		/* Tooltip:
+		DisplayName: Glándula de secreción de slime
+		Tooltip:
 			'''
-			Creates a slimy coating which absorbs half of all incoming damage
-			Coating massively increases your hitbox size
-			''' */
+			Crea una capa de gel que absorbe la mitad del daño recibido
+			La capa masivamente aumenta tu área de daño
+			'''
 	}
 
 	KeepersShovel: {
-		// DisplayName: Gravekeeper's Shovel
-		// Tooltip: Digs up skeletons to fight for you
+		DisplayName: Pala del Guardatumbas
+		Tooltip: Desentierra esqueletos para que peleen por ti
 	}
 
 	PetPigSummon: {
@@ -710,9 +710,9 @@ Projectiles: {
 	CyaniteSpearProjectile.DisplayName: Lanza de cianita
 	GalacticJellyBeanHand.DisplayName: Mano galáctica
 	FishbackerReflectProj.DisplayName: Wow, que mala suerte
-	// SuffocationAura.DisplayName: Suffocation Aura
-	// TheUnburied.DisplayName: The Unburied
-	// PetPigPet.DisplayName: Pet Pig Pet
+	SuffocationAura.DisplayName: Aura de asfixia
+	TheUnburied.DisplayName: El Desenterrado
+	PetPigPet.DisplayName: Cerdo con globo
 }
 
 NPCs: {
@@ -740,7 +740,7 @@ NPCs: {
 	ShroomishSlime.DisplayName: Slime champizúl
 	CosmicJellyfishMini.DisplayName: Medusa neptuniana
 	Sandberus.DisplayName: Desierbero
-	// KSGlandNPC.DisplayName: Slimy Coating
+	KSGlandNPC.DisplayName: Capa de gel
 }
 
 Buffs: {
@@ -765,28 +765,28 @@ Buffs: {
 	}
 
 	BloodlettingBuff: {
-		// DisplayName: Bloodletting
-		// Description: Your blood is shielding you from damage
+		DisplayName: Flebotomía
+		Description: Tu sangre te protege del daño
 	}
 
 	CrimsonAntidoteBuff: {
-		// DisplayName: Crimson Antidote Buff
-		// Description: Massively increased life regeneration
+		DisplayName: Antídoto carmesí
+		Description: Regeneración aumentada masivamente
 	}
 
 	CorruptAntidoteBuff: {
-		// DisplayName: Corrupt Antidote Buff
-		// Description: -25% Mana Usage and +25% Magic Damage
+		DisplayName: Antídoto corrupto
+		Description: -25% de uso de maná y +25% de daño mágico
 	}
 
 	FishbackerTagDebuff: {
-		// DisplayName: Fishbacker Tag Debuff
-		// Description: Mods.ITD.Buffs.FishbackerTagDebuff.Description
+	    DisplayName: Fishbacker Tag Debuff
+		Description: Mods.ITD.Buffs.FishbackerTagDebuff.Description
 	}
 
 	PetPigBuff: {
-		// DisplayName: Pet Pig Buff
-		// Description: Mods.ITD.Buffs.PetPigBuff.Description
+		DisplayName: Cerdo con globo
+		Description: Un cerdo con globo te sigue, mostrandote cofres cercanos
 	}
 }
 

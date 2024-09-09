@@ -274,7 +274,7 @@ Items: {
 	DriversIncense: {
 		DisplayName: Weihrauch für Fahrer
 		Tooltip: Erhöht die Bewegungsgeschwindigkeit von Reittieren permanent um 10%
-		// MunchiesExplanation: Mods.ITD.Items.DriversIncense.MunchiesExplanation
+		// MunchiesExplanation: Shimmer an otherwordly vehicle's unlocker
 	}
 
 	BlueCatacombBrick: {
