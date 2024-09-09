@@ -273,6 +273,7 @@ Items: {
 	DriversIncense: {
 		DisplayName: Incienso de conducir
 		Tooltip: Permanentemente aumenta la velocidad de las monturas por un 10%
+		// MunchiesExplanation: Mods.ITD.Items.DriversIncense.MunchiesExplanation
 	}
 
 	BlueCatacombBrick: {

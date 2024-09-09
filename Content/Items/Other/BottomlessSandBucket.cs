@@ -27,7 +27,7 @@ namespace ITD.Content.Items.Other
 			Item.ammo = AmmoID.Sand;
 			Item.notAmmo = true;
 			
-			Item.createTile = 53;
+			Item.createTile = TileID.Sand;
         }
 		
 		public override void ModifyTooltips(List<TooltipLine> tooltips)

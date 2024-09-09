@@ -16,6 +16,7 @@ namespace ITD
         internal Mod wikithis = null;
         internal Mod bossChecklist = null;
         internal Mod musicDisplay = null;
+        internal Mod munchies = null;
         public override void PostSetupContent()
         {
             ExternalModSupport.Init();
@@ -27,9 +28,11 @@ namespace ITD
             wikithis = null;
             bossChecklist = null;
             musicDisplay = null;
+            munchies = null;
             ModLoader.TryGetMod("Wikithis", out wikithis);
             ModLoader.TryGetMod("BossChecklist", out bossChecklist);
             ModLoader.TryGetMod("MusicDisplay", out musicDisplay);
+            ModLoader.TryGetMod("Munchies", out munchies);
             if (!Main.dedServ)
             {
                 wikithis?.Call("AddModURL", this, "https://itdmod.fandom.com/wiki/{}");
@@ -40,6 +43,7 @@ namespace ITD
             wikithis = null;
             bossChecklist = null;
             musicDisplay = null;
+            munchies = null;
             Instance = null;
         }
     }

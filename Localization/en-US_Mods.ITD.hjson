@@ -273,6 +273,7 @@ Items: {
 	DriversIncense: {
 		DisplayName: Driver's Incense
 		Tooltip: Permanently increases mount speed by 10%
+		MunchiesExplanation: Shimmer an otherwordly vehicle's unlocker
 	}
 
 	BlueCatacombBrick: {

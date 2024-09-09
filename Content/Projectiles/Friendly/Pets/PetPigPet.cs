@@ -55,7 +55,7 @@ namespace ITD.Content.Projectiles.Friendly.Pets
         {
             // get player. if player is alive and has the pet buff, keep the projectile alive by setting timeLeft to 2
             Player player = Main.player[Projectile.owner];
-            if (!player.dead && player.HasBuff(ModContent.BuffType<CosmicJamBuff>()))
+            if (!player.dead && player.HasBuff(ModContent.BuffType<PetPigBuff>()))
             {
                 Projectile.timeLeft = 2;
             }
