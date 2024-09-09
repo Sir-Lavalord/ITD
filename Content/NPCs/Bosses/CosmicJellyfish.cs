@@ -100,6 +100,10 @@ namespace ITD.Content.NPCs.Bosses
             NPC.boss = true;
             NPC.npcSlots = 10f;
             NPC.aiStyle = -1;
+            if (!Main.dedServ)
+            {
+                Music = ITD.Instance.GetMusic("InterstellarInvertebrate") ?? MusicID.Boss1;
+            }
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)

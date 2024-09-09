@@ -54,7 +54,7 @@ namespace ITD.Content.NPCs.Bosses
             NPC.npcSlots = 10f;
 			if (!Main.dedServ)
             {
-                Music = MusicLoader.GetMusicSlot(Mod, "Content/Music/DuneBearer");
+                Music = ITD.Instance.GetMusic("DuneBearer") ?? MusicID.Boss1;
             }
         }
         public override void AI()

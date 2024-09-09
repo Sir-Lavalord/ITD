@@ -780,7 +780,7 @@ Buffs: {
 	}
 
 	FishbackerTagDebuff: {
-	    DisplayName: Fishbacker Tag Debuff
+		DisplayName: Fishbacker Tag Debuff
 		Description: Mods.ITD.Buffs.FishbackerTagDebuff.Description
 	}
 

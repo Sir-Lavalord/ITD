@@ -13,10 +13,17 @@ namespace ITD
     {
         public static ITD Instance;
         public ITD() => Instance = this;
+
+        internal Mod itdMusic = null;
+
         internal Mod wikithis = null;
         internal Mod bossChecklist = null;
         internal Mod musicDisplay = null;
         internal Mod munchies = null;
+        public int? GetMusic(string trackName)
+        {
+            return itdMusic is not null ? MusicLoader.GetMusicSlot(itdMusic, "Music/" + trackName) : null;
+        }
         public override void PostSetupContent()
         {
             ExternalModSupport.Init();
@@ -25,10 +32,12 @@ namespace ITD
         public override void HandlePacket(BinaryReader reader, int whoAmI) => NetSystem.HandlePacket(reader, whoAmI);
         public override void Load()
         {
+            itdMusic = null;
             wikithis = null;
             bossChecklist = null;
             musicDisplay = null;
             munchies = null;
+            ModLoader.TryGetMod("ITDMusic", out itdMusic);
             ModLoader.TryGetMod("Wikithis", out wikithis);
             ModLoader.TryGetMod("BossChecklist", out bossChecklist);
             ModLoader.TryGetMod("MusicDisplay", out musicDisplay);
@@ -40,6 +49,7 @@ namespace ITD
         }
         public override void Unload()
         {
+            itdMusic = null;
             wikithis = null;
             bossChecklist = null;
             musicDisplay = null;

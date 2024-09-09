@@ -63,7 +63,7 @@ namespace ITD.Content.NPCs.Bosses
             Main.npcFrameCount[NPC.type] = 1;
             if (!Main.dedServ)
             {
-                Music = MusicLoader.GetMusicSlot(Mod, "Content/Music/WOMR");
+                Music = ITD.Instance.GetMusic("WOMR") ?? MusicID.Plantera;
             }
         }
 
@@ -266,10 +266,6 @@ namespace ITD.Content.NPCs.Bosses
             NPC.SpawnWithHigherTime(30);
             NPC.aiStyle = -1;
             Main.npcFrameCount[NPC.type] = 1;
-            if (!Main.dedServ)
-            {
-                Music = MusicLoader.GetMusicSlot(Mod, "Content/Music/WOMR");
-            }
         }
         public override void OnSpawn(IEntitySource source)
         {
