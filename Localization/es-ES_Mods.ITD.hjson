@@ -625,6 +625,11 @@ Items: {
 		// DisplayName: Pet Pig Summon
 		// Tooltip: ""
 	}
+
+	EoCInsight: {
+		// DisplayName: Eye of Eldritch Insight
+		// Tooltip: Show love to see what should not be seen
+	}
 }
 
 Projectiles: {

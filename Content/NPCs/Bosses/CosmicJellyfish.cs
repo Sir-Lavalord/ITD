@@ -323,12 +323,24 @@ namespace ITD.Content.NPCs.Bosses
                     NPC.localAI[1] = 0;
                     if (handState == HandState.Waiting && hand != -1)
                         handState = HandState.VoidShard;
+                    if (SecondStage)
+                    {
+                        if (handState2 == HandState.Waiting && hand2 != -1)
+                            handState2 = HandState.StarShard;
+                    }
                 }
                 else
                 {
                     if (hand == -1)
                     {
                         hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 1, 0.1f);
+                    }
+                    if (SecondStage)
+                    {
+                        if (hand2 == -1)
+                        {
+                            hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 1, 0.1f);
+                        }
                     }
                 }
             }
@@ -653,15 +665,33 @@ namespace ITD.Content.NPCs.Bosses
                             projectile.Center = Vector2.Lerp(projectile.Center, normalCenter, 0.3f);
                             if (Timer++ >= 30)
                             {
-                                handState = HandState.Waiting;
-                                projectile.Kill();
+                                if (NPC.ai[3] != 2)
+                                {
+                                    if (SecondStage)
+                                    {
+                                        if (handState2 == HandState.Waiting && hand2 != -1)
+                                            handState2 = HandState.Charging;
+                                        handState = HandState.Waiting;
+                                    }
+                                    else
+                                    {
+                                        handState = HandState.Waiting;
+                                        projectile.Kill();
+                                    }
+                                }
+                                else
+                                {
+                                    handState = HandState.Waiting;
+                                    projectile.Kill();
+                                }
+
                             }
                             break;
                         case HandState.VoidShard:
                             if (NPC.localAI[0]++>= 100)
                             {
                                 NPC.localAI[0] = 0;
-                                if (NPC.localAI[2]++ >= 5)
+                                if (NPC.localAI[2]++ >= 3)
                                 {
                                     NPC.ai[3]++;
                                     handState = HandState.DownToSize;
@@ -712,7 +742,8 @@ namespace ITD.Content.NPCs.Bosses
                                     new ParticleOrchestraSettings { PositionInWorld = other.Center }, projectile.owner);
                                 SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), projectile.Center);
                                 player.GetITDPlayer().Screenshake = 20;
-                                handState = HandState.DownToSize;
+                                    handState = HandState.DownToSize;
+
                                 if (NPC.life > NPC.lifeMax / 10)
                                 {
                                     NPC.life -= NPC.lifeMax / 10;
@@ -831,11 +862,44 @@ namespace ITD.Content.NPCs.Bosses
                             projectile2.Center = Vector2.Lerp(projectile2.Center, normalCenter, 0.3f);
                             if (Timer2++ >= 30)
                             {
-                                handState2 = HandState.Waiting;
-                                projectile2.Kill();
+                                if (NPC.ai[3] != 2)
+                                {
+                                    if (SecondStage)
+                                    {
+                                        if (handState == HandState.Waiting && hand != -1)
+                                            handState = HandState.Charging;
+                                        handState2 = HandState.Waiting;
+                                    }
+                                    else
+                                    {
+                                        handState2 = HandState.Waiting;
+                                        projectile2.Kill();
+                                    }
+                                }
+                                else
+                                {
+                                    handState2 = HandState.Waiting;
+                                    projectile2.Kill();
+                                }
 
                             }
                             break;
+                        case HandState.StarShard:
+                            if (NPC.localAI[0] >= 100)
+                            {
+                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                {
+                                    ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,new ParticleOrchestraSettings { PositionInWorld = projectile2.Center }, projectile2.owner);
+                                    Vector2 vel = projectile2.DirectionTo(player.Center) * 8f; ;
+                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), projectile2.Center, vel,
+                                     ModContent.ProjectileType<CosmicVoidShard>(), NPC.damage, 0f, -1, 240, NPC.whoAmI);
+                                }
+
+                            }
+                            projectile2.Center = Vector2.Lerp(projectile2.Center, normalCenter, 0.3f);
+
+                            break;
+
                     }
                     projectile2.rotation = MathHelper.Lerp(projectile2.rotation, targetRotation, 0.3f);
                     for (int i = 0; i < Main.maxProjectiles; i++)
@@ -852,7 +916,8 @@ namespace ITD.Content.NPCs.Bosses
                                     new ParticleOrchestraSettings { PositionInWorld = other.Center },projectile2.owner);
                                 SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), projectile2.Center);
                                 player.GetITDPlayer().Screenshake = 20;
-                                handState2 = HandState.DownToSize;
+                                    handState2 = HandState.DownToSize;
+                                
                                 if (NPC.life > NPC.lifeMax / 10)
                                 {
                                     NPC.life -= NPC.lifeMax / 10;
@@ -867,6 +932,17 @@ namespace ITD.Content.NPCs.Bosses
                 else
                 {
                     hand2 = -1;
+                }
+            }
+            if (NPC.ai[3] !=2)
+            {
+                if (hand != 1 || hand2 != 1)
+                {
+                    if (handState == HandState.VoidShard || handState2 == HandState.StarShard)
+                    {
+                        handState = HandState.DownToSize;
+                        handState2 = HandState.DownToSize;
+                    }
                 }
             }
         }

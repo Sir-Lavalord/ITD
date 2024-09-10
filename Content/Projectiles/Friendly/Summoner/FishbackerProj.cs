@@ -1,5 +1,6 @@
 ﻿using ITD.Content.Buffs.Debuffs;
 using ITD.Players;
+using ITD.Utilities;
 using Microsoft.Build.Evaluation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -58,7 +59,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Projectile.Kill();
                 return;
             }
-            if ((Timer >= swingTime * 0.25f && Timer <= swingTime * 0.75f) && CanParry)
+            if ((Timer >= swingTime * 0.4f && Timer <= swingTime * 0.6f) && CanParry)
             {
                 List<Vector2> points = Projectile.WhipPointsForCollision;
                 Projectile.FillWhipControlPoints(Projectile, points);
@@ -66,12 +67,9 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 {
                     Projectile other = Main.projectile[i];
 
-                    if (i != Projectile.whoAmI && other.hostile &&
-                        !other.friendly && other.active &&
-                        //TODO: Change this
-                        other.aiStyle != -100
+                    if (i != Projectile.whoAmI && other.Reflectable()
                         && Math.Abs(points[points.Count-1].X - other.position.X)
-                        + Math.Abs(points[points.Count-1].Y - other.position.Y) < 100)
+                        + Math.Abs(points[points.Count-1].Y - other.position.Y) < 60)
                     {
                         if (!Main.dedServ)
                         {
@@ -91,7 +89,11 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
                             other.friendly = true;
                             other.hostile = false;
-                            other.damage *= 2;
+                            if (other.damage <= 10000)
+                            {
+                                other.damage *= 2;
+                            }
+                            else other.damage = 10000;
                             other.netUpdate = true;
                         }
                     }
