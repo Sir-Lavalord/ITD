@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
 using ITD.Systems;
+using Terraria.Localization;
 
 namespace ITD.Content.Items.Other
 {
@@ -23,9 +24,11 @@ namespace ITD.Content.Items.Other
     }
     public class DriversIncense : ModItem
     {
+        public static LocalizedText MunchiesExplanation { get; private set; }
         public override void SetStaticDefaults()
         {
             ItemID.Sets.ShimmerTransformToItem[ItemID.CosmicCarKey] = Type;
+            MunchiesExplanation = this.GetLocalization("MunchiesExplanation");
         }
         public override void SetDefaults()
         {

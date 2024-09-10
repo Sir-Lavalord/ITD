@@ -273,6 +273,7 @@ Items: {
 	DriversIncense: {
 		DisplayName: Driver's Incense
 		Tooltip: Permanently increases mount speed by 10%
+		MunchiesExplanation: Shimmer an otherwordly vehicle's unlocker
 	}
 
 	BlueCatacombBrick: {
@@ -721,7 +722,7 @@ Projectiles: {
 	FishbackerReflectProj.DisplayName: How did you get this?
 	SuffocationAura.DisplayName: Suffocation Aura
 	TheUnburied.DisplayName: The Unburied
-	PetPigPet.DisplayName: Pet Pig Pet
+	PetPigPet.DisplayName: Balloon Pig
 }
 
 NPCs: {
@@ -779,12 +780,12 @@ Buffs: {
 	}
 
 	CrimsonAntidoteBuff: {
-		DisplayName: Crimson Antidote Buff
+		DisplayName: Crimson Antidote
 		Description: Massively increased life regeneration
 	}
 
 	CorruptAntidoteBuff: {
-		DisplayName: Corrupt Antidote Buff
+		DisplayName: Corrupt Antidote
 		Description: -25% Mana Usage and +25% Magic Damage
 	}
 
@@ -794,8 +795,8 @@ Buffs: {
 	}
 
 	PetPigBuff: {
-		DisplayName: Pet Pig Buff
-		Description: Mods.ITD.Buffs.PetPigBuff.Description
+		DisplayName: Balloon Pig
+		Description: A balloon pig follows you, showing you nearby loot
 	}
 }
 

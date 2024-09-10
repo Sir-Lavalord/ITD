@@ -2,12 +2,13 @@
 using Terraria;
 using Terraria.ModLoader;
 using ITD.Systems;
+using Terraria.ID;
 
 namespace ITD.Content.Biomes
 {
     public class DeepDesertBiome : ModBiome
     {
-        public override int Music => MusicLoader.GetMusicSlot(Mod, "Content/Music/DreadfulDunes");
+        public override int Music => ITD.Instance.GetMusic("DreadfulDunes") ?? MusicID.UndergroundDesert;
 
         public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh; // We have set the SceneEffectPriority to be BiomeLow for purpose of example, however default behavior is BiomeLow.
 

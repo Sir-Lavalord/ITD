@@ -7,6 +7,11 @@ using System.Collections.Generic;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static ITD.Downed;
+using ITD.Content.Items.Other;
+using Terraria;
+using ITD.Players;
+using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace ITD
 {
@@ -25,6 +30,7 @@ namespace ITD
         public static void Init()
         {
             BossChecklistSupport();
+            MunchiesSupport();
         }
         private static void AddBoss(Mod bossChecklist, Mod hostMod, string name, float difficulty, Func<bool> downed, object npcTypes, Dictionary<string, object> extraInfo)
             => bossChecklist.Call("LogBoss", hostMod, name, difficulty, downed, npcTypes, extraInfo);
@@ -55,6 +61,28 @@ namespace ITD
                     ["collectibles"] = collectibles,
                 });
             }
+        }
+        private static void MunchiesSupport()
+        {
+            ITD ITDMod = ITD.Instance;
+            Mod munchies = ITDMod.munchies;
+            if (munchies is null)
+                return;
+            object[] driversIncense =
+            {
+                "AddSingleConsumable", // ModCall type
+                ITDMod, // Mod ref
+                "1.4", // Munchies version
+                GetInstance<DriversIncense>(), // ModItem
+                "player", // Consumable type
+                () => Main.LocalPlayer.GetModPlayer<DriversIncensePlayer>().DriversIncenseConsumed, // Func<bool>
+                null, // Color
+                null, // Difficulty
+                null, // Extra tooltip
+                null, // Availability (Func<bool>)
+                DriversIncense.MunchiesExplanation // Explanation LocalizedText
+            };
+            munchies.Call(driversIncense);
         }
     }
 }

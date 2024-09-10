@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using ITD.Systems;
+using Terraria.ID;
 
 namespace ITD.Content.Biomes
 {
@@ -12,7 +13,7 @@ namespace ITD.Content.Biomes
         public override ModUndergroundBackgroundStyle UndergroundBackgroundStyle => ModContent.GetInstance<BlueshroomGrovesBackgroundStyle>();
 
         // Select Music
-        public override int Music => MusicLoader.GetMusicSlot(Mod, "Content/Music/WanderingTheBlueshrooms");
+        public override int Music => ITD.Instance.GetMusic("WanderingTheBlueshrooms") ?? MusicID.Ice;
 
         // Sets how the Scene Effect associated with this biome will be displayed with respect to vanilla Scene Effects. For more information see SceneEffectPriority & its values.
         public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh; // We have set the SceneEffectPriority to be BiomeLow for purpose of example, however default behavior is BiomeLow.
