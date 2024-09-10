@@ -795,6 +795,11 @@ Buffs: {
 		// DisplayName: Balloon Pig
 		// Description: A balloon pig follows you, showing you nearby loot
 	}
+
+	NecrosisBuff: {
+		// DisplayName: Necrosis Buff
+		// Description: Mods.ITD.Buffs.NecrosisBuff.Description
+	}
 }
 
 WorldGen: {

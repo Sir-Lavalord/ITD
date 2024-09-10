@@ -19,11 +19,15 @@ namespace ITD.Content.NPCs
 		public override bool InstancePerEntity => true;
 
 		public bool zapped;
+		
+		public bool necrosis;
         public bool toasted;
 		
 		public override void ResetEffects(NPC npc)
         {
 			zapped = false;
+			
+			necrosis = false;
             toasted = false;
 		}
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
@@ -42,6 +46,18 @@ namespace ITD.Content.NPCs
         }
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
+			if (necrosis)
+            {
+                if (npc.lifeRegen > 0)
+                {
+                    npc.lifeRegen = 0;
+                }
+                npc.lifeRegen -= 20;
+				
+				if (damage < 5)
+                    damage = 5;
+            }
+			
             if (toasted)
             {
                 if (npc.lifeRegen > 0)
@@ -94,6 +110,12 @@ namespace ITD.Content.NPCs
         }
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {
+			if (necrosis)
+			{
+				drawColor.R = 200;
+				drawColor.G = 100;
+				drawColor.B = 250;
+			}
             if (toasted)
             {
                 drawColor.G = 100;
