@@ -11,6 +11,7 @@ using ITD.Content.Buffs.Debuffs;
 using ITD.Content.Items.Accessories.Defensive;
 using ITD.Content.Items.Accessories.Master;
 using ITD.Content.Items.Weapons.Melee.Snaptraps;
+using ITD.Content.Items.Other;
 
 namespace ITD.Content.NPCs
 {
@@ -84,7 +85,15 @@ namespace ITD.Content.NPCs
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DreadShell>(), 10));
             }
-			if (npc.type == NPCID.EaterofWorldsHead || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail)
+            if (npc.type == NPCID.KingSlime)
+            {
+                npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<KSGland>()));
+            }
+            if (npc.type == NPCID.EyeofCthulhu)
+            {
+                npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<EoCInsight>()));
+            }
+            if (npc.type == NPCID.EaterofWorldsHead || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail)
             {
 				LeadingConditionRule IsABoss = new LeadingConditionRule(new Conditions.LegacyHack_IsABoss());
 				IsABoss.OnSuccess(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<EoWTail>()));

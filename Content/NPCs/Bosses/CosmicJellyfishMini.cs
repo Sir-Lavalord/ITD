@@ -36,8 +36,8 @@ namespace ITD.Content.NPCs.Bosses
             NPC.damage = 10;
             NPC.defense = 0;
             NPC.lifeMax = 50;
-            NPC.HitSound = SoundID.NPCHit4;
-            NPC.DeathSound = SoundID.NPCDeath14;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.knockBackResist = 0.3f;
@@ -103,7 +103,7 @@ namespace ITD.Content.NPCs.Bosses
             {
                 Dash(1, 10, 18, 24, 1);
             }
-            float maxRotation = MathHelper.Pi / 6;
+            float maxRotation = MathHelper.Pi / 3;
             float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);
 
             rotation = rotationFactor * maxRotation;
@@ -200,7 +200,7 @@ namespace ITD.Content.NPCs.Bosses
             int startFrame = 0;
             int finalFrame = 4;
 
-            int frameSpeed = 12;
+            int frameSpeed = 8;
             NPC.frameCounter += 1f;
             if (NPC.frameCounter > frameSpeed)
             {

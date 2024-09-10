@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace ITD.Effects
 {
-    public class TheTouhouDrawLayer : PlayerDrawLayer
+    public class CosmicJellyfishSpaceMash : PlayerDrawLayer
     {
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) =>
         drawInfo.drawPlayer.active
@@ -18,7 +18,7 @@ namespace ITD.Effects
 
         public override Position GetDefaultPosition()
         {
-            return new AfterParent(PlayerDrawLayers.Head);
+            return PlayerDrawLayers.AfterLastVanillaLayer;
         }
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {

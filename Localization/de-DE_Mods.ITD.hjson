@@ -585,7 +585,7 @@ Items: {
 		// DisplayName: Tail of the Eater
 		/* Tooltip:
 			'''
-			Split your life into two
+			Splits your life into two
 			Fatal damage does not carry onto next life
 			This can only happen every 1 minute
 			Cooldown only reduces when you have max life
@@ -627,6 +627,11 @@ Items: {
 	PetPigSummon: {
 		// DisplayName: Pet Pig Summon
 		// Tooltip: ""
+	}
+
+	EoCInsight: {
+		// DisplayName: Eye of Eldritch Insight
+		// Tooltip: Show love to see what should not be seen
 	}
 }
 

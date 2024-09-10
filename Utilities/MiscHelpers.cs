@@ -63,8 +63,20 @@ namespace ITD.Utilities
                 dust.fadeIn = 1f;
             }
         }
-				
-		public static void Zap(Vector2 origin, Player player, int damage, int critChance, int chain)
+        //Reflectable
+        public static bool Reflectable(this Projectile projectile)
+        {
+            if (projectile.aiStyle != -1 &&
+                projectile.hostile &&
+                !projectile.friendly &&
+                projectile.active)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static void Zap(Vector2 origin, Player player, int damage, int critChance, int chain)
         {
 			NPC target = null;
 			float reach = 300;

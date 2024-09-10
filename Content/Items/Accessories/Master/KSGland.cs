@@ -13,6 +13,10 @@ namespace ITD.Content.Items.Accessories.Master
     {
         public override void SetStaticDefaults()
         {
+            ItemID.Sets.AnimatesAsSoul[Item.type] = true;
+            Main.RegisterItemAnimation(Type, new DrawAnimationVertical(10, 5));
+            Terraria.GameContent.Creative.CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
         }
 
         public override void SetDefaults()
