@@ -17,7 +17,7 @@ namespace ITD.Content.Projectiles.Hostile
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording mode
-            Main.projFrames[Projectile.type] = 6;
+            Main.projFrames[Projectile.type] = 7;//I'm very mature
         }
         public override void SetDefaults()
         {

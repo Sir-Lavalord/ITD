@@ -20,7 +20,9 @@ namespace ITD.Content.NPCs.Friendly
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 3;
+            NPCID.Sets.DontDoHardmodeScaling[Type] = true;
             NPCID.Sets.ImmuneToAllBuffs[Type] = true;
+            NPCID.Sets.NeedsExpertScaling[Type] = true;
             //
             NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
@@ -33,8 +35,8 @@ namespace ITD.Content.NPCs.Friendly
             NPC.width = 40;
             NPC.height = 56;
             NPC.damage = 0;
-            NPC.defense = 10;
-            NPC.lifeMax = 200;
+            NPC.defense = 0;
+            NPC.lifeMax = 50;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.noGravity = true;
@@ -73,7 +75,7 @@ namespace ITD.Content.NPCs.Friendly
             }
             if (!player.GetModPlayer<KSGlandPlayer>().ksMasterAcc)
             {
-                player.GetModPlayer<KSGlandPlayer>().RegrowCD = 600;
+                player.GetModPlayer<KSGlandPlayer>().RegrowCD = 900;
                 NPC.checkDead();
                 NPC.life = 0;
             }
@@ -99,7 +101,7 @@ namespace ITD.Content.NPCs.Friendly
         }
         public override void OnSpawn(IEntitySource source)
         {
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 12; i++)
             {
                 Dust dust = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.t_Slime, 0, 0f, 40, Color.LightSkyBlue, Main.rand.NextFloat(1f, 2f));
                 dust.velocity *= 2f;
@@ -110,7 +112,7 @@ namespace ITD.Content.NPCs.Friendly
         }
         public override void OnKill()
         {
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 12; i++)
             {
                 Dust dust = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.t_Slime, 0, 0f, 40, Color.LightSkyBlue, Main.rand.NextFloat(1f, 2f));
                 dust.velocity *= 2f;
@@ -119,7 +121,7 @@ namespace ITD.Content.NPCs.Friendly
                 dust2.noGravity = true;
             }
             Player player = Main.player[(int)NPC.ai[0]];
-            player.GetModPlayer<KSGlandPlayer>().RegrowCD = 600;
+            player.GetModPlayer<KSGlandPlayer>().RegrowCD = 900;
         }
         public override void DrawBehind(int index)
         {
@@ -152,7 +154,7 @@ namespace ITD.Content.NPCs.Friendly
         {
             if (owner.dead || !owner.active)
             {
-                owner.GetModPlayer<KSGlandPlayer>().RegrowCD = 600;
+                owner.GetModPlayer<KSGlandPlayer>().RegrowCD = 900;
                 owner.GetModPlayer<KSGlandPlayer>().ksMasterAcc = false;
                 NPC.life = 0;
                 NPC.checkDead();
