@@ -7,6 +7,7 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using ITD.Content.Buffs.Debuffs;
 
 namespace ITD.Content.Projectiles.Friendly.Mage
 {
@@ -29,7 +30,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 		
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            target.AddBuff(BuffID.Venom, 120, false);
+            target.AddBuff(ModContent.BuffType<NecrosisBuff>(), 120, false);
         }
 		
 		public override void ModifyDamageHitbox(ref Rectangle hitbox)

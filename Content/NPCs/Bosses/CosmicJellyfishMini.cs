@@ -16,7 +16,7 @@ namespace ITD.Content.NPCs.Bosses
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[Type] = 3;
+            Main.npcFrameCount[Type] = 5;
 
             NPCID.Sets.DontDoHardmodeScaling[Type] = true;
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
@@ -31,8 +31,8 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override void SetDefaults()
         {
-            NPC.width = 70;
-            NPC.height = 100;
+            NPC.width = 54;
+            NPC.height = 74;
             NPC.damage = 10;
             NPC.defense = 0;
             NPC.lifeMax = 50;
@@ -198,7 +198,7 @@ namespace ITD.Content.NPCs.Bosses
         public override void FindFrame(int frameHeight)
         {
             int startFrame = 0;
-            int finalFrame = 2;
+            int finalFrame = 4;
 
             int frameSpeed = 12;
             NPC.frameCounter += 1f;
