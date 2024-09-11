@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
 using ITD.Utilities;
+using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {
@@ -13,38 +14,21 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
     {
         public override void SetDefaults()
         {
-            Item.autoReuse = false;
-            Item.useStyle = ItemUseStyleID.Shoot;
-            Item.useAnimation = Item.useTime = 22;
-            Item.knockBack = 0f;
-            Item.width = 30;
-            Item.height = 10;
-            Item.damage = 50;
-            Item.shoot = ModContent.ProjectileType<CrimeratrapProjectile>();
-            Item.shootSpeed = 12f;
-            Item.UseSound = SoundID.Item1;
+            Item.DefaultToSnaptrap(30, 10, ModContent.ProjectileType<CrimeratrapProjectile>(), 12f, 22, 50);
             Item.rare = ItemRarityID.LightRed;
             Item.value = Item.sellPrice(0, 0, 25);
-            Item.DamageType = DamageClass.Melee;
-            Item.noMelee = true;
-            Item.noUseGraphic = true;
-            Item.channel = true;
         }
-
-        public override bool CanUseItem(Player player)
-        {
-            return MiscHelpers.SnaptrapUseCondition(player.whoAmI);
-        }
-
+        public override bool CanUseItem(Player player) => player.GetSnaptrapPlayer().CanUseSnaptrap;
+        public override bool AltFunctionUse(Player player) => true;
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) => player.GetSnaptrapPlayer().ShootSnaptrap();
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.RottenChunk, 10);
+            recipe.AddIngredient(ItemID.Vertebrae, 10);
             recipe.AddIngredient(ItemID.Chain, 12);
             recipe.AddTile(TileID.DemonAltar);
             recipe.Register();
         }
-
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             float pulseAmount = Main.mouseTextColor / 255f;

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
 using ITD.Utilities;
+using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {
@@ -13,36 +14,22 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
     {
         public override void SetDefaults()
         {
-            Item.autoReuse = false;
-            Item.useStyle = ItemUseStyleID.Shoot;
-            Item.useAnimation = Item.useTime = 8;
-            Item.knockBack = 0f;
-            Item.width = 30;
-            Item.height = 10;
-            Item.damage = 8900;
-            Item.shoot = ModContent.ProjectileType<DespoticSnaptrapProjectile>();
-            Item.shootSpeed = 12f;
-            Item.UseSound = SoundID.Item1;
+            Item.DefaultToSnaptrap(30, 10, ModContent.ProjectileType<DespoticSnaptrapProjectile>(), 12f, 8, 8900);
             Item.rare = ItemRarityID.LightRed;
             Item.value = Item.sellPrice(0, 0, 25);
-            Item.DamageType = DamageClass.Melee;
-            Item.noMelee = true;
-            Item.noUseGraphic = true;
-            Item.channel = true;
         }
 
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.IronBar, 6);
+            recipe.AddIngredient(ItemID.LunarBar, 6); // rember to change this on release to make it unobtainable
             recipe.AddIngredient(ItemID.Chain, 16);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.Register();
         }
-        public override bool CanUseItem(Player player)
-        {
-            return MiscHelpers.SnaptrapUseCondition(player.whoAmI);
-        }
+        public override bool CanUseItem(Player player) => player.GetSnaptrapPlayer().CanUseSnaptrap;
+        public override bool AltFunctionUse(Player player) => true;
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) => player.GetSnaptrapPlayer().ShootSnaptrap();
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             float pulseAmount = Main.mouseTextColor / 255f;

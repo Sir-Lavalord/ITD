@@ -74,7 +74,7 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
             Player.jump = Player.jumpHeight;
             canDoubleJump = false;
 
-            SoundEngine.PlaySound(new SoundStyle($"ITD/Content/Sounds/FirestormInABottle{Main.rand.Next(1, 4)}"), Player.position);
+            SoundEngine.PlaySound(new SoundStyle($"ITD/Content/Sounds/FirestormInABottle{Main.rand.Next(1, 3)}"), Player.position);
 
             fireCloudTimer = FireCloudDuration;
             fireTrailTimer = FireTrailDuration;

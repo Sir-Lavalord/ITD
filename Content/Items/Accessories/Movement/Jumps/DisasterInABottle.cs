@@ -108,7 +108,7 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
             Player.jump = Player.jumpHeight;
 
             // Firestorm
-            SoundEngine.PlaySound(new SoundStyle($"ITD/Content/Sounds/FirestormInABottle{Main.rand.Next(1, 4)}"), Player.position);
+            SoundEngine.PlaySound(new SoundStyle($"ITD/Content/Sounds/FirestormInABottle{Main.rand.Next(1, 3)}"), Player.position);
             firestormPlayer.fireCloudTimer = FirestormPlayer.FireCloudDuration;
             firestormPlayer.fireTrailTimer = FirestormPlayer.FireTrailDuration;
             firestormPlayer.rainTimer = FirestormPlayer.RainDuration;
@@ -116,7 +116,7 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
             firestormPlayer.jumpPosition = Player.Bottom;
 
             // Twister
-            SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/TwisterInABottle1"), Player.position);
+            SoundEngine.PlaySound(SoundID.DoubleJump, Player.position);
             twisterPlayer.isTwistering = true;
             twisterPlayer.twisterTimer = TwisterPlayer.TwisterDuration;
             twisterPlayer.damageTimer = TwisterPlayer.DamageInterval;

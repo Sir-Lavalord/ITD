@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using ITD.Systems;
 
 namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps
 {
@@ -19,16 +20,6 @@ namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<SnaptrapPlayer>().ChainWeightEquipped = true;
-        }
-    }
-
-    public class SnaptrapPlayer : ModPlayer
-    {
-        public bool ChainWeightEquipped;
-
-        public override void ResetEffects()
-        {
-            ChainWeightEquipped = false;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			Projectile.ownerHitCheck = true;
 			Projectile.stopsDealingDamageAfterPenetrateHits = true;
             Projectile.penetrate = 3;
-            Projectile.alpha = 40;
+            Projectile.alpha = 20;
             Projectile.extraUpdates = 1;
             Projectile.light = 0.1f;
             DrawOffsetX = 0;
@@ -40,11 +40,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.noEnchantmentVisuals = true;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 100;
+            Projectile.scale *= 1.05f;
         }
 
         public override Color? GetAlpha(Color lightColor)
         {
-            return Color.White;
+            return Color.White * (1f - (Projectile.alpha / 255f));
         }
 		
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)//make it once per swing
@@ -84,11 +85,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         {
 			Player player = Main.player[Projectile.owner];
             //Don't hardcode guys
-/*			Projectile.Center = player.MountedCenter + Projectile.velocity * (11-Projectile.timeLeft);
-*/            Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
+            // mirror why'd you comment this part out, it's meant to be the sword slashing
+			Projectile.Center = player.MountedCenter + Projectile.velocity;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             Projectile.alpha += 5;
-            Projectile.velocity.X *= 0.96f;
-            Projectile.velocity.Y *= 0.96f;
+            Projectile.velocity *= 1.04f;
             if (Projectile.alpha > 180)
             {
                 Projectile.Kill();
