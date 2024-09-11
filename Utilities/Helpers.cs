@@ -32,7 +32,7 @@ namespace ITD.Utilities
                 _ => new Color(v, p, q),
             };
         }
-        public static Vector2 QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, float maxDistTiles = 64f)
+        public static (Vector2, bool) QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, float maxDistTiles = 64f)
         {
             origin /= 16f;
             direction = direction.SafeNormalize(Vector2.UnitY);
@@ -105,7 +105,7 @@ namespace ITD.Utilities
             {
                 intersection = origin + direction * maxDistTiles;
             }
-            return intersection * 16f;
+            return (intersection * 16f, tileFound);
         }
         public static float Remap(float value, float oldMin, float oldMax, float newMin, float newMax)
         {
