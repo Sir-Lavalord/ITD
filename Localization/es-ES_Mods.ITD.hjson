@@ -718,6 +718,7 @@ Projectiles: {
 	SuffocationAura.DisplayName: Aura de asfixia
 	TheUnburied.DisplayName: El Desenterrado
 	PetPigPet.DisplayName: Cerdo con globo
+	// GasLeak.DisplayName: Gas Leak
 }
 
 NPCs: {
@@ -746,6 +747,7 @@ NPCs: {
 	CosmicJellyfishMini.DisplayName: Medusa neptuniana
 	Sandberus.DisplayName: Desierbero
 	KSGlandNPC.DisplayName: Capa de gel
+	// Gravekeeper.DisplayName: Gravekeeper
 }
 
 Buffs: {

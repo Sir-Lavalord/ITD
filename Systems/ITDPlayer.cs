@@ -38,6 +38,8 @@ namespace ITD.Players
         public bool ZoneBlueshroomsUnderground;
 		public bool ZoneCatacombs;
 
+		public bool necrosis = false;
+
 		public float blockChance = 0f;
 		public bool dreadBlock = false;
 
@@ -91,6 +93,8 @@ namespace ITD.Players
 			if (recoilBack > 0f)
 				recoilBack -= 0.02f;
 
+			necrosis = false;
+
 			blockChance = 0f;
 			dreadBlock = false;
 
@@ -98,10 +102,25 @@ namespace ITD.Players
 			
             setAlloy = false;
         }
+		
 		public override void UpdateDead()
         {
 			itemVar = new float[4];
 		}
+		
+		public override void UpdateBadLifeRegen()
+        {
+			if (necrosis)
+			{
+				if (Player.lifeRegen > 0)
+                    Player.lifeRegen = 0;
+				
+				Player.lifeRegenTime = 0;
+				 
+				Player.lifeRegen -= 10;
+			}
+		}
+		
         public override void PostUpdateEquips()
         {
             if (setAlloy)
@@ -120,6 +139,7 @@ namespace ITD.Players
                 }
             }
         }
+		
         public override void PreUpdate()
         {
             ZoneBlueshroomsUnderground = ModContent.GetInstance<ITDSystem>().bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
@@ -230,6 +250,13 @@ namespace ITD.Players
 					drawInfo.DustCache.Add(dust);
 				}
             }
+			
+			if (necrosis)
+			{
+				r = 0.7f;
+				g = 0.4f;
+				b = 0.9f;
+			}
 		}
     }
 }

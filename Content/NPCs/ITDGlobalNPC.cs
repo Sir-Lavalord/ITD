@@ -127,7 +127,9 @@ namespace ITD.Content.NPCs
 			}
             if (toasted)
             {
+				drawColor.R = 255;
                 drawColor.G = 100;
+				drawColor.B = 255;
             }
         }
     }

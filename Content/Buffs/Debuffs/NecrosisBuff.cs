@@ -1,4 +1,5 @@
 ﻿using ITD.Content.NPCs;
+using ITD.Players;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,11 @@ namespace ITD.Content.Buffs.Debuffs
         {
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
+        }
+		
+		public override void Update(Player player, ref int buffIndex)
+        {
+            player.GetModPlayer<ITDPlayer>().necrosis = true;
         }
 		
         public override void Update(NPC npc, ref int buffIndex)
