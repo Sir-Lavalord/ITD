@@ -724,6 +724,7 @@ Projectiles: {
 	TheUnburied.DisplayName: The Unburied
 	PetPigPet.DisplayName: Balloon Pig
 	GasLeak.DisplayName: Gas Leak
+	Necroskull.DisplayName: Necroskull
 }
 
 NPCs: {

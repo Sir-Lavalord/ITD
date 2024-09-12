@@ -66,8 +66,7 @@ namespace ITD.Content.Projectiles.Hostile
 			float opacity = Utils.Remap(Projectile.localAI[0], num, lifespan, 1f, 0f, true);
 			float num7 = Math.Min(Projectile.localAI[0], 20f);
 			float num8 = Utils.Remap(Projectile.localAI[0], 0f, lifespan, 0f, 1f, true);
-			float skullScale = Utils.Remap(num8, 0.2f, 1f, 0.5f, 1f, true);
-			float scale = Utils.Remap(num8, 0.2f, 0.4f, 0.5f, 1f, true);
+			float scale = Utils.Remap(num8, 0f, 1f, 0.5f, 1.5f, true);
 			Rectangle rectangle = texture.Frame(1, 1);
 			if (num8 < 1f)
 			{

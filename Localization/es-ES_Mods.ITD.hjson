@@ -719,6 +719,7 @@ Projectiles: {
 	TheUnburied.DisplayName: El Desenterrado
 	PetPigPet.DisplayName: Cerdo con globo
 	// GasLeak.DisplayName: Gas Leak
+	// Necroskull.DisplayName: Necroskull
 }
 
 NPCs: {
