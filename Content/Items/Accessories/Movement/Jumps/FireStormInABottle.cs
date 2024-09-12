@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using System;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Accessories.Movement.Jumps
 {
@@ -208,11 +209,8 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
 
         private bool IsTileCollision(Vector2 position)
         {
-            int tileX = (int)(position.X / 16f);
-            int tileY = (int)(position.Y / 16f);
-
-            Tile tile = Main.tile[tileX, tileY];
-            return tile != null && Main.tileSolid[tile.TileType] && tile.HasTile;
+            Point tileCoords = position.ToTileCoordinates();
+            return Helpers.SolidTile(tileCoords.X, tileCoords.Y);
         }
 
         private void DamageEnemy(Vector2 position, bool dealDamage)

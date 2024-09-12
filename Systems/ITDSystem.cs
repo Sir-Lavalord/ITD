@@ -17,7 +17,18 @@ namespace ITD.Systems
 {
     public class ITDSystem : ModSystem
     {
-        public static bool hasMeteorFallen;
+        internal static bool _hasMeteorFallen;
+        public static bool hasMeteorFallen
+        {
+            get => _hasMeteorFallen;
+            set
+            {
+                if (!value)
+                    _hasMeteorFallen = false;
+                else
+                    NPC.SetEventFlagCleared(ref _hasMeteorFallen, -1);
+            }
+        }
         public int bluegrassCount;
         public int deepdesertTileCount;
         //misc
@@ -76,7 +87,6 @@ namespace ITD.Systems
         }
         public override void PostUpdateDusts()
         {
-            //Main.NewText(Main.hardMode);
             BlueshroomTree.opac = ((float)Math.Sin(Main.GameUpdateCount / 40f) + 1f) / 2f;
         }
     }

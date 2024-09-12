@@ -411,6 +411,7 @@ namespace ITD.Content.Tiles
         }
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
+            SpecialDrawing.RestartSpriteBatchAsTileDrawer();
             Color color = Lighting.GetColor(i, j);
             Tile tile = Framing.GetTileSafely(i, j);
             if (IsLeftBranch(tile))
