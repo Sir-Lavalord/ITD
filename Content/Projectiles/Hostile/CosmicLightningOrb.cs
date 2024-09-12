@@ -8,6 +8,9 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using ITD.Content.Dusts;
 using ITD.Content.NPCs.Bosses;
+using Terraria.DataStructures;
+using Microsoft.Build.Evaluation;
+using Microsoft.CodeAnalysis;
 
 namespace ITD.Content.Projectiles.Hostile
 {
@@ -15,22 +18,24 @@ namespace ITD.Content.Projectiles.Hostile
     {
         public override string Texture => "Terraria/Images/Projectile_465";
 
+        Vector2 vToCosJel;
+        Vector2 vLockedIn;
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            NPC CosJel = Main.npc[(int)Projectile.ai[0]];
+            if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+            {
+            }
+        }
+                
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = Main.projFrames[ProjectileID.CultistBossLightningOrb];
             ProjectileID.Sets.TrailCacheLength[Type] = 6;
             ProjectileID.Sets.TrailingMode[Type] = 0;
         }
-        private Player HomingTarget
-        {
-            get => Projectile.ai[2] == 0 ? null : Main.player[(int)Projectile.ai[2] - 1];
-            set
-            {
-                Projectile.ai[2] = value == null ? 0 : value.whoAmI + 1;
-            }
-        }
-        public int iStart;
-        public bool bStop;
+        public bool bLocked;
         public override void SetDefaults()
         {
             Projectile.width = 100;
@@ -50,29 +55,52 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override void AI()
         {
+
             NPC CosJel = Main.npc[(int)Projectile.ai[0]];
             if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
             {
-                if (HomingTarget == null)
+                switch (Projectile.ai[1])
                 {
-                    HomingTarget = Main.player[CosJel.target];
+                    case 0:
+                        vToCosJel = new Vector2(CosJel.Center.X, CosJel.Center.Y - 150);
+                        break;
+                    case 1:
+                        vToCosJel = new Vector2(CosJel.Center.X - 150, CosJel.Center.Y + 0);
+                        break;
+                    case 2:
+                        vToCosJel = new Vector2(CosJel.Center.X + 150, CosJel.Center.Y + 0);
+                        break;
                 }
+                Player player = Main.player[CosJel.target];
 
-                if (HomingTarget == null)
+                if (CosJel.ai[3] == 6 && CosJel.HasPlayerTarget)
                 {
-                    return;
-                }
+                    Vector2 normalCenter = vToCosJel + new Vector2(0f, CosJel.velocity.Y);
+                    Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
 
-                float length = Projectile.velocity.Length();
-                float targetAngle = Projectile.AngleTo(HomingTarget.Center);
-                if (iStart++ >= 120 && !bStop)
-                {
-                    Projectile.velocity = Projectile.velocity.ToRotation().AngleTowards(targetAngle, MathHelper.ToRadians(1)).ToRotationVector2() * length;
-                    Projectile.Center += Main.rand.NextVector2Circular(2, 2);
+                    if (Projectile.ai[2]++ >= 50)
+                    {
+                        Projectile.ai[2] = 0;
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings { PositionInWorld = Projectile.Center }, Projectile.owner);
+                            Vector2 vel = Projectile.DirectionTo(player.Center) * 12f;
+                            int projID = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel,
+                             ProjectileID.MartianTurretBolt, CosJel.damage, 0f, -1, 240, CosJel.whoAmI);
+                        }
+                    }
                 }
-                else if (iStart >= 300)
+                else if (player.dead || !player.active)
                 {
-                    bStop = true;
+                    Projectile.Kill();
+                }
+                else if (CosJel.ai[3] != 6)
+                {
+                    if (!bLocked)
+                    {
+                        bLocked = true;
+                        Projectile.velocity = Projectile.DirectionTo(player.Center) * 12f;
+                    }
                 }
             }
         }

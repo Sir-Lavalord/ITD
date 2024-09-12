@@ -20,10 +20,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 
         }
         public bool bFirstHit;
+        public bool bPeakSwing;
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Melee;
-            Projectile.width = 100; Projectile.height = 100;
+            Projectile.width = 94; Projectile.height = 94;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.timeLeft = 2000;//make the anim plays out then kill
@@ -32,7 +33,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			Projectile.ownerHitCheck = true;
 			Projectile.stopsDealingDamageAfterPenetrateHits = true;
             Projectile.penetrate = 3;
-            Projectile.alpha = 20;
+            Projectile.alpha = 15;
             Projectile.extraUpdates = 1;
             Projectile.light = 0.1f;
             DrawOffsetX = 0;
@@ -71,32 +72,44 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         }
         public override bool? CanDamage()
         {
-            if (Projectile.alpha < 180)
-            {
                 return true;
-            }
-            else
-            {
-                return false;
-            }
-
         }
         public override void AI()
         {
 			Player player = Main.player[Projectile.owner];
-            //Don't hardcode guys
             // mirror why'd you comment this part out, it's meant to be the sword slashing
+
+            // It was hard-coded (11- projectile.timeleft) part, it's supposed to play out its anim before dying
+
+            // Your projectile and mine are different, yours is locked w the player center whilst mine is just shooting a slash projectile
+            // I made it like that since i'd be unusable otherwise, the thing is nigh unusable as is with its miniscule range
+            // This will make do for now
 			Projectile.Center = player.MountedCenter + Projectile.velocity;
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-            Projectile.alpha += 5;
-            Projectile.velocity *= 1.04f;
-            if (Projectile.alpha > 180)
+            if (!bPeakSwing)
             {
-                Projectile.Kill();
+                if (Projectile.alpha <= 0)
+                {
+                    bPeakSwing = true;
+                }
+                Projectile.alpha -= 5;
             }
+            else
+            {
+                if (Projectile.frame <= 3)
+                {
+                    Projectile.alpha += 4;
+                }
+                else Projectile.alpha += 8;
+                if (Projectile.alpha > 180)
+                {
+                    Projectile.Kill();
+                }
+            }
+                Projectile.velocity *= 1.1f;
             Projectile.frameCounter++;
 
-            if (Projectile.frameCounter >= 8)
+            if (Projectile.frameCounter >= 5)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame++;
@@ -106,40 +119,44 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                     Projectile.Kill();
                 }
             }
-/*            if (Main.rand.NextBool(10))
+            if (Projectile.frame == 2)//Arkhalis dusting thing
             {
-                for (int i = 0; i < 1; i++)
+                if (Main.rand.NextBool(3))
                 {
-                    int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height / 3, DustID.SilverCoin, 0, 0, 100, default, Main.rand.NextFloat(0.8f, 1.2f));
-                    Dust dust = Main.dust[dustIndex];
-                    dust.noGravity = true;
+                    for (int i = 0; i < 1; i++)
+                    {
+                        int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDust, Projectile.velocity.X, Projectile.velocity.Y, 10, Color.LightSkyBlue, Main.rand.NextFloat(0.8f, 1.2f));
+                        Dust dust = Main.dust[dustIndex];
+                        dust.noGravity = true;
+                    }
                 }
-            }*/
-        }
-        public override bool PreDraw(ref Color lightColor)
-        {
-            Texture2D texture2D13 = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-            int num156 = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value.Height / Main.projFrames[Projectile.type]; //ypos of lower right corner of sprite to draw
-            int y3 = num156 * Projectile.frame; //ypos of upper left corner of sprite to draw
-            Rectangle rectangle = new Rectangle(0, y3, texture2D13.Width, num156);
-            Vector2 origin2 = rectangle.Size() / 2f;
-
-            Color color26 = Color.Crimson;
-            color26 = Projectile.GetAlpha(color26);
-
-            SpriteEffects effects = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-
-            for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
-            {
-                Color color27 = Color.White * Projectile.Opacity * 0.75f * 0.5f;
-                color27 *= (float)(ProjectileID.Sets.TrailCacheLength[Projectile.type] - i) / ProjectileID.Sets.TrailCacheLength[Projectile.type];
-                Vector2 value4 = Projectile.oldPos[i];
-                float num165 = Projectile.oldRot[i];
-                Main.EntitySpriteDraw(texture2D13, value4 + Projectile.Size / 2f - Main.screenPosition + new Vector2(0, Projectile.gfxOffY), new Microsoft.Xna.Framework.Rectangle?(rectangle), color27, num165, origin2, Projectile.scale, effects, 0);
             }
-
-            Main.EntitySpriteDraw(texture2D13, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Microsoft.Xna.Framework.Rectangle?(rectangle), Projectile.GetAlpha(lightColor), Projectile.rotation, origin2, Projectile.scale, effects, 0);
-            return false;
         }
+        //Blurry trail doesn't work 
+        /*        public override bool PreDraw(ref Color lightColor)
+                {
+                    Texture2D texture2D13 = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+                    int num156 = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value.Height / Main.projFrames[Projectile.type]; //ypos of lower right corner of sprite to draw
+                    int y3 = num156 * Projectile.frame; //ypos of upper left corner of sprite to draw
+                    Rectangle rectangle = new Rectangle(0, y3, texture2D13.Width, num156);
+                    Vector2 origin2 = rectangle.Size() / 2f;
+
+                    Color color26 = Color.Crimson;
+                    color26 = Projectile.GetAlpha(color26);
+
+                    SpriteEffects effects = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+                    for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
+                    {
+                        Color color27 = Color.White * Projectile.Opacity * 0.75f * 0.5f;
+                        color27 *= (float)(ProjectileID.Sets.TrailCacheLength[Projectile.type] - i) / ProjectileID.Sets.TrailCacheLength[Projectile.type];
+                        Vector2 value4 = Projectile.oldPos[i];
+                        float num165 = Projectile.oldRot[i];
+                        Main.EntitySpriteDraw(texture2D13, value4 + Projectile.Size / 2f - Main.screenPosition + new Vector2(0, Projectile.gfxOffY), new Microsoft.Xna.Framework.Rectangle?(rectangle), color27, num165, origin2, Projectile.scale, effects, 0);
+                    }
+
+                    Main.EntitySpriteDraw(texture2D13, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Microsoft.Xna.Framework.Rectangle?(rectangle), Projectile.GetAlpha(lightColor), Projectile.rotation, origin2, Projectile.scale, effects, 0);
+                    return false;
+                }*/
     }
 }

@@ -59,7 +59,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Projectile.Kill();
                 return;
             }
-            if ((Timer >= swingTime * 0.4f && Timer <= swingTime * 0.6f) && CanParry)
+            if ((Timer >= swingTime * 0.4f && Timer <= swingTime * 0.8f) && CanParry)
             {
                 List<Vector2> points = Projectile.WhipPointsForCollision;
                 Projectile.FillWhipControlPoints(Projectile, points);
