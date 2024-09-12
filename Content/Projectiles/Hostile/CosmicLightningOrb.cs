@@ -19,6 +19,8 @@ namespace ITD.Content.Projectiles.Hostile
         public override string Texture => "Terraria/Images/Projectile_465";
 
         Vector2 vToCosJel;
+        Vector2 vLockedIn;
+
         public override void OnSpawn(IEntitySource source)
         {
             NPC CosJel = Main.npc[(int)Projectile.ai[0]];
@@ -33,8 +35,7 @@ namespace ITD.Content.Projectiles.Hostile
             ProjectileID.Sets.TrailCacheLength[Type] = 6;
             ProjectileID.Sets.TrailingMode[Type] = 0;
         }
-        public int iStart;
-        public bool bStop;
+        public bool bLocked;
         public override void SetDefaults()
         {
             Projectile.width = 100;
@@ -61,22 +62,23 @@ namespace ITD.Content.Projectiles.Hostile
                 switch (Projectile.ai[1])
                 {
                     case 0:
-                        vToCosJel = new Vector2(CosJel.Center.X, CosJel.Center.Y - 100);
+                        vToCosJel = new Vector2(CosJel.Center.X, CosJel.Center.Y - 150);
                         break;
                     case 1:
-                        vToCosJel = new Vector2(CosJel.Center.X - 200, CosJel.Center.Y + 100);
+                        vToCosJel = new Vector2(CosJel.Center.X - 150, CosJel.Center.Y + 0);
                         break;
                     case 2:
-                        vToCosJel = new Vector2(CosJel.Center.X + 200, CosJel.Center.Y + 100);
+                        vToCosJel = new Vector2(CosJel.Center.X + 150, CosJel.Center.Y + 0);
                         break;
                 }
+                Player player = Main.player[CosJel.target];
+
                 if (CosJel.ai[3] == 6 && CosJel.HasPlayerTarget)
                 {
-                    Player player = Main.player[CosJel.target];
                     Vector2 normalCenter = vToCosJel + new Vector2(0f, CosJel.velocity.Y);
                     Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
 
-                    if (Projectile.ai[2]++ >= 60)
+                    if (Projectile.ai[2]++ >= 50)
                     {
                         Projectile.ai[2] = 0;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -84,13 +86,21 @@ namespace ITD.Content.Projectiles.Hostile
                             ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings { PositionInWorld = Projectile.Center }, Projectile.owner);
                             Vector2 vel = Projectile.DirectionTo(player.Center) * 12f;
                             int projID = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel,
-                             ProjectileID.BrainScramblerBolt, CosJel.damage, 0f, -1, 240, CosJel.whoAmI);
+                             ProjectileID.MartianTurretBolt, CosJel.damage, 0f, -1, 240, CosJel.whoAmI);
                         }
                     }
                 }
-                else
+                else if (player.dead || !player.active)
                 {
                     Projectile.Kill();
+                }
+                else if (CosJel.ai[3] != 6)
+                {
+                    if (!bLocked)
+                    {
+                        bLocked = true;
+                        Projectile.velocity = Projectile.DirectionTo(player.Center) * 12f;
+                    }
                 }
             }
         }

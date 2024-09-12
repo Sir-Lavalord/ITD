@@ -30,7 +30,7 @@ namespace ITD.Content.Items.Weapons.Summoner
             Item.DamageType = DamageClass.SummonMeleeSpeed;
             Item.damage = 18;
             Item.knockBack = 2;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.LightRed;
             Item.shoot = ModContent.ProjectileType<FishbackerProj>();
             Item.shootSpeed = 4;
             Item.useStyle = ItemUseStyleID.Swing;

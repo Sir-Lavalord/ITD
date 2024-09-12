@@ -23,7 +23,7 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.knockBack = 6f;
             Item.width = 30;
             Item.height = 10;
-            Item.damage = 24;
+            Item.damage = 26;
             Item.shoot = ModContent.ProjectileType<WRipperSlash>();
 			Item.shootSpeed = 4;
             Item.UseSound = SoundID.Item1;
@@ -83,6 +83,7 @@ namespace ITD.Content.Items.Weapons.Melee
 			Vector2 randomSpread = velocity.RotatedByRandom(MathHelper.ToRadians(10));
             Projectile proj = Projectile.NewProjectileDirect(source, position, randomSpread, Item.shoot, damage, knockback, player.whoAmI);
 			proj.spriteDirection = player.direction;
+            proj.CritChance = Item.crit;
             return false;
         }
     }

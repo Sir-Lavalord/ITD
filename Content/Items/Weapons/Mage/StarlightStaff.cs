@@ -40,7 +40,7 @@ namespace ITD.Content.Items.Weapons.Mage
             Item.noMelee = true;
             Item.knockBack = 1f;
             Item.value = Item.buyPrice(silver: 10);
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.LightRed;
             Item.UseSound = SoundID.Item43;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<StarlightStaffProj>();
