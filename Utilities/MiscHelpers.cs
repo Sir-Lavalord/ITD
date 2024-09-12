@@ -10,10 +10,6 @@ namespace ITD.Utilities
 {
     public static class MiscHelpers
     {
-		public static bool SnaptrapUseCondition(int playerID)
-		{
-            return !Main.projectile.Any(proj => proj.active && proj.ModProjectile is ITDSnaptrap && proj.owner == playerID);
-		}
         public static NPC FindClosestNPC(this Projectile projectile, float maxDetectDistance)
         {
             NPC closestNPC = null;

@@ -109,7 +109,7 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
             canDoubleJump = false;
             hasReleasedJumpButton = false;
             damageCounter = 0;
-            SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/TwisterInABottle1"), Player.position);
+            SoundEngine.PlaySound(SoundID.DoubleJump, Player.position);
         }
 
         private void ContinueTwister()

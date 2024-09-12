@@ -6,6 +6,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
+using Terraria.Audio;
 
 namespace ITD.Utilities
 {
@@ -32,7 +33,7 @@ namespace ITD.Utilities
                 _ => new Color(v, p, q),
             };
         }
-        public static Vector2 QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, float maxDistTiles = 64f)
+        public static (Vector2, bool) QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, float maxDistTiles = 64f)
         {
             origin /= 16f;
             direction = direction.SafeNormalize(Vector2.UnitY);
@@ -105,7 +106,7 @@ namespace ITD.Utilities
             {
                 intersection = origin + direction * maxDistTiles;
             }
-            return intersection * 16f;
+            return (intersection * 16f, tileFound);
         }
         public static float Remap(float value, float oldMin, float oldMax, float newMin, float newMax)
         {
@@ -201,6 +202,22 @@ namespace ITD.Utilities
             item.useAnimation = item.useTime = 15;
             item.useTurn = true;
             item.autoReuse = true;
+        }
+        public static void DefaultToSnaptrap(this Item item, int newWidth, int newHeight, int snaptrapType, float shootSpeed, int useTime, int damage, SoundStyle? useSound = null)
+        {
+            item.knockBack = 0f;
+            item.autoReuse = false;
+            item.useStyle = ItemUseStyleID.Shoot;
+            item.width = newWidth;
+            item.height = newHeight;
+            item.damage = damage;
+            item.shoot = snaptrapType;
+            item.useTime = item.useAnimation = useTime;
+            item.shootSpeed = shootSpeed;
+            item.DamageType = DamageClass.Melee;
+            item.noMelee = true;
+            item.noUseGraphic = true;
+            item.UseSound = useSound ?? SoundID.Item1;
         }
         /// <summary>
         /// If any of the tiles right below this are standable, return true

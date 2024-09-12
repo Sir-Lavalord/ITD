@@ -34,10 +34,6 @@ namespace ITD.Players
         bool prevTime = false;
         bool curTime = false;
 
-        bool cosJelCounter = false;
-        int cosJelTimer = 0;
-        private readonly int cosJelTime = 60 * 80;
-
         public bool ZoneDeepDesert;
         public bool ZoneBlueshroomsUnderground;
 		public bool ZoneCatacombs;
@@ -131,60 +127,10 @@ namespace ITD.Players
 
             UpdateMouse();
 
-            // Random boss spawns (MOVE THIS TO ITDSYSTEM TO PREVENT MP FUNKYNESS)
-
             prevTime = curTime;
             curTime = Main.dayTime;
 
-            if (prevTime && !curTime) // It has just turned into nighttime
-            {
-                if (!ITDSystem.hasMeteorFallen) // If the hasMeteorFallen flag is false, it checks for a meteor
-                {
-                    bool found = false;
-                    for (int i = 0; i < Main.maxTilesX && !found; i++) // Loop through every horizontal tile
-                    {
-                        for (int j = 0; j < Main.maxTilesY; j++) // For each horizontal tile, loop through every column of that tile
-                        {
-                            Tile tile = Main.tile[i, j];
-                            if (tile.TileType == TileID.Meteorite)
-                            {
-                                ITDSystem.hasMeteorFallen = true;
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (NPC.downedBoss1 && ITDSystem.hasMeteorFallen && (Player.ZoneOverworldHeight || Player.ZoneSkyHeight) && !cosJelCounter && !DownedBossSystem.downedCosJel)
-                {
-                    if (Main.rand.NextBool(3))
-                    {
-                        Main.NewText("It's going to be a wiggly night...", Color.Purple);
-                        cosJelCounter = true;
-                    }
-                }
-            }
-            if (cosJelCounter)
-            {
-                cosJelTimer++;
-                if (cosJelTimer > cosJelTime)
-                {
-                    cosJelTimer = 0;
-                    cosJelCounter = false;
-                    SoundEngine.PlaySound(SoundID.Roar, Player.position);
-
-                    int type = ModContent.NPCType<CosmicJellyfish>();
-
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        NPC.SpawnOnPlayer(Player.whoAmI, type);
-                    }
-                    else
-                    {
-                        NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, number: Player.whoAmI, number2: type);
-                    }
-                }
-            }
+            NaturalSpawns.CosmicJellyfish(curTime, prevTime, Player);
                 //Suffocation Here
         }
         public void UpdateMouse()
@@ -262,8 +208,6 @@ namespace ITD.Players
         }
         public override void OnEnterWorld()
         {
-            cosJelCounter = false;
-            cosJelTimer = 0;
             PhysicsMethods.ClearAll();
         }
 		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
