@@ -727,7 +727,11 @@ Projectiles: {
 }
 
 NPCs: {
-	CosmicJellyfish.DisplayName: Cosmic Jellyfish
+	CosmicJellyfish: {
+		DisplayName: Cosmic Jellyfish
+		SpawnWarning: It's going to be a wiggly night...
+	}
+
 	FloralDevourer.DisplayName: Floral Devourer
 	FloralDevourerSegment.DisplayName: Floral Devourer
 	EmberlionPiercer.DisplayName: Emberlion Piercer

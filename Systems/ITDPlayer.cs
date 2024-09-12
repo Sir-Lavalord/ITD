@@ -150,7 +150,7 @@ namespace ITD.Players
             prevTime = curTime;
             curTime = Main.dayTime;
 
-            NaturalSpawns.CosmicJellyfish(curTime, prevTime, Player);
+            NaturalSpawns.CosmicJellyfishSpawn(curTime, prevTime, Player);
                 //Suffocation Here
         }
         public void UpdateMouse()
@@ -228,6 +228,7 @@ namespace ITD.Players
         }
         public override void OnEnterWorld()
         {
+            NaturalSpawns.LeaveWorld();
             PhysicsMethods.ClearAll();
         }
 		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)

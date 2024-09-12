@@ -724,7 +724,11 @@ Projectiles: {
 }
 
 NPCs: {
-	CosmicJellyfish.DisplayName: Kosmische Qualle
+	CosmicJellyfish: {
+		DisplayName: Kosmische Qualle
+		// SpawnWarning: It's going to be a wiggly night...
+	}
+
 	FloralDevourer.DisplayName: Floraler Verschlinger
 	FloralDevourerSegment.DisplayName: Floraler Verschlinger
 	EmberlionPiercer.DisplayName: Bernsteinlöwenstürmer

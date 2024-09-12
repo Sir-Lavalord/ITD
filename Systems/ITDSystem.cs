@@ -33,6 +33,10 @@ namespace ITD.Systems
         public int deepdesertTileCount;
         //misc
         public static SimpleMountData[] defaultMountData;
+        public override void SetStaticDefaults()
+        {
+            NaturalSpawns.SetStaticDefaults();
+        }
         public override void PostSetupContent()
         {
             defaultMountData = mounts.Select(a => a.ToSimple()).ToArray();

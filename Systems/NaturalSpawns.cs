@@ -4,6 +4,8 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using Terraria.Localization;
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 
 namespace ITD.Systems
 {
@@ -12,7 +14,12 @@ namespace ITD.Systems
         static bool cosJelCounter = false;
         static int cosJelTimer = 0;
         private static readonly int cosJelTime = 60 * 80;
-        public static void CosmicJellyfish(bool curTime, bool prevTime, Player player)
+        public static LocalizedText cosJelWarning {  get; private set; }
+        public static void SetStaticDefaults()
+        {
+            cosJelWarning = Language.GetOrRegister(ITD.Instance.GetLocalizationKey($"NPCs.{nameof(CosmicJellyfish)}.SpawnWarning"));
+        }
+        public static void CosmicJellyfishSpawn(bool curTime, bool prevTime, Player player)
         {
             if (prevTime && !curTime) // It has just turned into nighttime
             {
@@ -20,13 +27,14 @@ namespace ITD.Systems
                 {
                     if (Main.rand.NextBool(3))
                     {
-                        Main.NewText("It's going to be a wiggly night...", Color.Purple);
+                        Main.NewText(cosJelWarning.Value, Color.Purple);
                         cosJelCounter = true;
                     }
                 }
             }
             if (cosJelCounter)
             {
+                //Main.NewText(cosJelTimer);
                 cosJelTimer++;
                 if (cosJelTimer > cosJelTime)
                 {
@@ -46,6 +54,11 @@ namespace ITD.Systems
                     }
                 }
             }
+        }
+        public static void LeaveWorld()
+        {
+            cosJelCounter = false;
+            cosJelTimer = 0;
         }
     }
 }

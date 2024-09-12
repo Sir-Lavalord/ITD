@@ -722,7 +722,11 @@ Projectiles: {
 }
 
 NPCs: {
-	CosmicJellyfish.DisplayName: Medusa Cósmica
+	CosmicJellyfish: {
+		DisplayName: Medusa Cósmica
+		SpawnWarning: Esta va a ser una noche ondulante...
+	}
+
 	FloralDevourer.DisplayName: Devorador Floral
 	FloralDevourerSegment.DisplayName: Devorador Floral
 	EmberlionPiercer.DisplayName: Brasaleón perforador
