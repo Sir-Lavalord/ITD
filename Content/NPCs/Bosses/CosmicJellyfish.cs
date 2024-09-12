@@ -77,6 +77,7 @@ namespace ITD.Content.NPCs.Bosses
             Charging,
             Slinging,
             DownToSize,
+            ForcedKill,
             VoidShard,
             StarShard,
         }
@@ -139,12 +140,12 @@ namespace ITD.Content.NPCs.Bosses
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
+            cooldownSlot = ImmunityCooldownID.Bosses;
             if (AI_State == MovementState.Suffocate)
             {
                 return false;
             }
-            cooldownSlot = ImmunityCooldownID.Bosses;
-            return true;
+            else return true;
         }
 
         public override void FindFrame(int frameHeight)
@@ -251,11 +252,11 @@ namespace ITD.Content.NPCs.Bosses
                         NPC.ai[3]++;
                         if (hand != -1)
                         {
-                            handState = HandState.DownToSize;
+                            handState = HandState.ForcedKill;
                         }
                         if (hand2 != -1)
                         {
-                            handState2 = HandState.DownToSize;
+                            handState2 = HandState.ForcedKill;
                         }
                         //Gore MUST goes here (else it will fuck up multiplayer)
                     }
@@ -288,23 +289,10 @@ namespace ITD.Content.NPCs.Bosses
             if (NPC.ai[3] == 1)//Sludge
             {
                 NPC.localAI[1]++;
-                if (NPC.localAI[1] == 180 || NPC.localAI[1] == 60 && SecondStage)
+                if (NPC.localAI[1] == 180 || NPC.localAI[1] == 120 && SecondStage)
                 {
-                    if (Main.expertMode || Main.masterMode)
-                    {
-                        NPC.localAI[0]++;
-                        if (NPC.localAI[0] < 2 && !SecondStage || NPC.localAI[0] < 3 && !SecondStage)
-                        {
-                            NPC.localAI[1] = 20;
-                        }
-                        else
-                        {
-                            NPC.ai[3]++;
-                            NPC.localAI[0] = 0;
-                            NPC.localAI[1] = 0;
-                        }
-                    }
-
+                    NPC.localAI[1] = 0;
+                    NPC.ai[3]++;
                     //P2 stat bloat garbage goes here
                     int projectileAmount = Main.rand.Next(3, 6);
 
@@ -332,7 +320,6 @@ namespace ITD.Content.NPCs.Bosses
             {
                 if (NPC.localAI[1]++ >= 100)
                 {
-                    NPC.localAI[1] = 0;
                     if (handState == HandState.Waiting && hand != -1)
                         handState = HandState.VoidShard;
                     if (SecondStage)
@@ -355,6 +342,14 @@ namespace ITD.Content.NPCs.Bosses
                         }
                     }
                 }
+                if (NPC.localAI[1] >= 300)//Convoluted
+                {
+                    NPC.localAI[1] = 0;
+                    NPC.ai[3]++;
+                    Timer = Timer2 = 0;
+                    handState = HandState.ForcedKill;
+                    handState2 = HandState.ForcedKill;
+                }
             }
             if (NPC.ai[3] == 3)//Mini Jello Fish
             {
@@ -376,7 +371,7 @@ namespace ITD.Content.NPCs.Bosses
                         }
                     }
                 }
-                else if (NPC.localAI[1] >= 200)
+                else if (NPC.localAI[1] >= 300)
                 {
                     NPC.ai[3]++;
                     NPC.localAI[1] = 0;
@@ -429,9 +424,9 @@ namespace ITD.Content.NPCs.Bosses
                             NPC.localAI[2] = 0;
                             NPC.ai[3]++;
                             if (handState == HandState.Waiting && hand != -1)
-                                handState = HandState.DownToSize;
+                                handState = HandState.ForcedKill;
                             if (handState2 == HandState.Waiting && hand2 != -1)
-                                handState2 = HandState.DownToSize;
+                                handState2 = HandState.ForcedKill;
                         }
                             if (hand == -1)
                             {
@@ -448,35 +443,35 @@ namespace ITD.Content.NPCs.Bosses
                 if (NPC.ai[3] == 5)//Suffocate, actual retarded attack but i'm not the boss here
             {
                 NPC.localAI[1]++;
-                if (NPC.localAI[1] == 60 && !SecondStage || NPC.localAI[1] == 50 && SecondStage)
+                if (NPC.localAI[1] == 60)
                 {
                     if (AI_State != MovementState.Suffocate)
                         AI_State = MovementState.Ram;
-                    if (NPC.localAI[0] > 3 && !SecondStage || NPC.localAI[0] > 4 && SecondStage)
-                    {
-                        //can't believe i have to do this, since the checking doesn't even fucking work
-                        NPC.ai[3]++;
-                        NPC.localAI[1] = 0;
-                        NPC.localAI[0] = 0;
-                        NPC.localAI[2] = 0;
+                }
+                if (NPC.localAI[0] >= 2 && !SecondStage || NPC.localAI[0] >= 3 && SecondStage)
+                {
+                    //can't believe i have to do this, since the checking doesn't even fucking work
+                    NPC.ai[3]++;
+                    NPC.localAI[1] = 0;
+                    NPC.localAI[0] = 0;
+                    NPC.localAI[2] = 0;
 
-                    }
                 }
             }
             if (NPC.ai[3] == 6)//Balls
             {
-                if (NPC.localAI[1]++ == 120)
+                if (NPC.localAI[1]++ == 60)
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         for (int i = 0; i < 3; i++)
                         {
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(0, -3.5f).RotatedBy((MathHelper.TwoPi/3) * i),
-                                ModContent.ProjectileType<CosmicLightningOrb>(), NPC.damage / 2, 2f, -1, NPC.whoAmI);
+                                ModContent.ProjectileType<CosmicLightningOrb>(), NPC.damage / 2, 2f, -1, NPC.whoAmI,i);
                         }
                     }
                 }
-                if (NPC.localAI[1] == 200)
+                if (NPC.localAI[1] == 600)
                 {
                     NPC.ai[3]++;
                     NPC.localAI[1] = 0;
@@ -707,19 +702,19 @@ namespace ITD.Content.NPCs.Bosses
 
                             }
                             break;
+                        case HandState.ForcedKill:
+                            handState = HandState.Waiting;
+                            projectile.Kill();
+                            Timer = 0;
+                            handSling = 0f;
+                            handCharge = 0f;
+                            handFollowThrough = 0f;
+                            projectile.Center = Vector2.Lerp(projectile.Center, normalCenter, 0.3f);
+                            break;
                         case HandState.VoidShard:
-                            if (Timer++ >= 100)
+                            if (Timer++ >= 80)
                             {
                                 Timer = 0;
-                                if (NPC.localAI[2]++ >= 3)
-                                {
-                                    NPC.ai[3]++;
-                                    handState = HandState.DownToSize;
-                                    NPC.localAI[2] = 0;
-                                    NPC.localAI[1] = 0;
-                                    Timer = 0;
-                                }
-
                                 SoundEngine.PlaySound(SoundID.Item20, projectile.Center);
                                 //P2 stat garbage here
                                 int projectileAmount = Main.rand.Next(5, 11);
@@ -911,6 +906,15 @@ namespace ITD.Content.NPCs.Bosses
 
                             }
                             break;
+                        case HandState.ForcedKill:
+                            handState2 = HandState.Waiting;
+                            projectile2.Kill();
+                            Timer2 = 0;
+                            handSling2 = 0f;
+                            handCharge2 = 0f;
+                            handFollowThrough2 = 0f;
+                            projectile2.Center = Vector2.Lerp(projectile2.Center, normalCenter, 0.3f);
+                            break;
                         case HandState.StarShard:
                             if (Timer2++ >= 100)
                             {
@@ -927,6 +931,8 @@ namespace ITD.Content.NPCs.Bosses
                                      ProjectileID.FallingStar, NPC.damage, 0f, -1, 240, NPC.whoAmI);
                                     Main.projectile[projID].friendly = false;
                                     Main.projectile[projID].hostile = true;
+                                    Main.projectile[projID].tileCollide = false;
+
                                 }
 
                             }
@@ -965,17 +971,6 @@ namespace ITD.Content.NPCs.Bosses
                 else
                 {
                     hand2 = -1;
-                }
-            }
-            if (NPC.ai[3] !=2)
-            {
-                if (hand != 1 || hand2 != 1)
-                {
-                    if (handState == HandState.VoidShard || handState2 == HandState.StarShard)
-                    {
-                        handState = HandState.DownToSize;
-                        handState2 = HandState.DownToSize;
-                    }
                 }
             }
         }
@@ -1043,9 +1038,9 @@ namespace ITD.Content.NPCs.Bosses
                     if (NPC.localAI[2] >= 80)
                     {
                         NPC.localAI[0]++;
-                            NPC.localAI[1] = 0;
-                            NPC.localAI[2] = 0;
-                            AI_State = MovementState.FollowingRegular;
+                        NPC.localAI[1] = 0;
+                        NPC.localAI[2] = 0;
+                        AI_State = MovementState.FollowingRegular;
                     }
                     break;
                 case MovementState.Suffocate:
@@ -1088,11 +1083,11 @@ namespace ITD.Content.NPCs.Bosses
                 DesperateAttack = true;
                 if (hand != -1)
                 {
-                    handState = HandState.DownToSize;
+                    handState = HandState.ForcedKill;
                 }
                 if (hand2 != -1)
                 {
-                    handState2 = HandState.DownToSize;
+                    handState2 = HandState.ForcedKill;
                 }
                 AI_State = MovementState.Explode;
                 Main.NewText("Subterranean Sun.", Color.Orange);

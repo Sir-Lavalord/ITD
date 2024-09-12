@@ -33,11 +33,9 @@ namespace ITD.Content.Items.Other
             if (Item.favorited)
             {
                 player.GetModPlayer<InsightedPlayer>().CorporateInsight = true;
-                ITDSystem.CorporateInsight = true;
             }
             else
             {
-                ITDSystem.CorporateInsight = false;
                 player.GetModPlayer<InsightedPlayer>().CorporateInsight = false;
             }
             }
@@ -49,33 +47,5 @@ namespace ITD.Content.Items.Other
     public class InsightedPlayer : ModPlayer
     {
         public bool CorporateInsight;
-    }
-        public class InsightedProjectiles : GlobalProjectile
-    {
-        public override bool InstancePerEntity => true;
-        public override bool PreDraw(Projectile projectile, ref Color lightColor)
-        {
-            if (ITDSystem.CorporateInsight)
-            {
-                for (int i = 0; i < 1000; i++)
-                {
-                    if (projectile.active)
-                    {
-                        Rectangle hitbox = projectile.getRect();
-                        ProjectileLoader.ModifyDamageHitbox(projectile, ref hitbox);
-                        hitbox.Offset((int)-Main.screenPosition.X, (int)-Main.screenPosition.Y);
-                        hitbox = Main.ReverseGravitySupport(hitbox);
-                        if (projectile.hostile)
-                        {
-                            Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, hitbox, Color.DarkRed * 0.8f);
-                        }
-                        else if (projectile.friendly)
-                            Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, hitbox, Color.LimeGreen * 0.8f);
-
-                    }
-                }
-            }
-            return true;
-        }
     }
 }

@@ -21,8 +21,6 @@ namespace ITD.Systems
         public int bluegrassCount;
         public int deepdesertTileCount;
         //misc
-        public static bool CorporateInsight = false;//dubiously strong
-
         public static SimpleMountData[] defaultMountData;
         public override void PostSetupContent()
         {
@@ -32,22 +30,6 @@ namespace ITD.Systems
         {
             bluegrassCount = tileCounts[ModContent.TileType<Bluegrass>()];
             deepdesertTileCount = tileCounts[ModContent.TileType<DioriteTile>()] + tileCounts[ModContent.TileType<PegmatiteTile>()];
-        }
-        private void ResetFlags()
-        {
-            CorporateInsight = false;
-        }
-        public override void OnWorldLoad()
-        {
-            CorporateInsight = false;
-        }
-        public override void OnWorldUnload()
-        {
-            CorporateInsight = false;
-        }
-        public override void ClearWorld()
-        {
-            hasMeteorFallen = false;
         }
         public override void SaveWorldData(TagCompound tag)
         {
