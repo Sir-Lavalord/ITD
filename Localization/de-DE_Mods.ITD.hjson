@@ -765,6 +765,7 @@ NPCs: {
 	Sandberus.DisplayName: Dünenfürst
 	// KSGlandNPC.DisplayName: Slimy Coating
 	// Gravekeeper.DisplayName: Gravekeeper
+	// HauntedTombstone.DisplayName: Haunted Tombstone
 }
 
 Buffs: {

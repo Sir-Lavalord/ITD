@@ -16,6 +16,7 @@ using ITD.Utilities;
 
 namespace ITD.Content.NPCs.Bosses
 {
+	[AutoloadBossHead]
     public class Gravekeeper : ModNPC
     {
 		private enum ActionState
@@ -28,13 +29,13 @@ namespace ITD.Content.NPCs.Bosses
         }
 		private ActionState AI_State;
 		private int AttackCycle = 0;
-		private int GoonCount = 1;
 		private int StateTimer = 100;
 		private Vector2 Teleposition;
 		
         public override void SetStaticDefaults()
         {
             NPCID.Sets.BossBestiaryPriority.Add(Type);
+			Main.npcFrameCount[Type] = 3;
         }
         public override void SetDefaults()
         {
@@ -44,6 +45,7 @@ namespace ITD.Content.NPCs.Bosses
             NPC.damage = 40;
             NPC.defense = 5;
             NPC.lifeMax = 5000;
+			NPC.dontTakeDamage = true;
 			NPC.knockBackResist = 0f;
             NPC.HitSound = SoundID.NPCHit54;
             NPC.DeathSound = SoundID.NPCDeath52;
@@ -52,6 +54,7 @@ namespace ITD.Content.NPCs.Bosses
             NPC.aiStyle = -1;
 			NPC.boss = true;
             NPC.npcSlots = 10f;
+			
 			if (!Main.dedServ)
             {
                 Music = ITD.Instance.GetMusic("DuneBearer") ?? MusicID.Boss1;
@@ -64,7 +67,7 @@ namespace ITD.Content.NPCs.Bosses
         }
 		
         float speed = 10;
-        float inertia = 20;
+        float inertia = 100;
         public override void AI()
         {
 			switch (AI_State)
@@ -96,13 +99,18 @@ namespace ITD.Content.NPCs.Bosses
 					}
 					break;
 				case ActionState.DarkFountain:
-					if (Main.netMode != NetmodeID.MultiplayerClient)
+					if (StateTimer % 2 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
 					{
 						float range = 1f;
 						if (Main.expertMode)
 							range = 2f;
-						Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(4f+Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), ModContent.ProjectileType<GasLeak>(), 20, 0, -1);
-						Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(-4f-Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), ModContent.ProjectileType<GasLeak>(), 20, 0, -1);
+						if (Main.masterMode)
+							range = 4f;
+						for (int i = 0; i < range; i++)
+						{
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(4f+Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), ModContent.ProjectileType<GasLeak>(), 20, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(-4f-Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), ModContent.ProjectileType<GasLeak>(), 20, 0, -1);
+						}
 					}
 					for (int i = 0; i < 4; i++)
 					{
@@ -132,9 +140,24 @@ namespace ITD.Content.NPCs.Bosses
 			float rotation = rotationFactor * maxRotation;
 			NPC.rotation = rotation;
 			NPC.spriteDirection = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();
-			
+						
 			if (NPC.Opacity < 1f)
 				NPC.Opacity += 0.05f;
+        }
+		
+		public override void FindFrame(int frameHeight)
+        {
+            NPC.frameCounter += 1f;
+            if (NPC.frameCounter > 5f)
+            {
+                NPC.frameCounter = 0;
+                NPC.frame.Y += frameHeight;
+
+                if (NPC.frame.Y > frameHeight * Main.npcFrameCount[Type]-1)
+                {
+                    NPC.frame.Y = frameHeight;
+                }
+            }
         }
 		
 		private void StateSwitch()
@@ -144,14 +167,9 @@ namespace ITD.Content.NPCs.Bosses
 				case ActionState.Chasing:
 					AI_State = ActionState.Cooking;
 					StateTimer = 20;
-					if (NPC.lifeMax-NPC.life > GoonCount * 500)
-					{
-						SummonGoons();
-						GoonCount++;
-					}
 					break;
 				case ActionState.Cooking:
-					AttackCycle = ++AttackCycle % 2;
+					AttackCycle = ++AttackCycle % 3;
 					switch (AttackCycle)
 					{
 						case 0:
@@ -160,6 +178,11 @@ namespace ITD.Content.NPCs.Bosses
 							NPC.velocity = new Vector2(0, -10f);
 							break;
 						case 1:
+							AI_State = ActionState.Chasing;
+							StateTimer = 120;
+							Necromancy();
+							break;
+						case 2:
 							AI_State = ActionState.Skullraiser;
 							StateTimer = 60;
 							break;
@@ -216,6 +239,7 @@ namespace ITD.Content.NPCs.Bosses
 			NPC.velocity = vectorToIdlePosition;
 			NPC.Opacity = 0f;
 			
+			SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
 			for (int i = 0; i < 60; i++)
 			{
 				Vector2 dustOffset = new Vector2(0f, 60f).RotatedBy(MathHelper.ToRadians(6*i));
@@ -234,33 +258,52 @@ namespace ITD.Content.NPCs.Bosses
 			NPCID.CursedSkull,
 			NPCID.DarkCaster,
 		};
-		private void SummonGoons()
+		private void Necromancy()
 		{
-			SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
-			
-			Player player = Main.player[NPC.target];
-			for (int i = 0; i < 6; i++)
+			int tombstones = 0;
+			foreach (var target in Main.ActiveNPCs)
+            {
+                if (target.type == ModContent.NPCType<HauntedTombstone>() && target.ai[0] == NPC.whoAmI)
+				{
+					tombstones++;
+					
+					for (int l = 0; l < 10; l++)
+					{
+						int spawnDust = Dust.NewDust(target.Center, 16, 16, DustID.GiantCursedSkullBolt, 0, 0, 0, default, 2f);
+						Main.dust[spawnDust].noGravity = true;
+						Main.dust[spawnDust].velocity *= 2f;
+					}
+					
+					NPC.NewNPC(NPC.GetSource_FromThis(), (int)(target.Center.X), (int)(target.Center.Y), TheList[Main.rand.Next(6)]);
+				}
+            }
+			while (tombstones < 3)
 			{
-				Vector2 skeletonOffset = new Vector2(0f, 400f).RotatedBy(MathHelper.ToRadians(60*i+30));
-				Vector2 position = player.Center + skeletonOffset;
+				tombstones++;
+				
+				Vector2 tombOffset = new Vector2();
+				double angle = Main.rand.NextDouble() * 2d * Math.PI;
+				tombOffset.X += (float)(Math.Sin(angle) * 400);
+				tombOffset.Y += (float)(Math.Cos(angle) * 400);
+				
+				Vector2 position = NPC.Center + tombOffset;
 				Point point = position.ToTileCoordinates();
 				
 				int j = 0;
-				while (j < 24 && point.Y >= 10 && WorldGen.SolidTile(point.X, point.Y, false))
+				while (j < 40 && point.Y >= 10 && WorldGen.SolidTile(point.X, point.Y, false))
 				{
 					point.Y--;
 					j++;
 				}
 				int k = 0;
-				while (k < 24 && point.Y <= Main.maxTilesY - 10 && !WorldGen.ActiveAndWalkableTile(point.X, point.Y))
+				while (k < 40 && point.Y <= Main.maxTilesY - 10 && !WorldGen.ActiveAndWalkableTile(point.X, point.Y))
 				{
 					point.Y++;
 					k++;
 				}
 				
 				position = new Vector2((float)(point.X * 16 + 8), (float)(point.Y * 16 - 8));
-				
-				if (Collision.CanHit(player.Center, 1, 1, position, 8, 8))
+				if (Collision.CanHit(NPC.Center, 1, 1, position, 8, 8))
 				{
 					for (int l = 0; l < 10; l++)
 					{
@@ -269,8 +312,17 @@ namespace ITD.Content.NPCs.Bosses
 						Main.dust[spawnDust].velocity *= 2f;
 					}
 					
-					NPC.NewNPC(NPC.GetSource_FromThis(), (int)(position.X), (int)(position.Y), TheList[Main.rand.Next(6)]);
+					NPC.NewNPC(NPC.GetSource_FromThis(), (int)(position.X), (int)(position.Y), ModContent.NPCType<HauntedTombstone>(), 0, NPC.whoAmI);
 				}
+			}
+			
+			SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
+			for (int i = 0; i < 60; i++)
+			{
+				Vector2 dustOffset = new Vector2(0f, 60f).RotatedBy(MathHelper.ToRadians(6*i));
+				Dust dust = Main.dust[Dust.NewDust(NPC.Center, 0, 0, DustID.GiantCursedSkullBolt, 0, 0, 100, default, 1.5f)];
+				dust.noGravity = true;
+				dust.velocity = dustOffset*0.1f;
 			}
 		}
 		

@@ -768,6 +768,7 @@ NPCs: {
 	Sandberus.DisplayName: Sandberus
 	KSGlandNPC.DisplayName: Slimy Coating
 	Gravekeeper.DisplayName: Gravekeeper
+	HauntedTombstone.DisplayName: Haunted Tombstone
 }
 
 Buffs: {
