@@ -17,6 +17,7 @@ namespace ITD.Content.UI
         public abstract Func<Item, bool> isValid { get; }
         public abstract string Texture { get; }
         public bool NoItem => item is null || item.IsAir;
+        public bool IsMouseOver => ContainsPoint(Main.MouseScreen);
         public void UpdateProperties(float dimension, float left, float top)
         {
             Width.Set(dimension, 0f);
@@ -50,13 +51,8 @@ namespace ITD.Content.UI
         }
         public override void Update(GameTime gameTime)
         {
-            if (!NoItem)
-            {
-                if (item.ModItem is Favor favorItem)
-                {
-                    favorItem.UpdateAccessory(Main.LocalPlayer, false);
-                }
-            }
+            if (IsMouseOver)
+                Main.LocalPlayer.mouseInterface = true;
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -65,12 +61,13 @@ namespace ITD.Content.UI
             if (!NoItem)
             {
                 ItemSlot.DrawItemIcon(item, 21, spriteBatch, GetDimensions().Position() + new Vector2(GetDimensions().Width / 2, GetDimensions().Height / 2), 1f, 64f, Color.White);
-                if (IsMouseHovering)
+                if (IsMouseOver)
                 {
                     Main.HoverItem = item.Clone();
+                    Main.hoverItemName = "a";
                 }
             }
-            if (IsMouseHovering)
+            if (IsMouseOver)
             {
                 Main.LocalPlayer.mouseInterface = true;
             }

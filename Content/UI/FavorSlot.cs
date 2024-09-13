@@ -50,5 +50,16 @@ namespace ITD.Content.UI
         public override ref Item item => ref Main.LocalPlayer.GetModPlayer<FavorPlayer>().FavorItem;
         public override Func<Item, bool> isValid => (item) => item.ModItem is Favor;
         public override string Texture => "ITD/Content/UI/FavorSlot";
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            if (!NoItem)
+            {
+                if (item.ModItem is Favor favorItem)
+                {
+                    favorItem.UpdateAccessory(Main.LocalPlayer, false);
+                }
+            }
+        }
     }
 }
