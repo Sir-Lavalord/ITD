@@ -33,7 +33,7 @@ namespace ITD.Utilities
                 _ => new Color(v, p, q),
             };
         }
-        public static (Vector2, bool) QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, float maxDistTiles = 64f)
+        public static (Vector2, bool) QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, bool shouldHitPlatforms = false, float maxDistTiles = 64f)
         {
             origin /= 16f;
             direction = direction.SafeNormalize(Vector2.UnitY);
@@ -81,7 +81,7 @@ namespace ITD.Utilities
                     curDistPixels = rayLength1D.Y;
                     rayLength1D.Y += unitStepSize.Y;
                 }
-                if (SolidTile(tileCheck.X, tileCheck.Y))
+                if ((shouldHitPlatforms && SolidTile(tileCheck.X, tileCheck.Y)) || WorldGen.SolidTile(tileCheck.X, tileCheck.Y, false))
                 {
                     tileFound = true;
                 }

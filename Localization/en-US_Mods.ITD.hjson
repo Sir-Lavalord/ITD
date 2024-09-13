@@ -646,6 +646,11 @@ Items: {
 		DisplayName: Ace Of Hearts
 		Tooltip: ""
 	}
+
+	GravekeeperBag: {
+		DisplayName: Gravekeeper Bag
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
