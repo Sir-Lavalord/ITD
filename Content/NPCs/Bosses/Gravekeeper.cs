@@ -12,6 +12,7 @@ using Terraria.UI;
 
 using ITD.Content.Buffs.Debuffs;
 using ITD.Content.Projectiles.Hostile;
+using ITD.Utilities;
 
 namespace ITD.Content.NPCs.Bosses
 {
@@ -27,6 +28,7 @@ namespace ITD.Content.NPCs.Bosses
         }
 		private ActionState AI_State;
 		private int AttackCycle = 0;
+		private int GoonCount = 1;
 		private int StateTimer = 100;
 		private Vector2 Teleposition;
 		
@@ -56,19 +58,13 @@ namespace ITD.Content.NPCs.Bosses
             }
         }
 		
-        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
-        {
-            cooldownSlot = ImmunityCooldownID.Bosses;
-            return true;
-        }
-		
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             target.AddBuff(ModContent.BuffType<NecrosisBuff>(), 60 * 8);
         }
 		
         float speed = 10;
-        float inertia = 100;
+        float inertia = 20;
         public override void AI()
         {
 			switch (AI_State)
@@ -117,11 +113,11 @@ namespace ITD.Content.NPCs.Bosses
 					}
 					break;
 				case ActionState.Skullraiser:
-					if (StateTimer % 8 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+					if (StateTimer % 10 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
 					{
-						Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(400f-Main.rand.NextFloat(800f), 400f), new Vector2(0, -4f), ModContent.ProjectileType<Necroskull>(), 20, 0, -1);
+						Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -4f), ModContent.ProjectileType<Necroskull>(), 20, 0, -1);
 						if (Main.expertMode)
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(400f-Main.rand.NextFloat(800f), 400f), new Vector2(0, -4f), ModContent.ProjectileType<Necroskull>(), 20, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -4f), ModContent.ProjectileType<Necroskull>(), 20, 0, -1);
 					}
 					break;
 			}
@@ -148,6 +144,11 @@ namespace ITD.Content.NPCs.Bosses
 				case ActionState.Chasing:
 					AI_State = ActionState.Cooking;
 					StateTimer = 20;
+					if (NPC.lifeMax-NPC.life > GoonCount * 500)
+					{
+						SummonGoons();
+						GoonCount++;
+					}
 					break;
 				case ActionState.Cooking:
 					AttackCycle = ++AttackCycle % 2;
@@ -160,10 +161,9 @@ namespace ITD.Content.NPCs.Bosses
 							break;
 						case 1:
 							AI_State = ActionState.Skullraiser;
-							StateTimer = 48;
+							StateTimer = 60;
 							break;
 					}
-					
 					break;
 				case ActionState.ShovelSlam:
 					AI_State = ActionState.DarkFountain;
@@ -172,11 +172,12 @@ namespace ITD.Content.NPCs.Bosses
 					
 					Vector2 tpOffset = new Vector2();
 					double angle = Main.rand.NextDouble() * 2d * Math.PI;
-					tpOffset.X += (float)(Math.Sin(angle) * 200);
-					tpOffset.Y += (float)(Math.Cos(angle) * 200);
+					tpOffset.X += (float)(Math.Sin(angle) * 240);
+					tpOffset.Y += (float)(Math.Cos(angle) * 240);
 			
 					Teleposition = Main.player[NPC.target].Center - tpOffset;
 					
+					Main.player[Main.myPlayer].GetITDPlayer().Screenshake = 20;
 					SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
 					SoundEngine.PlaySound(SoundID.NPCDeath51, NPC.Center);
 					break;
@@ -187,7 +188,7 @@ namespace ITD.Content.NPCs.Bosses
 					break;
 				default:
 					AI_State = ActionState.Chasing;
-					StateTimer = 100;
+					StateTimer = 120;
 					break;
 			}
 		}
@@ -221,6 +222,55 @@ namespace ITD.Content.NPCs.Bosses
 				Dust dust = Main.dust[Dust.NewDust(NPC.Center, 0, 0, DustID.GiantCursedSkullBolt, 0, 0, 100, default, 1.5f)];
 				dust.noGravity = true;
 				dust.velocity = dustOffset*0.1f;
+			}
+		}
+		
+		public static int[] TheList = new int[]
+		{
+			NPCID.AngryBones,
+			NPCID.AngryBonesBig,
+			NPCID.AngryBonesBigHelmet,
+			NPCID.AngryBonesBigMuscle,
+			NPCID.CursedSkull,
+			NPCID.DarkCaster,
+		};
+		private void SummonGoons()
+		{
+			SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
+			
+			Player player = Main.player[NPC.target];
+			for (int i = 0; i < 6; i++)
+			{
+				Vector2 skeletonOffset = new Vector2(0f, 400f).RotatedBy(MathHelper.ToRadians(60*i+30));
+				Vector2 position = player.Center + skeletonOffset;
+				Point point = position.ToTileCoordinates();
+				
+				int j = 0;
+				while (j < 24 && point.Y >= 10 && WorldGen.SolidTile(point.X, point.Y, false))
+				{
+					point.Y--;
+					j++;
+				}
+				int k = 0;
+				while (k < 24 && point.Y <= Main.maxTilesY - 10 && !WorldGen.ActiveAndWalkableTile(point.X, point.Y))
+				{
+					point.Y++;
+					k++;
+				}
+				
+				position = new Vector2((float)(point.X * 16 + 8), (float)(point.Y * 16 - 8));
+				
+				if (Collision.CanHit(player.Center, 1, 1, position, 8, 8))
+				{
+					for (int l = 0; l < 10; l++)
+					{
+						int spawnDust = Dust.NewDust(position, 16, 16, DustID.GiantCursedSkullBolt, 0, 0, 0, default, 2f);
+						Main.dust[spawnDust].noGravity = true;
+						Main.dust[spawnDust].velocity *= 2f;
+					}
+					
+					NPC.NewNPC(NPC.GetSource_FromThis(), (int)(position.X), (int)(position.Y), TheList[Main.rand.Next(6)]);
+				}
 			}
 		}
 		

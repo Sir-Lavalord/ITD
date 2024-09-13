@@ -135,6 +135,7 @@ namespace ITD.Content.NPCs.Bosses
 							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*0.5f, NPC.height*0.5f), new Vector2(2f, -16f), ModContent.ProjectileType<SandBoulder>(), 20, 0, -1);
 							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(-NPC.width*0.5f, NPC.height*0.5f), new Vector2(-2f, -16f), ModContent.ProjectileType<SandBoulder>(), 20, 0, -1);
 						}
+						Main.player[Main.myPlayer].GetITDPlayer().Screenshake = 20;
 						SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
 					}
 					else if (StateTimer < 10)

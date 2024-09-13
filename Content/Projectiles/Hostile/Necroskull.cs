@@ -12,16 +12,25 @@ namespace ITD.Content.Projectiles.Hostile
 {
     public class Necroskull : ModProjectile
     {
+		public override void SetStaticDefaults()
+        {
+             Main.projFrames[Projectile.type] = 5;
+        }
         public override void SetDefaults()
         {
-            Projectile.width = 20;
-            Projectile.height = 20;
+            Projectile.width = 48;
+            Projectile.height = 48;
             Projectile.penetrate = -1;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.timeLeft = 300;
 			Projectile.tileCollide = false;
 			Projectile.ignoreWater = true;
+        }
+		
+		public override Color? GetAlpha(Color drawColor)
+        {
+            return Color.White;
         }
 		
 		public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
@@ -69,9 +78,15 @@ namespace ITD.Content.Projectiles.Hostile
 			else
 				Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2*2;
 
-			int trailDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.GiantCursedSkullBolt, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 2f);
-			Main.dust[trailDust].noGravity = true;
-			Main.dust[trailDust].velocity *= 0f;
+			if (++Projectile.frameCounter >= 6)
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
+				
+				int trailDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.GiantCursedSkullBolt, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 1.5f);
+				Main.dust[trailDust].noGravity = true;
+				Main.dust[trailDust].velocity *= 0f;
+            }
         }
 		
 		public override void OnKill(int timeLeft)

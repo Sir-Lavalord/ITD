@@ -805,9 +805,11 @@ Buffs: {
 
 	NecrosisBuff: {
 		// DisplayName: Necrosis Buff
-		// Description: Mods.ITD.Buffs.NecrosisBuff.Description
+		// Description: Rapidly losing life
 	}
 }
+
+// DeathMessage.Necrosis: succumbed to necrosis.
 
 WorldGen: {
 	BluesoilPassMessage: Blauifiziere das tiefe Eis...

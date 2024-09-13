@@ -10,6 +10,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terraria;
+using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using System.Linq;
 using ITD.Content.Projectiles.Friendly.Misc;
@@ -211,6 +212,20 @@ namespace ITD.Players
 					}
 				}
 			}
+		}
+		private PlayerDeathReason DeathByLocalization(string key)
+        {
+            string death = Language.GetTextValue($"Mods.ITD.DeathMessage.{key}");
+            return PlayerDeathReason.ByCustomReason($"{Player.name} {death}");
+        }
+		public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+        {
+			if (damage == 10.0 && hitDirection == 0 && damageSource.SourceOtherIndex == 8)
+            {
+                if (necrosis)
+                    damageSource = DeathByLocalization("Necrosis");
+            }
+			return true;
 		}
         public NPC[] GetNearbyNPCs(float distance, bool ignoreFriendly = true)
         {
