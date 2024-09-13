@@ -23,7 +23,6 @@ namespace ITD.Content.Items.Accessories.Combat.All
             Item.rare = ItemRarityID.Green;
             Item.accessory = true;
         }
-
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             BadassPlayer modPlayer = player.GetModPlayer<BadassPlayer>();

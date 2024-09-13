@@ -26,7 +26,7 @@ namespace ITD.Networking
         public override void Load()
         {
             // registers the packets into the packets list and the dictionary
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ITDPacket))))
+            foreach (var type in Mod.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ITDPacket))))
             {
                 var instance = (ITDPacket)RuntimeHelpers.GetUninitializedObject(type);
                 instance.ID = packets.Count;
