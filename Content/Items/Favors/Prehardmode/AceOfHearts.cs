@@ -15,15 +15,11 @@ namespace ITD.Content.Items.Favors.Prehardmode
 {
     public class AceOfHearts : Favor
     {
-
-        public static LocalizedText HotkeyText { get; private set; }
-
         public override int FavorFatigueTime => 240;
         public override void SetDefaults()
         {
             Item.width = Item.height = 32;
-            HotkeyText = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(AceOfHearts)}.HotkeyText"));
-            Item.rare = ModContent.RarityType<Content.Rarities.CursedFavorRarity>();
+            Item.rare = ModContent.RarityType<Rarities.CursedFavorRarity>();
         }
         public override string GetBarStyle()
         {
@@ -45,18 +41,9 @@ namespace ITD.Content.Items.Favors.Prehardmode
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            base.ModifyTooltips(tooltips);
-
-            // Retrieving the assigned keys for the favor key
-            var assignedKeys = FavorPlayer.UseFavorKey.GetAssignedKeys();
-
-            HotkeyText.WithFormatArgs(assignedKeys[0]);
-
-            tooltips.Add(new TooltipLine(Mod, "Tooltip0", $"Grants Invulnerability."));
-            tooltips.Add(new TooltipLine(Mod, "Tooltip1", $"All damage taken during invulnerability is inflicted after effect ends."));
-            tooltips.Add(new TooltipLine(Mod, "Tooltip2", $"Can be used indefinitely, but effect duration is reduced per use until deactivation."));
-            tooltips.Add(new TooltipLine(Mod, "Tooltip2", $"Press {assignedKeys[0]} to use when at full charge."));
-            tooltips.Add(new TooltipLine(Mod, "Tooltip2", $"''Jackpot!''"));
+            var line = tooltips.First(x => x.Name == "Tooltip3");
+            string hotkeyText = string.Format(line.Text, FavorPlayer.FavorKeybindString);
+            line.Text = hotkeyText;
         }
     }
 }

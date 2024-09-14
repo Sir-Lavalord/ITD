@@ -639,12 +639,26 @@ Items: {
 
 	BarOfSoap: {
 		DisplayName: Bar Of Soap
-		Tooltip: ""
+		Tooltip:
+			'''
+			Instantly purifies all Evil Tiles in a 20 tile radius.
+			Grants the Squeaky Clean buff for 4 minutes.
+			Deal damage to increase charge. Every hit of damage grants 1% charge.
+			Press {0} to use when at full charge.
+			'A strange, self-cleaning bar of solidified fat...'
+			'''
 	}
 
 	AceOfHearts: {
 		DisplayName: Ace Of Hearts
-		Tooltip: ""
+		Tooltip:
+			'''
+			Grants Invulnerability.
+			All damage taken during invulnerability is inflicted after effect ends.
+			Can be used indefinitely, but effect duration is reduced per use until deactivation.
+			Press {0} to use when at full charge.
+			'Jackpot!'
+			'''
 	}
 
 	GravekeeperBag: {
@@ -740,6 +754,7 @@ Projectiles: {
 	PetPigPet.DisplayName: Balloon Pig
 	GasLeak.DisplayName: Gas Leak
 	Necroskull.DisplayName: Necroskull
+	BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
 }
 
 NPCs: {

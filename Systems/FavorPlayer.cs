@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using ITD.Utilities;
 using ITD.Content.Buffs.Debuffs;
+using System.Linq;
 
 namespace ITD.Systems
 {
@@ -14,6 +15,7 @@ namespace ITD.Systems
         public Item FavorItem;
         public bool favorFatigue;
         public static ModKeybind UseFavorKey { get; private set; } = null;
+        public static string FavorKeybindString { get { return UseFavorKey.GetAssignedKeys().FirstOrDefault("[Unbound Key]"); } }
         public override void Load()
         {
             UseFavorKey = KeybindLoader.RegisterKeybind(Mod, "UseFavor", Keys.F);

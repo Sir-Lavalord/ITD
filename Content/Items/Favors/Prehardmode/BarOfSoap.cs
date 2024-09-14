@@ -56,18 +56,9 @@ namespace ITD.Content.Items.Favors.Prehardmode
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            base.ModifyTooltips(tooltips);
-
-            // Retrieving the assigned keys for the favor key
-            var assignedKeys = FavorPlayer.UseFavorKey.GetAssignedKeys();
-
-            HotkeyText.WithFormatArgs(assignedKeys[0]);
-
-            tooltips.Add(new TooltipLine(Mod, "Tooltip0", $"Instantly purifies all Evil Tiles in a 20 tile radius."));
-            tooltips.Add(new TooltipLine(Mod, "Tooltip1", $"Grants the Squeaky Clean buff for 4 minutes."));
-            tooltips.Add(new TooltipLine(Mod, "Tooltip2", $"Deal damage to increase charge. Every hit of damage grants 1% charge."));
-            tooltips.Add(new TooltipLine(Mod, "Tooltip2", $"Press {assignedKeys[0]} to use when at full charge."));
-            tooltips.Add(new TooltipLine(Mod, "Tooltip2", $"''Dont drop it!''"));
+            var line = tooltips.First(x => x.Name == "Tooltip3");
+            string hotkeyText = string.Format(line.Text, FavorPlayer.FavorKeybindString);
+            line.Text = hotkeyText;
         }
     }
 }
