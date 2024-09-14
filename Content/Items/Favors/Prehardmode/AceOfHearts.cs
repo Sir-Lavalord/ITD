@@ -25,6 +25,10 @@ namespace ITD.Content.Items.Favors.Prehardmode
         {
             return "AceOfHeartsBarStyle";
         }
+        public override string GetChargeSound()
+        {
+            return "CardSounds";
+        }
         public override bool UseFavor(Player player)
         {
             // does nothing rn, this is just for testing something

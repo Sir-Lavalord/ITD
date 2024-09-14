@@ -37,6 +37,10 @@ namespace ITD.Content.Items.Favors.Prehardmode
         {
             return "SoapBarStyle";
         }
+        public override string GetChargeSound()
+        {
+            return "SoapBubbles";
+        }
         public override bool UseFavor(Player player)
         {
             for (int i = 0; i < 8; i++)

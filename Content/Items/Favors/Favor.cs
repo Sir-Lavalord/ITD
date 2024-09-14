@@ -35,6 +35,8 @@ namespace ITD.Content.Items.Favors
     {
         public float Charge { get; set; } = 0f;
         private float prevCharge = 0f;
+        private float chargeScale;
+        private bool chargeScaleDirection = false;
         /// <summary>
         /// The amount of time Favor Fatigue should be applied for after usage. Return 0 for no Favor Fatigue.
         /// </summary>
@@ -79,7 +81,7 @@ namespace ITD.Content.Items.Favors
             Charge = Math.Clamp(Charge + amount, 0f, 1f);
             if (Charge >= 1f && prevCharge != Charge) // just got charged to max
             {
-                // should this play a sound?
+                SoundEngine.PlaySound(new SoundStyle("ITD/Content/Items/Favors/ChargeSounds/" + GetChargeSound()));
             }
         }
         /// <summary>
@@ -116,6 +118,39 @@ namespace ITD.Content.Items.Favors
         public virtual string GetBarStyle()
         {
             return "DefaultBarStyle";
+        }
+        public virtual string GetChargeSound()
+        {
+            return "DefaultChargeSound";
+        }
+        public virtual void PreDrawInInventoryAfterSheen(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+
+        }
+        public sealed override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            if (Charge >= 1f)
+            {
+                chargeScaleDirection = true;
+            }
+            else
+            {
+                chargeScaleDirection = false;
+            }
+            chargeScale = Math.Clamp(chargeScale + (chargeScaleDirection ? 0.01f : -0.01f), 0f, 1f);
+            if (chargeScale > 0f)
+            {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null, null, Main.UIScaleMatrix);
+                Texture2D flare = ModContent.Request<Texture2D>("ITD/Content/UI/LensFlare").Value;
+                float drawScale = (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 2f) + 1f) / 2f;
+                float addDrawScale = drawScale / 8f;
+                spriteBatch.Draw(flare, position, null, Color.White * drawScale * chargeScale, Main.GlobalTimeWrappedHourly, flare.Size() * 0.5f, 0.2f + addDrawScale, SpriteEffects.None, 0f);
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
+                PreDrawInInventoryAfterSheen(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
+            }
+            return true;
         }
         public sealed override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
