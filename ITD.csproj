@@ -17,6 +17,7 @@
   <ItemGroup>
     <Folder Include="Content\Gores\NPCs\" />
     <Folder Include="Content\Gores\Projectiles\" />
+    <Folder Include="Content\Items\Favors\BarStyles\" />
     <Folder Include="Content\Tiles\Relics\" />
   </ItemGroup>
   <ItemGroup>

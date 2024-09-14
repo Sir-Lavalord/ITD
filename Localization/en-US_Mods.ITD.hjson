@@ -636,6 +636,21 @@ Items: {
 		DisplayName: Eye of Eldritch Insight
 		Tooltip: Show love to see what should not be seen
 	}
+
+	BarOfSoap: {
+		DisplayName: Bar Of Soap
+		Tooltip: ""
+	}
+
+	AceOfHearts: {
+		DisplayName: Ace Of Hearts
+		Tooltip: ""
+	}
+
+	GravekeeperBag: {
+		DisplayName: Gravekeeper Bag
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -758,6 +773,7 @@ NPCs: {
 	Sandberus.DisplayName: Sandberus
 	KSGlandNPC.DisplayName: Slimy Coating
 	Gravekeeper.DisplayName: Gravekeeper
+	HauntedTombstone.DisplayName: Haunted Tombstone
 }
 
 Buffs: {
@@ -810,6 +826,11 @@ Buffs: {
 		DisplayName: Necrosis Buff
 		Description: Rapidly losing life
 	}
+
+	FavorFatigue: {
+		DisplayName: Favor Fatigue
+		Description: Mods.ITD.Buffs.FavorFatigue.Description
+	}
 }
 
 DeathMessage.Necrosis: succumbed to necrosis.
@@ -842,3 +863,5 @@ Biomes: {
 		TownNPCDialogueName: the Deep Desert
 	}
 }
+
+Keybinds.UseFavor.DisplayName: Use Favor

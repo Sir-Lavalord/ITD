@@ -191,10 +191,6 @@ namespace ITD.Content.NPCs.Bosses
         {
             Player closestPlayer = Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)];
         }
-        public override void DrawBehind(int index)
-        {
-            Main.instance.DrawCacheProjsBehindNPCs.Add(index);
-        }
         public override void FindFrame(int frameHeight)
         {
             int startFrame = 0;

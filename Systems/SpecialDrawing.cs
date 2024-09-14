@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Xna.Framework;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
@@ -10,9 +8,16 @@ namespace ITD.Systems
 {
     public static class SpecialDrawing
     {
-        public static void RestartSpriteBatchAsTileDrawer()
+        public static void RestartSpriteBatchAsTileDrawer(RenderTarget2D inbetweenerTarget = null, RenderTargetBinding[] previousTargets = null)
         {
             Main.spriteBatch.End();
+            if (inbetweenerTarget != null)
+            {
+                Main.graphics.GraphicsDevice.SetRenderTarget(inbetweenerTarget);
+                Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+            }
+            if (previousTargets != null)
+                Main.graphics.GraphicsDevice.SetRenderTargets(previousTargets);
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.EffectMatrix);
         }
         public static void RestartSpriteBatchAsRegular()
