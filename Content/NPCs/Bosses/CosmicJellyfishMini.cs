@@ -101,7 +101,7 @@ namespace ITD.Content.NPCs.Bosses
             }
             else
             {
-                Dash(1, 10, 18, 24, 1);
+                Dash(1, 10, 20, 30, 1);
             }
             float maxRotation = MathHelper.Pi / 3;
             float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);

@@ -23,10 +23,6 @@ namespace ITD.Content.Projectiles.Hostile
 
         public override void OnSpawn(IEntitySource source)
         {
-            NPC CosJel = Main.npc[(int)Projectile.ai[0]];
-            if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
-            {
-            }
         }
                 
         public override void SetStaticDefaults()
@@ -47,7 +43,7 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.ignoreWater = true;
             Projectile.light = 1f;
             Projectile.tileCollide = true;
-            Projectile.timeLeft = 400;
+            Projectile.timeLeft = 1200;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
