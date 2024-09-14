@@ -143,7 +143,7 @@ namespace ITD.Content.Items.Favors
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null, null, Main.UIScaleMatrix);
                 Texture2D flare = ModContent.Request<Texture2D>("ITD/Content/UI/LensFlare").Value;
-                float drawScale = (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 2f) + 1f) / 2f;
+                float drawScale = (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 2f) + 5f) / 6f;
                 float addDrawScale = drawScale / 8f;
                 spriteBatch.Draw(flare, position, null, Color.White * drawScale * chargeScale, Main.GlobalTimeWrappedHourly, flare.Size() * 0.5f, 0.2f + addDrawScale, SpriteEffects.None, 0f);
                 spriteBatch.End();

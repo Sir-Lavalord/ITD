@@ -48,7 +48,7 @@ namespace ITD.Content.Projectiles.Hostile
 				Vector2 distance = Main.player[target].Center - Projectile.Center;
 				distance.Normalize();
 				distance *= scaleFactor;
-				Projectile.velocity = (Projectile.velocity * 14f + distance) / 15f;
+				Projectile.velocity = (Projectile.velocity * 19f + distance) / 20f;
 				Projectile.velocity.Normalize();
 				Projectile.velocity *= scaleFactor;
 			}

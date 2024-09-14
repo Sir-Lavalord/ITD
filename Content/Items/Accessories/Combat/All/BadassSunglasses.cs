@@ -91,7 +91,7 @@ namespace ITD.Content.Items.Accessories.Combat.All
 
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
-            if (sunglassesVanity)
+            if (sunglassesVanity && drawInfo.shadow == 0f)
             {
                 Vector2 position = drawInfo.Position - Main.screenPosition + new Vector2(Player.width * 0.5f, Player.height * 0.5f - 8f * Player.gravDir);
                 Asset<Texture2D> texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Combat/All/BadassSunglasses_Aura");

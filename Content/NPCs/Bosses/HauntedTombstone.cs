@@ -28,7 +28,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             NPC.width = 30;
             NPC.height = 34;
-            NPC.damage = 75;
+            NPC.damage = 0;
             NPC.defense = 0;
             NPC.lifeMax = 200;
             NPC.HitSound = SoundID.NPCHit42;
@@ -42,10 +42,6 @@ namespace ITD.Content.NPCs.Bosses
 		public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
             NPC.lifeMax = 200;
-        }
-		public override bool CanHitPlayer(Player target, ref int cooldownSlot)
-        {
-            return Main.masterMode;
         }
 		
         public override void AI()

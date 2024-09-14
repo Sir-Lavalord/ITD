@@ -206,7 +206,7 @@ namespace ITD.Content.NPCs.Bosses
 							break;
 						case 1:
 							AI_State = ActionState.Chasing;
-							StateTimer = 160;
+							StateTimer = 120;
 							Necromancy();
 							break;
 						case 2:
@@ -246,7 +246,7 @@ namespace ITD.Content.NPCs.Bosses
 					break;
 				case ActionState.DarkFountain:
 					AI_State = ActionState.Chasing;
-					StateTimer = 160;
+					StateTimer = 120;
 					Teleport();
 					break;
 				case ActionState.Skullraiser:
@@ -319,6 +319,9 @@ namespace ITD.Content.NPCs.Bosses
 					
 					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
+						if (Main.masterMode)
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), target.Center, new Vector2(Main.rand.NextFloat(-3f, 3f), -4f), ModContent.ProjectileType<Necroskull>(), 25, 0f, -1);
+						
 						if (Main.expertMode)
 						{
 							for (int i = 0; i < 5; i++)
@@ -332,7 +335,15 @@ namespace ITD.Content.NPCs.Bosses
 					target.ai[0] = -1;
 				}
             }
-			while (tombstones < 6)
+			byte numPlayers = 0;
+			for (int i = 0; i < 255; i++)
+			{
+				if (Main.player[i].active)
+				{
+					numPlayers++;
+				}
+			}
+			while (tombstones < 4 + numPlayers * 2)
 			{
 				tombstones++;
 				
