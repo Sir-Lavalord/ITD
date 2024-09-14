@@ -57,7 +57,7 @@ namespace ITD.Content.NPCs.Bosses
             NPC.height = 100;
             NPC.damage = 40;
             NPC.defense = 5;
-            NPC.lifeMax = 5000;
+            NPC.lifeMax = 4800;
 			NPC.dontTakeDamage = true;
 			NPC.knockBackResist = 0f;
             NPC.HitSound = SoundID.NPCHit54;
@@ -206,7 +206,7 @@ namespace ITD.Content.NPCs.Bosses
 							break;
 						case 1:
 							AI_State = ActionState.Chasing;
-							StateTimer = 120;
+							StateTimer = 160;
 							Necromancy();
 							break;
 						case 2:
@@ -232,12 +232,12 @@ namespace ITD.Content.NPCs.Bosses
 						StateTimer = 32;
 						NPC.velocity = new Vector2(0, 0.5f);
 						
-						Vector2 tpOffset = new Vector2();
+						/*Vector2 tpOffset = new Vector2();
 						double angle = Main.rand.NextDouble() * 2d * Math.PI;
 						tpOffset.X += (float)(Math.Sin(angle) * 240);
-						tpOffset.Y += (float)(Math.Cos(angle) * 240);
+						tpOffset.Y += (float)(Math.Cos(angle) * 240);*/
 				
-						Teleposition = Main.player[NPC.target].Center - tpOffset;
+						Teleposition = Main.player[NPC.target].Center - new Vector2(0, 240f);
 					}
 					
 					Main.player[Main.myPlayer].GetITDPlayer().Screenshake = 20;
@@ -246,12 +246,12 @@ namespace ITD.Content.NPCs.Bosses
 					break;
 				case ActionState.DarkFountain:
 					AI_State = ActionState.Chasing;
-					StateTimer = 100;
+					StateTimer = 160;
 					Teleport();
 					break;
 				case ActionState.Skullraiser:
 					AI_State = ActionState.Chasing;
-					StateTimer = 120;
+					StateTimer = 160;
 					break;
 				case ActionState.Goodbye:
 					NPC.active = false;
@@ -303,7 +303,6 @@ namespace ITD.Content.NPCs.Bosses
 		};
 		private void Necromancy()
 		{
-			Player player = Main.player[NPC.target];
 			int tombstones = 0;
 			foreach (var target in Main.ActiveNPCs)
             {
@@ -318,41 +317,46 @@ namespace ITD.Content.NPCs.Bosses
 						Main.dust[spawnDust].velocity *= 2f;
 					}
 					
-					NPC.NewNPC(NPC.GetSource_FromThis(), (int)(target.Center.X), (int)(target.Center.Y), TheList[Main.rand.Next(6)]);
+					if (Main.netMode != NetmodeID.MultiplayerClient)
+					{
+						if (Main.expertMode)
+						{
+							for (int i = 0; i < 5; i++)
+							{
+								Projectile.NewProjectile(NPC.GetSource_FromThis(), target.Center, new Vector2(Main.rand.NextFloat(-6f, 6f), Main.rand.NextFloat(-8f, -2f)), ProjectileID.SkeletonBone, 25, 0f, -1);
+							}
+						}
+						
+						NPC.NewNPC(NPC.GetSource_FromThis(), (int)(target.Center.X), (int)(target.Center.Y), TheList[Main.rand.Next(6)]);
+					}
+					target.ai[0] = -1;
 				}
             }
-			while (tombstones < 3)
+			while (tombstones < 6)
 			{
 				tombstones++;
 				
-				double angle = Main.rand.NextDouble() * 2d * Math.PI;
-				Vector2 position = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY.RotatedBy(angle), false, false, 16f).Item1;
+				Vector2 position = NPC.Center + new Vector2(Main.rand.NextFloat(-600f, 600), Main.rand.NextFloat(-300f, 300));
 				Point point = position.ToTileCoordinates();
 				
 				int j = 0;
-				while (j < 40 && point.Y >= 10 && WorldGen.SolidTile(point.X, point.Y, false))
+				while (j < 32 && point.Y >= 10 && WorldGen.SolidTile(point.X, point.Y, false))
 				{
 					point.Y--;
 					j++;
 				}
 				int k = 0;
-				while (k < 40 && point.Y <= Main.maxTilesY - 10 && !WorldGen.ActiveAndWalkableTile(point.X, point.Y))
+				while (k < 32 && point.Y <= Main.maxTilesY - 10 && !WorldGen.ActiveAndWalkableTile(point.X, point.Y))
 				{
 					point.Y++;
 					k++;
 				}
 				
 				position = new Vector2((float)(point.X * 16 + 8), (float)(point.Y * 16 - 8));
-				if (Collision.CanHitLine(position, 0, 0, player.Center, 0, 0) || Collision.CanHit(position, 0, 0, NPC.Center, 0, 0))
+				if (WorldGen.ActiveAndWalkableTile(point.X, point.Y) && !WorldGen.SolidTile(point.X, point.Y-1, false))
 				{
-					for (int l = 0; l < 10; l++)
-					{
-						int spawnDust = Dust.NewDust(position, 16, 16, DustID.GiantCursedSkullBolt, 0, 0, 0, default, 2f);
-						Main.dust[spawnDust].noGravity = true;
-						Main.dust[spawnDust].velocity *= 2f;
-					}
-						
-					NPC.NewNPC(NPC.GetSource_FromThis(), (int)(position.X), (int)(position.Y), ModContent.NPCType<HauntedTombstone>(), 0, NPC.whoAmI);
+					if (Main.netMode != NetmodeID.MultiplayerClient)
+						NPC.NewNPC(NPC.GetSource_FromThis(), (int)(position.X), (int)(position.Y), ModContent.NPCType<HauntedTombstone>(), 0, NPC.whoAmI);
 				}
 			}
 			
