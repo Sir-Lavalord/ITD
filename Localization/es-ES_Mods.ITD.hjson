@@ -662,7 +662,7 @@ Items: {
 	}
 
 	AsterKnuckle: {
-		// Tooltip: ""
+		// Tooltip: "'Deals extra damage to spooky ghost'"
 		// DisplayName: Aster Knuckle
 	}
 
