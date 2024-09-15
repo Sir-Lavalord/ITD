@@ -11,6 +11,8 @@ using ITD.Content.NPCs.Bosses;
 using Terraria.DataStructures;
 using Microsoft.Build.Evaluation;
 using Microsoft.CodeAnalysis;
+using ITD.Content.Projectiles.Friendly.Summoner;
+using System.IO;
 
 namespace ITD.Content.Projectiles.Hostile
 {
@@ -23,10 +25,6 @@ namespace ITD.Content.Projectiles.Hostile
 
         public override void OnSpawn(IEntitySource source)
         {
-            NPC CosJel = Main.npc[(int)Projectile.ai[0]];
-            if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
-            {
-            }
         }
                 
         public override void SetStaticDefaults()
@@ -47,12 +45,22 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.ignoreWater = true;
             Projectile.light = 1f;
             Projectile.tileCollide = true;
-            Projectile.timeLeft = 400;
+            Projectile.timeLeft = 1200;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
 
         }
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(Projectile.localAI[0]);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            Projectile.localAI[0] = reader.ReadSingle();
+        }
+
         public override void AI()
         {
 
@@ -78,7 +86,7 @@ namespace ITD.Content.Projectiles.Hostile
                     Vector2 normalCenter = vToCosJel + new Vector2(0f, CosJel.velocity.Y);
                     Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
 
-                    if (Projectile.ai[2]++ >= 50)
+                    if (Projectile.ai[2]++ >= 80)
                     {
                         Projectile.ai[2] = 0;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -96,17 +104,65 @@ namespace ITD.Content.Projectiles.Hostile
                 }
                 else if (CosJel.ai[3] != 6)
                 {
-                    if (!bLocked)
+                    if (Projectile.localAI[0]++ >= 60 + (30 * Projectile.ai[1]))
                     {
-                        bLocked = true;
-                        Projectile.velocity = Projectile.DirectionTo(player.Center) * 12f;
+                        if (!bLocked)
+                        {
+                            bLocked = true;
+                            vLockedIn = player.Center;
+                            Projectile.velocity = Projectile.DirectionTo(vLockedIn) * 14f;
+                        }
+                        if (Projectile.Center == vLockedIn)
+                        {
+                            Projectile.Kill();
+                        }
+                    }
+                    else
+                    {
+                        Vector2 normalCenter = vToCosJel + new Vector2(0f, CosJel.velocity.Y);
+                        Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
+
                     }
                 }
+                }
+        }
+        public override void OnKill(int timeLeft)
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
+ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), Projectile.knockBack);
+                explosion.ai[1] = 100f; // Randomize the maximum radius.
+                explosion.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f); // And the interpolation step.
+                explosion.netUpdate = true;
             }
         }
-        
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            NPC CosJel = Main.npc[(int)Projectile.ai[0]];
+            if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+            {
+                if (CosJel.ai[3] != 6)
+                {
+                    Player player = Main.player[CosJel.target];
+                    width = 15;
+                    height = 15;
+                    fallThrough = player.Center.Y >= Projectile.Bottom.Y + 20;
+                }
+            }
+            return true;
+
+        }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
+            NPC CosJel = Main.npc[(int)Projectile.ai[0]];
+            if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+            {
+                if (CosJel.ai[3] != 6)
+                {
+                    Projectile.Kill();
+                }
+            }
             Projectile.position = Projectile.oldPos[0];
             return false;
         }

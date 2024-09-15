@@ -36,7 +36,12 @@ namespace ITD.Content.Projectiles.Hostile
             NPC CosJel = Main.npc[(int)Projectile.ai[0]];
             if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
             {
-                Projectile.velocity = (CosJel.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 2f;
+                if (Projectile.ai[1] != 2)
+                    Projectile.velocity = (CosJel.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 2f;
+                else
+                {
+                    Projectile.velocity = (CosJel.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.05f;
+                }
             }
             else
             {
@@ -51,7 +56,7 @@ namespace ITD.Content.Projectiles.Hostile
         {
             if (Projectile.ai[1] == 2)
             {
-                if (Projectile.ai[2]++ >= 30)
+                if (Projectile.ai[2] >= 30)
                     return true;
                 else return false;
             }
@@ -59,7 +64,7 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override void AI()
         {
-            {
+            
                 NPC CosJel = Main.npc[(int)Projectile.ai[0]];
                 if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
                 {
@@ -67,6 +72,13 @@ namespace ITD.Content.Projectiles.Hostile
                     {
                         Projectile.Kill();
                     }
+                }
+            if (Projectile.ai[1] == 2)
+            {
+                if (Projectile.ai[2]++ >= 30)
+                {
+                    Projectile.extraUpdates = 1;
+                    Projectile.velocity *= 1.03f;
                 }
             }
         }
