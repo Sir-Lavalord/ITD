@@ -72,7 +72,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 				Projectile.rotation += MathHelper.ToRadians(135f);
 			}
 
-			int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 135, 0f, 0f, 0, default, 2f);
+			int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 0, default, 2f);
 			Main.dust[dust].noGravity = true;
 			
 			if (Projectile.timeLeft < StoppingPoint)

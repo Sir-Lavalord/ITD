@@ -101,7 +101,7 @@ namespace ITD.Content.Items.Accessories.Movement.Boots
 
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
-            if (gravityBootsCharge > 0)
+            if (gravityBootsCharge > 0 && drawInfo.shadow == 0f)
             {
                 Texture2D texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Movement/Boots/GravityBoots_Propulsion").Value;
                 Rectangle sourceRectangle = texture.Frame(1, 1);

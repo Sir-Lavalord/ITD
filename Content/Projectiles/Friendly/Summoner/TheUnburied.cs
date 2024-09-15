@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -11,7 +10,6 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 {
     public class TheUnburied : ModProjectile
     {
-        public int Variant;
 		public NPC Target;
         public override void SetStaticDefaults()
         {
@@ -34,23 +32,15 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 15;
         }
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            writer.Write(Variant);
-        }
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            Variant = reader.ReadInt32();
-        }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
 
             if (Projectile.localAI[0] == 0f)
             {
-                Variant = Main.rand.Next(3);
+                Projectile.ai[0] = Main.rand.Next(3);
                 Projectile.netUpdate = true;
-                Projectile.localAI[0] += 1f;
+                Projectile.localAI[0] = 1f;
             }
 			
 			if (Math.Abs(Projectile.velocity.X) > 1f)
@@ -117,7 +107,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 		
         public override bool PreDraw(ref Color lightColor)
         {
-            Rectangle frame = new Rectangle(Variant * Projectile.width, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
+            Rectangle frame = new Rectangle((int)(Projectile.ai[0]) * Projectile.width, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
             SpriteEffects spriteEffects = (Projectile.spriteDirection == 1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Main.EntitySpriteDraw(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, Projectile.Center - Main.screenPosition, frame, lightColor, Projectile.rotation, Projectile.Size / 2f, 1f, spriteEffects, 0);
             return false;

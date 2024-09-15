@@ -28,7 +28,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.penetrate = -1;
 			Projectile.timeLeft = 150;
 			Projectile.usesLocalNPCImmunity = true;
-			Projectile.localNPCHitCooldown = -1;
+			Projectile.localNPCHitCooldown = 10;
         }
 		
 		public override void ModifyDamageHitbox(ref Rectangle hitbox)
@@ -50,11 +50,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			SoundEngine.PlaySound(SoundID.Item50, Projectile.Center);
 			return false;
 		}
-		
-		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            Projectile.ai[0] = 24;
-        }
 
         public override void PostAI()
         {
@@ -71,15 +66,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 				if (player.Distance(Projectile.Center) < 32)
 					Projectile.Kill();
 			}
-			if (Projectile.ai[0] % 8 == 0)
+			if (Projectile.ai[0] % 10 == 0)
 			{
 				SoundEngine.PlaySound(SoundID.Item7, Projectile.position);
-				if (Projectile.ai[0] < 24 && Main.myPlayer == Projectile.owner)
-				{
-					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity.RotatedBy(MathHelper.ToRadians(45)), Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.ai[0]);
-					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity.RotatedBy(MathHelper.ToRadians(-45)), Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.ai[0]);
-					Projectile.Kill();
-				}
 			}
 			
 			int dust = Dust.NewDust(Projectile.Center - new Vector2(16f, 16f), 32, 32, 135, 0f, 0f, 0, default, 2f);
@@ -105,7 +94,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
 			{
 				Vector2 oldPos = Projectile.oldPos[i];
-				Main.EntitySpriteDraw(texture2, oldPos + Projectile.Size * 0.5f - Main.screenPosition, new Rectangle?(rectangle2), new Color(120, 184, 255, 50) * (1f -(Projectile.scale*0.2f*i)), rotation + i, rectangle2.Size() / 2f, Projectile.scale*0.3f-(Projectile.scale*0.05f*i), SpriteEffects.None, 0f);
+				Main.EntitySpriteDraw(texture2, oldPos + Projectile.Size * 0.5f - Main.screenPosition, new Rectangle?(rectangle2), new Color(120, 184, 255, 50) * (1f -(Projectile.scale*0.2f*i)), rotation + i, rectangle2.Size() / 2f, Projectile.scale*0.4f-(Projectile.scale*0.05f*i), SpriteEffects.None, 0f);
 			}
 			
 			Main.EntitySpriteDraw(texture, position, new Rectangle?(rectangle), lightColor, rotation, rectangle.Size() / 2f, Projectile.scale, SpriteEffects.None, 0f);

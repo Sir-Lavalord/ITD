@@ -40,6 +40,7 @@ namespace ITD.Players
 		public bool ZoneCatacombs;
 
 		public bool necrosis = false;
+		public bool soulRot = false;
 
 		public float blockChance = 0f;
 		public bool dreadBlock = false;
@@ -95,6 +96,7 @@ namespace ITD.Players
 				recoilBack -= 0.02f;
 
 			necrosis = false;
+			soulRot = false;
 
 			blockChance = 0f;
 			dreadBlock = false;
@@ -121,6 +123,15 @@ namespace ITD.Players
 				Player.lifeRegenTime = 0;
 				 
 				Player.lifeRegen -= 10;
+			}
+			if (soulRot)
+			{
+				if (Player.lifeRegen > 0)
+                    Player.lifeRegen = 0;
+				
+				Player.lifeRegenTime = 0;
+				 
+				Player.lifeRegen -= 20;
 			}
 		}
 		
@@ -226,6 +237,8 @@ namespace ITD.Players
             {
                 if (necrosis)
                     damageSource = DeathByLocalization("Necrosis");
+				if (soulRot)
+                    damageSource = DeathByLocalization("SoulRot");
             }
 			return true;
 		}
@@ -273,6 +286,13 @@ namespace ITD.Players
 			{
 				r = 0.7f;
 				g = 0.4f;
+				b = 0.9f;
+			}
+			
+			if (soulRot)
+			{
+				r = 0.4f;
+				g = 0.7f;
 				b = 0.9f;
 			}
 		}

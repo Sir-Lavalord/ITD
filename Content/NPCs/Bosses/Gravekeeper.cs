@@ -44,11 +44,12 @@ namespace ITD.Content.NPCs.Bosses
 		private int AttackCycle = 0;
 		private int StateTimer = 100;
 		private Vector2 Teleposition;
+		private int Form = 0;
 		
         public override void SetStaticDefaults()
         {
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-			Main.npcFrameCount[Type] = 3;
+			Main.npcFrameCount[Type] = 6;
         }
         public override void SetDefaults()
         {
@@ -57,7 +58,7 @@ namespace ITD.Content.NPCs.Bosses
             NPC.height = 100;
             NPC.damage = 40;
             NPC.defense = 5;
-            NPC.lifeMax = 5000;
+            NPC.lifeMax = 4800;
 			NPC.dontTakeDamage = true;
 			NPC.knockBackResist = 0f;
             NPC.HitSound = SoundID.NPCHit54;
@@ -67,16 +68,31 @@ namespace ITD.Content.NPCs.Bosses
             NPC.aiStyle = -1;
 			NPC.boss = true;
             NPC.npcSlots = 10f;
-			
+						
 			if (!Main.dedServ)
             {
-                Music = ITD.Instance.GetMusic("DuneBearer") ?? MusicID.Boss1;
+                Music = ITD.Instance.GetMusic("Gravekeeper") ?? MusicID.Boss1;
             }
+        }
+		public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
+        {
+			if (NPC.downedPlantBoss)
+			{
+				Form = 1;
+				NPC.lifeMax *= 5;
+				NPC.life *= 5;
+				NPC.damage *= 2;
+				NPC.defense *= 2;
+				NPC.frame.Y = (int)(NPC.frame.Size().Y)*Main.npcFrameCount[Type];
+			}
         }
 		
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
-            target.AddBuff(ModContent.BuffType<NecrosisBuff>(), 60 * 8);
+			if (Form == 1)
+				target.AddBuff(ModContent.BuffType<SoulRotBuff>(), 60 * 8);
+			else
+				target.AddBuff(ModContent.BuffType<NecrosisBuff>(), 60 * 8);
         }
 		
         float speed = 10;
@@ -125,16 +141,26 @@ namespace ITD.Content.NPCs.Bosses
 							range = 2f;
 						if (Main.masterMode)
 							range = 4f;
+						int type = ModContent.ProjectileType<GasLeak>();
+						int damage = 20;
+						if (Form == 1)
+						{
+							type = ModContent.ProjectileType<SoulLeak>();
+							damage = 40;
+						}
 						for (int i = 0; i < range; i++)
 						{
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(4f+Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), ModContent.ProjectileType<GasLeak>(), 20, 0, -1);
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(-4f-Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), ModContent.ProjectileType<GasLeak>(), 20, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(4f+Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), type, damage, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(-4f-Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), type, damage, 0, -1);
 						}
 					}
 					for (int i = 0; i < 4; i++)
 					{
 						Vector2 dustOffset = new Vector2(0f, 60f).RotatedBy(MathHelper.ToRadians(90*i+45));
-						Dust dust = Main.dust[Dust.NewDust(Teleposition, 0, 0, DustID.GiantCursedSkullBolt, 0, 0, 100, default, 1.5f)];
+						int dustType = DustID.GiantCursedSkullBolt;
+						if (Form == 1)
+							dustType = DustID.DungeonSpirit;
+						Dust dust = Main.dust[Dust.NewDust(Teleposition, 0, 0, dustType, 0, 0, 100, default, 1.5f)];
 						dust.noGravity = true;
 						dust.velocity = dustOffset*0.05f;
 					}
@@ -142,9 +168,16 @@ namespace ITD.Content.NPCs.Bosses
 				case ActionState.Skullraiser:
 					if (StateTimer % 10 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
 					{
-						Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -4f), ModContent.ProjectileType<Necroskull>(), 20, 0, -1);
+						int type = ModContent.ProjectileType<NecroSkull>();
+						int damage = 20;
+						if (Form == 1)
+						{
+							type = ModContent.ProjectileType<SoulSkull>();
+							damage = 40;
+						}
+						Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -4f), type, damage, 0, -1);
 						if (Main.expertMode)
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -4f), ModContent.ProjectileType<Necroskull>(), 20, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -4f), type, damage, 0, -1);
 					}
 					break;
 			}
@@ -174,15 +207,16 @@ namespace ITD.Content.NPCs.Bosses
 		
 		public override void FindFrame(int frameHeight)
         {
+			int offset = (int)(frameHeight * Main.npcFrameCount[Type] * Form / 2);
             NPC.frameCounter += 1f;
             if (NPC.frameCounter > 5f)
             {
                 NPC.frameCounter = 0;
                 NPC.frame.Y += frameHeight;
 
-                if (NPC.frame.Y > frameHeight * Main.npcFrameCount[Type]-1)
+                if (NPC.frame.Y > (frameHeight * Main.npcFrameCount[Type] / 2) - 1 + offset)
                 {
-                    NPC.frame.Y = frameHeight;
+                    NPC.frame.Y = frameHeight + offset;
                 }
             }
         }
@@ -232,12 +266,12 @@ namespace ITD.Content.NPCs.Bosses
 						StateTimer = 32;
 						NPC.velocity = new Vector2(0, 0.5f);
 						
-						Vector2 tpOffset = new Vector2();
+						/*Vector2 tpOffset = new Vector2();
 						double angle = Main.rand.NextDouble() * 2d * Math.PI;
 						tpOffset.X += (float)(Math.Sin(angle) * 240);
-						tpOffset.Y += (float)(Math.Cos(angle) * 240);
+						tpOffset.Y += (float)(Math.Cos(angle) * 240);*/
 				
-						Teleposition = Main.player[NPC.target].Center - tpOffset;
+						Teleposition = Main.player[NPC.target].Center - new Vector2(0, 240f);
 					}
 					
 					Main.player[Main.myPlayer].GetITDPlayer().Screenshake = 20;
@@ -246,12 +280,12 @@ namespace ITD.Content.NPCs.Bosses
 					break;
 				case ActionState.DarkFountain:
 					AI_State = ActionState.Chasing;
-					StateTimer = 100;
+					StateTimer = 120;
 					Teleport();
 					break;
 				case ActionState.Skullraiser:
 					AI_State = ActionState.Chasing;
-					StateTimer = 120;
+					StateTimer = 160;
 					break;
 				case ActionState.Goodbye:
 					NPC.active = false;
@@ -261,10 +295,13 @@ namespace ITD.Content.NPCs.Bosses
 		
 		private void Teleport()
 		{
+			int dustType = DustID.GiantCursedSkullBolt;
+			if (Form == 1)
+				dustType = DustID.DungeonSpirit;
 			for (int i = 0; i < 60; i++)
 			{
 				Vector2 dustOffset = new Vector2(0f, 60f).RotatedBy(MathHelper.ToRadians(6*i));
-				Dust dust = Main.dust[Dust.NewDust(NPC.Center + dustOffset, 0, 0, DustID.GiantCursedSkullBolt, 0, 0, 100, default, 1.5f)];
+				Dust dust = Main.dust[Dust.NewDust(NPC.Center + dustOffset, 0, 0, dustType, 0, 0, 100, default, 1.5f)];
 				dust.noGravity = true;
 				dust.velocity = -dustOffset*0.05f;
 			}			
@@ -286,80 +323,71 @@ namespace ITD.Content.NPCs.Bosses
 			for (int i = 0; i < 60; i++)
 			{
 				Vector2 dustOffset = new Vector2(0f, 60f).RotatedBy(MathHelper.ToRadians(6*i));
-				Dust dust = Main.dust[Dust.NewDust(NPC.Center, 0, 0, DustID.GiantCursedSkullBolt, 0, 0, 100, default, 1.5f)];
+				Dust dust = Main.dust[Dust.NewDust(NPC.Center, 0, 0, dustType, 0, 0, 100, default, 1.5f)];
 				dust.noGravity = true;
 				dust.velocity = dustOffset*0.1f;
 			}
 		}
 		
-		public static int[] TheList = new int[]
-		{
-			NPCID.AngryBones,
-			NPCID.AngryBonesBig,
-			NPCID.AngryBonesBigHelmet,
-			NPCID.AngryBonesBigMuscle,
-			NPCID.CursedSkull,
-			NPCID.DarkCaster,
-		};
 		private void Necromancy()
 		{
-			Player player = Main.player[NPC.target];
 			int tombstones = 0;
 			foreach (var target in Main.ActiveNPCs)
             {
-                if (target.type == ModContent.NPCType<HauntedTombstone>() && target.ai[0] == NPC.whoAmI)
+                if ((target.type == ModContent.NPCType<HauntedTombstone>() || target.type == ModContent.NPCType<GhastlyTombstone>()) && target.ai[0] == NPC.whoAmI)
 				{
 					tombstones++;
-					
-					for (int l = 0; l < 10; l++)
-					{
-						int spawnDust = Dust.NewDust(target.Center, 16, 16, DustID.GiantCursedSkullBolt, 0, 0, 0, default, 2f);
-						Main.dust[spawnDust].noGravity = true;
-						Main.dust[spawnDust].velocity *= 2f;
-					}
-					
-					NPC.NewNPC(NPC.GetSource_FromThis(), (int)(target.Center.X), (int)(target.Center.Y), TheList[Main.rand.Next(6)]);
+					target.ai[0] = -1;
 				}
             }
-			while (tombstones < 3)
+			byte numPlayers = 0;
+			for (int i = 0; i < 255; i++)
+			{
+				if (Main.player[i].active)
+				{
+					numPlayers++;
+				}
+			}
+			while (tombstones < 4 + numPlayers * 2)
 			{
 				tombstones++;
 				
-				double angle = Main.rand.NextDouble() * 2d * Math.PI;
-				Vector2 position = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY.RotatedBy(angle), false, false, 16f).Item1;
+				Vector2 position = NPC.Center + new Vector2(Main.rand.NextFloat(-600f, 600), Main.rand.NextFloat(-300f, 300));
 				Point point = position.ToTileCoordinates();
 				
 				int j = 0;
-				while (j < 40 && point.Y >= 10 && WorldGen.SolidTile(point.X, point.Y, false))
+				while (j < 32 && point.Y >= 10 && WorldGen.SolidTile(point.X, point.Y, false))
 				{
 					point.Y--;
 					j++;
 				}
 				int k = 0;
-				while (k < 40 && point.Y <= Main.maxTilesY - 10 && !WorldGen.ActiveAndWalkableTile(point.X, point.Y))
+				while (k < 32 && point.Y <= Main.maxTilesY - 10 && !WorldGen.ActiveAndWalkableTile(point.X, point.Y))
 				{
 					point.Y++;
 					k++;
 				}
 				
 				position = new Vector2((float)(point.X * 16 + 8), (float)(point.Y * 16 - 8));
-				if (Collision.CanHitLine(position, 0, 0, player.Center, 0, 0) || Collision.CanHit(position, 0, 0, NPC.Center, 0, 0))
+				if (WorldGen.ActiveAndWalkableTile(point.X, point.Y) && !WorldGen.SolidTile(point.X, point.Y-1, false))
 				{
-					for (int l = 0; l < 10; l++)
+					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
-						int spawnDust = Dust.NewDust(position, 16, 16, DustID.GiantCursedSkullBolt, 0, 0, 0, default, 2f);
-						Main.dust[spawnDust].noGravity = true;
-						Main.dust[spawnDust].velocity *= 2f;
+						int type = ModContent.NPCType<HauntedTombstone>();
+						if (Form == 1)
+							type = ModContent.NPCType<GhastlyTombstone>();
+						NPC.NewNPC(NPC.GetSource_FromThis(), (int)(position.X), (int)(position.Y), type, 0, NPC.whoAmI);
 					}
-						
-					NPC.NewNPC(NPC.GetSource_FromThis(), (int)(position.X), (int)(position.Y), ModContent.NPCType<HauntedTombstone>(), 0, NPC.whoAmI);
 				}
 			}
 			
 			SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
+			int dustType = DustID.GiantCursedSkullBolt;
+			if (Form == 1)
+				dustType = DustID.DungeonSpirit;
 			for (int l = 0; l < 20; l++)
 			{
-				int spawnDust = Dust.NewDust(NPC.Center, 0, 0, DustID.GiantCursedSkullBolt, 0, 0, 0, default, 2f);
+				int spawnDust = Dust.NewDust(NPC.Center, 0, 0, dustType, 0, 0, 0, default, 2f);
 				Main.dust[spawnDust].noGravity = true;
 				Main.dust[spawnDust].velocity *= 3f;
 			}

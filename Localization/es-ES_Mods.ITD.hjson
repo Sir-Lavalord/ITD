@@ -634,22 +634,31 @@ Items: {
 
 	BarOfSoap: {
 		// DisplayName: Bar Of Soap
-		// Tooltip: ""
+		/* Tooltip:
+			'''
+			Instantly purifies all Evil Tiles in a 20 tile radius.
+			Grants the Squeaky Clean buff for 4 minutes.
+			Deal damage to increase charge. Every hit of damage grants 1% charge.
+			Press {0} to use when at full charge.
+			'A strange, self-cleaning bar of solidified fat...'
+			''' */
 	}
 
 	AceOfHearts: {
 		// DisplayName: Ace Of Hearts
-		// Tooltip: ""
+		/* Tooltip:
+			'''
+			Grants Invulnerability.
+			All damage taken during invulnerability is inflicted after effect ends.
+			Can be used indefinitely, but effect duration is reduced per use until deactivation.
+			Press {0} to use when at full charge.
+			'Jackpot!'
+			''' */
 	}
 
 	GravekeeperBag: {
 		// DisplayName: Gravekeeper Bag
 		// Tooltip: ""
-	}
-
-	AsterKnuckle: {
-		// DisplayName: Aster-Knuckle
-		// Tooltip: "'Extra damage to spooky ghosts'"
 	}
 }
 
@@ -740,8 +749,10 @@ Projectiles: {
 	PetPigPet.DisplayName: Cerdo con globo
 	// GasLeak.DisplayName: Gas Leak
 	// Necroskull.DisplayName: Necroskull
-	// AsterBlasterBlast.DisplayName: Aster Blaster Blast
-	// CosmicLightningBlast.DisplayName: Cosmic Lightning Blast
+	// BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
+	// SoulLeak.DisplayName: Soul Leak
+	// NecroSkull.DisplayName: Necro Skull
+	// SoulSkull.DisplayName: Soul Skull
 }
 
 NPCs: {
@@ -776,6 +787,7 @@ NPCs: {
 	KSGlandNPC.DisplayName: Capa de gel
 	// Gravekeeper.DisplayName: Gravekeeper
 	// HauntedTombstone.DisplayName: Haunted Tombstone
+	// GhastlyTombstone.DisplayName: Ghastly Tombstone
 }
 
 Buffs: {
@@ -825,17 +837,25 @@ Buffs: {
 	}
 
 	NecrosisBuff: {
-		// DisplayName: Necrosis Buff
+		// DisplayName: Necrosis
+		// Description: Rapidly losing life
+	}
+
+	SoulRotBuff: {
+		// DisplayName: Soul Rot
 		// Description: Rapidly losing life
 	}
 
 	FavorFatigue: {
 		// DisplayName: Favor Fatigue
-		// Description: Mods.ITD.Buffs.FavorFatigue.Description
+		// Description: Cannot use favor abilities
 	}
 }
 
-// DeathMessage.Necrosis: succumbed to necrosis.
+DeathMessage: {
+	// Necrosis: succumbed to necrosis.
+	// SoulRot: became a soulless husk.
+}
 
 WorldGen: {
 	BluesoilPassMessage: Azulificando la Tundra Subterranea...

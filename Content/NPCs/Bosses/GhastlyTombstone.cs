@@ -13,7 +13,7 @@ using ITD.Content.Buffs.Debuffs;
 
 namespace ITD.Content.NPCs.Bosses
 {
-    public class HauntedTombstone : ModNPC
+    public class GhastlyTombstone : ModNPC
     {
         public override void SetStaticDefaults()
         {
@@ -31,7 +31,7 @@ namespace ITD.Content.NPCs.Bosses
             NPC.height = 34;
             NPC.damage = 0;
             NPC.defense = 0;
-            NPC.lifeMax = 200;
+            NPC.lifeMax = 1000;
             NPC.HitSound = SoundID.NPCHit42;
             NPC.DeathSound = SoundID.NPCDeath44;
             NPC.noGravity = true;
@@ -42,7 +42,7 @@ namespace ITD.Content.NPCs.Bosses
         }
 		public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
-            NPC.lifeMax = 200;
+            NPC.lifeMax = 1000;
         }
 		
         public override void AI()
@@ -58,7 +58,7 @@ namespace ITD.Content.NPCs.Bosses
 				NPC.localAI[1] = 1;
 				for (int l = 0; l < 10; l++)
 				{
-					int spawnDust = Dust.NewDust(NPC.Center, 16, 16, DustID.GiantCursedSkullBolt, 0, 0, 0, default, 2f);
+					int spawnDust = Dust.NewDust(NPC.Center, 16, 16, DustID.DungeonSpirit, 0, 0, 0, default, 2f);
 					Main.dust[spawnDust].noGravity = true;
 					Main.dust[spawnDust].velocity *= 2f;
 				}
@@ -70,12 +70,28 @@ namespace ITD.Content.NPCs.Bosses
 		
 		public static int[] TheList = new int[]
 		{
-			NPCID.AngryBones,
-			NPCID.AngryBonesBig,
-			NPCID.AngryBonesBigHelmet,
-			NPCID.AngryBonesBigMuscle,
-			NPCID.CursedSkull,
-			NPCID.DarkCaster,
+			NPCID.BlueArmoredBones,
+			NPCID.BlueArmoredBonesMace,
+			NPCID.BlueArmoredBonesNoPants,
+			NPCID.BlueArmoredBonesSword,
+			
+			NPCID.RustyArmoredBonesAxe,
+			NPCID.RustyArmoredBonesFlail,
+			NPCID.RustyArmoredBonesSword,
+			NPCID.RustyArmoredBonesSwordNoArmor,
+			
+			NPCID.HellArmoredBones,
+			NPCID.HellArmoredBonesMace,
+			NPCID.HellArmoredBonesSpikeShield,
+			NPCID.HellArmoredBonesSword,
+			
+			NPCID.Necromancer,
+			NPCID.RaggedCaster,
+			NPCID.DiabolistRed,
+			
+			NPCID.GiantCursedSkull,
+			NPCID.DungeonSpirit,
+			NPCID.DungeonSpirit,
 		};
 		public override bool CheckDead()
         {
@@ -92,24 +108,24 @@ namespace ITD.Content.NPCs.Bosses
 				{
 					for (int l = 0; l < 20; l++)
 					{
-						int spawnDust = Dust.NewDust(npc.Center, 0, 0, DustID.GiantCursedSkullBolt, 0, 0, 0, default, 2f);
+						int spawnDust = Dust.NewDust(npc.Center, 0, 0, DustID.DungeonSpirit, 0, 0, 0, default, 2f);
 						Main.dust[spawnDust].noGravity = true;
 						Main.dust[spawnDust].velocity *= 3f;
 					}
 					npc.StrikeNPC(new NPC.HitInfo
 						{
-							Damage = 200,
+							Damage = 1000,
 							Knockback = 0f,
 							HitDirection = 0,
 							Crit = true
 						});
 				}
 			}
-			if (NPC.ai[0] == -1 || Main.masterMode)
+			if (NPC.ai[0] == -1 || (Main.masterMode && Main.npc[(int)(NPC.ai[0])].active))
 			{
 				for (int l = 0; l < 10; l++)
 				{
-					int spawnDust = Dust.NewDust(NPC.Center, 16, 16, DustID.GiantCursedSkullBolt, 0, 0, 0, default, 2f);
+					int spawnDust = Dust.NewDust(NPC.Center, 16, 16, DustID.DungeonSpirit, 0, 0, 0, default, 2f);
 					Main.dust[spawnDust].noGravity = true;
 					Main.dust[spawnDust].velocity *= 2f;
 				}
@@ -120,13 +136,13 @@ namespace ITD.Content.NPCs.Bosses
 					{
 						for (int i = 0; i < 5; i++)
 						{
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(Main.rand.NextFloat(-6f, 6f), Main.rand.NextFloat(-8f, -2f)), ProjectileID.SkeletonBone, 25, 0f, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(Main.rand.NextFloat(-6f, 6f), Main.rand.NextFloat(-8f, -2f)), ProjectileID.SkeletonBone, 50, 0f, -1);
 						}
 					}		
-					NPC npc = Main.npc[NPC.NewNPC(NPC.GetSource_FromThis(), (int)(NPC.Center.X), (int)(NPC.Center.Y), TheList[Main.rand.Next(6)])];
+					NPC npc = Main.npc[NPC.NewNPC(NPC.GetSource_FromThis(), (int)(NPC.Center.X), (int)(NPC.Center.Y), TheList[Main.rand.Next(18)])];
 					if (NPC.ai[0] >= 0) //hell is war
 					{
-						npc.AddBuff(ModContent.BuffType<NecrosisBuff>(), 3600, false);
+						npc.AddBuff(ModContent.BuffType<SoulRotBuff>(), 3600, false);
 						npc.life = (int)(npc.lifeMax * 0.66f);
 					}
 				}

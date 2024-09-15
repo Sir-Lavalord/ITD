@@ -31,7 +31,7 @@ namespace ITD.Content.Items.Weapons.Melee
 			Item.shoot = ModContent.ProjectileType<CyaniteBoomerangProjectile>();
 		}
 		
-		public override  bool CanUseItem (Player player)
+		/*public override  bool CanUseItem (Player player)
         {
 			for (int k = 0; k < 1000; k++)
 			{
@@ -41,7 +41,7 @@ namespace ITD.Content.Items.Weapons.Melee
 				}
 			}
 			return true;
-        }
+        }*/
 		
 		public override void AddRecipes()
 		{
