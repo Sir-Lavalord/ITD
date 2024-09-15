@@ -651,6 +651,11 @@ Items: {
 		DisplayName: Gravekeeper Bag
 		Tooltip: ""
 	}
+
+	AsterKnuckle: {
+		DisplayName: Aster-Knuckle
+		Tooltip: "'Extra damage to spooky ghosts'"
+	}
 }
 
 Projectiles: {
@@ -740,6 +745,8 @@ Projectiles: {
 	PetPigPet.DisplayName: Balloon Pig
 	GasLeak.DisplayName: Gas Leak
 	Necroskull.DisplayName: Necroskull
+	AsterBlasterBlast.DisplayName: Aster Blaster Blast
+	CosmicLightningBlast.DisplayName: Cosmic Lightning Blast
 }
 
 NPCs: {

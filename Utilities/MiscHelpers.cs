@@ -5,6 +5,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using ITD.Content.NPCs;
 using ITD.Content.Projectiles;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ITD.Utilities
 {
@@ -71,6 +72,16 @@ namespace ITD.Utilities
             }
             return false;
         }
+        public static void ExpandHitboxBy(this Projectile projectile, int width, int height)
+        {
+            projectile.position = projectile.Center;
+            projectile.width = width;
+            projectile.height = height;
+            projectile.position -= projectile.Size * 0.5f;
+        }
+        public static void ExpandHitboxBy(this Projectile projectile, int newSize) => projectile.ExpandHitboxBy(newSize, newSize);
+        public static void ExpandHitboxBy(this Projectile projectile, Vector2 newSize) => projectile.ExpandHitboxBy((int)newSize.X, (int)newSize.Y);
+        public static void ExpandHitboxBy(this Projectile projectile, float expandRatio) => projectile.ExpandHitboxBy((int)(projectile.width * expandRatio), (int)(projectile.height * expandRatio));
 
         public static void Zap(Vector2 origin, Player player, int damage, int critChance, int chain)
         {

@@ -25,7 +25,7 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 400;
+            Projectile.timeLeft = 10;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
         }

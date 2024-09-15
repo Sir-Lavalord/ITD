@@ -106,7 +106,9 @@ namespace ITD.Players
 		
 		public override void UpdateDead()
         {
-			itemVar = new float[4];
+            if (Screenshake > 0)
+                Screenshake--; 
+            itemVar = new float[4];
 		}
 		
 		public override void UpdateBadLifeRegen()
