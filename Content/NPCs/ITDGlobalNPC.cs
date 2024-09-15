@@ -22,6 +22,7 @@ namespace ITD.Content.NPCs
 		public bool zapped;
 		
 		public bool necrosis;
+		public bool soulRot;
         public bool toasted;
 		
 		public override void ResetEffects(NPC npc)
@@ -29,6 +30,7 @@ namespace ITD.Content.NPCs
 			zapped = false;
 			
 			necrosis = false;
+			soulRot = false;
             toasted = false;
 		}
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
@@ -57,6 +59,18 @@ namespace ITD.Content.NPCs
 				
 				if (damage < 5)
                     damage = 5;
+            }
+			
+			if (soulRot)
+            {
+                if (npc.lifeRegen > 0)
+                {
+                    npc.lifeRegen = 0;
+                }
+                npc.lifeRegen -= 60;
+				
+				if (damage < 10)
+                    damage = 10;
             }
 			
             if (toasted)
@@ -123,7 +137,13 @@ namespace ITD.Content.NPCs
 			{
 				drawColor.R = 200;
 				drawColor.G = 100;
-				drawColor.B = 250;
+				drawColor.B = 255;
+			}
+			if (soulRot)
+			{
+				drawColor.R = 100;
+				drawColor.G = 200;
+				drawColor.B = 255;
 			}
             if (toasted)
             {

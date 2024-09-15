@@ -752,6 +752,9 @@ Projectiles: {
 	// GasLeak.DisplayName: Gas Leak
 	// Necroskull.DisplayName: Necroskull
 	// BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
+	// SoulLeak.DisplayName: Soul Leak
+	// NecroSkull.DisplayName: Necro Skull
+	// SoulSkull.DisplayName: Soul Skull
 }
 
 NPCs: {
@@ -786,6 +789,7 @@ NPCs: {
 	// KSGlandNPC.DisplayName: Slimy Coating
 	// Gravekeeper.DisplayName: Gravekeeper
 	// HauntedTombstone.DisplayName: Haunted Tombstone
+	// GhastlyTombstone.DisplayName: Ghastly Tombstone
 }
 
 Buffs: {
@@ -835,17 +839,25 @@ Buffs: {
 	}
 
 	NecrosisBuff: {
-		// DisplayName: Necrosis Buff
+		// DisplayName: Necrosis
+		// Description: Rapidly losing life
+	}
+
+	SoulRotBuff: {
+		// DisplayName: Soul Rot
 		// Description: Rapidly losing life
 	}
 
 	FavorFatigue: {
 		// DisplayName: Favor Fatigue
-		// Description: Mods.ITD.Buffs.FavorFatigue.Description
+		// Description: Cannot use favor abilities
 	}
 }
 
-// DeathMessage.Necrosis: succumbed to necrosis.
+DeathMessage: {
+	// Necrosis: succumbed to necrosis.
+	// SoulRot: became a soulless husk.
+}
 
 WorldGen: {
 	BluesoilPassMessage: Blauifiziere das tiefe Eis...
