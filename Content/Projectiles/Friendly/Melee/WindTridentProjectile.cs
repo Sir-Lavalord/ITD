@@ -12,6 +12,8 @@ using ITD.Utilities;
 using static tModPorter.ProgressUpdate;
 using Terraria.ID;
 using Terraria.DataStructures;
+using Mono.Cecil;
+using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {
@@ -21,8 +23,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         protected virtual float InitialHoldoutRange => 64f;
         protected virtual float HoldoutRangeMax => 128f;
         protected virtual float StoppingPoint => 8f;
+
         private float Charge = 0f;
         public int InitialDamage = 0;
+        private int timesToHit;
         public override void SetDefaults()
         {
             Projectile.width = 32;
@@ -56,7 +60,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         private Vector2 Holdout(Vector2 direction, int time)
         {
             Player player = Main.player[Projectile.owner];
-            return direction * InitialHoldoutRange + Vector2.SmoothStep(direction * HoldoutRangeMin * -Charge, direction * HoldoutRangeMax, Progress(time)) + Main.rand.NextVector2Circular(player.channel? Charge * 6f: 0f, player.channel ? Charge * 6f : 0f);
+            return direction * InitialHoldoutRange + Vector2.SmoothStep(direction * HoldoutRangeMin * (-Charge * 0.5f), direction * HoldoutRangeMax, Progress(time)) + Main.rand.NextVector2Circular(player.channel? Charge * 1.5f: 0f, player.channel ? Charge * 3f : 0f);
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
@@ -65,19 +69,19 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         }
         public override bool PreAI()
         {
-            float chargeSpeed = 0.02f;
+            float chargeSpeed = 0.04f;
             Player player = Main.player[Projectile.owner];
             player.heldProj = Projectile.whoAmI;
             Vector2 direction = Projectile.velocity.SafeNormalize(Vector2.Zero);
             if (player.channel)
             {
                 Projectile.timeLeft = 20;
-                Charge = Math.Clamp(Charge + chargeSpeed, 0f, 2f);
+                Charge = Math.Clamp(Charge + chargeSpeed, 0f, 4f);
                 Projectile.velocity = (player.GetITDPlayer().MousePosition - player.MountedCenter).SafeNormalize(Vector2.Zero);
                 player.ChangeDir(Projectile.direction);
                 player.SetDummyItemTime(2);
                 player.itemRotation = (Projectile.velocity * Projectile.direction).ToRotation();
-                Projectile.damage = (int)(InitialDamage * Charge);
+                Projectile.damage = (int)(InitialDamage * (Charge * 0.5f));
             }
             else
             {
@@ -85,9 +89,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 {
                     for (int i = 0; i < 10; i++)
                     {
-                        Vector2 velo = Main.rand.NextVector2Unit(Projectile.rotation, MathHelper.PiOver2) * (Charge) * 3f;
+                        Vector2 velo = Main.rand.NextVector2Unit(Projectile.rotation, MathHelper.PiOver2) * (Charge * 0.5f) * 3f;
                         Dust d = Dust.NewDustPerfect(Projectile.Center - (direction) * 128f, DustID.Cloud, velo);
-                        d.scale *= 1.2f;
+                        d.scale *= 0.6f;
                     }
                 }
             }
@@ -110,10 +114,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Color dustColor = Color.Lerp(Color.White, Color.LightBlue, Main.rand.NextFloat(0.7f));
             float radius = 32f;
 
-            Dust dust = Dust.NewDustPerfect(createPoint, DustID.Cloud, Vector2.Zero, 0, dustColor * Charge, 1f);
+            Dust dust = Dust.NewDustPerfect(createPoint, DustID.Cloud, Vector2.Zero, 0, dustColor * (Charge * 0.5f), 1f);
 
             dust.noGravity = true;
-            dust.fadeIn = Main.rand.NextFloat(0.8f, 1.2f) * Charge;
+            dust.fadeIn = Main.rand.NextFloat(0.8f, 1.2f) * (Charge * 0.5f);
 
             dust.customData = new TwisterDustData
             {
@@ -170,6 +174,14 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             public float Angle;
             public float Radius;
             public float RotationSpeed;
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            base.OnHitNPC(target, hit, damageDone);
+
+            timesToHit = 20 - (int)(Charge * 4f);
+            target.immune[Projectile.owner] = timesToHit;
         }
     }
 }
