@@ -103,7 +103,7 @@ namespace ITD.Content.Items.Weapons.Summoner
                 InvSprite = ModContent.Request<Texture2D>("ITD/Content/Items/Weapons/Summoner/AsterKnuckle");
 
             Texture2D properSprite = InvSprite.Value;
-            spriteBatch.Draw(properSprite, Item.position, null, lightColor, rotation, properSprite.Size(), scale, 0, 0);
+            spriteBatch.Draw(properSprite, Item.position - Main.screenPosition, null, lightColor, rotation, properSprite.Size() / 2f, scale, 0, 0);
             return false;
         }
         public override void HoldStyle(Player player, Rectangle heldItemFrame) => SetItemInHand(player, heldItemFrame);

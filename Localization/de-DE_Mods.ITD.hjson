@@ -662,6 +662,16 @@ Items: {
 		// DisplayName: Gravekeeper Bag
 		// Tooltip: ""
 	}
+
+	AsterKnuckle: {
+		// Tooltip: ""
+		// DisplayName: Aster Knuckle
+	}
+
+	WindTrident: {
+		// Tooltip: ""
+		// DisplayName: Wind Trident
+	}
 }
 
 Projectiles: {
@@ -755,6 +765,9 @@ Projectiles: {
 	// SoulLeak.DisplayName: Soul Leak
 	// NecroSkull.DisplayName: Necro Skull
 	// SoulSkull.DisplayName: Soul Skull
+	// CosmicLightningBlast.DisplayName: Cosmic Lightning Blast
+	// AsterBlasterBlast.DisplayName: Aster Blaster Blast
+	// WindTridentProjectile.DisplayName: Wind Trident Projectile
 }
 
 NPCs: {
