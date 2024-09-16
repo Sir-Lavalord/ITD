@@ -662,7 +662,7 @@ Items: {
 	}
 
 	AsterKnuckle: {
-		// Tooltip: ""
+		// Tooltip: "'RECONSTRUCT THIS'"
 		// DisplayName: Aster Knuckle
 	}
 

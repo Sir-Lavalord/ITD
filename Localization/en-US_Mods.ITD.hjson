@@ -667,8 +667,8 @@ Items: {
 	}
 
 	AsterKnuckle: {
-		Tooltip: "'Deals extra damage to spooky ghost'"
-		DisplayName: Aster Knuckle
+		Tooltip: "'RECONSTRUCT THIS'"
+		DisplayName: Aster-Knuckle
 	}
 
 	WindTrident: {
