@@ -22,6 +22,8 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.timeLeft = 800;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 8;
             DrawOffsetX = 6;
         }
         private void SpawnDust()
@@ -38,6 +40,8 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+            if (player.dead)
+                Projectile.Kill();
             int count = player.ownedProjectileCounts[Type];
             float radians = MathHelper.TwoPi / count;
             Projectile.Center = player.Center + new Vector2(0f, player.gfxOffY);

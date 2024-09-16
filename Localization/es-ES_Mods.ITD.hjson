@@ -880,6 +880,7 @@ Buffs: {
 DeathMessage: {
 	Necrosis: sucumbió a la necrosis.
 	SoulRot: se convirtío en una cáscara sin alma.
+	// IncrediblySharpKnife: cut a little too deep.
 }
 
 WorldGen: {

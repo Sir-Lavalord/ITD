@@ -226,7 +226,7 @@ namespace ITD.Players
 				}
 			}
 		}
-		private PlayerDeathReason DeathByLocalization(string key)
+		public PlayerDeathReason DeathByLocalization(string key)
         {
             string death = Language.GetTextValue($"Mods.ITD.DeathMessage.{key}");
             return PlayerDeathReason.ByCustomReason($"{Player.name} {death}");

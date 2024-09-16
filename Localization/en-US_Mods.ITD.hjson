@@ -885,6 +885,7 @@ Buffs: {
 DeathMessage: {
 	Necrosis: succumbed to necrosis.
 	SoulRot: became a soulless husk.
+	IncrediblySharpKnife: cut a little too deep.
 }
 
 WorldGen: {
