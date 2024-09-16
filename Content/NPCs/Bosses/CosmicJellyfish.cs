@@ -1063,6 +1063,8 @@ namespace ITD.Content.NPCs.Bosses
                                 else CheckDead();
                                 CombatText.NewText(projectile2.Hitbox, Color.Violet, "DOWN TO SIZE", true);
                                 projectile2.velocity = -projectile2.velocity * 2;
+                                // if the achievements mod is on, unlock the parry achievement
+                                ITD.Instance.achievements?.Call("Event", "ParryCosJelHand");
                             }
                         }
                     }
