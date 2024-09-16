@@ -20,6 +20,10 @@ namespace ITD.Content.Items.Favors.Prehardmode
             Main.RegisterItemAnimation(Type, new DrawAnimationVertical(7, 9));
             ItemID.Sets.AnimatesAsSoul[Type] = true;
         }
+        public override void SetFavorDefaults()
+        {
+            Item.width = Item.height = 32;
+        }
         public override bool UseFavor(Player player)
         {
             player.Hurt(PlayerDeathReason.ByCustomReason(""), (int)(player.statLifeMax / 5f), 0, dodgeable: false, knockback: 0);
@@ -36,10 +40,6 @@ namespace ITD.Content.Items.Favors.Prehardmode
             }
             SoundEngine.PlaySound(SoundID.NPCHit54, player.Center);
             return true;
-        }
-        public override void UpdateFavor(Player player, bool hideVisual)
-        {
-            base.UpdateFavor(player, hideVisual);
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
