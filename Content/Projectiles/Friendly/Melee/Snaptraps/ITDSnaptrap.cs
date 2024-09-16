@@ -209,6 +209,11 @@ namespace ITD.Content.Projectiles
         }
         public override void AI()
         {
+            if (myPlayer.dead)
+            {
+                Projectile.Kill();
+                return;
+            }
             Vector2 mountedCenter = myPlayer.MountedCenter;
             Vector2 toOwner = mountedCenter - Projectile.Center;
 
