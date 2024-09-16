@@ -761,7 +761,6 @@ Projectiles: {
 	// PetPigPet.DisplayName: Balloon Pig
 	// GasLeak.DisplayName: Gas Leak
 	// Necroskull.DisplayName: Necroskull
-	// BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
 	// SoulLeak.DisplayName: Soul Leak
 	// NecroSkull.DisplayName: Necro Skull
 	// SoulSkull.DisplayName: Soul Skull
@@ -902,3 +901,15 @@ Biomes: {
 }
 
 // Keybinds.UseFavor.DisplayName: Use Favor
+
+Achievements: {
+	CosmicConundrum: {
+		// Name: Cosmic Conundrum
+		// Description: Defeat the Cosmic Jellyfish, mutated aquatic alien from outer space, for the first time.
+	}
+
+	+PARRY: {
+		// Name: +PARRY
+		// Description: Parry the Cosmic Jellyfish’s slap attack.
+	}
+}
