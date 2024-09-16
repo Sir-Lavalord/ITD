@@ -656,7 +656,7 @@ Items: {
 			Grants Invulnerability.
 			All damage taken during invulnerability is inflicted after effect ends.
 			Can be used indefinitely, but effect duration is reduced per use until deactivation.
-			Press {0} to use when at full charge.
+			Press {0} to use.
 			'Jackpot!'
 			'''
 	}
@@ -674,6 +674,17 @@ Items: {
 	WindTrident: {
 		Tooltip: ""
 		DisplayName: Wind Trident
+	}
+
+	IncrediblySharpKnife: {
+		DisplayName: Incredibly Sharp Knife
+		Tooltip:
+			'''
+			Summons a ring of shadow knives to slash through your enemies.
+			Can be used indefinitely, but you take 20% of your max health as damage per use.
+			Press {0} to use.
+			'Cutting edge technology.'
+			'''
 	}
 }
 
@@ -770,6 +781,8 @@ Projectiles: {
 	CosmicLightningBlast.DisplayName: Cosmic Lightning Blast
 	AsterBlasterBlast.DisplayName: Aster Blaster Blast
 	WindTridentProjectile.DisplayName: Wind Trident Projectile
+	BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
+	ShadowKnife.DisplayName: Shadow Knife
 }
 
 NPCs: {

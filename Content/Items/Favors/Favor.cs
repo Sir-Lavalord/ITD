@@ -1,4 +1,5 @@
-﻿using ITD.Content.UI;
+﻿using ITD.Content.Rarities;
+using ITD.Content.UI;
 using ITD.Systems;
 using ITD.Utilities;
 using Microsoft.Xna.Framework;
@@ -41,6 +42,10 @@ namespace ITD.Content.Items.Favors
         /// The amount of time Favor Fatigue should be applied for after usage. Return 0 for no Favor Fatigue.
         /// </summary>
         public abstract int FavorFatigueTime { get; }
+        /// <summary>
+        /// If true, the Charge bar will not be drawn. Internally, the item will always be at 100% Charge.
+        /// </summary>
+        public abstract bool IsCursedFavor { get; }
         public override void SaveData(TagCompound tag)
         {
             tag.Add("favorItemCharge", Charge);
@@ -48,6 +53,18 @@ namespace ITD.Content.Items.Favors
         public override void LoadData(TagCompound tag)
         {
             Charge = tag.Get<float>("favorItemCharge");
+        }
+        /// <summary>
+        /// Same function as SetDefaults without extra stuff. You don't need to set the rarity here.
+        /// </summary>
+        public virtual void SetFavorDefaults()
+        {
+
+        }
+        public sealed override void SetDefaults()
+        {
+            Item.rare = IsCursedFavor? ModContent.RarityType<CursedFavorRarity>() : ModContent.RarityType<FavorRarity>() ;
+            SetFavorDefaults();
         }
         public sealed override bool ConsumeItem(Player player) => false;
         public sealed override bool CanRightClick() => true;
@@ -73,7 +90,7 @@ namespace ITD.Content.Items.Favors
         /// <returns></returns>
         public virtual float ChargeAmount(ChargeData chargeData)
         {
-            return chargeData.AmountX / 20f;
+            return 0f;
         }
         public void ChargeFavor(float amount)
         {
@@ -101,6 +118,11 @@ namespace ITD.Content.Items.Favors
             return slot == ModContent.GetInstance<FavorSlot>().Type;
         }
         */
+        /// <summary>
+        /// Allows you to do something while the Favor is in the Favor slot.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="hideVisual"></param>
         public virtual void UpdateFavor(Player player, bool hideVisual)
         {
 
@@ -109,6 +131,8 @@ namespace ITD.Content.Items.Favors
         {
             FavorPlayer favorPlayer = player.GetModPlayer<FavorPlayer>();
             favorPlayer.FavorItem = Item;
+            if (IsCursedFavor)
+                Charge = 1f;
             UpdateFavor(player, hideVisual);
         }
         /// <summary>
@@ -154,6 +178,8 @@ namespace ITD.Content.Items.Favors
         }
         public sealed override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
+            if (IsCursedFavor)
+                return;
             string barPath = "ITD/Content/Items/Favors/BarStyles/" + GetBarStyle();
             Texture2D barTexture = ModContent.Request<Texture2D>(barPath).Value;
             Texture2D barOverlay = ModContent.Request<Texture2D>(barPath + "_Overlay").Value;

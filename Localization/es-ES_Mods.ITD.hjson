@@ -670,6 +670,17 @@ Items: {
 		Tooltip: ""
 		DisplayName: Tridente de viento
 	}
+
+	IncrediblySharpKnife: {
+		// DisplayName: Incredibly Sharp Knife
+		/* Tooltip:
+			'''
+			Summons a ring of shadow knives to slash through your enemies.
+			Can be used indefinitely, but you take 20% of your max health as damage per use.
+			Press {0} to use.
+			'Cutting edge technology.'
+			''' */
+	}
 }
 
 Projectiles: {
@@ -765,6 +776,8 @@ Projectiles: {
 	CosmicLightningBlast.DisplayName: Rayo de electricidad cósmica
 	AsterBlasterBlast.DisplayName: Explosión de Aster Knuckle
 	WindTridentProjectile.DisplayName: Tridente de viento
+	// BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
+	// ShadowKnife.DisplayName: Shadow Knife
 }
 
 NPCs: {
