@@ -15,34 +15,17 @@ namespace ITD.Content.Items.Favors.Prehardmode
 {
     public class AceOfHearts : Favor
     {
-        public override int FavorFatigueTime => 240;
-        public override void SetDefaults()
+        public override int FavorFatigueTime => 0;
+        public override bool IsCursedFavor => true;
+        public override void SetFavorDefaults()
         {
             Item.width = Item.height = 32;
-            Item.rare = ModContent.RarityType<Rarities.CursedFavorRarity>();
-        }
-        public override string GetBarStyle()
-        {
-            return "AceOfHeartsBarStyle";
-        }
-        public override string GetChargeSound()
-        {
-            return "CardSounds";
         }
         public override bool UseFavor(Player player)
         {
             // does nothing rn, this is just for testing something
             return true;
         }
-        public override float ChargeAmount(ChargeData chargeData)
-        {
-            if (chargeData.Type == ChargeType.DamageGiven)
-            {
-                return 0.05f;
-            }
-            return 0f;
-        }
-
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             var line = tooltips.First(x => x.Name == "Tooltip3");

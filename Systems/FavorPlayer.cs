@@ -42,8 +42,10 @@ namespace ITD.Systems
             {
                 if (favorItem.UseFavor(Player))
                 {
-                    favorItem.Charge = 0f;
-                    Player.AddBuff(ModContent.BuffType<FavorFatigue>(), favorItem.FavorFatigueTime);
+                    if (!favorItem.IsCursedFavor)
+                        favorItem.Charge = 0f;
+                    if (favorItem.FavorFatigueTime > 0)
+                        Player.AddBuff(ModContent.BuffType<FavorFatigue>(), favorItem.FavorFatigueTime);
                 }
             }
         }

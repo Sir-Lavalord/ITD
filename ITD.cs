@@ -20,6 +20,7 @@ namespace ITD
         internal Mod bossChecklist = null;
         internal Mod musicDisplay = null;
         internal Mod munchies = null;
+        internal Mod achievements = null;
         public int? GetMusic(string trackName)
         {
             return itdMusic is not null ? MusicLoader.GetMusicSlot(itdMusic, "Music/" + trackName) : null;
@@ -42,6 +43,7 @@ namespace ITD
             ModLoader.TryGetMod("BossChecklist", out bossChecklist);
             ModLoader.TryGetMod("MusicDisplay", out musicDisplay);
             ModLoader.TryGetMod("Munchies", out munchies);
+            ModLoader.TryGetMod("TMLAchievements", out achievements);
             if (!Main.dedServ)
             {
                 wikithis?.Call("AddModURL", this, "https://itdmod.fandom.com/wiki/{}");
@@ -54,6 +56,7 @@ namespace ITD
             bossChecklist = null;
             musicDisplay = null;
             munchies = null;
+            achievements = null;
             Instance = null;
         }
     }
