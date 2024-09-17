@@ -686,6 +686,11 @@ Items: {
 
 	StrawmanItem: {
 		// DisplayName: Strawman
+		// Tooltip: Right click in inventory to dummy type
+	}
+
+	BloodPact: {
+		// DisplayName: Blood Pact
 		// Tooltip: ""
 	}
 }
@@ -785,6 +790,8 @@ Projectiles: {
 	// WindTridentProjectile.DisplayName: Wind Trident Projectile
 	// BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
 	// ShadowKnife.DisplayName: Shadow Knife
+	// BloodPactCut.DisplayName: Blood Pact Cut
+	// BloodPactSpirit.DisplayName: Blood Pact Spirit
 }
 
 NPCs: {
