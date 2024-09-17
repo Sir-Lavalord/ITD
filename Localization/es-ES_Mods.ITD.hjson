@@ -662,8 +662,8 @@ Items: {
 	}
 
 	AsterKnuckle: {
-		// Tooltip: "'RECONSTRUCT WHAT!?'"
-		// DisplayName: Aster-Knuckle
+		Tooltip: "'Da más daño al fantasma fantasmal'"
+		DisplayName: Aster Knuckle
 	}
 
 	WindTrident: {
@@ -680,16 +680,6 @@ Items: {
 			Press {0} to use.
 			'Cutting edge technology.'
 			''' */
-	}
-
-	StrawmanItem: {
-		// DisplayName: Strawman
-		// Tooltip: Right click in inventory to dummy type
-	}
-
-	BloodPact: {
-		// DisplayName: Blood Pact
-		// Tooltip: ""
 	}
 }
 
@@ -788,8 +778,6 @@ Projectiles: {
 	WindTridentProjectile.DisplayName: Tridente de viento
 	// BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
 	// ShadowKnife.DisplayName: Shadow Knife
-	// BloodPactCut.DisplayName: Blood Pact Cut
-	// BloodPactSpirit.DisplayName: Blood Pact Spirit
 }
 
 NPCs: {
@@ -825,7 +813,6 @@ NPCs: {
 	Gravekeeper.DisplayName: Guardatumbas
 	HauntedTombstone.DisplayName: Tumba embrujada
 	GhastlyTombstone.DisplayName: Tumba fantasmagórica
-	// StrawmanDummy.DisplayName: Strawman
 }
 
 Buffs: {

@@ -37,8 +37,6 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = Lifetime;
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = -1;
         }
         public override void OnKill(int timeLeft)
         {
@@ -66,7 +64,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                     {
                         other.GetGlobalProjectile<FishbackerReflectedProj>().IsReflected = true;
                         other.owner = Main.myPlayer;
-                        other.velocity.X *= -3f;
+                        other.velocity.X *= -1f;
                         other.velocity.Y *= -1f;
 
                         ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.WallOfFleshGoatMountFlames, new ParticleOrchestraSettings
