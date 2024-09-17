@@ -14,6 +14,9 @@ namespace ITD.Systems
     {
         public Item FavorItem;
         public bool favorFatigue;
+
+        // Fields: Favor specific
+        public bool bloodPact;
         public static ModKeybind UseFavorKey { get; private set; } = null;
         public static string FavorKeybindString { get { return UseFavorKey.GetAssignedKeys().FirstOrDefault("[Unbound Key]"); } }
         public override void Load()
@@ -35,6 +38,8 @@ namespace ITD.Systems
         public override void ResetEffects()
         {
             favorFatigue = false;
+
+            bloodPact = false;
         }
         public void UseFavor()
         {
@@ -93,6 +98,20 @@ namespace ITD.Systems
             if (distanceTraveled != Vector2.Zero && FavorItem != null && FavorItem.ModItem is Favor favorItem)
             {
                 favorItem.ChargeFavor(favorItem.ChargeAmount(new ChargeData(ChargeType.DistanceTravelled, null, null, distanceTraveled.X, distanceTraveled.Y)));
+            }
+        }
+        public override void UpdateEquips()
+        {
+            if (FavorItem != null && FavorItem.ModItem is Favor favorItem)
+                favorItem.UpdateAccessory(Player, false);
+        }
+        public override void UpdateBadLifeRegen()
+        {
+            if (bloodPact)
+            {
+                if (Player.lifeRegen > 0)
+                    Player.lifeRegen = 0;
+                Player.lifeRegen -= 120;
             }
         }
     }
