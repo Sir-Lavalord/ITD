@@ -863,6 +863,8 @@ namespace ITD.Content.NPCs.Bosses
                                 else CheckDead();
                                 CombatText.NewText(projectile.Hitbox, Color.Violet, "DOWN TO SIZE", true);
                                 projectile.velocity = -projectile.velocity *2;
+                                // if the achievements mod is on, unlock the parry achievement
+                                ITD.Instance.achievements?.Call("Event", "ParryCosJelHand");
                             }
                         }
                     }
@@ -1061,6 +1063,8 @@ namespace ITD.Content.NPCs.Bosses
                                 else CheckDead();
                                 CombatText.NewText(projectile2.Hitbox, Color.Violet, "DOWN TO SIZE", true);
                                 projectile2.velocity = -projectile2.velocity * 2;
+                                // if the achievements mod is on, unlock the parry achievement
+                                ITD.Instance.achievements?.Call("Event", "ParryCosJelHand");
                             }
                         }
                     }
@@ -1213,7 +1217,7 @@ namespace ITD.Content.NPCs.Bosses
                     spriteBatch.Draw(texture, drawPos, null, color, 0f, drawOrigin, NPC.scale, effects, 0);
                 }
             }
-        spriteBatch.Draw(spriteBack.Value, NPC.Center - screenPos - new Vector2(0f, 32f), NPC.frame, Color.White, rotation, new Vector2(spriteBack.Width() / 2f, spriteBack.Height() / Main.npcFrameCount[NPC.type] / 2f), 1f, SpriteEffects.None, default);
+        spriteBatch.Draw(spriteBack.Value, NPC.Center - screenPos - new Vector2(0f, 46f), NPC.frame, Color.White, rotation, new Vector2(spriteBack.Width() / 2f, spriteBack.Height() / Main.npcFrameCount[NPC.type] / 2f), 1f, SpriteEffects.None, default);
             if (hand != -1)
             {
                 Projectile projectile = Main.projectile[hand];

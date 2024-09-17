@@ -20,18 +20,15 @@ namespace ITD.Content.Items.Favors.Prehardmode
     public class BarOfSoap : Favor
     {
         public override int FavorFatigueTime => 60;
-
-        public static LocalizedText HotkeyText { get; private set; }
+        public override bool IsCursedFavor => false;
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Type, new DrawAnimationVertical(7, 13));
             ItemID.Sets.AnimatesAsSoul[Type] = true;
         }
-        public override void SetDefaults()
+        public override void SetFavorDefaults()
         {
             Item.width = Item.height = 32;
-            HotkeyText = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(BarOfSoap)}.HotkeyText"));
-            Item.rare = ModContent.RarityType<Content.Rarities.FavorRarity>();
         }
         public override string GetBarStyle()
         {

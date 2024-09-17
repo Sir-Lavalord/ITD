@@ -623,52 +623,63 @@ Items: {
 	}
 
 	PetPigSummon: {
-		// DisplayName: Pet Pig Summon
-		// Tooltip: ""
+		DisplayName: Tocino de hule
+		Tooltip: ""
 	}
 
 	EoCInsight: {
-		// DisplayName: Eye of Eldritch Insight
-		// Tooltip: Show love to see what should not be seen
+		DisplayName: Ojo del conocimiento prohibido
+		Tooltip: Muestrale amor a lo que no debe ser visto
 	}
 
 	BarOfSoap: {
-		// DisplayName: Bar Of Soap
-		/* Tooltip:
+		DisplayName: Barra de jabón
+		Tooltip:
 			'''
-			Instantly purifies all Evil Tiles in a 20 tile radius.
-			Grants the Squeaky Clean buff for 4 minutes.
-			Deal damage to increase charge. Every hit of damage grants 1% charge.
-			Press {0} to use when at full charge.
-			'A strange, self-cleaning bar of solidified fat...'
-			''' */
+			Purifica los bloques en un rango de 20 bloques.
+			Otorga el efecto de Limpieza máxima por 4 minutos.
+			Haz daño para cargar. Cada golpe de daño carga este favor por 1%.
+			Presiona {0} para usar al tener carga máxima.
+			'Una barra extraña y autolimpiante de grasa solida...'
+			'''
 	}
 
 	AceOfHearts: {
-		// DisplayName: Ace Of Hearts
-		/* Tooltip:
+		DisplayName: As de corazones
+		Tooltip:
 			'''
-			Grants Invulnerability.
-			All damage taken during invulnerability is inflicted after effect ends.
-			Can be used indefinitely, but effect duration is reduced per use until deactivation.
-			Press {0} to use when at full charge.
-			'Jackpot!'
-			''' */
+			Otorga invulnerabilidad.
+			Todo el daño tomado durante la invulnerabilidad es infligido al terminar el efecto.
+			Puede ser usado indefinidamente, pero la duración del efecto se reduce por uso hasta la desactivación.
+			Presiona {0} para usar al tener carga máxima.
+			'Premio mayor!'
+			'''
 	}
 
 	GravekeeperBag: {
-		// DisplayName: Gravekeeper Bag
-		// Tooltip: ""
+		DisplayName: Bolsa del Tesoro (Guardatumbas)
+		Tooltip: ""
 	}
 
 	AsterKnuckle: {
-		// Tooltip: "'Deals extra damage to spooky ghost'"
-		// DisplayName: Aster Knuckle
+		Tooltip: "'Da más daño al fantasma fantasmal'"
+		DisplayName: Aster Knuckle
 	}
 
 	WindTrident: {
-		// Tooltip: ""
-		// DisplayName: Wind Trident
+		Tooltip: ""
+		DisplayName: Tridente de viento
+	}
+
+	IncrediblySharpKnife: {
+		// DisplayName: Incredibly Sharp Knife
+		/* Tooltip:
+			'''
+			Summons a ring of shadow knives to slash through your enemies.
+			Can be used indefinitely, but you take 20% of your max health as damage per use.
+			Press {0} to use.
+			'Cutting edge technology.'
+			''' */
 	}
 }
 
@@ -757,15 +768,16 @@ Projectiles: {
 	SuffocationAura.DisplayName: Aura de asfixia
 	TheUnburied.DisplayName: El Desenterrado
 	PetPigPet.DisplayName: Cerdo con globo
-	// GasLeak.DisplayName: Gas Leak
-	// Necroskull.DisplayName: Necroskull
+	GasLeak.DisplayName: Fuga de gas
+	Necroskull.DisplayName: Necrocalavera
+	SoulLeak.DisplayName: Fuga de alma
+	NecroSkull.DisplayName: Necrocalavera
+	SoulSkull.DisplayName: Almacalavera
+	CosmicLightningBlast.DisplayName: Rayo de electricidad cósmica
+	AsterBlasterBlast.DisplayName: Explosión de Aster Knuckle
+	WindTridentProjectile.DisplayName: Tridente de viento
 	// BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
-	// SoulLeak.DisplayName: Soul Leak
-	// NecroSkull.DisplayName: Necro Skull
-	// SoulSkull.DisplayName: Soul Skull
-	// CosmicLightningBlast.DisplayName: Cosmic Lightning Blast
-	// AsterBlasterBlast.DisplayName: Aster Blaster Blast
-	// WindTridentProjectile.DisplayName: Wind Trident Projectile
+	// ShadowKnife.DisplayName: Shadow Knife
 }
 
 NPCs: {
@@ -798,9 +810,9 @@ NPCs: {
 	CosmicJellyfishMini.DisplayName: Medusa neptuniana
 	Sandberus.DisplayName: Desierbero
 	KSGlandNPC.DisplayName: Capa de gel
-	// Gravekeeper.DisplayName: Gravekeeper
-	// HauntedTombstone.DisplayName: Haunted Tombstone
-	// GhastlyTombstone.DisplayName: Ghastly Tombstone
+	Gravekeeper.DisplayName: Guardatumbas
+	HauntedTombstone.DisplayName: Tumba embrujada
+	GhastlyTombstone.DisplayName: Tumba fantasmagórica
 }
 
 Buffs: {
@@ -850,24 +862,25 @@ Buffs: {
 	}
 
 	NecrosisBuff: {
-		// DisplayName: Necrosis
-		// Description: Rapidly losing life
+		DisplayName: Necrosis
+		Description: Perdiendo vida rápidamente
 	}
 
 	SoulRotBuff: {
-		// DisplayName: Soul Rot
-		// Description: Rapidly losing life
+		DisplayName: Putrefacción del alma
+		Description: Perdiendo vida rápidamente
 	}
 
 	FavorFatigue: {
-		// DisplayName: Favor Fatigue
-		// Description: Cannot use favor abilities
+		DisplayName: Fatiga de Favor
+		Description: No puedes utilizar Favores
 	}
 }
 
 DeathMessage: {
-	// Necrosis: succumbed to necrosis.
-	// SoulRot: became a soulless husk.
+	Necrosis: sucumbió a la necrosis.
+	SoulRot: se convirtío en una cáscara sin alma.
+	// IncrediblySharpKnife: cut a little too deep.
 }
 
 WorldGen: {
@@ -899,4 +912,16 @@ Biomes: {
 	}
 }
 
-// Keybinds.UseFavor.DisplayName: Use Favor
+Keybinds.UseFavor.DisplayName: Usar Favor
+
+Achievements: {
+	CosmicConundrum: {
+		Name: Acertijo Cósmico
+		Description: Derrota a la Medusa Cósmica, alienígena mutante del espacio exterior, por la primera vez.
+	}
+
+	+PARRY: {
+		Name: +PARRY
+		Description: Bloquea el ataque de la mano de la Medusa Cósmica.
+	}
+}

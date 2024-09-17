@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static ITD.Downed;
+using Terraria.Achievements;
 using ITD.Content.Items.Other;
 using Terraria;
 using ITD.Players;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ITD
 {
@@ -31,6 +33,23 @@ namespace ITD
         {
             BossChecklistSupport();
             MunchiesSupport();
+            TMLAchievementsSupport();
+        }
+
+        private static void TMLAchievementsSupport()
+        {
+            ITD ITDMod = ITD.Instance;
+            Mod achievements = ITDMod.achievements;
+            if (achievements is null)
+                return;
+            string[] slayCosJel = {"Kill_" + NPCType<CosmicJellyfish>() };
+            string[] parryCosJel = { "Event_ParryCosJelHand" };
+            void AddAchievement(string nameNoSpaces, AchievementCategory category, string texturePath, string? customBorderTexturePath, bool showProgressBar, bool showAchievementCard, float achievementCardOrder, string[] conditions)
+            {
+                achievements.Call("AddAchievement", ITDMod, nameNoSpaces, category, texturePath, customBorderTexturePath, showProgressBar, showAchievementCard, achievementCardOrder, conditions);
+            }
+            AddAchievement("CosmicConundrum", AchievementCategory.Slayer, "ITD/Achievements/CosmicConundrum", null, false, false, 2.5f, slayCosJel);
+            AddAchievement("+PARRY", AchievementCategory.Challenger, "ITD/Achievements/CosJelParry", null, false, false, 2.6f, parryCosJel);
         }
         private static void AddBoss(Mod bossChecklist, Mod hostMod, string name, float difficulty, Func<bool> downed, object npcTypes, Dictionary<string, object> extraInfo)
             => bossChecklist.Call("LogBoss", hostMod, name, difficulty, downed, npcTypes, extraInfo);
