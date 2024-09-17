@@ -664,8 +664,8 @@ Items: {
 	}
 
 	AsterKnuckle: {
-		// Tooltip: ""
-		// DisplayName: Aster Knuckle
+		// Tooltip: "'RECONSTRUCT WHAT!?'"
+		// DisplayName: Aster-Knuckle
 	}
 
 	WindTrident: {
@@ -682,6 +682,11 @@ Items: {
 			Press {0} to use.
 			'Cutting edge technology.'
 			''' */
+	}
+
+	StrawmanItem: {
+		// DisplayName: Strawman
+		// Tooltip: ""
 	}
 }
 
@@ -815,6 +820,7 @@ NPCs: {
 	// Gravekeeper.DisplayName: Gravekeeper
 	// HauntedTombstone.DisplayName: Haunted Tombstone
 	// GhastlyTombstone.DisplayName: Ghastly Tombstone
+	// StrawmanDummy.DisplayName: Strawman
 }
 
 Buffs: {

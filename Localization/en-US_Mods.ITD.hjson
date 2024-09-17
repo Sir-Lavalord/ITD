@@ -667,7 +667,7 @@ Items: {
 	}
 
 	AsterKnuckle: {
-		Tooltip: "'RECONSTRUCT THIS'"
+		Tooltip: "'RECONSTRUCT WHAT!?'"
 		DisplayName: Aster-Knuckle
 	}
 
@@ -685,6 +685,14 @@ Items: {
 			Press {0} to use.
 			'Cutting edge technology.'
 			'''
+	}
+
+	StrawmanItem: {
+		DisplayName: Strawman
+		Tooltip:
+					'''
+					Right click in inventory to dummy type
+					'''
 	}
 }
 
@@ -818,6 +826,7 @@ NPCs: {
 	Gravekeeper.DisplayName: Gravekeeper
 	HauntedTombstone.DisplayName: Haunted Tombstone
 	GhastlyTombstone.DisplayName: Ghastly Tombstone
+	StrawmanDummy.DisplayName: Strawman
 }
 
 Buffs: {
