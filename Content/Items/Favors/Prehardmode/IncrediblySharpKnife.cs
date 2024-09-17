@@ -8,6 +8,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using System.Linq;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Favors.Prehardmode
 {
@@ -26,7 +27,9 @@ namespace ITD.Content.Items.Favors.Prehardmode
         }
         public override bool UseFavor(Player player)
         {
-            player.Hurt(PlayerDeathReason.ByCustomReason(""), (int)(player.statLifeMax / 5f), 0, dodgeable: false, knockback: 0);
+            if (player.immune)
+                return false;
+            player.Hurt(player.GetITDPlayer().DeathByLocalization("IncrediblySharpKnife"), (int)(player.statLifeMax2 / 5f), 0, dodgeable: false, knockback: 0);
             int type = ModContent.ProjectileType<ShadowKnife>();
             for (int i = 0; i < 8; i++)
             {
