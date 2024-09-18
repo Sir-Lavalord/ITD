@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.Localization;
+using Terraria.DataStructures;
 using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Items.Favors.Prehardmode
@@ -14,10 +16,7 @@ namespace ITD.Content.Items.Favors.Prehardmode
         public override bool IsCursedFavor => true;
 
         private int lifeConsumed;
-        public override void SetStaticDefaults()
-        {
-
-        }
+		private int lifeTimer;
         public override void SetFavorDefaults()
         {
             Item.width = Item.height = 32;
@@ -43,15 +42,26 @@ namespace ITD.Content.Items.Favors.Prehardmode
                 return;
             if (FavorPlayer.UseFavorKey.Current)
             {
-                player.GetModPlayer<FavorPlayer>().bloodPact = true;
-                lifeConsumed += 1;
+                lifeTimer = ++lifeTimer % 5;
+				if (lifeTimer == 0)
+				{
+					lifeConsumed += 5;
+					player.statLife -= 5;
+					CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), CombatText.LifeRegen, 5, false, true);
+				}
             }
             if (FavorPlayer.UseFavorKey.JustReleased)
             {
                 // I'm using Projectile.ai[0] here in the newProjectile call as timeLeft, if you wanna change the amount of time relative to lifeConsumed the projectile should exist.
                 Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed, 0f, player.whoAmI, lifeConsumed);
-                lifeConsumed = 0;
+                lifeTimer = 0;
+				lifeConsumed = 0;
             }
+			if (player.statLife <= 0 && player.whoAmI == Main.myPlayer)
+			{
+				string death = Language.GetTextValue($"Mods.ITD.DeathMessage.BloodPact");
+				player.KillMe(PlayerDeathReason.ByCustomReason($"{player.name} {death}"), 10.0, 0, false);
+			}
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {

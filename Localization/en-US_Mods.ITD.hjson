@@ -730,6 +730,11 @@ Items: {
 		DisplayName: Strawman
 		Tooltip: Right click in inventory to change dummy type
 	}
+
+	HardmodeGravekeeperBag: {
+		DisplayName: Hardmode Gravekeeper Bag
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -933,6 +938,7 @@ DeathMessage: {
 	Necrosis: succumbed to necrosis.
 	SoulRot: became a soulless husk.
 	IncrediblySharpKnife: cut a little too deep.
+	BloodPact: ran out of blood.
 }
 
 WorldGen: {
