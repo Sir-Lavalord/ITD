@@ -49,7 +49,7 @@ namespace ITD.Content.Items.Favors.Prehardmode
 				{
 					lifeConsumed += 5;
 					player.statLife -= 5;
-					CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), CombatText.LifeRegen, 5, false, true);
+					CombatText.NewText(player.getRect(), CombatText.LifeRegen, 5, false, true);
 					
 					SoundEngine.PlaySound(SoundID.NPCHit1, player.Center);
 					for (int i = 0; i < 6; i++)

@@ -1,12 +1,18 @@
 ﻿using ITD.Content.NPCs.Bosses;
-using Terraria;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria;
 using Terraria.ModLoader;
+using Terraria.GameContent.Events;
 
 namespace ITD.Content.Items.BossSummons
 {
-    public class SpacePrawn : ModItem
+    public class DuneSkull : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -29,7 +35,7 @@ namespace ITD.Content.Items.BossSummons
 
         public override bool CanUseItem(Player player)
         {
-            return !NPC.AnyNPCs(ModContent.NPCType<CosmicJellyfish>()) && !Main.dayTime;
+            return !NPC.AnyNPCs(ModContent.NPCType<Sandberus>()) && player.ZoneDesert && Sandstorm.Happening;
         }
 
         public override bool? UseItem(Player player)
@@ -38,7 +44,7 @@ namespace ITD.Content.Items.BossSummons
             {
                 SoundEngine.PlaySound(SoundID.Roar, player.position);
 
-                int type = ModContent.NPCType<CosmicJellyfish>();
+                int type = ModContent.NPCType<Sandberus>();
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
@@ -50,14 +56,6 @@ namespace ITD.Content.Items.BossSummons
                 }
             }
             return true;
-        }
-        public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient(ItemID.FossilOre, 2)
-                .AddIngredient(ItemID.DesertFossil, 4)
-                .AddIngredient(ItemID.SandBlock, 100)
-                .Register();
         }
     }
 }
