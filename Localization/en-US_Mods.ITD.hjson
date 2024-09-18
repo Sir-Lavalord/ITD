@@ -690,9 +690,37 @@ Items: {
 	StrawmanItem: {
 		DisplayName: Strawman
 		Tooltip:
-					'''
-					Right click in inventory to dummy type
-					'''
+			'''
+			Current Mode:
+			Spawns a strawman
+			Right Click while in inventory to change to next mode
+			Right Click while holding Shift in inventory to return previous mode
+			'''
+
+		DummyType: {
+			0: Perfect
+			1: Heavy
+			2: Windswept
+			3: Thorny
+			4: Terminal
+			5: Armed
+			6: Demoted
+		}
+
+		Mode: {
+			0: DEFAULT
+			1: 50 DEF
+			2: KNOCKBACK
+			3: CONTACT DAMAGE
+			4: KILLABLE
+			5: RANGED DAMAGE
+			6: NOT A BOSS
+		}
+	}
+
+	BloodPact: {
+		DisplayName: Blood Pact
+		Tooltip: ""
 	}
 }
 
@@ -791,6 +819,8 @@ Projectiles: {
 	WindTridentProjectile.DisplayName: Wind Trident Projectile
 	BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
 	ShadowKnife.DisplayName: Shadow Knife
+	BloodPactCut.DisplayName: Blood Pact Cut
+	BloodPactSpirit.DisplayName: Blood Pact Spirit
 }
 
 NPCs: {
@@ -888,6 +918,11 @@ Buffs: {
 	FavorFatigue: {
 		DisplayName: Favor Fatigue
 		Description: Cannot use favor abilities
+	}
+
+	BloodPactBuff: {
+		DisplayName: Blood Pact Buff
+		Description: Mods.ITD.Buffs.BloodPactBuff.Description
 	}
 }
 
