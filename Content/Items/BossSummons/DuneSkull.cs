@@ -57,5 +57,13 @@ namespace ITD.Content.Items.BossSummons
             }
             return true;
         }
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.FossilOre, 2)
+                .AddIngredient(ItemID.DesertFossil, 4)
+                .AddIngredient(ItemID.SandBlock, 100)
+                .Register();
+        }
     }
 }

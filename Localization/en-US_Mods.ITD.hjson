@@ -761,6 +761,11 @@ Items: {
 		DisplayName: Hardmode Gravekeeper Bag
 		Tooltip: ""
 	}
+
+	DuneSkull: {
+		DisplayName: Dune Skull
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
