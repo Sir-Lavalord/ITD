@@ -64,16 +64,5 @@ namespace ITD.Content.UI
                 favorItem.Charge = 0f;
             }
         }
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-            if (!NoItem)
-            {
-                if (item.ModItem is Favor favorItem)
-                {
-                    favorItem.UpdateAccessory(Main.LocalPlayer, false);
-                }
-            }
-        }
     }
 }

@@ -14,6 +14,8 @@ namespace ITD.Systems
     {
         public Item FavorItem;
         public bool favorFatigue;
+
+        // Fields: Favor specific
         public static ModKeybind UseFavorKey { get; private set; } = null;
         public static string FavorKeybindString { get { return UseFavorKey.GetAssignedKeys().FirstOrDefault("[Unbound Key]"); } }
         public override void Load()
@@ -74,7 +76,8 @@ namespace ITD.Systems
             if (entity is Projectile projectile)
             {
                 proj = projectile;
-            } else if (entity is NPC npc)
+            }
+            else if (entity is NPC npc)
             {
                 nPC = npc;
             }
@@ -94,6 +97,11 @@ namespace ITD.Systems
             {
                 favorItem.ChargeFavor(favorItem.ChargeAmount(new ChargeData(ChargeType.DistanceTravelled, null, null, distanceTraveled.X, distanceTraveled.Y)));
             }
+        }
+        public override void UpdateEquips()
+        {
+            if (FavorItem != null && FavorItem.ModItem is Favor favorItem)
+                favorItem.UpdateAccessory(Player, false);
         }
     }
 }

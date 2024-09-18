@@ -1,22 +1,12 @@
-﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
-using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
-using ITD.Systems;
-using Microsoft.Xna.Framework;
-using System;
+﻿using ITD.Systems;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using static System.Net.Mime.MediaTypeNames;
-using ITD.Content.Rarities;
-using ITD.Content.Projectiles.Friendly.Summoner;
-using Microsoft.Xna.Framework.Input;
-using ITD.Content.Buffs.Debuffs;
+using Terraria.Localization;
+using Terraria.DataStructures;
+using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Items.Favors.Prehardmode
 {
@@ -25,13 +15,8 @@ namespace ITD.Content.Items.Favors.Prehardmode
         public override int FavorFatigueTime => 0;
         public override bool IsCursedFavor => true;
 
-        private bool favorActivated;
-
         private int lifeConsumed;
-        public override void SetStaticDefaults()
-        {
-
-        }
+		private int lifeTimer;
         public override void SetFavorDefaults()
         {
             Item.width = Item.height = 32;
@@ -47,44 +32,40 @@ namespace ITD.Content.Items.Favors.Prehardmode
 
         public override bool UseFavor(Player player)
         {
-            favorActivated = true;
-            lifeConsumed = 0;
-
             return true;
         }
 
         public override void UpdateFavor(Player player, bool hideVisual)
         {
-            base.UpdateFavor(player, hideVisual);
-
+            int bloodPactSpirit = ModContent.ProjectileType<BloodPactSpirit>();
+            if (player.ownedProjectileCounts[bloodPactSpirit] > 0)
+                return;
             if (FavorPlayer.UseFavorKey.Current)
             {
-
-                player.lifeRegen = 0;
-                player.statLife -= 1;
-                lifeConsumed += 1;
+                lifeTimer = ++lifeTimer % 5;
+				if (lifeTimer == 0)
+				{
+					lifeConsumed += 5;
+					player.statLife -= 5;
+					CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), CombatText.LifeRegen, 5, false, true);
+				}
             }
-            else if (favorActivated == true)
+            if (FavorPlayer.UseFavorKey.JustReleased)
             {
-                player.AddBuff(ModContent.BuffType<Content.Buffs.SummonBuffs.BloodPactBuff>(), 60 * lifeConsumed);
-                Item.shoot = ModContent.ProjectileType<BloodPactSpirit>();
-                favorActivated = false;
+                // I'm using Projectile.ai[0] here in the newProjectile call as timeLeft, if you wanna change the amount of time relative to lifeConsumed the projectile should exist.
+                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed, 0f, player.whoAmI, lifeConsumed);
+                lifeTimer = 0;
+				lifeConsumed = 0;
             }
+			if (player.statLife <= 0 && player.whoAmI == Main.myPlayer)
+			{
+				string death = Language.GetTextValue($"Mods.ITD.DeathMessage.BloodPact");
+				player.KillMe(PlayerDeathReason.ByCustomReason($"{player.name} {death}"), 10.0, 0, false);
+			}
         }
-
-
-        public override float ChargeAmount(ChargeData chargeData)
-        {
-            if (chargeData.Type == ChargeType.DamageGiven)
-            {
-                return 0.01f;
-            }
-            return 0f;
-        }
-
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            var line = tooltips.First(x => x.Name == "Tooltip5");
+            var line = tooltips.First(x => x.Name == "Tooltip0");
             string hotkeyText = string.Format(line.Text, FavorPlayer.FavorKeybindString);
             line.Text = hotkeyText;
         }

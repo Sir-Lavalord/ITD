@@ -30,45 +30,54 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         {
             for (int i = 0; i < 6; i++)
             {
-                Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.Shadowflame);
+                Dust d = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0, 0f, 40, default, 1.5f);
+				d.noGravity = true;
             }
         }
         public override void OnKill(int timeLeft)
         {
             SpawnDust();
         }
+		public override Color? GetAlpha(Color drawColor)
+        {
+            return Color.White;
+        }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
             if (player.dead)
                 Projectile.Kill();
-            int count = player.ownedProjectileCounts[Type];
+			
+            int count = 0;
+			int offset = 0;
+			
+			foreach (var target in Main.ActiveProjectiles)
+            {
+				if (target.type == Projectile.type)
+				{
+					count++;
+					if (target == Projectile)
+						offset = count;
+				}
+			}
+			
             float radians = MathHelper.TwoPi / count;
             Projectile.Center = player.Center + new Vector2(0f, player.gfxOffY);
-            NPC closest = Projectile.FindClosestNPC(256f);
-            Vector2 toClosest = Vector2.Zero;
+
+			Projectile.localAI[0] = Projectile.localAI[0] + 0.1f;
+
+			float rotation = (radians * offset) + Main.GlobalTimeWrappedHourly * 4f;
+			float range = 64f;
+
+			NPC closest = Projectile.FindClosestNPC(256f);
             if (closest != null)
             {
-                toClosest = (closest.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
-                bool isInAngleRange = Math.Abs(Projectile.AngleTo(closest.Center) - Projectile.velocity.ToRotation()) < MathHelper.PiOver4;
-                if (isInAngleRange)
-                {
-                    piercing = true;
-                }
+				range = Math.Max((player.Center - closest.Center).Length(), 64f);
             }
+			Vector2 restingVelocity = (-Vector2.UnitY * range).RotatedBy(rotation);
 
-            Vector2 restingVelocity = (-Vector2.UnitY * (piercing? 64f + (float)Math.Sin(PierceProgress * (float)Math.PI) * 128f: 64f)).RotatedBy((radians * Projectile.ai[0]) + Main.GlobalTimeWrappedHourly * 4f);
-            if (piercing)
-            {
-                PierceProgress += 0.05f;
-                if (PierceProgress > 1f)
-                {
-                    piercing = false;
-                    PierceProgress = 0f;
-                }
-            }
-            Projectile.velocity = restingVelocity;
-            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity, restingVelocity, 0.25f);
+            Projectile.rotation = rotation;
         }
     }
 }

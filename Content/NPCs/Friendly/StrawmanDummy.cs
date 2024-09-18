@@ -91,15 +91,15 @@ namespace ITD.Content.NPCs.Friendly
                             SoundEngine.PlaySound(SoundID.Item11, NPC.Center);
                             NPC.ai[1] = 0;
                             Projectile.NewProjectile(NPC.GetSource_FromThis(),
-                                new Vector2(NPC.Center.X + 10 * NPC.direction, NPC.Center.Y), 
-                                new Vector2(2 * NPC.spriteDirection,0), ProjectileID.BulletSnowman, 100, 0,
+                                new Vector2(NPC.Center.X + 10 * NPC.direction, NPC.Center.Y),
+                                new Vector2(2 * NPC.spriteDirection, 0), ProjectileID.BulletSnowman, 100, 0,
                                 Main.myPlayer, NPC.whoAmI);
                         }
                     }
-                        if (player.position.X <= NPC.position.X)
-                            NPC.spriteDirection = -1;
-                        else
-                            NPC.spriteDirection = 1;
+                    if (player.position.X <= NPC.position.X)
+                        NPC.spriteDirection = -1;
+                    else
+                        NPC.spriteDirection = 1;
 
 
                     break;

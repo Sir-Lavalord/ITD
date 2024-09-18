@@ -33,13 +33,13 @@ namespace ITD.Content.Items.Favors.Prehardmode
             int type = ModContent.ProjectileType<ShadowKnife>();
             for (int i = 0; i < 8; i++)
             {
-                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, type, 40, 0f, player.whoAmI, i + player.ownedProjectileCounts[type]);
+                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, type, 40, 0f, player.whoAmI);
             }
             for (int i = 0; i < 60; i++)
             {
                 Vector2 pos = Main.rand.NextVector2Unit() * 64f;
-                Dust d = Dust.NewDustDirect(player.Center + pos, 1, 1, DustID.Shadowflame);
-                d.scale *= 1.5f;
+                Dust d = Dust.NewDustDirect(player.Center + pos, 1, 1, DustID.CrystalPulse2, 0, 0f, 40, default, 1.5f);
+				d.noGravity = true;
             }
             SoundEngine.PlaySound(SoundID.NPCHit54, player.Center);
             return true;
