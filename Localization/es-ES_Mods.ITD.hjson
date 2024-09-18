@@ -452,7 +452,7 @@ Items: {
 
 	Dunebarrel: {
 		DisplayName: Cañones de dunas
-		Tooltip:
+		Tooltip: ""
 	}
 
 	Quasar: {
