@@ -23,14 +23,14 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.ignoreWater = true;
             Projectile.timeLeft = 800;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 8;
+            Projectile.localNPCHitCooldown = 20;
             DrawOffsetX = 6;
         }
         private void SpawnDust()
         {
             for (int i = 0; i < 6; i++)
             {
-                Dust d = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0, 0f, 40, default, 1.5f);
+                Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.CrystalPulse2, 0, 0f, 40, default, 1.5f);
 				d.noGravity = true;
             }
         }
@@ -63,8 +63,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 			
             float radians = MathHelper.TwoPi / count;
             Projectile.Center = player.Center + new Vector2(0f, player.gfxOffY);
-
-			Projectile.localAI[0] = Projectile.localAI[0] + 0.1f;
 
 			float rotation = (radians * offset) + Main.GlobalTimeWrappedHourly * 4f;
 			float range = 64f;

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.DataStructures;
+using Terraria.ID;
 using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Items.Favors.Prehardmode
@@ -48,6 +50,13 @@ namespace ITD.Content.Items.Favors.Prehardmode
 					lifeConsumed += 5;
 					player.statLife -= 5;
 					CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), CombatText.LifeRegen, 5, false, true);
+					
+					SoundEngine.PlaySound(SoundID.NPCHit1, player.Center);
+					for (int i = 0; i < 6; i++)
+					{
+						Dust d = Dust.NewDustDirect(player.position, player.width, player.height, DustID.Blood, 0, 0f, 40, default, 2f);
+						d.noGravity = true;
+					}
 				}
             }
             if (FavorPlayer.UseFavorKey.JustReleased)

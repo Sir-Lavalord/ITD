@@ -578,7 +578,7 @@ Items: {
 
 	GalacticJellyBean: {
 		// DisplayName: Galactic Jelly Bean
-		// Tooltip: ""
+		// Tooltip: Summons a cosmic hand to attack your foes
 	}
 
 	EoWTail: {
@@ -678,7 +678,7 @@ Items: {
 		/* Tooltip:
 			'''
 			Summons a ring of shadow knives to slash through your enemies.
-			Can be used indefinitely, but you take 20% of your max health as damage per use.
+			Can be used indefinitely, but costs you 20% of your max health per use.
 			Press {0} to use.
 			'Cutting edge technology.'
 			''' */
@@ -717,6 +717,39 @@ Items: {
 
 	BloodPact: {
 		// DisplayName: Blood Pact
+		// Tooltip: ""
+	}
+
+	CyaniteHelm: {
+		// SetBonus: Mods.ITD.Items.CyaniteHelm.SetBonus
+		// DisplayName: Cyanite Helm
+		// Tooltip: ""
+	}
+
+	CyaniteHood: {
+		// SetBonus: Mods.ITD.Items.CyaniteHood.SetBonus
+		// DisplayName: Cyanite Hood
+		// Tooltip: ""
+	}
+
+	CyaniteMask: {
+		// SetBonus: Mods.ITD.Items.CyaniteMask.SetBonus
+		// DisplayName: Cyanite Mask
+		// Tooltip: ""
+	}
+
+	CyaniteGreaves: {
+		// DisplayName: Cyanite Greaves
+		// Tooltip: ""
+	}
+
+	CyanitePlating: {
+		// DisplayName: Cyanite Plating
+		// Tooltip: ""
+	}
+
+	HardmodeGravekeeperBag: {
+		// DisplayName: Hardmode Gravekeeper Bag
 		// Tooltip: ""
 	}
 }
@@ -927,6 +960,7 @@ DeathMessage: {
 	// Necrosis: succumbed to necrosis.
 	// SoulRot: became a soulless husk.
 	// IncrediblySharpKnife: cut a little too deep.
+	// BloodPact: ran out of blood.
 }
 
 WorldGen: {

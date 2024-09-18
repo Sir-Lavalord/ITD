@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.GameContent.Drawing;
 using ITD.Utilities;
 using ITD.Content.Items.Accessories.Expert;
 using Microsoft.Xna.Framework.Graphics;
@@ -47,7 +48,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         {
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.height = 32; Projectile.width = 32;
+            Projectile.height = 64; Projectile.width = 64;
             Projectile.damage = 50;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
@@ -75,31 +76,23 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             }
             HomingTarget ??= Projectile.FindClosestNPC(homingDistance);
 
-            if (HomingTarget != null && Projectile.Distance(HomingTarget.Center) > homingDistance)
+            if (HomingTarget != null && player.Distance(HomingTarget.Center) > homingDistance)
             {
                 HomingTarget = null;
             }
-                Target();
-
+            Target();
         }
         Vector2 toTarget;
         Vector2 chargedPosition;
         public void Target()
         {
             Player player = Main.player[Projectile.owner];
-            Vector2 offset = new Vector2(player.direction == -1 ? 18 : -14, -32f + player.gfxOffY);
+            Vector2 offset = new Vector2(player.direction * -26 + 18, -16f + player.gfxOffY);
             Vector2 normalCenter = player.Center + offset + new Vector2(0f, player.velocity.Y);
             if (HomingTarget != null)
             {
-                if ((Projectile.Distance(HomingTarget.Center) > homingDistance + chargeDistance && handState == HandState.Default))
-                {
-                    HomingTarget = null;
-                }
-                else
-                {
-                    toTarget = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
-                    chargedPosition = player.Center + offset + new Vector2(0f, player.velocity.Y) - toTarget * chargeDistance;
-                }
+                toTarget = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
+                chargedPosition = player.Center + offset + new Vector2(0f, player.velocity.Y) - toTarget * chargeDistance;
                 if (!HomingTarget.active || HomingTarget.life <= 0)
                 {
                     HomingTarget = null;
@@ -135,7 +128,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     {
                         handState = HandState.Slinging;
                         handTarget = HomingTarget.Center + toTarget * 120f;
-
                     }
                     Projectile.Center = Vector2.Lerp(normalCenter, chargedPosition, (float)Math.Sin(handCharge * Math.PI));
                     break;
@@ -147,7 +139,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     }
                     else
                     {
-                        if (handFollowThrough < 0.8f)
+                        if (handFollowThrough < 0.4f)
                         {
                             handFollowThrough += 0.1f;
                         }
@@ -156,7 +148,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                             handState = HandState.Default;
                         }
                     }
-                    Projectile.Center = Vector2.Lerp(normalCenter, handTarget, (float)Math.Sin(handSling * Math.PI));
+                    Projectile.Center = Vector2.Lerp(Projectile.Center, handTarget, (float)Math.Sin(handSling * Math.PI));
                     break;
             }
         }
@@ -180,6 +172,10 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             modifiers.ScalingArmorPenetration += 1f;
+			
+			ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.SlapHand,
+				new ParticleOrchestraSettings { PositionInWorld = target.Center },
+				Projectile.owner);
         }
         public override bool? CanHitNPC(NPC target)
         {
