@@ -628,8 +628,8 @@ Items: {
 	}
 
 	PetPigSummon: {
-		DisplayName: Pet Pig Summon
-		Tooltip: ""
+		DisplayName: Rubber Bacon
+		Tooltip: Summons a balloon pig with a penchant for loot
 	}
 
 	EoCInsight: {
@@ -641,10 +641,10 @@ Items: {
 		DisplayName: Bar Of Soap
 		Tooltip:
 			'''
-			Instantly purifies all Evil Tiles in a 20 tile radius.
-			Grants the Squeaky Clean buff for 4 minutes.
-			Deal damage to increase charge. Every hit of damage grants 1% charge.
-			Press {0} to use when at full charge.
+			Instantly purifies all Evil Tiles in a 20 tile radius
+			Grants the Squeaky Clean buff for 4 minutes
+			Deal damage to increase charge. Every hit of damage grants 1% charge
+			Press {0} to use when at full charge
 			'A strange, self-cleaning bar of solidified fat...'
 			'''
 	}
@@ -653,26 +653,26 @@ Items: {
 		DisplayName: Ace Of Hearts
 		Tooltip:
 			'''
-			Grants Invulnerability.
-			All damage taken during invulnerability is inflicted after effect ends.
-			Can be used indefinitely, but effect duration is reduced per use until deactivation.
-			Press {0} to use.
+			Grants invulnerability
+			All damage taken during invulnerability is inflicted after effect ends
+			Can be used indefinitely, but effect duration is reduced per use until deactivation
+			Press {0} to use
 			'Jackpot!'
 			'''
 	}
 
 	GravekeeperBag: {
 		DisplayName: Gravekeeper Bag
-		Tooltip: ""
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 	}
 
 	AsterKnuckle: {
-		Tooltip: "'Deals extra damage to spooky ghost'"
-		DisplayName: Aster Knuckle
+		Tooltip: "'RECONSTRUCT WHAT!?'"
+		DisplayName: Aster-Knuckle
 	}
 
 	WindTrident: {
-		Tooltip: ""
+		Tooltip: Hold down the attack button to charge the trident, readying a more powerful attack
 		DisplayName: Wind Trident
 	}
 
@@ -680,11 +680,55 @@ Items: {
 		DisplayName: Incredibly Sharp Knife
 		Tooltip:
 			'''
-			Summons a ring of shadow knives to slash through your enemies.
-			Can be used indefinitely, but you take 20% of your max health as damage per use.
-			Press {0} to use.
-			'Cutting edge technology.'
+			Summons a ring of shadow knives to slash through your enemies
+			Can be used indefinitely, but you take 20% of your max health as damage per use
+			Press {0} to use
+			'Cutting edge technology'
 			'''
+	}
+
+	CyaniteHelm: {
+		SetBonus: Mods.ITD.Items.CyaniteHelm.SetBonus
+		DisplayName: Cyanite Helm
+		Tooltip: ""
+	}
+
+	CyaniteHood: {
+		SetBonus: Mods.ITD.Items.CyaniteHood.SetBonus
+		DisplayName: Cyanite Hood
+		Tooltip: ""
+	}
+
+	CyaniteMask: {
+		SetBonus: Mods.ITD.Items.CyaniteMask.SetBonus
+		DisplayName: Cyanite Mask
+		Tooltip: ""
+	}
+
+	CyaniteGreaves: {
+		DisplayName: Cyanite Greaves
+		Tooltip: ""
+	}
+
+	CyanitePlating: {
+		DisplayName: Cyanite Plating
+		Tooltip: ""
+	}
+
+	BloodPact: {
+		DisplayName: Blood Pact
+		Tooltip:
+			'''
+			Hold down {0} to rapidly drain your own blood
+			Once released, this will summon a powerful spirit to help you in battle
+			The duration and damage this spirit deals increases as you sacrifice more blood
+			You may not summon more than one spirit at the same time
+			'''
+	}
+
+	StrawmanItem: {
+		DisplayName: Strawman
+		Tooltip: Right click in inventory to change dummy type
 	}
 }
 
@@ -783,6 +827,8 @@ Projectiles: {
 	WindTridentProjectile.DisplayName: Wind Trident Projectile
 	BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
 	ShadowKnife.DisplayName: Shadow Knife
+	BloodPactCut.DisplayName: Blood Pact Cut
+	BloodPactSpirit.DisplayName: Blood Pact Spirit
 }
 
 NPCs: {
@@ -818,6 +864,7 @@ NPCs: {
 	Gravekeeper.DisplayName: Gravekeeper
 	HauntedTombstone.DisplayName: Haunted Tombstone
 	GhastlyTombstone.DisplayName: Ghastly Tombstone
+	StrawmanDummy.DisplayName: Strawman Dummy
 }
 
 Buffs: {

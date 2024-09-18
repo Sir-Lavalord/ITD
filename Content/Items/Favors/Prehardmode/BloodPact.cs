@@ -38,26 +38,26 @@ namespace ITD.Content.Items.Favors.Prehardmode
 
         public override void UpdateFavor(Player player, bool hideVisual)
         {
+            int bloodPactSpirit = ModContent.ProjectileType<BloodPactSpirit>();
+            if (player.ownedProjectileCounts[bloodPactSpirit] > 0)
+                return;
             if (FavorPlayer.UseFavorKey.Current)
             {
-                ;
                 player.GetModPlayer<FavorPlayer>().bloodPact = true;
                 lifeConsumed += 1;
             }
             if (FavorPlayer.UseFavorKey.JustReleased)
             {
                 // I'm using Projectile.ai[0] here in the newProjectile call as timeLeft, if you wanna change the amount of time relative to lifeConsumed the projectile should exist.
-                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, ModContent.ProjectileType<BloodPactSpirit>(), lifeConsumed, 0f, player.whoAmI, lifeConsumed);
+                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed, 0f, player.whoAmI, lifeConsumed);
                 lifeConsumed = 0;
             }
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            /*
-            var line = tooltips.First(x => x.Name == "Tooltip5");
+            var line = tooltips.First(x => x.Name == "Tooltip0");
             string hotkeyText = string.Format(line.Text, FavorPlayer.FavorKeybindString);
             line.Text = hotkeyText;
-            */
         }
     }
 }

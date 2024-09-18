@@ -8,11 +8,14 @@ using Terraria.DataStructures;
 using Humanizer;
 using System.Collections.Generic;
 using ITD.Content.NPCs.Friendly;
+using Terraria.Localization;
 
 namespace ITD.Content.Items.Other
 {
     public class StrawmanItem : ModItem
     {
+        // make the dummy type titles and description localizable please
+        // -qangel
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 1;
