@@ -451,8 +451,8 @@ Items: {
 	}
 
 	Dunebarrel: {
-		DisplayName: Dunebarrel
-		Tooltip: Cañón de dunas
+		DisplayName: Cañones de dunas
+		Tooltip: ""
 	}
 
 	Quasar: {
@@ -516,7 +516,12 @@ Items: {
 
 	Fishbacker: {
 		DisplayName: Fishbacker
-		Tooltip: ""
+		Tooltip:
+			'''
+			Los súbditos hacen 8 de daño adicional a los enemigos marcados
+			Puede reflejar proyectiles
+			Los proyectiles reflejados marcan a los enemigos al golpearlos
+			'''
 	}
 
 	CrimsonAntidote: {
@@ -624,7 +629,7 @@ Items: {
 
 	PetPigSummon: {
 		DisplayName: Tocino de hule
-		Tooltip: ""
+		Tooltip: Invoca un cerdo con globo con una afición para los tesoros
 	}
 
 	EoCInsight: {
@@ -636,10 +641,10 @@ Items: {
 		DisplayName: Barra de jabón
 		Tooltip:
 			'''
-			Purifica los bloques en un rango de 20 bloques.
-			Otorga el efecto de Limpieza máxima por 4 minutos.
-			Haz daño para cargar. Cada golpe de daño carga este favor por 1%.
-			Presiona {0} para usar al tener carga máxima.
+			Purifica los bloques en un rango de 20 bloques
+			Otorga el efecto de Limpieza máxima por 4 minutos
+			Haz daño para cargar. Cada golpe de daño carga este favor por 1%
+			Presiona {0} para usar al tener carga máxima
 			'Una barra extraña y autolimpiante de grasa solida...'
 			'''
 	}
@@ -648,10 +653,10 @@ Items: {
 		DisplayName: As de corazones
 		Tooltip:
 			'''
-			Otorga invulnerabilidad.
-			Todo el daño tomado durante la invulnerabilidad es infligido al terminar el efecto.
-			Puede ser usado indefinidamente, pero la duración del efecto se reduce por uso hasta la desactivación.
-			Presiona {0} para usar al tener carga máxima.
+			Otorga invulnerabilidad
+			Todo el daño tomado durante la invulnerabilidad es infligido al terminar el efecto
+			Puede ser usado indefinidamente, pero la duración del efecto se reduce por uso hasta la desactivación
+			Presiona {0} para usar al tener carga máxima
 			'Premio mayor!'
 			'''
 	}
@@ -662,8 +667,8 @@ Items: {
 	}
 
 	AsterKnuckle: {
-		// Tooltip: "'RECONSTRUCT WHAT!?'"
-		// DisplayName: Aster-Knuckle
+		Tooltip: "'¿¡RECONSTRUIR QUÉ!?'"
+		DisplayName: Aster-Knuckle
 	}
 
 	WindTrident: {
@@ -672,14 +677,20 @@ Items: {
 	}
 
 	IncrediblySharpKnife: {
-		// DisplayName: Incredibly Sharp Knife
-		/* Tooltip:
+		DisplayName: Cuchillo increiblemente afilado
+		Tooltip:
 			'''
-			Summons a ring of shadow knives to slash through your enemies.
-			Can be used indefinitely, but costs you 20% of your max health per use.
-			Press {0} to use.
-			'Cutting edge technology.'
-			''' */
+			Invoca un anillo de cuchillos de sombra para cortar a tus enemigos
+			Puede ser usado indefinidamente, pero tomas el 20% de tu vida máxima como daño por cada uso
+			Presiona {0} para usar
+			'Tecnología acuchilleante'
+			}
+
+			StrawmanItem: {
+			// DisplayName: Strawman
+			// Tooltip:
+			//	
+			'''
 	}
 
 	StrawmanItem: {
@@ -714,36 +725,42 @@ Items: {
 	}
 
 	BloodPact: {
-		// DisplayName: Blood Pact
-		// Tooltip: ""
+		DisplayName: Pacto de sangre
+		Tooltip:
+			'''
+			Mantén presionado {0} para drenar tu propia sangre
+			Al soltar el botón, esto invocará un espíritu poderoso para ayudarte en batalla
+			La duración y el daño de este espírito aumenta con más sangre sacrificada
+			No puedes invocar más de un espíritu al mismo tiempo
+			'''
 	}
 
 	CyaniteHelm: {
-		// SetBonus: Mods.ITD.Items.CyaniteHelm.SetBonus
-		// DisplayName: Cyanite Helm
-		// Tooltip: ""
+		SetBonus: Mods.ITD.Items.CyaniteHelm.SetBonus
+		DisplayName: Yelmo de cianita
+		Tooltip: ""
 	}
 
 	CyaniteHood: {
-		// SetBonus: Mods.ITD.Items.CyaniteHood.SetBonus
-		// DisplayName: Cyanite Hood
-		// Tooltip: ""
+		SetBonus: Mods.ITD.Items.CyaniteHood.SetBonus
+		DisplayName: Capucha de cianita
+		Tooltip: ""
 	}
 
 	CyaniteMask: {
-		// SetBonus: Mods.ITD.Items.CyaniteMask.SetBonus
-		// DisplayName: Cyanite Mask
-		// Tooltip: ""
+		SetBonus: Mods.ITD.Items.CyaniteMask.SetBonus
+		DisplayName: Máscara de cianita
+		Tooltip: ""
 	}
 
 	CyaniteGreaves: {
-		// DisplayName: Cyanite Greaves
-		// Tooltip: ""
+		DisplayName: Grebas de cianita
+		Tooltip: ""
 	}
 
 	CyanitePlating: {
-		// DisplayName: Cyanite Plating
-		// Tooltip: ""
+		DisplayName: Blindaje de cianita
+		Tooltip: ""
 	}
 
 	HardmodeGravekeeperBag: {

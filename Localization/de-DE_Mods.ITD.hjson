@@ -625,8 +625,8 @@ Items: {
 	}
 
 	PetPigSummon: {
-		// DisplayName: Pet Pig Summon
-		// Tooltip: ""
+		// DisplayName: Rubber Bacon
+		// Tooltip: Summons a balloon pig with a penchant for loot
 	}
 
 	EoCInsight: {
@@ -638,10 +638,10 @@ Items: {
 		// DisplayName: Bar Of Soap
 		/* Tooltip:
 			'''
-			Instantly purifies all Evil Tiles in a 20 tile radius.
-			Grants the Squeaky Clean buff for 4 minutes.
-			Deal damage to increase charge. Every hit of damage grants 1% charge.
-			Press {0} to use when at full charge.
+			Instantly purifies all Evil Tiles in a 20 tile radius
+			Grants the Squeaky Clean buff for 4 minutes
+			Deal damage to increase charge. Every hit of damage grants 1% charge
+			Press {0} to use when at full charge
 			'A strange, self-cleaning bar of solidified fat...'
 			''' */
 	}
@@ -650,10 +650,10 @@ Items: {
 		// DisplayName: Ace Of Hearts
 		/* Tooltip:
 			'''
-			Grants Invulnerability.
-			All damage taken during invulnerability is inflicted after effect ends.
-			Can be used indefinitely, but effect duration is reduced per use until deactivation.
-			Press {0} to use.
+			Grants Invulnerability
+			All damage taken during invulnerability is inflicted after effect ends
+			Can be used indefinitely, but effect duration is reduced per use until deactivation
+			Press {0} to use
 			'Jackpot!'
 			''' */
 	}
@@ -669,7 +669,7 @@ Items: {
 	}
 
 	WindTrident: {
-		// Tooltip: ""
+		// Tooltip: Hold down the attack button to charge the trident, readying a more powerful attack
 		// DisplayName: Wind Trident
 	}
 
@@ -677,9 +677,9 @@ Items: {
 		// DisplayName: Incredibly Sharp Knife
 		/* Tooltip:
 			'''
-			Summons a ring of shadow knives to slash through your enemies.
-			Can be used indefinitely, but costs you 20% of your max health per use.
-			Press {0} to use.
+			Summons a ring of shadow knives to slash through your enemies
+			Can be used indefinitely, but costs you 20% of your max health per use
+			Press {0} to use
 			'Cutting edge technology.'
 			''' */
 	}
@@ -717,7 +717,13 @@ Items: {
 
 	BloodPact: {
 		// DisplayName: Blood Pact
-		// Tooltip: ""
+		/* Tooltip:
+			'''
+			Hold down {0} to rapidly drain your own blood
+			Once released, this will summon a powerful spirit to help you in battle
+			The duration and damage this spirit deals increases as you sacrifice more blood
+			You may not summon more than one spirit at the same time
+			''' */
 	}
 
 	CyaniteHelm: {
