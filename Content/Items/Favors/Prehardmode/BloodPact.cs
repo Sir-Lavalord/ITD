@@ -49,7 +49,7 @@ namespace ITD.Content.Items.Favors.Prehardmode
             if (FavorPlayer.UseFavorKey.JustReleased)
             {
                 // I'm using Projectile.ai[0] here in the newProjectile call as timeLeft, if you wanna change the amount of time relative to lifeConsumed the projectile should exist.
-                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed, 0f, player.whoAmI, lifeConsumed);
+                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed, 0f, player.whoAmI, lifeConsumed * 10);
                 lifeConsumed = 0;
             }
         }

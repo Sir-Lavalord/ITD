@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {
@@ -14,7 +16,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         public ref float AITimer => ref Projectile.ai[1];
         public override void SetStaticDefaults()
         {
-            //Main.projFrames[Projectile.type] = 15;
+            Main.projFrames[Projectile.type] = 3;
         }
         public override void SetDefaults()
         {
@@ -28,6 +30,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.minion = true;
             Projectile.DamageType = DamageClass.Generic;
         }
+
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.timeLeft = (int)Projectile.ai[0];
@@ -52,9 +55,15 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                         Vector2 towards = (target.Center - Projectile.Center);
                         Vector2 towardsNormalized = towards.SafeNormalize(Vector2.Zero);
                         int slashDamage = (int)(Projectile.ai[0] / 2f);
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, towardsNormalized * (towards.Length() / 16f), ModContent.ProjectileType<BloodPactCut>(), slashDamage, 0f, player.whoAmI);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, towardsNormalized * (towards.Length() / 16f) * 0f, ModContent.ProjectileType<BloodPactCut>(), slashDamage, 0f, player.whoAmI);
+                    /*    Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, towardsNormalized * (towards.Length() / 16f), ModContent.ProjectileType<BloodPactCut>(), slashDamage, 0f, player.whoAmI);*/
                     }
                 }
+            }
+            if (++Projectile.frameCounter >= 3)
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
             }
         }
 
@@ -62,7 +71,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         {
             for (int j = 0; j < 20; ++j)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Bone, 0, 0, 0, default, 1f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Crimstone, 0, 0, 0, default, 1f);
             }
         }
     }
