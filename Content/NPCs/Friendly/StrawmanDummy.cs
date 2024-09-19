@@ -13,6 +13,7 @@ using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 using ITD.Content.Items.Other;
 using Terraria.DataStructures;
+using Terraria.Localization;
 
 namespace ITD.Content.NPCs.Friendly
 
@@ -50,31 +51,8 @@ namespace ITD.Content.NPCs.Friendly
         }
         public override void ModifyTypeName(ref string typeName)
         {
-
-            switch (NPC.ai[0])
-            {
-                case 0:
-                    typeName = "Perfect " + typeName;
-                    break;
-                case 1:
-                    typeName = "Heavy " + typeName;
-                    break;
-                case 2:
-                    typeName = "Windswept " + typeName;
-                    break;
-                case 3:
-                    typeName = "Thorny " + typeName;
-                    break;
-                case 4:
-                    typeName = "Terminal " + typeName;
-                    break;
-                case 5:
-                    typeName = "Armed" + typeName;
-                    break;
-                case 6:
-                    typeName = "Demoted " + typeName;
-                    break;
-            }
+            string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(StrawmanItem)}.DummyType.{NPC.ai[0]}")).Value;
+            typeName = Text + " " + typeName;
         }
         bool die;
         public override void OnSpawn(IEntitySource source)
@@ -139,7 +117,7 @@ namespace ITD.Content.NPCs.Friendly
                 NPC.life -= int.MaxValue;
                 SoundEngine.PlaySound(SoundID.NPCDeath6, NPC.Center);
 
-                for (int i = 0; i < 2; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     int goreIndex = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X + (float)(NPC.width / 2) - 24f, NPC.position.Y + (float)(NPC.height / 2) - 4f), default(Vector2), Main.rand.Next(61, 64), 1f);
                     Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X + 1f;
@@ -167,12 +145,11 @@ namespace ITD.Content.NPCs.Friendly
         {
             if (Main.netMode == NetmodeID.Server)
             {
-                // We don't want Mod.Find<ModGore> to run on servers as it will crash because gores are not loaded on servers
                 return;
             }
             if (NPC.ai[0] == 4)
             {
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     Dust dust = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.Blood, 0, 0f, 80, default, Main.rand.NextFloat(0.9f, 1.5f));
                     dust.velocity *= 1f;

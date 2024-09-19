@@ -12,6 +12,8 @@ using ITD.Content.Items.Accessories.Defensive;
 using ITD.Content.Items.Accessories.Master;
 using ITD.Content.Items.Weapons.Melee.Snaptraps;
 using ITD.Content.Items.Other;
+using System.Linq;
+using ITD.Content.Items.BossSummons;
 
 namespace ITD.Content.NPCs
 {
@@ -24,6 +26,16 @@ namespace ITD.Content.NPCs
 		public bool necrosis;
 		public bool soulRot;
         public bool toasted;
+
+        private static int[] shouldDropSandberusSummon =
+            [
+            NPCID.WalkingAntlion,
+            NPCID.FlyingAntlion,
+            NPCID.GiantWalkingAntlion,
+            NPCID.GiantFlyingAntlion,
+            NPCID.TombCrawlerHead,
+            NPCID.LarvaeAntlion
+            ];
 		
 		public override void ResetEffects(NPC npc)
         {
@@ -95,6 +107,10 @@ namespace ITD.Content.NPCs
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Crimeratrap>(), 50));
             }
+            if (shouldDropSandberusSummon.Contains(npc.type))
+            {
+                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DuneSkull>(), 50));
+            }
 			if (npc.type == NPCID.BloodNautilus)
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DreadShell>(), 10));
@@ -120,6 +136,7 @@ namespace ITD.Content.NPCs
         }
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
         {
+            /* i don't think modifying the pool like this works with vanilla npcs
             if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
             {
                 pool[NPCID.CaveBat] = 0f;
@@ -130,6 +147,7 @@ namespace ITD.Content.NPCs
                 pool[NPCID.WalkingAntlion] = 0f;
                 pool[NPCID.Antlion] = 0f;
             }
+            */
         }
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {

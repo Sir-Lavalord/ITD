@@ -11,9 +11,10 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
+using ITD.Utilities;
+using ITD.ItemDropRules.Conditions;
 using ITD.Content.Buffs.Debuffs;
 using ITD.Content.Projectiles.Hostile;
-using ITD.Utilities;
 using ITD.Content.Items.Other;
 using ITD.Content.Items.Weapons.Mage;
 using ITD.Content.Items.Weapons.Melee;
@@ -395,9 +396,15 @@ namespace ITD.Content.NPCs.Bosses
 		
 		public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-			npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<GravekeeperBag>()));
+			LeadingConditionRule downedPlanteraRule = new LeadingConditionRule(new DownedPlanteraButBetter()); // woe is me right now
+            downedPlanteraRule.OnSuccess(ItemDropRule.BossBag(ModContent.ItemType<HardmodeGravekeeperBag>()));
+			npcLoot.Add(downedPlanteraRule);
+			LeadingConditionRule downedPlanteraNotRule = new LeadingConditionRule(new DownedPlanteraNot());
+			downedPlanteraNotRule.OnSuccess(ItemDropRule.BossBag(ModContent.ItemType<GravekeeperBag>()));
+			npcLoot.Add(downedPlanteraNotRule);
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
             notExpertRule.OnSuccess(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, oneFromOptionsDrops));
+			notExpertRule.OnSuccess(ItemDropRule.ByCondition(new DownedPlanteraButBetter(), ItemID.Ectoplasm, 1, 5, 10));
 			npcLoot.Add(notExpertRule);
         }
 		

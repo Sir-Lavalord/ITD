@@ -656,7 +656,7 @@ Items: {
 			Otorga invulnerabilidad
 			Todo el daño tomado durante la invulnerabilidad es infligido al terminar el efecto
 			Puede ser usado indefinidamente, pero la duración del efecto se reduce por uso hasta la desactivación
-			Presiona {0} para usar
+			Presiona {0} para usar al tener carga máxima
 			'Premio mayor!'
 			'''
 	}
@@ -672,7 +672,7 @@ Items: {
 	}
 
 	WindTrident: {
-		Tooltip: Mantén presionado el botón de ataque para cargar el tridente, alistando un ataque más poderoso
+		Tooltip: ""
 		DisplayName: Tridente de viento
 	}
 
@@ -684,6 +684,54 @@ Items: {
 			Puede ser usado indefinidamente, pero tomas el 20% de tu vida máxima como daño por cada uso
 			Presiona {0} para usar
 			'Tecnología acuchilleante'
+			}
+
+			StrawmanItem: {
+			// DisplayName: Strawman
+			// Tooltip:
+			//	
+			'''
+	}
+
+	StrawmanItem: {
+		// DisplayName: Strawman
+		/* Tooltip:
+			'''
+			Current Mode:
+			Spawns a strawman
+			Right Click while in inventory to change to next mode
+			Right Click while holding Shift in inventory to return previous mode
+			''' */
+
+		DummyType: {
+			// 0: Perfect
+			// 1: Heavy
+			// 2: Windswept
+			// 3: Thorny
+			// 4: Terminal
+			// 5: Armed
+			// 6: Demoted
+		}
+
+		Mode: {
+			// 0: DEFAULT
+			// 1: 50 DEF
+			// 2: KNOCKBACK
+			// 3: CONTACT DAMAGE
+			// 4: KILLABLE
+			// 5: RANGED DAMAGE
+			// 6: NOT A BOSS
+		}
+	}
+
+	BloodPact: {
+		DisplayName: Pacto de sangre
+		Tooltip:
+			'''
+			Mantén presionado {0} para drenar tu propia sangre
+			Al soltar el botón, esto invocará un espíritu poderoso para ayudarte en batalla
+			La duración y el daño de este espírito aumenta con más sangre sacrificada
+			No puedes invocar más de un espíritu al mismo tiempo
 			'''
 	}
 
@@ -715,20 +763,14 @@ Items: {
 		Tooltip: ""
 	}
 
-	BloodPact: {
-		DisplayName: Pacto de sangre
-		Tooltip:
-			'''
-			Mantén presionado {0} para drenar tu propia sangre
-			Al soltar el botón, esto invocará un espíritu poderoso para ayudarte en batalla
-			La duración y el daño de este espírito aumenta con más sangre sacrificada
-			No puedes invocar más de un espíritu al mismo tiempo
-			'''
+	HardmodeGravekeeperBag: {
+		// DisplayName: Hardmode Gravekeeper Bag
+		// Tooltip: ""
 	}
 
-	StrawmanItem: {
-		DisplayName: Hombre de paja
-		Tooltip: Hazle clic derecho en el inventario para cambiar su tipo
+	DuneSkull: {
+		// DisplayName: Dune Skull
+		// Tooltip: ""
 	}
 }
 
@@ -864,7 +906,7 @@ NPCs: {
 	Gravekeeper.DisplayName: Guardatumbas
 	HauntedTombstone.DisplayName: Tumba embrujada
 	GhastlyTombstone.DisplayName: Tumba fantasmagórica
-	// StrawmanDummy.DisplayName: Strawman Dummy
+	// StrawmanDummy.DisplayName: Strawman
 }
 
 Buffs: {
@@ -927,12 +969,18 @@ Buffs: {
 		DisplayName: Fatiga de Favor
 		Description: No puedes utilizar Favores
 	}
+
+	BloodPactBuff: {
+		// DisplayName: Blood Pact Buff
+		// Description: Mods.ITD.Buffs.BloodPactBuff.Description
+	}
 }
 
 DeathMessage: {
 	Necrosis: sucumbió a la necrosis.
 	SoulRot: se convirtío en una cáscara sin alma.
 	// IncrediblySharpKnife: cut a little too deep.
+	// BloodPact: ran out of blood.
 }
 
 WorldGen: {

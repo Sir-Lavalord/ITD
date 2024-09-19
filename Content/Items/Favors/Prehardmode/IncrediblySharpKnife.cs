@@ -8,7 +8,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using System.Linq;
-using ITD.Utilities;
+using Terraria.Localization;
 
 namespace ITD.Content.Items.Favors.Prehardmode
 {
@@ -27,21 +27,30 @@ namespace ITD.Content.Items.Favors.Prehardmode
         }
         public override bool UseFavor(Player player)
         {
-            if (player.immune)
-                return false;
-            player.Hurt(player.GetITDPlayer().DeathByLocalization("IncrediblySharpKnife"), (int)(player.statLifeMax2 / 5f), 0, dodgeable: false, knockback: 0);
+			player.statLife -= (int)(player.statLifeMax2 / 5f);
+			CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), CombatText.LifeRegen, (int)(player.statLifeMax2 / 5f), true, false);
+			
             int type = ModContent.ProjectileType<ShadowKnife>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 6; i++)
             {
-                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, type, 40, 0f, player.whoAmI, i + player.ownedProjectileCounts[type]);
+                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, type, 50, 0f, player.whoAmI);
             }
             for (int i = 0; i < 60; i++)
             {
                 Vector2 pos = Main.rand.NextVector2Unit() * 64f;
-                Dust d = Dust.NewDustDirect(player.Center + pos, 1, 1, DustID.Shadowflame);
-                d.scale *= 1.5f;
+                Dust d = Dust.NewDustDirect(player.Center + pos, 1, 1, DustID.CrystalPulse2, 0, 0f, 40, default, 1.5f);
+				d.noGravity = true;
             }
+			
+			SoundEngine.PlaySound(SoundID.NPCDeath12, player.Center);
             SoundEngine.PlaySound(SoundID.NPCHit54, player.Center);
+			
+			if (player.statLife <= 0 && player.whoAmI == Main.myPlayer)
+			{
+				string death = Language.GetTextValue($"Mods.ITD.DeathMessage.IncrediblySharpKnife");
+				player.KillMe(PlayerDeathReason.ByCustomReason($"{player.name} {death}"), 10.0, 0, false);
+			}
+			
             return true;
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)

@@ -581,7 +581,7 @@ Items: {
 
 	GalacticJellyBean: {
 		DisplayName: Galactic Jelly Bean
-		Tooltip: ""
+		Tooltip: Summons a cosmic hand to attack your foes
 	}
 
 	EoWTail: {
@@ -653,7 +653,7 @@ Items: {
 		DisplayName: Ace Of Hearts
 		Tooltip:
 			'''
-			Grants invulnerability
+			Grants Invulnerability
 			All damage taken during invulnerability is inflicted after effect ends
 			Can be used indefinitely, but effect duration is reduced per use until deactivation
 			Press {0} to use
@@ -663,7 +663,7 @@ Items: {
 
 	GravekeeperBag: {
 		DisplayName: Gravekeeper Bag
-		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+		Tooltip: ""
 	}
 
 	AsterKnuckle: {
@@ -681,9 +681,51 @@ Items: {
 		Tooltip:
 			'''
 			Summons a ring of shadow knives to slash through your enemies
-			Can be used indefinitely, but you take 20% of your max health as damage per use
+			Can be used indefinitely, but costs you 20% of your max health per use
 			Press {0} to use
-			'Cutting edge technology'
+			'Cutting edge technology.'
+			'''
+	}
+
+	StrawmanItem: {
+		DisplayName: Strawman
+		Tooltip:
+			'''
+			Current Mode:
+			Spawns a strawman
+			Right Click while in inventory to change to next mode
+			Right Click while holding Shift in inventory to return previous mode
+			'''
+
+		DummyType: {
+			0: Perfect
+			1: Heavy
+			2: Windswept
+			3: Thorny
+			4: Terminal
+			5: Armed
+			6: Demoted
+		}
+
+		Mode: {
+			0: DEFAULT
+			1: 50 DEF
+			2: KNOCKBACK
+			3: CONTACT DAMAGE
+			4: KILLABLE
+			5: RANGED DAMAGE
+			6: NOT A BOSS
+		}
+	}
+
+	BloodPact: {
+		DisplayName: Blood Pact
+		Tooltip:
+			'''
+			Hold down {0} to rapidly drain your own blood
+			Once released, this will summon a powerful spirit to help you in battle
+			The duration and damage this spirit deals increases as you sacrifice more blood
+			You may not summon more than one spirit at the same time
 			'''
 	}
 
@@ -715,20 +757,14 @@ Items: {
 		Tooltip: ""
 	}
 
-	BloodPact: {
-		DisplayName: Blood Pact
-		Tooltip:
-			'''
-			Hold down {0} to rapidly drain your own blood
-			Once released, this will summon a powerful spirit to help you in battle
-			The duration and damage this spirit deals increases as you sacrifice more blood
-			You may not summon more than one spirit at the same time
-			'''
+	HardmodeGravekeeperBag: {
+		DisplayName: Hardmode Gravekeeper Bag
+		Tooltip: ""
 	}
 
-	StrawmanItem: {
-		DisplayName: Strawman
-		Tooltip: Right click in inventory to change dummy type
+	DuneSkull: {
+		DisplayName: Dune Skull
+		Tooltip: ""
 	}
 }
 
@@ -864,7 +900,7 @@ NPCs: {
 	Gravekeeper.DisplayName: Gravekeeper
 	HauntedTombstone.DisplayName: Haunted Tombstone
 	GhastlyTombstone.DisplayName: Ghastly Tombstone
-	StrawmanDummy.DisplayName: Strawman Dummy
+	StrawmanDummy.DisplayName: Strawman
 }
 
 Buffs: {
@@ -927,12 +963,18 @@ Buffs: {
 		DisplayName: Favor Fatigue
 		Description: Cannot use favor abilities
 	}
+
+	BloodPactBuff: {
+		DisplayName: Blood Pact Buff
+		Description: Mods.ITD.Buffs.BloodPactBuff.Description
+	}
 }
 
 DeathMessage: {
 	Necrosis: succumbed to necrosis.
 	SoulRot: became a soulless husk.
 	IncrediblySharpKnife: cut a little too deep.
+	BloodPact: ran out of blood.
 }
 
 WorldGen: {

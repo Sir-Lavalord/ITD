@@ -143,43 +143,12 @@ namespace ITD.Content.NPCs.BlueshroomGroves
             int playerDirectionX = NPC.Center.X < player.Center.X ? 1 : -1;
             NPC.direction = playerDirectionX;
             NPC.velocity.X = playerDirectionX * xSpeed;
-            CheckForSideTiles();
+            NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
             boulderCooldown--;
             if (boulderCooldown <= 0 && toPlayer.Length() > 400f && Math.Abs(toPlayer.Y) > 80f)
             {
                 LaunchIcyBoulder(player);
                 boulderCooldown = 120;
-            }
-        }
-        private void CheckForSideTiles()
-        {
-            Tile right = Framing.GetTileSafely(new Vector2(NPC.position.X+NPC.width+0.1f, NPC.position.Y+NPC.height-0.1f));
-            Tile rightUp = Framing.GetTileSafely(new Vector2(NPC.position.X + NPC.width + 0.1f, NPC.position.Y + NPC.height - 16.1f));
-            Tile left = Framing.GetTileSafely(new Vector2(NPC.position.X - 0.1f, NPC.position.Y + NPC.height - 0.1f));
-            Tile leftUp = Framing.GetTileSafely(new Vector2(NPC.position.X - 0.1f, NPC.position.Y + NPC.height - 16.1f));
-            static bool CanCollide(Tile tile)
-            {
-                return tile.HasTile && Main.tileSolid[tile.TileType] && !tile.IsActuated;
-            }
-            bool rightIsClimbableSlope = right.Slope == SlopeType.SlopeDownRight;
-            bool leftIsClimbableSlope = left.Slope == SlopeType.SlopeDownLeft;
-            if (CanCollide(right) && !CanCollide(rightUp) && NPC.velocity.X > 0f && !rightIsClimbableSlope)
-            {
-                float tp = 16f;
-                if (right.IsHalfBlock)
-                {
-                    tp = 8f;
-                }
-                NPC.position.Y -= tp;
-            }
-            if (CanCollide(left) && !CanCollide(leftUp) && NPC.velocity.X < 0f && !leftIsClimbableSlope)
-            {
-                float tp = 16f;
-                if (left.IsHalfBlock)
-                {
-                    tp = 8f;
-                }
-                NPC.position.Y -= tp;
             }
         }
         private void SpawnDiggingDust()
@@ -257,6 +226,12 @@ namespace ITD.Content.NPCs.BlueshroomGroves
                 }
             }
             return true;
+        }
+        public override bool? CanFallThroughPlatforms()
+        {
+            Player player = Main.player[NPC.target];
+            bool isBackgroundElement = AI_State == ActionState.Background || AI_State == ActionState.Transition;
+            return !isBackgroundElement && player.position.Y > NPC.position.Y + NPC.height;
         }
         public override Color? GetAlpha(Color drawColor)
         {

@@ -8,14 +8,15 @@ using Terraria.DataStructures;
 using Humanizer;
 using System.Collections.Generic;
 using ITD.Content.NPCs.Friendly;
+using ITD.Content.Items.Accessories.Combat.All;
 using Terraria.Localization;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.UI;
 
 namespace ITD.Content.Items.Other
 {
     public class StrawmanItem : ModItem
     {
-        // make the dummy type titles and description localizable please
-        // -qangel
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 1;
@@ -45,8 +46,16 @@ namespace ITD.Content.Items.Other
         }
         public override void RightClick(Player player)
         {
-            dummytype++;
-
+            if (ItemSlot.ShiftInUse)
+            {
+                dummytype--;
+            }
+            else
+            {
+                dummytype++;
+            }
+            if (dummytype < 0)
+                dummytype = 6;
             if (dummytype > 6)
                 dummytype = 0;
         }
@@ -55,62 +64,19 @@ namespace ITD.Content.Items.Other
         {
             foreach (TooltipLine line in tooltips)
             {
-                if (line.Mod == "Terraria" && line.Name == "Tooltip3")
+                if (line.Mod == "Terraria" && line.Name == "Tooltip0")
                 {
-                    line.Text = line.Text + "[c/428af5:Current mode:]";
-                    switch (dummytype)
-                    {
-                        case 0:
-                            line.Text = line.Text + "[c/428af5: DEFAULT]";
-                            break;
-                        case 1:
-                            line.Text = line.Text + "[c/42f548: 50 DEF]";
-                            break;
-                        case 2:
-                            line.Text = line.Text + "[c/f5d142: KNOCKBACK]";
-                            break;
-                        case 3:
-                            line.Text = line.Text + "[c/bf4406: CONTACT DAMAGE]";
-                            break;
-                        case 4:
-                            line.Text = line.Text + "[c/ff2e2e: KILLABLE]";
-                            break;
-                        case 5:
-                            line.Text = line.Text + "[c/bf4406: RANGED DAMAGE]";
-                            break;
-                        case 6:
-                            line.Text = line.Text + "[c/7d28df: NOT A BOSS]";
-                            break;
-                    }
+                    string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(StrawmanItem)}.Mode.{dummytype}")).Value;
+                    line.Text = "[c/0388fc:" + line.Text + "]";
+                    line.Text += "[c/0388fc: " + Text + "]";
                 }
                 if (line.Mod == "Terraria" && line.Name == "ItemName")
                 {
-                    switch (dummytype)
-                    {
-                        case 0:
-                            line.Text = "Perfect " + line.Text;
-                            break;
-                        case 1:
-                            line.Text = "Heavy " + line.Text;
-                            break;
-                        case 2:
-                            line.Text = "Windswept " + line.Text;
-                            break;
-                        case 3:
-                            line.Text = "Thorny " + line.Text;
-                            break;
-                        case 4:
-                            line.Text = "Terminal " + line.Text;
-                            break;
-                        case 5:
-                            line.Text = "Armed " + line.Text;
-                            break;
-                        case 6:
-                            line.Text = "Demoted " + line.Text;
-                            break;
-                    }
+                    string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(StrawmanItem)}.DummyType.{dummytype}")).Value;
+
+                    line.Text = Text + " " + line.Text;//Fine for now
                 }
-            }
+                }
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
@@ -137,10 +103,14 @@ namespace ITD.Content.Items.Other
             return false;
         }
         public override bool ConsumeItem(Player player) => false;
-
-        public override bool CanRightClick()
+        public override bool CanRightClick() => true;
+        public override void AddRecipes()
         {
-            return true;
+            CreateRecipe()
+                .AddIngredient(ItemID.TargetDummy)
+                .AddIngredient(ItemID.Fedora)
+                .AddIngredient(ItemID.Hay, 64)
+                .Register();
         }
     }
 }
