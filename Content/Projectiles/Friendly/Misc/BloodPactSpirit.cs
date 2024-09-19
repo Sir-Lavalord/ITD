@@ -4,10 +4,7 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System;
 using System.Linq;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {
@@ -47,15 +44,13 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             if (targets.Any())
             {
                 AITimer++;
-                if (AITimer >= 20f)
+                if (AITimer >= 30f)
                 {
                     AITimer = 0;
                     foreach (NPC target in targets)
                     {
-                        Vector2 towards = (target.Center - Projectile.Center);
-                        Vector2 towardsNormalized = towards.SafeNormalize(Vector2.Zero);
                         int slashDamage = (int)(Projectile.ai[0] / 2f);
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, towardsNormalized * (towards.Length() / 16f) * 0f, ModContent.ProjectileType<BloodPactCut>(), slashDamage, 0f, player.whoAmI);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<BloodPactCut>(), slashDamage, 0f, player.whoAmI);
                     /*    Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, towardsNormalized * (towards.Length() / 16f), ModContent.ProjectileType<BloodPactCut>(), slashDamage, 0f, player.whoAmI);*/
                     }
                 }
