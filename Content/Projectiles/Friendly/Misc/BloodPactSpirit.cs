@@ -21,15 +21,11 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.height = 56;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
-            Projectile.timeLeft = 150;
+            Projectile.timeLeft = 10;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
             Projectile.minion = true;
             Projectile.DamageType = DamageClass.Generic;
-        }
-        public override void OnSpawn(IEntitySource source)
-        {
-            Projectile.timeLeft = (int)Projectile.ai[0];
         }
         public override void AI()
         {
@@ -43,15 +39,21 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             if (targets.Any())
             {
                 AITimer++;
-                if (AITimer >= 30f)
+                if (AITimer >= 40f && AITimer % 10 == 0)
                 {
-                    AITimer = 0;
                     foreach (NPC target in targets)
                     {
-                        int slashDamage = (int)(Projectile.ai[0] / 2f);
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<BloodPactCut>(), slashDamage, 0f, player.whoAmI);
+                        Projectile cut = Main.projectile[Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<BloodPactCut>(), Projectile.damage, 0f, player.whoAmI)];
+						cut.rotation = Main.rand.NextFloat(MathHelper.Pi);
                     /*    Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, towardsNormalized * (towards.Length() / 16f), ModContent.ProjectileType<BloodPactCut>(), slashDamage, 0f, player.whoAmI);*/
                     }
+					if (AITimer >= 60f)
+					{
+						AITimer = 0;
+						Projectile.ai[0]--;
+						if (Projectile.ai[0] < 1)
+							Projectile.Kill();
+					}
                 }
             }
             if (++Projectile.frameCounter >= 3)
@@ -59,7 +61,10 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
             }
+			Projectile.timeLeft = 10;
         }
+
+		public override bool? CanHitNPC(NPC target) => false; // no contact damage
 
         public override void OnKill(int timeLeft)
         {

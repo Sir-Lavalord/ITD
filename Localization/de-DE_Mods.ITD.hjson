@@ -965,6 +965,11 @@ Buffs: {
 		// DisplayName: Blood Pact Buff
 		// Description: Mods.ITD.Buffs.BloodPactBuff.Description
 	}
+
+	SqueakyClean: {
+		// DisplayName: Squeaky Clean
+		// Description: Mods.ITD.Buffs.SqueakyClean.Description
+	}
 }
 
 DeathMessage: {
