@@ -941,7 +941,7 @@ Buffs: {
 
 	FishbackerTagDebuff: {
 		DisplayName: Fishbacker Tag Debuff
-		Description: Mods.ITD.Buffs.FishbackerTagDebuff.Description
+		Description: Tag, you're it!
 	}
 
 	PetPigBuff: {
@@ -971,7 +971,11 @@ Buffs: {
 
 	SqueakyClean: {
 		DisplayName: Squeaky Clean
-		Description: Mods.ITD.Buffs.SqueakyClean.Description
+		Description:
+			'''
+			Grants immunity to more debuffs
+			Decreased enemy spawn rate
+			'''
 	}
 }
 

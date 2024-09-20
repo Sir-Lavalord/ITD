@@ -421,15 +421,15 @@ namespace ITD.Content.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Vector2 playerArmPosition = Main.GetPlayerArmPosition(Projectile);
+            Player player = Main.player[Projectile.owner];
             Asset<Texture2D> chainTexture = ModContent.Request<Texture2D>(ToChainTexture);
             Rectangle? chainSourceRectangle = null;
             float chainHeightAdjustment = 0f; // Use this to adjust the chain overlap. 
 
             Vector2 chainOrigin = chainSourceRectangle.HasValue ? (chainSourceRectangle.Value.Size() / 2f) : (chainTexture.Size() / 2f);
             Vector2 chainDrawPosition = Projectile.Center;
-            Vector2 vectorFromProjectileToPlayerArms = playerArmPosition.MoveTowards(chainDrawPosition, 4f) - chainDrawPosition;
-            Vector2 unitVectorFromProjectileToPlayerArms = vectorFromProjectileToPlayerArms.SafeNormalize(Vector2.Zero);
+            Vector2 vectorFromProjectileToPlayer = player.Center.MoveTowards(chainDrawPosition, 4f) - chainDrawPosition;
+            Vector2 unitVectorFromProjectileToPlayerArms = vectorFromProjectileToPlayer.SafeNormalize(Vector2.Zero);
             float chainSegmentLength = (chainSourceRectangle.HasValue ? chainSourceRectangle.Value.Height : chainTexture.Height()) + chainHeightAdjustment;
             if (chainSegmentLength == 0)
             {
@@ -437,7 +437,7 @@ namespace ITD.Content.Projectiles
             }
             float chainRotation = unitVectorFromProjectileToPlayerArms.ToRotation() + MathHelper.PiOver2;
             int chainCount = 0;
-            float chainLengthRemainingToDraw = vectorFromProjectileToPlayerArms.Length() + chainSegmentLength / 2f;
+            float chainLengthRemainingToDraw = vectorFromProjectileToPlayer.Length() + chainSegmentLength / 2f;
             while (chainLengthRemainingToDraw > 0f)
             {
                 ExtraChainEffects(chainDrawPosition, chainCount);

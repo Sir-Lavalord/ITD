@@ -21,7 +21,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.height = 56;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
-            Projectile.timeLeft = 10;
+            Projectile.timeLeft = 60;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
             Projectile.minion = true;
@@ -55,13 +55,13 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 							Projectile.Kill();
 					}
                 }
+				Projectile.timeLeft = 60;
             }
             if (++Projectile.frameCounter >= 3)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
             }
-			Projectile.timeLeft = 10;
         }
 
 		public override bool? CanHitNPC(NPC target) => false; // no contact damage

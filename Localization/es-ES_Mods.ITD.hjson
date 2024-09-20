@@ -977,7 +977,11 @@ Buffs: {
 
 	SqueakyClean: {
 		// DisplayName: Squeaky Clean
-		// Description: Mods.ITD.Buffs.SqueakyClean.Description
+		/* Description:
+			'''
+			Grants immunity to more debuffs
+			Decreased enemy spawn rate
+			''' */
 	}
 }
 

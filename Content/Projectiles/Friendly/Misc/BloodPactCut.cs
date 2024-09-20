@@ -38,7 +38,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 
             Texture2D tex = TextureAssets.Extra[98].Value;
 
-            Main.EntitySpriteDraw(tex, drawPosition, null, new Color(255, 0, 0, 0), Projectile.rotation, tex.Size()/2f, new Vector2(scaleX, scaleY), SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(tex, drawPosition, null, new Color(255, 0, 0, 127), Projectile.rotation, tex.Size()/2f, new Vector2(scaleX, scaleY), SpriteEffects.None, 0);
             return false;
         }
     }
