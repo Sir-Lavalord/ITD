@@ -25,6 +25,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
         }
+        public override Color? GetAlpha(Color lightColor) => Color.White;
         public override bool PreDraw(ref Color lightColor)
         {
             Player player = Main.player[Projectile.owner];

@@ -27,7 +27,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.minion = true;
             Projectile.DamageType = DamageClass.Generic;
         }
-
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.timeLeft = (int)Projectile.ai[0];
@@ -38,7 +37,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             float speed = 16f;
             float range = 500f;
             Vector2 toPlayer = (player.Center + new Vector2(0f, -100f) - Projectile.Center).SafeNormalize(Vector2.Zero);
-            Projectile.velocity = Vector2.SmoothStep(Projectile.velocity, toPlayer * speed, 0.1f);
+            Projectile.velocity = Vector2.SmoothStep(Projectile.velocity, toPlayer * speed, 0.08f);
             // this gets the valid NPCs that the summon can target
             IEnumerable<NPC> targets = Main.npc.Where(npc => npc.active && !npc.friendly && Projectile.DistanceSQ(npc.Center) < range * range);
             if (targets.Any())
