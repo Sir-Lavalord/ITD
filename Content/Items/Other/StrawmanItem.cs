@@ -8,15 +8,13 @@ using Terraria.DataStructures;
 using Humanizer;
 using System.Collections.Generic;
 using ITD.Content.NPCs.Friendly;
-using ITD.Content.Items.Accessories.Combat.All;
-using Terraria.Localization;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.UI;
 
 namespace ITD.Content.Items.Other
 {
     public class StrawmanItem : ModItem
     {
+        // make the dummy type titles and description localizable please
+        // -qangel
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 1;
@@ -76,7 +74,7 @@ namespace ITD.Content.Items.Other
 
                     line.Text = Text + " " + line.Text;//Fine for now
                 }
-                }
+            }
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
