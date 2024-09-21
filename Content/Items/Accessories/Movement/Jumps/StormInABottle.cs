@@ -43,6 +43,11 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
 
         public override void PreUpdate()
         {
+            if (!hasStormJump)
+            {
+                canDoubleJump = false;
+            }
+
             HandleDoubleJump();
             UpdateTimers();
         }
@@ -189,9 +194,9 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
             float heightProgress = Main.rand.NextFloat();
             float angle = Main.rand.NextFloat() * MathHelper.TwoPi;
             float radius = MathHelper.Lerp(10f, MathHelper.Lerp(10f, 100f, progress), heightProgress);
-            float height = TornadoHeight * progress * heightProgress; // Changed to positive
+            float height = TornadoHeight * progress * heightProgress;
 
-            return tornadoBase + new Vector2((float)Math.Cos(angle) * radius, -height); // Negative height to go upwards
+            return tornadoBase + new Vector2((float)Math.Cos(angle) * radius, -height);
         }
     }
 }

@@ -46,6 +46,11 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
 
         public override void PreUpdate()
         {
+            if (!hasFireJump)
+            {
+                canDoubleJump = false;
+            }
+
             HandleDoubleJump();
             UpdateTimers();
         }
