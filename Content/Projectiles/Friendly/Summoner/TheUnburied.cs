@@ -109,7 +109,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         {
             Rectangle frame = new Rectangle((int)(Projectile.ai[0]) * Projectile.width, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
             SpriteEffects spriteEffects = (Projectile.spriteDirection == 1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Main.EntitySpriteDraw(Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value, Projectile.Center - Main.screenPosition, frame, lightColor, Projectile.rotation, Projectile.Size / 2f, 1f, spriteEffects, 0);
+            Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, frame, lightColor, Projectile.rotation, Projectile.Size / 2f, 1f, spriteEffects, 0);
             return false;
         }
 

@@ -58,6 +58,7 @@ namespace ITD.Content.UI
                 Main.mouseItem = temp;
                 PostClickWithValidItemAndEmptySlot(ref item);
                 PostClickWithNoItemAndFilledSlot(ref Main.mouseItem);
+                SoundEngine.PlaySound(SoundID.Grab);
             }
             base.LeftClick(evt);
         }

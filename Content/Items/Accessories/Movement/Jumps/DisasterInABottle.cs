@@ -56,6 +56,12 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
 
         public override void PreUpdate()
         {
+            if (!hasDisasterJump)
+            {
+                canJump = false;
+                jumpCount = 0;
+            }
+
             if (hasDisasterJump)
             {
                 HandleDisasterJump();
