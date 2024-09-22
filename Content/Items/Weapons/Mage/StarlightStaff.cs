@@ -19,7 +19,7 @@ namespace ITD.Content.Items.Weapons.Mage
             HeldItemLayer.RegisterData(Item.type, new DrawLayerData()
             {
                 Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),
-                Color = () => Color.White * 0.7f
+                Color = () => new Color(255, 255, 255, 50) * 0.7f
             });
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
@@ -52,7 +52,7 @@ namespace ITD.Content.Items.Weapons.Mage
             Texture2D texture = (Texture2D)Mod.Assets.Request<Texture2D>("Content/Items/Weapons/Mage/StarlightStaff_Glow");
 
             spriteBatch.Draw(texture, new Vector2(Item.position.X - Main.screenPosition.X + Item.width * 0.5f, Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height * 0.5f),
-                new Rectangle(0, 0, texture.Width, texture.Height), Color.White * 0.7f, rotation, texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+                new Rectangle(0, 0, texture.Width, texture.Height), Color.White, rotation, texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
         }
     }
 }

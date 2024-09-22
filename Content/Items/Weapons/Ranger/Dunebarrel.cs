@@ -7,12 +7,12 @@ using Terraria.GameContent;
 
 using ITD.Systems;
 using ITD.Players;
-using ITD.Utilities;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Drawing.Text;
 using System.IO;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {
@@ -64,10 +64,9 @@ namespace ITD.Content.Items.Weapons.Ranger
 			}
             return true;
         }
-		
-		public void Hold(Player player)
-		{
-			ITDPlayer modPlayer = player.GetITDPlayer();
+        public override void UseStyle(Player player, Rectangle heldItemFrame)
+        {
+            ITDPlayer modPlayer = player.GetITDPlayer();
             Vector2 mouse = modPlayer.MousePosition;
 
             if (mouse.X < player.Center.X)
@@ -78,15 +77,21 @@ namespace ITD.Content.Items.Weapons.Ranger
 			float rotation = (Vector2.Normalize(mouse - player.MountedCenter)*player.direction).ToRotation();
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilFront * player.direction - MathHelper.PiOver2 * player.direction);
 			player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilBack * player.direction - MathHelper.PiOver2 * player.direction);
-		}
-		
-        public override void UseStyle(Player player, Rectangle heldItemFrame)
-		{
-			Hold(player);
-		}
+        }
+
 		public override void HoldStyle(Player player, Rectangle heldItemFrame)
-		{
-			Hold(player);
-		}
+        {
+            ITDPlayer modPlayer = player.GetITDPlayer();
+            Vector2 mouse = modPlayer.MousePosition;
+
+            if (mouse.X < player.Center.X)
+				player.direction = -1;
+			else
+				player.direction = 1;
+			
+			float rotation = (Vector2.Normalize(mouse - player.MountedCenter)*player.direction).ToRotation();
+			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilFront * player.direction - MathHelper.PiOver2 * player.direction);
+			player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, rotation * player.gravDir - modPlayer.recoilBack * player.direction - MathHelper.PiOver2 * player.direction);
+        }
     }
 }

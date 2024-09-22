@@ -21,6 +21,7 @@ namespace ITD.Content.UI
         public override void OnInitialize()
         {
             favor = new FavorSlot();
+
             if (Main.playerInventory)
             {
                 favor.UpdateProperties(52f, Main.screenWidth - 500, 30);
@@ -29,19 +30,14 @@ namespace ITD.Content.UI
             {
                 favor.UpdateProperties(52f, Main.screenWidth - 370, 30);
             }
+
             Append(favor);
         }
         public override void Update(GameTime gameTime)
         {
-            if (Main.playerInventory)
-            {
-                favor.UpdateProperties(52f, Main.screenWidth - 500, 30);
-            }
-            else
-            {
-                favor.UpdateProperties(52f, Main.screenWidth - 370, 30);
-            }
-            Recalculate();
+            // this is really stupid but trying to change the properties directly here doesn't work for some reason
+            RemoveAllChildren();
+            OnInitialize();
             base.Update(gameTime);
         }
         public override void Draw(SpriteBatch spriteBatch)

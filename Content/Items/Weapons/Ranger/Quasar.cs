@@ -15,8 +15,8 @@ namespace ITD.Content.Items.Weapons.Ranger
         {
             Item.damage = 12;
             Item.DamageType = DamageClass.Ranged;
-            Item.width = 30;
-            Item.height = 60;
+            Item.width = 20;
+            Item.height = 40;
             Item.useTime = 30;
             Item.useAnimation = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -45,7 +45,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         }
 		
 		public override Vector2? HoldoutOffset() {
-			return new Vector2(-4f, 0f);
+			return new Vector2(-10f, 0f);
 		}
     }
 }

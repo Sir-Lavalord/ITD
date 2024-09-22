@@ -1,5 +1,4 @@
 ﻿using ITD.Systems;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -46,9 +45,9 @@ namespace ITD.Content.Items.Favors.Hardmode
             if (FavorPlayer.UseFavorKey.Current)
             {
                 lifeTimer = ++lifeTimer % 5;
-				if (lifeTimer == 1)
+				if (lifeTimer == 0)
 				{
-					lifeConsumed += 1;
+					lifeConsumed += 5;
 					player.statLife -= 5;
 					CombatText.NewText(player.getRect(), CombatText.LifeRegen, 5, false, true);
 					
@@ -63,11 +62,8 @@ namespace ITD.Content.Items.Favors.Hardmode
             if (FavorPlayer.UseFavorKey.JustReleased)
             {
                 // I'm using Projectile.ai[0] here in the newProjectile call as timeLeft, if you wanna change the amount of time relative to lifeConsumed the projectile should exist.
-				// Now with diminishing returns!
-				Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed * 20, 0f, player.whoAmI, (float)(Math.Pow(lifeConsumed, 0.666)));				
-				SoundEngine.PlaySound(SoundID.NPCDeath5, player.Center);
-				
-				lifeTimer = 0;
+                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed * 5, 0f, player.whoAmI, lifeConsumed * 5);
+                lifeTimer = 0;
 				lifeConsumed = 0;
             }
             

@@ -36,7 +36,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
 			Rectangle sourceRectangle = NPC.frame;
 			Vector2 origin = sourceRectangle.Size() / 2f;
 
-            spriteBatch.Draw(glow.Value, NPC.Center - screenPos + new Vector2(0f, NPC.gfxOffY), sourceRectangle, Color.White * BlueshroomTree.opac, 0f, origin, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(glow.Value, NPC.Center - screenPos + new Vector2(0f, NPC.gfxOffY + 2f), sourceRectangle, Color.White * BlueshroomTree.opac, 0f, origin, 1f, SpriteEffects.None, 0f);
         }
 			
 		public override void HitEffect(NPC.HitInfo hit)

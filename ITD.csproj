@@ -19,7 +19,6 @@
     <Folder Include="Content\Gores\Projectiles\" />
     <Folder Include="Content\Items\Favors\BarStyles\" />
     <Folder Include="Content\Tiles\Relics\" />
-    <Folder Include="Particles\Textures\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="StructureHelper">

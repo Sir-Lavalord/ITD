@@ -772,36 +772,6 @@ Items: {
 		// DisplayName: Dune Skull
 		// Tooltip: ""
 	}
-
-	CyanideArrow: {
-		// DisplayName: Cyanide Arrow
-		// Tooltip: ""
-	}
-
-	CyanideBullet: {
-		// DisplayName: Cyanide Bullet
-		// Tooltip: ""
-	}
-
-	FrostichorArrow: {
-		// DisplayName: Frostichor Arrow
-		// Tooltip: ""
-	}
-
-	FrostichorBullet: {
-		// DisplayName: Frostichor Bullet
-		// Tooltip: ""
-	}
-
-	CyaniteHammer: {
-		// DisplayName: Cyanite Hammer
-		// Tooltip: ""
-	}
-
-	CyanitePickaxe: {
-		// DisplayName: Cyanite Pickaxe
-		// Tooltip: ""
-	}
 }
 
 Projectiles: {
@@ -901,11 +871,6 @@ Projectiles: {
 	// ShadowKnife.DisplayName: Shadow Knife
 	// BloodPactCut.DisplayName: Blood Pact Cut
 	// BloodPactSpirit.DisplayName: Blood Pact Spirit
-	// CyaniteIceShard.DisplayName: Cyanite Ice Shard
-	// CyanideArrow.DisplayName: Cyanide Arrow
-	// CyanideBullet.DisplayName: Cyanide Bullet
-	// FrostichorArrow.DisplayName: Frostichor Arrow
-	// FrostichorBullet.DisplayName: Frostichor Bullet
 }
 
 NPCs: {
@@ -1008,15 +973,6 @@ Buffs: {
 	BloodPactBuff: {
 		// DisplayName: Blood Pact Buff
 		// Description: Mods.ITD.Buffs.BloodPactBuff.Description
-	}
-
-	SqueakyClean: {
-		// DisplayName: Squeaky Clean
-		/* Description:
-			'''
-			Grants immunity to more debuffs
-			Decreased enemy spawn rate
-			''' */
 	}
 }
 
