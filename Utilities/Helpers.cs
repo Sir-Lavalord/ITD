@@ -207,7 +207,7 @@ namespace ITD.Utilities
         {
             item.knockBack = 0f;
             item.autoReuse = false;
-            item.useStyle = ItemUseStyleID.Shoot;
+            item.useStyle = ItemUseStyleID.Swing;
             item.width = newWidth;
             item.height = newHeight;
             item.damage = damage;

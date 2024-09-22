@@ -2,9 +2,11 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
-using Terraria.Audio;
 using System;
+using Terraria.Audio;
 using Terraria.DataStructures;
+using System.Collections.Generic;
+using Terraria.Enums;
 
 namespace ITD.Content.Items.Accessories.Movement.Jumps
 {
@@ -28,9 +30,9 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
     public class TwisterPlayer : ModPlayer
     {
 
-        public const int DamageInterval = 30; // 2 times per second (60 frames / 2)
+        public const int DamageInterval = 30;
         public const int TotalDamage = 70;
-        public const int DamageDuration = 120; // 2 seconds (60 frames * 2)
+        public const int DamageDuration = 120;
         private int damageCounter = 0;
         public const int TwisterDuration = 60;
         public const float SpeedBoostMultiplier = 1.5f;
@@ -52,13 +54,18 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
 
         public override void PreUpdate()
         {
-            HandleTwisterJump();
-            UpdateTimers();
+            if (!hasTwisterJump)
+            {
+                canDoubleJump = false;
+            }
             if (isTwistering)
             {
                 Player.direction = spinDirection;
                 CreateTrail();
             }
+
+            HandleTwisterJump();
+            UpdateTimers();
         }
 
         public override void PostUpdate() => UpdateTwisterDust();

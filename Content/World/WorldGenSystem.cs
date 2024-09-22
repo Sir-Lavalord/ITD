@@ -7,6 +7,8 @@ using Terraria.Localization;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
 using ITD.Physics;
+using ITD.Particles;
+using ITD.Particles.Testing;
 
 namespace ITD.Content.World
 {
@@ -48,6 +50,7 @@ namespace ITD.Content.World
 
         private void TestMethod(int x, int y)
         {
+            ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), new Vector2(x, y), Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             //Main.LocalPlayer.Center = new Vector2(x, y);
             //Rain.NewRainForced(new Vector2(x, y), Vector2.UnitY * 16f + Vector2.UnitX * 8f);
             //Dust.QuickBox(new Vector2(x, y) * 16, new Vector2(x + 1, y + 1) * 16, 2, Color.YellowGreen, null);
