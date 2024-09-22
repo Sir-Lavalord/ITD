@@ -136,6 +136,13 @@ namespace ITD.Content.Items.Favors
             UpdateFavor(player, hideVisual);
         }
         /// <summary>
+        /// Override to do things when this favor is unequipped, like resetting fields.
+        /// </summary>
+        public virtual void OnUnequip()
+        {
+
+        }
+        /// <summary>
         /// Override to set a custom BarStyle for the item being drawn in the inventory.
         /// </summary>
         /// <returns>The name of the bar style. The item will look for an overlay image that has the same path, but with _Overlay added to the end of the name.</returns>
