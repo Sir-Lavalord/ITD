@@ -20,6 +20,11 @@ namespace ITD.Content.Items.Favors.Hardmode
 
         private int lifeConsumed;
 		private int lifeTimer;
+        public override void OnUnequip()
+        {
+            lifeConsumed = 0;
+            lifeTimer = 0;
+        }
         public override void SetFavorDefaults()
         {
             Item.width = Item.height = 32;
@@ -63,9 +68,12 @@ namespace ITD.Content.Items.Favors.Hardmode
             if (FavorPlayer.UseFavorKey.JustReleased)
             {
                 // I'm using Projectile.ai[0] here in the newProjectile call as timeLeft, if you wanna change the amount of time relative to lifeConsumed the projectile should exist.
-				// Now with diminishing returns!
-				Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed * 20, 0f, player.whoAmI, (float)(Math.Pow(lifeConsumed, 0.666)));				
-				SoundEngine.PlaySound(SoundID.NPCDeath5, player.Center);
+                // Now with diminishing returns!
+                // pls find a way to make this work the way you want to. for now i'll comment this out
+                //Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed * 20, 0f, player.whoAmI, (float)(Math.Pow(lifeConsumed, 0.666)));	
+                // TODO: replace damage multiplier with boss progression	
+                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed * 5, 0f, player.whoAmI, lifeConsumed * 2.5f);		
+                SoundEngine.PlaySound(SoundID.NPCDeath5, player.Center);
 				
 				lifeTimer = 0;
 				lifeConsumed = 0;

@@ -27,6 +27,10 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.minion = true;
             Projectile.DamageType = DamageClass.Generic;
         }
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.timeLeft = (int)Projectile.ai[0]; // added this back
+        }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -47,6 +51,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 						cut.rotation = Main.rand.NextFloat(MathHelper.Pi);
                     /*    Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, towardsNormalized * (towards.Length() / 16f), ModContent.ProjectileType<BloodPactCut>(), slashDamage, 0f, player.whoAmI);*/
                     }
+                    /*
 					if (AITimer >= 60f)
 					{
 						AITimer = 0;
@@ -54,8 +59,9 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 						if (Projectile.ai[0] < 1)
 							Projectile.Kill();
 					}
+                    */
                 }
-				Projectile.timeLeft = 60;
+				//Projectile.timeLeft = 60;
             }
             if (++Projectile.frameCounter >= 3)
             {
