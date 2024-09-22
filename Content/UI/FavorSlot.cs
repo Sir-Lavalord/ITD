@@ -55,7 +55,6 @@ namespace ITD.Content.UI
             if (mouseItem.ModItem is Favor favorItem)
             {
                 favorItem.Charge = 0f;
-                favorItem.OnUnequip();
             }
         }
         public override void PostClickWithValidItemAndEmptySlot(ref Item slotItem)
@@ -63,7 +62,6 @@ namespace ITD.Content.UI
             if (slotItem.ModItem is Favor favorItem)
             {
                 favorItem.Charge = 0f;
-                favorItem.OnUnequip();
             }
         }
     }
