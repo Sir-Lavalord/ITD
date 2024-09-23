@@ -64,6 +64,10 @@ namespace ITD.Particles
             }
             return null;
         }
+        public void ClearParticlesOfType(uint type) // this method must be accessed through ModContent.GetInstance<ParticleSystem>();
+        {
+            particles.RemoveAll(x => x.type == type);
+        }
         public override void Load()
         {
             particles = [];
@@ -86,12 +90,14 @@ namespace ITD.Particles
             }
             On_Main.DrawSuperSpecialProjectiles += DrawParticlesUnderProjectiles; // subscribe to events for drawing
             On_Main.DrawCachedProjs += DrawParticlesOverProjectiles;
+            On_Main.DrawInterface += DrawParticlesOnUI;
             On_Main.UpdateParticleSystems += UpdateAllParticles;
         }
         public override void Unload()
         {
             On_Main.DrawSuperSpecialProjectiles -= DrawParticlesUnderProjectiles; // unsubscribe from events on unload
             On_Main.DrawCachedProjs -= DrawParticlesOverProjectiles;
+            On_Main.DrawInterface -= DrawParticlesOnUI;
             On_Main.UpdateParticleSystems -= UpdateAllParticles;
             particles?.Clear();
             particlePrototypes?.Clear();
@@ -112,10 +118,10 @@ namespace ITD.Particles
             if (!startSpriteBatch)
                 Main.spriteBatch.End();
 
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp,
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
                 DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
 
-            foreach (ITDParticle particle in particles.Where(p => p.layer == WorldParticleDrawLayer.UnderProjectiles))
+            foreach (ITDParticle particle in particles.Where(p => p.canvas == ParticleDrawCanvas.WorldUnderProjectiles))
             {
                 particle.DrawParticle(Main.spriteBatch);
             }
@@ -123,7 +129,7 @@ namespace ITD.Particles
             Main.spriteBatch.End();
 
             if (!startSpriteBatch)
-                Main.spriteBatch.Begin(default, default, Main.DefaultSamplerState, default, RasterizerState.CullNone, default, Main.GameViewMatrix.TransformationMatrix);
+                Main.spriteBatch.Begin(default, default, SamplerState.PointClamp, default, RasterizerState.CullNone, default, Main.GameViewMatrix.TransformationMatrix);
         }
         public void DrawParticlesOverProjectiles(On_Main.orig_DrawCachedProjs orig, Main self, List<int> projCache, bool startSpriteBatch)
         {
@@ -131,10 +137,10 @@ namespace ITD.Particles
             if (!startSpriteBatch)
                 Main.spriteBatch.End();
 
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp,
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
                 DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
 
-            foreach (ITDParticle particle in particles.Where(p => p.layer == WorldParticleDrawLayer.OverProjectiles))
+            foreach (ITDParticle particle in particles.Where(p => p.canvas == ParticleDrawCanvas.WorldOverProjectiles))
             {
                 particle.DrawParticle(Main.spriteBatch);
             }
@@ -142,7 +148,21 @@ namespace ITD.Particles
             Main.spriteBatch.End();
 
             if (!startSpriteBatch)
-                Main.spriteBatch.Begin(default, default, Main.DefaultSamplerState, default, RasterizerState.CullNone, default, Main.GameViewMatrix.TransformationMatrix);
+                Main.spriteBatch.Begin(default, default, SamplerState.PointClamp, default, RasterizerState.CullNone, default, Main.GameViewMatrix.TransformationMatrix);
+        }
+        public void DrawParticlesOnUI(On_Main.orig_DrawInterface orig, Main self, GameTime gameTime)
+        {
+            orig(self, gameTime);
+
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
+                DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
+
+            foreach (ITDParticle particle in particles.Where(p => p.canvas == ParticleDrawCanvas.UI))
+            {
+                particle.DrawParticle(Main.spriteBatch);
+            }
+
+            Main.spriteBatch.End();
         }
     }
 }

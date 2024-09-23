@@ -9,14 +9,10 @@ namespace ITD.Particles
 {
     public enum ParticleDrawCanvas
     {
-        World,
+        WorldUnderProjectiles,
+        WorldOverProjectiles,
         Screen,
         UI
-    }
-    public enum WorldParticleDrawLayer
-    {
-        UnderProjectiles,
-        OverProjectiles
     }
     public abstract class ITDParticle() : IDisposable
     {
@@ -34,7 +30,6 @@ namespace ITD.Particles
         public float scale = 1f;
         public float opacity;
         public ParticleDrawCanvas canvas;
-        public WorldParticleDrawLayer? layer;
         public virtual void SetStaticDefaults()
         {
 
@@ -65,7 +60,6 @@ namespace ITD.Particles
         public void Dispose()
         {
             texture = null;
-            layer = null;
             GC.SuppressFinalize(this);
         }
         /// <summary>
@@ -87,7 +81,8 @@ namespace ITD.Particles
         private void Draw(SpriteBatch spriteBatch)
         {
             (Rectangle, Vector2) data = GetFramingData();
-            spriteBatch.Draw(texture, position - Main.screenPosition, data.Item1, Color.White * ProgressOneToZero, rotation, data.Item2, scale * ProgressOneToZero, SpriteEffects.None, 0f);
+            Vector2 offset = canvas == ParticleDrawCanvas.UI ? Vector2.Zero : Main.screenPosition;
+            spriteBatch.Draw(texture, position - offset, data.Item1, Color.White * ProgressOneToZero, rotation, data.Item2, scale * ProgressOneToZero, SpriteEffects.None, 0f);
         }
         public virtual void PostDraw(SpriteBatch spriteBatch)
         {
