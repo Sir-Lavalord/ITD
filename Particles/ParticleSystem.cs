@@ -14,7 +14,8 @@ namespace ITD.Particles
     {
         private static readonly List<ITDParticle> particlePrototypes = [];
         private static readonly Dictionary<uint, ITDParticle> particlesByID = [];
-        public static int[] particleFrames = [];
+        public static int[] particleFramesVertical = [];
+        public static int[] particleFramesHorizontal = [];
         private static readonly Dictionary<Type, ITDParticle> particlesByType = [];
         public List<ITDParticle> particles;
         public static uint ParticleType<T>() where T : ITDParticle
@@ -72,27 +73,34 @@ namespace ITD.Particles
                 instance.type = (uint)particlePrototypes.Count;
                 particlesByType[t] = instance;
                 particlesByID[instance.type] = instance;
-                Array.Resize(ref particleFrames, particlePrototypes.Count + 1);
-                instance.SetStaticDefaults();
 
                 particlePrototypes.Add(instance);
             }
+            Array.Resize(ref particleFramesVertical, particlePrototypes.Count + 1);
+            Array.Resize(ref particleFramesHorizontal, particlePrototypes.Count + 1);
+            foreach (ITDParticle prototype in particlePrototypes)
+            {
+                particleFramesVertical[prototype.type] = 1;
+                particleFramesHorizontal[prototype.type] = 1;
+                prototype.SetStaticDefaults();
+            }
             On_Main.DrawSuperSpecialProjectiles += DrawParticlesUnderProjectiles; // subscribe to events for drawing
             On_Main.DrawCachedProjs += DrawParticlesOverProjectiles;
-            On_Main.Update += UpdateAllParticles;
+            On_Main.UpdateParticleSystems += UpdateAllParticles;
         }
         public override void Unload()
         {
             On_Main.DrawSuperSpecialProjectiles -= DrawParticlesUnderProjectiles; // unsubscribe from events on unload
             On_Main.DrawCachedProjs -= DrawParticlesOverProjectiles;
+            On_Main.UpdateParticleSystems -= UpdateAllParticles;
             particles?.Clear();
             particlePrototypes?.Clear();
             particlesByType?.Clear();
             particlesByID?.Clear();
         }
-        public void UpdateAllParticles(On_Main.orig_Update orig, Main self, GameTime gameTime)
+        public void UpdateAllParticles(On_Main.orig_UpdateParticleSystems orig, Main self)
         {
-            orig(self, gameTime);
+            orig(self);
             foreach (ITDParticle particle in particles.ToList()) // avoid particle deletion funkiness by cloning the particles list (better way to do this?)
             {
                 particle.Update();

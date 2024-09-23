@@ -7,7 +7,7 @@ namespace ITD.Particles.Testing
     {
         public override void SetStaticDefaults()
         {
-            ParticleSystem.particleFrames[type] = 5;
+            ParticleSystem.particleFramesVertical[type] = 5;
         }
         public override void SetDefaults()
         {

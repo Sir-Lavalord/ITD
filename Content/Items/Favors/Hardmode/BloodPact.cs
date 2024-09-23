@@ -24,6 +24,11 @@ namespace ITD.Content.Items.Favors.Hardmode
         {
             Item.width = Item.height = 32;
         }
+        public override void OnUnequip()
+        {
+            lifeConsumed = 0;
+            lifeTimer = 0;
+        }
         public override string GetBarStyle()
         {
             return "BloodPactBarStyle";
