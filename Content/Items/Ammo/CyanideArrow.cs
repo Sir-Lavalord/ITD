@@ -1,5 +1,4 @@
-﻿using ITD.Content.Buffs;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
@@ -31,6 +30,7 @@ namespace ITD.Content.Items.Ammo
             Item.shoot = ModContent.ProjectileType<Content.Projectiles.Friendly.Ranger.Ammo.CyanideArrow>();
             Item.shootSpeed = 5.25f;
             Item.ammo = AmmoID.Arrow;
+			Item.rare = ItemRarityID.Cyan;
         }
     }
 }

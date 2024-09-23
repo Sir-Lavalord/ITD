@@ -14,8 +14,8 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         private static int duration = 30;
         public override void SetDefaults()
         {
-            Projectile.damage = 6;
-            Projectile.width = 12;
+            Projectile.damage = 44;
+            Projectile.width = 44;
             Projectile.height = 12;
             Projectile.scale = 1.2f;
             Projectile.friendly = true;
@@ -33,7 +33,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            target.AddBuff(BuffID.Frostburn, 600);
+            target.AddBuff(BuffID.Frostburn2, 600);
         }
     }
 }

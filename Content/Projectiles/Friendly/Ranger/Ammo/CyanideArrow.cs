@@ -1,57 +1,86 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger.Ammo
 {
-    // This example is similar to the Wooden Arrow projectile
     public class CyanideArrow : ModProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            // If this arrow would have strong effects (like Holy Arrow pierce), we can make it fire fewer projectiles from Daedalus Stormbow for game balance considerations like this:
-            //ProjectileID.Sets.FiresFewerFromDaedalusStormbow[Type] = true;
-        }
+		private bool explosion = false;
 
         public override void SetDefaults()
         {
-            Projectile.width = 8;
-            Projectile.height = 8;
-            Projectile.friendly = true;
-            Projectile.hostile = false;
-            Projectile.DamageType = DamageClass.Ranged;
-            Projectile.penetrate = 2;
-            Projectile.timeLeft = 1200;
-            Projectile.alpha = 255;
-            Projectile.light = 0.5f;
-            Projectile.ignoreWater = true;
-            Projectile.tileCollide = true;
-            Projectile.extraUpdates = 0;
-
-            AIType = ProjectileID.WoodenArrowFriendly;
+            Projectile.CloneDefaults(1); // assume wooden arrow identity
+			Projectile.penetrate = -1;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = -1;
         }
 
-        public override void OnKill(int timeLeft)
+		private void Boom()
+		{
+			explosion = true;
+			
+			Projectile.timeLeft = 15;
+			Projectile.velocity *= 0f;
+			Projectile.tileCollide = false;
+			
+			Projectile.Resize(100, 100);
+			SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
+		}
+
+		public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
-            for (int i = 0; i < 5; i++)
-            {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Ice);
-                dust.noGravity = true;
-                dust.velocity *= 1.5f;
-                dust.scale *= 0.9f;
-            }
+			if (Projectile.oldPos[0] != new Vector2())
+				Projectile.position = Projectile.oldPos[0];
+			
+			Boom();
+			
+            return false;
+        }
 
-            Vector2 position = Projectile.Center;
-            Vector2 velocity = Vector2.Zero;
-            int type = ModContent.ProjectileType<Content.Projectiles.Friendly.Misc.CyaniteIceShard>();
-            int damage = 6;
-            float ai0 = 0f;
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+			if (!explosion)
+				Boom();
+            target.AddBuff(BuffID.Frostburn2, 600);
+        }
+		
+		public override bool PreDraw(ref Color lightColor)
+        {
+			Vector2 position = Projectile.Center - Main.screenPosition;
+			
+			Texture2D texture = TextureAssets.Extra[98].Value;
+			Rectangle sourceRectangle = texture.Frame(1, 1);
+			Vector2 origin = sourceRectangle.Size() / 2f;
 
-            Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), position, velocity, type, damage, ai0);
+			if (explosion)
+			{
+				
+				float scaleMultipler = (20f-Projectile.timeLeft)*0.1f;
+				float colorMultiplier = Math.Min(1, Projectile.timeLeft*0.2f);
+				
+				Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(120, 184, 255, 50)*colorMultiplier, scaleMultipler*2f+MathHelper.PiOver4, origin, new Vector2(scaleMultipler, 1.5f * scaleMultipler), SpriteEffects.None, 0f);
+				Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(120, 184, 255, 50)*colorMultiplier, scaleMultipler*2f+MathHelper.PiOver2+MathHelper.PiOver4, origin, new Vector2(scaleMultipler, 1.5f * scaleMultipler), SpriteEffects.None, 0f);
+				
+				Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(120, 184, 255, 50)*colorMultiplier, scaleMultipler*2f, origin, new Vector2(0.75f * scaleMultipler, scaleMultipler), SpriteEffects.None, 0f);
+				Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(120, 184, 255, 50)*colorMultiplier, scaleMultipler*2f+MathHelper.PiOver2, origin, new Vector2(0.75f * scaleMultipler, scaleMultipler), SpriteEffects.None, 0f);
+								
+				return false;
+			}
+			else
+			{
+				Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(120, 184, 255, 50), Main.GlobalTimeWrappedHourly*2f, origin, 1f*Main.essScale, SpriteEffects.None, 0f);
+				Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(120, 184, 255, 50), Main.GlobalTimeWrappedHourly*2f+MathHelper.PiOver2, origin, 1f*Main.essScale, SpriteEffects.None, 0f);
+			}
+
+            return true;
         }
     }
 }
