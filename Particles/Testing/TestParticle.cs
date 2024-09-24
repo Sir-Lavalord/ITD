@@ -11,7 +11,7 @@ namespace ITD.Particles.Testing
         }
         public override void SetDefaults()
         {
-            canvas = ParticleDrawCanvas.UI;
+            canvas = ParticleDrawCanvas.WorldUnderProjectiles;
             timeLeft = 120;
         }
         public override void PreUpdate()

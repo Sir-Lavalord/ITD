@@ -5,6 +5,7 @@ using System;
 using Terraria.DataStructures;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader;
+using Terraria.GameContent;
 namespace ITD.Particles
 {
     public enum ParticleDrawCanvas
@@ -90,11 +91,19 @@ namespace ITD.Particles
         }
         public void DrawParticle(SpriteBatch spriteBatch)
         {
-            if (PreDraw(spriteBatch))
+            Rectangle screen = canvas == ParticleDrawCanvas.UI ? new(0, 0, (int)(Main.screenWidth/Main.UIScale), (int)(Main.screenHeight/Main.UIScale)) : new((int)Main.screenPosition.X, (int)Main.screenPosition.Y, Main.screenWidth, Main.screenHeight);
+            int maxSize = (int)Math.Max((texture.Height / ParticleSystem.particleFramesVertical[type]) * scale, (texture.Width / ParticleSystem.particleFramesHorizontal[type]) * scale);
+            Rectangle particleBoundingBox = new((int)position.X - maxSize / 2, (int)position.Y - maxSize / 2, maxSize, maxSize);
+            // debug: see particle bounding box vvv
+            //spriteBatch.Draw(TextureAssets.MagicPixel.Value, particleBoundingBox, Color.Red * 0.5f);
+            if (screen.Intersects(particleBoundingBox))
             {
-                Draw(spriteBatch);
+                if (PreDraw(spriteBatch))
+                {
+                    Draw(spriteBatch);
+                }
+                PostDraw(spriteBatch);
             }
-            PostDraw(spriteBatch);
         }
     }
 }
