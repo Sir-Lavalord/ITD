@@ -1,48 +1,45 @@
 ﻿using Microsoft.Xna.Framework;
-using Terraria.ID;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using ITD.Utilities;
 using System;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {
     public class BloodPactCut : ModProjectile
     {
+        private static int duration = 30;
         public override void SetDefaults()
         {
             Projectile.width = 12;
-
+            Projectile.height = 12;
+            Projectile.scale = 1.2f;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Generic;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
-            Projectile.timeLeft = 30;
-
+            Projectile.timeLeft = duration;
             Projectile.penetrate = -1;
+            Projectile.stopsDealingDamageAfterPenetrateHits = true;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
         }
-
-        public override void SetStaticDefaults()
+        public override bool PreDraw(ref Color lightColor)
         {
-            Main.projFrames[Projectile.type] = 4;
-        }
+            Player player = Main.player[Projectile.owner];
 
-        public override Color? GetAlpha(Color lightColor)
-        {
-            return Color.White;
-        }
+            float progressZeroToOne = 1f-(Projectile.timeLeft / (float)duration);
 
-        public override void AI()
-        {
-            Projectile.velocity *= 0.95f;
-            Projectile.rotation = Projectile.velocity.ToRotation();
-            if (++Projectile.frameCounter >= 6)
-            {
-                Projectile.frameCounter = 0;
-                Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
-            }
+            float scaleX = 1f-progressZeroToOne;
+            float scaleY = (float)Math.Sin(progressZeroToOne * Math.PI)*4f;
+
+            Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+
+            Texture2D tex = TextureAssets.Extra[98].Value;
+
+            Main.EntitySpriteDraw(tex, drawPosition, null, new Color(255, 0, 0, 127), Projectile.rotation, tex.Size()/2f, new Vector2(scaleX, scaleY), SpriteEffects.None, 0);
+            return false;
         }
     }
 }

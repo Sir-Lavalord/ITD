@@ -1,4 +1,5 @@
 ﻿using ITD.Systems;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -10,7 +11,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using ITD.Content.Projectiles.Friendly.Misc;
 
-namespace ITD.Content.Items.Favors.Prehardmode
+namespace ITD.Content.Items.Favors.Hardmode
 {
     public class BloodPact : Favor
     {
@@ -22,6 +23,11 @@ namespace ITD.Content.Items.Favors.Prehardmode
         public override void SetFavorDefaults()
         {
             Item.width = Item.height = 32;
+        }
+        public override void OnUnequip()
+        {
+            lifeConsumed = 0;
+            lifeTimer = 0;
         }
         public override string GetBarStyle()
         {
@@ -45,11 +51,11 @@ namespace ITD.Content.Items.Favors.Prehardmode
             if (FavorPlayer.UseFavorKey.Current)
             {
                 lifeTimer = ++lifeTimer % 5;
-				if (lifeTimer == 0)
+				if (lifeTimer == 1)
 				{
-					lifeConsumed += 5;
+					lifeConsumed += 1;
 					player.statLife -= 5;
-					CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height), CombatText.LifeRegen, 5, false, true);
+					CombatText.NewText(player.getRect(), CombatText.LifeRegen, 5, false, true);
 					
 					SoundEngine.PlaySound(SoundID.NPCHit1, player.Center);
 					for (int i = 0; i < 6; i++)
@@ -62,10 +68,14 @@ namespace ITD.Content.Items.Favors.Prehardmode
             if (FavorPlayer.UseFavorKey.JustReleased)
             {
                 // I'm using Projectile.ai[0] here in the newProjectile call as timeLeft, if you wanna change the amount of time relative to lifeConsumed the projectile should exist.
-                Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed, 0f, player.whoAmI, lifeConsumed);
-                lifeTimer = 0;
+				// Now with diminishing returns!
+				Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.Zero, bloodPactSpirit, lifeConsumed * 20, 0f, player.whoAmI, (float)(Math.Pow(lifeConsumed, 0.666)));				
+				SoundEngine.PlaySound(SoundID.NPCDeath5, player.Center);
+				
+				lifeTimer = 0;
 				lifeConsumed = 0;
             }
+            
 			if (player.statLife <= 0 && player.whoAmI == Main.myPlayer)
 			{
 				string death = Language.GetTextValue($"Mods.ITD.DeathMessage.BloodPact");

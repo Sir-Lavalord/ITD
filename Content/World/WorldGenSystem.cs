@@ -7,6 +7,8 @@ using Terraria.Localization;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
 using ITD.Physics;
+using ITD.Particles;
+using ITD.Particles.Testing;
 
 namespace ITD.Content.World
 {
@@ -42,17 +44,27 @@ namespace ITD.Content.World
         {
             if (JustPressed(Keys.D1))
             {
-                TestMethod((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y);
+                TestMethod();
+            }
+            if (JustPressed(Keys.D2))
+            {
+                TestMethod2();
             }
         }
 
-        private void TestMethod(int x, int y)
+        private void TestMethod()
         {
-            //Main.LocalPlayer.Center = new Vector2(x, y);
-            //Rain.NewRainForced(new Vector2(x, y), Vector2.UnitY * 16f + Vector2.UnitX * 8f);
-            //Dust.QuickBox(new Vector2(x, y) * 16, new Vector2(x + 1, y + 1) * 16, 2, Color.YellowGreen, null);
-            //PhysicsMethods.CreateVerletChain(8, 16, Main.MouseWorld, Main.MouseWorld + Vector2.One, false);
-            //Helpers.GrowTallBluegrass(x, y);
+            // test UI particle (change particle.canvas in particle type)
+            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+            // test world particle (change particle.canvas in particle type)
+            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+        }
+        private void TestMethod2()
+        {
+            // test UI particle (change particle.canvas in particle type)
+            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+            // test world particle (change particle.canvas in particle type)
+            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
         }
     }
 }

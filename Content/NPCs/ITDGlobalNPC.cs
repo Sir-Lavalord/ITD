@@ -1,38 +1,48 @@
-﻿using System.Collections.Generic;
+﻿using ITD.Content.Buffs.Debuffs;
+using ITD.Content.Buffs.FavorBuffs;
+using ITD.Content.Items.Accessories.Defensive;
+using ITD.Content.Items.Accessories.Master;
+using ITD.Content.Items.BossSummons;
+using ITD.Content.Items.Other;
+using ITD.Content.Items.Weapons.Melee.Snaptraps;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-
-using ITD.Utilities;
-using ITD.Content.Buffs.Debuffs;
-
-using ITD.Content.Items.Accessories.Defensive;
-using ITD.Content.Items.Accessories.Master;
-using ITD.Content.Items.Weapons.Melee.Snaptraps;
-using ITD.Content.Items.Other;
 
 namespace ITD.Content.NPCs
 {
     public class ITDGlobalNPC : GlobalNPC
     {
-		public override bool InstancePerEntity => true;
+        public override bool InstancePerEntity => true;
 
-		public bool zapped;
-		
-		public bool necrosis;
-		public bool soulRot;
+        public bool zapped;
+
+        public bool necrosis;
+        public bool soulRot;
         public bool toasted;
-		
-		public override void ResetEffects(NPC npc)
+
+        private static int[] shouldDropSandberusSummon =
+            [
+            NPCID.WalkingAntlion,
+            NPCID.FlyingAntlion,
+            NPCID.GiantWalkingAntlion,
+            NPCID.GiantFlyingAntlion,
+            NPCID.TombCrawlerHead,
+            NPCID.LarvaeAntlion
+            ];
+
+        public override void ResetEffects(NPC npc)
         {
-			zapped = false;
-			
-			necrosis = false;
-			soulRot = false;
+            zapped = false;
+
+            necrosis = false;
+            soulRot = false;
             toasted = false;
-		}
+        }
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
         {
             if (toasted)
@@ -49,30 +59,30 @@ namespace ITD.Content.NPCs
         }
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
-			if (necrosis)
+            if (necrosis)
             {
                 if (npc.lifeRegen > 0)
                 {
                     npc.lifeRegen = 0;
                 }
                 npc.lifeRegen -= 20;
-				
-				if (damage < 5)
+
+                if (damage < 5)
                     damage = 5;
             }
-			
-			if (soulRot)
+
+            if (soulRot)
             {
                 if (npc.lifeRegen > 0)
                 {
                     npc.lifeRegen = 0;
                 }
                 npc.lifeRegen -= 60;
-				
-				if (damage < 10)
+
+                if (damage < 10)
                     damage = 10;
             }
-			
+
             if (toasted)
             {
                 if (npc.lifeRegen > 0)
@@ -80,8 +90,8 @@ namespace ITD.Content.NPCs
                     npc.lifeRegen = 0;
                 }
                 npc.lifeRegen -= 60;
-				
-				if (damage < 10)
+
+                if (damage < 10)
                     damage = 10;
             }
         }
@@ -95,7 +105,11 @@ namespace ITD.Content.NPCs
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Crimeratrap>(), 50));
             }
-			if (npc.type == NPCID.BloodNautilus)
+            if (shouldDropSandberusSummon.Contains(npc.type))
+            {
+                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DuneSkull>(), 50));
+            }
+            if (npc.type == NPCID.BloodNautilus)
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DreadShell>(), 10));
             }
@@ -109,17 +123,27 @@ namespace ITD.Content.NPCs
             }
             if (npc.type == NPCID.EaterofWorldsHead || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail)
             {
-				LeadingConditionRule IsABoss = new LeadingConditionRule(new Conditions.LegacyHack_IsABoss());
-				IsABoss.OnSuccess(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<EoWTail>()));
-				npcLoot.Add(IsABoss);
+                LeadingConditionRule IsABoss = new LeadingConditionRule(new Conditions.LegacyHack_IsABoss());
+                IsABoss.OnSuccess(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<EoWTail>()));
+                npcLoot.Add(IsABoss);
             }
-			if (npc.type == NPCID.BrainofCthulhu)
+            if (npc.type == NPCID.BrainofCthulhu)
             {
                 npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<Prophylaxis>()));
             }
         }
+        public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
+        {
+            if (player.HasBuff(ModContent.BuffType<SqueakyClean>()))
+            {
+                float factor = SqueakyClean.SpawnrateMultiplier;
+                spawnRate = (int)(spawnRate / factor);
+                maxSpawns = (int)(maxSpawns * factor);
+            }
+        }
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
         {
+            /* i don't think modifying the pool like this works with vanilla npcs
             if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
             {
                 pool[NPCID.CaveBat] = 0f;
@@ -130,26 +154,27 @@ namespace ITD.Content.NPCs
                 pool[NPCID.WalkingAntlion] = 0f;
                 pool[NPCID.Antlion] = 0f;
             }
+            */
         }
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {
-			if (necrosis)
-			{
-				drawColor.R = 200;
-				drawColor.G = 100;
-				drawColor.B = 255;
-			}
-			if (soulRot)
-			{
-				drawColor.R = 100;
-				drawColor.G = 200;
-				drawColor.B = 255;
-			}
+            if (necrosis)
+            {
+                drawColor.R = 200;
+                drawColor.G = 100;
+                drawColor.B = 255;
+            }
+            if (soulRot)
+            {
+                drawColor.R = 100;
+                drawColor.G = 200;
+                drawColor.B = 255;
+            }
             if (toasted)
             {
-				drawColor.R = 255;
+                drawColor.R = 255;
                 drawColor.G = 100;
-				drawColor.B = 255;
+                drawColor.B = 255;
             }
         }
     }

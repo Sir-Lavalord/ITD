@@ -106,10 +106,14 @@ namespace ITD.Content.Items.Other
             return false;
         }
         public override bool ConsumeItem(Player player) => false;
-
-        public override bool CanRightClick()
+        public override bool CanRightClick() => true;
+        public override void AddRecipes()
         {
-            return true;
+            CreateRecipe()
+                .AddIngredient(ItemID.TargetDummy)
+                .AddIngredient(ItemID.Fedora)
+                .AddIngredient(ItemID.Hay, 64)
+                .Register();
         }
     }
 }

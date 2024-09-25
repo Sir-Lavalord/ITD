@@ -43,7 +43,7 @@ namespace ITD.Content.UI
         public static void AddLayer(List<GameInterfaceLayer> layers, UIState state, int index, bool visible, InterfaceScaleType scale)
         {
             string name = state == null ? "Unknown" : state.ToString();
-            layers.Insert(index, new LegacyGameInterfaceLayer("BrickAndMortar: " + name,
+            layers.Insert(index, new LegacyGameInterfaceLayer("IntoTheDepths: " + name,
                 delegate
                 {
                     if (visible)

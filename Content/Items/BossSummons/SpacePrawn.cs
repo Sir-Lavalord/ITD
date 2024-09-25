@@ -49,7 +49,6 @@ namespace ITD.Content.Items.BossSummons
                     NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, number: player.whoAmI, number2: type);
                 }
             }
-
             return true;
         }
     }
