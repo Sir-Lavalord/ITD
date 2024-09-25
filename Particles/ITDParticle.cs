@@ -6,6 +6,7 @@ using Terraria.DataStructures;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader;
 using Terraria.GameContent;
+using Terraria.Graphics.Shaders;
 namespace ITD.Particles
 {
     public enum ParticleDrawCanvas
@@ -21,6 +22,7 @@ namespace ITD.Particles
         internal Texture2D texture;
         public int frameVertical;
         public int frameHorizontal;
+        public int frameCounter;
         public Vector2 position;
         public Vector2 velocity;
         public int spawnTimeLeft;
@@ -29,7 +31,7 @@ namespace ITD.Particles
         public float ProgressOneToZero { get { return 1f - ProgressZeroToOne; } }
         public float rotation;
         public float scale = 1f;
-        public float opacity;
+        public float opacity = 1f;
         public ParticleDrawCanvas canvas;
         public virtual void SetStaticDefaults()
         {
@@ -44,13 +46,13 @@ namespace ITD.Particles
             SetDefaults();
             spawnTimeLeft = timeLeft;
         }
-        public virtual void PreUpdate()
+        public virtual void AI()
         {
 
         }
         public void Update()
         {
-            PreUpdate();
+            AI();
             position += velocity;
             if (timeLeft-- <= 0)
             {
@@ -83,7 +85,7 @@ namespace ITD.Particles
         {
             (Rectangle, Vector2) data = GetFramingData();
             Vector2 offset = canvas == ParticleDrawCanvas.UI ? Vector2.Zero : Main.screenPosition;
-            spriteBatch.Draw(texture, position - offset, data.Item1, Color.White * ProgressOneToZero, rotation, data.Item2, scale * ProgressOneToZero, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, position - offset, data.Item1, Color.White * opacity, rotation, data.Item2, scale, SpriteEffects.None, 0f);
         }
         public virtual void PostDraw(SpriteBatch spriteBatch)
         {

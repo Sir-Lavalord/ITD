@@ -44,16 +44,27 @@ namespace ITD.Content.World
         {
             if (JustPressed(Keys.D1))
             {
-                TestMethod((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y);
+                TestMethod();
+            }
+            if (JustPressed(Keys.D2))
+            {
+                TestMethod2();
             }
         }
 
-        private void TestMethod(int x, int y)
+        private void TestMethod()
         {
             // test UI particle (change particle.canvas in particle type)
             //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             // test world particle (change particle.canvas in particle type)
             //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+        }
+        private void TestMethod2()
+        {
+            // test UI particle (change particle.canvas in particle type)
+            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+            // test world particle (change particle.canvas in particle type)
+            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
         }
     }
 }
