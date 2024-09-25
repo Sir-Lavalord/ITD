@@ -17,6 +17,9 @@ namespace ITD.Content.Items.Other
 {
     public class StrawmanItem : ModItem
     {
+        // make the dummy type titles and description localizable please
+        // -qangel
+        // ok
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 1;
@@ -76,7 +79,7 @@ namespace ITD.Content.Items.Other
 
                     line.Text = Text + " " + line.Text;//Fine for now
                 }
-                }
+            }
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {

@@ -21,7 +21,7 @@ namespace ITD.Content.Projectiles.Hostile
     public class CosmicLightningBlast : BigBlankExplosion
     {
         public override int Lifetime => 60;
-        public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.Cyan * 1.6f, Color.White, MathHelper.Clamp(pulseCompletionRatio * 2.2f, 0f, 1f));
+        public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.MediumPurple * 1.6f, Color.DarkBlue, MathHelper.Clamp(pulseCompletionRatio * 2.2f, 0f, 1f));
 
         public override void SetStaticDefaults()
         {

@@ -21,7 +21,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
     public class AsterBlasterBlast : BigBlankExplosion
     {   
         public override int Lifetime => 30;
-        public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.WhiteSmoke * 1.6f, Color.White, MathHelper.Clamp(pulseCompletionRatio * 2.2f, 0f, 1f));
+        public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.Turquoise * 1.6f, Color.DarkViolet, MathHelper.Clamp(pulseCompletionRatio * 2.2f, 0f, 1f));
 
         public override void SetStaticDefaults()
         {
@@ -60,13 +60,13 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 
                 other.active
                     && Math.Abs(Projectile.Center.X - other.position.X)
-                    + Math.Abs(Projectile.Center.Y - other.position.Y) < CurrentRadius * 3)
+                    + Math.Abs(Projectile.Center.Y - other.position.Y) < CurrentRadius * 2.5f)
                 {
                     if (!Main.dedServ)
                     {
                         other.GetGlobalProjectile<FishbackerReflectedProj>().IsReflected = true;
                         other.owner = Main.myPlayer;
-                        other.velocity.X *= -3f;
+                        other.velocity.X *= -4f;
                         other.velocity.Y *= -1f;
 
                         ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.WallOfFleshGoatMountFlames, new ParticleOrchestraSettings

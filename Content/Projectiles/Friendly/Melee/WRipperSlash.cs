@@ -80,9 +80,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             // mirror why'd you comment this part out, it's meant to be the sword slashing
 
             // It was hard-coded (11- projectile.timeleft) part, it's supposed to play out its anim before dying
-
-            // Your projectile and mine are different, yours is locked w the player center whilst mine is just shooting a slash projectile
-            // I made it like that since i'd be unusable otherwise, the thing is nigh unusable as is with its miniscule range
             // This will make do for now
 			Projectile.Center = player.MountedCenter + Projectile.velocity;
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
@@ -121,11 +118,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             }
             if (Projectile.frame == 2)//Arkhalis dusting thing
             {
-                if (Main.rand.NextBool(3))
+                if (Main.rand.NextBool(2))
                 {
                     for (int i = 0; i < 3; i++)
                     {
-                        int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDust, Projectile.velocity.X, Projectile.velocity.Y, 10, Color.LightSkyBlue, Main.rand.NextFloat(0.8f, 1.2f));
+                        int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X, Projectile.velocity.Y, 0, Color.Purple, Main.rand.NextFloat(1f, 1.4f));
                         Dust dust = Main.dust[dustIndex];
                         dust.noGravity = true;
                     }

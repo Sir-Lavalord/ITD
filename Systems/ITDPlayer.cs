@@ -108,6 +108,8 @@ namespace ITD.Players
 		
 		public override void UpdateDead()
         {
+            CosJellSuffocated = false;
+            CosJellEscapeCurrent = 0;
             if (Screenshake > 0)
                 Screenshake--; 
             itemVar = new float[4];

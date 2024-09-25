@@ -86,14 +86,6 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override void AI()
         {
-            if (Projectile.timeLeft <= 3)
-            {
-                Projectile.tileCollide = false;
-                Projectile.alpha = 255;
-                Projectile.Resize(explosionWidthHeight, explosionWidthHeight);
-                Projectile.damage = 25;
-                Projectile.knockBack = 10;
-            }
             if (isStuck == false)
             {
                 Projectile.velocity.Y += 0.2f;
@@ -107,17 +99,20 @@ namespace ITD.Content.Projectiles.Hostile
 
         public override void OnKill(int timeLeft)
         {
-            //Be considerate with the dusting
-            SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
-            // Smoke Dust spawn
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < 8; i++)
             {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, Color.Purple, 2f);
                 dust.velocity *= 1.4f;
             }
-
-            // Fire Dust spawn
-            for (int i = 0; i < 40; i++)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
+ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), Projectile.knockBack);
+                explosion.ai[1] = 80;
+                explosion.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+                explosion.netUpdate = true;
+            }
+            for (int i = 0; i < 10; i++)
             {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.ShimmerTorch, 0f, 0f, 100, default, 3f);
                 dust.noGravity = true;
@@ -125,8 +120,6 @@ namespace ITD.Content.Projectiles.Hostile
                 dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.ShimmerSpark, 0f, 0f, 100, default, 2f);
                 dust.velocity *= 3f;
             }
-
-            // Large Smoke Gore spawn
             for (int g = 0; g < 2; g++)
             {
                 var goreSpawnPosition = new Vector2(Projectile.position.X + Projectile.width / 2 - 24f, Projectile.position.Y + Projectile.height / 2 - 24f);
@@ -138,17 +131,7 @@ namespace ITD.Content.Projectiles.Hostile
                 gore.scale = 1.5f;
                 gore.velocity.X -= 1.5f;
                 gore.velocity.Y += 1.5f;
-                gore = Gore.NewGoreDirect(Projectile.GetSource_FromThis(), goreSpawnPosition, default, Main.rand.Next(61, 64), 1f);
-                gore.scale = 1.5f;
-                gore.velocity.X += 1.5f;
-                gore.velocity.Y -= 1.5f;
-                gore = Gore.NewGoreDirect(Projectile.GetSource_FromThis(), goreSpawnPosition, default, Main.rand.Next(61, 64), 1f);
-                gore.scale = 1.5f;
-                gore.velocity.X -= 1.5f;
-                gore.velocity.Y -= 1.5f;
             }
-            // reset size to normal width and height.
-            Projectile.Resize(defaultWidthHeight, defaultWidthHeight);
         }
     }
 }
