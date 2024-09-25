@@ -37,6 +37,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
             NPC.noTileCollide = true;
             NPC.value = 0;
             NPC.aiStyle = -1;
+            NPC.chaseable = false;
         }
         public override Color? GetAlpha(Color drawColor)
         {
