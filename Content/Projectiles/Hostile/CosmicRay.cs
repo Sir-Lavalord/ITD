@@ -48,7 +48,6 @@ namespace ITD.Content.Projectiles.Hostile
             {
                 if (CosJel != null && !CosJel.dontTakeDamage)
                 {
-                    CosJel.velocity =  -(Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(CosJel.Center.X, CosJel.Center.Y))) * 2f;
                     Projectile.Center = CosJel.Center;
                 }
                 else

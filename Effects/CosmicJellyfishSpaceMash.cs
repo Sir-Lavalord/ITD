@@ -1,4 +1,5 @@
-﻿using ITD.Players;
+﻿using ITD.Content.NPCs.Bosses;
+using ITD.Players;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -11,6 +12,7 @@ namespace ITD.Effects
     {
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) =>
         drawInfo.drawPlayer.active
+        && NPC.AnyNPCs(ModContent.NPCType<CosmicJellyfish>())
         && !drawInfo.drawPlayer.dead
         && !drawInfo.drawPlayer.ghost
         && drawInfo.shadow == 0

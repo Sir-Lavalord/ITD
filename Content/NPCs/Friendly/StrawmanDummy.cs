@@ -73,7 +73,7 @@ namespace ITD.Content.NPCs.Friendly
                     NPC.defense = 50;
                     break;
                 case 2:
-                    NPC.knockBackResist = 0.4f;
+                    NPC.knockBackResist = 0.8f;
                     if (NPC.velocity.Y == 0)
                         NPC.velocity.X *= 0.9f;
                     break;

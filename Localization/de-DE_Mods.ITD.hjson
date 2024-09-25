@@ -857,6 +857,8 @@ Projectiles: {
 	// ShadowKnife.DisplayName: Shadow Knife
 	// BloodPactCut.DisplayName: Blood Pact Cut
 	// BloodPactSpirit.DisplayName: Blood Pact Spirit
+	// CosmicJellyfish_LeftHand.DisplayName: Cosmic Jellyfish_ Left Hand
+	// CosmicJellyfish_RightHand.DisplayName: Cosmic Jellyfish_ Right Hand
 }
 
 NPCs: {

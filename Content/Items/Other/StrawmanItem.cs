@@ -8,6 +8,10 @@ using Terraria.DataStructures;
 using Humanizer;
 using System.Collections.Generic;
 using ITD.Content.NPCs.Friendly;
+using ITD.Content.Items.Accessories.Combat.All;
+using Terraria.Localization;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.UI;
 
 namespace ITD.Content.Items.Other
 {
@@ -15,6 +19,7 @@ namespace ITD.Content.Items.Other
     {
         // make the dummy type titles and description localizable please
         // -qangel
+        // ok
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 1;
