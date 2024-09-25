@@ -50,13 +50,13 @@ namespace ITD.Content.NPCs.Bosses
         public override void SetStaticDefaults()
         {
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-			Main.npcFrameCount[Type] = 6;
+			Main.npcFrameCount[Type] = 14;
         }
         public override void SetDefaults()
         {
 			AI_State = ActionState.Chasing;
-            NPC.width = 100;
-            NPC.height = 100;
+            NPC.width = 80;
+            NPC.height = 80;
             NPC.damage = 40;
             NPC.defense = 5;
             NPC.lifeMax = 4800;
@@ -167,18 +167,31 @@ namespace ITD.Content.NPCs.Bosses
 					}
 					break;
 				case ActionState.Skullraiser:
-					if (StateTimer % 10 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+					if (StateTimer % 10 == 0)
 					{
-						int type = ModContent.ProjectileType<NecroSkull>();
-						int damage = 20;
-						if (Form == 1)
+						if (Main.netMode != NetmodeID.MultiplayerClient)
 						{
-							type = ModContent.ProjectileType<SoulSkull>();
-							damage = 40;
-						}
-						Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -4f), type, damage, 0, -1);
-						if (Main.expertMode)
+							int type = ModContent.ProjectileType<NecroSkull>();
+							int damage = 20;
+							if (Form == 1)
+							{
+								type = ModContent.ProjectileType<SoulSkull>();
+								damage = 40;
+							}
 							Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -4f), type, damage, 0, -1);
+							if (Main.expertMode)
+								Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -4f), type, damage, 0, -1);
+						}
+						
+						int dustType = DustID.GiantCursedSkullBolt;
+						if (Form == 1)
+							dustType = DustID.DungeonSpirit;
+						for (int l = 0; l < 8; l++)
+						{
+							int spawnDust = Dust.NewDust(NPC.Center, 0, 0, dustType, 0, 0, 0, default, 2f);
+							Main.dust[spawnDust].noGravity = true;
+							Main.dust[spawnDust].velocity *= 3f;
+						}
 					}
 					break;
 			}
