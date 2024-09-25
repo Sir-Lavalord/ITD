@@ -32,7 +32,10 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             // Adjust the hitbox.
             Projectile.ExpandHitboxBy((int)(CurrentRadius * Projectile.scale), (int)(CurrentRadius * Projectile.scale));
         }
-
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.HitDirectionOverride = (Projectile.Center.X < target.Center.X).ToDirectionInt();
+        }
         public override bool PreDraw(ref Color lightColor)
         {
             Main.spriteBatch.End();

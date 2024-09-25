@@ -18,7 +18,14 @@ namespace ITD.Content.Items.Weapons.Summoner
     {
         internal static Asset<Texture2D> InvSprite;
         public override string Texture => "ITD/Content/Items/Weapons/Summoner/AsterKnuckle_Arm";
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.AnimatesAsSoul[Item.type] = true;
+            Main.RegisterItemAnimation(Type, new DrawAnimationVertical(8, 4));
+            //11 2 12 1 19 20 
+            Terraria.GameContent.Creative.CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1121211920;
 
+        }
         public override void SetDefaults()
         {
             Item.width = 46;
@@ -42,6 +49,10 @@ namespace ITD.Content.Items.Weapons.Summoner
         public override void HoldItem(Player player)
         {
         }
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return Color.White;
+        }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraExplode"), player.Center);
@@ -51,9 +62,22 @@ namespace ITD.Content.Items.Weapons.Summoner
             modPlayer.Screenshake = 10;
             Projectile Blast = Projectile.NewProjectileDirect(player.GetSource_FromThis(), Item.Center, Vector2.Zero,
     ModContent.ProjectileType<AsterBlasterBlast>(), (int)(Item.damage), Item.knockBack, player.whoAmI);
-            Blast.ai[1] = 100f; // Randomize the maximum radius.
-            Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f); // And the interpolation step.
-            Blast.netUpdate = true;
+            Blast.ai[1] = 100f;
+            Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+            Blast.netUpdate = true;;
+            Vector2 Shootpos = -Vector2.Normalize(Main.MouseWorld - player.MountedCenter) * 10;
+            for (int i = 0; i < 4; i++)
+            {
+                int dust1 = Dust.NewDust(player.Center, 5, 5, DustID.TintableDustLighted, Shootpos.X, Shootpos.Y, 0, Color.MediumPurple, 2f);
+                Main.dust[dust1].noGravity = true;
+
+                int dust = Dust.NewDust(player.Center, 5,5, DustID.TintableDustLighted, Shootpos.X, Shootpos.Y, 0, Color.Turquoise, 2f);
+                Main.dust[dust].noGravity = true;
+
+                int dust2 = Dust.NewDust(player.Center, 5, 5, DustID.TintableDustLighted, Shootpos.X, Shootpos.Y, 0, Color.Turquoise, 2f);
+                Main.dust[dust2].noGravity = true;
+            }
+
             return false;
         }
 
@@ -94,6 +118,9 @@ namespace ITD.Content.Items.Weapons.Summoner
                 InvSprite = ModContent.Request<Texture2D>("ITD/Content/Items/Weapons/Summoner/AsterKnuckle");
 
             Texture2D properSprite = InvSprite.Value;
+            position.Y -= 10;
+            position.X -= 4;
+
             spriteBatch.Draw(properSprite, position, null, drawColor, 0f, origin, scale, 0, 0);
             return false;
         }
@@ -103,7 +130,7 @@ namespace ITD.Content.Items.Weapons.Summoner
                 InvSprite = ModContent.Request<Texture2D>("ITD/Content/Items/Weapons/Summoner/AsterKnuckle");
 
             Texture2D properSprite = InvSprite.Value;
-            spriteBatch.Draw(properSprite, Item.position - Main.screenPosition, null, lightColor, rotation, properSprite.Size() / 2f, scale, 0, 0);
+            spriteBatch.Draw(properSprite, Item.position - Main.screenPosition + new Vector2 (0, 22), null, lightColor, rotation, properSprite.Size() / 2f, scale, 0, 0);
             return false;
         }
         public override void HoldStyle(Player player, Rectangle heldItemFrame) => SetItemInHand(player, heldItemFrame);

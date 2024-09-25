@@ -135,7 +135,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     handCharge = 0f;
                     if (handSling < 0.8f)
                     {
-                        handSling += 0.05f;
+                        handSling += 0.1f;
                     }
                     else
                     {

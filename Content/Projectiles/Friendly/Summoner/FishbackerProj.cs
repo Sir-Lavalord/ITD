@@ -59,7 +59,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Projectile.Kill();
                 return;
             }
-            if ((Timer >= swingTime * 0.4f && Timer <= swingTime * 0.8f) && CanParry)
+            if ((Timer >= swingTime * 0.5f && Timer <= swingTime * 0.75f) && CanParry)
             {
                 List<Vector2> points = Projectile.WhipPointsForCollision;
                 Projectile.FillWhipControlPoints(Projectile, points);
@@ -68,8 +68,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                     Projectile other = Main.projectile[i];
 
                     if (i != Projectile.whoAmI && other.Reflectable()
-                        && Math.Abs(points[points.Count-1].X - other.position.X)
-                        + Math.Abs(points[points.Count-1].Y - other.position.Y) < 60)
+                        && Math.Abs(points[points.Count - 1].X - other.position.X)
+                        + Math.Abs(points[points.Count -1].Y - other.position.Y) < 60)
                     {
                         if (!Main.dedServ)
                         {
