@@ -1,13 +1,20 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Terraria;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
 
 namespace ITD.Particles.Testing
 {
-    public class TestParticle : ITDParticle
+    public class ShaderTestParticle : ITDParticle
     {
         public override void SetStaticDefaults()
         {
-            ParticleSystem.particleFramesVertical[type] = 5;
+            ParticleSystem.particleShaders[type] = GameShaders.Armor.GetShaderFromItemId(ItemID.AcidDye);
         }
         public override void SetDefaults()
         {

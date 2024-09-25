@@ -5,18 +5,16 @@ using System;
 using Terraria.DataStructures;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader;
+using Terraria.GameContent;
+using Terraria.Graphics.Shaders;
 namespace ITD.Particles
 {
     public enum ParticleDrawCanvas
     {
-        World,
+        WorldUnderProjectiles,
+        WorldOverProjectiles,
         Screen,
         UI
-    }
-    public enum WorldParticleDrawLayer
-    {
-        UnderProjectiles,
-        OverProjectiles
     }
     public abstract class ITDParticle() : IDisposable
     {
@@ -24,6 +22,7 @@ namespace ITD.Particles
         internal Texture2D texture;
         public int frameVertical;
         public int frameHorizontal;
+        public int frameCounter;
         public Vector2 position;
         public Vector2 velocity;
         public int spawnTimeLeft;
@@ -32,9 +31,8 @@ namespace ITD.Particles
         public float ProgressOneToZero { get { return 1f - ProgressZeroToOne; } }
         public float rotation;
         public float scale = 1f;
-        public float opacity;
+        public float opacity = 1f;
         public ParticleDrawCanvas canvas;
-        public WorldParticleDrawLayer? layer;
         public virtual void SetStaticDefaults()
         {
 
@@ -48,13 +46,13 @@ namespace ITD.Particles
             SetDefaults();
             spawnTimeLeft = timeLeft;
         }
-        public virtual void PreUpdate()
+        public virtual void AI()
         {
 
         }
         public void Update()
         {
-            PreUpdate();
+            AI();
             position += velocity;
             if (timeLeft-- <= 0)
             {
@@ -65,7 +63,6 @@ namespace ITD.Particles
         public void Dispose()
         {
             texture = null;
-            layer = null;
             GC.SuppressFinalize(this);
         }
         /// <summary>
@@ -87,7 +84,8 @@ namespace ITD.Particles
         private void Draw(SpriteBatch spriteBatch)
         {
             (Rectangle, Vector2) data = GetFramingData();
-            spriteBatch.Draw(texture, position - Main.screenPosition, data.Item1, Color.White * ProgressOneToZero, rotation, data.Item2, scale * ProgressOneToZero, SpriteEffects.None, 0f);
+            Vector2 offset = canvas == ParticleDrawCanvas.UI ? Vector2.Zero : Main.screenPosition;
+            spriteBatch.Draw(texture, position - offset, data.Item1, Color.White * opacity, rotation, data.Item2, scale, SpriteEffects.None, 0f);
         }
         public virtual void PostDraw(SpriteBatch spriteBatch)
         {
@@ -95,11 +93,19 @@ namespace ITD.Particles
         }
         public void DrawParticle(SpriteBatch spriteBatch)
         {
-            if (PreDraw(spriteBatch))
+            Rectangle screen = canvas == ParticleDrawCanvas.UI ? new(0, 0, (int)(Main.screenWidth/Main.UIScale), (int)(Main.screenHeight/Main.UIScale)) : new((int)Main.screenPosition.X, (int)Main.screenPosition.Y, Main.screenWidth, Main.screenHeight);
+            int maxSize = (int)Math.Max((texture.Height / ParticleSystem.particleFramesVertical[type]) * scale, (texture.Width / ParticleSystem.particleFramesHorizontal[type]) * scale);
+            Rectangle particleBoundingBox = new((int)position.X - maxSize / 2, (int)position.Y - maxSize / 2, maxSize, maxSize);
+            // debug: see particle bounding box vvv
+            //spriteBatch.Draw(TextureAssets.MagicPixel.Value, particleBoundingBox, Color.Red * 0.5f);
+            if (screen.Intersects(particleBoundingBox))
             {
-                Draw(spriteBatch);
+                if (PreDraw(spriteBatch))
+                {
+                    Draw(spriteBatch);
+                }
+                PostDraw(spriteBatch);
             }
-            PostDraw(spriteBatch);
         }
     }
 }
