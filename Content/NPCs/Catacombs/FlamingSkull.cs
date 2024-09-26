@@ -10,12 +10,16 @@ namespace ITD.Content.NPCs.Catacombs
 {
     public class FlamingSkull : ModNPC
     {
+		public override void SetStaticDefaults()
+        {
+            Main.npcFrameCount[Type] = 6;
+        }
         public override void SetDefaults()
         {
             NPC.damage = 35;
             NPC.aiStyle = -1;
-            NPC.width = 26;
-            NPC.height = 26;
+            NPC.width = 32;
+            NPC.height = 32;
             NPC.defense = 6;
             NPC.lifeMax = 60;
             NPC.knockBackResist = 0.2f;
@@ -24,6 +28,7 @@ namespace ITD.Content.NPCs.Catacombs
             NPC.value = Item.buyPrice(silver: 4);
             NPC.HitSound = SoundID.NPCHit3;
             NPC.DeathSound = SoundID.NPCDeath3;
+			NPC.gfxOffY += 4f;
         }
 		public override Color? GetAlpha(Color drawColor)
         {
@@ -45,8 +50,9 @@ namespace ITD.Content.NPCs.Catacombs
 			else
 				NPC.rotation = NPC.velocity.ToRotation() + MathHelper.PiOver2*2;
 
-            int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Torch, 0, 0, 100, default, 2f);
+            int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.DungeonSpirit, 0, 0, 100, default, 2f);
 			Main.dust[dust].noGravity = true;
+			Main.dust[dust].velocity = NPC.velocity * 0.5f;
             return true;
         }
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
@@ -59,11 +65,29 @@ namespace ITD.Content.NPCs.Catacombs
 			{
 				for (int i = 0; i < 15; ++i)
 				{
-					int dustId = Dust.NewDust(NPC.Center, 0, 0, DustID.Torch, 0.0f, 0.0f, 100, default, 2f);
+					int dustId = Dust.NewDust(NPC.Center, 0, 0, DustID.DungeonSpirit, 0.0f, 0.0f, 100, default, 2f);
 					Main.dust[dustId].noGravity = true;
 					Main.dust[dustId].velocity *= 5f;
 				}
 			}
+        }
+		public override void FindFrame(int frameHeight)
+        {
+            int startFrame = 0;
+            int finalFrame = 5;
+
+            int frameSpeed = 8;
+            NPC.frameCounter += 1f;
+            if (NPC.frameCounter > frameSpeed)
+            {
+                NPC.frameCounter = 0;
+                NPC.frame.Y += frameHeight;
+
+                if (NPC.frame.Y > finalFrame * frameHeight)
+                {
+                    NPC.frame.Y = startFrame * frameHeight;
+                }
+            }
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {

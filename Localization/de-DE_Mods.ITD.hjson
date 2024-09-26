@@ -897,6 +897,8 @@ Projectiles: {
 	// CyanideBullet.DisplayName: Cyanide Bullet
 	// FrostichorArrow.DisplayName: Frostichor Arrow
 	// FrostichorBullet.DisplayName: Frostichor Bullet
+	// CosmicJellyfish_LeftHand.DisplayName: Cosmic Jellyfish_ Left Hand
+	// CosmicJellyfish_RightHand.DisplayName: Cosmic Jellyfish_ Right Hand
 }
 
 NPCs: {
