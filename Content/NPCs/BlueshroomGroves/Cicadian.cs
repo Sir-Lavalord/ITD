@@ -142,7 +142,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
             int playerDirectionX = NPC.Center.X < player.Center.X ? 1 : -1;
             NPC.direction = playerDirectionX;
-            NPC.velocity.X = playerDirectionX * xSpeed;
+            NPC.velocity.X = Math.Clamp(NPC.velocity.X + playerDirectionX, -xSpeed, xSpeed);
             NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
             boulderCooldown--;
             if (boulderCooldown <= 0 && toPlayer.Length() > 400f && Math.Abs(toPlayer.Y) > 80f)
