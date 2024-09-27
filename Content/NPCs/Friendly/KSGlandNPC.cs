@@ -10,6 +10,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -90,8 +91,8 @@ namespace ITD.Content.NPCs.Friendly
         public override void HitEffect(NPC.HitInfo hit)
         {
             Player player = Main.player[(int)NPC.ai[0]];
-            player.Hurt(PlayerDeathReason.ByCustomReason(player.name +
-                " was crushed by the aftershock"), (int)(hit.Damage),0);
+            string death = Language.GetTextValue($"Mods.ITD.DeathMessage.KSGlandAftershock");
+            player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} {death}"), (int)(hit.Damage),0);
             player.immune = true;
             player.immuneTime = 60;
         }
