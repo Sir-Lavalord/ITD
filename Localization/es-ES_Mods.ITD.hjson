@@ -593,6 +593,7 @@ Items: {
 			Este efecto solo puede suceder cada minuto
 			El tiempo de espera solo reduce cuando tienes la máxima cantidad de vida
 			'''
+		// TailLost: TAIL LOSS
 	}
 
 	Prophylaxis: {
@@ -802,6 +803,15 @@ Items: {
 		// DisplayName: Cyanite Pickaxe
 		// Tooltip: ""
 	}
+
+	HunterrGreatbow: {
+		// DisplayName: Hun-Terr Greatbow
+		/* Tooltip:
+			'''
+			Hold Right Click to charge up an arrow
+			While not charging, the bow can block projectiles
+			''' */
+	}
 }
 
 Projectiles: {
@@ -908,6 +918,8 @@ Projectiles: {
 	// FrostichorBullet.DisplayName: Frostichor Bullet
 	// CosmicJellyfish_LeftHand.DisplayName: Cosmic Jellyfish_ Left Hand
 	// CosmicJellyfish_RightHand.DisplayName: Cosmic Jellyfish_ Right Hand
+	// HunterrGreatbowProj.DisplayName: Hunterr Greatbow
+	// HunterrGreatarrow.DisplayName: Hunterr Greatarrow
 }
 
 NPCs: {
@@ -1020,6 +1032,11 @@ Buffs: {
 			Decreased enemy spawn rate
 			''' */
 	}
+
+	ToppledDebuff: {
+		// DisplayName: Toppled
+		// Description: KB
+	}
 }
 
 DeathMessage: {
@@ -1027,6 +1044,7 @@ DeathMessage: {
 	SoulRot: se convirtío en una cáscara sin alma.
 	// IncrediblySharpKnife: cut a little too deep.
 	// BloodPact: ran out of blood.
+	// KSGlandAftershock: was crushed by the aftershock.
 }
 
 WorldGen: {

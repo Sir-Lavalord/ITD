@@ -5,6 +5,8 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using System;
+using Terraria.Localization;
+using ITD.Content.Items.Other;
 namespace ITD.Content.Items.Accessories.Master
 {
     public class EoWTail : ModItem
@@ -66,11 +68,6 @@ namespace ITD.Content.Items.Accessories.Master
                 }
                 if (revtime <= 0)
                 {
-                    if (!tailregained)
-                    {
-                        RevText = "Tail Regained";
-                        tailregained = true;
-                    }
                     eowFirstBar = true;
                 }
                 Player.statLifeMax2 = Player.statLifeMax2 / 2;
@@ -127,8 +124,9 @@ namespace ITD.Content.Items.Accessories.Master
                     eowFirstBar = false;
                     tailregained = false;
                     revtime = 3600;
-                    RevText = "Tail Loss";
-                    CombatText.NewText(new Rectangle((int)Player.Center.X, (int)Player.Center.Y, 12, 4), Color.Lime, RevText, true);
+                    string Lost = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(EoWTail)}.TailLost")).Value;
+                    RevText = Lost;
+                    CombatText.NewText(new Rectangle((int)Player.Center.X, (int)Player.Center.Y, 12, 4), Color.Red, RevText, true);
                     return false;
                 }
                 else
