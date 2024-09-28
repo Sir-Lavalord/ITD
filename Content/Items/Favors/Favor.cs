@@ -5,10 +5,8 @@ using ITD.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Terraria.Utilities;
+using ReLogic.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -187,38 +185,21 @@ namespace ITD.Content.Items.Favors
         {
             if (IsCursedFavor)
                 return;
+
             string barPath = "ITD/Content/Items/Favors/BarStyles/" + GetBarStyle();
             Texture2D barTexture = ModContent.Request<Texture2D>(barPath).Value;
-            Texture2D barOverlay = ModContent.Request<Texture2D>(barPath + "_Overlay").Value;
+
             int barHeight = barTexture.Height;
-            int barWidth = 42;
-            int barSegment = barTexture.Width / 3;
-            float centerSegmentXScale = (float)(barWidth - barSegment * 2f) / barSegment;
-            float chargeWidth = barWidth * Charge;
-            float centerSegmentChargeScale = (float)(chargeWidth - barSegment * 2f) / barSegment;
-            centerSegmentChargeScale = Helpers.Remap(centerSegmentChargeScale, -2f, centerSegmentXScale, 0f, centerSegmentXScale );
-            for (int i = 0; i < 3; i++)
-            {
-                Rectangle rect = new Rectangle(barSegment * i, 0, barSegment, barHeight);
-                spriteBatch.Draw(
-                    barTexture,
-                    new Vector2(position.X - (barWidth / 2f) + barSegment * i + (i == 2 ? barSegment * centerSegmentXScale - barSegment : 0), position.Y + barHeight),
-                    rect, Color.White, 0f, default,
-                    new Vector2(i == 1 ? centerSegmentXScale : 1f, 1f),
-                    SpriteEffects.None, 0f
-                );
-            }
-            for (int i = 0; i < 3; i++)
-            {
-                Rectangle rect = new Rectangle(barSegment * i, 0, barSegment, barHeight);
-                spriteBatch.Draw(
-                    barOverlay,
-                    new Vector2(position.X - (barWidth / 2f) + barSegment * i + (i == 2 ? barSegment * centerSegmentChargeScale - barSegment : 0), position.Y + barHeight),
-                    rect, Color.White, 0f, default,
-                    new Vector2(i == 1 ? centerSegmentChargeScale : 1f, 1f),
-                    SpriteEffects.None, 0f
-                );
-            }
+            int barWidth = barTexture.Width;
+ 
+            float chargeWidth = barWidth / 2 * Charge;
+            Vector2 drawPos = new(position.X - (barWidth / 2 / 2), position.Y + barHeight);
+
+            Rectangle barRect = barTexture.Frame(2, 1, 0);
+            Rectangle overlayRect = new(barWidth / 2, 0, (int)chargeWidth, barHeight);
+
+            spriteBatch.Draw(barTexture, drawPos, barRect, Color.White, 0f, default, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(barTexture, drawPos, overlayRect, Color.White, 0f, default, 1f, SpriteEffects.None, 0f);
         }
     }
 }

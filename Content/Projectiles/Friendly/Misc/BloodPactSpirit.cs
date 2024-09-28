@@ -35,7 +35,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Vector2 toPlayer = (player.Center + new Vector2(0f, -100f) - Projectile.Center).SafeNormalize(Vector2.Zero);
             Projectile.velocity = Vector2.SmoothStep(Projectile.velocity, toPlayer * speed, 0.08f);
             // this gets the valid NPCs that the summon can target
-            IEnumerable<NPC> targets = Main.npc.Where(npc => npc.active && !npc.friendly && Projectile.DistanceSQ(npc.Center) < range * range);
+            IEnumerable<NPC> targets = Main.npc.Where(npc => npc.CanBeChasedBy() && Projectile.DistanceSQ(npc.Center) < range * range);
             if (targets.Any())
             {
                 AITimer++;
