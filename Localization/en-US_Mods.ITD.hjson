@@ -807,6 +807,15 @@ Items: {
 			While not charging, the bow can block projectiles
 			'''
 	}
+
+	Calcium: {
+		DisplayName: Calcium
+		Tooltip:
+			'''
+			'Douse in milk every 48 hours.'
+			[c/{0}:Latch Effect:] Grants passive regeneration
+			'''
+	}
 }
 
 Projectiles: {
@@ -861,6 +870,11 @@ Projectiles: {
 	VenusSnaptrapProjectile: {
 		OneTimeLatchMessage: Poisoned!
 		DisplayName: Venus Snaptrap
+	}
+
+	CalciumProjectile: {
+		OneTimeLatchMessage: Vampirism!
+		DisplayName: Calcium
 	}
 
 	WingedSnowpoffPet.DisplayName: Winged Snowpoff

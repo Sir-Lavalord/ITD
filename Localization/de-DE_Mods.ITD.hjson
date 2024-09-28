@@ -800,7 +800,17 @@ Items: {
 		/* Tooltip:
 			'''
 			Hold Right Click to charge up an arrow
+			Fully-charged arrow can topple enemies
 			While not charging, the bow can block projectiles
+			''' */
+	}
+
+	Calcium: {
+		// DisplayName: Calcium
+		/* Tooltip:
+			'''
+			'Douse in milk every 48 hours.'
+			[c/{0}:Latch Effect:] Grants passive regeneration
 			''' */
 	}
 }
@@ -857,6 +867,11 @@ Projectiles: {
 	VenusSnaptrapProjectile: {
 		OneTimeLatchMessage: Vergiftet!
 		DisplayName: Venusfliegenfalle
+	}
+
+	CalciumProjectile: {
+		// OneTimeLatchMessage: Vampirism!
+		// DisplayName: Calcium
 	}
 
 	WingedSnowpoffPet.DisplayName: Geflügeltes Schneewölkchen
