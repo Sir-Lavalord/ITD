@@ -660,8 +660,8 @@ Items: {
 	}
 
 	GravekeeperBag: {
-		// DisplayName: Gravekeeper Bag
-		// Tooltip: ""
+		// DisplayName: Treasure Bag (Gravekeeper)
+		// Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 	}
 
 	AsterKnuckle: {
@@ -756,13 +756,13 @@ Items: {
 	}
 
 	HardmodeGravekeeperBag: {
-		// DisplayName: Hardmode Gravekeeper Bag
-		// Tooltip: ""
+		// DisplayName: Treasure Bag (Gravekeeper - Rematch)
+		// Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 	}
 
 	DuneSkull: {
 		// DisplayName: Dune Skull
-		// Tooltip: ""
+		// Tooltip: Summons Sandberus during a sandstorm
 	}
 
 	CyanideArrow: {
@@ -913,7 +913,6 @@ Projectiles: {
 	// CosmicLightningBlast.DisplayName: Cosmic Lightning Blast
 	// AsterBlasterBlast.DisplayName: Aster Blaster Blast
 	// WindTridentProjectile.DisplayName: Wind Trident Projectile
-	// BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
 	// ShadowKnife.DisplayName: Shadow Knife
 	// BloodPactCut.DisplayName: Blood Pact Cut
 	// BloodPactSpirit.DisplayName: Blood Pact Spirit
@@ -1025,16 +1024,11 @@ Buffs: {
 		// Description: Cannot use favor abilities
 	}
 
-	BloodPactBuff: {
-		// DisplayName: Blood Pact Buff
-		// Description: Mods.ITD.Buffs.BloodPactBuff.Description
-	}
-
 	SqueakyClean: {
 		// DisplayName: Squeaky Clean
 		/* Description:
 			'''
-			Grants immunity to more debuffs
+			Grants immunity to various debuffs
 			Decreased enemy spawn rate
 			''' */
 	}
@@ -1095,3 +1089,5 @@ Achievements: {
 		// Description: Parry the Cosmic Jellyfish’s slap attack.
 	}
 }
+
+// UI.FavorSlot.MouseHoverName: Favor

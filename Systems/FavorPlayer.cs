@@ -14,10 +14,9 @@ namespace ITD.Systems
     {
         public Item FavorItem;
         public bool favorFatigue;
-
-        // Fields: Favor specific
         public static ModKeybind UseFavorKey { get; private set; } = null;
         public static string FavorKeybindString { get { return UseFavorKey.GetAssignedKeys().FirstOrDefault("[Unbound Key]"); } }
+        public bool FavorSlotVisible { get { return (!FavorItem.IsAir && FavorItem != null) || Player.inventory.Any(i => i.ModItem is Favor); } }
         public override void Load()
         {
             UseFavorKey = KeybindLoader.RegisterKeybind(Mod, "UseFavor", Keys.F);

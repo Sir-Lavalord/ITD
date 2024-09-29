@@ -34,7 +34,6 @@ namespace ITD.Content.NPCs
             NPCID.TombCrawlerHead,
             NPCID.LarvaeAntlion
             ];
-
         public override void ResetEffects(NPC npc)
         {
             zapped = false;
