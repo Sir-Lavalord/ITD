@@ -816,6 +816,11 @@ Items: {
 			[c/{0}:Efecto de Enganche:] Te da regeneración pasiva
 			'''
 	}
+
+	TestRecruiter: {
+		// DisplayName: Test Recruiter
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

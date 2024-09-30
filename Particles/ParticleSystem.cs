@@ -10,10 +10,11 @@ using Terraria.Graphics.Shaders;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ID;
+using ITD.Detours;
 
 namespace ITD.Particles
 {
-    public class ParticleSystem : ModSystem // this also doubles as a particle loader
+    public class ParticleSystem : DetourGroup // this also doubles as a particle loader
     {
         private static readonly List<ITDParticle> particlePrototypes = [];
         private static readonly Dictionary<uint, ITDParticle> particlesByID = [];
@@ -51,7 +52,7 @@ namespace ITD.Particles
                     newInstance.Initialize();
                     newInstance.position = position;
                     newInstance.velocity = velocity;
-                    ModContent.GetInstance<ParticleSystem>().particles.Add(newInstance);
+                    DetourManager.GetInstance<ParticleSystem>().particles.Add(newInstance);
                     return newInstance;
                 }
             }
@@ -63,8 +64,10 @@ namespace ITD.Particles
         }
         public override void Load()
         {
+            if (Main.dedServ)
+                return;
             particles = [];
-            foreach (Type t in Mod.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ITDParticle)))) // particle loader
+            foreach (Type t in ITD.Instance.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ITDParticle)))) // particle loader
             {
                 var instance = (ITDParticle)RuntimeHelpers.GetUninitializedObject(t);
                 instance.type = (uint)particlePrototypes.Count;
@@ -90,6 +93,8 @@ namespace ITD.Particles
         }
         public override void Unload()
         {
+            if (Main.dedServ)
+                return;
             On_Main.DrawSuperSpecialProjectiles -= DrawParticlesUnderProjectiles; // unsubscribe from events on unload
             On_Main.DrawCachedProjs -= DrawParticlesOverProjectiles;
             On_Main.DrawInterface -= DrawParticlesOnUI;

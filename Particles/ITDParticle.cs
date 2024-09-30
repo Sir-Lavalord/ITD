@@ -7,6 +7,7 @@ using Terraria.ModLoader.Config;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
+using ITD.Detours;
 namespace ITD.Particles
 {
     public enum ParticleDrawCanvas
@@ -56,7 +57,7 @@ namespace ITD.Particles
             position += velocity;
             if (timeLeft-- <= 0)
             {
-                ModContent.GetInstance<ParticleSystem>().particles.Remove(this);
+                DetourManager.GetInstance<ParticleSystem>().particles.Remove(this);
                 Dispose();
             }
         }

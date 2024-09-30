@@ -816,6 +816,11 @@ Items: {
 			[c/{0}:Latch Effect:] Grants passive regeneration
 			'''
 	}
+
+	TestRecruiter: {
+		DisplayName: Test Recruiter
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

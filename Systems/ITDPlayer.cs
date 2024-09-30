@@ -19,6 +19,7 @@ using ITD.Networking;
 using ITD.Networking.Packets;
 using ReLogic.Graphics;
 using Terraria.GameContent;
+using ITD.Systems.Recruitment;
 
 namespace ITD.Players
 {
@@ -57,7 +58,8 @@ namespace ITD.Players
         public int CosJellEscapeCurrent;
         //Screenshake
         public int Screenshake;
-
+        //NPC recruit index
+        public int NPCRecruit = -1;
         public override void ResetEffects()
         {
             //Screenshake
@@ -232,6 +234,25 @@ namespace ITD.Players
         {
             string death = Language.GetTextValue($"Mods.ITD.DeathMessage.{key}");
             return PlayerDeathReason.ByCustomReason($"{Player.name} {death}");
+        }
+        public void SetRecruit(int whoAmI)
+        {
+            foreach (NPC npc in Main.ActiveNPCs)
+            {
+                if (npc.TryGetGlobalNPC(out TownNPCRecruitmentRunner runner) && runner.isRecruitedBy == Player.whoAmI)
+                {
+                    runner.isRecruitedBy = -1;
+                }
+            }
+            if (whoAmI > -1)
+            {
+                NPC npc1 = Main.npc[whoAmI];
+                if (npc1.TryGetGlobalNPC(out TownNPCRecruitmentRunner runner1))
+                {
+                    runner1.isRecruitedBy = Player.whoAmI;
+                }
+            }
+            NPCRecruit = whoAmI;
         }
 		public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {

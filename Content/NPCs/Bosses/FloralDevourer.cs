@@ -75,7 +75,7 @@ namespace ITD.Content.NPCs.Bosses
 
         public override void AI()
         {
-            var (raycastPos, hit) = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, false, true, raycastFloatLength);
+            var (_, hit) = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, false, true, raycastFloatLength);
             if (hit)
             {
                 NPC.velocity.Y = -2f;

@@ -27,7 +27,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         {
             ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 1000;
         }
-        public override string Texture => "ITD/Content/Projectiles/BlankTexture";
+        public override string Texture => ITD.BlankTexture;
         public override void SetDefaults()
         {
             Projectile.width = Projectile.height = 2;

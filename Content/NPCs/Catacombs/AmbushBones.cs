@@ -44,14 +44,14 @@ namespace ITD.Content.NPCs.Catacombs
 				int i = 0;
 				while ((double)i < hit.Damage / (double)NPC.lifeMax * 50.0)
 				{
-					Dust.NewDust(NPC.position, NPC.width, NPC.height, 26, hit.HitDirection, -1f, 0, default, 1f);
+					Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, hit.HitDirection, -1f, 0, default, 1f);
 					i++;
 				}
 				return;
 			}
 			for (int j = 0; j < 20; ++j)
 			{
-				Dust.NewDust(NPC.position, NPC.width, NPC.height, 26, 2.5f * hit.HitDirection, -2.5f, 0, default, 1f);
+				Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Bone, 2.5f * hit.HitDirection, -2.5f, 0, default, 1f);
 			}
 			Gore.NewGore(NPC.GetSource_FromThis(), NPC.position, NPC.velocity, 42, NPC.scale);
 			Gore.NewGore(NPC.GetSource_FromThis(), new Vector2(NPC.position.X, NPC.position.Y + 20f), NPC.velocity, 43, NPC.scale);
