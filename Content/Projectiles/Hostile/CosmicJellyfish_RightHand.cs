@@ -92,7 +92,7 @@ namespace ITD.Content.Projectiles.Hostile
             if (NPC.active && NPC.type == ModContent.NPCType<CosmicJellyfish>())
             {
                 Player player = Main.player[NPC.target];
-                fallThrough = player.Center.Y >= Projectile.Bottom.Y - 20 && !bStopfalling;
+                fallThrough = player.Center.Y >= Projectile.Bottom.Y - 10 && !bStopfalling;
             }
 
                 return true;
@@ -294,7 +294,7 @@ namespace ITD.Content.Projectiles.Hostile
 
                             if (Projectile.localAI[1]++ <= 50)
                             {
-                                Projectile.Center = Vector2.Lerp(Projectile.Center, ToPlayerHead, 0.3f);
+                                Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
                             }
                             else
                             {
@@ -317,12 +317,11 @@ namespace ITD.Content.Projectiles.Hostile
                                             {
                                                 bSmackdown = true;
                                                 Vector2 toTarget = (vLockedIn - Projectile.Center).SafeNormalize(Vector2.Zero);
-                                                handTarget = ToPlayerHead + toTarget * 120f;
+                                                handTarget = vLockedIn + toTarget * 120f;
                                                 handStatic = Projectile.Center;
                                             }
                                         }
-                                        Vector2 chargedToPlayerPosition = ToPlayerHead + new Vector2(0f, NPC.velocity.Y) - toPlayer * 150f;
-                                        Projectile.Center = Vector2.Lerp(ToPlayerHead, chargedToPlayerPosition, (float)Math.Sin(handCharge * Math.PI));
+                                        Projectile.Center = Vector2.Lerp(normalCenter, chargedPosition, (float)Math.Sin(handCharge * Math.PI));
                                     }
                                     else
                                     {
@@ -351,7 +350,7 @@ namespace ITD.Content.Projectiles.Hostile
                                                     {
                                                         bStopfalling = false;
                                                         SoundEngine.PlaySound(SoundID.Item88, Main.player[i].Center);
-                                                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Main.player[i].Center.X + (Main.player[i].velocity.X * 10f) + (Main.rand.Next(-40, 40)), Main.player[i].Center.Y - 500)
+                                                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Main.player[i].Center.X + (Main.player[i].velocity.X * 20f) + (Main.rand.Next(-40, 40)), Main.player[i].Center.Y - 500)
                                                             , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(0.85f, 1), Main.rand.Next(ProjectileID.Meteor1, ProjectileID.Meteor3 + 1), Projectile.damage, Projectile.knockBack, Main.player[i].whoAmI);
                                                         Main.projectile[proj].hostile = true;
                                                         Main.projectile[proj].friendly = false;
@@ -408,7 +407,8 @@ namespace ITD.Content.Projectiles.Hostile
                                 new ParticleOrchestraSettings { PositionInWorld = other.Center }, Projectile.owner);
                             SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), Projectile.Center);
                             player.GetITDPlayer().Screenshake = 20;
-                            handState = HandState.DownToSize;
+                            if (NPC.life > NPC.lifeMax / 2)
+                                handState = HandState.DownToSize;
                             CombatText.NewText(Projectile.Hitbox, Color.Violet, "DOWN TO SIZE", true);
                             Projectile.velocity = -Projectile.velocity * 2;
                             // if the achievements mod is on, unlock the parry achievement

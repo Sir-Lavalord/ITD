@@ -707,11 +707,12 @@ Items: {
 		DummyType: {
 			// 0: Perfect
 			// 1: Heavy
-			// 2: Windswept
+			// 2: Fortified
 			// 3: Thorny
 			// 4: Terminal
 			// 5: Armed
 			// 6: Demoted
+			// 7: Observant
 		}
 
 		Mode: {
@@ -722,6 +723,7 @@ Items: {
 			// 4: KILLABLE
 			// 5: RANGED DAMAGE
 			// 6: NOT A BOSS
+			// 7: ALL NPCs IN RANGE ARE HAPPY
 		}
 	}
 
@@ -808,7 +810,9 @@ Items: {
 		// DisplayName: Hun-Terr Greatbow
 		/* Tooltip:
 			'''
-			Hold Right Click to charge up an arrow
+			Hold Right Click to charge up a greatarrow
+			Fully-charged greatarrow can topple enemies
+			Greatarrows knock back toppled enemies
 			While not charging, the bow can block projectiles
 			''' */
 	}
@@ -1035,7 +1039,7 @@ Buffs: {
 
 	ToppledDebuff: {
 		// DisplayName: Toppled
-		// Description: KB
+		// Description: You are going to fall
 	}
 }
 

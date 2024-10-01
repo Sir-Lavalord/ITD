@@ -72,7 +72,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             if (Main.player[Projectile.owner].HeldItem.type == ModContent.ItemType<HunterrGreatbow>())
             {
                 Projectile.damage = Main.player[Projectile.owner].GetWeaponDamage(Main.player[Projectile.owner].HeldItem);
-                Projectile.damage = (int)(Projectile.damage * (1 + (ChargeTally * 0.5f)));
+                Projectile.damage = (int)(Projectile.damage * (1 + (ChargeTally * 0.75f)));
                 Projectile.CritChance = player.GetWeaponCrit(player.HeldItem);
                 Projectile.knockBack = Main.player[Projectile.owner].GetWeaponKnockback(Main.player[Projectile.owner].HeldItem, Main.player[Projectile.owner].HeldItem.knockBack);
             }

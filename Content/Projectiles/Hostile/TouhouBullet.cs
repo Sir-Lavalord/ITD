@@ -39,12 +39,14 @@ namespace ITD.Content.Projectiles.Hostile
             NPC CosJel = Main.npc[(int)Projectile.ai[0]];
             if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
             {
-                Vector2 CorePos = new Vector2(CosJel.Center.X, CosJel.Center.Y - 80);
+                Vector2 CorePos = new Vector2(CosJel.Center.X, CosJel.Center.Y - 100);
 
                 if (Projectile.ai[1] != 2)
                     Projectile.velocity = (CorePos - Projectile.Center).SafeNormalize(Vector2.Zero) * 2f;
                 else
                 {
+                    scaleX = 0.2f;
+                    scaleY = 0.2f;
                     Projectile.velocity = (CorePos - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.05f;
                 }
             }
@@ -92,8 +94,17 @@ namespace ITD.Content.Projectiles.Hostile
                     Projectile.extraUpdates = 1;
                     Projectile.velocity *= 1.03f;
                 }
+                else
+                {
+                     scaleX += .1f;
+                    scaleY += .1f;
+                }
             }
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+
         }
+        float scaleX = 1f;
+        float scaleY = 2f;
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             Main.instance.DrawCacheProjsBehindNPCs.Add(index);
@@ -105,9 +116,9 @@ namespace ITD.Content.Projectiles.Hostile
             Texture2D effectTexture = TextureAssets.Extra[98].Value;
             Vector2 effectOrigin = effectTexture.Size() / 2f;
             lightColor = Lighting.GetColor((int)player.Center.X / 16, (int)player.Center.Y / 16);
-
-            Main.EntitySpriteDraw(effectTexture, Projectile.Center, new Rectangle?(Projectile.Hitbox), new Color(120, 184, 255, 50) * 0.05f * Projectile.timeLeft, Projectile.rotation, effectOrigin, Projectile.scale, SpriteEffects.None, 0f);
-            return true;
+            Vector2 drawPosition = Projectile.Center - Main.screenPosition;;
+            Main.EntitySpriteDraw(effectTexture, drawPosition, null, new Color(255, 255, 255, 127), Projectile.rotation, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY), SpriteEffects.None, 0);
+            return false;
         }
     }
 }

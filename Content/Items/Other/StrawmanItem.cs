@@ -58,8 +58,8 @@ namespace ITD.Content.Items.Other
                 dummytype++;
             }
             if (dummytype < 0)
-                dummytype = 6;
-            if (dummytype > 6)
+                dummytype = 7;
+            if (dummytype > 7)
                 dummytype = 0;
         }
 
@@ -77,7 +77,10 @@ namespace ITD.Content.Items.Other
                 {
                     string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(StrawmanItem)}.DummyType.{dummytype}")).Value;
 
-                    line.Text = Text + " " + line.Text;//Fine for now
+                    if (dummytype != 7)
+                        line.Text = Text + " " + line.Text;//Fine for now
+                    else
+                        line.Text = Text;
                 }
             }
         }
