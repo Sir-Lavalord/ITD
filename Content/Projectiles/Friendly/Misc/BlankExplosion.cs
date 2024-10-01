@@ -8,7 +8,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 {
     public class BlankExplosion : ModProjectile
     {
-        public override string Texture => "ITD/Content/Projectiles/BlankTexture";
+        public override string Texture => ITD.BlankTexture;
 
         public override void SetStaticDefaults()
         {

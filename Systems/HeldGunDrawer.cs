@@ -90,7 +90,7 @@ namespace ITD.Systems
 			Color drawColor = Lighting.GetColor((int)((double)drawInfo.Position.X + (double)drawPlayer.width * 0.5) / 16, (int)(((double)drawInfo.Position.Y + (double)drawPlayer.height * 0.5) / 16.0));
 			
 			Vector2 position = new Vector2((float)((int)(drawInfo.Position.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(drawInfo.Position.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f))) + drawPlayer.bodyPosition + new Vector2((float)(drawPlayer.bodyFrame.Width / 2), (float)(drawPlayer.bodyFrame.Height / 2)) - new Vector2(drawPlayer.direction*5f, 0f);//Player.MountedCenter - new Vector2(Player.direction*4f, Player.gravDir*2f);
-			position = position - Main.screenPosition;
+            position -= Main.screenPosition;
 			
 			Vector2 value = Main.OffsetsPlayerHeadgear[drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height];
 			value.Y -= 2f;
@@ -113,7 +113,7 @@ namespace ITD.Systems
 			if (drawPlayer.gravDir == -1)
 			{
 				origin -= new Vector2(0f, texture.Height);
-				effects = effects | SpriteEffects.FlipVertically;
+				effects |= SpriteEffects.FlipVertically;
 			}
 			
 			float adjustedItemScale = drawPlayer.GetAdjustedItemScale(heldItem);
@@ -189,7 +189,7 @@ namespace ITD.Systems
 			Color drawColor = Lighting.GetColor((int)((double)drawInfo.Position.X + (double)drawPlayer.width * 0.5) / 16, (int)(((double)drawInfo.Position.Y + (double)drawPlayer.height * 0.5) / 16.0));
 			
 			Vector2 position = new Vector2((float)((int)(drawInfo.Position.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2))), (float)((int)(drawInfo.Position.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f))) + drawPlayer.bodyPosition + new Vector2((float)(drawPlayer.bodyFrame.Width / 2), (float)(drawPlayer.bodyFrame.Height / 2)) + new Vector2(drawPlayer.direction*6f, drawPlayer.gravDir*2f);//Player.MountedCenter - new Vector2(Player.direction*4f, Player.gravDir*2f);
-			position = position - Main.screenPosition;
+			position -= Main.screenPosition;
 			
 			Vector2 value = Main.OffsetsPlayerHeadgear[drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height];
 			value.Y -= 2f;
@@ -212,7 +212,7 @@ namespace ITD.Systems
 			if (drawPlayer.gravDir == -1)
 			{
 				origin -= new Vector2(0f, texture.Height);
-				effects = effects | SpriteEffects.FlipVertically;
+				effects |= SpriteEffects.FlipVertically;
 			}
 			
 			float adjustedItemScale = drawPlayer.GetAdjustedItemScale(heldItem);

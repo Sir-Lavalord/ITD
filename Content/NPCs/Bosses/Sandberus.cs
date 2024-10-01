@@ -194,8 +194,8 @@ namespace ITD.Content.NPCs.Bosses
 							StateTimer = 60;
 							Vector2 distance;
 							distance = Main.player[NPC.target].Center - NPC.Center;
-							distance.X = distance.X / StateTimer;
-							distance.Y = distance.Y / StateTimer - 0.18f * StateTimer;
+							distance.X /= StateTimer;
+                            distance.Y = distance.Y / StateTimer - 0.18f * StateTimer;
 							JumpX = Math.Clamp(distance.X, -16, 16);
 							JumpY = distance.Y;
 							SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);

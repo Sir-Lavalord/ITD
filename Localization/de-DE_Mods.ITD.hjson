@@ -660,8 +660,8 @@ Items: {
 	}
 
 	GravekeeperBag: {
-		// DisplayName: Gravekeeper Bag
-		// Tooltip: ""
+		// DisplayName: Treasure Bag (Gravekeeper)
+		// Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 	}
 
 	AsterKnuckle: {
@@ -698,12 +698,11 @@ Items: {
 		DummyType: {
 			// 0: Perfect
 			// 1: Heavy
-			// 2: Fortified
+			// 2: Windswept
 			// 3: Thorny
 			// 4: Terminal
 			// 5: Armed
 			// 6: Demoted
-			// 7: Observant
 		}
 
 		Mode: {
@@ -714,7 +713,6 @@ Items: {
 			// 4: KILLABLE
 			// 5: RANGED DAMAGE
 			// 6: NOT A BOSS
-			// 7: ALL NPCs IN RANGE ARE HAPPY
 		}
 	}
 
@@ -758,13 +756,13 @@ Items: {
 	}
 
 	HardmodeGravekeeperBag: {
-		// DisplayName: Hardmode Gravekeeper Bag
-		// Tooltip: ""
+		// DisplayName: Treasure Bag (Gravekeeper - Rematch)
+		// Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 	}
 
 	DuneSkull: {
 		// DisplayName: Dune Skull
-		// Tooltip: ""
+		// Tooltip: Summons Sandberus during a sandstorm
 	}
 
 	CyanideArrow: {
@@ -801,11 +799,24 @@ Items: {
 		// DisplayName: Hun-Terr Greatbow
 		/* Tooltip:
 			'''
-			Hold Right Click to charge up a greatarrow
-			Fully-charged greatarrow can topple enemies
-			Greatarrows knock back toppled enemies
+			Hold Right Click to charge up an arrow
+			Fully-charged arrow can topple enemies
 			While not charging, the bow can block projectiles
 			''' */
+	}
+
+	Calcium: {
+		// DisplayName: Calcium
+		/* Tooltip:
+			'''
+			'Douse in milk every 48 hours.'
+			[c/{0}:Latch Effect:] Grants passive regeneration
+			''' */
+	}
+
+	TestRecruiter: {
+		// DisplayName: Test Recruiter
+		// Tooltip: ""
 	}
 }
 
@@ -863,6 +874,11 @@ Projectiles: {
 		DisplayName: Venusfliegenfalle
 	}
 
+	CalciumProjectile: {
+		// OneTimeLatchMessage: Vampirism!
+		// DisplayName: Calcium
+	}
+
 	WingedSnowpoffPet.DisplayName: Geflügeltes Schneewölkchen
 	WRipperSlash.DisplayName: Wurmlochreißer
 	WRipperRift.DisplayName: Wurmlochreißer
@@ -902,7 +918,6 @@ Projectiles: {
 	// CosmicLightningBlast.DisplayName: Cosmic Lightning Blast
 	// AsterBlasterBlast.DisplayName: Aster Blaster Blast
 	// WindTridentProjectile.DisplayName: Wind Trident Projectile
-	// BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
 	// ShadowKnife.DisplayName: Shadow Knife
 	// BloodPactCut.DisplayName: Blood Pact Cut
 	// BloodPactSpirit.DisplayName: Blood Pact Spirit
@@ -1014,23 +1029,18 @@ Buffs: {
 		// Description: Cannot use favor abilities
 	}
 
-	BloodPactBuff: {
-		// DisplayName: Blood Pact Buff
-		// Description: Mods.ITD.Buffs.BloodPactBuff.Description
-	}
-
 	SqueakyClean: {
 		// DisplayName: Squeaky Clean
 		/* Description:
 			'''
-			Grants immunity to more debuffs
+			Grants immunity to various debuffs
 			Decreased enemy spawn rate
 			''' */
 	}
 
 	ToppledDebuff: {
 		// DisplayName: Toppled
-		// Description: You are going to fall
+		// Description: KB
 	}
 }
 
@@ -1084,3 +1094,5 @@ Achievements: {
 		// Description: Parry the Cosmic Jellyfish’s slap attack.
 	}
 }
+
+// UI.FavorSlot.MouseHoverName: Favor

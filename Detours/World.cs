@@ -6,7 +6,7 @@ using ITD.Systems;
 
 namespace ITD.Detours
 {
-    public class World : ModSystem
+    public class World : DetourGroup
     {
         public override void Load()
         {

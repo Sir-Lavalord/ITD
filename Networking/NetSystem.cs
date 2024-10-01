@@ -19,9 +19,9 @@ namespace ITD.Networking
     {
         public static NetSystem Instance => ModContent.GetInstance<NetSystem>();
 
-        private static readonly List<ITDPacket> packets = new();
+        private static readonly List<ITDPacket> packets = [];
 
-        private static readonly Dictionary<Type, ITDPacket> packetsByType = new();
+        private static readonly Dictionary<Type, ITDPacket> packetsByType = [];
 
         public override void Load()
         {

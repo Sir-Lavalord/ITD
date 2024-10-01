@@ -20,7 +20,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             Projectile.ignoreWater = false;
             Projectile.tileCollide = true;
         }
-        public override string Texture => "ITD/Content/Projectiles/BlankTexture";
+        public override string Texture => ITD.BlankTexture;
         public override void AI()
         {
             Dust.NewDust(Projectile.position, 8, 8, Projectile.ai[0] == 0f ? DustID.ScourgeOfTheCorruptor : DustID.Crimslime);

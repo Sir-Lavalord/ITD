@@ -21,20 +21,13 @@ namespace ITD.Content.Projectiles.Hostile
     public class CosmicLightningBlast : BigBlankExplosion
     {
         public override int Lifetime => 60;
-        public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.MediumPurple * 1.6f, Color.BlueViolet, MathHelper.Clamp(pulseCompletionRatio * 2f, 0f, 1f));
+        public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.MediumPurple * 1.6f, Color.DarkBlue, MathHelper.Clamp(pulseCompletionRatio * 2.2f, 0f, 1f));
 
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 1000;
         }
-        public override void OnSpawn(IEntitySource source)
-        {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraExplode"), Projectile.Center);
-            }
-        }
-        public override string Texture => "ITD/Content/Projectiles/BlankTexture";
+        public override string Texture => ITD.BlankTexture;
         public override void SetDefaults()
         {
             Projectile.width = Projectile.height = 2;
@@ -44,6 +37,13 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = Lifetime;
+        }
+        public override void OnKill(int timeLeft)
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraExplode"), Projectile.Center);
+            }
         }
         public override void PostAI() => Lighting.AddLight(Projectile.Center, 0.2f, 0.1f, 0f);
     }

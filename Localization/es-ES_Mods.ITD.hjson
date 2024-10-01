@@ -486,7 +486,7 @@ Items: {
 
 	SandberusBag: {
 		DisplayName: Bolsa del tesoro (Desierbero)
-		Tooltip: ""
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 	}
 
 	RazedWine: {
@@ -593,7 +593,7 @@ Items: {
 			Este efecto solo puede suceder cada minuto
 			El tiempo de espera solo reduce cuando tienes la máxima cantidad de vida
 			'''
-		// TailLost: TAIL LOSS
+		TailLost: PÉRDIDA DE COLA
 	}
 
 	Prophylaxis: {
@@ -663,8 +663,8 @@ Items: {
 	}
 
 	GravekeeperBag: {
-		DisplayName: Bolsa del Tesoro (Guardatumbas)
-		Tooltip: ""
+		DisplayName: Bolsa del tesoro (Guardatumbas)
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 	}
 
 	AsterKnuckle: {
@@ -685,45 +685,37 @@ Items: {
 			Puede ser usado indefinidamente, pero tomas el 20% de tu vida máxima como daño por cada uso
 			Presiona {0} para usar
 			'Tecnología acuchilleante'
-			}
-
-			StrawmanItem: {
-			// DisplayName: Strawman
-			// Tooltip:
-			//	
 			'''
 	}
 
 	StrawmanItem: {
-		// DisplayName: Strawman
-		/* Tooltip:
+		DisplayName: Hombre de paja
+		Tooltip:
 			'''
-			Current Mode:
-			Spawns a strawman
-			Right Click while in inventory to change to next mode
-			Right Click while holding Shift in inventory to return previous mode
-			''' */
+			Modo actual:
+			Invoca un hombre de paja
+			Hazle click derecho en el inventario para cambiar modos
+			Hazle click derecho mientras presionas Shift en el inventario para regresar al anterior modo
+			'''
 
 		DummyType: {
-			// 0: Perfect
-			// 1: Heavy
-			// 2: Fortified
-			// 3: Thorny
-			// 4: Terminal
-			// 5: Armed
-			// 6: Demoted
-			// 7: Observant
+			0: Perfección -
+			1: Pesadez -
+			2: Ligeridad -
+			3: Espinosidad -
+			4: Terminalidad -
+			5: Violencia -
+			6: Debilidad -
 		}
 
 		Mode: {
-			// 0: DEFAULT
-			// 1: 50 DEF
-			// 2: KNOCKBACK
-			// 3: CONTACT DAMAGE
-			// 4: KILLABLE
-			// 5: RANGED DAMAGE
-			// 6: NOT A BOSS
-			// 7: ALL NPCs IN RANGE ARE HAPPY
+			0: POR DEFECTO
+			1: 50 DEFENSA
+			2: KNOCKBACK
+			3: DAÑO DE CONTACTO
+			4: MATABLE
+			5: DAÑO A RANGO
+			6: NO ES UN JEFE
 		}
 	}
 
@@ -767,54 +759,67 @@ Items: {
 	}
 
 	HardmodeGravekeeperBag: {
-		// DisplayName: Hardmode Gravekeeper Bag
-		// Tooltip: ""
+		DisplayName: Bolsa del tesoro (Guardatumbas - Revancha)
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 	}
 
 	DuneSkull: {
-		// DisplayName: Dune Skull
-		// Tooltip: ""
+		DisplayName: Calavera de las dunas
+		Tooltip: Invoca a Desierbero durante una tormenta de arena
 	}
 
 	CyanideArrow: {
-		// DisplayName: Cyanide Arrow
-		// Tooltip: ""
+		DisplayName: Flecha de cianita
+		Tooltip: ""
 	}
 
 	CyanideBullet: {
-		// DisplayName: Cyanide Bullet
-		// Tooltip: ""
+		DisplayName: Bala de cianita
+		Tooltip: ""
 	}
 
 	FrostichorArrow: {
-		// DisplayName: Frostichor Arrow
-		// Tooltip: ""
+		DisplayName: Flecha de icor congelado
+		Tooltip: ""
 	}
 
 	FrostichorBullet: {
-		// DisplayName: Frostichor Bullet
-		// Tooltip: ""
+		DisplayName: Bala de icor congelado
+		Tooltip: ""
 	}
 
 	CyaniteHammer: {
-		// DisplayName: Cyanite Hammer
-		// Tooltip: ""
+		DisplayName: Martillo de cianita
+		Tooltip: ""
 	}
 
 	CyanitePickaxe: {
-		// DisplayName: Cyanite Pickaxe
-		// Tooltip: ""
+		DisplayName: Pico de cianita
+		Tooltip: ""
 	}
 
 	HunterrGreatbow: {
-		// DisplayName: Hun-Terr Greatbow
-		/* Tooltip:
+		DisplayName: Gran arco del Hun-Terr
+		Tooltip:
 			'''
-			Hold Right Click to charge up a greatarrow
-			Fully-charged greatarrow can topple enemies
-			Greatarrows knock back toppled enemies
-			While not charging, the bow can block projectiles
-			''' */
+			Mantén presionado clic derecho para cargar una flecha
+			Flechas completamente cargadas pueden derribar a los enemigos
+			Mientras no esta cargandose, el arco puede bloquear proyectiles
+			'''
+	}
+
+	Calcium: {
+		DisplayName: Calcio
+		Tooltip:
+			'''
+			'Sumergir en leche cada 48 horas.'
+			[c/{0}:Efecto de Enganche:] Te da regeneración pasiva
+			'''
+	}
+
+	TestRecruiter: {
+		// DisplayName: Test Recruiter
+		// Tooltip: ""
 	}
 }
 
@@ -872,6 +877,11 @@ Projectiles: {
 		DisplayName: Venus Enganchamoscas
 	}
 
+	CalciumProjectile: {
+		OneTimeLatchMessage: ¡Vampirismo!
+		DisplayName: Calcio
+	}
+
 	WingedSnowpoffPet.DisplayName: Montonieve Alado
 	WRipperSlash.DisplayName: Desgarrador del Espaciotiempo
 	WRipperRift.DisplayName: Desgarrador del Espaciotiempo
@@ -911,19 +921,18 @@ Projectiles: {
 	CosmicLightningBlast.DisplayName: Rayo de electricidad cósmica
 	AsterBlasterBlast.DisplayName: Explosión de Aster Knuckle
 	WindTridentProjectile.DisplayName: Tridente de viento
-	// BarOfSoap.HotkeyText: Mods.ITD.Projectiles.BarOfSoap.HotkeyText
-	// ShadowKnife.DisplayName: Shadow Knife
-	// BloodPactCut.DisplayName: Blood Pact Cut
-	// BloodPactSpirit.DisplayName: Blood Pact Spirit
-	// CyaniteIceShard.DisplayName: Cyanite Ice Shard
-	// CyanideArrow.DisplayName: Cyanide Arrow
-	// CyanideBullet.DisplayName: Cyanide Bullet
-	// FrostichorArrow.DisplayName: Frostichor Arrow
-	// FrostichorBullet.DisplayName: Frostichor Bullet
-	// CosmicJellyfish_LeftHand.DisplayName: Cosmic Jellyfish_ Left Hand
-	// CosmicJellyfish_RightHand.DisplayName: Cosmic Jellyfish_ Right Hand
-	// HunterrGreatbowProj.DisplayName: Hunterr Greatbow
-	// HunterrGreatarrow.DisplayName: Hunterr Greatarrow
+	ShadowKnife.DisplayName: Cuchillo de la sombra
+	BloodPactCut.DisplayName: Corte sangriento
+	BloodPactSpirit.DisplayName: Espíritu de sangre
+	CyaniteIceShard.DisplayName: Fragmento de cianita
+	CyanideArrow.DisplayName: Flecha de cianita
+	CyanideBullet.DisplayName: Bala de cianita
+	FrostichorArrow.DisplayName: Flecha de icor congelado
+	FrostichorBullet.DisplayName: Bala de icor congelado
+	CosmicJellyfish_LeftHand.DisplayName: Mano de la Medusa Cósmica
+	CosmicJellyfish_RightHand.DisplayName: Mano de la Medusa Cósmica
+	HunterrGreatbowProj.DisplayName: Gran arco del Hun-Terr
+	HunterrGreatarrow.DisplayName: Gran flecha del Hun-Terr
 }
 
 NPCs: {
@@ -959,7 +968,7 @@ NPCs: {
 	Gravekeeper.DisplayName: Guardatumbas
 	HauntedTombstone.DisplayName: Tumba embrujada
 	GhastlyTombstone.DisplayName: Tumba fantasmagórica
-	// StrawmanDummy.DisplayName: Strawman
+	StrawmanDummy.DisplayName: Hombre de paja
 }
 
 Buffs: {
@@ -1023,32 +1032,27 @@ Buffs: {
 		Description: No puedes utilizar Favores
 	}
 
-	BloodPactBuff: {
-		// DisplayName: Blood Pact Buff
-		// Description: Mods.ITD.Buffs.BloodPactBuff.Description
-	}
-
 	SqueakyClean: {
-		// DisplayName: Squeaky Clean
-		/* Description:
+		DisplayName: Más limpio que una patena
+		Description:
 			'''
-			Grants immunity to more debuffs
-			Decreased enemy spawn rate
-			''' */
+			Inmunidad a varios efectos negativos
+			Disminuye el porcentaje de aparición de monstruos
+			'''
 	}
 
 	ToppledDebuff: {
-		// DisplayName: Toppled
-		// Description: You are going to fall
+		DisplayName: Derribado
+		Description: KB
 	}
 }
 
 DeathMessage: {
 	Necrosis: sucumbió a la necrosis.
 	SoulRot: se convirtío en una cáscara sin alma.
-	// IncrediblySharpKnife: cut a little too deep.
-	// BloodPact: ran out of blood.
-	// KSGlandAftershock: was crushed by the aftershock.
+	IncrediblySharpKnife: cortó demasiado profundo.
+	BloodPact: se quedó sin sangre.
+	KSGlandAftershock: sufrió un aplanamiento por el aftershock.
 }
 
 WorldGen: {
@@ -1093,3 +1097,5 @@ Achievements: {
 		Description: Bloquea el ataque de la mano de la Medusa Cósmica.
 	}
 }
+
+UI.FavorSlot.MouseHoverName: Favor

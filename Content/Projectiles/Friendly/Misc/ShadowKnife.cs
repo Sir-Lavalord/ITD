@@ -11,8 +11,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 {
     public class ShadowKnife : ModProjectile
     {
-        public ref float PierceProgress => ref Projectile.ai[1];
-        bool piercing = false;
         public override void SetDefaults()
         {
             Projectile.width = Projectile.height = 24;

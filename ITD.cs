@@ -1,11 +1,9 @@
-using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using ITD.Networking;
-using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-using static Terraria.ModLoader.ModContent;
+using Microsoft.Xna.Framework;
 
 namespace ITD
 {
@@ -13,6 +11,7 @@ namespace ITD
     {
         public static ITD Instance;
         public ITD() => Instance = this;
+        public const string BlankTexture = "ITD/Content/BlankTexture";
 
         internal Mod itdMusic = null;
 

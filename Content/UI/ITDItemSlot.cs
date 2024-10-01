@@ -25,11 +25,15 @@ namespace ITD.Content.UI
             Left.Set(left, 0f);
             Top.Set(top, 0f);
         }
-        public virtual void PostClickWithValidItemAndEmptySlot(ref Item slotItem)
+        public virtual void PostClickItemIn(ref Item slotItem)
         {
 
         }
-        public virtual void PostClickWithNoItemAndFilledSlot(ref Item mouseItem)
+        public virtual void PostClickItemOut(ref Item mouseItem)
+        {
+
+        }
+        public virtual void PostDraw(SpriteBatch spriteBatch)
         {
 
         }
@@ -40,14 +44,14 @@ namespace ITD.Content.UI
             if (!Main.mouseItem.IsAir && isValid(Main.mouseItem) && NoItem)
             {
                 item = Main.mouseItem.Clone();
-                PostClickWithValidItemAndEmptySlot(ref item);
+                PostClickItemIn(ref item);
                 Main.mouseItem.TurnToAir();
                 SoundEngine.PlaySound(SoundID.Grab);
             }
             else if (Main.mouseItem.IsAir && !NoItem)
             {
                 Main.mouseItem = item.Clone();
-                PostClickWithNoItemAndFilledSlot(ref Main.mouseItem);
+                PostClickItemOut(ref Main.mouseItem);
                 item.TurnToAir();
                 SoundEngine.PlaySound(SoundID.Grab);
             }
@@ -56,8 +60,8 @@ namespace ITD.Content.UI
                 var temp = item.Clone();
                 item = Main.mouseItem.Clone();
                 Main.mouseItem = temp;
-                PostClickWithValidItemAndEmptySlot(ref item);
-                PostClickWithNoItemAndFilledSlot(ref Main.mouseItem);
+                PostClickItemIn(ref item);
+                PostClickItemOut(ref Main.mouseItem);
                 SoundEngine.PlaySound(SoundID.Grab);
             }
             base.LeftClick(evt);
@@ -84,6 +88,7 @@ namespace ITD.Content.UI
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
+            PostDraw(spriteBatch);
         }
     }
 }

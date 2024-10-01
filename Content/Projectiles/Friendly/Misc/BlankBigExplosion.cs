@@ -20,7 +20,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         public abstract Color GetCurrentExplosionColor(float pulseCompletionRatio);
 
         // Use the invisible projectile by default. This can be overridden in child types if desired.
-        public override string Texture => "ITD/Content/Projectiles/BlankTexture";
+        public override string Texture => ITD.BlankTexture;
 
         public override void AI()
         {
