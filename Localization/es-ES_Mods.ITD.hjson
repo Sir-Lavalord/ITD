@@ -824,7 +824,11 @@ Items: {
 
 	CopperMandibles: {
 		// DisplayName: Copper Mandibles
-		// Tooltip: "[c/{0}:Latch Effect:] Grants passive regeneration"
+		/* Tooltip:
+			'''
+			'Not to be confused with Steel Mandibles'
+			[c/{0}:Latch Effect:] Increases damage dealt depending on the target's remaining life
+			''' */
 	}
 }
 
@@ -941,7 +945,7 @@ Projectiles: {
 
 	CopperMandiblesProjectile: {
 		// OneTimeLatchMessage: Toxin!
-		// DisplayName: Copper Mandibles Projectile
+		// DisplayName: Copper Mandibles
 	}
 }
 

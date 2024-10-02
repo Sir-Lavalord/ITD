@@ -14,7 +14,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
     {
         public override void SetDefaults()
         {
-            Item.DefaultToSnaptrap(30, 10, ModContent.ProjectileType<CopperMandiblesProjectile>(), 12f, 22, 50);
+            Item.DefaultToSnaptrap(30, 10, ModContent.ProjectileType<CopperMandiblesProjectile>(), 12f, 22, 30);
             Item.rare = ItemRarityID.LightRed;
             Item.value = Item.sellPrice(0, 0, 25);
         }
