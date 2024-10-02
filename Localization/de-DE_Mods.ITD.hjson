@@ -818,6 +818,11 @@ Items: {
 		// DisplayName: Test Recruiter
 		// Tooltip: ""
 	}
+
+	CopperMandibles: {
+		// DisplayName: Copper Mandibles
+		// Tooltip: "[c/{0}:Latch Effect:] Grants passive regeneration"
+	}
 }
 
 Projectiles: {
@@ -930,6 +935,11 @@ Projectiles: {
 	// CosmicJellyfish_RightHand.DisplayName: Cosmic Jellyfish_ Right Hand
 	// HunterrGreatbowProj.DisplayName: Hunterr Greatbow
 	// HunterrGreatarrow.DisplayName: Hunterr Greatarrow
+
+	CopperMandiblesProjectile: {
+		// OneTimeLatchMessage: Toxin!
+		// DisplayName: Copper Mandibles Projectile
+	}
 }
 
 NPCs: {
