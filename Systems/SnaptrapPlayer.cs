@@ -13,6 +13,8 @@ namespace ITD.Systems
     public class SnaptrapPlayer : ModPlayer
     {
         public bool ChainWeightEquipped;
+        public float LengthIncrease;
+        public float RetractMultiplier;
         public bool CanUseSnaptrap
         {
             get
@@ -25,6 +27,8 @@ namespace ITD.Systems
         public override void ResetEffects()
         {
             ChainWeightEquipped = false;
+            LengthIncrease = 0f;
+            RetractMultiplier = 0f;
         }
         public bool ShootSnaptrap()
         {

@@ -28,7 +28,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public override void SetSnaptrapProperties()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(CopperMandiblesProjectile)}.OneTimeLatchMessage"));
-            ShootRange = 16f * 16f;
+            ShootRange = 16f * 10f;
             RetractAccel = 1.5f;
             ExtraFlexibility = 16f * 2f;
             FramesBetweenHits = 22;
@@ -38,7 +38,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             WarningFrames = 60;
             ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/CopperMandiblesChain";
             ChompDust = DustID.Sand;
-            DrawOffsetX = -13;
+            DrawOffsetX = -16;
         }
         public override void OneTimeLatchEffect()
         {

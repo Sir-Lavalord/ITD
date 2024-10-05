@@ -830,6 +830,15 @@ Items: {
 			[c/{0}:Latch Effect:] Increases damage dealt depending on the target's remaining life
 			'''
 	}
+
+	Winch: {
+		DisplayName: Winch
+		Tooltip:
+			'''
+			Snaptraps retract faster
+			+10% Snaptrap Length
+			'''
+	}
 }
 
 Projectiles: {

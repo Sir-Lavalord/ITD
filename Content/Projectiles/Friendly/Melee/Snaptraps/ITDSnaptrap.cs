@@ -82,6 +82,10 @@ namespace ITD.Content.Projectiles
         private bool hasDoneLatchEffect = false;
 
         private bool chainWeight = false;
+        private float lengthIncrease = 0f;
+        //Use floats in the form of percentages to increase this
+        private float retractMultiplier = 0f;
+        //Use floats in the form of decimals to increase this. Base is 0.4f.
 
         public bool IsStickingToTarget
         {
@@ -146,6 +150,8 @@ namespace ITD.Content.Projectiles
         private void SetSnaptrapPlayerFlags(SnaptrapPlayer snaptrapPlayer)
         {
             chainWeight = snaptrapPlayer.ChainWeightEquipped;
+            lengthIncrease = snaptrapPlayer.LengthIncrease;
+            retractMultiplier = snaptrapPlayer.RetractMultiplier;
         }
 
         public override void OnSpawn(IEntitySource source)
@@ -162,6 +168,8 @@ namespace ITD.Content.Projectiles
                 MaxDamage += MaxDamage / 10;
             }
             Projectile.damage = MinDamage;
+
+            ShootRange = ShootRange + (ShootRange * lengthIncrease);
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
@@ -319,7 +327,7 @@ namespace ITD.Content.Projectiles
             if (retracting)
             {
                 Vector2 towardsOwner = Projectile.DirectionTo(mountedCenter).SafeNormalize(Vector2.Zero);
-                RetractAccel += 0.4f;
+                RetractAccel += 0.4f + retractMultiplier;
                 Projectile.velocity = towardsOwner*RetractAccel;
                 Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
                 if (Projectile.Distance(mountedCenter) <= RetractAccel)

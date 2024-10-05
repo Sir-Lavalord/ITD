@@ -27,7 +27,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public override void SetSnaptrapProperties()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(CalciumProjectile)}.OneTimeLatchMessage"));
-            ShootRange = 16f * 16f;
+            ShootRange = 16f * 12f;
             RetractAccel = 1.5f;
             ExtraFlexibility = 16f * 2f;
             FramesBetweenHits = 22;
@@ -37,7 +37,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             WarningFrames = 60;
             ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/CalciumChain";
             ChompDust = DustID.Bone;
-            DrawOffsetX = -13;
+            DrawOffsetX = -16;
         }
         public override void OneTimeLatchEffect()
         {
