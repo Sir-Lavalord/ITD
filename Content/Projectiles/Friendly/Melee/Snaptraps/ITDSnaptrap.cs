@@ -126,7 +126,6 @@ namespace ITD.Content.Projectiles
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.usesIDStaticNPCImmunity = true;
-            Projectile.idStaticNPCHitCooldown = FramesBetweenHits / 3;
             DrawOffsetX = -12;
             DrawOriginOffsetY = -16;
             //Projectile.hide = true;
@@ -160,6 +159,7 @@ namespace ITD.Content.Projectiles
         {
             myPlayer = Main.player[Projectile.owner];
             Projectile.netUpdate = true;
+            Projectile.idStaticNPCHitCooldown = FramesBetweenHits;
             if (myPlayer.TryGetModPlayer(out SnaptrapPlayer modPlayer))
             {
                 SetSnaptrapPlayerFlags(modPlayer);

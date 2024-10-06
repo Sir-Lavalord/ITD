@@ -950,7 +950,7 @@ Projectiles: {
 	// HunterrGreatarrow.DisplayName: Hunterr Greatarrow
 
 	CopperMandiblesProjectile: {
-		// OneTimeLatchMessage: Toxin!
+		// OneTimeLatchMessage: Infestation!
 		// DisplayName: Copper Mandibles
 	}
 
