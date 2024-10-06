@@ -1,12 +1,9 @@
 ﻿using ITD.Utilities;
 using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
-using Terraria.Map;
 using Terraria.ModLoader;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
 {
@@ -26,13 +23,13 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             Projectile.height = 16;
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.penetrate = 1;
-            Projectile.timeLeft = 200;
+            Projectile.penetrate = 5;
+            Projectile.timeLeft = 600;
             Projectile.ignoreWater = false;
             Projectile.tileCollide = false;
 
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = (3);
+            Projectile.localNPCHitCooldown = (15);
         }
         private NPC HomingTarget
         {
@@ -45,6 +42,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
 
         public override void AI()
         {
+            Projectile.damage = 0;
             float maxDetectRadius = 400f;
 
             if (DelayTimer < 5)
@@ -53,13 +51,14 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
                 return;
             }
 
-            if (Projectile.timeLeft > 20)
+            Projectile.damage = 10;
+
+            if (Projectile.penetrate > 1)
             {
                 HomingTarget ??= Projectile.FindClosestNPC(maxDetectRadius);
 
                 if (HomingTarget == null)
                 {
-                    Projectile.Kill();
                     return;
                 }
                 else
@@ -79,8 +78,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             }
             else
             {
-                Projectile.velocity *= 0f;
-                SoundEngine.PlaySound(SoundID.NPCHit31, Projectile.Center);
+                for (int i = 0; i < 6; i++)
+                {
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Sand, 0f, 0f, 150, default(Color), 1.5f);
+                }
                 Projectile.Kill();
             }
 
@@ -91,6 +92,13 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
                     Projectile.frame = 0;
             }
         }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (Main.rand.NextBool(5))
+            {
+                SoundEngine.PlaySound(SoundID.NPCHit31, Projectile.Center);
+            }
+        }
     }
 }
-       

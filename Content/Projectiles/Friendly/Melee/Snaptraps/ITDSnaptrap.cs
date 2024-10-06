@@ -125,6 +125,8 @@ namespace ITD.Content.Projectiles
             Projectile.alpha = 0;
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Melee;
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = FramesBetweenHits / 3;
             DrawOffsetX = -12;
             DrawOriginOffsetY = -16;
             //Projectile.hide = true;
