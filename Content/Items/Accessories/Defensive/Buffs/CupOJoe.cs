@@ -7,7 +7,6 @@ namespace ITD.Content.Items.Accessories.Defensive.Buffs
 {
     public class CupOJoe : ModItem
     {
-        public override string Texture => Placeholder.PHBottle;
 
         public override void SetDefaults()
         {

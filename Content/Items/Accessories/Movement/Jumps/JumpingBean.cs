@@ -11,7 +11,6 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
 {
     public class JumpingBean : ModItem
     {
-        public override string Texture => Placeholder.PHGeneric;
         public override void SetDefaults()
         {
             Item.width = 32;
