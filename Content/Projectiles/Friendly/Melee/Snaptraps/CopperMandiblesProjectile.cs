@@ -1,6 +1,7 @@
 ﻿using ITD.Content.Items;
 using ITD.Content.Items.Accessories.Misc;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
+using ITD.Content.Projectiles.Friendly.Pets;
 using ITD.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -22,7 +23,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
     public class CopperMandiblesProjectile : ITDSnaptrap
     {
         public static LocalizedText OneTimeLatchMessage { get; private set; }
-        int constantEffectFrames = 22;
+        int constantEffectFrames = 44;
         int constantEffectTimer = 0;
         private int percentage;
         public override void SetSnaptrapProperties()
@@ -60,17 +61,16 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             if (constantEffectTimer >= constantEffectFrames)
             {
                 constantEffectTimer = 0;
-                ChangeDamage();
+                MiniMandible();
             }
         }
-        private void ChangeDamage()
+        private void MiniMandible()
         {
-            NPC target = Main.npc[TargetWhoAmI];
-
-            if (target != null)
+            if (Main.myPlayer == myPlayer.whoAmI)
             {
-                percentage = (target.life / target.lifeMax) * 100;
-                target.life -= 30 + (30 * percentage);
+                float speedX = -Projectile.velocity.X * Main.rand.NextFloat(.4f, .7f) + Main.rand.NextFloat(-8f, 8f);
+                float speedY = -Projectile.velocity.Y * Main.rand.Next(40, 70) * 0.01f + Main.rand.Next(-20, 21) * 0.4f;
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X + speedX, Projectile.position.Y + speedY, speedX, speedY, ModContent.ProjectileType<MiniMandible>(), Projectile.damage, 0f, Projectile.owner);
             }
         }
     }

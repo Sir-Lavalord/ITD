@@ -956,6 +956,8 @@ Projectiles: {
 		OneTimeLatchMessage: Toxin!
 		DisplayName: Copper Mandibles
 	}
+
+	MiniMandible.DisplayName: Mini Mandible
 }
 
 NPCs: {
