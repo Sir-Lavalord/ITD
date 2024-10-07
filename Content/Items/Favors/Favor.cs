@@ -53,7 +53,7 @@ namespace ITD.Content.Items.Favors
             Charge = tag.Get<float>("favorItemCharge");
         }
         /// <summary>
-        /// Same function as SetStaticDefaults without extra stuff. You don't need to set the rarity here.
+        /// Same function as SetDefaults without extra stuff. You don't need to set the rarity here.
         /// </summary>
         public virtual void SetFavorDefaults()
         {

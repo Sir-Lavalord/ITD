@@ -20,6 +20,7 @@ namespace ITD
         internal Mod musicDisplay = null;
         internal Mod munchies = null;
         internal Mod achievements = null;
+        internal Mod dialogueTweak = null; // this is necessary so the recruitment button doesn't screw up when this mod is on
         public int? GetMusic(string trackName)
         {
             return itdMusic is not null ? MusicLoader.GetMusicSlot(itdMusic, "Music/" + trackName) : null;
@@ -37,12 +38,15 @@ namespace ITD
             bossChecklist = null;
             musicDisplay = null;
             munchies = null;
+            achievements = null;
+            dialogueTweak = null;
             ModLoader.TryGetMod("ITDMusic", out itdMusic);
             ModLoader.TryGetMod("Wikithis", out wikithis);
             ModLoader.TryGetMod("BossChecklist", out bossChecklist);
             ModLoader.TryGetMod("MusicDisplay", out musicDisplay);
             ModLoader.TryGetMod("Munchies", out munchies);
             ModLoader.TryGetMod("TMLAchievements", out achievements);
+            ModLoader.TryGetMod("DialogueTweak", out dialogueTweak);
             if (!Main.dedServ)
             {
                 wikithis?.Call("AddModURL", this, "https://itdmod.fandom.com/wiki/{}");
@@ -56,6 +60,7 @@ namespace ITD
             musicDisplay = null;
             munchies = null;
             achievements = null;
+            dialogueTweak = null;
             Instance = null;
         }
     }

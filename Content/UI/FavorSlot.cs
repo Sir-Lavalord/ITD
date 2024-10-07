@@ -42,10 +42,6 @@ namespace ITD.Content.UI
             Recalculate();
             base.Update(gameTime);
         }
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
     }
     public class FavorSlot : ITDItemSlot
     {

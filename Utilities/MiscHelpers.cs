@@ -6,11 +6,34 @@ using Microsoft.Xna.Framework;
 using ITD.Content.NPCs;
 using ITD.Content.Projectiles;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace ITD.Utilities
 {
     public static class MiscHelpers
     {
+        public static Entity[] EntityQuery<T>(this Entity entity, int maxAmount = -1, bool ignoreSelf = true, Func<Entity, bool> predicate = null) where T : Entity
+        {
+            Type entityType = typeof(T);
+
+            Entity[] entities = entityType switch
+            {
+                Type t when t == typeof(NPC) => Main.npc,
+                Type t when t == typeof(Projectile) => Main.projectile,
+                Type t when t == typeof(Player) => Main.player,
+                Type t when t == typeof(Item) => Main.item,
+                _ => null
+            };
+
+            if (entities is null) return [];
+
+            Entity[] result = entities
+            .Where(e => e is T && predicate(e) && (!ignoreSelf || e.whoAmI != entity.whoAmI))
+            .Take(maxAmount > 0 ? maxAmount : entities.Length)
+            .ToArray();
+
+            return result;
+        }
         public static NPC FindClosestNPC(this Projectile projectile, float maxDetectDistance)
         {
             NPC closestNPC = null;
