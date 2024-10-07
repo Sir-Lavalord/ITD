@@ -4,54 +4,54 @@ using ITD.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Terraria.ModLoader;
 using Terraria;
+using Terraria.ID;
 
 namespace ITD.Systems.Recruitment
 {
-    public class TownNPCRecruitmentLoader : DetourGroup
+    public class RecruitmentData
     {
-        public static List<RecruitBehavior> recruitBehaviors = [];
-        public override void Load()
+        public int WhoAmI { get; set; } = -1;
+        public string FullName { get; set; }
+        public int OriginalType { get; set; } = -1;
+        public int Recruiter { get; set; } = -1;
+        public void Clear()
         {
-            foreach (Type t in ITD.Instance.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(RecruitBehavior))))
-            {
-                RecruitBehavior instance = (RecruitBehavior)Activator.CreateInstance(t);
-                instance.SetStaticDefaults();
-                recruitBehaviors.Add(instance);
-            }
+            WhoAmI = -1;
+            FullName = string.Empty;
+            OriginalType = -1;
+            Recruiter = -1;
         }
-        public override void Unload()
-        {
-            recruitBehaviors?.Clear();
-        }
-        public static RecruitBehavior SearchForNPCType(int type)
-        {
-            return recruitBehaviors.FirstOrDefault(b => b.NPCType == type, null);
-        }
-        public static bool CanBeRecruited(int type)
-        {
-            return recruitBehaviors.Any(b => b.NPCType == type);
-        }
-        public bool TryRecruit(int whoAmI, Player player)
+    }
+    public static class TownNPCRecruitmentLoader
+    {
+        private readonly static int[] NPCsThatCanBeRecruited = 
+        [
+            NPCID.Merchant
+        ];
+        public static bool CanBeRecruited(int type) => NPCsThatCanBeRecruited.Contains(type);
+        public static bool TryRecruit(int whoAmI, Player player)
         {
             NPC npc = Main.npc[whoAmI];
-            if (CanBeRecruited(npc.type) && npc.TryGetGlobalNPC(out TownNPCRecruitmentRunner runner))
+            RecruitmentData data = player.GetITDPlayer().recruitmentData;
+            if (CanBeRecruited(npc.type))
             {
-                player.GetITDPlayer().SetRecruit(whoAmI);
+                data.WhoAmI = npc.whoAmI;
+                data.FullName = npc.FullName;
+                data.OriginalType = npc.type;
+                data.Recruiter = player.whoAmI;
+                npc.Transform(ModContent.NPCType<RecruitedNPC>());
                 return true;
             }
             return false;
         }
-        public void Unrecruit(int whoAmI, Player player)
+        public static void Unrecruit(int whoAmI, Player player)
         {
             NPC npc = Main.npc[whoAmI];
-            if (CanBeRecruited(npc.type) && npc.TryGetGlobalNPC(out TownNPCRecruitmentRunner runner))
-            {
-                runner.isRecruitedBy = -1;
-                player.GetITDPlayer().SetRecruit(-1);
-            }
+            RecruitmentData data = player.GetITDPlayer().recruitmentData;
+            npc.Transform(data.OriginalType);
+            data.Clear();
         }
     }
 }

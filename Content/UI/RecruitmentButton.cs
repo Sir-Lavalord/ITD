@@ -9,9 +9,10 @@ using Terraria.ModLoader.Config;
 using Terraria.UI;
 using Terraria.Localization;
 using Terraria.ModLoader.UI;
-using ITD.Content.Items.Favors;
+using ITD.Utilities;
 using ReLogic.Graphics;
 using Terraria.GameContent;
+using ITD.Systems.Recruitment;
 
 namespace ITD.Content.UI
 {
@@ -80,7 +81,12 @@ namespace ITD.Content.UI
         }
         public override void LeftClick(UIMouseEvent evt)
         {
-            // do recruitment stuff. check npc instance with Main.LocalPlayer.TalkNPC
+            Player player = Main.LocalPlayer;
+            if (TownNPCRecruitmentLoader.TryRecruit(player.talkNPC, player))
+            {
+                Main.NewText("Recruited " + player.GetITDPlayer().recruitmentData.FullName + "!", Color.Green);
+                player.SetTalkNPC(-1);
+            }
         }
     }
 }
