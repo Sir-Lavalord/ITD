@@ -839,6 +839,11 @@ Items: {
 			+10% Snaptrap Length
 			'''
 	}
+
+	CharmOfTheAccursed: {
+		DisplayName: Charm of the Accursed
+		Tooltip: Releases damaging spirits after taking 100 damage
+	}
 }
 
 Projectiles: {
@@ -958,6 +963,7 @@ Projectiles: {
 	}
 
 	MiniMandible.DisplayName: Mini Mandible
+	AccursedSpirit.DisplayName: Accursed Spirit
 }
 
 NPCs: {
