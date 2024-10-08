@@ -24,7 +24,7 @@ Rygel Bluestar, qAngel
 qAngel, lolxd87 - Spanish  
 Duckman - German
 ### Special Thanks
-GabeHasWon - Some tile drawing code from Verdant
+GabeHasWon - Some tile drawing code from Verdant  
 Un-Terr, Ionic - Various feedback
 
 # LICENSE
