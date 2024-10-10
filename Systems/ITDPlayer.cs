@@ -61,6 +61,14 @@ namespace ITD.Players
         public int Screenshake;
         //Recruitment data
         public RecruitmentData recruitmentData = new();
+        public override void SaveData(TagCompound tag)
+        {
+            tag["recruitmentOriginalType"] = recruitmentData.OriginalType;
+        }
+        public override void LoadData(TagCompound tag)
+        {
+            recruitmentData.OriginalType = tag.GetInt("recruitmentOriginalType");
+        }
         public override void ResetEffects()
         {
             //Screenshake
@@ -269,7 +277,6 @@ namespace ITD.Players
         {
             public override void PreSaveAndQuit()
             {
-                base.PreSaveAndQuit();
                 Player player = Main.CurrentPlayer;
                 NaturalSpawns.LeaveWorld();
                 PhysicsMethods.ClearAll();

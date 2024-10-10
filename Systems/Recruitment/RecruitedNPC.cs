@@ -8,12 +8,16 @@ using Microsoft.Xna.Framework;
 using ReLogic.Content;
 using System;
 using Terraria.GameContent;
+using Terraria.ModLoader.IO;
+using Terraria.DataStructures;
+using System.IO;
 
 namespace ITD.Systems.Recruitment
 {
     public class RecruitedNPC : ModNPC
     {
-        public ref float Recruiter => ref NPC.ai[0]; // index of the player who recruited this NPC
+        public int Recruiter = 0;
+        public int originalType = -1;
         public int armFrame = 0;
         public override void SetStaticDefaults()
         {
@@ -27,7 +31,30 @@ namespace ITD.Systems.Recruitment
             NPC.lifeMax = 100;
             NPC.friendly = true;
         }
-        public RecruitmentData GetRecruitmentData() => Main.player[(int)Recruiter].GetITDPlayer().recruitmentData;
+        public RecruitmentData GetRecruitmentData()
+        {
+            if (Recruiter < 0)
+            {
+                Recruiter = TownNPCRecruitmentLoader.TryFindRecruiterOf(originalType).whoAmI;
+            }
+            return Main.player[(int)Recruiter].GetITDPlayer().recruitmentData;
+        }
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(Recruiter);
+        }
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            Recruiter = reader.ReadInt32();
+        }
+        public override void SaveData(TagCompound tag)
+        {
+            tag["originalType"] = originalType;
+        }
+        public override void LoadData(TagCompound tag)
+        {
+            originalType = tag.GetInt("originalType");
+        }
         public override void ModifyTypeName(ref string typeName) => typeName = GetRecruitmentData().FullName;
 
         // this implementation using the vanilla interface sucks because it requires NPC.townNPC to be set to true. is there something better?
@@ -55,12 +82,14 @@ namespace ITD.Systems.Recruitment
         }
         public override void AI()
         {
+            if (Recruiter < 0)
+                return;
             Player player = Main.player[(int)Recruiter];
             // testing AI
             NPC.velocity.X = Math.Sign(player.Center.X - NPC.Center.X)*2f;
             NPC.spriteDirection = NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
             NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
-            switch (GetRecruitmentData().OriginalType) // AI type switch
+            switch (originalType) // AI type switch
             {
                 case NPCID.Merchant:
                     DoMerchantAI();
@@ -109,13 +138,16 @@ namespace ITD.Systems.Recruitment
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Asset<Texture2D> tex = null;
-            string pathToTypeTexture = Texture + "_" + GetRecruitmentData().OriginalType;
-            if (!ModContent.RequestIfExists(pathToTypeTexture, out tex)) // try to load type-specific texture
+            string pathToTypeTexture = Texture + "_" + originalType;
+            string pathToShimmerTexture = pathToTypeTexture + "_Shimmer";
+            if (GetRecruitmentData().IsShimmered) // try to load shimmer texture
             {
-                tex = TextureAssets.Npc[Type]; // if doesn't exist, get default texture
+                ModContent.RequestIfExists(pathToShimmerTexture, out tex);
             }
-            if (tex is null || !tex.IsLoaded)
-                return false;
+            if (tex == null && !ModContent.RequestIfExists(pathToTypeTexture, out tex)) // try to load type-specific texture
+            {
+                tex = TextureAssets.Npc[Type]; // if type-specific texture doesn't exist, get default texture
+            }
             int framesX = 2;
             int framesY = Main.npcFrameCount[Type];
             Rectangle vR = NPC.frame;

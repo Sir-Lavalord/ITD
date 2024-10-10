@@ -44,7 +44,7 @@ namespace ITD.Content.UI
         {
             DynamicSpriteFont font = FontAssets.MouseText.Value;
             Vector2 size = font.MeasureString(Main.npcChatText);
-            float wrapWidth = 480f;
+            float wrapWidth = 460f;
             int numberOfLines = (int)(size.X / wrapWidth);
             float yOffset = numberOfLines * 30f; // hacky way to do this
             //Main.NewText(yOffset.ToString() + " " + size.X.ToString());
