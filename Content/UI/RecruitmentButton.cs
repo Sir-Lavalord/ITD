@@ -44,9 +44,9 @@ namespace ITD.Content.UI
         {
             DynamicSpriteFont font = FontAssets.MouseText.Value;
             Vector2 size = font.MeasureString(Main.npcChatText);
-            float wrapWidth = 500f;
-            int numberOfLines = (int)(size.X / wrapWidth) + 1;
-            float yOffset = (numberOfLines - 1) * 32f; // hacky way to do this
+            float wrapWidth = 480f;
+            int numberOfLines = (int)(size.X / wrapWidth);
+            float yOffset = numberOfLines * 30f; // hacky way to do this
             //Main.NewText(yOffset.ToString() + " " + size.X.ToString());
             recruitmentButton.UpdateProperties(32f, Main.screenWidth / 2 + 210, 150 + yOffset);
             Recalculate();
@@ -84,7 +84,6 @@ namespace ITD.Content.UI
             Player player = Main.LocalPlayer;
             if (TownNPCRecruitmentLoader.TryRecruit(player.talkNPC, player))
             {
-                Main.NewText("Recruited " + player.GetITDPlayer().recruitmentData.FullName + "!", Color.Green);
                 player.SetTalkNPC(-1);
             }
         }

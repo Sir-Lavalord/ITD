@@ -20,6 +20,7 @@ using ITD.Networking.Packets;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 using ITD.Systems.Recruitment;
+using Terraria.ModLoader.IO;
 
 namespace ITD.Players
 {
@@ -262,13 +263,25 @@ namespace ITD.Players
         }
         public override void OnEnterWorld()
         {
-            NaturalSpawns.LeaveWorld();
-            PhysicsMethods.ClearAll();
+
+        }
+        private sealed class ITDPlayerSystem : ModSystem // there's no OnExitWorld hook :death:
+        {
+            public override void PreSaveAndQuit()
+            {
+                base.PreSaveAndQuit();
+                Player player = Main.CurrentPlayer;
+                NaturalSpawns.LeaveWorld();
+                PhysicsMethods.ClearAll();
+
+                // transform recruited npc back to original type
+                RecruitmentData recruitmentData = player.GetITDPlayer().recruitmentData;
+                if (recruitmentData.WhoAmI > -1)
+                    Main.npc[recruitmentData.WhoAmI].Transform(recruitmentData.OriginalType);
+            }
         }
 		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
-            //Main.spriteBatch.DrawString(FontAssets.MouseText.Value, Player.name, MousePosition - Main.screenPosition, Color.White);
-            //Dust.NewDustPerfect(MousePosition, 0);
             if (heldItem == ModContent.ItemType<WormholeRipper>())
             {
                 if (itemVar[0] > 0)

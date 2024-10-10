@@ -2,11 +2,12 @@
 using ITD.Particles;
 using ITD.Utilities;
 using System;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using System.Linq;
 using Terraria.ModLoader;
 using Terraria;
 using Terraria.ID;
+using Terraria.GameContent;
 
 namespace ITD.Systems.Recruitment
 {
@@ -37,13 +38,24 @@ namespace ITD.Systems.Recruitment
             RecruitmentData data = player.GetITDPlayer().recruitmentData;
             if (CanBeRecruited(npc.type))
             {
-                data.WhoAmI = npc.whoAmI;
-                data.FullName = npc.FullName;
-                data.OriginalType = npc.type;
-                data.Recruiter = player.whoAmI;
-                npc.Transform(ModContent.NPCType<RecruitedNPC>());
-                return true;
+                //if (Main.ShopHelper.GetShoppingSettings(player, npc).PriceAdjustment < 0.82f) // if happiness is max
+                if (true is true) // just for testing yaehahh
+                {
+                    data.WhoAmI = npc.whoAmI;
+                    data.FullName = npc.FullName;
+                    data.OriginalType = npc.type;
+                    data.Recruiter = player.whoAmI;
+                    npc.Transform(ModContent.NPCType<RecruitedNPC>());
+                    npc.ai[0] = player.whoAmI;
+                    Main.NewText("Recruited " + data.FullName + "!", Color.LimeGreen); // replace with localizable stuff
+                    return true;
+                }
+                else
+                {
+                    Main.NewText(npc.FullName + " is not at maximum happiness!", Color.Red); // replace with lolcalzic stuf
+                }
             }
+            Main.NewText(npc.FullName + " cannot be recruited!", Color.Red); //a plapa local sutf
             return false;
         }
         public static void Unrecruit(int whoAmI, Player player)
