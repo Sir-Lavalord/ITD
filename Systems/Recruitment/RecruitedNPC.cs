@@ -11,6 +11,8 @@ using Terraria.GameContent;
 using Terraria.ModLoader.IO;
 using Terraria.DataStructures;
 using System.IO;
+using ITD.Particles;
+using ITD.Particles.Testing;
 
 namespace ITD.Systems.Recruitment
 {
@@ -78,7 +80,10 @@ namespace ITD.Systems.Recruitment
         // the common method would also be called in these smaller methods (just in case something needs to be done conditionally)
         public void DoMerchantAI()
         {
-
+            if (Main.GameUpdateCount % 20 == 0)
+            {
+                ParticleSystem.NewParticle(ParticleSystem.ParticleType<ShaderTestParticle>(), NPC.Center, Vector2.Zero);
+            }
         }
         public override void AI()
         {
@@ -89,11 +94,19 @@ namespace ITD.Systems.Recruitment
             NPC.velocity.X = Math.Sign(player.Center.X - NPC.Center.X)*2f;
             NPC.spriteDirection = NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
             NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
-            switch (originalType) // AI type switch
+            ExternalRecruitmentData extData = TownNPCRecruitmentLoader.GetExternalRecruitmentData(originalType);
+            if (extData?.AIDelegate != null) // try to run custom mod AI
             {
-                case NPCID.Merchant:
-                    DoMerchantAI();
-                break;
+                extData.AIDelegate.Method.Invoke(extData.AIDelegate.Target, [ NPC, player ]);
+            }
+            else
+            {
+                switch (originalType) // AI type switch
+                {
+                    case NPCID.Merchant:
+                        DoMerchantAI();
+                        break;
+                }
             }
         }
         private static int MapBaseFrameToArmFrame(int currentFrame) // is this stupid? am i stupid?
@@ -138,7 +151,12 @@ namespace ITD.Systems.Recruitment
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Asset<Texture2D> tex = null;
+            ExternalRecruitmentData extData = TownNPCRecruitmentLoader.GetExternalRecruitmentData(originalType);
             string pathToTypeTexture = Texture + "_" + originalType;
+            if (extData != null)
+            {
+                pathToTypeTexture = extData.TexturePath;
+            }
             string pathToShimmerTexture = pathToTypeTexture + "_Shimmer";
             if (GetRecruitmentData().IsShimmered) // try to load shimmer texture
             {

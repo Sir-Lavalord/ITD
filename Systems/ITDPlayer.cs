@@ -39,6 +39,7 @@ namespace ITD.Players
 
         public bool ZoneDeepDesert;
         public bool ZoneBlueshroomsUnderground;
+        public bool ZoneBlueshroomsSurface;
 		public bool ZoneCatacombs;
 
 		public bool necrosis = false;
@@ -169,8 +170,10 @@ namespace ITD.Players
 		
         public override void PreUpdate()
         {
-            ZoneBlueshroomsUnderground = ModContent.GetInstance<ITDSystem>().bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
-            ZoneDeepDesert = ModContent.GetInstance<ITDSystem>().deepdesertTileCount > 50 && Player.ZoneRockLayerHeight;
+            ITDSystem system = ModContent.GetInstance<ITDSystem>();
+            ZoneBlueshroomsSurface = system.bluegrassCount > 50 && Player.ZoneOverworldHeight;
+            ZoneBlueshroomsUnderground = system.bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
+            ZoneDeepDesert = system.deepdesertTileCount > 50 && Player.ZoneRockLayerHeight;
 
             UpdateMouse();
 

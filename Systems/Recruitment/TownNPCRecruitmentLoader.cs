@@ -9,9 +9,11 @@ using Terraria;
 using Terraria.ID;
 using Terraria.GameContent;
 using Terraria.Enums;
+using System.Collections.Generic;
 
 namespace ITD.Systems.Recruitment
 {
+    public delegate void RecruitmentAIDelegate(NPC npc, Player recruiter);
     public class RecruitmentData
     {
         public int WhoAmI { get; set; } = -1;
@@ -28,13 +30,29 @@ namespace ITD.Systems.Recruitment
             IsShimmered = false;
         }
     }
+    public class ExternalRecruitmentData (Delegate aiDelegate, Mod modInstance, string texturePath)
+    {
+        public Delegate AIDelegate { get; set; } = aiDelegate;
+        public Mod ModInstance { get; set; } = modInstance;
+        public string TexturePath {  get; set; } = texturePath;
+    }
     public static class TownNPCRecruitmentLoader
     {
-        private readonly static int[] NPCsThatCanBeRecruited = 
+        private static Dictionary<int, ExternalRecruitmentData> recruitmentDataRegistry = [];
+        private readonly static int[] NPCsThatCanBeRecruited =
         [
             NPCID.Merchant
         ];
-        public static bool CanBeRecruited(int type) => NPCsThatCanBeRecruited.Contains(type);
+        public static void RegisterRecruitmentData(Mod mod, int npcType, Delegate recruitmentAI, string texturePath)
+        {
+            ITD.Instance.Logger.Info("Trying to add recruitment data for NPC of ID " +  npcType + " from mod " + mod.Name);
+            recruitmentDataRegistry[npcType] = new ExternalRecruitmentData(recruitmentAI, mod, texturePath);
+        }
+        public static ExternalRecruitmentData GetExternalRecruitmentData(int npcType)
+        {
+            return recruitmentDataRegistry.TryGetValue(npcType, out ExternalRecruitmentData data) ? data : null;
+        }
+        public static bool CanBeRecruited(int type) => NPCsThatCanBeRecruited.Contains(type) || recruitmentDataRegistry.ContainsKey(type);
         public static Player TryFindRecruiterOf(int type) => Main.player.FirstOrDefault(p => p.GetITDPlayer().recruitmentData.OriginalType == type, Main.player[0]);
         public static bool TryRecruit(int whoAmI, Player player)
         {

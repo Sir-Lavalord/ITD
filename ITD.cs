@@ -4,6 +4,8 @@ using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using System;
+using ITD.Systems;
 
 namespace ITD
 {
@@ -30,6 +32,7 @@ namespace ITD
             ExternalModSupport.Init();
             ITDSets.Init();
         }
+        public override object Call(params object[] args) => ModCalls.Call(args);
         public override void HandlePacket(BinaryReader reader, int whoAmI) => NetSystem.HandlePacket(reader, whoAmI);
         public override void Load()
         {
