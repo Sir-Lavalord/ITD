@@ -34,6 +34,10 @@ namespace ITD.Utilities
                 _ => new Color(v, p, q),
             };
         }
+        public static Point Lerp(this Point p1, Point p2, float alpha)
+        {
+            return new Point((int)MathHelper.Lerp(p1.X, p2.X, alpha), (int)MathHelper.Lerp(p1.Y, p2.Y, alpha));
+        }
         public static (Vector2, bool) QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, bool shouldHitPlatforms = false, float maxDistTiles = 64f)
         {
             origin /= 16f;

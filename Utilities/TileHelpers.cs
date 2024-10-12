@@ -66,7 +66,8 @@ namespace ITD.Utilities
             {
                 for (int l = rect.Top; l < rect.Bottom; l++)
                 {
-                    //Dust.QuickBox(new Vector2(k, l)*16f, new Vector2(k, l)*16f + new Vector2(16, 16), 8, Color.White, null);
+                    if (!WorldGen.InWorld(k, l))
+                        return false;
                     if (Framing.GetTileSafely(k, l).HasTile)
                     {
                         if (saplingType != null && Framing.GetTileSafely(k, l).TileType == (int)saplingType)

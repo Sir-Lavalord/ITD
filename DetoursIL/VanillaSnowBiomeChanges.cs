@@ -24,8 +24,6 @@ namespace ITD.DetoursIL
             hook = newHook;
             hook.Apply(); // hook into it
         }
-        private static void LogError(string message) => ITD.Instance.Logger.Error(message);
-        private static void DumpIL(ILContext il) => MonoModHooks.DumpIL(ITD.Instance, il);
         private static void SnowBiomeExtension(ILContext il)
         {
             try
