@@ -42,7 +42,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             //TileObjectData.newTile.Origin = new Point16(0, 1);
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, 1, 1);
             TileObjectData.newTile.LavaDeath = true;
-            TileObjectData.newTile.AnchorValidTiles = new[] { TileType<Bluegrass>() };
+            TileObjectData.newTile.AnchorValidTiles = [ TileType<Bluegrass>() ];
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.RandomStyleRange = 3;
             //TileObjectData.newTile.StyleMultiplier = 3;

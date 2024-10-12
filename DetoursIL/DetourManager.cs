@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace ITD.Detours
+namespace ITD.DetoursIL
 {
     public class DetourManager : ModSystem
     {

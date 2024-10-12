@@ -65,7 +65,7 @@ namespace ITD.Systems
         internal static void DrawTreeSway(int i, int j, SpriteBatch spriteBatch, Texture2D tex, Rectangle? source, Vector2? offset = null, Vector2? origin = null, SpriteEffects effect = SpriteEffects.None)
         {
             Tile tile = Main.tile[i, j];
-            Vector2 drawPos = Helpers.TileExtraPos(i, j) + (offset ?? Vector2.Zero);
+            Vector2 drawPos = TileHelpers.TileExtraPos(i, j) + (offset ?? Vector2.Zero);
             float rot = ModContent.GetInstance<WeatherSystem>().GetTreeSway(i, j, ref drawPos);
             Color col = Lighting.GetColor(i, j);
 

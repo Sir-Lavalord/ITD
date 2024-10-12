@@ -84,9 +84,9 @@ namespace ITD.Content.Projectiles.Friendly.Pets
             // this line of code makes it so the rope is always at the bottom of the balloon properly
             pigChain?.UpdateStart(Projectile.Center + Projectile.velocity + Vector2.UnitY*(Projectile.height/2));
         }
-        private Chest DetectChest(Point tile, int radius)
+        private static Chest DetectChest(Point tile, int radius)
         {
-            Rectangle rect = new Rectangle(tile.X - radius, tile.Y - radius, radius + radius, radius + radius);
+            Rectangle rect = new(tile.X - radius, tile.Y - radius, radius + radius, radius + radius);
             static bool inCircle(int i, int j, Rectangle rect) // math things
             {
                 Point rC = rect.Center;

@@ -10,7 +10,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ID;
-using ITD.Detours;
+using ITD.DetoursIL;
 
 namespace ITD.Particles
 {

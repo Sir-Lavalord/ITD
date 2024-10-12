@@ -19,7 +19,7 @@ namespace ITD.Content.World
             GenFloor(p.X, p.Y, WorldGen._genRandSeed);
         }
 
-        private Point GetGenStartPoint()
+        private static Point GetGenStartPoint()
         {
             Point iceBiomeStart = new(0, 0);
             Point iceBiomeEnd = new(0, 0);
@@ -48,7 +48,7 @@ namespace ITD.Content.World
             return (Vector2.Lerp(iceBiomeStart.ToVector2(), iceBiomeEnd.ToVector2(), 0.5f).ToPoint());
         }
 
-        private void GenFloor(float x, float y, int seed)
+        private static void GenFloor(float x, float y, int seed)
         {
             int width = Main.maxTilesX / 15;
             int height = width;
@@ -143,7 +143,7 @@ namespace ITD.Content.World
             {
                 for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
                 {
-                    if (Helpers.AptForTree(i, j, 16))
+                    if (TileHelpers.AptForTree(i, j, 16))
                     {
                         ITDTree.Grow(i, j, 0, 8, 14);
                     }

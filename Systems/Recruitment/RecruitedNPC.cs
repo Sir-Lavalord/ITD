@@ -171,7 +171,7 @@ namespace ITD.Systems.Recruitment
             Rectangle vR = NPC.frame;
             Rectangle baseQuad = new(vR.X, vR.Y, vR.Width/2, vR.Height);
             Rectangle armQuad = tex.Frame(framesX, framesY, 1, armFrame);
-            Vector2 baseOrigin = new Vector2(tex.Width() / framesX / 2, tex.Height() / framesY / 2);
+            Vector2 baseOrigin = new (tex.Width() / framesX / 2, tex.Height() / framesY / 2);
             SpriteEffects flip = NPC.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             Vector2 offset = new(0f, -4f); // random ahh magic number?
             Main.EntitySpriteDraw(tex.Value, NPC.Center - screenPos + offset, armQuad, drawColor, 0f, baseOrigin, 1f, flip);

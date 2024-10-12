@@ -1,14 +1,10 @@
-﻿using ITD.Detours;
-using ITD.Particles;
-using ITD.Utilities;
+﻿using ITD.Utilities;
 using System;
 using Microsoft.Xna.Framework;
 using System.Linq;
 using Terraria.ModLoader;
 using Terraria;
 using Terraria.ID;
-using Terraria.GameContent;
-using Terraria.Enums;
 using System.Collections.Generic;
 
 namespace ITD.Systems.Recruitment
@@ -38,7 +34,7 @@ namespace ITD.Systems.Recruitment
     }
     public static class TownNPCRecruitmentLoader
     {
-        private static Dictionary<int, ExternalRecruitmentData> recruitmentDataRegistry = [];
+        private readonly static Dictionary<int, ExternalRecruitmentData> recruitmentDataRegistry = [];
         private readonly static int[] NPCsThatCanBeRecruited =
         [
             NPCID.Merchant

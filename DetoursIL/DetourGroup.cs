@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ITD.Detours
+namespace ITD.DetoursIL
 {
     public abstract class DetourGroup // lighter class than using a modsystem for every single loader/detour. probably faster loading times?
     {

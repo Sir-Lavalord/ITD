@@ -143,7 +143,7 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
 
         private void CreateFireTrailDust()
         {
-            Vector2 speed = new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1.5f, -0.5f));
+            Vector2 speed = new(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1.5f, -0.5f));
 
             Dust dust = Dust.NewDustPerfect(
                 Player.Bottom + new Vector2(Main.rand.Next(-10, 11), 0),
@@ -168,7 +168,7 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
         private void CreateFireRainDust(float progress)
         {
             Vector2 rainPosition = jumpPosition + new Vector2(Main.rand.Next(-50, 51), Main.rand.Next(-20, 0));
-            Vector2 rainVelocity = new Vector2(Main.windSpeedCurrent * 0.3f, Main.rand.Next(2, 4));
+            Vector2 rainVelocity = new(Main.windSpeedCurrent * 0.3f, Main.rand.Next(2, 4));
 
             Dust dust = Dust.NewDustPerfect(
                 rainPosition,
@@ -186,7 +186,7 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
             dust.customData = new FireRainData { InitialPosition = rainPosition, CreationTime = Main.GameUpdateCount };
         }
 
-        private void UpdateFireRain()
+        private static void UpdateFireRain()
         {
             for (int i = 0; i < Main.maxDust; i++)
             {
@@ -212,13 +212,13 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
             }
         }
 
-        private bool IsTileCollision(Vector2 position)
+        private static bool IsTileCollision(Vector2 position)
         {
             Point tileCoords = position.ToTileCoordinates();
-            return Helpers.SolidTile(tileCoords.X, tileCoords.Y);
+            return TileHelpers.SolidTile(tileCoords.X, tileCoords.Y);
         }
 
-        private void DamageEnemy(Vector2 position, bool dealDamage)
+        private static void DamageEnemy(Vector2 position, bool dealDamage)
         {
             for (int i = 0; i < Main.maxNPCs; i++)
             {

@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ModLoader;
 using ITD.Systems;
 
-namespace ITD.Detours
+namespace ITD.DetoursIL
 {
     public class World : DetourGroup
     {
