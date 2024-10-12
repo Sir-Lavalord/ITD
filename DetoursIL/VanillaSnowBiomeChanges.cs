@@ -25,6 +25,7 @@ namespace ITD.DetoursIL
             hook.Apply(); // hook into it
         }
         private static void LogError(string message) => ITD.Instance.Logger.Error(message);
+        private static void DumpIL(ILContext il) => MonoModHooks.DumpIL(ITD.Instance, il);
         private static void SnowBiomeExtension(ILContext il)
         {
             try
@@ -48,25 +49,63 @@ namespace ITD.DetoursIL
             }
             catch
             {
-                MonoModHooks.DumpIL(ITD.Instance, il);
+                DumpIL(il);
             }
         }
         private static void ModifySnowBiomeHeight(ILContext il)
         {
-            var c = new ILCursor(il);
-            // get to the maxValue load of 200 for Main.genRand (next is modifying num949)
-            if (!c.TryGotoNext(i => i.MatchLdcI4(200)))
+            try
             {
-                LogError("SnowBiomeExtension: snowThickness declaration not found");
+                var c = new ILCursor(il);
+                // get to the maxValue load of 200 for Main.genRand (next is modifying num949)
+                if (!c.TryGotoNext(i => i.MatchLdcI4(200)))
+                {
+                    LogError("SnowBiomeExtension: snowThickness declaration not found");
+                }
+                // from here we need to modify the number that is used as the lower Y limit in the loop (this is equal to num949 in the source code)
+                if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(GenVars), "lavaLine")))
+                {
+                    LogError("SnowBiomeExtension: Couldn't find lavaLine storage");
+                }
+                c.Index++; // advance cursor position
+
+                // call GetWorldSize for switch statement (to avoid crashing)
+                c.Emit(OpCodes.Call, typeof(WorldGen).GetMethod("GetWorldSize"));
+                
+                // labels
+                ILLabel smallWorldLabel = c.DefineLabel();
+                ILLabel mediumWorldLabel = c.DefineLabel();
+                ILLabel largeWorldLabel = c.DefineLabel();
+                ILLabel endLabel = c.DefineLabel();
+
+                c.Emit(OpCodes.Switch, new[]
+                {
+                    smallWorldLabel,
+                    mediumWorldLabel,
+                    largeWorldLabel
+                });
+
+                // small world switch case
+                c.MarkLabel(smallWorldLabel);
+                c.Emit(OpCodes.Ldc_I4, 300);
+                c.Emit(OpCodes.Br, endLabel);
+
+                // medium world switch case
+                c.MarkLabel(mediumWorldLabel);
+                c.Emit(OpCodes.Ldc_I4, 500);
+                c.Emit(OpCodes.Br, endLabel);
+
+                // large world switch case
+                c.MarkLabel(largeWorldLabel);
+                c.Emit(OpCodes.Ldc_I4, 700);
+                c.MarkLabel(endLabel);
+
+                c.Emit(OpCodes.Add); // add the int to num949
             }
-            // from here we need to modify the number that is used as the lower Y limit in the loop (this is equal to num949 in the source code)
-            if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(GenVars), "lavaLine")))
+            catch
             {
-                LogError("SnowBiomeExtension: Couldn't find lavaLine storage");
+                DumpIL(il);
             }
-            c.Index++; // advance cursor position
-            c.Emit(OpCodes.Ldc_I4, 500); // load this int onto the stack
-            c.Emit(OpCodes.Add); // add the int to num949
         }
         public override void Unload()
         {
