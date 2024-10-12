@@ -7,7 +7,7 @@ using Terraria.ModLoader.Config;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
-using ITD.Detours;
+using ITD.DetoursIL;
 namespace ITD.Particles
 {
     public enum ParticleDrawCanvas
