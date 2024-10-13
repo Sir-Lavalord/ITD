@@ -88,5 +88,9 @@ namespace ITD.Content.Items.Weapons.Ranger
 		{
 			Hold(player);
 		}
+		
+		public override Vector2? HoldoutOffset() {
+			return new Vector2(-4f, -6f);
+		}
     }
 }
