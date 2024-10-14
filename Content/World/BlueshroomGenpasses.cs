@@ -24,6 +24,7 @@ namespace ITD.Content.World
 
         private static Point GetGenStartPoint()
         {
+            //
             // you would think GenVars.snowMinX[0] and GenVars.snowMaxX[0] would provide the correct values but they only do that if the snow biome is perfectly symmetrical for some reason
             int xTileCandidateLeft = 0;
             bool foundTileClosestToTheLeftAndOnTheSurface = false;
