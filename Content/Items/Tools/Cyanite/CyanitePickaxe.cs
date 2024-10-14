@@ -15,12 +15,12 @@ namespace ITD.Content.Items.Tools.Cyanite
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
-            Item.useTime = 25;
-            Item.useAnimation = 7;
+            Item.useTime = 7;
+            Item.useAnimation = 14;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.knockBack = 5;
             Item.value = Item.buyPrice(gold: 1); // Buy this item for one gold - change gold to any coin and change the value to any number <= 100
-            Item.rare = ItemRarityID.Yellow;
+            Item.rare = ItemRarityID.Cyan;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
 
