@@ -127,7 +127,7 @@ namespace ITD.Content.World
             {
                 for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
                 {
-                    Helpers.GrowBluegrass(i, j);
+                    Helpers.GrowGrass(i, j, ModContent.TileType<Bluegrass>(), TileID.SnowBlock);
                 }
             }
             for (int i = rectangle.Left; i <= rectangle.Right; i++)

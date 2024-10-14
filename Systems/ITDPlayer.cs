@@ -44,6 +44,7 @@ namespace ITD.Players
 
 		public bool necrosis = false;
 		public bool soulRot = false;
+        public bool melomycosis = false;
 
 		public float blockChance = 0f;
 		public bool dreadBlock = false;
@@ -109,6 +110,7 @@ namespace ITD.Players
 
 			necrosis = false;
 			soulRot = false;
+            melomycosis = false;
 
 			blockChance = 0f;
 			dreadBlock = false;
@@ -147,6 +149,15 @@ namespace ITD.Players
 				 
 				Player.lifeRegen -= 20;
 			}
+            if (melomycosis)
+            {
+                if (Player.lifeRegen > 0)
+                    Player.lifeRegen = 0;
+
+                Player.lifeRegenTime = 0;
+
+                Player.lifeRegen -= 5;
+            }
 		}
 		
         public override void PostUpdateEquips()
@@ -255,6 +266,8 @@ namespace ITD.Players
                     damageSource = DeathByLocalization("Necrosis");
 				if (soulRot)
                     damageSource = DeathByLocalization("SoulRot");
+                if (melomycosis)
+                    damageSource = DeathByLocalization("Melomycosis");
             }
 			return true;
 		}

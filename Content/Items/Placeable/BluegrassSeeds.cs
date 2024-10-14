@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 using Terraria.Audio;
 using ITD.Utilities;
+using ITD.Content.Tiles.BlueshroomGroves;
 
 namespace ITD.Content.Items.Placeable
 {
@@ -30,7 +31,7 @@ namespace ITD.Content.Items.Placeable
                 Point tileCoords = Main.MouseWorld.ToTileCoordinates();
                 if (player.IsInTileInteractionRange(tileCoords.X, tileCoords.Y, TileReachCheckSettings.Simple))
                 {
-                    if (Helpers.GrowBluegrass(tileCoords.X, tileCoords.Y))
+                    if (Helpers.GrowGrass(tileCoords.X, tileCoords.Y, ModContent.TileType<Bluegrass>(), TileID.SnowBlock))
                     {
                         SoundEngine.PlaySound(SoundID.Dig, Main.MouseWorld);
                         return true;

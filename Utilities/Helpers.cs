@@ -117,14 +117,21 @@ namespace ITD.Utilities
         {
             return newMin + (value - oldMin) * (newMax - newMin) / (oldMax - oldMin);
         }
-        public static bool GrowBluegrass(int i, int j)
+        public static void SpreadGrass(int i, int j, int grassType, int soilType)
+        {
+            GrowGrass(i - 1, j, grassType, soilType);
+            GrowGrass(i + 1, j, grassType, soilType);
+            GrowGrass(i, j - 1, grassType, soilType);
+            GrowGrass(i, j + 1, grassType, soilType);
+        }
+        public static bool GrowGrass(int i, int j, int grassType, int soilType)
         {
             Tile t = Framing.GetTileSafely(i, j);
-            if (t.TileType == TileID.SnowBlock)
+            if (t.TileType == soilType)
             {
                 if (EdgeTile(i ,j) && !(Framing.GetTileSafely(i, j-1).TileType == TileID.Trees))
                 {
-                    t.TileType = (ushort)ModContent.TileType<Bluegrass>();
+                    t.TileType = (ushort)grassType;
                     WorldGen.SquareTileFrame(i, j);
                     NetMessage.SendTileSquare(-1, i, j, 1);
                     return true;

@@ -57,16 +57,14 @@ namespace ITD.Content.Tiles.BlueshroomGroves
         {
             if (fail)
             {
+                Framing.GetTileSafely(i, j).TileType = TileID.SnowBlock;
             }
         }
         public override void RandomUpdate(int i, int j)
         {
             if (Main.rand.NextBool(4))
             {
-                Helpers.GrowBluegrass(i - 1, j);
-                Helpers.GrowBluegrass(i + 1, j);
-                Helpers.GrowBluegrass(i, j - 1);
-                Helpers.GrowBluegrass(i, j + 1);
+                Helpers.SpreadGrass(i, j, Type, TileID.SnowBlock);
             }
         }
     }

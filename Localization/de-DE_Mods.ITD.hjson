@@ -1088,6 +1088,11 @@ Buffs: {
 		// DisplayName: Toppled
 		// Description: KB
 	}
+
+	MelomycosisBuff: {
+		// DisplayName: Melomycosis Buff
+		// Description: Mods.ITD.Buffs.MelomycosisBuff.Description
+	}
 }
 
 DeathMessage: {
