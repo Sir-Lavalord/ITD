@@ -1,10 +1,8 @@
+global using Microsoft.Xna.Framework;
 using ITD.Networking;
-using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using System;
 using ITD.Systems;
 
 namespace ITD
