@@ -974,7 +974,7 @@ Projectiles: {
 	// AccursedSpirit.DisplayName: Accursed Spirit
 
 	ChainwhipSnaptrapProjectile: {
-		// OneTimeLatchMessage: Mods.ITD.Projectiles.ChainwhipSnaptrapProjectile.OneTimeLatchMessage
+		// OneTimeLatchMessage: Agility!
 		// DisplayName: Chainwhip Snaptrap Projectile
 	}
 
