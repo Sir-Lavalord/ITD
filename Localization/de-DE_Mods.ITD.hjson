@@ -841,6 +841,17 @@ Items: {
 		// DisplayName: Charm of the Accursed
 		// Tooltip: Releases damaging spirits after taking 100 damage
 	}
+
+	Chainwhip: {
+		// DisplayName: Chainwhip
+		/* Tooltip:
+			'''
+			Press RMB or LMB to fire a snaptrap
+			RMB to whip enemies while a snaptrap is latched
+			'Its a chain, AND a whip! '
+			[c/{0}:Latch Effect:] Increases Summon damage and Movement speed over a course of 20 seconds
+			''' */
+	}
 }
 
 Projectiles: {
@@ -961,6 +972,13 @@ Projectiles: {
 
 	// MiniMandible.DisplayName: Mini Mandible
 	// AccursedSpirit.DisplayName: Accursed Spirit
+
+	ChainwhipSnaptrapProjectile: {
+		// OneTimeLatchMessage: Mods.ITD.Projectiles.ChainwhipSnaptrapProjectile.OneTimeLatchMessage
+		// DisplayName: Chainwhip Snaptrap Projectile
+	}
+
+	// ChainwhipWhip.DisplayName: Chainwhip Whip
 }
 
 NPCs: {
