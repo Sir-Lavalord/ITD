@@ -82,7 +82,7 @@ namespace ITD.Systems.Recruitment
         {
             if (Main.GameUpdateCount % 20 == 0)
             {
-                ParticleSystem.NewParticle(ParticleSystem.ParticleType<ShaderTestParticle>(), NPC.Center, Vector2.Zero);
+                ParticleSystem.NewParticle<ShaderTestParticle>(NPC.Center, Vector2.Zero);
             }
         }
         public override void AI()
