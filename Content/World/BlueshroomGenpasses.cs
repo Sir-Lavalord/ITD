@@ -144,7 +144,7 @@ namespace ITD.Content.World
             {
                 for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
                 {
-                    Helpers.GrowTallBluegrass(i, j);
+                    Helpers.GrowTallGrass(i, j, ModContent.TileType<BluegrassBlades>(), ModContent.TileType<Bluegrass>());
                 }
             }
         }

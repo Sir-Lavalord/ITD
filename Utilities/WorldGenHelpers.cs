@@ -14,6 +14,7 @@ namespace ITD.Utilities
             public abstract bool Contains(Point point);
             public virtual bool Contains(int x, int y) => Contains(new Point(x, y));
             public abstract void LoopThroughPoints(Action<Point> callback);
+            public abstract Rectangle Container { get; }
         }
         public class Ellipse(int x, int y, int xRadius, int yRadius) : ITDShape
         {
@@ -22,7 +23,7 @@ namespace ITD.Utilities
             public int XRadius = xRadius;
             public int YRadius = yRadius;
             public Point Center {  get { return new Point(X, Y); } }
-            public Rectangle Container { get { return new Rectangle(X - XRadius, Y - YRadius, XRadius * 2, YRadius * 2); } }
+            public override Rectangle Container => new(X - XRadius, Y - YRadius, XRadius * 2, YRadius * 2);
             public override bool Contains(Point point)
             {
                 Point normalized = new Point(point.X - X, point.Y - Y);

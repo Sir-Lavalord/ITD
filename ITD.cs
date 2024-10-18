@@ -28,7 +28,6 @@ namespace ITD
         public override void PostSetupContent()
         {
             ExternalModSupport.Init();
-            ITDSets.Init();
         }
         public override object Call(params object[] args) => ModCalls.Call(args);
         public override void HandlePacket(BinaryReader reader, int whoAmI) => NetSystem.HandlePacket(reader, whoAmI);

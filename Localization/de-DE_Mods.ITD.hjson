@@ -724,6 +724,7 @@ Items: {
 			Once released, this will summon a powerful spirit to help you in battle
 			The duration and damage this spirit deals increases as you sacrifice more blood
 			You may not summon more than one spirit at the same time
+			'Blood for the blood god.'
 			''' */
 	}
 
@@ -851,6 +852,16 @@ Items: {
 			'Its a chain, AND a whip! '
 			[c/{0}:Latch Effect:] Increases Summon damage and Movement speed over a course of 20 seconds
 			''' */
+	}
+
+	GrabbOMatic20000: {
+		// DisplayName: Grabb O Matic20000
+		// Tooltip: ""
+	}
+
+	BlackMoldItem: {
+		// DisplayName: Black Mold Item
+		// Tooltip: ""
 	}
 }
 

@@ -10,7 +10,9 @@ namespace ITD.Kinematics
         public Vector2 b { get; set; }
         public float Length { get; set; } = length;
         public float Angle { get; set; }
-
+        public float MinAngle { get; set; } = 0f;
+        public float MaxAngle { get; set; } = MathF.Tau;
+        public float LocalAngle;
         public Vector2 Target { get; set; } = Main.MouseWorld;
 
         public void FollowSegment(KineSegment child)

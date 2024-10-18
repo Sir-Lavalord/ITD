@@ -24,21 +24,6 @@ namespace ITD.Content.Items.Placeable
         {
             Item.DefaultToSeeds();
         }
-        public override bool? UseItem(Player player)
-        {
-            if (player.whoAmI == Main.myPlayer)
-            {
-                Point tileCoords = Main.MouseWorld.ToTileCoordinates();
-                if (player.IsInTileInteractionRange(tileCoords.X, tileCoords.Y, TileReachCheckSettings.Simple))
-                {
-                    if (Helpers.GrowGrass(tileCoords.X, tileCoords.Y, ModContent.TileType<Bluegrass>(), TileID.SnowBlock))
-                    {
-                        SoundEngine.PlaySound(SoundID.Dig, Main.MouseWorld);
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
+        public override bool? UseItem(Player player) => Helpers.UseItem_PlaceSeeds(player, ModContent.TileType<Bluegrass>(), TileID.SnowBlock);
     }
 }

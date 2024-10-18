@@ -855,6 +855,16 @@ Items: {
 			[c/{0}:Latch Effect:] Increases Summon damage and Movement speed over a course of 20 seconds
 			''' */
 	}
+
+	GrabbOMatic20000: {
+		// DisplayName: Grabb O Matic20000
+		// Tooltip: ""
+	}
+
+	BlackMoldItem: {
+		// DisplayName: Black Mold Item
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

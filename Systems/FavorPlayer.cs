@@ -52,11 +52,7 @@ namespace ITD.Systems
         }
         private bool TryUseFavor()
         {
-            if (Player.IsLocalPlayer() && FavorItem != null && FavorItem.ModItem is Favor favorItem && favorItem.Charge >= 1f && UseFavorKey.JustPressed && !favorFatigue)
-            {
-                return true;
-            }
-            return false;
+            return Player.IsLocalPlayer() && FavorItem != null && FavorItem.ModItem is Favor favorItem && favorItem.Charge >= 1f && UseFavorKey.JustPressed && !favorFatigue;
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {

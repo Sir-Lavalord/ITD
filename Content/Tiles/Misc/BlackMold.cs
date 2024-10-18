@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Buffs.Debuffs;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ITD.Content.Tiles.Misc
 {
@@ -49,8 +50,7 @@ namespace ITD.Content.Tiles.Misc
         }
         public override void RandomUpdate(int i, int j)
         {
-            Dust d = Dust.NewDustDirect(new Point(i, j).ToWorldCoordinates(), 16, 16, DustID.t_Slime, 0f, 0f, 0, Color.Black);
-            d.noGravity = true;
+            Helpers.GrowLongMossForTile(i, j, ModContent.TileType<LongBlackMold>(), Type);
         }
     }
 }

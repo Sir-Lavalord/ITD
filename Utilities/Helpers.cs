@@ -139,14 +139,51 @@ namespace ITD.Utilities
             }
             return false;
         }
-        public static void GrowTallBluegrass(int i, int j)
+        public static void GrowTallGrass(int i, int j, int tallGrassType, int grassType)
         {
-            if (TileType(i, j + 1, ModContent.TileType<Bluegrass>()) && !SolidTile(i, j) && !TileType(i, j, ModContent.TileType<BluegrassBlades>()))
+            if (TileType(i, j + 1, grassType) && !SolidTile(i, j) && !TileType(i, j, tallGrassType))
             {
-                //WorldGen.Place1x1(i, j, ModContent.TileType<BluegrassBlades>(), WorldGen._genRand.Next(2));
-                if (WorldGen.PlaceTile(i, j, ModContent.TileType<BluegrassBlades>(), true, false, -1, WorldGen._genRand.Next(3)))
+                if (WorldGen.PlaceTile(i, j, tallGrassType, true, false, -1, WorldGen._genRand.Next(3)))
                     NetMessage.SendTileSquare(-1, i, j, 1);
             }
+        }
+        public static void GrowLongMossForTile(int i , int j, int longMossType, int mossType)
+        {
+            Tile t = Framing.GetTileSafely(i, j);
+            if (t.TileType != mossType)
+                return;
+            GrowLongMoss(i + 1, j, longMossType);
+            GrowLongMoss(i - 1, j, longMossType);
+            GrowLongMoss(i, j + 1, longMossType);
+            GrowLongMoss(i, j - 1, longMossType);
+        }
+        public static void GrowLongMoss(int i, int j, int longMossType)
+        {
+            if (SolidTile(i, j) || TileType(i, j, longMossType)) return;
+
+            // todo: add check for grow direction for correct alt placement
+
+            if (WorldGen.PlaceObject(i, j, longMossType, true, 0, 0))
+            {
+                NetMessage.SendTileSquare(-1, i, j, 1);
+            }
+        }
+        public static bool UseItem_PlaceSeeds(Player player, int seedsTile, int soilTile)
+        {
+            if (player.whoAmI == Main.myPlayer)
+            {
+                int tX = Player.tileTargetX;
+                int tY = Player.tileTargetY;
+                if (player.IsInTileInteractionRange(tX, tY, TileReachCheckSettings.Simple))
+                {
+                    if (GrowGrass(tX, tY, seedsTile, soilTile))
+                    {
+                        SoundEngine.PlaySound(SoundID.Dig, Main.MouseWorld);
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
         public static void DefaultToSeeds(this Item item)
         {
