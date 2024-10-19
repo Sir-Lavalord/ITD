@@ -20,6 +20,7 @@ namespace ITD.Content.Tiles.Misc
             Main.tileBlockLight[Type] = true;
             TileID.Sets.CanBeClearedDuringOreRunner[Type] = true;
             TileID.Sets.Conversion.Moss[Type] = true;
+            
 
             HitSound = SoundID.NPCHit9;
             DustType = DustID.Stone;
