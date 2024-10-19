@@ -30,28 +30,31 @@ namespace ITD.Content.Items.Weapons.Ranger
             Item.shootSpeed = 16f;
             Item.autoReuse = true;
         }
-        Vector2 distance;
+        public override Vector2? HoldoutOffset()
+        {
+            return new Vector2(0f, -6f);
+        }
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            const float gravity = 0.2f;
-            float time = 60f;
-            distance =  Main.MouseWorld - player.Center;
-            distance.X = distance.X / time;
-            distance.Y = distance.Y / time - 0.5f * gravity * time;
-            velocity = distance;
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            for (int i = 0; i < 4; i++)
+            SoundEngine.PlaySound(SoundID.Item36, position);
+            for (int i = 0; i < 6; i++)
             {
-                SoundEngine.PlaySound(SoundID.Item61, player.Center);
-                Projectile proj = Projectile.NewProjectileDirect(source, position, distance, type, damage, knockback, player.whoAmI);
+                Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(30));
+                newVelocity *= 1f - Main.rand.NextFloat(0.3f);
+                Projectile.NewProjectileDirect(source, position, newVelocity, type, damage, knockback, player.whoAmI,2);
             }
-            for (int k = 0; k < 16; k++)
+            Vector2 muzzleOffset = Vector2.Normalize(velocity) * 50f;
+            position += muzzleOffset;
+            for (int i = 0; i < 16; i++)
             {
-                int dust = Dust.NewDust(position - new Vector2(6, 6), 12, 12, DustID.Smoke, 0f, 0f, 0, default, 2f);
+                Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(30));
+                newVelocity *= Main.rand.NextFloat(2f);
+                int dust = Dust.NewDust(position, 0, 0, DustID.Smoke, 0f, 0f, 0, default, 2f);
                 Main.dust[dust].noGravity = true;
-                Main.dust[dust].velocity = velocity * Main.rand.NextFloat(1.5f);
+                Main.dust[dust].velocity = newVelocity;
             }
             return false;
         }

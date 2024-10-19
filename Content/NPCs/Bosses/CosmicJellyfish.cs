@@ -26,6 +26,7 @@ using System.IO;
 using SteelSeries.GameSense;
 using ITD.Content.Dusts;
 using ITD.Content.Items.Armor.Vanity.Masks;
+using Terraria.Graphics.Effects;
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -239,6 +240,10 @@ namespace ITD.Content.NPCs.Bosses
                 {
                     NPC.ai[3] = 1;
                 }
+            }
+            if (!SkyManager.Instance["ITD:CosjelOkuuSky"].IsActive() && bOkuu)
+            {
+                SkyManager.Instance.Activate("ITD:CosjelOkuuSky");
             }
 
             if (NPC.life * 100 / NPC.lifeMax < 50)
@@ -523,7 +528,7 @@ namespace ITD.Content.NPCs.Bosses
                                 }
                             }
                         }
-                        if (NPC.localAI[2] >= 600)
+                        if (NPC.localAI[2] >= 800)
                         {
                             AI_State = MovementState.FollowingRegular;
                             NPC.ai[3] = 0;
@@ -782,9 +787,18 @@ namespace ITD.Content.NPCs.Bosses
             }
             float maxRotation = MathHelper.Pi / 6;
             float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);
+            if (AI_State == MovementState.Ram)
+            {
+                Vector2 velo = Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
+                NPC.rotation = velo.ToRotation();
+                NPC.rotation = NPC.velocity.X / 50;
 
-            rotation = rotationFactor * maxRotation;
-            NPC.rotation = rotation;
+            }
+            else
+            {
+                rotation = rotationFactor * maxRotation;
+                NPC.rotation = rotation;
+            }
         }
         //Can't kill hand directly for some reasons
         //When this is called, kill both hands
@@ -804,7 +818,10 @@ namespace ITD.Content.NPCs.Bosses
                 bOkuu = true;
                 handState = HandState.ForcedKill;
                 handState2 = HandState.ForcedKill;
-
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(), ModContent.ProjectileType<CosmicJellyfishBlackholeAura>(), 0, 0, -1, NPC.whoAmI);
+                }
                 AI_State = MovementState.Explode;
                 Main.NewText("BLACKHOLE BLACKHOLE BLACKHOLE BLACKHOLE BLACKHOLE BLACKHOLE BLACHKOLE BLACKHOLE.", Color.Violet);
                 return false;
@@ -1034,21 +1051,20 @@ namespace ITD.Content.NPCs.Bosses
 
                                         if (Main.netMode != NetmodeID.MultiplayerClient)
                                         {
-                                            for (int i = 0; i < Main.maxPlayers; i++)
+                                            for (int f = 0; f < 1; f++)
                                             {
-                                                for (int f = 0; f < 1; f++)
-                                                {
-                                                    SoundEngine.PlaySound(SoundID.Item88, Main.player[i].Center);
-                                                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Main.player[i].Center.X + (Main.player[i].velocity.X * 24f) + (Main.rand.Next(-40, 40)), Main.player[i].Center.Y - 500)
-                                                        , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(0.75f, 1.1f), Main.rand.Next(ProjectileID.Meteor1, ProjectileID.Meteor3 + 1), Projectile.damage, Projectile.knockBack, Main.player[i].whoAmI);
-                                                    Main.projectile[proj].hostile = true;
-                                                    Main.projectile[proj].friendly = false;
-                                                }
+                                                SoundEngine.PlaySound(SoundID.Item88, player.Center);
+                                                int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(vLockedIn.X + (Main.rand.Next(-40, 40)), player.Center.Y - 500)
+                                                    , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(0.75f, 1.1f), Main.rand.Next(ProjectileID.Meteor1, ProjectileID.Meteor3 + 1), Projectile.damage, Projectile.knockBack, player.whoAmI);
+                                                Main.projectile[proj].hostile = true;
+                                                Main.projectile[proj].friendly = false;
+                                                Main.projectile[proj].scale = Main.rand.NextFloat(2, 3f);
+
                                             }
                                         }
                                     }
-                                }
-                                else
+                                    }
+                                    else
                                 {
                                     Projectile.ai[1] = 0;
                                     bSmackdown = true;
@@ -1061,6 +1077,8 @@ namespace ITD.Content.NPCs.Bosses
 
                             else
                             {
+
+                                vLockedIn.X = player.Center.X + (player.velocity.X * 35f);
                                 Timer = 0;
                                 handSling = 0f;
                                 handCharge = 0f;
@@ -1274,20 +1292,22 @@ namespace ITD.Content.NPCs.Bosses
                                         iMeteorCount2++;
                                         if (Main.netMode != NetmodeID.MultiplayerClient)
                                         {
-                                            for (int i = 0; i < Main.maxPlayers; i++)
-                                            {
-                                                for (int f = 0; f < 2; f++)
-                                                {
-                                                    SoundEngine.PlaySound(SoundID.Item88, Main.player[i].Center);
-                                                    int proj = Projectile.NewProjectile(Projectile2.GetSource_FromThis(), new Vector2(Main.player[i].Center.X + (Main.player[i].velocity.X * 24f) + (Main.rand.Next(-40, 40)), Main.player[i].Center.Y - 500)
-                                                        , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(0.65f, 1.1f), Main.rand.Next(ProjectileID.Meteor1, ProjectileID.Meteor3 + 1), Projectile2.damage, Projectile2.knockBack, Main.player[i].whoAmI);
-                                                    Main.projectile[proj].hostile = true;
-                                                    Main.projectile[proj].friendly = false;
 
-                                                }
+                                            for (int f = 0; f < 2; f++)
+                                            {
+                                                SoundEngine.PlaySound(SoundID.Item88, player.Center);
+                                                int proj = Projectile.NewProjectile(Projectile2.GetSource_FromThis(), new Vector2(vLockedIn.X + Main.rand.Next(-40, 40), player.Center.Y - 500)
+                                                    , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(0.65f, 1.1f), Main.rand.Next(ProjectileID.Meteor1, ProjectileID.Meteor3 + 1), Projectile2.damage, Projectile2.knockBack, player.whoAmI);
+                                                Main.projectile[proj].hostile = true;
+                                                Main.projectile[proj].friendly = false;
+                                                Main.projectile[proj].scale = Main.rand.NextFloat(2,3f);
+
+
                                             }
                                         }
+                                        
                                     }
+
 
                                 }
                                 else
@@ -1297,13 +1317,13 @@ namespace ITD.Content.NPCs.Bosses
                                     iMeteorCount2 = 0;
                                     Timer2 = 0;
                                     handState2 = HandState.Waiting;
-
                                 }
                             }
                             else
                             {
-                                iMeteorCount2 = 0;
 
+                                vLockedIn.X = player.Center.X + (player.velocity.X * 35f);
+                                iMeteorCount2 = 0;
                                 Timer2 = 0;
                                 handSling2 = 0f;
                                 handCharge2 = 0f;
@@ -1367,14 +1387,19 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (AI_State == MovementState.Ram)
             {
-                Texture2D texture = TextureAssets.Npc[Type].Value;
-                Vector2 drawOrigin = texture.Size() / 2f;
-                for (int k = 0; k < NPC.oldPos.Length; k++)
+                Texture2D tex = TextureAssets.Npc[NPC.type].Value;
+                int vertSize = tex.Height / Main.npcFrameCount[NPC.type];
+                Vector2 origin = new Vector2(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);
+                Rectangle frameRect = new Rectangle(0, vertSize * NPC.frame.Y, tex.Width, vertSize);
+                if (handState2 == HandState.Slinging || bSmackdown)
                 {
-                    Vector2 drawPos = NPC.oldPos[k] - screenPos + new Vector2(NPC.width * 0.5f, NPC.height * 0.5f) + new Vector2(0f, NPC.gfxOffY + 4f);
-                    Color color = drawColor * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
-                    SpriteEffects effects = NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                    spriteBatch.Draw(texture, drawPos, null, color, 0f, drawOrigin, NPC.scale, effects, 0);
+                    for (int k = 0; k < NPC.oldPos.Length; k++)
+                    {
+                        Vector2 center = NPC.Size / 2f;
+                        Vector2 drawPos = NPC.oldPos[k] - Main.screenPosition + center;
+                        Color color = NPC.GetAlpha(drawColor) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
+                        spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, NPC.scale, SpriteEffects.FlipHorizontally, 0f);
+                    }
                 }
             }
             if (hand != -1)
@@ -1415,7 +1440,7 @@ namespace ITD.Content.NPCs.Bosses
                 }
                 spriteBatch.Draw(tex, projectile.Center - screenPos, frameRect, Color.White, projectile.rotation, origin, projectile.scale, SpriteEffects.FlipHorizontally, 0f);
             }
-            spriteBatch.Draw(spriteBack.Value, NPC.Center - screenPos - new Vector2(0f, 46f), NPC.frame, Color.White, rotation, new Vector2(spriteBack.Width() / 2f, spriteBack.Height() / (Main.npcFrameCount[NPC.type] -1) / 2f), 1f, SpriteEffects.None, default);
+            spriteBatch.Draw(spriteBack.Value, NPC.Center - screenPos - new Vector2(0f, 46f), NPC.frame, Color.White, NPC.rotation, new Vector2(spriteBack.Width() / 2f, spriteBack.Height() / (Main.npcFrameCount[NPC.type] -1) / 2f), 1f, SpriteEffects.None, default);
             return true;
         }
     }

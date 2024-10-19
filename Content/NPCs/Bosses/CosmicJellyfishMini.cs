@@ -17,7 +17,9 @@ namespace ITD.Content.NPCs.Bosses
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 5;
-
+            //is buggy
+/*            NPCID.Sets.TrailCacheLength[Type] = 8;
+            NPCID.Sets.TrailingMode[Type] = 4;*/
             NPCID.Sets.DontDoHardmodeScaling[Type] = true;
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
@@ -88,12 +90,11 @@ namespace ITD.Content.NPCs.Bosses
             {
                 if (NPC.localAI[2]++ >= 100)
                 {
-                    NPC.velocity *= 0.9f;
-                    if (NPC.localAI[2]++ >= 150)//Have to stop first
-                    {
 
+                        NPC.localAI[1] = 0;
+                        NPC.localAI[2] = 0;
                         IsDashing = true;
-                    }
+                    
                 }
                 else
                 {
@@ -101,13 +102,12 @@ namespace ITD.Content.NPCs.Bosses
             }
             else
             {
-                Dash(1, 10, 20, 30, 1);
+                Dash(1, 5, 10,60, 80);
             }
-            float maxRotation = MathHelper.Pi / 3;
-            float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);
-
-            rotation = rotationFactor * maxRotation;
-            NPC.rotation = rotation;
+            NPC.netUpdate = true;
+            NPC.rotation = NPC.velocity.X / 50;
+            Vector2 velo = Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
+            NPC.rotation = velo.ToRotation();
         }
         Vector2 dashvel;
         public bool IsDashing;

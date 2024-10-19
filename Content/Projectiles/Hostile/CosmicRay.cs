@@ -8,6 +8,7 @@ using ITD.Content.Projectiles;
 using Terraria.Map;
 using ITD.Content.NPCs.Bosses;
 using ITD.Utilities;
+using SteelSeries.GameSense;
 namespace ITD.Content.Projectiles.Hostile
 {
     //TODO: MUST BE RE-WRITTEN ENTIRELY, ELSE REMOVE BEFORE RELEASE
@@ -21,6 +22,8 @@ namespace ITD.Content.Projectiles.Hostile
         {
             base.SetStaticDefaults();
         }
+        public Vector2 CorePos;
+
         public override void AI()
         {
             Vector2? vector78 = null;
@@ -46,6 +49,8 @@ namespace ITD.Content.Projectiles.Hostile
             player.GetITDPlayer().Screenshake = 20;
             if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
             {
+                CorePos = new Vector2(CosJel.Center.X, CosJel.Center.Y - 140);
+
                 if (CosJel != null && !CosJel.dontTakeDamage)
                 {
                     Projectile.Center = CosJel.Center;

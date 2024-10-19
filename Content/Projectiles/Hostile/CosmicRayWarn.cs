@@ -24,6 +24,7 @@ namespace ITD.Content.Projectiles.Hostile
             return false;
         }
         public int iTimer;
+        public Vector2 CorePos;
         public override void AI()
         {
             maxTime = Projectile.ai[0];
@@ -35,9 +36,11 @@ namespace ITD.Content.Projectiles.Hostile
             NPC CosJel = Main.npc[(int)Projectile.ai[1]];
             if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
             {
+                CorePos = new Vector2(CosJel.Center.X, CosJel.Center.Y - 120);
+
                 if (CosJel != null && !CosJel.dontTakeDamage)
                 {
-                    Projectile.Center = CosJel.Center;
+                    Projectile.Center = CorePos;
                 }
                 else
                 {

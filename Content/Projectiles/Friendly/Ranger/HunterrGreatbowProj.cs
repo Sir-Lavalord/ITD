@@ -146,9 +146,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                     Shift = Math.Clamp(Shift + 0.25f, 0f, 1f);
                     if (HaveArrow)
                     {
-                        ITDParticle flash = new RingMuzzleFlash(Projectile.Center + Projectile.rotation.ToRotationVector2() * 5f, Vector2.Zero, Color.White, new Vector2(0.5f, 1f), Projectile.rotation, 0.05f, 0.34f + Main.rand.NextFloat(0.3f), 30);
-                        ParticleSystem.NewParticle(ParticleSystem.ParticleType<RingMuzzleFlash>(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 5f
-                            , Vector2.Zero);
+                        ParticleSystem.NewParticle<RingMuzzleFlash>(Projectile.Center + Projectile.rotation.ToRotationVector2() * 5f, Vector2.Zero,Projectile.rotation);
 
                         //RoundDown
                         Shift = 1;

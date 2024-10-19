@@ -4,6 +4,8 @@ using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using ITD.Systems;
+using Terraria.Graphics.Effects;
+using ITD.Skies;
 
 namespace ITD
 {
@@ -33,6 +35,7 @@ namespace ITD
         public override void HandlePacket(BinaryReader reader, int whoAmI) => NetSystem.HandlePacket(reader, whoAmI);
         public override void Load()
         {
+            SkyManager.Instance["ITD:CosjelOkuuSky"] = new CosjelOkuuSky();
             itdMusic = null;
             wikithis = null;
             bossChecklist = null;

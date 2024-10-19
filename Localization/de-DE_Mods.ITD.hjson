@@ -863,6 +863,11 @@ Items: {
 		// DisplayName: Black Mold Item
 		// Tooltip: ""
 	}
+
+	WheelerTrashCan: {
+		// DisplayName: Wheeler Trash Can
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -990,6 +995,7 @@ Projectiles: {
 	}
 
 	// ChainwhipWhip.DisplayName: Chainwhip Whip
+	// CosmicJellyfishBlackholeAura.DisplayName: Cosmic Jellyfish Blackhole Aura
 }
 
 NPCs: {

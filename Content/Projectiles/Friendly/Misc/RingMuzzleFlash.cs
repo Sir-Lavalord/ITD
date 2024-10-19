@@ -22,13 +22,14 @@ namespace ITD.Content.Projectiles.Hostile
 {
     public class RingMuzzleFlash : ITDParticle
     {
-        
         private float OriginalScale;
         private float FinalScale;
-        private float opacity;
+        private float opacity = 1;
         private Color BaseColor;
         public override void SetDefaults()
         {
+            timeLeft = 30;
+
             canvas = ParticleDrawCanvas.WorldUnderProjectiles;
         }
         public RingMuzzleFlash(Vector2 pos, Vector2 vel, Color col, Vector2 morph, float rotation, float originalScale, float finalScale, int lifeTime)
@@ -36,29 +37,31 @@ namespace ITD.Content.Projectiles.Hostile
 
             position = pos;
             velocity = vel;
-            BaseColor = col;
-            texMorph = morph;
+            BaseColor = Color.White;
+            texMorph = new Vector2(0.5f, 1f);
             OriginalScale = originalScale;
-            FinalScale = finalScale;
-            scale = originalScale;
-            spawnTimeLeft = lifeTime;
+            FinalScale = 0.05f;
+            scale = 0.34f + Main.rand.NextFloat(0.3f);
             rotation = Main.rand.NextFloat(MathHelper.TwoPi);
         }
-        public override void Update()
+        public override void AI()
         {
-            scale = MathHelper.Lerp(OriginalScale, FinalScale, ProgressZeroToOne);
+
+            BaseColor = Color.White;
+            texMorph = new Vector2(0.5f, 1f);
+            OriginalScale = 0.05f;
+            FinalScale = 0.34f + Main.rand.NextFloat(0.3f);
+            scale = MathHelper.Lerp(OriginalScale, FinalScale, 0.25f);
 
             opacity = (float)Math.Sin(MathHelper.PiOver2 + timeLeft * MathHelper.PiOver2);
 
-            BaseColor = BaseColor * opacity;
             Lighting.AddLight(position, BaseColor.R / 255f, BaseColor.G / 255f, BaseColor.B / 255f);
             velocity *= 0.95f;
         }
 
         public override void PostDraw(SpriteBatch spriteBatch)
         {
-            Texture2D tex = ModContent.Request<Texture2D>("Terraria/Images/Misc/Perlin").Value;
-            spriteBatch.Draw(tex, position - Main.screenPosition, null, BaseColor * opacity, rotation, tex.Size() / 2f, scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, position - Main.screenPosition, null, BaseColor * opacity, rotation, texture.Size() / 2f, scale, SpriteEffects.None, 0);
         }
 
     }
