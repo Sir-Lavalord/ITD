@@ -24,6 +24,7 @@ namespace ITD.Content.NPCs
         public bool necrosis;
         public bool soulRot;
         public bool toasted;
+        public bool melomycosis;
 
         private static int[] shouldDropSandberusSummon =
             [
@@ -89,6 +90,19 @@ namespace ITD.Content.NPCs
                     npc.lifeRegen = 0;
                 }
                 npc.lifeRegen -= 60;
+
+                if (damage < 10)
+                    damage = 10;
+            }
+
+            if (melomycosis)
+            {
+                int defenseCalc = npc.defense / 2;
+                if (npc.lifeRegen > 0)
+                {
+                    npc.lifeRegen = 0;
+                }
+                npc.lifeRegen -= 10 + defenseCalc;
 
                 if (damage < 10)
                     damage = 10;

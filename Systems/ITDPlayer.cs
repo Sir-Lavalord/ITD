@@ -151,12 +151,13 @@ namespace ITD.Players
 			}
             if (melomycosis)
             {
+                int defenseCalc = Player.statDefense / 5;
                 if (Player.lifeRegen > 0)
                     Player.lifeRegen = 0;
 
                 Player.lifeRegenTime = 0;
 
-                Player.lifeRegen -= 5;
+                Player.lifeRegen -= 5 + defenseCalc;
             }
 		}
 		

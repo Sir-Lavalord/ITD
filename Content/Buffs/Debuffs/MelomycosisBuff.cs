@@ -1,4 +1,5 @@
-﻿using ITD.Utilities;
+﻿using ITD.Content.NPCs;
+using ITD.Utilities;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -10,10 +11,14 @@ namespace ITD.Content.Buffs.Debuffs
         {
             Main.buffNoSave[Type] = true;
             Main.debuff[Type] = true;
+            Main.buffNoTimeDisplay[Type] = true;
         }
         public override void Update(Player player, ref int buffIndex)
         {
             player.GetITDPlayer().melomycosis = true;
         }
+        public override void Update(NPC npc, ref int buffIndex) {
+			npc.GetGlobalNPC<ITDGlobalNPC>().melomycosis = true;
+		}
     }
 }

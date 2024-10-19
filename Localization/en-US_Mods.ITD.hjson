@@ -863,13 +863,13 @@ Items: {
 	}
 
 	BlackMoldItem: {
-		DisplayName: Black Mold Item
+		DisplayName: Black Mold
 		Tooltip: ""
 	}
 
-	WheelerTrashCan: {
-		DisplayName: Wheeler Trash Can
-		Tooltip: ""
+	BlackFlask: {
+		DisplayName: Black Flask
+		Tooltip: Melee and whip attacks deal damage over time to enemies
 	}
 }
 
@@ -998,7 +998,6 @@ Projectiles: {
 	}
 
 	ChainwhipWhip.DisplayName: Chainwhip Whip
-	CosmicJellyfishBlackholeAura.DisplayName: Cosmic Jellyfish Blackhole Aura
 }
 
 NPCs: {
@@ -1128,8 +1127,13 @@ Buffs: {
 	}
 
 	MelomycosisBuff: {
-		DisplayName: Melomycosis Buff
-		Description: Mods.ITD.Buffs.MelomycosisBuff.Description
+		DisplayName: Melomycosis
+		Description: Deals increased damage based on your defense
+	}
+
+	WeaponImbueMelomycosis: {
+		DisplayName: Weapon Imbue: Melomycosis
+		Description: Melee attacks deal damage over time to enemies
 	}
 }
 
