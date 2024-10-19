@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using ITD.Content.Buffs.Debuffs;
+using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger
 {

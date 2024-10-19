@@ -10,6 +10,11 @@ using Terraria.ID;
 using ITD.Utilities;
 using System.Runtime.InteropServices;
 using Terraria.DataStructures;
+using ITD.Content.Projectiles.Friendly.Summoner;
+using ITD.Content.Projectiles.Hostile;
+using ITD.Particles;
+using ITD.Particles.Testing;
+using System.Data;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger
 {
@@ -72,7 +77,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             if (Main.player[Projectile.owner].HeldItem.type == ModContent.ItemType<HunterrGreatbow>())
             {
                 Projectile.damage = Main.player[Projectile.owner].GetWeaponDamage(Main.player[Projectile.owner].HeldItem);
-                Projectile.damage = (int)(Projectile.damage * (1 + (ChargeTally * 0.5f)));
+                Projectile.damage = (int)(Projectile.damage * (1 + (ChargeTally * 0.75f)));
                 Projectile.CritChance = player.GetWeaponCrit(player.HeldItem);
                 Projectile.knockBack = Main.player[Projectile.owner].GetWeaponKnockback(Main.player[Projectile.owner].HeldItem, Main.player[Projectile.owner].HeldItem.knockBack);
             }
@@ -141,6 +146,8 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                     Shift = Math.Clamp(Shift + 0.25f, 0f, 1f);
                     if (HaveArrow)
                     {
+                        ParticleSystem.NewParticle<RingMuzzleFlash>(Projectile.Center + Projectile.rotation.ToRotationVector2() * 5f, Vector2.Zero,Projectile.rotation);
+
                         //RoundDown
                         Shift = 1;
                         SoundEngine.PlaySound(SoundID.DD2_BallistaTowerShot, Projectile.Center);

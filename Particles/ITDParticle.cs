@@ -26,6 +26,7 @@ namespace ITD.Particles
         public int frameCounter;
         public Vector2 position;
         public Vector2 velocity;
+        public Vector2 texMorph;
         public int spawnTimeLeft;
         public int timeLeft;
         public float ProgressZeroToOne { get { return (spawnTimeLeft - timeLeft) / (float)spawnTimeLeft; } }

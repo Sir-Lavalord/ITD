@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Buffs.Debuffs;
+using ITD.Content.Items.Weapons.Ranger;
 using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Utilities.Placeholders;
 using Terraria;
@@ -28,6 +29,7 @@ namespace ITD.Content.Buffs.Debuffs
         public override void ResetEffects(NPC npc)
         {
             if (!npc.HasBuff<ToppledDebuff>())
+
             {
                 npc.knockBackResist = OriginalKB;
             }
@@ -36,7 +38,8 @@ namespace ITD.Content.Buffs.Debuffs
         {
             if (npc.HasBuff<ToppledDebuff>())
             {
-                npc.knockBackResist += 0.1f;
+                if (projectile.type == ModContent.ProjectileType<HunterrGreatarrow>())
+                npc.knockBackResist += 0.05f;
             }
         }
     }

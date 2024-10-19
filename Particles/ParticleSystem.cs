@@ -22,7 +22,7 @@ namespace ITD.Particles
         public static ArmorShaderData[] particleShaders = [];
         private static readonly Dictionary<Type, ITDParticle> particlesByType = [];
         public List<ITDParticle> particles;
-        public static ITDParticle NewParticle<T>(Vector2 position, Vector2 velocity) where T : ITDParticle
+        public static ITDParticle NewParticle<T>(Vector2 position, Vector2 velocity, float rotation) where T : ITDParticle
         {
             Type particleType = typeof(T);
             if (particlesByType.TryGetValue(particleType, out ITDParticle value))
@@ -39,6 +39,7 @@ namespace ITD.Particles
                     newInstance.Initialize();
                     newInstance.position = position;
                     newInstance.velocity = velocity;
+                    newInstance.rotation = rotation;
                     DetourManager.GetInstance<ParticleSystem>().particles.Add(newInstance);
                     return newInstance;
                 }

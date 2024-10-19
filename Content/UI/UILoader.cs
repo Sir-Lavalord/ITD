@@ -1,8 +1,8 @@
 ﻿using ITD.Networking;
 using Microsoft.Xna.Framework;
 using NVorbis.Contracts;
-using StructureHelper.Core.Loaders.UILoading;
-using System;
+/*using StructureHelper.Core.Loaders.UILoading;
+*/using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;

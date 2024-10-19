@@ -8,19 +8,22 @@ using ITD.Content.Projectiles;
 using Terraria.Map;
 using ITD.Content.NPCs.Bosses;
 using ITD.Utilities;
+using SteelSeries.GameSense;
 namespace ITD.Content.Projectiles.Hostile
 {
     //TODO: MUST BE RE-WRITTEN ENTIRELY, ELSE REMOVE BEFORE RELEASE
     public class CosmicRay : Deathray
     {
         public override string Texture => "ITD/Content/Projectiles/Hostile/CosmicRay";
-        public CosmicRay() : base(120) { }
+        public CosmicRay() : base(180) { }
         private Vector2 spawnPos;
 
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
         }
+        public Vector2 CorePos;
+
         public override void AI()
         {
             Vector2? vector78 = null;
@@ -46,6 +49,8 @@ namespace ITD.Content.Projectiles.Hostile
             player.GetITDPlayer().Screenshake = 20;
             if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
             {
+                CorePos = new Vector2(CosJel.Center.X, CosJel.Center.Y - 140);
+
                 if (CosJel != null && !CosJel.dontTakeDamage)
                 {
                     Projectile.Center = CosJel.Center;

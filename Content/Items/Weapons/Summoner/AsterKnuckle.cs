@@ -64,7 +64,7 @@ namespace ITD.Content.Items.Weapons.Summoner
     ModContent.ProjectileType<AsterBlasterBlast>(), (int)(Item.damage), Item.knockBack, player.whoAmI);
             Blast.ai[1] = 100f;
             Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
-            Blast.netUpdate = true;;
+            Blast.netUpdate = true;
             Vector2 Shootpos = -Vector2.Normalize(Main.MouseWorld - player.MountedCenter) * 10;
             for (int i = 0; i < 4; i++)
             {

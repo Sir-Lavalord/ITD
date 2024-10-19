@@ -13,23 +13,16 @@ namespace ITD.Content.Projectiles.Friendly.Misc
     {
         public ref float CurrentRadius => ref Projectile.ai[0];
         public ref float MaxRadius => ref Projectile.ai[1];
-        public virtual bool UsesScreenshake { get; } = false;
-        public virtual float GetScreenshakePower(float pulseCompletionRatio) => 0f;
         public virtual float Fadeout(float completion) => (1f - (float)Math.Sqrt(completion)) * 0.7f;
         public abstract int Lifetime { get; }
         public abstract Color GetCurrentExplosionColor(float pulseCompletionRatio);
-
-        // Use the invisible projectile by default. This can be overridden in child types if desired.
         public override string Texture => ITD.BlankTexture;
+        public abstract Vector2 ScaleRatio { get; }
 
         public override void AI()
         {
-
-            // Expand outward.
             CurrentRadius = MathHelper.Lerp(CurrentRadius, MaxRadius, 0.25f);
             Projectile.scale = MathHelper.Lerp(1.2f, 5f, Utils.GetLerpValue(Lifetime, 0f, Projectile.timeLeft, true));
-
-            // Adjust the hitbox.
             Projectile.ExpandHitboxBy((int)(CurrentRadius * Projectile.scale), (int)(CurrentRadius * Projectile.scale));
         }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -42,11 +35,10 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 
             float pulseCompletionRatio = Utils.GetLerpValue(Lifetime, 0f, Projectile.timeLeft, true);
-            Vector2 scale = new Vector2(1.5f, 1f);
-            Vector2 drawPosition = Projectile.Center - Main.screenPosition + Projectile.Size * scale * 0.5f;
+            Vector2 drawPosition = Projectile.Center - Main.screenPosition + Projectile.Size * ScaleRatio * 0.5f;
             Rectangle drawArea = new Rectangle(0, 0, Projectile.width, Projectile.height);
             Color fadeoutColor = new Color(new Vector4(Fadeout(pulseCompletionRatio)) * Projectile.Opacity);
-            DrawData drawData = new DrawData(ModContent.Request<Texture2D>("Terraria/Images/Misc/Perlin").Value, drawPosition, drawArea, fadeoutColor, Projectile.rotation, Projectile.Size, scale, SpriteEffects.None, 0);
+            DrawData drawData = new DrawData(ModContent.Request<Texture2D>("Terraria/Images/Misc/Perlin").Value, drawPosition, drawArea, fadeoutColor, Projectile.rotation, Projectile.Size, ScaleRatio, SpriteEffects.None, 0);
 
             GameShaders.Misc["ForceField"].UseColor(GetCurrentExplosionColor(pulseCompletionRatio));
             GameShaders.Misc["ForceField"].Apply(drawData);

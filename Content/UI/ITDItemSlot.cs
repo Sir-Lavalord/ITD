@@ -1,8 +1,8 @@
 ﻿using ITD.Content.Items.Favors;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using StructureHelper.Core.Loaders.UILoading;
-using System;
+/*using StructureHelper.Core.Loaders.UILoading;
+*/using System;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;

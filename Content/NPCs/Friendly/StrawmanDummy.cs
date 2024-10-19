@@ -14,6 +14,7 @@ using Terraria.GameContent.ItemDropRules;
 using ITD.Content.Items.Other;
 using Terraria.DataStructures;
 using Terraria.Localization;
+using Terraria.GameContent.Personalities;
 
 namespace ITD.Content.NPCs.Friendly
 
@@ -64,7 +65,8 @@ namespace ITD.Content.NPCs.Friendly
         public override void AI()
         {
             Player player = Main.LocalPlayer;
-
+            if (NPC.velocity.Y == 0)
+                NPC.velocity.X *= 0.9f;
             switch (NPC.ai[0])
             {
                 case 0:
@@ -74,8 +76,6 @@ namespace ITD.Content.NPCs.Friendly
                     break;
                 case 2:
                     NPC.knockBackResist = 0.8f;
-                    if (NPC.velocity.Y == 0)
-                        NPC.velocity.X *= 0.9f;
                     break;
                 case 3:
                     NPC.damage = 100;
@@ -106,6 +106,7 @@ namespace ITD.Content.NPCs.Friendly
                 case 6:
                     NPC.boss = false;
                     break;
+
             }
             if (player.controlUseTile && (player.HeldItem.type == ModContent.ItemType<StrawmanItem>()) && player.noThrow == 0)
             {
@@ -151,7 +152,7 @@ namespace ITD.Content.NPCs.Friendly
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    Dust dust = Dust.NewDustDirect(NPC.Center, NPC.width, NPC.height, DustID.Blood, 0, 0f, 80, default, Main.rand.NextFloat(0.9f, 1.5f));
+                    Dust dust = Dust.NewDustDirect(NPC.Center, NPC.width/2, NPC.height/2, DustID.Blood, 0, 0f, 80, default, Main.rand.NextFloat(0.9f, 1.5f));
                     dust.velocity *= 1f;
                 }
             }

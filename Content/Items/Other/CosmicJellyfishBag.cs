@@ -36,8 +36,8 @@ namespace ITD.Content.Items.Other
         public override void ModifyItemLoot(ItemLoot itemLoot)
         {
             itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<CosmicJellyfishMask>(), 7));
-            itemLoot.Add(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, CosmicJellyfish.oneFromOptionsDrops));
-			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<StarlitOre>(), 1, 15, 30));
+/*            itemLoot.Add(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, CosmicJellyfish.oneFromOptionsDrops));
+*/			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<StarlitOre>(), 1, 15, 30));
             itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(ModContent.NPCType<CosmicJellyfish>()));
         }
     }
