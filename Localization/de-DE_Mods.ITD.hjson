@@ -697,7 +697,7 @@ Items: {
 
 		DummyType: {
 			// 0: Perfect
-			// 1: Fortified
+			// 1: Heavy
 			// 2: Windswept
 			// 3: Thorny
 			// 4: Terminal
@@ -724,6 +724,7 @@ Items: {
 			Once released, this will summon a powerful spirit to help you in battle
 			The duration and damage this spirit deals increases as you sacrifice more blood
 			You may not summon more than one spirit at the same time
+			'Blood for the blood god.'
 			''' */
 	}
 
@@ -799,9 +800,8 @@ Items: {
 		// DisplayName: Hun-Terr Greatbow
 		/* Tooltip:
 			'''
-			Hold Right Click to charge up a greatarrow
-			Fully-charged greatarrow can topple enemies
-			Greatarrows knock back toppled enemies
+			Hold Right Click to charge up an arrow
+			Fully-charged arrow can topple enemies
 			While not charging, the bow can block projectiles
 			''' */
 	}
@@ -820,8 +820,47 @@ Items: {
 		// Tooltip: ""
 	}
 
-	WheelerTrashCan: {
-		// DisplayName: Dorothea
+	CopperMandibles: {
+		// DisplayName: Copper Mandibles
+		/* Tooltip:
+			'''
+			'Not to be confused with Steel Mandibles'
+			[c/{0}:Latch Effect:] Increases damage dealt depending on the target's remaining life
+			''' */
+	}
+
+	Winch: {
+		// DisplayName: Winch
+		/* Tooltip:
+			'''
+			Snaptraps retract faster
+			+10% Snaptrap Length
+			''' */
+	}
+
+	CharmOfTheAccursed: {
+		// DisplayName: Charm of the Accursed
+		// Tooltip: Releases damaging spirits after taking 100 damage
+	}
+
+	Chainwhip: {
+		// DisplayName: Chainwhip
+		/* Tooltip:
+			'''
+			Press RMB or LMB to fire a snaptrap
+			RMB to whip enemies while a snaptrap is latched
+			'Its a chain, AND a whip! '
+			[c/{0}:Latch Effect:] Increases Summon damage and Movement speed over a course of 20 seconds
+			''' */
+	}
+
+	GrabbOMatic20000: {
+		// DisplayName: Grabb O Matic20000
+		// Tooltip: ""
+	}
+
+	BlackMoldItem: {
+		// DisplayName: Black Mold Item
 		// Tooltip: ""
 	}
 }
@@ -936,7 +975,21 @@ Projectiles: {
 	// CosmicJellyfish_RightHand.DisplayName: Cosmic Jellyfish_ Right Hand
 	// HunterrGreatbowProj.DisplayName: Hunterr Greatbow
 	// HunterrGreatarrow.DisplayName: Hunterr Greatarrow
-	// RingMuzzleFlash.DisplayName: Ring Muzzle Flash
+
+	CopperMandiblesProjectile: {
+		// OneTimeLatchMessage: Infestation!
+		// DisplayName: Copper Mandibles
+	}
+
+	// MiniMandible.DisplayName: Mini Mandible
+	// AccursedSpirit.DisplayName: Accursed Spirit
+
+	ChainwhipSnaptrapProjectile: {
+		// OneTimeLatchMessage: Agility!
+		// DisplayName: Chainwhip Snaptrap Projectile
+	}
+
+	// ChainwhipWhip.DisplayName: Chainwhip Whip
 }
 
 NPCs: {
@@ -973,6 +1026,21 @@ NPCs: {
 	// HauntedTombstone.DisplayName: Haunted Tombstone
 	// GhastlyTombstone.DisplayName: Ghastly Tombstone
 	// StrawmanDummy.DisplayName: Strawman
+
+	RecruitedNPC: {
+		// DisplayName: Recruited N P C
+
+		TownNPCMood: {
+			// Content: I am content.
+			// NoHome: I hate not having a home.
+			// FarFromHome: I am too far from home.
+			// LoveSpace: I love having so much space.
+			// DislikeCrowded: I dislike how crowded I am.
+			// HateCrowded: I hate how crowded I am.
+			// LikeNPC_Princess: I like {NPCName}.
+			// Princess_LovesNPC: I like {NPCName}.
+		}
+	}
 }
 
 Buffs: {
@@ -1047,7 +1115,12 @@ Buffs: {
 
 	ToppledDebuff: {
 		// DisplayName: Toppled
-		// Description: You are going to fall
+		// Description: KB
+	}
+
+	MelomycosisBuff: {
+		// DisplayName: Melomycosis Buff
+		// Description: Mods.ITD.Buffs.MelomycosisBuff.Description
 	}
 }
 

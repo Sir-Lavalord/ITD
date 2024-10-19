@@ -12,14 +12,12 @@ using ITD.Utilities;
 
 namespace ITD.Content.World
 {
-    public class DeepDesertGenPass : GenPass
+    public class DeepDesertGenPass(string name, float loadWeight) : GenPass(name, loadWeight)
     {
         private static int diorite;
         private static int pegmatite;
         private static int pegmatiteWall;
-        public DeepDesertGenPass(string name, float loadWeight) : base(name, loadWeight)
-        {
-        }
+
         protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
             diorite = ModContent.TileType<DioriteTile>();
@@ -29,7 +27,7 @@ namespace ITD.Content.World
             GenDeepDesert(p.X, p.Y, WorldGen._genRandSeed);
         }
 
-        private Point GetGenStartPoint()
+        private static Point GetGenStartPoint()
         {
             Point deepDesertStart = new();
             for (int j = Main.maxTilesY; j >= 0 && deepDesertStart == Point.Zero; j--)
@@ -46,12 +44,12 @@ namespace ITD.Content.World
             return deepDesertStart;
         }
 
-        private void GenDeepDesert(float x, float y, int seed)
+        private static void GenDeepDesert(float x, float y, int seed)
         {
             int width = Main.maxTilesX / 15;
             int height = Main.maxTilesY / 6;
             var rectangle = new Rectangle((int)x - (width / 2), (int)y - (height / 2), width, height);
-            List<Rectangle> tunnelsList = new List<Rectangle>();
+            List<Rectangle> tunnelsList = [];
             bool inTunnels(int i, int j)
             {
                 for(int k = 0; k < tunnelsList.Count; k++)
@@ -76,7 +74,7 @@ namespace ITD.Content.World
             {
                 for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
                 {
-                    if (Helpers.TileType(i, j, diorite))
+                    if (TileHelpers.TileType(i, j, diorite))
                     {
                         if (WorldGen.genRand.NextBool(2) && !inTunnels(i,j))
                         {
@@ -98,7 +96,7 @@ namespace ITD.Content.World
             {
                 for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
                 {
-                    if (Helpers.EdgeTile(i, j) && Helpers.TileType(i, j, diorite))
+                    if (TileHelpers.EdgeTile(i, j) && TileHelpers.TileType(i, j, diorite))
                     {
                         WorldGen.TileRunner(i, j, 5, 2, pegmatite);
                     }

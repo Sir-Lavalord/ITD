@@ -180,7 +180,7 @@ namespace ITD.Content.Tiles
                 type = ModContent.TileType<BlueshroomTree>();
             }
             int height = Main.rand.Next(minHeight, maxHeight + 1);
-            if (Helpers.AptForTree(i, j, height, saplingType))
+            if (TileHelpers.AptForTree(i, j, height, saplingType))
             {
                 for (int k = 0; k < height; k++)
                 {
@@ -320,15 +320,15 @@ namespace ITD.Content.Tiles
             }
             if (IsCenterRootWithSideRoots(i, j))
             {
-                if (IsRightRoot(i + 1, j) && Helpers.TileType(i + 1, j, Type))
+                if (IsRightRoot(i + 1, j) && TileHelpers.TileType(i + 1, j, Type))
                 {
                     WorldGen.KillTile(i + 1, j);
                 }
-                if (IsLeftRoot(i - 1, j) && Helpers.TileType(i - 1, j, Type))
+                if (IsLeftRoot(i - 1, j) && TileHelpers.TileType(i - 1, j, Type))
                 {
                     WorldGen.KillTile(i - 1, j);
                 }
-                if (IsCenterTrunk(i, j - 1) && Helpers.TileType(i, j - 1, Type))
+                if (IsCenterTrunk(i, j - 1) && TileHelpers.TileType(i, j - 1, Type))
                 {
                     WorldGen.KillTile(i, j - 1);
                 }
@@ -347,21 +347,21 @@ namespace ITD.Content.Tiles
                 {
                     WorldGen.KillTile(i + 1, j);
                 }
-                if (IsCenterTrunk(i, j - 1) && Helpers.TileType(i, j - 1, Type))
+                if (IsCenterTrunk(i, j - 1) && TileHelpers.TileType(i, j - 1, Type))
                 {
                     WorldGen.KillTile(i, j - 1 );
                 }
-                if (IsCenterTrunk(i, j + 1) && Helpers.TileType(i, j + 1, Type))
+                if (IsCenterTrunk(i, j + 1) && TileHelpers.TileType(i, j + 1, Type))
                 {
                     Tile t = Framing.GetTileSafely(i, j + 1);
                     if (IsCenterRootWithSideRoots(i, j + 1))
                     {
                         SideGrowth roots = SideGrowth.None;
-                        if (IsRightRoot(i + 1, j + 1) && Helpers.TileType(i + 1, j + 1, Type))
+                        if (IsRightRoot(i + 1, j + 1) && TileHelpers.TileType(i + 1, j + 1, Type))
                         {
                             roots = SideGrowth.Right;
                         }
-                        if (IsLeftRoot(i - 1, j + 1) && Helpers.TileType(i - 1, j + 1, Type))
+                        if (IsLeftRoot(i - 1, j + 1) && TileHelpers.TileType(i - 1, j + 1, Type))
                         {
                             roots = roots == SideGrowth.Right ? SideGrowth.Both : SideGrowth.Left;
                         }
@@ -383,11 +383,11 @@ namespace ITD.Content.Tiles
                         return;
                     }
                     SideGrowth branches = SideGrowth.None;
-                    if ((IsRightBranch(i + 1, j + 1) || IsRightBranchNormal(i + 1, j + 1)) && Helpers.TileType(i + 1, j + 1, Type))
+                    if ((IsRightBranch(i + 1, j + 1) || IsRightBranchNormal(i + 1, j + 1)) && TileHelpers.TileType(i + 1, j + 1, Type))
                     {
                         branches = SideGrowth.Right;
                     }
-                    if ((IsLeftBranch(i - 1, j + 1) || IsLeftBranchNormal(i - 1, j + 1)) && Helpers.TileType(i - 1, j + 1, Type))
+                    if ((IsLeftBranch(i - 1, j + 1) || IsLeftBranchNormal(i - 1, j + 1)) && TileHelpers.TileType(i - 1, j + 1, Type))
                     {
                         branches = branches == SideGrowth.Right ? SideGrowth.Both : SideGrowth.Left;
                     }
@@ -417,9 +417,9 @@ namespace ITD.Content.Tiles
             if (IsLeftBranch(tile))
             {
                 int frame = tile.TileFrameY / 18;
-                Rectangle sourceRect = new Rectangle(0, 42*frame, 40, 40);
-                Vector2 position = Helpers.TileExtraPos(i, j, new Vector2(15f, 7f));
-                Vector2 origin = new Vector2(39, GetBranches().Height / 2f / 3f);
+                Rectangle sourceRect = new(0, 42*frame, 40, 40);
+                Vector2 position = TileHelpers.TileExtraPos(i, j, new Vector2(15f, 7f));
+                Vector2 origin = new(39, GetBranches().Height / 2f / 3f);
                 spriteBatch.Draw(GetBranches(), position, sourceRect, color, 0f, origin, 1f, SpriteEffects.None, 0f);
                 PostDrawBranch(spriteBatch, position, origin, color, sourceRect, true);
                 return false;
@@ -427,9 +427,9 @@ namespace ITD.Content.Tiles
             if (IsRightBranch(tile))
             {
                 int frame = tile.TileFrameY / 18;
-                Rectangle sourceRect = new Rectangle(42, 42 * frame, 40, 40);
-                Vector2 position = Helpers.TileExtraPos(i, j, new Vector2(42f, 7f));
-                Vector2 origin = new Vector2(42, GetBranches().Height / 2f / 3f);
+                Rectangle sourceRect = new(42, 42 * frame, 40, 40);
+                Vector2 position = TileHelpers.TileExtraPos(i, j, new Vector2(42f, 7f));
+                Vector2 origin = new(42, GetBranches().Height / 2f / 3f);
                 spriteBatch.Draw(GetBranches(), position, sourceRect, color, 0f, origin, 1f, SpriteEffects.None, 0f);
                 PostDrawBranch(spriteBatch, position, origin, color, sourceRect, false);
                 return false;
@@ -437,9 +437,9 @@ namespace ITD.Content.Tiles
             if (IsTopTile(tile))
             {
                 int frame = tile.TileFrameY / 18;
-                Rectangle sourceRect = new Rectangle(82*frame, 0, 80, 80);
-                Vector2 origin = new Vector2(GetTreeTops().Width / 2f / 3f + 4, GetTreeTops().Height - 2);
-                Vector2 offset = new Vector2(13f, 0f);
+                Rectangle sourceRect = new(82*frame, 0, 80, 80);
+                Vector2 origin = new(GetTreeTops().Width / 2f / 3f + 4, GetTreeTops().Height - 2);
+                Vector2 offset = new(13f, 0f);
                 WeatherSystem.DrawTreeSway(i, j, spriteBatch, GetTreeTops(), sourceRect, offset, origin);
                 PostDrawTreeTops(i, j, spriteBatch, sourceRect, offset, origin, color);
             }

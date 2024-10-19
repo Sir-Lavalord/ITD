@@ -10,9 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.DataStructures;
-using System.Collections;
-using Terraria.GameContent.Animations;
-using Microsoft.Extensions.Logging.Abstractions;
+using ITD.Kinematics;
 using ITD.Utilities;
 using Terraria.GameContent.Bestiary;
 
@@ -214,6 +212,9 @@ namespace ITD.Content.NPCs.Bosses
 
     public class FloralDevourerSegment : ModNPC
     {
+        private static readonly Asset<Texture2D> femurTexture = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerFemur");
+        private static readonly Asset<Texture2D> tibiaTexture = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerTibia");
+
         public Vector2 frontLegPosition;
         public Vector2 backLegPosition;
 
@@ -234,8 +235,8 @@ namespace ITD.Content.NPCs.Bosses
             get => NPC.ai[3] == 1f;
             set => NPC.ai[3] = value ? 1f : 0f;
         }
-        private Leg legFront;
-        private Leg legBack;
+        private WomrLeg legFront;
+        private WomrLeg legBack;
         public int ID
         {
             get => (int)NPC.ai[0];
@@ -270,8 +271,8 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (HasLegs)
             {
-                legFront = new Leg(NPC.Center.X, NPC.Center.Y, 0f);
-                legBack = new Leg(NPC.Center.X, NPC.Center.Y, 0f);
+                legFront = new WomrLeg(NPC.Center.X, NPC.Center.Y);
+                legBack = new WomrLeg(NPC.Center.X, NPC.Center.Y);
             }
         }
         public override bool? CanBeHitByItem(Player player, Item item) => false;
@@ -317,108 +318,30 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     legFront.Update(frontLegPosition);
                     legBack.Update(backLegPosition);
-                    legFront.legBase = NPC.Center;
-                    legBack.legBase = NPC.Center + new Vector2(direction.X * 32f, 0f);
+                    legFront.ChainBase = NPC.Center;
+                    legBack.ChainBase = NPC.Center + new Vector2(direction.X * 32f, 0f);
                 }
             }
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             bool isFacingRight = direction.X > 0f;
-            legBack?.Draw(spriteBatch, screenPos, Color.Gray, isFacingRight);
+            legBack?.Draw(spriteBatch, screenPos, Color.Gray, isFacingRight, femurTexture.Value, femurTexture.Value, tibiaTexture.Value);
             return false;
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             bool isFacingRight = direction.X > 0f;
-            legFront?.Draw(spriteBatch, screenPos, Color.White, isFacingRight);
+            legFront?.Draw(spriteBatch, screenPos, Color.White, isFacingRight, femurTexture.Value, femurTexture.Value, tibiaTexture.Value);
         }
     }
-    public class Leg(float x, float y, float angle) : IDisposable
+    public class WomrLeg(float x, float y) : KineChain(x, y)
     {
-        public Segment[] segments =
-            [
-                new Segment(x, y, angle, 97f, false),
-                new Segment(x, y, angle, 81f, true),
-            ];
-        public Vector2 legBase = new Vector2(x, y);
-
-        public void Update(Vector2 targetPos)
-        {
-            segments[0].Update();
-            segments[0].Follow(targetPos);
-
-            for (int i = 1; i < segments.Length; i++)
-            {
-                segments[i].Update();
-                segments[i].FollowSegment(segments[i - 1]);
-            }
-            int last = segments.Length - 1;
-            Segment s = segments[last];
-            s.a = legBase;
-            s.Update();
-
-            for (int i = last - 1; i >= 0; i--)
-            {
-                Segment seg = segments[i];
-                Segment next = segments[i + 1];
-                seg.a = next.b;
-                seg.Update();
-            }
-        }
-
-        public void Draw(SpriteBatch spriteBatch, Vector2 screenPos, Color color, bool shouldBeMirrored)
-        {
-            for (int i = segments.Length - 1; i >= 0; i--)
-            {
-                segments[i].Draw(spriteBatch, screenPos, color, shouldBeMirrored);
-            }
-        }
-
-        public void Dispose()
-        {
-            segments = null;
-            GC.SuppressFinalize(this);
-        }
-    }
-
-    public class Segment(float x, float y, float angle, float length, bool femur)
-    {
-        private static Asset<Texture2D> femurTexture = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerFemur");
-        private static Asset<Texture2D> tibiaTexture = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerTibia");
-        public Vector2 a { get; set; } = new Vector2(x, y);
-        public Vector2 b { get; set; }
-        public float Length { get; set; } = length;
-        public float Angle { get; set; } = angle;
-
-        public Vector2 Target { get; set; } = Main.MouseWorld;
-        public bool isFemur { get; set; } = femur;
-
-        public void FollowSegment(Segment child)
-        {
-            Follow(new Vector2(child.a.X, child.a.Y));
-        }
-        public void Follow(Vector2 target)
-        {
-            Vector2 dir = target - a;
-            Angle = (float)Math.Atan2(dir.Y, dir.X);
-            dir.Normalize();
-            dir *= Length;
-            dir *= -1f;
-            a = target + dir;
-        }
-
-        public void Update()
-        {
-            float dx = Length * (float)Math.Cos(Angle);
-            float dy = Length * (float)Math.Sin(Angle);
-            b = new Vector2(a.X+dx, a.Y+dy);
-        }
-        public void Draw(SpriteBatch spriteBatch, Vector2 screenPos, Color color, bool shouldBeMirrored)
-        {
-            Point tileCoords = new Vector2((a.X+b.X)/2f, (a.Y+b.Y)/2f).ToTileCoordinates();
-            Texture2D textureToDraw = isFemur ? femurTexture.Value : tibiaTexture.Value;
-            spriteBatch.Draw(textureToDraw, a-screenPos, null, Lighting.GetColor(tileCoords.X, tileCoords.Y).MultiplyRGB(color), Angle, new Vector2(0f, textureToDraw.Height / 2f), 1f, shouldBeMirrored? SpriteEffects.FlipVertically : SpriteEffects.None, default);
-        }
+        private KineSegment[] segments =
+        [
+            new KineSegment(x, y, 97f),
+            new KineSegment(x, y, 81f),
+        ];
+        public override KineSegment[] Segments => segments;
     }
 }

@@ -10,10 +10,6 @@ using static ITD.Downed;
 using Terraria.Achievements;
 using ITD.Content.Items.Other;
 using Terraria;
-using ITD.Players;
-using Microsoft.Xna.Framework;
-using System.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ITD
 {

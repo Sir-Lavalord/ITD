@@ -26,7 +26,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public override void SetSnaptrapProperties()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(VocalZeroProjectile)}.OneTimeLatchMessage"));
-            ShootRange = 16f * 12f;
+            ShootRange = 16f * 16f;
             RetractAccel = 1.8f;
             FramesUntilRetractable = 10;
             ExtraFlexibility = 16f * 4f;

@@ -822,8 +822,47 @@ Items: {
 		// Tooltip: ""
 	}
 
-	WheelerTrashCan: {
-		// DisplayName: Dorothea
+	CopperMandibles: {
+		// DisplayName: Copper Mandibles
+		/* Tooltip:
+			'''
+			'Not to be confused with Steel Mandibles'
+			[c/{0}:Latch Effect:] Increases damage dealt depending on the target's remaining life
+			''' */
+	}
+
+	Winch: {
+		// DisplayName: Winch
+		/* Tooltip:
+			'''
+			Snaptraps retract faster
+			+10% Snaptrap Length
+			''' */
+	}
+
+	CharmOfTheAccursed: {
+		// DisplayName: Charm of the Accursed
+		// Tooltip: Releases damaging spirits after taking 100 damage
+	}
+
+	Chainwhip: {
+		// DisplayName: Chainwhip
+		/* Tooltip:
+			'''
+			Press RMB or LMB to fire a snaptrap
+			RMB to whip enemies while a snaptrap is latched
+			'Its a chain, AND a whip! '
+			[c/{0}:Latch Effect:] Increases Summon damage and Movement speed over a course of 20 seconds
+			''' */
+	}
+
+	GrabbOMatic20000: {
+		// DisplayName: Grabb O Matic20000
+		// Tooltip: ""
+	}
+
+	BlackMoldItem: {
+		// DisplayName: Black Mold Item
 		// Tooltip: ""
 	}
 }
@@ -938,7 +977,21 @@ Projectiles: {
 	CosmicJellyfish_RightHand.DisplayName: Mano de la Medusa Cósmica
 	HunterrGreatbowProj.DisplayName: Gran arco del Hun-Terr
 	HunterrGreatarrow.DisplayName: Gran flecha del Hun-Terr
-	// RingMuzzleFlash.DisplayName: Ring Muzzle Flash
+
+	CopperMandiblesProjectile: {
+		// OneTimeLatchMessage: Infestation!
+		// DisplayName: Copper Mandibles
+	}
+
+	// MiniMandible.DisplayName: Mini Mandible
+	// AccursedSpirit.DisplayName: Accursed Spirit
+
+	ChainwhipSnaptrapProjectile: {
+		// OneTimeLatchMessage: Agility!
+		// DisplayName: Chainwhip Snaptrap Projectile
+	}
+
+	// ChainwhipWhip.DisplayName: Chainwhip Whip
 }
 
 NPCs: {
@@ -975,6 +1028,21 @@ NPCs: {
 	HauntedTombstone.DisplayName: Tumba embrujada
 	GhastlyTombstone.DisplayName: Tumba fantasmagórica
 	StrawmanDummy.DisplayName: Hombre de paja
+
+	RecruitedNPC: {
+		// DisplayName: Recruited N P C
+
+		TownNPCMood: {
+			// Content: I am content.
+			// NoHome: I hate not having a home.
+			// FarFromHome: I am too far from home.
+			// LoveSpace: I love having so much space.
+			// DislikeCrowded: I dislike how crowded I am.
+			// HateCrowded: I hate how crowded I am.
+			// LikeNPC_Princess: I like {NPCName}.
+			// Princess_LovesNPC: I like {NPCName}.
+		}
+	}
 }
 
 Buffs: {
@@ -1050,6 +1118,11 @@ Buffs: {
 	ToppledDebuff: {
 		DisplayName: Derribado
 		Description: KB
+	}
+
+	MelomycosisBuff: {
+		// DisplayName: Melomycosis Buff
+		// Description: Mods.ITD.Buffs.MelomycosisBuff.Description
 	}
 }
 

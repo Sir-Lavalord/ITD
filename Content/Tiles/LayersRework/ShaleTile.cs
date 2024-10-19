@@ -24,19 +24,10 @@ namespace ITD.Content.Tiles.LayersRework
         }
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-            Tile up = Framing.GetTileSafely(i, j - 1);
-            Tile upLeft = Framing.GetTileSafely(i - 1, j - 1);
-            Tile upRight = Framing.GetTileSafely(i + 1, j - 1);
-            Tile right = Framing.GetTileSafely(i + 1, j);
-            Tile left = Framing.GetTileSafely(i - 1, j);
-            Tile down = Framing.GetTileSafely(i, j + 1);
-            Tile downLeft = Framing.GetTileSafely(i - 1, j + 1);
-            Tile downRight = Framing.GetTileSafely(i + 1, j + 1);
-            Tile thisTile = Framing.GetTileSafely(i, j);
-            Helpers.VanillaTileFraming(ref thisTile, up, upLeft, upRight, down, downLeft, downRight, left, right);
-            Helpers.VanillaTileMergeWithOther(ref thisTile, TileID.Dirt, up, upLeft, upRight, down, downLeft, downRight, left, right);
-            Helpers.VanillaTileMergeWithOther(ref thisTile, TileID.Stone, up, upLeft, upRight, down, downLeft, downRight, left, right, 180, 270);
-            Helpers.VanillaTileMergeWithOther(ref thisTile, ModContent.TileType<DepthrockTile>(), up, upLeft, upRight, down, downLeft, downRight, left, right, 180, 270);
+            TileHelpers.VanillaTileFraming(i, j);
+            TileHelpers.VanillaTileMergeWithOther(i, j, TileID.Dirt);
+            TileHelpers.VanillaTileMergeWithOther(i, j, TileID.Stone, 180, 270);
+            TileHelpers.VanillaTileMergeWithOther(i, j, ModContent.TileType<DepthrockTile>(), 180, 270);
             return false;
         }
     }

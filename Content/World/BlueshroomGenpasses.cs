@@ -8,6 +8,9 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using ITD.Content.Tiles;
 using ITD.Utilities;
+using ITD.Content.Tiles.LayersRework;
+using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics;
 
 namespace ITD.Content.World
 {
@@ -19,48 +22,48 @@ namespace ITD.Content.World
             GenFloor(p.X, p.Y, WorldGen._genRandSeed);
         }
 
-        private Point GetGenStartPoint()
+        private static Point GetGenStartPoint()
         {
-            Point iceBiomeStart = new(0, 0);
-            Point iceBiomeEnd = new(0, 0);
-            for (int i = 0; i < Main.maxTilesX && iceBiomeStart == Point.Zero; i++)
+            // you would think GenVars.snowMinX[0] and GenVars.snowMaxX[0] would provide the correct values but they only do that if the snow biome is perfectly symmetrical for some reason
+            int xTileCandidateLeft = 0;
+            bool foundTileClosestToTheLeftAndOnTheSurface = false;
+            for (int i = 0; i < Main.maxTilesX && !foundTileClosestToTheLeftAndOnTheSurface; i++)
             {
-                for (int j = 0; j < Main.maxTilesY; j++)
+                for (int j = 0; j < GenVars.snowTop; j++)
                 {
-                    if (Main.tile[i, j].TileType == TileID.IceBlock)
+                    if (Framing.GetTileSafely(i, j).TileType == TileID.SnowBlock && xTileCandidateLeft < i)
                     {
-                        iceBiomeStart = new Point(i, j);
+                        xTileCandidateLeft = i;
+                        foundTileClosestToTheLeftAndOnTheSurface = true;
                         break;
                     }
                 }
             }
-            for (int i = Main.maxTilesX; i >= 0 && iceBiomeEnd == Point.Zero; i--)
+            int xTileCandidateRight = Main.maxTilesX;
+            bool foundTileClosestToTheRightAndOnTheSurface = false;
+            for (int i = Main.maxTilesX - 1; i >= 0 && !foundTileClosestToTheRightAndOnTheSurface; i--)
             {
-                for (int j = Main.maxTilesY; j >= 0; j--)
+                for (int j = 0; j < GenVars.snowTop; j++)
                 {
-                    if (Main.tile[i, j].TileType == TileID.IceBlock)
+                    if (Framing.GetTileSafely(i, j).TileType == TileID.SnowBlock && xTileCandidateRight > i)
                     {
-                        iceBiomeEnd = new Point(i, j);
+                        xTileCandidateRight = i;
+                        foundTileClosestToTheRightAndOnTheSurface = true;
                         break;
                     }
                 }
             }
-            return (Vector2.Lerp(iceBiomeStart.ToVector2(), iceBiomeEnd.ToVector2(), 0.5f).ToPoint());
+            Point topLeftSnowBiome = new(xTileCandidateLeft, GenVars.snowTop);
+            Point topRightSnowBiome = new(xTileCandidateRight, GenVars.snowTop);
+            return topLeftSnowBiome.Lerp(topRightSnowBiome, 0.5f);
         }
 
-        private void GenFloor(float x, float y, int seed)
+        private static void GenFloor(int x, int y, int seed)
         {
-            int width = Main.maxTilesX / 15;
-            int height = width;
-            var rectangle = new Rectangle((int)x - (width / 2), (int)y - (height / 2), width, height);
-            if (rectangle.Y < 400)
-            {
-                rectangle.Y = 400;
-            }
-            if (rectangle.Y > Main.maxTilesY / 2.1f)
-            {
-                rectangle.Y = (int)(Main.maxTilesY / 2.1f);
-            }
+            int width = (GenVars.snowMaxX[0] - GenVars.snowMinX[0]) / 2;
+            int height = Main.maxTilesY / 4;
+            ITDShapes.Ellipse ellipse = new(x, y, width, height);
+            Rectangle rectangle = ellipse.Container;
             var placetilefrom = -0.58f;
             var noise = new FastNoise
             {
@@ -92,58 +95,46 @@ namespace ITD.Content.World
                 FractalGain = 0.2f,
                 FractalLacunarity = 4f
             };
-            static bool inCircle(int i, int j, Rectangle rect, int wid)
+            ellipse.LoopThroughPoints(p => 
             {
-                Point rC = rect.Center;
-                int xElem = i - rC.X;
-                int yElem = j - rC.Y;
-                int r = wid / 2;
-                return xElem * xElem + yElem * yElem <= r * r;
-            }
-            for (int i = rectangle.Left; i <= rectangle.Right; i++)
+                if (p.Y > GenVars.snowTop)
+                    WorldGen.digTunnel(p.X, p.Y, 0, 0, 1, 1, false);
+            });
+            ellipse.LoopThroughPoints(p =>
             {
-                for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
+                int i = p.X;
+                int j = p.Y;
+                if (!WorldGen.InWorld(i, j) || j < GenVars.snowTop)
+                    return;
+                float n = noise.GetNoise(i, j);
+                float c = noiseForCircles.GetNoise(i, j);
+                float subnoise = noiseForSubfrost.GetNoise(i, j);
+                if (n > placetilefrom)
                 {
-                    if (inCircle(i, j, rectangle, width))
-                    {
-                        WorldGen.digTunnel(i, j, 0, 0, 1, 1, false);
-                    }
+                    WorldGen.PlaceTile(i, j, TileID.SnowBlock);
                 }
-            }
-            for (int i = rectangle.Left; i <= rectangle.Right; i++)
-            {
-                for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
+                if (c > -0.18f)
                 {
+                    WorldUtils.Gen(new Point(i, j), new Shapes.Circle(20 + (Main.rand.Next(21) - 10), 3), new Actions.SetTile((ushort)TileID.SnowBlock));
+                }
+                if (subnoise > -0.45f)
+                {
+                    WorldGen.OreRunner(i, j, 2, 2, (ushort)ModContent.TileType<SubfrostTile>());
+                }
+            });
 
-                    float n = noise.GetNoise(i, j);
-                    float c = noiseForCircles.GetNoise(i, j);
-                    float subnoise = noiseForSubfrost.GetNoise(i, j);
-                    if (n > placetilefrom)
-                    {
-                        WorldGen.PlaceTile(i, j, TileID.SnowBlock);
-                    }
-                    if (c > -0.18f && inCircle(i, j, rectangle, width))
-                    {
-                        WorldUtils.Gen(new Point(i, j), new Shapes.Circle(20 + (Main.rand.Next(21) - 10), 3), new Actions.SetTile((ushort)TileID.SnowBlock));
-                    }
-                    if (subnoise > -0.45f && inCircle(i, j, rectangle, width))
-                    {
-                        WorldGen.OreRunner(i, j, 2, 2, (ushort)ModContent.TileType<SubfrostTile>());
-                    }
+            for (int i = rectangle.Left; i <= rectangle.Right; i++)
+            {
+                for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
+                {
+                    Helpers.GrowGrass(i, j, ModContent.TileType<Bluegrass>(), TileID.SnowBlock);
                 }
             }
             for (int i = rectangle.Left; i <= rectangle.Right; i++)
             {
                 for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
                 {
-                    Helpers.GrowBluegrass(i, j);
-                }
-            }
-            for (int i = rectangle.Left; i <= rectangle.Right; i++)
-            {
-                for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
-                {
-                    if (Helpers.AptForTree(i, j, 16))
+                    if (TileHelpers.AptForTree(i, j, 16))
                     {
                         ITDTree.Grow(i, j, 0, 8, 14);
                     }
@@ -153,7 +144,7 @@ namespace ITD.Content.World
             {
                 for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
                 {
-                    Helpers.GrowTallBluegrass(i, j);
+                    Helpers.GrowTallGrass(i, j, ModContent.TileType<BluegrassBlades>(), ModContent.TileType<Bluegrass>());
                 }
             }
         }

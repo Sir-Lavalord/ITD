@@ -20,6 +20,7 @@ using ITD.Networking.Packets;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 using ITD.Systems.Recruitment;
+using Terraria.ModLoader.IO;
 
 namespace ITD.Players
 {
@@ -38,10 +39,12 @@ namespace ITD.Players
 
         public bool ZoneDeepDesert;
         public bool ZoneBlueshroomsUnderground;
+        public bool ZoneBlueshroomsSurface;
 		public bool ZoneCatacombs;
 
 		public bool necrosis = false;
 		public bool soulRot = false;
+        public bool melomycosis = false;
 
 		public float blockChance = 0f;
 		public bool dreadBlock = false;
@@ -58,8 +61,16 @@ namespace ITD.Players
         public int CosJellEscapeCurrent;
         //Screenshake
         public int Screenshake;
-        //NPC recruit index
-        public int NPCRecruit = -1;
+        //Recruitment data
+        public RecruitmentData recruitmentData = new();
+        public override void SaveData(TagCompound tag)
+        {
+            tag["recruitmentOriginalType"] = recruitmentData.OriginalType;
+        }
+        public override void LoadData(TagCompound tag)
+        {
+            recruitmentData.OriginalType = tag.GetInt("recruitmentOriginalType");
+        }
         public override void ResetEffects()
         {
             //Screenshake
@@ -99,6 +110,7 @@ namespace ITD.Players
 
 			necrosis = false;
 			soulRot = false;
+            melomycosis = false;
 
 			blockChance = 0f;
 			dreadBlock = false;
@@ -137,6 +149,15 @@ namespace ITD.Players
 				 
 				Player.lifeRegen -= 20;
 			}
+            if (melomycosis)
+            {
+                if (Player.lifeRegen > 0)
+                    Player.lifeRegen = 0;
+
+                Player.lifeRegenTime = 0;
+
+                Player.lifeRegen -= 5;
+            }
 		}
 		
         public override void PostUpdateEquips()
@@ -160,8 +181,10 @@ namespace ITD.Players
 		
         public override void PreUpdate()
         {
-            ZoneBlueshroomsUnderground = ModContent.GetInstance<ITDSystem>().bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
-            ZoneDeepDesert = ModContent.GetInstance<ITDSystem>().deepdesertTileCount > 50 && Player.ZoneRockLayerHeight;
+            ITDSystem system = ModContent.GetInstance<ITDSystem>();
+            ZoneBlueshroomsSurface = system.bluegrassCount > 50 && Player.ZoneOverworldHeight;
+            ZoneBlueshroomsUnderground = system.bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
+            ZoneDeepDesert = system.deepdesertTileCount > 50 && Player.ZoneRockLayerHeight;
 
             UpdateMouse();
 
@@ -235,25 +258,6 @@ namespace ITD.Players
             string death = Language.GetTextValue($"Mods.ITD.DeathMessage.{key}");
             return PlayerDeathReason.ByCustomReason($"{Player.name} {death}");
         }
-        public void SetRecruit(int whoAmI)
-        {
-            foreach (NPC npc in Main.ActiveNPCs)
-            {
-                if (npc.TryGetGlobalNPC(out TownNPCRecruitmentRunner runner) && runner.isRecruitedBy == Player.whoAmI)
-                {
-                    runner.isRecruitedBy = -1;
-                }
-            }
-            if (whoAmI > -1)
-            {
-                NPC npc1 = Main.npc[whoAmI];
-                if (npc1.TryGetGlobalNPC(out TownNPCRecruitmentRunner runner1))
-                {
-                    runner1.isRecruitedBy = Player.whoAmI;
-                }
-            }
-            NPCRecruit = whoAmI;
-        }
 		public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
 			if (damage == 10.0 && hitDirection == 0 && damageSource.SourceOtherIndex == 8)
@@ -262,6 +266,8 @@ namespace ITD.Players
                     damageSource = DeathByLocalization("Necrosis");
 				if (soulRot)
                     damageSource = DeathByLocalization("SoulRot");
+                if (melomycosis)
+                    damageSource = DeathByLocalization("Melomycosis");
             }
 			return true;
 		}
@@ -281,13 +287,24 @@ namespace ITD.Players
         }
         public override void OnEnterWorld()
         {
-            NaturalSpawns.LeaveWorld();
-            PhysicsMethods.ClearAll();
+
+        }
+        private sealed class ITDPlayerSystem : ModSystem // there's no OnExitWorld hook :death:
+        {
+            public override void PreSaveAndQuit()
+            {
+                Player player = Main.CurrentPlayer;
+                NaturalSpawns.LeaveWorld();
+                PhysicsMethods.ClearAll();
+
+                // transform recruited npc back to original type
+                RecruitmentData recruitmentData = player.GetITDPlayer().recruitmentData;
+                if (recruitmentData.WhoAmI > -1)
+                    Main.npc[recruitmentData.WhoAmI].Transform(recruitmentData.OriginalType);
+            }
         }
 		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
-            //Main.spriteBatch.DrawString(FontAssets.MouseText.Value, Player.name, MousePosition - Main.screenPosition, Color.White);
-            //Dust.NewDustPerfect(MousePosition, 0);
             if (heldItem == ModContent.ItemType<WormholeRipper>())
             {
                 if (itemVar[0] > 0)

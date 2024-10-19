@@ -10,44 +10,31 @@ using Terraria.Graphics.Shaders;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ID;
-using ITD.Detours;
+using ITD.DetoursIL;
 
 namespace ITD.Particles
 {
     public class ParticleSystem : DetourGroup // this also doubles as a particle loader
     {
         private static readonly List<ITDParticle> particlePrototypes = [];
-        private static readonly Dictionary<uint, ITDParticle> particlesByID = [];
         public static int[] particleFramesVertical = [];
         public static int[] particleFramesHorizontal = [];
         public static ArmorShaderData[] particleShaders = [];
         private static readonly Dictionary<Type, ITDParticle> particlesByType = [];
         public List<ITDParticle> particles;
-        public static uint ParticleType<T>() where T : ITDParticle
+        public static ITDParticle NewParticle<T>(Vector2 position, Vector2 velocity) where T : ITDParticle
         {
-            var type = typeof(T);
-            if (particlesByType.TryGetValue(type, out ITDParticle value))
+            Type particleType = typeof(T);
+            if (particlesByType.TryGetValue(particleType, out ITDParticle value))
             {
-                return value.type;
-            }
-            return 0;
-        }
-        public static ITDParticle NewParticle(uint type, Vector2 position, Vector2 velocity)
-        {
-            if (particlesByID.TryGetValue(type, out ITDParticle value))
-            {
-                var particleTemplate = value;
-                var particleType = particleTemplate.GetType();
-
                 var constructor = particleType.GetConstructor(Type.EmptyTypes);
                 if (constructor != null)
                 {
                     var newInstance = (ITDParticle)constructor.Invoke(null);
-                    newInstance.type = type;
+                    newInstance.type = value.type;
                     if (!Main.dedServ)
                     {
                         newInstance.texture = ModContent.Request<Texture2D>($"ITD/Particles/Textures/{particleType.Name}").Value;
-                        //newInstance.shader = value.shader;
                     }
                     newInstance.Initialize();
                     newInstance.position = position;
@@ -58,9 +45,9 @@ namespace ITD.Particles
             }
             return null;
         }
-        public void ClearParticlesOfType(uint type) // this method must be accessed through ModContent.GetInstance<ParticleSystem>();
+        public void ClearParticlesOfType<T>() // this method must be accessed through ModContent.GetInstance<ParticleSystem>();
         {
-            particles.RemoveAll(x => x.type == type);
+            particles.RemoveAll(x => x.GetType() == typeof(T));
         }
         public override void Load()
         {
@@ -72,7 +59,6 @@ namespace ITD.Particles
                 var instance = (ITDParticle)RuntimeHelpers.GetUninitializedObject(t);
                 instance.type = (uint)particlePrototypes.Count;
                 particlesByType[t] = instance;
-                particlesByID[instance.type] = instance;
 
                 particlePrototypes.Add(instance);
             }
@@ -102,7 +88,6 @@ namespace ITD.Particles
             particles?.Clear();
             particlePrototypes?.Clear();
             particlesByType?.Clear();
-            particlesByID?.Clear();
         }
         public void UpdateAllParticles(On_Main.orig_UpdateParticleSystems orig, Main self)
         {
@@ -139,7 +124,6 @@ namespace ITD.Particles
                     if (shader != null)
                     {
                         (Rectangle source, Vector2 origin) = particle.GetFramingData();
-                        //shader.Apply(null, new DrawData(particle.texture, particle.position, source, Color.White, particle.rotation, origin, particle.scale, SpriteEffects.None));
                         shader.Apply(null, null);
                     }
                     particle.DrawParticle(Main.spriteBatch);

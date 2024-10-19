@@ -17,7 +17,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public override void SetSnaptrapProperties()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(CrimeratrapProjectile)}.OneTimeLatchMessage"));
-            ShootRange = 16f * 16f;
+            ShootRange = 16f * 10f;
             RetractAccel = 1.5f;
             ExtraFlexibility = 16f * 2f;
             FramesBetweenHits = 24;

@@ -51,23 +51,20 @@ namespace ITD.Content.Tiles.BlueshroomGroves
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            Helpers.DrawSlopedGlowMask(i, j, glowmask.Value, Color.White, Vector2.Zero);
+            TileHelpers.DrawSlopedGlowMask(i, j, glowmask.Value, Color.White, Vector2.Zero);
         }
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
             if (fail)
             {
+                Framing.GetTileSafely(i, j).TileType = TileID.SnowBlock;
             }
         }
         public override void RandomUpdate(int i, int j)
         {
-            Helpers.GrowTallBluegrass(i, j - 1);
-            if (Main.rand.NextBool(250))
+            if (Main.rand.NextBool(4))
             {
-                Helpers.GrowBluegrass(i - 1, j);
-                Helpers.GrowBluegrass(i + 1, j);
-                Helpers.GrowBluegrass(i, j - 1);
-                Helpers.GrowBluegrass(i, j + 1);
+                Helpers.SpreadGrass(i, j, Type, TileID.SnowBlock);
             }
         }
     }

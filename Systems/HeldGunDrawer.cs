@@ -117,7 +117,9 @@ namespace ITD.Systems
 			}
 			
 			float adjustedItemScale = drawPlayer.GetAdjustedItemScale(heldItem);
-			DrawData drawData = new DrawData(texture, position, sourceRectangle, drawColor, rotation - modPlayer.recoilFront * drawPlayer.direction * drawPlayer.gravDir, origin - new Vector2(8f * drawPlayer.direction, 10f * drawPlayer.gravDir), adjustedItemScale, effects, 0f);
+			Vector2 offset = heldItem.ModItem.HoldoutOffset().HasValue ? heldItem.ModItem.HoldoutOffset().Value : new Vector2();
+			
+			DrawData drawData = new DrawData(texture, position, sourceRectangle, drawColor, rotation - modPlayer.recoilFront * drawPlayer.direction * drawPlayer.gravDir, origin + new Vector2((offset.X-4f) * drawPlayer.direction, (offset.Y-4f) * drawPlayer.gravDir), adjustedItemScale, effects, 0f);
             drawInfo.DrawDataCache.Add(drawData);
         }
     }
@@ -216,7 +218,9 @@ namespace ITD.Systems
 			}
 			
 			float adjustedItemScale = drawPlayer.GetAdjustedItemScale(heldItem);
-			DrawData drawData = new DrawData(texture, position, sourceRectangle, drawColor, rotation - modPlayer.recoilBack * drawPlayer.direction * drawPlayer.gravDir, origin - new Vector2(4f * drawPlayer.direction, 6f * drawPlayer.gravDir), adjustedItemScale, effects, 0f);
+			Vector2 offset = heldItem.ModItem.HoldoutOffset().HasValue ? heldItem.ModItem.HoldoutOffset().Value : new Vector2();
+			
+			DrawData drawData = new DrawData(texture, position, sourceRectangle, drawColor, rotation - modPlayer.recoilBack * drawPlayer.direction * drawPlayer.gravDir, origin + new Vector2(offset.X * drawPlayer.direction, offset.Y * drawPlayer.gravDir), adjustedItemScale, effects, 0f);
             drawInfo.DrawDataCache.Add(drawData);
         }
     }

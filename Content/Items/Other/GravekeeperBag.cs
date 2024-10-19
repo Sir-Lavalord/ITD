@@ -35,6 +35,7 @@ namespace ITD.Content.Items.Other
         public override void ModifyItemLoot(ItemLoot itemLoot)
         {
             itemLoot.Add(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, Gravekeeper.oneFromOptionsDrops));
+			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<CharmOfTheAccursed>(), 1));
         }
     }
 }

@@ -36,11 +36,11 @@ namespace ITD.Content.Projectiles.Hostile
 			
 			Projectile.timeLeft = 10;
 			
-			Projectile.Center = npc.Center;
+			Projectile.Center = Vector2.Lerp(Projectile.Center, npc.Center, 0.025f);
 			
 			Player player = Main.LocalPlayer;
 			float range = Projectile.Distance(player.Center);
-			if (player.active && !player.dead && !player.ghost && range > 400f && range < 3000f)
+			if (player.active && !player.dead && !player.ghost && range > 500f && range < 3000f)
 			{
 				player.AddBuff(BuffID.Suffocation, 2, false);
 			}
@@ -54,7 +54,7 @@ namespace ITD.Content.Projectiles.Hostile
 		public override bool PreDraw(ref Color lightColor)
         {
 			Texture2D auraTexture = ModContent.Request<Texture2D>(Texture).Value;
-			Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, null, new Color(235, 186, 123, 0) * 0.5f,  Main.GlobalTimeWrappedHourly, auraTexture.Size() / 2, 1.6f, SpriteEffects.None);
+			Main.EntitySpriteDraw(auraTexture, Projectile.Center - Main.screenPosition, null, new Color(235, 186, 123, 0) * 0.5f,  Main.GlobalTimeWrappedHourly, auraTexture.Size() / 2, 2f, SpriteEffects.None);
 			
             return false;
         }

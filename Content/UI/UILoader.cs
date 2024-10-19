@@ -16,9 +16,9 @@ namespace ITD.Content.UI
 {
     public class UILoader : ModSystem
     {
-		public static List<UserInterface> UserInterfaces = new();
+		public static List<UserInterface> UserInterfaces = [];
 
-        public static List<ITDUIState> UIStates = new();
+        public static List<ITDUIState> UIStates = [];
         public override void Load() // same principle as the packet loader in NetSystem
         {
             foreach (Type t in Mod.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ITDUIState))))
