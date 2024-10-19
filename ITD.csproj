@@ -6,6 +6,9 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <AdditionalFiles Remove="Shaders\MelomycosisScreen.fx" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Content\Items\Weapons\Electrum\ElectrumSpear.png" />
     <None Remove="Content\Items\Weapons\Electrum\ElectrumSpearProjectile.png" />
     <None Remove="Content\Projectiles\TheScorpionProjectile.png" />
