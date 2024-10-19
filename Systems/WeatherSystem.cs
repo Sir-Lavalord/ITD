@@ -28,7 +28,7 @@ namespace ITD.Systems
                 GrassWind += 1.0 / 180.0 + 1.0 / 180.0 * num * 4.0;
             }
         }
-        internal static void DrawGrassSway(SpriteBatch batch, Texture2D texture, int i, int j, Color color)
+        internal static void DrawGrassSway(SpriteBatch batch, Texture2D texture, int i, int j, Color? color = null, Vector2 drawOffset = default)
         {
             Tile tile = Main.tile[i, j];
             Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -37,8 +37,10 @@ namespace ITD.Systems
             float rot = ModContent.GetInstance<WeatherSystem>().GetGrassSway(i, j, ref pos);
             //Main.NewText(rot);
             Vector2 orig = GrassOrigin(i, j);
+            Color color0 = Lighting.GetColor(i, j);
+            if (color != null) color0 = (Color)color;
 
-            batch.Draw(texture, pos + new Vector2(8, 16), new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 22), color, rot, orig, 1f, SpriteEffects.None, 0f);
+            batch.Draw(texture, pos + new Vector2(8, 16), new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 22), color0, rot, orig, 1f, SpriteEffects.None, 0f);
         }
         internal static Vector2 GrassOrigin(int i, int j)
         {

@@ -129,7 +129,7 @@ namespace ITD.Utilities
             Tile t = Framing.GetTileSafely(i, j);
             if (t.TileType == soilType)
             {
-                if (EdgeTile(i ,j) && !(Framing.GetTileSafely(i, j-1).TileType == TileID.Trees))
+                if (EdgeTile(i ,j) && !TileID.Sets.PreventsTileReplaceIfOnTopOfIt[Framing.GetTileSafely(i, j-1).TileType])
                 {
                     t.TileType = (ushort)grassType;
                     WorldGen.SquareTileFrame(i, j);
@@ -152,18 +152,23 @@ namespace ITD.Utilities
             Tile t = Framing.GetTileSafely(i, j);
             if (t.TileType != mossType)
                 return;
-            GrowLongMoss(i + 1, j, longMossType);
-            GrowLongMoss(i - 1, j, longMossType);
-            GrowLongMoss(i, j + 1, longMossType);
-            GrowLongMoss(i, j - 1, longMossType);
+            GrowLongMoss(i + 1, j, longMossType, mossType);
+            GrowLongMoss(i - 1, j, longMossType, mossType);
+            GrowLongMoss(i, j + 1, longMossType, mossType);
+            GrowLongMoss(i, j - 1, longMossType, mossType);
         }
-        public static void GrowLongMoss(int i, int j, int longMossType)
+        public static void GrowLongMoss(int i, int j, int longMossType, int mossType)
         {
             if (SolidTile(i, j) || TileType(i, j, longMossType)) return;
 
-            // todo: add check for grow direction for correct alt placement
+            bool hasUp = TileType(i, j - 1, mossType);
+            bool hasDown = TileType(i, j + 1, mossType);
+            bool hasLeft = TileType(i - 1, j, mossType);
+            //bool hasRight = TileType(i + 1, j, mossType);
 
-            if (WorldGen.PlaceObject(i, j, longMossType, true, 0, 0))
+            int alt = hasDown ? 0 : hasUp ? 3 : hasLeft ? 6 : 9;
+
+            if (WorldGen.PlaceObject(i, j, longMossType, true, 0, alt))
             {
                 NetMessage.SendTileSquare(-1, i, j, 1);
             }

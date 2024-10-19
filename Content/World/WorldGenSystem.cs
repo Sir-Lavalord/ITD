@@ -11,6 +11,7 @@ using ITD.Particles;
 using ITD.Particles.Testing;
 using ITD.Content.Tiles.Misc;
 using ITD.Utilities;
+using Terraria.ObjectData;
 
 namespace ITD.Content.World
 {
@@ -60,8 +61,8 @@ namespace ITD.Content.World
             //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             // test world particle (change particle.canvas in particle type)
             //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
-            //Point pos = Main.MouseWorld.ToTileCoordinates();
-            //Helpers.GrowLongMoss(pos.X, pos.Y, ModContent.TileType<LongBlackMold>());
+            Point pos = Main.MouseWorld.ToTileCoordinates();
+            Helpers.GrowLongMoss(pos.X, pos.Y, ModContent.TileType<LongBlackMold>(), ModContent.TileType<BlackMold>());
             //WorldGen.PlaceTile(pos.X, pos.Y, ModContent.TileType<BlackMold>());
         }
         private void TestMethod2()
