@@ -63,13 +63,14 @@ namespace ITD.Utilities
         //Reflectable
         public static bool Reflectable(this Projectile projectile)
         {
-            if (projectile.aiStyle != -1 &&
+            if (projectile.aiStyle >=0 &&
                 projectile.hostile &&
-                !projectile.friendly &&
-                projectile.active)
+                projectile.active &&
+                projectile.velocity != Vector2.Zero)
             {
                 return true;
             }
+            else
             return false;
         }
         public static void ExpandHitboxBy(this Projectile projectile, int width, int height)

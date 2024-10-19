@@ -82,7 +82,6 @@ namespace ITD.Content.Projectiles.Hostile
                     if (Projectile.ai[1] == 2)
                     {
                         Projectile.Kill();
-                        CosJel.localAI[0]++;
                     }
                     Projectile.Kill();
                 }
@@ -96,15 +95,15 @@ namespace ITD.Content.Projectiles.Hostile
                 }
                 else
                 {
-                     scaleX += .1f;
-                    scaleY += .1f;
+                     scaleX += .05f;
+                    scaleY += .05f;
                 }
             }
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
         }
         float scaleX = 1f;
-        float scaleY = 2f;
+        float scaleY = 2.5f;
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             Main.instance.DrawCacheProjsBehindNPCs.Add(index);

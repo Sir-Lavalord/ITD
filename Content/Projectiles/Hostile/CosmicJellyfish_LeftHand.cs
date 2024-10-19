@@ -12,6 +12,7 @@ using ITD.Content.NPCs.Bosses;
 using ITD.Utilities;
 using System.IO;
 using Terraria.GameContent.Drawing;
+using SteelSeries.GameSense;
 
 
 namespace ITD.Content.Projectiles.Hostile
@@ -46,10 +47,22 @@ namespace ITD.Content.Projectiles.Hostile
                 Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
                 if (!bStopfalling)
                 {
-                    Projectile.position += Projectile.velocity;
-                    Projectile.velocity = Vector2.Zero;
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
+                    ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), 2f, -1, Projectile.owner);
+                            Blast.ai[1] = 300f;
+                            Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+                            Blast.netUpdate = true;
+                        }
+                        Projectile.position += Projectile.velocity;
+                        Projectile.velocity = Vector2.Zero;
+                    
                 }
                 bStopfalling = true;
+                Projectile.netUpdate = true;
+
             }
 
             return false;
@@ -199,6 +212,7 @@ namespace ITD.Content.Projectiles.Hostile
                 switch (handState)
                 {
                     case HandState.Waiting:
+                        Projectile.netUpdate = true;
                         Projectile.tileCollide = false;
                         bSmackdown = false;
                         bStopfalling = false;
@@ -261,6 +275,7 @@ namespace ITD.Content.Projectiles.Hostile
                                 {
                                     NPC.ai[1] = 1;
                                     NPC.ai[2] = 0;
+                                    Projectile.netUpdate = true;
                                 }
                                 else
                                     Projectile.Kill();
@@ -321,6 +336,7 @@ namespace ITD.Content.Projectiles.Hostile
                             Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
                         if (NPC.ai[3] !=2)
                         {
+                            Projectile.netUpdate = true;
                             handState = HandState.ForcedKill;
                         }
                         break;
@@ -352,6 +368,8 @@ namespace ITD.Content.Projectiles.Hostile
                                             }
                                             else if (Projectile.localAI[0] >= 5 && NPC.localAI[2] > 6 || Projectile.localAI[0] >= 0 && NPC.localAI[2] <= 6)
                                             {
+                                                Projectile.netUpdate = true;
+
                                                 bSmackdown = true;
                                                 Vector2 toTarget = (vLockedIn - Projectile.Center).SafeNormalize(Vector2.Zero);
                                                 handTarget = vLockedIn + toTarget * 120f;
@@ -386,7 +404,6 @@ namespace ITD.Content.Projectiles.Hostile
                                                 {
                                                     for (int f = 0; f < 2; f++)
                                                     {
-                                                        bStopfalling = false;
                                                         SoundEngine.PlaySound(SoundID.Item88, Main.player[i].Center);
                                                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Main.player[i].Center.X + (Main.player[i].velocity.X * 20f) + (Main.rand.Next(-40, 40)), Main.player[i].Center.Y - 500)
                                                             , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(0.85f, 1), Main.rand.Next(ProjectileID.Meteor1, ProjectileID.Meteor3 + 1), Projectile.damage, Projectile.knockBack, Main.player[i].whoAmI);
@@ -409,6 +426,7 @@ namespace ITD.Content.Projectiles.Hostile
                                                 NPC.ai[1] = 0;
                                                 NPC.ai[2] = 1;
                                             }
+                                            Projectile.netUpdate = true;
                                             bSmackdown = false;
                                             bStopfalling = false;
                                             iMeteorCount = 0;

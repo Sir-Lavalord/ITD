@@ -69,7 +69,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
                     if (i != Projectile.whoAmI && other.Reflectable()
                         && Math.Abs(points[points.Count - 1].X - other.position.X)
-                        + Math.Abs(points[points.Count -1].Y - other.position.Y) < 60)
+                        + Math.Abs(points[points.Count -1].Y - other.position.Y) < 40)
                     {
                         if (!Main.dedServ)
                         {
@@ -79,7 +79,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                             Main.player[Projectile.owner].GetModPlayer<ITDPlayer>().Screenshake = 20;
                             other.GetGlobalProjectile<FishbackerReflectedProj>().IsReflected = true;
                             other.owner = Main.myPlayer;
-                            other.velocity.X *= -2f;
+                            other.velocity.X *= -3f;
                             other.velocity.Y *= -1f;
 
                             ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
@@ -141,29 +141,29 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             for (int i = 0; i < list.Count - 1; i++)
             {
                 //NOTE: CHANGE ORGIN FOR SEGMENTS
-                Rectangle frame = new Rectangle(0, 0, 18, 28);
+                Rectangle frame = new Rectangle(0, 0, 28, 28);
                 Vector2 origin = new Vector2(5, 11);
                 float scale = 1;
                 if (i == list.Count - 2)
                 {
-                    frame.Y = 74;
-                    frame.Height = 18;
+                    frame.Y = 76;
+                    frame.Height = 32;
                     frame.Width = 28;
                     origin.Y = -2;
                     Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out int _, out float _);
                     float t = Timer / timeToFlyOut;
                     scale = MathHelper.Lerp(0.5f, 1.5f, Utils.GetLerpValue(0.1f, 0.7f, t, true) * Utils.GetLerpValue(0.9f, 0.7f, t, true));
                 }
-                else if (i > 10)
+                else if (i > 7)
                 {
-                    frame.Y = 58;
-                    frame.Height = 16;
+                    frame.Y = 56;
+                    frame.Height = 20;
                     frame.Width = 28;
                     origin.Y = -2;
                 }
-                else if (i > 5)
+                else if (i > 3)
                 {
-                    frame.Y = 42;
+                    frame.Y = 40;
                     frame.Width = 28;
                     frame.Height = 16;
                     origin.Y = -2;
@@ -175,12 +175,13 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                     frame.Width = 28;
                     frame.Height = 16;
                     origin.Y = -2;
+
                 }
 
                 Vector2 element = list[i];
                 Vector2 diff = list[i + 1] - element;
 
-                float rotation = diff.ToRotation() - MathHelper.PiOver2; // This projectile's sprite faces down, so PiOver2 is used to correct rotation.
+                float rotation = diff.ToRotation() - MathHelper.PiOver2;
                 Color color = Lighting.GetColor(element.ToTileCoordinates());
 
                 Main.EntitySpriteDraw(texture, pos - Main.screenPosition, frame, Color.White, rotation, origin, scale, flip, 0);
@@ -188,6 +189,12 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 pos += diff;
             }
             return false;
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            SoundEngine.PlaySound(SoundID.NPCHit1, target.Center);//Sloppy toppy
+
+            
         }
         public override Color? GetAlpha(Color lightColor)
         {

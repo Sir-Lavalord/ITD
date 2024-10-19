@@ -8,6 +8,8 @@ using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using ITD.Detours;
+using Terraria.Graphics.Renderers;
+using System.Collections.Generic;
 namespace ITD.Particles
 {
     public enum ParticleDrawCanvas
@@ -26,6 +28,7 @@ namespace ITD.Particles
         public int frameCounter;
         public Vector2 position;
         public Vector2 velocity;
+        public Vector2 texMorph;
         public int spawnTimeLeft;
         public int timeLeft;
         public float ProgressZeroToOne { get { return (spawnTimeLeft - timeLeft) / (float)spawnTimeLeft; } }
@@ -33,7 +36,9 @@ namespace ITD.Particles
         public float rotation;
         public float scale = 1f;
         public float opacity = 1f;
+
         public ParticleDrawCanvas canvas;
+
         public virtual void SetStaticDefaults()
         {
 
@@ -51,7 +56,9 @@ namespace ITD.Particles
         {
 
         }
-        public void Update()
+
+
+        public virtual void Update()
         {
             AI();
             position += velocity;

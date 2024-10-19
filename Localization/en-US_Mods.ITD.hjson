@@ -700,8 +700,8 @@ Items: {
 
 		DummyType: {
 			0: Perfect
-			1: Heavy
-			2: Fortified
+			1: Fortified
+			2: Windswept
 			3: Thorny
 			4: Terminal
 			5: Armed
@@ -822,6 +822,11 @@ Items: {
 		DisplayName: Test Recruiter
 		Tooltip: ""
 	}
+
+	WheelerTrashCan: {
+		DisplayName: Dorothea
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -934,6 +939,7 @@ Projectiles: {
 	CosmicJellyfish_RightHand.DisplayName: Cosmic Jellyfish_ Right Hand
 	HunterrGreatbowProj.DisplayName: Hunterr Greatbow
 	HunterrGreatarrow.DisplayName: Hunterr Greatarrow
+	RingMuzzleFlash.DisplayName: Ring Muzzle Flash
 }
 
 NPCs: {

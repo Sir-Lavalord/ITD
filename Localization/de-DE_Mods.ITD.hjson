@@ -697,7 +697,7 @@ Items: {
 
 		DummyType: {
 			// 0: Perfect
-			// 1: Heavy
+			// 1: Fortified
 			// 2: Windswept
 			// 3: Thorny
 			// 4: Terminal
@@ -799,8 +799,9 @@ Items: {
 		// DisplayName: Hun-Terr Greatbow
 		/* Tooltip:
 			'''
-			Hold Right Click to charge up an arrow
-			Fully-charged arrow can topple enemies
+			Hold Right Click to charge up a greatarrow
+			Fully-charged greatarrow can topple enemies
+			Greatarrows knock back toppled enemies
 			While not charging, the bow can block projectiles
 			''' */
 	}
@@ -816,6 +817,11 @@ Items: {
 
 	TestRecruiter: {
 		// DisplayName: Test Recruiter
+		// Tooltip: ""
+	}
+
+	WheelerTrashCan: {
+		// DisplayName: Dorothea
 		// Tooltip: ""
 	}
 }
@@ -930,6 +936,7 @@ Projectiles: {
 	// CosmicJellyfish_RightHand.DisplayName: Cosmic Jellyfish_ Right Hand
 	// HunterrGreatbowProj.DisplayName: Hunterr Greatbow
 	// HunterrGreatarrow.DisplayName: Hunterr Greatarrow
+	// RingMuzzleFlash.DisplayName: Ring Muzzle Flash
 }
 
 NPCs: {
@@ -1040,7 +1047,7 @@ Buffs: {
 
 	ToppledDebuff: {
 		// DisplayName: Toppled
-		// Description: KB
+		// Description: You are going to fall
 	}
 }
 

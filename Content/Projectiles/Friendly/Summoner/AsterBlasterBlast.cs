@@ -21,6 +21,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
     public class AsterBlasterBlast : BigBlankExplosion
     {   
         public override int Lifetime => 30;
+        public override Vector2 ScaleRatio => new Vector2(1.5f,1f);
+
         public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.Turquoise * 1.6f, Color.DarkViolet, MathHelper.Clamp(pulseCompletionRatio * 2.2f, 0f, 1f));
 
         public override void SetStaticDefaults()
@@ -76,7 +78,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
                         other.friendly = true;
                         other.hostile = false;
-                        other.damage *= 100;
+                        other.damage *= 5;//NERFED'D
                         other.netUpdate = true;
                     }
                 }

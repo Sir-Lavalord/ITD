@@ -821,6 +821,11 @@ Items: {
 		// DisplayName: Test Recruiter
 		// Tooltip: ""
 	}
+
+	WheelerTrashCan: {
+		// DisplayName: Dorothea
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -933,6 +938,7 @@ Projectiles: {
 	CosmicJellyfish_RightHand.DisplayName: Mano de la Medusa Cósmica
 	HunterrGreatbowProj.DisplayName: Gran arco del Hun-Terr
 	HunterrGreatarrow.DisplayName: Gran flecha del Hun-Terr
+	// RingMuzzleFlash.DisplayName: Ring Muzzle Flash
 }
 
 NPCs: {

@@ -14,7 +14,7 @@ namespace ITD.Content.Projectiles.Hostile
     public class CosmicRay : Deathray
     {
         public override string Texture => "ITD/Content/Projectiles/Hostile/CosmicRay";
-        public CosmicRay() : base(120) { }
+        public CosmicRay() : base(180) { }
         private Vector2 spawnPos;
 
         public override void SetStaticDefaults()

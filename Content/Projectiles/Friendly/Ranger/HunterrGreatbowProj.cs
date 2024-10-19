@@ -10,6 +10,11 @@ using Terraria.ID;
 using ITD.Utilities;
 using System.Runtime.InteropServices;
 using Terraria.DataStructures;
+using ITD.Content.Projectiles.Friendly.Summoner;
+using ITD.Content.Projectiles.Hostile;
+using ITD.Particles;
+using ITD.Particles.Testing;
+using System.Data;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger
 {
@@ -141,6 +146,10 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                     Shift = Math.Clamp(Shift + 0.25f, 0f, 1f);
                     if (HaveArrow)
                     {
+                        ITDParticle flash = new RingMuzzleFlash(Projectile.Center + Projectile.rotation.ToRotationVector2() * 5f, Vector2.Zero, Color.White, new Vector2(0.5f, 1f), Projectile.rotation, 0.05f, 0.34f + Main.rand.NextFloat(0.3f), 30);
+                        ParticleSystem.NewParticle(ParticleSystem.ParticleType<RingMuzzleFlash>(), Projectile.Center + Projectile.rotation.ToRotationVector2() * 5f
+                            , Vector2.Zero);
+
                         //RoundDown
                         Shift = 1;
                         SoundEngine.PlaySound(SoundID.DD2_BallistaTowerShot, Projectile.Center);

@@ -45,13 +45,24 @@ namespace ITD.Content.Projectiles.Hostile
                 Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
                 if (!bStopfalling)
                 {
-                    Projectile.position += Projectile.velocity;
-                    Projectile.velocity = Vector2.Zero;
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
+                    ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), 2f, -1, Projectile.owner);
+                            Blast.ai[1] = 300f;
+                            Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+                            Blast.netUpdate = true;
+                        }
+                        Projectile.position += Projectile.velocity;
+                        Projectile.velocity = Vector2.Zero;
+                    
                 }
                 bStopfalling = true;
+
             }
 
-                return false;
+            return false;
 
         }
         public override void OnSpawn(IEntitySource source)
@@ -348,7 +359,6 @@ namespace ITD.Content.Projectiles.Hostile
                                                 {
                                                     for (int f = 0; f < 2; f++)
                                                     {
-                                                        bStopfalling = false;
                                                         SoundEngine.PlaySound(SoundID.Item88, Main.player[i].Center);
                                                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Main.player[i].Center.X + (Main.player[i].velocity.X * 20f) + (Main.rand.Next(-40, 40)), Main.player[i].Center.Y - 500)
                                                             , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(0.85f, 1), Main.rand.Next(ProjectileID.Meteor1, ProjectileID.Meteor3 + 1), Projectile.damage, Projectile.knockBack, Main.player[i].whoAmI);

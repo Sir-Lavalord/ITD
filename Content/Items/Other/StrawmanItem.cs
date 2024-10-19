@@ -20,6 +20,7 @@ namespace ITD.Content.Items.Other
         // make the dummy type titles and description localizable please
         // -qangel
         // ok
+        // -me
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 1;
@@ -58,8 +59,8 @@ namespace ITD.Content.Items.Other
                 dummytype++;
             }
             if (dummytype < 0)
-                dummytype = 7;
-            if (dummytype > 7)
+                dummytype = 6;
+            if (dummytype > 6)
                 dummytype = 0;
         }
 
@@ -77,16 +78,14 @@ namespace ITD.Content.Items.Other
                 {
                     string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(StrawmanItem)}.DummyType.{dummytype}")).Value;
 
-                    if (dummytype != 7)
                         line.Text = Text + " " + line.Text;//Fine for now
-                    else
-                        line.Text = Text;
+
                 }
             }
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
+            if (Main.netMode != NetmodeID.Server)
             {
                 NPC.NewNPC(source, (int)Math.Round(Main.MouseWorld.X), (int)Math.Round(Main.MouseWorld.Y), ModContent.NPCType<StrawmanDummy>(), 0, dummytype);
 
