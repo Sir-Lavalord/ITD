@@ -6,6 +6,9 @@ using Terraria.ModLoader;
 using ITD.Systems;
 using Terraria.Graphics.Effects;
 using ITD.Skies;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using Terraria.Graphics.Shaders;
 
 namespace ITD
 {
@@ -33,9 +36,16 @@ namespace ITD
         }
         public override object Call(params object[] args) => ModCalls.Call(args);
         public override void HandlePacket(BinaryReader reader, int whoAmI) => NetSystem.HandlePacket(reader, whoAmI);
+        public static void LoadShader(string name, string path)
+        {
+            Asset<Effect> screen = ModContent.Request<Effect>(path, AssetRequestMode.ImmediateLoad);
+            Filters.Scene[name] = new Filter(new ScreenShaderData(screen, name + "Pass"), EffectPriority.High);
+            Filters.Scene[name].Load();
+        }
         public override void Load()
         {
             SkyManager.Instance["ITD:CosjelOkuuSky"] = new CosjelOkuuSky();
+            LoadShader("BlackMold", "ITD/Shaders/MelomycosisScreen");
             itdMusic = null;
             wikithis = null;
             bossChecklist = null;
