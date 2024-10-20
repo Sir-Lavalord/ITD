@@ -870,6 +870,11 @@ Items: {
 		// DisplayName: Black Flask
 		// Tooltip: Melee and whip attacks deal damage over time to enemies
 	}
+
+	WheelerTrashCan: {
+		// DisplayName: Wheeler Trash Can
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -997,6 +1002,7 @@ Projectiles: {
 	}
 
 	// ChainwhipWhip.DisplayName: Chainwhip Whip
+	// CosmicJellyfishBlackholeAura.DisplayName: Cosmic Jellyfish Blackhole Aura
 }
 
 NPCs: {

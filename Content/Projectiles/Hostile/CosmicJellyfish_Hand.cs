@@ -34,6 +34,8 @@ namespace ITD.Content.Projectiles.Hostile
         //0.0 is normal
         //0.1 is smackdown
         //1.1 is call to stop spawn explosion
+        bool expertMode = Main.expertMode;
+        bool masterMode = Main.masterMode;
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
             width = 15;
@@ -58,14 +60,22 @@ namespace ITD.Content.Projectiles.Hostile
                 {
                     if (Projectile.ai[1] != 1)
                     {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        if (expertMode || masterMode)
                         {
-                            Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
-                    ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), 2f, -1, Projectile.owner);
-                            Blast.ai[1] = 100f;
-                            Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
-                            Blast.netUpdate = true;
-                            
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
+                        ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), 2f, -1, Projectile.owner);
+                                Blast.ai[1] = 100f;
+                                Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+                                Blast.netUpdate = true;
+
+                            }
+                        }
+                        for (int i = 0; i < 12; i++)
+                        {
+                            Dust.NewDustPerfect(Projectile.Center, DustID.ShimmerTorch, new Vector2(Main.rand.NextFloat() * 6f, -8f + 8f * Main.rand.NextFloat()), 0, default(Color), 1.5f).noGravity = true;
                         }
                         Projectile.ai[1] = 1;
 

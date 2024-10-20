@@ -42,8 +42,15 @@ namespace ITD.Content.Projectiles.Hostile
 
         public override void AI()
         {
-
-            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+            if (Projectile.ai[1] == 2)
+            {
+                if (Projectile.ai[2]++ >= 30)
+                {
+                    Projectile.extraUpdates = 1;
+                    Projectile.velocity *= 1.02f;
+                }
+            }
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
         }
         public override bool PreDraw(ref Color lightColor)
         {

@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using ReLogic.Content;
 using ITD.Content.NPCs.Bosses;
+using SteelSeries.GameSense;
+using Microsoft.Build.Evaluation;
 
 namespace ITD.Content.Projectiles.Hostile
 {
@@ -29,7 +31,7 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 300;
+            Projectile.timeLeft = 400;
             Projectile.light = 0.5f;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = true;
@@ -41,7 +43,10 @@ namespace ITD.Content.Projectiles.Hostile
         {
             return Color.White * (1f-(Projectile.alpha/255f));
         }
-
+        public override bool? CanDamage()
+        {
+            return false;
+        }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             behindNPCsAndTiles.Add(index);
@@ -84,13 +89,38 @@ namespace ITD.Content.Projectiles.Hostile
 
             return true;
         }
+        public int pulseSpeed;
+        public int pulseTime;
+        float Distance;
+        bool expertMode = Main.expertMode;
+        bool masterMode = Main.masterMode;
         public override void AI()
         {
+                if (expertMode || masterMode)
+                {
+                NPC CosJel = Main.npc[(int)Projectile.ai[0]];
+                if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+                {
+                    Player player = Main.player[CosJel.target];
+                    if (player.Distance(Projectile.Center) < 20)
+                    {
+                        if (pulseTime++ >= 5)
+                        {
+                            pulseTime = 0;
+                            pulseSpeed++;
+                        }
+                    }
+                    if (pulseSpeed >= 8)
+                    {
+                        Projectile.Kill();
+                    }
+                }
+            }
             if (isStuck == false)
             {
                 Projectile.velocity.Y += 0.2f;
             }
-            if (++Projectile.frameCounter >= 3)
+            if (++Projectile.frameCounter >= 10 - pulseSpeed)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
