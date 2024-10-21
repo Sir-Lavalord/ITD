@@ -22,6 +22,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.timeLeft = 800;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 20;
+            Projectile.minion = true; // can't use proj.minionPos without this
             DrawOffsetX = 6;
         }
         private void SpawnDust()
@@ -47,22 +48,19 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 Projectile.Kill();
 			
             int count = 0;
-			int offset = 0;
 			
 			foreach (var target in Main.ActiveProjectiles)
             {
-				if (target.type == Projectile.type && target.owner == Projectile.owner)
+				if (target.type == Type && target.owner == Projectile.owner)
 				{
-					count++;
-					if (target == Projectile)
-						offset = count;
+					count++; // i wonder why player.ownedprojectilecounts doesn't work here
 				}
 			}
-			
-            float radians = MathHelper.TwoPi / count;
+
             Projectile.Center = player.Center + new Vector2(0f, player.gfxOffY);
 
-			float rotation = (radians * offset) + Main.GlobalTimeWrappedHourly * 4f;
+            float spinSpeed = 2f;
+			float rotation = Main.GlobalTimeWrappedHourly * spinSpeed + (Projectile.minionPos / (float)count) * MathHelper.TwoPi;
 			float range = 64f;
 
 			NPC closest = Projectile.FindClosestNPC(256f);
