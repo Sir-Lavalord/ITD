@@ -51,17 +51,16 @@ namespace ITD.Content.NPCs.Bosses
             cooldownSlot = ImmunityCooldownID.Bosses; // use the boss immunity cooldown counter, to prevent ignoring boss attacks by taking damage from other sources
             return true;
         }
-        public float rotation = 0f;
-
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             NPC.checkDead();
             NPC.life = 0;
         }
-        float speed = 3;
+        float speed = 6;
         float inertia = 40;
         float distanceToIdlePosition;
         float distance;
+        bool movementallow;
         public override void AI()
         {
 
@@ -76,33 +75,50 @@ namespace ITD.Content.NPCs.Bosses
             Vector2 vectorToIdlePosition = idlePosition - NPC.Center;
             Vector2 vectorToIdlePositionNorm = vectorToIdlePosition.SafeNormalize(Vector2.UnitY);
             distanceToIdlePosition = vectorToIdlePosition.Length();
+            float distance = 200;
             //speed is dependant on attack
             if (distanceToIdlePosition > 10f)
             {
                 vectorToIdlePosition.Normalize();
                 vectorToIdlePosition *= speed;
             }
-            if ((Main.expertMode||Main.masterMode) && !IsDashing)
-            NPC.velocity = (NPC.velocity * (inertia - 2) + vectorToIdlePosition) / inertia;
-
+            if (movementallow)
+            {
+                NPC.velocity = (NPC.velocity * (inertia - 2) + vectorToIdlePosition) / inertia;
+            }
             NPC.netUpdate = true;
+            speed = 8;
+            inertia = 40;
             if (!IsDashing)
             {
-                if (NPC.localAI[2]++ >= 100)
+                if (NPC.localAI[2]++ >= 150)
                 {
+                    NPC.velocity *= 0.9f;
+                    movementallow = false;
+                    if (NPC.localAI[2]++ >= 200)//Have to stop first
+                    {
 
-                        NPC.localAI[1] = 0;
-                        NPC.localAI[2] = 0;
                         IsDashing = true;
-                    
+                    }
                 }
                 else
                 {
+                    movementallow = true;
                 }
             }
             else
             {
-                Dash(1, 5, 10,60, 80);
+                for (int i = 0; i < 8; i++)
+                {
+                    float X = NPC.Center.X - NPC.velocity.X / 20f * (float)i;
+                    float Y = NPC.Center.Y - NPC.velocity.Y / 20f * (float)i;
+                    int dust2 = Dust.NewDust(new Vector2(X, Y), NPC.width/2, NPC.height / 2, DustID.ShimmerTorch, 0, 0, 160, Color.WhiteSmoke, 2);
+                    Main.dust[dust2].position.X = X;
+                    Main.dust[dust2].position.Y = Y;
+                    Main.dust[dust2].noGravity = true;
+                    Main.dust[dust2].velocity *= 0.1f;
+                }
+                Dash(1, 5, 10, 60);
             }
             NPC.netUpdate = true;
             NPC.rotation = NPC.velocity.X / 50;
@@ -111,51 +127,46 @@ namespace ITD.Content.NPCs.Bosses
         }
         Vector2 dashvel;
         public bool IsDashing;
-        public void Dash(int time1, int time2, int time3, int reset, int attackID)
+        public void Dash(int time1, int time2, int time3, int reset)
         {
             IsDashing = true;
             Player player = Main.player[NPC.target];
             NPC.localAI[1]++;
             //very hard coded
-            if (NPC.localAI[1] == time1)//set where to dash
-            {
-                dashvel = Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
-                NPC.velocity = dashvel;
-                NPC.netUpdate = true;
-            }
-
-            if (NPC.localAI[1] > time1 && NPC.localAI[1] < time2)//xcel
-            {
-                if (Main.netMode != NetmodeID.MultiplayerClient)
+                if (NPC.localAI[1] == time1)//set where to dash
                 {
-                    NPC.netUpdate = true;
-
-                    NPC.velocity *= 1.2f;
+                    dashvel = Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
+                    NPC.velocity = dashvel * 2;
                     NPC.netUpdate = true;
                 }
-            }
-            if (NPC.localAI[1] > time3) //Decelerate 
-            {
-                if (Main.netMode != NetmodeID.MultiplayerClient)
+
+                if (NPC.localAI[1] > time1 && NPC.localAI[1] < time2)//xcel
                 {
-                    NPC.netUpdate = true;
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        NPC.netUpdate = true;
 
-                    NPC.velocity *= 0.96f;
-                    NPC.netUpdate = true;
-
+                        NPC.velocity *= 2f;
+                        NPC.netUpdate = true;
+                    }
                 }
-            }
-            if (NPC.localAI[1] >= reset)//
-            {
-                NPC.ai[3]++;
-                if (NPC.ai[3] >= 4 && (!Main.expertMode||!Main.masterMode) || NPC.ai[3] >= 6 && (Main.expertMode || Main.masterMode))
+                if (NPC.localAI[1] > time3) //Decelerate 
                 {
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        NPC.netUpdate = true;
 
+                        NPC.velocity *= 0.96f;
+                        NPC.netUpdate = true;
+
+                    }
                 }
-                NPC.localAI[0] = 0;
-                NPC.localAI[1] = 0;
-                NPC.localAI[2] = 0;
-                IsDashing = false;
+                if (NPC.localAI[1] >= reset)//
+                {
+                    NPC.localAI[0] = 0;
+                    NPC.localAI[1] = 0;
+                    NPC.localAI[2] = 0;
+                    IsDashing = false;
             }
 
         }

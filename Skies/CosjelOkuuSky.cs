@@ -38,7 +38,7 @@ namespace ITD.Skies
         {
             if (maxDepth >= 0 && minDepth < 0)
             {
-                spriteBatch.Draw(ITD.Instance.Assets.Request<Texture2D>("Skies/CosjelOkuuSKy", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value,
+                spriteBatch.Draw(ITD.Instance.Assets.Request<Texture2D>("Skies/CosjelOkuuSky", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value,
                     new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * intensity * 1f);
             }
         }
@@ -69,7 +69,7 @@ namespace ITD.Skies
 
         public override Color OnTileColor(Color inColor)
         {
-            return new Color(Vector4.Lerp(new Vector4(0f, 0.50f, 1f, 1f), inColor.ToVector4(), 1f - intensity));
+            return new Color(Vector4.Lerp(new Vector4(0f, 0f, 0f, 1f), inColor.ToVector4(), 1f - intensity));
         }
     }
 }

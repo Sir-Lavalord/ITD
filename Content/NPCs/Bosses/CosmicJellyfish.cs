@@ -221,6 +221,10 @@ namespace ITD.Content.NPCs.Bosses
             {
                 CheckSecondStage();
             }
+            if (!SkyManager.Instance["ITD:CosjelOkuuSky"].IsActive() && bOkuu)
+            {
+                SkyManager.Instance.Activate("ITD:CosjelOkuuSky");
+            }
             Attacks(player);
             Movement(player);
             HandControl(player);
@@ -240,10 +244,6 @@ namespace ITD.Content.NPCs.Bosses
                 {
                     NPC.ai[3] = 1;
                 }
-            }
-            if (!SkyManager.Instance["ITD:CosjelOkuuSky"].IsActive() && bOkuu)
-            {
-                SkyManager.Instance.Activate("ITD:CosjelOkuuSky");
             }
 
             if (NPC.life * 100 / NPC.lifeMax < 50)
@@ -285,8 +285,6 @@ namespace ITD.Content.NPCs.Bosses
         {
             Vector2 toPlayer = player.Center - NPC.Center;
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
-
-
             switch (NPC.ai[3])
             {
 
@@ -318,11 +316,11 @@ namespace ITD.Content.NPCs.Bosses
                             for (int i = 0; i < projectileAmount; i++)
                             {
                                 Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -8f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity + projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 0, 0, -1, NPC.whoAmI);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity + projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 30, 0, -1, NPC.whoAmI);
                             }
                         }
                     }
-                    else if (NPC.localAI[1] == 180 || NPC.localAI[1] == 120 && bSecondStage)
+                    else if (NPC.localAI[1] == 150 || NPC.localAI[1] == 100 && bSecondStage)
                     {
                         NPC.ai[3]++;
                         NPC.localAI[1] = 0;
@@ -330,7 +328,7 @@ namespace ITD.Content.NPCs.Bosses
                     break;
                 case 2:
                     //Tempo
-                    if (NPC.localAI[1]++ >= 100)
+                    if (NPC.localAI[1]++ >= 200 || expertMode && NPC.localAI[1]++ >= 180 || masterMode && NPC.localAI[1]++ >= 150)
                     {
                         NPC.localAI[1] = 0;
                         SoundEngine.PlaySound(SoundID.Item20, NPC.Center);
@@ -347,11 +345,14 @@ namespace ITD.Content.NPCs.Bosses
                             {
                                 float angle = startAngle + sectorOfSector * i;
                                 Vector2 projectileVelo = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * radius;
+                                if (bSecondStage)
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo * 0.01f, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1,0,2);
+                                else
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1);
                             }
                         }
                     }
-                    if (NPC.localAI[2]++ >= 300)
+                    if (NPC.localAI[2]++ >= 400 + Main.rand.Next(-100, 150))
                     {
                         NPC.ai[3]++;
 
@@ -389,7 +390,7 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         if (!bSecondStage)
                         {
-                            if (NPC.localAI[1]++ >= 200)
+                            if (NPC.localAI[1]++ >= 100)
                             {
                                 NPC.ai[3]++;
                                 NPC.localAI[1] = 0;
@@ -404,14 +405,14 @@ namespace ITD.Content.NPCs.Bosses
                                 {
                                     if (hand == -1)
                                     {
-                                        hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 1, 0.1f);
+                                        hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(),20, 0.1f);
                                     }
                                 }
                                 else
                                 {
                                     if (hand2 == -1)
                                     {
-                                        hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 1, 0.1f);
+                                        hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f);
                                     }
                                 }
                             }
@@ -423,23 +424,25 @@ namespace ITD.Content.NPCs.Bosses
                                 if (handState == HandState.Waiting && hand != -1)
                                     handState = HandState.Charging;
                             }
-                            if (NPC.localAI[2] > 6)
+
+                                if (NPC.localAI[2] > 6)
+                                {
+                                    NPC.localAI[1] = 0;
+                                    NPC.localAI[2] = 0;
+                                    NPC.ai[3]++;
+                                    if (handState == HandState.Waiting && hand != -1)
+                                        handState = HandState.ForcedKill;
+                                    if (handState2 == HandState.Waiting && hand2 != -1)
+                                        handState2 = HandState.ForcedKill;
+                                }
+                            
+                            if (hand == -1) 
                             {
-                                NPC.localAI[1] = 0;
-                                NPC.localAI[2] = 0;
-                                NPC.ai[3]++;
-                                if (handState == HandState.Waiting && hand != -1)
-                                    handState = HandState.ForcedKill;
-                                if (handState2 == HandState.Waiting && hand2 != -1)
-                                    handState2 = HandState.ForcedKill;
-                            }
-                            if (hand == -1)
-                            {
-                                hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 1, 0.1f);
+                                hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f);
                             }
                             if (hand2 == -1)
                             {
-                                hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 1, 0.1f);
+                                hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f);
                             }
                         }
                     }
@@ -486,16 +489,16 @@ namespace ITD.Content.NPCs.Bosses
 
                                 if (hand == -1)
                                 {
-                                    hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 1, 0.1f,-1,1,0,NPC.whoAmI);
+                                    hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f,-1,1,0,NPC.whoAmI);
                                 }
                                 if (hand2 == -1)
                                 {
-                                    hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 1, 0.1f, -1, 1, 0, NPC.whoAmI);
+                                    hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f, -1, 1, 0, NPC.whoAmI);
                                 }
                             
                         
                     }
-                    if (NPC.localAI[2]++ >= 600)
+                    if (NPC.localAI[2]++ >= 600 + Main.rand.Next(100, 200))
                     {
                         NPC.ai[3]++;
                         NPC.localAI[0] = 0;
@@ -571,7 +574,7 @@ namespace ITD.Content.NPCs.Bosses
                                     ? Main.rand.NextFloat((float)Math.PI * 2) : player.velocity.ToRotation();
                                 float rotation = offset + (float)Math.PI * 2 / Main.rand.Next(10);
                                 int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + saferange * Vector2.UnitX.RotatedBy(rotation), Vector2.Zero,
-                                    ModContent.ProjectileType<TouhouBullet>(), NPC.damage, 0f, -1, NPC.whoAmI, 2);
+                                    ModContent.ProjectileType<TouhouBullet>(), 30, 0f, -1, NPC.whoAmI, 2);
                                 ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
                                     new ParticleOrchestraSettings { PositionInWorld = Main.projectile[proj].Center }, Main.projectile[proj].owner);
                                 NPC.localAI[1] = 0;
@@ -591,26 +594,26 @@ namespace ITD.Content.NPCs.Bosses
                                 NPC.localAI[1] += (float)Math.PI / 2 / 360 * 75;
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
-                                    for (int i = 0; i < 4; i++)
+                                    for (int i = 0; i < 2; i++)
                                     {
                                         Projectile.NewProjectile(NPC.GetSource_FromThis(), CorePos + 600 *
                                         Vector2.UnitX.RotatedBy(NPC.localAI[1] + Math.PI / 2 * i), Vector2.Zero, ModContent.ProjectileType<TouhouBullet>(),
-                                        NPC.damage, 0f, -1, NPC.whoAmI);
+                                        25, 0f, -1, NPC.whoAmI);
                                     }
                                 }
 
                             }
-                            float Range = 2000f;
+                            float Range = 8000;
                             float Power = 0.125f + 1.5f * 0.125f;
                             for (int i = 0; i < Main.maxPlayers; i++)
                             {
                                 float Distance = Vector2.Distance(Main.player[i].Center, CorePos);
-                                if (Distance < 1000f && Main.player[i].grappling[0] == -1)
+                                if (Distance < 500 && Main.player[i].grappling[0] == -1)
                                 {
                                     if (Collision.CanHit(CorePos, 1, 1, Main.player[i].Center, 1, 1))
                                     {
                                         float distanceRatio = Distance / Range;
-                                        float multiplier = 1f - distanceRatio;
+                                        float multiplier = distanceRatio;
 
                                         if (Main.player[i].Center.X < CorePos.X)
                                             Main.player[i].velocity.X += Power * multiplier;
@@ -628,7 +631,7 @@ namespace ITD.Content.NPCs.Bosses
                             Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), CorePos, Vector2.Zero,
                     ModContent.ProjectileType<CosmicLightningBlast>(), (int)(NPC.damage), 2f, player.whoAmI);
                             Blast.damage = 0;
-                            Blast.ai[1] = 100f;
+                            Blast.ai[1] = 1000f;
                             Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
                             Blast.netUpdate = true;
                         }
@@ -685,11 +688,7 @@ namespace ITD.Content.NPCs.Bosses
                 if (!suffer.CosJellSuffocated)
                 {
                     suffer.CosJellSuffocated = true;
-                    if (Main.masterMode || Main.expertMode)//Annoying asdf
-                    {
-                        suffer.CosJellEscapeCurrent = 10;
-                    }
-                    else suffer.CosJellEscapeCurrent = 6;
+                    suffer.CosJellEscapeCurrent = masterMode ? 12 : expertMode ? 8 : 6;
                 }
             }
             else
@@ -770,7 +769,7 @@ namespace ITD.Content.NPCs.Bosses
                     player.velocity *= 0;
                     player.Center = NPC.Center;
                     player.AddBuff(BuffID.Suffocation, 5);
-                    player.AddBuff(BuffID.Blackout, 5);
+                    player.AddBuff(BuffID.Obstructed, 5);
                     if (!suffer.CosJellSuffocated)
                     {
                         NPC.localAI[1] = 0;
@@ -855,6 +854,11 @@ namespace ITD.Content.NPCs.Bosses
             MeteorStrike,
             TemperTantrum
         }
+
+        bool expertMode = Main.expertMode;
+        bool masterMode = Main.masterMode;
+        int iDelayTime;
+
         private HandState handState = HandState.Waiting;
         private HandState handState2 = HandState.Waiting;
         Vector2 vLockedIn;
@@ -877,6 +881,8 @@ namespace ITD.Content.NPCs.Bosses
                     handState2 = HandState.ForcedKill;
                 }
             }
+            iDelayTime = masterMode ? 0 : expertMode ? 4 : 6;
+
             if (hand != -1)
             {
                 Projectile Projectile = Main.projectile[hand];
@@ -938,9 +944,9 @@ namespace ITD.Content.NPCs.Bosses
                                     {
                                         vLockedIn = player.Center;
                                     }
-                                    else if (Timer >= 5 && NPC.localAI[2] > 6 || Timer >= 0 && NPC.localAI[2] <= 6)
-                                    {
-                                        Timer = 0;
+                                else if (Timer >= iDelayTime && bSecondStage || Timer >= 0 && !bSecondStage)
+                                {
+                                    Timer = 0;
                                     if (Projectile.ai[0] != 1)
                                     {
                                         handState = HandState.Slinging;
@@ -1041,7 +1047,7 @@ namespace ITD.Content.NPCs.Bosses
                             if (Projectile.ai[1] == 1)
                             {
                                 player.GetITDPlayer().Screenshake = 10;
-                                if (iMeteorCount <= 15)
+                                if (iMeteorCount <= 25)
                                 {
                                     if (Timer++ >= 1)
                                     {
@@ -1055,7 +1061,7 @@ namespace ITD.Content.NPCs.Bosses
                                             {
                                                 SoundEngine.PlaySound(SoundID.Item88, player.Center);
                                                 int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(vLockedIn.X + (Main.rand.Next(-40, 40)), player.Center.Y - 500)
-                                                    , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(0.75f, 1.1f), Main.rand.Next(ProjectileID.Meteor1, ProjectileID.Meteor3 + 1), Projectile.damage, Projectile.knockBack, player.whoAmI);
+                                                    , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(0.75f, 1.1f), Main.rand.Next(424, 427), Projectile.damage, Projectile.knockBack, player.whoAmI);
                                                 Main.projectile[proj].hostile = true;
                                                 Main.projectile[proj].friendly = false;
                                                 Main.projectile[proj].scale = Main.rand.NextFloat(2, 3f);
@@ -1186,7 +1192,7 @@ namespace ITD.Content.NPCs.Bosses
                                 {
                                     vLockedIn = player.Center;
                                 }
-                                else if (Timer2 >= 5 && bSecondStage || Timer2 >= 0 && !bSecondStage)
+                                else if (Timer2 >= iDelayTime && bSecondStage || Timer2 >= 0 && !bSecondStage)
                                 {
                                     Timer2 = 0;
                                     if (Projectile2.ai[0] != 1)
@@ -1284,7 +1290,7 @@ namespace ITD.Content.NPCs.Bosses
                             if (Projectile2.ai[1] == 1)
                             {
                                 player.GetITDPlayer().Screenshake = 10;
-                                if (iMeteorCount2 <= 15)
+                                if (iMeteorCount2 <= 25)
                                 {
                                     if (Timer2++ >= 1)
                                     {
@@ -1297,7 +1303,7 @@ namespace ITD.Content.NPCs.Bosses
                                             {
                                                 SoundEngine.PlaySound(SoundID.Item88, player.Center);
                                                 int proj = Projectile.NewProjectile(Projectile2.GetSource_FromThis(), new Vector2(vLockedIn.X + Main.rand.Next(-40, 40), player.Center.Y - 500)
-                                                    , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(0.65f, 1.1f), Main.rand.Next(ProjectileID.Meteor1, ProjectileID.Meteor3 + 1), Projectile2.damage, Projectile2.knockBack, player.whoAmI);
+                                                    , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(0.65f, 1.1f), Main.rand.Next(424, 427), Projectile2.damage, Projectile2.knockBack, player.whoAmI);
                                                 Main.projectile[proj].hostile = true;
                                                 Main.projectile[proj].friendly = false;
                                                 Main.projectile[proj].scale = Main.rand.NextFloat(2,3f);
