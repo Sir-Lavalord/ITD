@@ -51,7 +51,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 			
 			foreach (var target in Main.ActiveProjectiles)
             {
-				if (target.type == Projectile.type)
+				if (target.type == Projectile.type && target.owner == Projectile.owner)
 				{
 					count++;
 					if (target == Projectile)
