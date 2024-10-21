@@ -13,6 +13,7 @@ using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Utilities;
 using Terraria.UI;
 
 namespace ITD.Content.NPCs.BlueshroomGroves
@@ -238,6 +239,12 @@ namespace ITD.Content.NPCs.BlueshroomGroves
             //float clamped = Helpers.Remap(transitionProgress, 0f, 1f, 0.5f, 1f);
             //return drawColor.MultiplyRGB(new Color(clamped, clamped, clamped, 1f));
             return drawColor;
+        }
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)
+                return 0.1f;
+            return 0f;
         }
     }
 }

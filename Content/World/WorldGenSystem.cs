@@ -20,6 +20,7 @@ namespace ITD.Content.World
         public static LocalizedText BluesoilPassMessage { get; private set; }
         public static LocalizedText DeepDesertPassMessage { get; private set; }
 
+        //public static List<Point> testPoints = [];
         public override void SetStaticDefaults()
         {
             BluesoilPassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{nameof(BluesoilPassMessage)}"));
@@ -62,7 +63,19 @@ namespace ITD.Content.World
             // test world particle (change particle.canvas in particle type)
             //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
-            Helpers.GrowLongMoss(pos.X, pos.Y, ModContent.TileType<LongBlackMold>(), ModContent.TileType<BlackMold>());
+            /* test triangle creation
+            testPoints.Add(pos);
+            if (testPoints.Count == 3)
+            {
+                ITDShapes.Triangle tri = new(testPoints[0], testPoints[1], testPoints[2]);
+                tri.LoopThroughPoints(p =>
+                {
+                    WorldGen.PlaceTile(p.X, p.Y, TileID.BlueDungeonBrick);
+                });
+                testPoints.Clear();
+            }
+            */
+            //Helpers.GrowLongMoss(pos.X, pos.Y, ModContent.TileType<LongBlackMold>(), ModContent.TileType<BlackMold>());
             //WorldGen.PlaceTile(pos.X, pos.Y, ModContent.TileType<BlackMold>());
         }
         private void TestMethod2()
