@@ -847,7 +847,7 @@ Items: {
 			'''
 			Press RMB or LMB to fire a snaptrap
 			RMB to whip enemies while a snaptrap is latched
-			'It''s a chain, AND a whip!'
+			'It's a chain, AND a whip!'
 			[c/{0}:Latch Effect:] Increases summon damage and movement speed over a course of 20 seconds
 			'''
 	}
