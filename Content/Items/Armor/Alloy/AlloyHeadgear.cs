@@ -1,13 +1,13 @@
-﻿using Terraria.ID;
+﻿using ITD.Utilities;
+using Terraria.ID;
+using Terraria.Localization;
 using Terraria;
 using Terraria.ModLoader;
-using ITD.Utilities;
-using Terraria.Localization;
 
 namespace ITD.Content.Items.Armor.Alloy
 {
     [AutoloadEquip(EquipType.Head)]
-    public class AlloyHelmet : ModItem
+    public class AlloyHeadgear : ModItem
     {
         public static LocalizedText SetBonusText { get; private set; }
         public override void SetStaticDefaults()
@@ -16,8 +16,8 @@ namespace ITD.Content.Items.Armor.Alloy
         }
         public override void SetDefaults()
         {
-            Item.width = 24;
-            Item.height = 26;
+            Item.width = 22;
+            Item.height = 24;
             Item.value = Item.sellPrice(silver: 10);
             Item.rare = ItemRarityID.Green;
             Item.defense = 2;
@@ -28,7 +28,7 @@ namespace ITD.Content.Items.Armor.Alloy
         }
         public override void UpdateArmorSet(Player player)
         {
-            player.GetITDPlayer().setAlloy_Melee = true;
+            player.GetITDPlayer().setAlloy_Ranged = true;
             player.setBonus = SetBonusText.Value;
         }
     }

@@ -226,7 +226,7 @@ Items: {
 	}
 
 	AlloyHelmet: {
-		SetBonus: Mods.ITD.Items.AlloyHelmet.SetBonus
+		SetBonus: Aumenta el daño cuerpo-a-cuerpo por un 10%
 		DisplayName: Yelmo de aleación
 		Tooltip: ""
 	}
@@ -868,6 +868,18 @@ Items: {
 
 	WheelerTrashCan: {
 		DisplayName: Bote de basura rodante
+		// Tooltip: ""
+	}
+
+	AlloyHeadgear: {
+		SetBonus: Aumenta el daño a distancia por un 8%
+		DisplayName: Casco de aleación
+		// Tooltip: ""
+	}
+
+	AlloyVisor: {
+		SetBonus: Aumenta el daño mágico por un 6%
+		DisplayName: Visor de aleación
 		// Tooltip: ""
 	}
 }

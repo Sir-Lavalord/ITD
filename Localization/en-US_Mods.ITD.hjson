@@ -226,7 +226,7 @@ Items: {
 	}
 
 	AlloyHelmet: {
-		SetBonus: Mods.ITD.Items.AlloyHelmet.SetBonus
+		SetBonus: Increases melee damage by 10%
 		DisplayName: Alloy Helmet
 		Tooltip: ""
 	}
@@ -869,6 +869,18 @@ Items: {
 
 	WheelerTrashCan: {
 		DisplayName: Wheeler Trash Can
+		Tooltip: ""
+	}
+
+	AlloyHeadgear: {
+		SetBonus: Increases ranged damage by 8%
+		DisplayName: Alloy Headgear
+		Tooltip: ""
+	}
+
+	AlloyVisor: {
+		SetBonus: Increases magic damage by 6%
+		DisplayName: Alloy Visor
 		Tooltip: ""
 	}
 }

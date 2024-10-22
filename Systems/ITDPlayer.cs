@@ -52,7 +52,10 @@ namespace ITD.Players
         public bool razedWine = false;
         public int razedCooldown = 0;
 
-        public bool setAlloy = false;
+        public bool setAlloy_Melee = false;
+        public bool setAlloy_Ranged = false;
+        public bool setAlloy_Magic = false;
+        public bool setAlloy { get { return setAlloy_Melee ||  setAlloy_Ranged || setAlloy_Magic; } }
         //Drawlayer nonsense
         public int frameCounter = 0;
         public int frameEffect = 0;
@@ -117,7 +120,9 @@ namespace ITD.Players
 
             razedWine = false;
 			
-            setAlloy = false;
+            setAlloy_Melee = false;
+            setAlloy_Ranged = false;
+            setAlloy_Magic = false;
         }
 		
 		public override void UpdateDead()
@@ -165,11 +170,13 @@ namespace ITD.Players
         {
             if (setAlloy)
             {
-                Player.GetDamage(DamageClass.Melee) += 0.1f;
-                Player.GetDamage(DamageClass.Ranged) += 0.08f;
-                Player.GetDamage(DamageClass.Magic) += 0.06f;
-                Player.GetDamage(DamageClass.Summon) += 0.06f;
                 Player.endurance += 0.02f;
+                if (setAlloy_Melee)
+                    Player.GetDamage(DamageClass.Melee) += 0.1f;
+                if (setAlloy_Ranged)
+                    Player.GetDamage(DamageClass.Ranged) += 0.08f;
+                if (setAlloy_Magic)
+                    Player.GetDamage(DamageClass.Magic) += 0.06f;
             }
             if (razedWine)
             {
