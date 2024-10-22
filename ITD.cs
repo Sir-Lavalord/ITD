@@ -22,7 +22,6 @@ namespace ITD
 
         internal Mod wikithis = null;
         internal Mod bossChecklist = null;
-        internal Mod musicDisplay = null;
         internal Mod munchies = null;
         internal Mod achievements = null;
         internal Mod dialogueTweak = null; // this is necessary so the recruitment button doesn't screw up when this mod is on
@@ -49,14 +48,12 @@ namespace ITD
             itdMusic = null;
             wikithis = null;
             bossChecklist = null;
-            musicDisplay = null;
             munchies = null;
             achievements = null;
             dialogueTweak = null;
             ModLoader.TryGetMod("ITDMusic", out itdMusic);
             ModLoader.TryGetMod("Wikithis", out wikithis);
             ModLoader.TryGetMod("BossChecklist", out bossChecklist);
-            ModLoader.TryGetMod("MusicDisplay", out musicDisplay);
             ModLoader.TryGetMod("Munchies", out munchies);
             ModLoader.TryGetMod("TMLAchievements", out achievements);
             ModLoader.TryGetMod("DialogueTweak", out dialogueTweak);
@@ -70,7 +67,6 @@ namespace ITD
             itdMusic = null;
             wikithis = null;
             bossChecklist = null;
-            musicDisplay = null;
             munchies = null;
             achievements = null;
             dialogueTweak = null;
