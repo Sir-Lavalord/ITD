@@ -815,11 +815,6 @@ Items: {
 			''' */
 	}
 
-	TestRecruiter: {
-		// DisplayName: Test Recruiter
-		// Tooltip: ""
-	}
-
 	CopperMandibles: {
 		// DisplayName: Copper Mandibles
 		/* Tooltip:
