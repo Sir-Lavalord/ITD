@@ -34,8 +34,8 @@ namespace ITD.Systems.Recruitment
     }
     public static class TownNPCRecruitmentLoader
     {
-        private readonly static Dictionary<int, ExternalRecruitmentData> recruitmentDataRegistry = [];
-        private readonly static int[] NPCsThatCanBeRecruited =
+        public readonly static Dictionary<int, ExternalRecruitmentData> recruitmentDataRegistry = [];
+        public readonly static int[] NPCsThatCanBeRecruited =
         [
             NPCID.Merchant
         ];

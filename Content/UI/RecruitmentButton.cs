@@ -86,16 +86,20 @@ namespace ITD.Content.UI
         {
             if (IsMouseHovering)
             {
-                UICommon.TooltipMouseText(Language.GetOrRegister(ITD.Instance.GetLocalizationKey($"UI.{nameof(RecruitmentButton)}.MouseHoverName")).Value);
+                UICommon.TooltipMouseText(ITD.Instance.GetLocalization($"UI.{nameof(RecruitmentButton)}.MouseHoverName").Value);
             }
         }
-        public override void LeftClick(UIMouseEvent evt)
+        public static void DoRecruit()
         {
             Player player = Main.LocalPlayer;
             if (TownNPCRecruitmentLoader.TryRecruit(player.talkNPC, player))
             {
                 player.SetTalkNPC(-1);
             }
+        }
+        public override void LeftClick(UIMouseEvent evt)
+        {
+            DoRecruit();
         }
     }
 }

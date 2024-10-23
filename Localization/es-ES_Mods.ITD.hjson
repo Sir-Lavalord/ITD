@@ -1216,4 +1216,7 @@ Achievements: {
 	}
 }
 
-UI.FavorSlot.MouseHoverName: Favor
+UI: {
+	FavorSlot.MouseHoverName: Favor
+	// RecruitmentButton.MouseHoverName: Recruit
+}
