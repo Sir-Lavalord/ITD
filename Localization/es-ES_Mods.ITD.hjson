@@ -882,6 +882,22 @@ Items: {
 		DisplayName: Visor de aleación
 		// Tooltip: ""
 	}
+
+	ElectrumVisor: {
+		// SetBonus: Hitting enemies releases chain lightning
+		// DisplayName: Electrum Visor
+		// Tooltip: ""
+	}
+
+	ElectrumChestplate: {
+		// DisplayName: Electrum Chestplate
+		// Tooltip: ""
+	}
+
+	ElectrumLeggings: {
+		// DisplayName: Electrum Leggings
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

@@ -1,26 +1,31 @@
-﻿using ITD.Content.NPCs.Bosses;
-using ITD.Content.Items.Weapons.Melee;
-using ITD.Content.Dusts;
-using ITD.Physics;
+﻿using Microsoft.Xna.Framework;
+
 using System;
+using System.Linq;
 using System.Collections.Generic;
-using ITD.Systems;
+
+using ReLogic.Graphics;
+
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terraria;
 using Terraria.Localization;
-using Microsoft.Xna.Framework;
-using System.Linq;
+using Terraria.GameContent;
+using Terraria.ModLoader.IO;
+
+using ITD.Systems;
+using ITD.Content.NPCs;
+using ITD.Content.NPCs.Bosses;
+using ITD.Content.Items.Weapons.Melee;
+using ITD.Content.Dusts;
+using ITD.Physics;
+using ITD.Systems.Recruitment;
 using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Utilities;
 using ITD.Networking;
 using ITD.Networking.Packets;
-using ReLogic.Graphics;
-using Terraria.GameContent;
-using ITD.Systems.Recruitment;
-using Terraria.ModLoader.IO;
 
 namespace ITD.Players
 {
@@ -52,10 +57,13 @@ namespace ITD.Players
         public bool razedWine = false;
         public int razedCooldown = 0;
 
+		public bool setElectrum = false;
+
         public bool setAlloy_Melee = false;
         public bool setAlloy_Ranged = false;
         public bool setAlloy_Magic = false;
         public bool setAlloy { get { return setAlloy_Melee ||  setAlloy_Ranged || setAlloy_Magic; } }
+		
         //Drawlayer nonsense
         public int frameCounter = 0;
         public int frameEffect = 0;
@@ -119,6 +127,8 @@ namespace ITD.Players
 			dreadBlock = false;
 
             razedWine = false;
+			
+			setElectrum = false;
 			
             setAlloy_Melee = false;
             setAlloy_Ranged = false;
@@ -222,6 +232,41 @@ namespace ITD.Players
                 Main.screenPosition += Main.rand.NextVector2Circular(4, 4);
             }
         }
+		
+		public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
+		{
+			if (setElectrum)
+			{
+				target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
+				MiscHelpers.Zap(target.Center, Player, (int)(Player.GetDamage(item.DamageType).ApplyTo(item.damage) * 0.75f), (int)(Player.GetCritChance(item.DamageType)), 1);
+				
+				SoundEngine.PlaySound(SoundID.Item94, target.position);
+				for (int i = 0; i < 3; i++)
+				{
+					int dust = Dust.NewDust(target.Center, 1, 1, DustID.Electric, 0f, 0f, 0, default, 1f);
+					Main.dust[dust].noGravity = true;
+					Main.dust[dust].velocity *= 2f;
+				}
+			}
+		}
+		
+		public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
+		{
+			if (setElectrum)
+			{
+				target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
+				MiscHelpers.Zap(target.Center, Player, (int)(proj.damage * 0.75f), proj.CritChance, 1);
+				
+				SoundEngine.PlaySound(SoundID.Item94, target.position);
+				for (int i = 0; i < 3; i++)
+				{
+					int dust = Dust.NewDust(target.Center, 1, 1, DustID.Electric, 0f, 0f, 0, default, 1f);
+					Main.dust[dust].noGravity = true;
+					Main.dust[dust].velocity *= 2f;
+				}
+			}
+		}
+		
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
 			if (modifiers.Dodgeable && Main.rand.NextFloat(1f) < blockChance) // Chance to block attacks
