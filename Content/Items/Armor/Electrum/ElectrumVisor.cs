@@ -23,6 +23,12 @@ namespace ITD.Content.Items.Armor.Electrum
             Item.rare = ItemRarityID.Green;
             Item.defense = 2;
         }
+		
+		public override void UpdateEquip(Player player)
+        {
+            player.moveSpeed += 0.08f;
+        }
+		
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
             return body.type == ModContent.ItemType<ElectrumChestplate>() && legs.type == ModContent.ItemType<ElectrumLeggings>();

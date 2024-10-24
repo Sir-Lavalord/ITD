@@ -14,9 +14,9 @@ Items: {
 		Tooltip: ""
 	}
 
-	RhodiumBow: {
-		DisplayName: Rhodiumbogen
-		Tooltip: ""
+	ElectrumBow: {
+		// DisplayName: Electrum Bow
+		// Tooltip: Electrifies wooden arrows
 	}
 
 	RhodiumBroadsword: {
@@ -884,17 +884,17 @@ Items: {
 	ElectrumVisor: {
 		// SetBonus: Hitting enemies releases chain lightning
 		// DisplayName: Electrum Visor
-		// Tooltip: ""
+		// Tooltip: 8% increased movement speed
 	}
 
 	ElectrumChestplate: {
 		// DisplayName: Electrum Chestplate
-		// Tooltip: ""
+		// Tooltip: 8% increased movement speed
 	}
 
 	ElectrumLeggings: {
 		// DisplayName: Electrum Leggings
-		// Tooltip: ""
+		// Tooltip: 8% increased movement speed
 	}
 }
 

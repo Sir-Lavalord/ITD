@@ -17,6 +17,11 @@ namespace ITD.Content.Items.Armor.Electrum
             Item.defense = 2;
         }
 		
+		public override void UpdateEquip(Player player)
+        {
+            player.moveSpeed += 0.08f;
+        }
+		
 		public override void AddRecipes()
 		{
 			CreateRecipe(1)

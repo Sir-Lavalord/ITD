@@ -1,19 +1,31 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Content.Items.Materials;
 using ITD.Utilities;
+using ITD.Systems;
+using ITD.Content.Tiles.BlueshroomGroves;
 
 namespace ITD.Content.Items.Weapons.Melee
 {
     public class RhodiumBroadsword : ModItem
     {
+		public override void SetStaticDefaults()
+        {			
+			HeldItemLayer.RegisterData(Item.type, new DrawLayerData()
+            {
+                Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),
+                Color = () => Color.White
+            });
+        }
+		
         public override void SetDefaults()
         {
-            Item.damage = 18;
+            Item.damage = 24;
             Item.DamageType = DamageClass.Melee;
 			Item.crit = 2;
             Item.width = 40;
@@ -25,23 +37,20 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.value = Item.sellPrice(gold: 1);
             Item.rare = ItemRarityID.Blue;
             Item.UseSound = SoundID.Item1;
-			Item.shoot = ModContent.ProjectileType<RhodiumSwordBeam>();
 			Item.shootSpeed = 9.5f;
         }
 		
-		public override void MeleeEffects (Player player, Rectangle hitbox)
+		public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-			Vector2 position;
-			Vector2 spinningpoint;
-			MiscHelpers.GetPointOnSwungItemPath(player, 50f, 50f, 0.2f + 0.8f * Main.rand.NextFloat(), player.GetAdjustedItemScale(Item), out position, out spinningpoint);
-			Vector2 value = spinningpoint.RotatedBy((double)(1.57079637f * (float)player.direction * player.gravDir), default(Vector2));
-			Dust.NewDustPerfect(position, DustID.Electric, new Vector2?(value * 4f), 100, default(Color), 1f).noGravity = true;
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+
+            spriteBatch.Draw(texture, new Vector2(Item.position.X - Main.screenPosition.X + Item.width * 0.5f, Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height * 0.5f),
+                new Rectangle(0, 0, texture.Width, texture.Height), Color.White, rotation, texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
         }
 		
         public override void AddRecipes()
         {
             CreateRecipe(1)
-                .AddIngredient(724, 1)
                 .AddIngredient(ModContent.ItemType<RhodiumBar>(), 10)
                 .AddTile(TileID.Anvils)
                 .Register();
