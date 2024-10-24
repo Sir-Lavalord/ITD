@@ -26,14 +26,18 @@ namespace ITD.Content.UI
         private static bool RecruitmentButtonVisible()
         {
             bool talking = Main.LocalPlayer.talkNPC > -1;
-            bool inSpecialNPCTalkMenu = Main.InGuideCraftMenu || Main.InReforgeMenu;
+            bool inSpecialNPCTalkMenu = Main.InGuideCraftMenu || Main.InReforgeMenu || Main.npcShop > 0;
+
+            bool shouldShow = talking && !inSpecialNPCTalkMenu;
+
             Mod dialogueTweakMod = ITD.Instance.dialogueTweak;
             if (dialogueTweakMod is null)
-                return talking && !inSpecialNPCTalkMenu;
-            dialogueTweakMod.TryFind("Configuration", out ModConfig config);
-            FieldInfo field = config.GetType().GetField("VanillaUI");
-            bool isDialogueTweakVanillaUI = (bool)field.GetValue(config);
-            return talking && !inSpecialNPCTalkMenu && isDialogueTweakVanillaUI;
+                return shouldShow;
+
+            if (dialogueTweakMod.TryGetModConfigValue("Configuration", "VanillaUI", null, out bool isDialogueTweakVanillaUI))
+                return shouldShow && isDialogueTweakVanillaUI;
+
+            return shouldShow;
         }
         public override int InsertionIndex(List<GameInterfaceLayer> layers)
         {
@@ -49,8 +53,15 @@ namespace ITD.Content.UI
             DynamicSpriteFont font = FontAssets.MouseText.Value;
 
             float xOffset = 0f;
+            Mod dialogueTweakMod = ITD.Instance.dialogueTweak;
 
-            if (Main.npcChatCornerItem > 0 || ITD.Instance.dialogueTweak != null)
+            bool altDrawToLeft = dialogueTweakMod != null;
+            if (altDrawToLeft)
+            {
+                dialogueTweakMod.TryGetModConfigValue("Configuration", "ShowSwapButton", null, out altDrawToLeft); // who needs readable code
+            }
+
+            if (Main.npcChatCornerItem > 0 || altDrawToLeft)
                 xOffset -= 32f;
 
             // prev implementation was horrid. this replicates what vanilla does to draw Main.npcChatCornerItem. this is more solid
