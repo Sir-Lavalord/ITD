@@ -50,6 +50,18 @@ namespace ITD.DetoursIL
                 DumpIL(il);
             }
         }
+        private static int GetYOffset()
+        {
+            return WorldGen.GetWorldSize() switch
+            {
+                // medium world
+                1 => 500,
+                // large world
+                2 => 700,
+                // small world and default
+                _ => 300,
+            };
+        }
         private static void ModifySnowBiomeHeight(ILContext il)
         {
             try
@@ -67,36 +79,7 @@ namespace ITD.DetoursIL
                 }
                 c.Index++; // advance cursor position
 
-                // call GetWorldSize for switch statement (to avoid crashing)
-                c.Emit(OpCodes.Call, typeof(WorldGen).GetMethod("GetWorldSize"));
-                
-                // labels
-                ILLabel smallWorldLabel = c.DefineLabel();
-                ILLabel mediumWorldLabel = c.DefineLabel();
-                ILLabel largeWorldLabel = c.DefineLabel();
-                ILLabel endLabel = c.DefineLabel();
-
-                c.Emit(OpCodes.Switch, new[]
-                {
-                    smallWorldLabel,
-                    mediumWorldLabel,
-                    largeWorldLabel
-                });
-
-                // small world switch case
-                c.MarkLabel(smallWorldLabel);
-                c.Emit(OpCodes.Ldc_I4, 300);
-                c.Emit(OpCodes.Br, endLabel);
-
-                // medium world switch case
-                c.MarkLabel(mediumWorldLabel);
-                c.Emit(OpCodes.Ldc_I4, 500);
-                c.Emit(OpCodes.Br, endLabel);
-
-                // large world switch case
-                c.MarkLabel(largeWorldLabel);
-                c.Emit(OpCodes.Ldc_I4, 700);
-                c.MarkLabel(endLabel);
+                c.EmitDelegate(GetYOffset); // get the int we need to add to 949
 
                 c.Emit(OpCodes.Add); // add the int to num949
             }
@@ -108,7 +91,6 @@ namespace ITD.DetoursIL
         public override void Unload()
         {
             hook?.Dispose();
-            IL_WorldGen.AddGenPasses -= SnowBiomeExtension;
         }
     }
 }
