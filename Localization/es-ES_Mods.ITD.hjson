@@ -914,6 +914,11 @@ Items: {
 		// DisplayName: Rhodium Leggings
 		// Tooltip: 4% increased critical strike chance
 	}
+
+	DespoticSuperMeleeSword: {
+		// DisplayName: Undying Chaos
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -1042,6 +1047,7 @@ Projectiles: {
 
 	ChainwhipWhip.DisplayName: Látigo de cadena
 	CosmicJellyfishBlackholeAura.DisplayName: Agujero negro de Medusa Cósmica
+	// DespoticSuperMeleeProj.DisplayName: Despotic Super Melee Proj
 }
 
 NPCs: {

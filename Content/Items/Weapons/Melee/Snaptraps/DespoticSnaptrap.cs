@@ -15,17 +15,8 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
         public override void SetDefaults()
         {
             Item.DefaultToSnaptrap(30, 10, ModContent.ProjectileType<DespoticSnaptrapProjectile>(), 12f, 8, 8900);
-            Item.rare = ItemRarityID.LightRed;
-            Item.value = Item.sellPrice(0, 0, 25);
-        }
-
-        public override void AddRecipes()
-        {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.LunarBar, 6); // rember to change this on release to make it unobtainable
-            recipe.AddIngredient(ItemID.Chain, 16);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.Register();
+            Item.rare = ItemRarityID.Purple;
+            Item.value = Item.sellPrice(platinum: 1);
         }
         public override bool CanUseItem(Player player) => player.GetSnaptrapPlayer().CanUseSnaptrap;
         public override bool AltFunctionUse(Player player) => true;
