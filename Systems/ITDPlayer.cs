@@ -58,6 +58,7 @@ namespace ITD.Players
         public int razedCooldown = 0;
 
 		public bool setElectrum = false;
+		public bool setRhodium = false;
 
         public bool setAlloy_Melee = false;
         public bool setAlloy_Ranged = false;
@@ -129,6 +130,7 @@ namespace ITD.Players
             razedWine = false;
 			
 			setElectrum = false;
+			setRhodium = false;
 			
             setAlloy_Melee = false;
             setAlloy_Ranged = false;

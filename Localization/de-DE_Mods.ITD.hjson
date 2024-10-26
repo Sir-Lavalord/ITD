@@ -896,6 +896,22 @@ Items: {
 		// DisplayName: Electrum Leggings
 		// Tooltip: 8% increased movement speed
 	}
+
+	RhodiumVisor: {
+		// SetBonus: Mods.ITD.Items.RhodiumVisor.SetBonus
+		// DisplayName: Rhodium Visor
+		// Tooltip: 4% increased critical strike chance
+	}
+
+	RhodiumChestplate: {
+		// DisplayName: Rhodium Chestplate
+		// Tooltip: 4% increased critical strike chance
+	}
+
+	RhodiumLeggings: {
+		// DisplayName: Rhodium Leggings
+		// Tooltip: 4% increased critical strike chance
+	}
 }
 
 Projectiles: {

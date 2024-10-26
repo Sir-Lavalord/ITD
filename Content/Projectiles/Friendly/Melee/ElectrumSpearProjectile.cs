@@ -70,7 +70,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			{
 				Player player = Main.player[Projectile.owner];
 				
-				Texture2D texture = TextureAssets.Projectile[Type].Value;
+				Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+				Texture2D glow = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
 				Rectangle sourceRectangle = texture.Frame(1, 1);
 				Vector2 origin = sourceRectangle.Size() / 6f;
 
@@ -87,6 +88,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 						rotation = rotatedDirection.ToRotation() + MathHelper.ToRadians(135f);
 						
 						Main.EntitySpriteDraw(texture, position, sourceRectangle, Lighting.GetColor((int)player.Center.X/16, (int)player.Center.Y/16), rotation, origin, Projectile.scale, SpriteEffects.None, 0f);
+						Main.EntitySpriteDraw(glow, position, sourceRectangle, Color.White, rotation, origin, Projectile.scale, SpriteEffects.None, 0f);
 					}
 				}
 			}
