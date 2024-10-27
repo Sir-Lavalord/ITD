@@ -56,6 +56,7 @@ namespace ITD.Utilities
             }
 			return closestNPC;
         }
+        public static bool Exists(this Entity entity) => entity != null && entity.active;
         //Make the invul boss part untargetable please
         public static bool IsValidTarget(this Projectile projectile, NPC target)
         {

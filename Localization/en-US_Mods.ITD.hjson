@@ -1049,6 +1049,7 @@ Projectiles: {
 	ChainwhipWhip.DisplayName: Chainwhip Whip
 	CosmicJellyfishBlackholeAura.DisplayName: Cosmic Jellyfish Blackhole Aura
 	DespoticSuperMeleeProj.DisplayName: Despotic Super Melee Proj
+	CosJelHandTest.DisplayName: Cos Jel Hand Test
 }
 
 NPCs: {

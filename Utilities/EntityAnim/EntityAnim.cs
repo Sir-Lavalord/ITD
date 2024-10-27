@@ -31,7 +31,16 @@ namespace ITD.Utilities.EntityAnim
             return new EntityAnim<T>([.. Keyframes, .. keyframes])
             {
                 Entity = Entity,
-                GlobalPosition = GlobalPosition
+                GlobalPosition = GlobalPosition,
+            };
+        }
+        public EntityAnim<T> Append(Expression<Func<T>> propertyExpr, T endValue, int frames, EasingFunctions.EasingFunc easingFunc)
+        {
+            Keyframe<T> newKeyframe = AnimHelpers.CreateFor(Entity, propertyExpr, endValue, frames, easingFunc);
+            return new EntityAnim<T>([.. Keyframes, newKeyframe])
+            {
+                Entity = Entity,
+                GlobalPosition = GlobalPosition,
             };
         }
         /// <summary>

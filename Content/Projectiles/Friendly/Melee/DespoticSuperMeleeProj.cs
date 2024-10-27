@@ -46,10 +46,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         public EntityAnim<Vector2> GetAnim()
         {
             Player player = Main.player[Projectile.owner];
-            Vector2 direction = new Vector2(player.direction, 0f);
+            Vector2 direction = new(player.direction, 0f);
             EntityAnim<Vector2> newAnim = Projectile.CreateAnim<Vector2>()
-                .Append(AnimHelpers.CreateFor(Projectile, () => Projectile.velocity, (direction * 32f).RotatedBy(-MathHelper.PiOver4), 30, InOutQuad))
-                .Append(AnimHelpers.CreateFor(Projectile, () => Projectile.velocity, (direction * 32f).RotatedBy(MathHelper.PiOver4), 30, InQuad));
+                .Append(() => Projectile.velocity, (direction * 32f).RotatedBy(-MathHelper.PiOver4), 20, InOutQuad)
+                .Append(() => Projectile.velocity, (direction * 32f).RotatedBy(MathHelper.PiOver4), 20, InQuad);
             return newAnim;
         }
         public override void AI()

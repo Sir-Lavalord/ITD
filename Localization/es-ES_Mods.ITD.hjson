@@ -1048,6 +1048,7 @@ Projectiles: {
 	ChainwhipWhip.DisplayName: Látigo de cadena
 	CosmicJellyfishBlackholeAura.DisplayName: Agujero negro de Medusa Cósmica
 	// DespoticSuperMeleeProj.DisplayName: Despotic Super Melee Proj
+	// CosJelHandTest.DisplayName: Cos Jel Hand Test
 }
 
 NPCs: {
