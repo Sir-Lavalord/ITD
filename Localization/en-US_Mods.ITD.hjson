@@ -920,6 +920,16 @@ Items: {
 		DisplayName: Undying Chaos
 		Tooltip: ""
 	}
+
+	Frostgrip: {
+		DisplayName: Frostgrip
+		Tooltip:
+			'''
+			Continually slows down struck enemies
+			'Not to be used in temperatures above 0 kelvins.'
+			[c/{0}:Latch Effect:] Encases the target in ice, dealing heavy damage and throwing ice shards
+			'''
+	}
 }
 
 Projectiles: {
@@ -1050,6 +1060,14 @@ Projectiles: {
 	CosmicJellyfishBlackholeAura.DisplayName: Cosmic Jellyfish Blackhole Aura
 	DespoticSuperMeleeProj.DisplayName: Despotic Super Melee Proj
 	CosJelHandTest.DisplayName: Cos Jel Hand Test
+
+	FrostgripProjectile: {
+		OneTimeLatchMessage: Ice Cold!
+		DisplayName: Frostgrip Projectile
+	}
+
+	FrostgripIceCube.DisplayName: Frostgrip Ice Cube
+	FrostgripIcicle.DisplayName: Frostgrip Icicle
 }
 
 NPCs: {
@@ -1186,6 +1204,11 @@ Buffs: {
 	WeaponImbueMelomycosis: {
 		DisplayName: Weapon Imbue: Melomycosis
 		Description: Melee attacks deal damage over time to enemies
+	}
+
+	FrostgripChilledBuff: {
+		DisplayName: Frostgrip Chilled Buff
+		Description: Mods.ITD.Buffs.FrostgripChilledBuff.Description
 	}
 }
 
