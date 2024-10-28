@@ -1,32 +1,29 @@
 
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\tModLoader.targets" />
+	
   <PropertyGroup>
     <AssemblyName>ITD</AssemblyName>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
+	
   <ItemGroup>
-    <AdditionalFiles Remove="Shaders\MelomycosisScreen.fx" />
+    <PackageReference Include="Krafs.Publicizer" Version="2.2.1" />
   </ItemGroup>
+	
   <ItemGroup>
-    <None Remove="Content\Items\Weapons\Electrum\ElectrumSpear.png" />
-    <None Remove="Content\Items\Weapons\Electrum\ElectrumSpearProjectile.png" />
-    <None Remove="Content\Projectiles\TheScorpionProjectile.png" />
-    <None Remove="Effects\BarsLifeOverlay_Fill.png" />
-    <None Remove="Effects\BarsLifeOverlay_Panel.png" />
-    <None Remove="Effects\ClassicLifeOverlay.png" />
-    <None Remove="Effects\FancyLifeOverlay_Panel.png" />
+    <Publicize Include="Terraria" />
+	<Publicize Include="ReLogic" />
+	<Publicize Include="tModLoader" />
+	<DoNotPublicize Include="tModLoader:Terraria.ModLoader.PlayerDrawLayer.Draw" />
+	<DoNotPublicize Include="tModLoader:Terraria.WorldBuilding.GenPass.ApplyPass" />
+	<DoNotPublicize Include="tModLoader:Terraria.UI.UIElement.DrawSelf" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\Gores\NPCs\" />
-    <Folder Include="Content\Gores\Projectiles\" />
-    <Folder Include="Content\Items\Favors\BarStyles\" />
-    <Folder Include="Content\Tiles\Relics\" />
-    <Folder Include="Systems\Recruitment\RecruitedNPCs\" />
-  </ItemGroup>
+	
   <ItemGroup>
     <Reference Include="StructureHelper">
       <HintPath>..\ModAssemblies\StructureHelper_v2.5.3.dll</HintPath>
     </Reference>
   </ItemGroup>
+
 </Project>

@@ -193,12 +193,12 @@ namespace ITD.Utilities.EntityAnim
                 }
                 else if (memberExpr.Member is FieldInfo field)
                 {
-                    Action<T> setter = value =>
+                    void Setter(T value)
                     {
                         field.SetValue(target, value);
-                    };
+                    }
 
-                    return new Keyframe<T>(getter, setter, endValue, easingFunc)
+                    return new Keyframe<T>(getter, Setter, endValue, easingFunc)
                     {
                         frames = frames
                     };

@@ -80,13 +80,13 @@ namespace ITD.Systems
                 return null;
             }
 
-            switch (callType)
+            return callType switch
             {
-                case "Downed": return Downed(args[1].ToString());
-                case "Zone": return Zone(CastToPlayer(args[1]), args[2].ToString());
-                case "RegisterRecruitment": return TryRegisterRecruitment(args);
-            }
-            return null;
+                "Downed" => Downed(args[1].ToString()),
+                "Zone" => Zone(CastToPlayer(args[1]), args[2].ToString()),
+                "RegisterRecruitment" => TryRegisterRecruitment(args),
+                _ => null,
+            };
         }
     }
 }

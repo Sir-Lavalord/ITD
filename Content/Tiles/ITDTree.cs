@@ -411,7 +411,6 @@ namespace ITD.Content.Tiles
         }
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            SpecialDrawing.RestartSpriteBatchAsTileDrawer();
             Color color = Lighting.GetColor(i, j);
             Tile tile = Framing.GetTileSafely(i, j);
             if (IsLeftBranch(tile))
@@ -430,6 +429,7 @@ namespace ITD.Content.Tiles
                 Rectangle sourceRect = new(42, 42 * frame, 40, 40);
                 Vector2 position = TileHelpers.TileExtraPos(i, j, new Vector2(42f, 7f));
                 Vector2 origin = new(42, GetBranches().Height / 2f / 3f);
+                //WeatherSystem.DrawTreeSway(i, j, spriteBatch, GetBranches(), sourceRect, new Vector2(42f, 7f), origin);
                 spriteBatch.Draw(GetBranches(), position, sourceRect, color, 0f, origin, 1f, SpriteEffects.None, 0f);
                 PostDrawBranch(spriteBatch, position, origin, color, sourceRect, false);
                 return false;

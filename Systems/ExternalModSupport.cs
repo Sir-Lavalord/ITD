@@ -131,14 +131,14 @@ namespace ITD
             List<int> NPCsThatCanBeRecruited = [.. TownNPCRecruitmentLoader.NPCsThatCanBeRecruited, .. TownNPCRecruitmentLoader.recruitmentDataRegistry.Keys];
             string buttonName = ITD.Instance.GetLocalization($"UI.{nameof(RecruitmentButton)}.MouseHoverName").Value;
             string toTex = "ITD/Content/UI/RecruitmentButton";
-            Action behavior = () =>
+            void Behavior()
             {
                 if (Main.mouseLeft)
                 {
                     RecruitmentButton.DoRecruit();
                 }
-            };
-            AddButton(NPCsThatCanBeRecruited, () => buttonName, () => toTex, behavior);
+            }
+            AddButton(NPCsThatCanBeRecruited, () => buttonName, () => toTex, Behavior);
         }
     }
 }

@@ -28,15 +28,12 @@ namespace ITD.Systems
 
         public static void RegisterData(int headSlot, DrawLayerData data)
         {
-            if (!HeadLayerData.ContainsKey(headSlot))
-            {
-                HeadLayerData.Add(headSlot, data);
-            }
+            HeadLayerData.TryAdd(headSlot, data);
         }
 
         public override void Load()
         {
-            HeadLayerData = new Dictionary<int, DrawLayerData>();
+            HeadLayerData = [];
         }
 
         public override void Unload()
@@ -73,7 +70,7 @@ namespace ITD.Systems
             Texture2D texture = data.Texture.Value;
             Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawPlayer.width / 2 - drawPlayer.bodyFrame.Width / 2, drawPlayer.height - drawPlayer.bodyFrame.Height + 4f) + drawPlayer.headPosition;
             Vector2 headVect = drawInfo.headVect;
-            DrawData drawData = new DrawData(texture, drawPos.Floor() + headVect, drawPlayer.bodyFrame, color, drawPlayer.headRotation, headVect, 1f, drawInfo.playerEffect, 0)
+            DrawData drawData = new(texture, drawPos.Floor() + headVect, drawPlayer.bodyFrame, color, drawPlayer.headRotation, headVect, 1f, drawInfo.playerEffect, 0)
             {
                 shader = drawInfo.cHead
             };
@@ -89,15 +86,12 @@ namespace ITD.Systems
         public static void RegisterData(int bodySlot, Func<Color> color)
         {
 
-            if (!BodyColor.ContainsKey(bodySlot))
-            {
-                BodyColor.Add(bodySlot, color);
-            }
+            BodyColor.TryAdd(bodySlot, color);
         }
 
         public override void Load()
         {
-            BodyColor = new Dictionary<int, Func<Color>>();
+            BodyColor = [];
         }
 
         public override void Unload()
@@ -128,15 +122,12 @@ namespace ITD.Systems
 
         public static void RegisterData(int legSlot, DrawLayerData data)
         {
-            if (!LegsLayerData.ContainsKey(legSlot))
-            {
-                LegsLayerData.Add(legSlot, data);
-            }
+            LegsLayerData.TryAdd(legSlot, data);
         }
 
         public override void Load()
         {
-            LegsLayerData = new Dictionary<int, DrawLayerData>();
+            LegsLayerData = [];
         }
 
         public override void Unload()
@@ -174,7 +165,7 @@ namespace ITD.Systems
             Texture2D texture = data.Texture.Value;
             Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawPlayer.width / 2 - drawPlayer.legFrame.Width / 2, drawPlayer.height - drawPlayer.legFrame.Height + 4f) + drawPlayer.legPosition;
             Vector2 legsOffset = drawInfo.legsOffset;
-            DrawData drawData = new DrawData(texture, drawPos.Floor() + legsOffset, drawPlayer.legFrame, color, drawPlayer.legRotation, legsOffset, 1f, drawInfo.playerEffect, 0)
+            DrawData drawData = new(texture, drawPos.Floor() + legsOffset, drawPlayer.legFrame, color, drawPlayer.legRotation, legsOffset, 1f, drawInfo.playerEffect, 0)
             {
                 shader = drawInfo.cLegs
             };
@@ -202,7 +193,7 @@ namespace ITD.Systems
 
         public override void Load()
         {
-            WingsLayerData = new Dictionary<int, DrawLayerData>();
+            WingsLayerData = [];
         }
 
         public override void Unload()
@@ -239,7 +230,7 @@ namespace ITD.Systems
             Texture2D texture = data.Texture.Value;
 
             Vector2 directions = drawPlayer.Directions;
-            Vector2 offset = new Vector2(0f, 7f);
+            Vector2 offset = new(0f, 7f);
             Vector2 position = drawInfo.Position - Main.screenPosition + new Vector2(drawPlayer.width / 2, drawPlayer.height - drawPlayer.bodyFrame.Height / 2) + offset;
 
             int num11 = 0;
@@ -248,8 +239,8 @@ namespace ITD.Systems
 
             position += new Vector2(num12 - 9, num11 + 2) * directions;
             position = position.Floor();
-            Rectangle frame = new Rectangle(0, texture.Height / numFrames * drawPlayer.wingFrame, texture.Width, texture.Height / numFrames);
-            DrawData drawData = new DrawData(texture, position.Floor(), frame, color, drawPlayer.bodyRotation, new Vector2(texture.Width / 2, texture.Height / numFrames / 2), 1f, drawInfo.playerEffect, 0)
+            Rectangle frame = new(0, texture.Height / numFrames * drawPlayer.wingFrame, texture.Width, texture.Height / numFrames);
+            DrawData drawData = new(texture, position.Floor(), frame, color, drawPlayer.bodyRotation, new Vector2(texture.Width / 2, texture.Height / numFrames / 2), 1f, drawInfo.playerEffect, 0)
             {
                 shader = drawInfo.cWings
             };
@@ -265,15 +256,12 @@ namespace ITD.Systems
 
         public static void RegisterData(int shoeSlot, DrawLayerData data)
         {
-            if (!ShoesLayerData.ContainsKey(shoeSlot))
-            {
-                ShoesLayerData.Add(shoeSlot, data);
-            }
+            ShoesLayerData.TryAdd(shoeSlot, data);
         }
 
         public override void Load()
         {
-            ShoesLayerData = new Dictionary<int, DrawLayerData>();
+            ShoesLayerData = [];
         }
 
         public override void Unload()
@@ -311,7 +299,7 @@ namespace ITD.Systems
             Texture2D texture = data.Texture.Value;
             Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawPlayer.width / 2 - drawPlayer.legFrame.Width / 2, drawPlayer.height - drawPlayer.legFrame.Height + 4f) + drawPlayer.legPosition;
             Vector2 shoeOffset = drawInfo.legsOffset;
-            DrawData drawData = new DrawData(texture, drawPos.Floor() + shoeOffset, drawPlayer.legFrame, color, drawPlayer.legRotation, shoeOffset, 1f, drawInfo.playerEffect, 0)
+            DrawData drawData = new(texture, drawPos.Floor() + shoeOffset, drawPlayer.legFrame, color, drawPlayer.legRotation, shoeOffset, 1f, drawInfo.playerEffect, 0)
             {
                 shader = drawInfo.cShoe
             };
@@ -327,15 +315,12 @@ namespace ITD.Systems
         public static void RegisterData(int type, DrawLayerData data, int useStyle = -1)
         {
             var tuple = new ValueTuple<int, int>(type, useStyle);
-            if (!ItemLayerData.ContainsKey(tuple))
-            {
-                ItemLayerData.Add(tuple, data);
-            }
+            ItemLayerData.TryAdd(tuple, data);
         }
 
         public override void Load()
         {
-            ItemLayerData = new Dictionary<(int, int), DrawLayerData>();
+            ItemLayerData = [];
         }
 
         public override void Unload()
@@ -352,14 +337,14 @@ namespace ITD.Systems
         {
             Player drawPlayer = drawInfo.drawPlayer;
             Item heldItem = drawInfo.heldItem;
-            bool usingItem = drawPlayer.itemAnimation > 0 && heldItem.useStyle != 0;
+            bool usingItem = drawPlayer.itemAnimation > 0 && heldItem.useStyle != ItemUseStyleID.None;
             bool holdingSuitableItem = heldItem.holdStyle != 0 && !drawPlayer.pulley;
             if (!drawPlayer.CanVisuallyHoldItem(heldItem))
             {
                 holdingSuitableItem = false;
             }
 
-            if (drawInfo.shadow != 0f || drawPlayer.JustDroppedAnItem || drawPlayer.frozen || !(usingItem || holdingSuitableItem) || heldItem.type <= 0 || drawPlayer.dead || heldItem.noUseGraphic || drawPlayer.wet && heldItem.noWet || drawPlayer.happyFunTorchTime && drawPlayer.HeldItem.createTile == TileID.Torches && drawPlayer.itemAnimation == 0)
+            if (drawInfo.shadow != 0f || drawPlayer.JustDroppedAnItem || drawPlayer.frozen || !(usingItem || holdingSuitableItem) || heldItem.type <= ItemID.None || drawPlayer.dead || heldItem.noUseGraphic || drawPlayer.wet && heldItem.noWet || drawPlayer.happyFunTorchTime && drawPlayer.HeldItem.createTile == TileID.Torches && drawPlayer.itemAnimation == 0)
             {
                 return false;
             }
@@ -400,13 +385,13 @@ namespace ITD.Systems
 
             Texture2D weaponGlow = data.Texture.Value;
             float adjustedItemScale = drawPlayer.GetAdjustedItemScale(heldItem);
-            Vector2 position = new Vector2((int)(drawInfo.ItemLocation.X - Main.screenPosition.X), (int)(drawInfo.ItemLocation.Y - Main.screenPosition.Y));
+            Vector2 position = new((int)(drawInfo.ItemLocation.X - Main.screenPosition.X), (int)(drawInfo.ItemLocation.Y - Main.screenPosition.Y));
             Rectangle? sourceRect = new Rectangle(0, 0, weaponGlow.Width, weaponGlow.Height);
 
             if (useStyle == ItemUseStyleID.Swing)
             {
-                Vector2 origin = new Vector2(drawPlayer.direction == -1 ? weaponGlow.Width : 0, drawPlayer.gravDir == -1 ? 0 : weaponGlow.Height);
-                DrawData drawData = new DrawData(weaponGlow, position, sourceRect, data.Color(), drawPlayer.itemRotation, origin, adjustedItemScale, drawInfo.itemEffect, 0);
+                Vector2 origin = new(drawPlayer.direction == -1 ? weaponGlow.Width : 0, drawPlayer.gravDir == -1 ? 0 : weaponGlow.Height);
+                DrawData drawData = new(weaponGlow, position, sourceRect, data.Color(), drawPlayer.itemRotation, origin, adjustedItemScale, drawInfo.itemEffect, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
             else if (useStyle == ItemUseStyleID.Shoot)
@@ -416,7 +401,7 @@ namespace ITD.Systems
                     float num9 = drawInfo.drawPlayer.itemRotation + 0.785f * drawInfo.drawPlayer.direction;
                     float num10 = 0f;
                     float num11 = 0f;
-                    Vector2 originStaff = new Vector2(0f, weaponGlow.Height);
+                    Vector2 originStaff = new(0f, weaponGlow.Height);
 
                     if (drawInfo.drawPlayer.gravDir == -1f)
                     {
@@ -440,23 +425,23 @@ namespace ITD.Systems
 
                     ItemLoader.HoldoutOrigin(drawInfo.drawPlayer, ref originStaff);
 
-                    DrawData drawDataStaff = new DrawData(weaponGlow, new Vector2((int)(drawInfo.ItemLocation.X - Main.screenPosition.X + originStaff.X + num10), (int)(drawInfo.ItemLocation.Y - Main.screenPosition.Y + num11)), sourceRect, data.Color(), num9, originStaff, adjustedItemScale, drawInfo.itemEffect, 0);
+                    DrawData drawDataStaff = new(weaponGlow, new Vector2((int)(drawInfo.ItemLocation.X - Main.screenPosition.X + originStaff.X + num10), (int)(drawInfo.ItemLocation.Y - Main.screenPosition.Y + num11)), sourceRect, data.Color(), num9, originStaff, adjustedItemScale, drawInfo.itemEffect, 0);
                     drawInfo.DrawDataCache.Add(drawDataStaff);
 
                     return;
                 }
 
-                Vector2 vector5 = new Vector2(weaponGlow.Width / 2, weaponGlow.Height / 2);
+                Vector2 vector5 = new(weaponGlow.Width / 2, weaponGlow.Height / 2);
                 Vector2 vector6 = Main.DrawPlayerItemPos(drawPlayer.gravDir, heldItem.type);
                 int num12 = (int)vector6.X;
                 vector5.Y = vector6.Y;
-                Vector2 origin = new Vector2(-num12, weaponGlow.Height / 2);
+                Vector2 origin = new(-num12, weaponGlow.Height / 2);
                 if (drawPlayer.direction == -1)
                 {
                     origin = new Vector2(weaponGlow.Width + num12, weaponGlow.Height / 2);
                 }
 
-                DrawData drawData = new DrawData(weaponGlow, new Vector2((int)(drawInfo.ItemLocation.X - Main.screenPosition.X + vector5.X), (int)(drawInfo.ItemLocation.Y - Main.screenPosition.Y + vector5.Y)), sourceRect, data.Color(), drawPlayer.itemRotation, origin, adjustedItemScale, drawInfo.itemEffect, 0);
+                DrawData drawData = new(weaponGlow, new Vector2((int)(drawInfo.ItemLocation.X - Main.screenPosition.X + vector5.X), (int)(drawInfo.ItemLocation.Y - Main.screenPosition.Y + vector5.Y)), sourceRect, data.Color(), drawPlayer.itemRotation, origin, adjustedItemScale, drawInfo.itemEffect, 0);
                 drawInfo.DrawDataCache.Add(drawData);
             }
         }
