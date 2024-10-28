@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Terraria;
+using ITD.Content.Projectiles.Friendly.Melee;
 
 namespace ITD.Utilities.EntityAnim
 {
@@ -21,27 +22,28 @@ namespace ITD.Utilities.EntityAnim
         /// Keyframes in the animation. These will play in the order they're appended in
         /// </summary>
         public Keyframe<T>[] Keyframes { get; set; } = keyframes;
-        /// <summary>
-        /// The "pivot" along which this animation will play. The position value passed into a new keyframe declaration will have this value added onto it.
-        /// </summary>
-        public Func<Vector2> GlobalPosition { get; set; } = null;
+        public int FrameIndex { get; set; } = 0;
         public T PreviousValue { get; set; } = default;
-        public EntityAnim<T> Append(params Keyframe<T>[] keyframes)
+        public EntityAnim<T> Append(params Keyframe<T>[] addKeyframes)
         {
-            return new EntityAnim<T>([.. Keyframes, .. keyframes])
+            return new EntityAnim<T>([.. Keyframes, .. addKeyframes])
             {
                 Entity = Entity,
-                GlobalPosition = GlobalPosition,
             };
         }
-        public EntityAnim<T> Append(Expression<Func<T>> propertyExpr, T endValue, int frames, EasingFunctions.EasingFunc easingFunc)
+        public EntityAnim<T> Append(Expression<Func<T>> propertyExpr, Func<T> endValue, int frames, EasingFunctions.EasingFunc easingFunc)
         {
             Keyframe<T> newKeyframe = AnimHelpers.CreateFor(Entity, propertyExpr, endValue, frames, easingFunc);
             return new EntityAnim<T>([.. Keyframes, newKeyframe])
             {
                 Entity = Entity,
-                GlobalPosition = GlobalPosition,
             };
+        }
+        private void ResetKeyframe(Keyframe<T> keyframe)
+        {
+            keyframe.IsFinished = false;
+            keyframe.playFrames = 0;
+            keyframe.SetStartValue(PreviousValue);
         }
         /// <summary>
         /// This method must be called every frame until IsFinished is true. ik it's kinda annoying but I don't want to make an AnimationManager class
@@ -57,17 +59,18 @@ namespace ITD.Utilities.EntityAnim
                 else
                     return;
             }
-            Keyframe<T> playKeyframe = Keyframes.FirstOrDefault(k => !k.IsFinished);
-            if (playKeyframe is null)
+            int maxIndex = Keyframes.Length;
+            if (FrameIndex > maxIndex - 1)
             {
                 IsFinished = true;
                 return;
             }
-            else
-                playKeyframe.SetStartValue(PreviousValue);
+            Keyframe<T> playKeyframe = Keyframes[FrameIndex];
+            playKeyframe.SetStartValue(PreviousValue);
             playKeyframe.Play();
             if (playKeyframe.IsFinished)
             {
+                FrameIndex++;
                 PreviousValue = playKeyframe.getter();
             }
         }
@@ -79,16 +82,18 @@ namespace ITD.Utilities.EntityAnim
         public void JumpTo(int keyframe, int playFrame)
         {
             IsFinished = false;
+            FrameIndex = keyframe;
+
             for (int i = keyframe; i < Keyframes.Length; i++)
             {
-                Keyframe<T> k = Keyframes[i];
-                k.IsFinished = false;
-                k.playFrames = 0;
+                ResetKeyframe(keyframes[i]);
             }
-            Keyframes[keyframe].playFrames = playFrame;
+
+            if (Keyframes.Length > 0)
+                Keyframes[keyframe].playFrames = playFrame;
         }
     }
-    public class Keyframe<T>(Func<T> getter, Action<T> setter, T endValue, EasingFunctions.EasingFunc easingFunc) where T : struct
+    public class Keyframe<T>(Func<T> getter, Action<T> setter, Func<T> endValue, EasingFunctions.EasingFunc easingFunc) where T : struct
     {
         public bool IsFinished = false;
         public int frames;
@@ -100,13 +105,13 @@ namespace ITD.Utilities.EntityAnim
         public readonly Func<T> getter = getter;
         private readonly Action<T> _setter = value => setter(value);
         private  T _startValue = getter();
-        private readonly T _endValue = endValue;
+        private readonly Func<T> _endValue = endValue;
         private readonly EasingFunctions.EasingFunc _easingFunc = easingFunc;
         public void SetStartValue(T lastValue)
         {
             _startValue = lastValue;
         }
-        public void Play() // todo: add stuff here to use EntityAnim's GlobalPosition
+        public void Play()
         {
             playFrames++;
             if (Progress >= 1f)
@@ -115,13 +120,13 @@ namespace ITD.Utilities.EntityAnim
             if (typeof(T) == typeof(float))
             {
                 float start = (float)(object)_startValue;
-                float end = (float)(object)_endValue;
+                float end = (float)(object)_endValue();
                 interpolatedValue = (T)(object)MathHelper.Lerp(start, end, _easingFunc(Progress));
             }
             else if (typeof(T) == typeof(Vector2))
             {
                 Vector2 start = (Vector2)(object)_startValue;
-                Vector2 end = (Vector2)(object)_endValue;
+                Vector2 end = (Vector2)(object)_endValue();
                 interpolatedValue = (T)(object)Vector2.Lerp(start, end, _easingFunc(Progress));
             }
             else
@@ -140,17 +145,15 @@ namespace ITD.Utilities.EntityAnim
         /// <param name="entity"></param>
         /// <param name="globalPosition"></param>
         /// <returns></returns>
-        public static EntityAnim<T> CreateAnim<T>(this Entity entity, Func<Vector2> globalPosition = null) where T : struct
+        public static EntityAnim<T> CreateAnim<T>(this Entity entity) where T : struct
         {
             EntityAnim<T> newAnim = new([])
             {
                 Entity = entity
             };
-            if (globalPosition != null)
-                newAnim.GlobalPosition = globalPosition;
             return newAnim;
         }
-        public static Keyframe<T> CreateFor<T>(Entity target, Expression<Func<T>> propertyExpr, T endValue, int frames, EasingFunctions.EasingFunc easingFunc) where T : struct
+        public static Keyframe<T> CreateFor<T>(Entity target, Expression<Func<T>> propertyExpr, Func<T> endValue, int frames, EasingFunctions.EasingFunc easingFunc) where T : struct
         {
             var getter = propertyExpr.Compile();
 

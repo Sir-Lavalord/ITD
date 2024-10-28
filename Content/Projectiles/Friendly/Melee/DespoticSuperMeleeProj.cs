@@ -45,12 +45,24 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         public EntityAnim<Vector2> anim = null;
         public EntityAnim<Vector2> GetAnim()
         {
-            Player player = Main.player[Projectile.owner];
-            Vector2 direction = new(player.direction, 0f);
             EntityAnim<Vector2> newAnim = Projectile.CreateAnim<Vector2>()
-                .Append(() => Projectile.velocity, (direction * 32f).RotatedBy(-MathHelper.PiOver4), 20, InOutQuad)
-                .Append(() => Projectile.velocity, (direction * 32f).RotatedBy(MathHelper.PiOver4), 20, InQuad);
+                .Append(() => Projectile.velocity, () => (Vector2.UnitX * 32f).RotatedBy(-1).RotatedBy(GetRot()), 30, InOutQuad)
+                .Append(() => Projectile.velocity, () => (Vector2.UnitX * 32f).RotatedBy(1).RotatedBy(GetRot()), 10, InQuad);
+            
+            
+            /*
+            EntityAnim<Vector2> newAnim = Projectile.CreateAnim<Vector2>(extraDataF: animDataF)
+                .Append(() => Projectile.velocity, Vector2.UnitX, 20, Linear);
+            */
+            
             return newAnim;
+        }
+        public float GetRot()
+        {
+            Player player = Main.player[Projectile.owner];
+            Vector2 mouse = player.GetITDPlayer().MousePosition;
+            Vector2 toMouse = mouse - Projectile.Center;
+            return toMouse.ToRotation();
         }
         public override void AI()
         {
@@ -58,6 +70,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.Center = player.MountedCenter;
             Projectile.rotation = Projectile.velocity.ToRotation();
             player.heldProj = Projectile.whoAmI;
+            player.itemTime = 2;
+            player.itemAnimation = 2;
             bool inUse = player.channel && !player.noItems && !player.CCed;
             if (inUse)
             {
