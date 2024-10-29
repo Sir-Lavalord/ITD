@@ -14,9 +14,9 @@ Items: {
 		Tooltip: ""
 	}
 
-	RhodiumBow: {
-		DisplayName: Arco de rodio
-		Tooltip: Electrifica a las flechas de madera
+	ElectrumBow: {
+		// DisplayName: Electrum Bow
+		// Tooltip: Electrifies wooden arrows
 	}
 
 	RhodiumBroadsword: {
@@ -226,7 +226,7 @@ Items: {
 	}
 
 	AlloyHelmet: {
-		SetBonus: Mods.ITD.Items.AlloyHelmet.SetBonus
+		SetBonus: Aumenta el daño cuerpo-a-cuerpo por un 10%
 		DisplayName: Yelmo de aleación
 		Tooltip: ""
 	}
@@ -725,7 +725,7 @@ Items: {
 			'''
 			Mantén presionado {0} para drenar tu propia sangre
 			Al soltar el botón, esto invocará un espíritu poderoso para ayudarte en batalla
-			La duración y el daño de este espírito aumenta con más sangre sacrificada
+			La duración y el daño de este espíritu aumenta con más sangre sacrificada
 			No puedes invocar más de un espíritu al mismo tiempo
 			'''
 	}
@@ -817,63 +817,117 @@ Items: {
 			'''
 	}
 
-	TestRecruiter: {
-		// DisplayName: Test Recruiter
-		// Tooltip: ""
-	}
-
 	CopperMandibles: {
-		// DisplayName: Copper Mandibles
-		/* Tooltip:
+		DisplayName: Mandíbulas de cobre
+		Tooltip:
 			'''
-			'Not to be confused with Steel Mandibles'
-			[c/{0}:Latch Effect:] Increases damage dealt depending on the target's remaining life
-			''' */
+			'No se debe confundir con las Mandíbulas de acero'
+			[c/{0}:Efecto de Enganche:] Aumenta el daño dado dependiendo en la vida restante del enemigo
+			'''
 	}
 
 	Winch: {
-		// DisplayName: Winch
-		/* Tooltip:
+		DisplayName: Cabrestante
+		Tooltip:
 			'''
-			Snaptraps retract faster
-			+10% Snaptrap Length
-			''' */
+			Las enganchadoras se retraen más rápido
+			+10% de longitud de enganchadoras
+			'''
 	}
 
 	CharmOfTheAccursed: {
-		// DisplayName: Charm of the Accursed
-		// Tooltip: Releases damaging spirits after taking 100 damage
+		DisplayName: Talismán de los condenados
+		Tooltip: Libera espíritus que hacen daño tras tomar 100 de daño
 	}
 
 	Chainwhip: {
-		// DisplayName: Chainwhip
-		/* Tooltip:
+		DisplayName: Látigo de cadena
+		Tooltip:
 			'''
-			Press RMB or LMB to fire a snaptrap
-			RMB to whip enemies while a snaptrap is latched
-			'Its a chain, AND a whip! '
-			[c/{0}:Latch Effect:] Increases Summon damage and Movement speed over a course of 20 seconds
-			''' */
+			Haz clic izquierdo o derecho para lanzar una enganchadora
+			Clic derecho para darle latigazos a tus enemigos mientras una enganchadora esta enganchada
+			'¡Es una cadena, Y un látigo!'
+			[c/{0}:Latch Effect:] Aumenta daño de invocación y velocidad de movimiento en un período de 20 segundos
+			'''
 	}
 
 	GrabbOMatic20000: {
-		// DisplayName: Grabb O Matic20000
-		// Tooltip: ""
+		DisplayName: Agarr-O-Matic 20000
+		Tooltip: ""
 	}
 
 	BlackMoldItem: {
-		// DisplayName: Black Mold
-		// Tooltip: ""
+		DisplayName: Moho negro
+		Tooltip: No es muy bueno para los pulmones
 	}
 
 	BlackFlask: {
-		// DisplayName: Black Flask
-		// Tooltip: Melee and whip attacks deal damage over time to enemies
+		DisplayName: Frasco negro
+		Tooltip: Ataques de látigo y cuerpo-a-cuerpo dan daño a lo largo del tiempo a los enemigos
 	}
 
 	WheelerTrashCan: {
-		// DisplayName: Wheeler Trash Can
+		DisplayName: Bote de basura rodante
 		// Tooltip: ""
+	}
+
+	AlloyHeadgear: {
+		SetBonus: Aumenta el daño a distancia por un 8%
+		DisplayName: Casco de aleación
+		// Tooltip: ""
+	}
+
+	AlloyVisor: {
+		SetBonus: Aumenta el daño mágico por un 6%
+		DisplayName: Visor de aleación
+		// Tooltip: ""
+	}
+
+	ElectrumVisor: {
+		// SetBonus: Hitting enemies releases chain lightning
+		// DisplayName: Electrum Visor
+		// Tooltip: 8% increased movement speed
+	}
+
+	ElectrumChestplate: {
+		// DisplayName: Electrum Chestplate
+		// Tooltip: 8% increased movement speed
+	}
+
+	ElectrumLeggings: {
+		// DisplayName: Electrum Leggings
+		// Tooltip: 8% increased movement speed
+	}
+
+	RhodiumVisor: {
+		// SetBonus: Mods.ITD.Items.RhodiumVisor.SetBonus
+		// DisplayName: Rhodium Visor
+		// Tooltip: 4% increased critical strike chance
+	}
+
+	RhodiumChestplate: {
+		// DisplayName: Rhodium Chestplate
+		// Tooltip: 4% increased critical strike chance
+	}
+
+	RhodiumLeggings: {
+		// DisplayName: Rhodium Leggings
+		// Tooltip: 4% increased critical strike chance
+	}
+
+	DespoticSuperMeleeSword: {
+		// DisplayName: Undying Chaos
+		// Tooltip: ""
+	}
+
+	Frostgrip: {
+		// DisplayName: Frostgrip
+		/* Tooltip:
+			'''
+			Continually slows down struck enemies
+			'Not to be used in temperatures above 0 kelvins.'
+			[c/{0}:Latch Effect:] Encases the target in ice, dealing heavy damage and throwing ice shards
+			''' */
 	}
 }
 
@@ -989,20 +1043,30 @@ Projectiles: {
 	HunterrGreatarrow.DisplayName: Gran flecha del Hun-Terr
 
 	CopperMandiblesProjectile: {
-		// OneTimeLatchMessage: Infestation!
-		// DisplayName: Copper Mandibles
+		OneTimeLatchMessage: ¡Infestación!
+		DisplayName: Mandíbulas de cobre
 	}
 
-	// MiniMandible.DisplayName: Mini Mandible
-	// AccursedSpirit.DisplayName: Accursed Spirit
+	MiniMandible.DisplayName: Mini mandíbula
+	AccursedSpirit.DisplayName: Espíritu condenado
 
 	ChainwhipSnaptrapProjectile: {
-		// OneTimeLatchMessage: Agility!
-		// DisplayName: Chainwhip Snaptrap Projectile
+		OneTimeLatchMessage: ¡Agilidad!
+		DisplayName: Látigo de cadena
 	}
 
-	// ChainwhipWhip.DisplayName: Chainwhip Whip
-	// CosmicJellyfishBlackholeAura.DisplayName: Cosmic Jellyfish Blackhole Aura
+	ChainwhipWhip.DisplayName: Látigo de cadena
+	CosmicJellyfishBlackholeAura.DisplayName: Agujero negro de Medusa Cósmica
+	// DespoticSuperMeleeProj.DisplayName: Despotic Super Melee Proj
+	// CosJelHandTest.DisplayName: Cos Jel Hand Test
+
+	FrostgripProjectile: {
+		// OneTimeLatchMessage: Ice Cold!
+		// DisplayName: Frostgrip Projectile
+	}
+
+	// FrostgripIceCube.DisplayName: Frostgrip Ice Cube
+	// FrostgripIcicle.DisplayName: Frostgrip Icicle
 }
 
 NPCs: {
@@ -1132,13 +1196,18 @@ Buffs: {
 	}
 
 	MelomycosisBuff: {
-		// DisplayName: Melomycosis
-		// Description: Deals increased damage based on your defense
+		DisplayName: Melomicosis
+		Description: Da daño aumentado basado en tu defensa
 	}
 
 	WeaponImbueMelomycosis: {
-		// DisplayName: Weapon Imbue: Melomycosis
-		// Description: Melee attacks deal damage over time to enemies
+		DisplayName: Arma imbuida: Melomicosis
+		Description: Los ataques cuerpo-a-cuerpo dan daño a lo largo del tiempo a los enemigos
+	}
+
+	FrostgripChilledBuff: {
+		// DisplayName: Frostgrip Chilled Buff
+		// Description: Mods.ITD.Buffs.FrostgripChilledBuff.Description
 	}
 }
 
@@ -1193,4 +1262,7 @@ Achievements: {
 	}
 }
 
-UI.FavorSlot.MouseHoverName: Favor
+UI: {
+	FavorSlot.MouseHoverName: Favor
+	// RecruitmentButton.MouseHoverName: Recruit
+}

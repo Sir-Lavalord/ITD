@@ -36,7 +36,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             if (IsTopTile(i, j))
             {
                 Vector2 worldCoords = new Point(i, j).ToWorldCoordinates();
-                Lighting.AddLight(worldCoords, new Vector3(0f, 0.55f, 0.6f));
+                Lighting.AddLight(worldCoords, new Vector3(0f, 0.85f, 0.9f) * opac);
                 if (Main.rand.NextBool(12))
                 {
                     int offset = 20;

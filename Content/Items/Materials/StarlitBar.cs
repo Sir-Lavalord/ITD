@@ -13,7 +13,7 @@ namespace ITD.Content.Items.Materials
         public override void SetStaticDefaults()
         {
 			Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(5, 5));
-			
+			ItemID.Sets.AnimatesAsSoul[Type] = true;
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
             ItemID.Sets.SortingPriorityMaterials[Type] = 59;
         }

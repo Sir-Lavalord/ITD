@@ -22,6 +22,7 @@ namespace ITD.Particles
         public static ArmorShaderData[] particleShaders = [];
         private static readonly Dictionary<Type, ITDParticle> particlesByType = [];
         public List<ITDParticle> particles;
+        public static ParticleSystem Instance => DetourManager.GetInstance<ParticleSystem>();
         public static ITDParticle NewParticle<T>(Vector2 position, Vector2 velocity, float rotation) where T : ITDParticle
         {
             Type particleType = typeof(T);

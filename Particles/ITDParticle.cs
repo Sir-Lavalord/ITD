@@ -33,8 +33,14 @@ namespace ITD.Particles
         public float ProgressOneToZero { get { return 1f - ProgressZeroToOne; } }
         public float rotation;
         public float scale = 1f;
+        public float spawnScale;
         public float opacity = 1f;
         public ParticleDrawCanvas canvas;
+
+        /// <summary>
+        /// what if ai[] arrays were good
+        /// </summary>
+        public object tag;
         public virtual void SetStaticDefaults()
         {
 
@@ -47,6 +53,7 @@ namespace ITD.Particles
         {
             SetDefaults();
             spawnTimeLeft = timeLeft;
+            spawnScale = scale;
         }
         public virtual void AI()
         {
@@ -83,15 +90,44 @@ namespace ITD.Particles
             int frameWidth = texture.Width / framesHorizontal;
             return (new Rectangle(frameWidth * frameHorizontal, frameHeight * frameVertical, frameWidth, frameHeight), new Vector2(frameWidth * 0.5f, frameHeight * 0.5f));
         }
+        public Vector2 CanvasOffset { get { return canvas == ParticleDrawCanvas.UI ? Vector2.Zero : Main.screenPosition; } }
         private void Draw(SpriteBatch spriteBatch)
         {
-            (Rectangle, Vector2) data = GetFramingData();
-            Vector2 offset = canvas == ParticleDrawCanvas.UI ? Vector2.Zero : Main.screenPosition;
-            spriteBatch.Draw(texture, position - offset, data.Item1, Color.White * opacity, rotation, data.Item2, scale, SpriteEffects.None, 0f);
+            DrawCommon(spriteBatch, texture, CanvasOffset);
         }
         public virtual void PostDraw(SpriteBatch spriteBatch)
         {
 
+        }
+        /// <summary>
+        /// This method is not called anywhere by default. This is designed to be called somewhere for special cases (like the metaball-esque particles of CosJelHand)
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public virtual void SpecialDraw(SpriteBatch spriteBatch)
+        {
+
+        }
+        /// <summary>
+        /// Draws something on the center of the particle (this is called in the regular particle draw call, but can be used for other cases)
+        /// The data from GetFramingData() will be used unless specified otherwise here (origin and sourceRect)
+        /// 
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="texture"></param>
+        /// <param name="offset"></param>
+        /// <param name="color"></param>
+        public void DrawCommon(SpriteBatch spriteBatch, Texture2D texture, Vector2 offset = default, Color? color = null, Rectangle? sourceRect = null, Vector2? origin = null, float? rotation = null, float? scale = null)
+        {
+            (Rectangle, Vector2) data = GetFramingData();
+            if (sourceRect != null)
+                data.Item1 = sourceRect.Value;
+            if (origin != null)
+                data.Item2 = origin.Value;
+            Color drawColor = color == null ? Color.White : color.Value;
+            float drawRotation = rotation == null ? this.rotation : 0f;
+            float drawScale = scale == null ? this.scale : 1f;
+
+            spriteBatch.Draw(texture, position - offset, data.Item1, drawColor * opacity, drawRotation, data.Item2, drawScale, SpriteEffects.None, 0f);
         }
         public void DrawParticle(SpriteBatch spriteBatch)
         {

@@ -12,6 +12,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 {
     public class EmberSlash : ModProjectile
     {
+		public ref float Scale => ref Projectile.ai[0];
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Melee;
@@ -32,7 +33,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 		
 		public override void ModifyDamageHitbox(ref Rectangle hitbox)
         {
-            hitbox.Inflate((int)(32*Projectile.ai[0]), (int)(32*Projectile.ai[0]));
+            hitbox.Inflate((int)(32*Scale), (int)(32*Scale));
         }
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
@@ -53,11 +54,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			if (Projectile.ai[1] == 0 && Main.myPlayer == Projectile.owner)
 			{
 				if (Projectile.localAI[0] == 8)
-					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 25f, Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.ai[0]*1.4f, 1f);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 25f, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Scale*1.4f, 1f);
 			}
 			
 			double angle = Main.rand.NextDouble() * 2d * Math.PI;
-			Vector2 offset = new Vector2((float)(Math.Sin(angle)), (float)(Math.Cos(angle))) * 40f * Projectile.ai[0] * (0.5f + Main.rand.NextFloat(0.5f));
+			Vector2 offset = new Vector2((float)(Math.Sin(angle)), (float)(Math.Cos(angle))) * 40f * Scale * (0.5f + Main.rand.NextFloat(0.5f));
 			Vector2 velocity = offset.RotatedBy(MathHelper.PiOver2*Projectile.direction);
 			velocity.Normalize();
 			
@@ -84,7 +85,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			float opacity = Utils.Remap(Projectile.localAI[0], num, fromMax, 1f, 0f, true);
 			float num7 = Math.Min(Projectile.localAI[0], 20f);
 			float num8 = Utils.Remap(Projectile.localAI[0], 0f, fromMax, 0f, 1f, true);
-			float scale = Utils.Remap(num8, 0.2f, 0.5f, 0.5f*Projectile.ai[0], 1f*Projectile.ai[0], true);
+			float scale = Utils.Remap(num8, 0.2f, 0.5f, 0.5f*Scale, Scale, true);
 			Rectangle rectangle = texture.Frame(1, 1);
 			Rectangle rectangle2 = texture2.Frame(1, 1);
 			if (num8 < 1f)

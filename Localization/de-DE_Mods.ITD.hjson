@@ -14,9 +14,9 @@ Items: {
 		Tooltip: ""
 	}
 
-	RhodiumBow: {
-		DisplayName: Rhodiumbogen
-		Tooltip: ""
+	ElectrumBow: {
+		// DisplayName: Electrum Bow
+		// Tooltip: Electrifies wooden arrows
 	}
 
 	RhodiumBroadsword: {
@@ -815,11 +815,6 @@ Items: {
 			''' */
 	}
 
-	TestRecruiter: {
-		// DisplayName: Test Recruiter
-		// Tooltip: ""
-	}
-
 	CopperMandibles: {
 		// DisplayName: Copper Mandibles
 		/* Tooltip:
@@ -849,19 +844,19 @@ Items: {
 			'''
 			Press RMB or LMB to fire a snaptrap
 			RMB to whip enemies while a snaptrap is latched
-			'Its a chain, AND a whip! '
-			[c/{0}:Latch Effect:] Increases Summon damage and Movement speed over a course of 20 seconds
+			'It's a chain, AND a whip!'
+			[c/{0}:Latch Effect:] Increases summon damage and movement speed over a course of 20 seconds
 			''' */
 	}
 
 	GrabbOMatic20000: {
-		// DisplayName: Grabb O Matic20000
+		// DisplayName: Grabb-O-Matic 20000
 		// Tooltip: ""
 	}
 
 	BlackMoldItem: {
 		// DisplayName: Black Mold
-		// Tooltip: ""
+		// Tooltip: Not great for the lungs
 	}
 
 	BlackFlask: {
@@ -872,6 +867,65 @@ Items: {
 	WheelerTrashCan: {
 		// DisplayName: Wheeler Trash Can
 		// Tooltip: ""
+	}
+
+	AlloyHeadgear: {
+		// SetBonus: Increases ranged damage by 8%
+		// DisplayName: Alloy Headgear
+		// Tooltip: ""
+	}
+
+	AlloyVisor: {
+		// SetBonus: Increases magic damage by 6%
+		// DisplayName: Alloy Visor
+		// Tooltip: ""
+	}
+
+	ElectrumVisor: {
+		// SetBonus: Hitting enemies releases chain lightning
+		// DisplayName: Electrum Visor
+		// Tooltip: 8% increased movement speed
+	}
+
+	ElectrumChestplate: {
+		// DisplayName: Electrum Chestplate
+		// Tooltip: 8% increased movement speed
+	}
+
+	ElectrumLeggings: {
+		// DisplayName: Electrum Leggings
+		// Tooltip: 8% increased movement speed
+	}
+
+	RhodiumVisor: {
+		// SetBonus: Mods.ITD.Items.RhodiumVisor.SetBonus
+		// DisplayName: Rhodium Visor
+		// Tooltip: 4% increased critical strike chance
+	}
+
+	RhodiumChestplate: {
+		// DisplayName: Rhodium Chestplate
+		// Tooltip: 4% increased critical strike chance
+	}
+
+	RhodiumLeggings: {
+		// DisplayName: Rhodium Leggings
+		// Tooltip: 4% increased critical strike chance
+	}
+
+	DespoticSuperMeleeSword: {
+		// DisplayName: Undying Chaos
+		// Tooltip: ""
+	}
+
+	Frostgrip: {
+		// DisplayName: Frostgrip
+		/* Tooltip:
+			'''
+			Continually slows down struck enemies
+			'Not to be used in temperatures above 0 kelvins.'
+			[c/{0}:Latch Effect:] Encases the target in ice, dealing heavy damage and throwing ice shards
+			''' */
 	}
 }
 
@@ -1001,6 +1055,16 @@ Projectiles: {
 
 	// ChainwhipWhip.DisplayName: Chainwhip Whip
 	// CosmicJellyfishBlackholeAura.DisplayName: Cosmic Jellyfish Blackhole Aura
+	// DespoticSuperMeleeProj.DisplayName: Despotic Super Melee Proj
+	// CosJelHandTest.DisplayName: Cos Jel Hand Test
+
+	FrostgripProjectile: {
+		// OneTimeLatchMessage: Ice Cold!
+		// DisplayName: Frostgrip Projectile
+	}
+
+	// FrostgripIceCube.DisplayName: Frostgrip Ice Cube
+	// FrostgripIcicle.DisplayName: Frostgrip Icicle
 }
 
 NPCs: {
@@ -1138,6 +1202,11 @@ Buffs: {
 		// DisplayName: Weapon Imbue: Melomycosis
 		// Description: Melee attacks deal damage over time to enemies
 	}
+
+	FrostgripChilledBuff: {
+		// DisplayName: Frostgrip Chilled Buff
+		// Description: Mods.ITD.Buffs.FrostgripChilledBuff.Description
+	}
 }
 
 DeathMessage: {
@@ -1191,4 +1260,7 @@ Achievements: {
 	}
 }
 
-// UI.FavorSlot.MouseHoverName: Favor
+UI: {
+	// FavorSlot.MouseHoverName: Favor
+	// RecruitmentButton.MouseHoverName: Recruit
+}

@@ -28,7 +28,7 @@ namespace ITD.Content.Items.Armor.Alloy
         }
         public override void UpdateArmorSet(Player player)
         {
-            player.GetITDPlayer().setAlloy = true;
+            player.GetITDPlayer().setAlloy_Melee = true;
             player.setBonus = SetBonusText.Value;
         }
     }

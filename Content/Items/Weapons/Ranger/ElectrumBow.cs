@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {
-    public class RhodiumBow : ModItem
+    public class ElectrumBow : ModItem
     {
 
         public override void SetDefaults()
@@ -42,7 +42,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ModContent.ItemType<RhodiumBar>(), 10);
+            recipe.AddIngredient(ModContent.ItemType<ElectrumBar>(), 10);
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }
