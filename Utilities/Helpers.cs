@@ -38,6 +38,20 @@ namespace ITD.Utilities
         {
             return new Point((int)MathHelper.Lerp(p1.X, p2.X, alpha), (int)MathHelper.Lerp(p1.Y, p2.Y, alpha));
         }
+        public static void Along(this Vector2 mag, Vector2 center, float spacing, Action<Vector2> action)
+        {
+            Vector2 dir = mag.SafeNormalize(Vector2.Zero);
+            if (dir == Vector2.Zero)
+            {
+                action(center);
+                return;
+            }
+            for (float distance = 0f; (distance * distance) < mag.LengthSquared(); distance += spacing)
+            {
+                Vector2 point = center + (dir * distance);
+                action(point);
+            }
+        }
         public static (Vector2, bool) QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, bool shouldHitPlatforms = false, float maxDistTiles = 64f)
         {
             origin /= 16f;
