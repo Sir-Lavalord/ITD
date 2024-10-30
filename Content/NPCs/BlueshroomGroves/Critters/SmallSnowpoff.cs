@@ -12,7 +12,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
         public override void SetDefaults()
         {
             base.SetDefaults();
-            NPC.defense = 50;
+            NPC.defense = 5;
             NPC.lifeMax = 10;
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)

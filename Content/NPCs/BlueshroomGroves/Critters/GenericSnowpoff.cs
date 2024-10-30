@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using Terraria.Audio;
+using System;
 
 namespace ITD.Content.NPCs.BlueshroomGroves.Critters
 {
@@ -69,8 +70,8 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
                     NPC.collideY = false;
                     NPC.velocity.Y -= 1.5f;
                 }
-                if (hit.DamageType != DamageClass.Magic) // try turn into ball
-                    switch (AI_State)
+                if (hit.DamageType != DamageClass.Magic)
+                    switch (AI_State)  // try turn into ball
                     {
                         case ActionState.Wandering:
                         case ActionState.JumpPreDig:
@@ -82,6 +83,22 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
                             break;
                     }
             }
+        }
+        public override void ModifyIncomingHit(ref NPC.HitModifiers modifiers)
+        {
+            if (modifiers.DamageType == DamageClass.Magic)
+                return;
+            modifiers.Defense += 9999;
+            modifiers.HideCombatText();
+        }
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+        {
+            NPC.life += damageDone;
+        }
+        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+        {
+            if (hit.DamageType != DamageClass.Magic)
+                NPC.life += damageDone;
         }
         public override void FindFrame(int frameHeight) // using this for all relevant visuals
         {
@@ -293,7 +310,8 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
                 NPC.velocity.Y *= -1f;
             }
             NPC.rotation += NPC.velocity.X / 32f;
-            if ((NPC.velocity - NPC.oldVelocity).LengthSquared() < 10f && AITimer > 360)
+            float length = NPC.velocity.X;
+            if (Math.Abs(length) < 1f && AITimer > 200 && NPC.IsOnStandableGround())
             {
                 AI_State = ActionState.Wandering;
                 return;
