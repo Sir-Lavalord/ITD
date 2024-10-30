@@ -2,6 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using Terraria.Audio;
 
 namespace ITD.Content.NPCs.BlueshroomGroves.Critters
 {
@@ -41,8 +42,14 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
             NPC.width = HeightAsBall;
             NPC.height = NormalHeight;
             NPC.damage = 0;
-            NPC.HitSound = SoundID.AbigailCry; // replace with snowpoff sfx
-            NPC.DeathSound = SoundID.AbigailCry; // replace with snowpoff sfx
+            NPC.HitSound = new SoundStyle("ITD/Content/Sounds/NPCSounds/SnowpoffHit")
+            {
+                PitchVariance = 0.75f
+            };
+            NPC.DeathSound = new SoundStyle("ITD/Content/Sounds/NPCSounds/SnowpoffDeath")
+            {
+                PitchVariance = 0.75f
+            };
             NPC.catchItem = ModContent.ItemType<SmallSnowpoffItem>();
             AI_State = ActionState.Wandering;
             AIDir = 1f;
