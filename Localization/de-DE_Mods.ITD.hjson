@@ -927,6 +927,16 @@ Items: {
 			[c/{0}:Latch Effect:] Encases the target in ice, dealing heavy damage and throwing ice shards
 			''' */
 	}
+
+	SmallSnowpoffItem: {
+		// DisplayName: Small Snowpoff Item
+		// Tooltip: ""
+	}
+
+	LargeSnowpoffItem: {
+		// DisplayName: Large Snowpoff Item
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -1116,6 +1126,9 @@ NPCs: {
 			// Princess_LovesNPC: I like {NPCName}.
 		}
 	}
+
+	// SmallSnowpoff.DisplayName: Small Snowpoff
+	// LargeSnowpoff.DisplayName: Large Snowpoff
 }
 
 Buffs: {

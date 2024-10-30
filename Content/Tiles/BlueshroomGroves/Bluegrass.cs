@@ -25,6 +25,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             Main.tileBlockLight[Type] = true;
             Main.tileLighted[Type] = true;
             TileID.Sets.CanBeClearedDuringOreRunner[Type] = true;
+            ITDSets.SnowpoffDiggable[Type] = true;
 
             HitSound = SoundID.Item48;
             DustType = DustID.SnowBlock;

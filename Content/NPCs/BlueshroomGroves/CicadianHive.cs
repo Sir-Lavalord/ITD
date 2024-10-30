@@ -82,8 +82,8 @@ namespace ITD.Content.NPCs.BlueshroomGroves
             {
                 case ActionState.Hovering:
                     timeBetweenFrames = 4;
-                    (Vector2 ground, bool _) = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, false, true, 32);
-                    Vector2 hoverPoint = ground - new Vector2(0f, hoverDistance * 16);
+                    RaycastData ray = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, false, true, 32);
+                    Vector2 hoverPoint = ray.End - new Vector2(0f, hoverDistance * 16);
                     Vector2 toHoverPoint = (hoverPoint - NPC.Center) / 32f;
                     NPC.velocity = Vector2.Lerp(NPC.velocity, toHoverPoint, 0.05f);
                     if (Vector2.Distance(NPC.Center, player.Center) < tileRange * 16)
