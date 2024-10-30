@@ -61,6 +61,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<IceChunkDust>(), direction.X * speed, direction.Y * speed, 150, default(Color), Projectile.scale);
                 }
 
+                SoundStyle shatter = new SoundStyle("ITD/Content/Sounds/FrostgripIceShatter");
+                SoundEngine.PlaySound(shatter, Projectile.Center);
+
                 for (int i = 0; i < (int)(size + 15); i++)
                 {
                     if (Projectile.owner == Main.myPlayer)

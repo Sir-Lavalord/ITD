@@ -5,12 +5,16 @@ using ITD.Content.Items.Accessories.Master;
 using ITD.Content.Items.BossSummons;
 using ITD.Content.Items.Other;
 using ITD.Content.Items.Weapons.Melee.Snaptraps;
+using ITD.Content.NPCs.BlueshroomGroves.Critters;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -49,6 +53,8 @@ namespace ITD.Content.NPCs
             soulRot = false;
             toasted = false;
         }
+
+        
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
         {
             if (toasted)
@@ -63,6 +69,7 @@ namespace ITD.Content.NPCs
                 modifiers.SourceDamage += ToastedBuff.DamageMultiplier;
             }
         }
+
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
             if (necrosis)
@@ -120,7 +127,7 @@ namespace ITD.Content.NPCs
             if (chilled)
             {
                 int MAX_CHILLED_DURATION = npc.width * npc.height;
-                chilledTimer++;
+                chilledTimer += 2;
 
                 float scale = MathHelper.Lerp(0.5f, 1.5f, (float)chilledTimer / MAX_CHILLED_DURATION);
                 Texture2D iceTexture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Melee/Snaptraps/Extra/FrostgripIceCube").Value;
@@ -137,7 +144,7 @@ namespace ITD.Content.NPCs
                     int projectileWidth = (int)(iceTexture.Width * scale);
                     int projectileHeight = (int)(iceTexture.Height * scale);
 
-                    npc.SimpleStrikeNPC(7000, 0, false, 0f, null, true, 0, false);
+                    npc.SimpleStrikeNPC(3000, 0, false, 0f, null, true, 0, false);
 
                     Projectile iceProjectile = Projectile.NewProjectileDirect
                     (
@@ -145,7 +152,7 @@ namespace ITD.Content.NPCs
                         npc.Center,
                         Vector2.Zero,
                         projType,
-                        7000,
+                        0,
                         0f,
                         Main.myPlayer
                     );
