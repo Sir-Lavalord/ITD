@@ -115,7 +115,7 @@ namespace ITD.Content.NPCs
                 {
                     npc.lifeRegen = 0;
                 }
-                npc.lifeRegen -= 10 + defenseCalc;
+                npc.lifeRegen -= 30 + defenseCalc;
 
                 if (damage < 10)
                     damage = 10;

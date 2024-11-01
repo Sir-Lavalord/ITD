@@ -31,7 +31,7 @@ namespace ITD.Players
 {
     public class ITDPlayer : ModPlayer
     {
-        public float[] itemVar = new float[4];  // used for storing info about held items, like wormhole ripper's current charge
+        public float[] itemVar = new float[4];
 		int heldItem;
 		
 		public float recoilFront = 0f;
@@ -64,6 +64,8 @@ namespace ITD.Players
         public bool setAlloy_Ranged = false;
         public bool setAlloy_Magic = false;
         public bool setAlloy { get { return setAlloy_Melee ||  setAlloy_Ranged || setAlloy_Magic; } }
+
+        public int DebuffCount;
 		
         //Drawlayer nonsense
         public int frameCounter = 0;
@@ -177,7 +179,7 @@ namespace ITD.Players
                 Player.lifeRegen -= 5 + defenseCalc;
             }
 		}
-		
+
         public override void PostUpdateEquips()
         {
             if (setAlloy)
