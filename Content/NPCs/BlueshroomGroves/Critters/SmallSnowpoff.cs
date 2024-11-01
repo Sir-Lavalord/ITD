@@ -14,11 +14,12 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
             base.SetDefaults();
             NPC.defense = 5;
             NPC.lifeMax = 10;
+            NPC.catchItem = ModContent.ItemType<SmallSnowpoffItem>();
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)
-                return 0.1f;
+                return 0.15f;
             return 0f;
         }
     }

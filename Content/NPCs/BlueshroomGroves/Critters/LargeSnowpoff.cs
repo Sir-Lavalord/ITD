@@ -14,6 +14,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
             base.SetDefaults();
             NPC.defense = 10;
             NPC.lifeMax = 30;
+            NPC.catchItem = ModContent.ItemType<LargeSnowpoffItem>();
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {

@@ -53,13 +53,20 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         public EntityAnim<Vector2> GetAnim()
         {
             return Projectile.CreateAnim<Vector2>()
-                .Append(() => Projectile.velocity, () => (Vector2.UnitX * 32f).RotatedBy(-1).RotatedBy(GetRot()), 30, InOutQuad)
-                .Append(() => Projectile.velocity, () => (Vector2.UnitX * 32f).RotatedBy(1).RotatedBy(GetRot()), 10, InQuad);
+                .Append(() => Projectile.velocity, FirstFrameDirection, 30, InOutQuad)
+                .Append(() => Projectile.velocity, SecondFrameDirection, 10, InQuad);
         }
         public float GetRot()
         {
             return Main.player[Projectile.owner].LookDirection().ToRotation();
         }
+        private Vector2 FrameDirection(int dirMultiplier)
+        {
+            int dir = Math.Sign(Main.player[Projectile.owner].direction) * dirMultiplier;
+            return (Vector2.UnitX * 32f).RotatedBy(dir).RotatedBy(GetRot());
+        }
+        public Func<Vector2> FirstFrameDirection => () => FrameDirection(-1);
+        public Func<Vector2> SecondFrameDirection => () => FrameDirection(1);
         public override void AI()
         {
             if (FadeIn < 1f)

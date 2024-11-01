@@ -51,7 +51,6 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
             {
                 PitchVariance = 0.75f
             };
-            NPC.catchItem = ModContent.ItemType<SmallSnowpoffItem>();
             AI_State = ActionState.Wandering;
             AIDir = 1f;
         }
@@ -69,6 +68,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
                 {
                     NPC.collideY = false;
                     NPC.velocity.Y -= 1.5f;
+                    AITimer = 0f;
                 }
                 if (hit.DamageType != DamageClass.Magic)
                     switch (AI_State)  // try turn into ball
@@ -310,8 +310,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
                 NPC.velocity.Y *= -1f;
             }
             NPC.rotation += NPC.velocity.X / 32f;
-            float length = NPC.velocity.X;
-            if (Math.Abs(length) < 1f && AITimer > 200 && NPC.IsOnStandableGround())
+            if (AITimer > 300)
             {
                 AI_State = ActionState.Wandering;
                 return;
