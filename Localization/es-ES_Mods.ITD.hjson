@@ -15,8 +15,8 @@ Items: {
 	}
 
 	ElectrumBow: {
-		// DisplayName: Electrum Bow
-		// Tooltip: Electrifies wooden arrows
+		DisplayName: Arco de electro
+		Tooltip: Electrifica las flechas de madera
 	}
 
 	RhodiumBroadsword: {
@@ -867,7 +867,7 @@ Items: {
 	}
 
 	WheelerTrashCan: {
-		DisplayName: Bote de basura rodante
+		// DisplayName: WheelerTrashCan
 		// Tooltip: ""
 	}
 
@@ -884,60 +884,60 @@ Items: {
 	}
 
 	ElectrumVisor: {
-		// SetBonus: Hitting enemies releases chain lightning
-		// DisplayName: Electrum Visor
-		// Tooltip: 8% increased movement speed
+		SetBonus: Al golpear enemigos, lanza un relámpago en cadena
+		DisplayName: Visor de electro
+		Tooltip: Aumenta la velocidad de movimiento por un 8%
 	}
 
 	ElectrumChestplate: {
-		// DisplayName: Electrum Chestplate
-		// Tooltip: 8% increased movement speed
+		DisplayName: Cota de malla de electro
+		Tooltip: Aumenta la velocidad de movimiento por un 8%
 	}
 
 	ElectrumLeggings: {
-		// DisplayName: Electrum Leggings
-		// Tooltip: 8% increased movement speed
+		DisplayName: Grebas de electro
+		Tooltip: Aumenta la velocidad de movimiento por un 8%
 	}
 
 	RhodiumVisor: {
 		// SetBonus: Mods.ITD.Items.RhodiumVisor.SetBonus
-		// DisplayName: Rhodium Visor
-		// Tooltip: 4% increased critical strike chance
+		DisplayName: Visor de rodio
+		Tooltip: Aumenta el porcentaje de ataque crítico por un 4%
 	}
 
 	RhodiumChestplate: {
-		// DisplayName: Rhodium Chestplate
-		// Tooltip: 4% increased critical strike chance
+		DisplayName: Cota de malla de rodio
+		Tooltip: Aumenta el porcentaje de ataque crítico por un 4%
 	}
 
 	RhodiumLeggings: {
-		// DisplayName: Rhodium Leggings
-		// Tooltip: 4% increased critical strike chance
+		DisplayName: Grebas de rodio
+		Tooltip: Aumenta el porcentaje de ataque crítico por un 4%
 	}
 
 	DespoticSuperMeleeSword: {
-		// DisplayName: Undying Chaos
+		DisplayName: Caos Incesable
 		// Tooltip: ""
 	}
 
 	Frostgrip: {
-		// DisplayName: Frostgrip
-		/* Tooltip:
+		DisplayName: Agarresfrío
+		Tooltip:
 			'''
-			Continually slows down struck enemies
-			'Not to be used in temperatures above 0 kelvins.'
-			[c/{0}:Latch Effect:] Encases the target in ice, dealing heavy damage and throwing ice shards
-			''' */
+			Continuamente congela el movimiento de los enemigos
+			'No se debe usar en temperaturas sobre 0 Kelvin'
+			[c/{0}:Efecto de Enganche:] Encierra al enemigo en hielo, infligiendo gran daño y lanzando fragmentos de hielo
+			'''
 	}
 
 	SmallSnowpoffItem: {
-		// DisplayName: Small Snowpoff Item
-		// Tooltip: ""
+		DisplayName: Montonieve (Joven)
+		Tooltip: Qué criatura tan adorable... ten cuidado al interactuar con ellos
 	}
 
 	LargeSnowpoffItem: {
-		// DisplayName: Large Snowpoff Item
-		// Tooltip: ""
+		DisplayName: Montonieve (Adulto)
+		Tooltip: Un montonieve adulto... aun así, no ha llegado a su máximo poder
 	}
 }
 
@@ -1067,16 +1067,16 @@ Projectiles: {
 
 	ChainwhipWhip.DisplayName: Látigo de cadena
 	CosmicJellyfishBlackholeAura.DisplayName: Agujero negro de Medusa Cósmica
-	// DespoticSuperMeleeProj.DisplayName: Despotic Super Melee Proj
+	DespoticSuperMeleeProj.DisplayName: Caos Incesable
 	// CosJelHandTest.DisplayName: Cos Jel Hand Test
 
 	FrostgripProjectile: {
-		// OneTimeLatchMessage: Ice Cold!
-		// DisplayName: Frostgrip Projectile
+		OneTimeLatchMessage: ¡Qué helado!
+		DisplayName: Agarresfrío
 	}
 
-	// FrostgripIceCube.DisplayName: Frostgrip Ice Cube
-	// FrostgripIcicle.DisplayName: Frostgrip Icicle
+	FrostgripIceCube.DisplayName: Cubo de Agarresfrío
+	FrostgripIcicle.DisplayName: Carámbano de Agarresfrío
 }
 
 NPCs: {
@@ -1129,8 +1129,8 @@ NPCs: {
 		}
 	}
 
-	// SmallSnowpoff.DisplayName: Small Snowpoff
-	// LargeSnowpoff.DisplayName: Large Snowpoff
+	SmallSnowpoff.DisplayName: Montonieve
+	LargeSnowpoff.DisplayName: Montonieve
 }
 
 Buffs: {
@@ -1277,5 +1277,5 @@ Achievements: {
 
 UI: {
 	FavorSlot.MouseHoverName: Favor
-	// RecruitmentButton.MouseHoverName: Recruit
+	RecruitmentButton.MouseHoverName: Reclutar
 }
