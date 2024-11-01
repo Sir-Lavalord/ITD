@@ -5,6 +5,7 @@
   <PropertyGroup>
     <AssemblyName>ITD</AssemblyName>
     <LangVersion>latest</LangVersion>
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
   </PropertyGroup>
 	
   <ItemGroup>

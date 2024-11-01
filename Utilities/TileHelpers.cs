@@ -36,6 +36,7 @@ namespace ITD.Utilities
     }
     public static class TileHelpers
     {
+        public const int TileSheetHeight = 270;
         public static bool TileType(int i, int j, int t) => Framing.GetTileSafely(i, j).HasTile && Framing.GetTileSafely(i, j).TileType == t;
         public static bool TileType(Tile tile, int t) => tile.HasTile && tile.TileType == t;
         public static bool SolidTile(Point tileCoord) => SolidTile(tileCoord.X, tileCoord.Y);
