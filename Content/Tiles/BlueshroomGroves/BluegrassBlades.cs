@@ -72,7 +72,6 @@ namespace ITD.Content.Tiles.BlueshroomGroves
 
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            SpecialDrawing.RestartSpriteBatchAsTileDrawer();
             WeatherSystem.DrawGrassSway(spriteBatch, TextureAssets.Tile[Type].Value, i, j, Lighting.GetColor(i, j));
             return false;
         }

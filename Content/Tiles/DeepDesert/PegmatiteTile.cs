@@ -10,9 +10,10 @@ namespace ITD.Content.Tiles.DeepDesert
     {
         public override void SetStaticDefaults()
         {
+            TileID.Sets.ChecksForMerge[Type] = true;
             Main.tileSolid[Type] = true;
             Main.tileBlockLight[Type] = true;
-            Main.tileMerge[ModContent.TileType<DioriteTile>()][ModContent.TileType<PegmatiteTile>()] = true;
+            Main.tileMerge[ModContent.TileType<DioriteTile>()][Type] = true;
 
             MinPick = 55;
             HitSound = SoundID.Tink;
@@ -20,11 +21,9 @@ namespace ITD.Content.Tiles.DeepDesert
 
             AddMapEntry(new Color(153, 105, 103));
         }
-        public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+        public override void ModifyFrameMerge(int i, int j, ref int up, ref int down, ref int left, ref int right, ref int upLeft, ref int upRight, ref int downLeft, ref int downRight)
         {
-            TileHelpers.VanillaTileFraming(i, j);
-            TileHelpers.VanillaTileMergeWithOther(i, j, ModContent.TileType<DioriteTile>());
-            return false;
+            WorldGen.TileMergeAttempt(-2, ModContent.TileType<DioriteTile>(), ref up, ref down, ref left, ref right, ref upLeft, ref upRight, ref downLeft, ref downRight);
         }
     }
 }

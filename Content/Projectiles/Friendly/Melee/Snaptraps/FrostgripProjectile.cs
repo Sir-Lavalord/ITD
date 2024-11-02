@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Buffs.Debuffs;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -20,7 +21,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             ShootRange = 18f * 12f;
             RetractAccel = 1.5f;
             ExtraFlexibility = 16f * 2f;
-            FramesBetweenHits = 18;
+            FramesBetweenHits = 22;
             MinDamage = 25;
             MaxDamage = 55;
             FullPowerHitsAmount = 10;
@@ -42,16 +43,19 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 Velocity = Projectile.velocity,
             };
             PopupText.NewText(popupSettings, Projectile.Center + new Vector2(0f, -50f));
+            SoundStyle freeze = new SoundStyle("ITD/Content/Sounds/FrostgripFreeze");
+            SoundEngine.PlaySound(freeze, Projectile.Center);
         }
 
         public override void ConstantLatchEffect()
         {
-            constantEffectTimer++;
-            totalEffectTime++;
             NPC target = Main.npc[TargetWhoAmI];
+            totalEffectTime += 2;
+            constantEffectTimer += 1;
+
             if (totalEffectTime >= target.width * target.height)
             {
-                target.AddBuff(ModContent.BuffType<FrostgripChilledBuff>(), 1);
+                target.AddBuff(ModContent.BuffType<FrostgripChilledBuff>(), 20);
                 retracting = true;
             } 
             else

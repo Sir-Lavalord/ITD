@@ -5,20 +5,8 @@
   <PropertyGroup>
     <AssemblyName>ITD</AssemblyName>
     <LangVersion>latest</LangVersion>
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
   </PropertyGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="Krafs.Publicizer" Version="2.2.1" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <Publicize Include="Terraria" />
-	<Publicize Include="ReLogic" />
-	<Publicize Include="tModLoader" />
-	<DoNotPublicize Include="tModLoader:Terraria.ModLoader.PlayerDrawLayer.Draw" />
-	<DoNotPublicize Include="tModLoader:Terraria.WorldBuilding.GenPass.ApplyPass" />
-	<DoNotPublicize Include="tModLoader:Terraria.UI.UIElement.DrawSelf" />
-  </ItemGroup>
 	
   <ItemGroup>
     <Reference Include="StructureHelper">

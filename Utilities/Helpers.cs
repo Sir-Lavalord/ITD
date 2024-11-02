@@ -11,6 +11,15 @@ using static ITD.Utilities.TileHelpers;
 
 namespace ITD.Utilities
 {
+    public struct RaycastData(Vector2 end, bool hit, float lengthSQ, Tile? tile = null, NPC npc = null)
+    {
+        public Vector2 End = end;
+        public bool Hit = hit;
+        public float LengthSQ = lengthSQ;
+        public readonly float Length { get { return MathF.Sqrt(LengthSQ); } }
+        public Tile? Tile = tile;
+        public NPC NPC = npc;
+    }
     public static class Helpers
     {
         public static Color ColorFromHSV(float hue, float saturation, float value)
@@ -52,7 +61,7 @@ namespace ITD.Utilities
                 action(point);
             }
         }
-        public static (Vector2, bool) QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, bool shouldHitPlatforms = false, float maxDistTiles = 64f)
+        public static RaycastData QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, bool shouldHitPlatforms = false, float maxDistTiles = 64f, bool visualize = false)
         {
             origin /= 16f;
             direction = direction.SafeNormalize(Vector2.UnitY);
@@ -85,6 +94,8 @@ namespace ITD.Utilities
                 rayLength1D.Y = (tileCheck.Y + 1 - origin.Y) * unitStepSize.Y;
             }
             bool tileFound = false;
+            NPC intersectNPC = null;
+            Tile? intersectTile = null;
             while (!tileFound && curDistPixels < maxDistTiles)
             {
                 // Walk
@@ -100,9 +111,15 @@ namespace ITD.Utilities
                     curDistPixels = rayLength1D.Y;
                     rayLength1D.Y += unitStepSize.Y;
                 }
+                if (visualize)
+                {
+                    Dust d = Dust.NewDustPerfect(tileCheck.ToWorldCoordinates(), DustID.WhiteTorch);
+                    d.noGravity = true;
+                }
                 if ((shouldHitPlatforms && SolidTile(tileCheck.X, tileCheck.Y)) || WorldGen.SolidTile(tileCheck.X, tileCheck.Y, false))
                 {
                     tileFound = true;
+                    intersectTile = Framing.GetTileSafely(tileCheck);
                 }
                 if (shouldHitNPCs)
                 {
@@ -112,6 +129,7 @@ namespace ITD.Utilities
                         if (npc.getRect().Contains(worldPosition.ToPoint()))
                         {
                             tileFound = true;
+                            intersectNPC = npc;
                         }
                     }
                 }
@@ -125,7 +143,7 @@ namespace ITD.Utilities
             {
                 intersection = origin + direction * maxDistTiles;
             }
-            return (intersection * 16f, tileFound);
+            return new RaycastData(intersection * 16f, tileFound, Vector2.DistanceSquared(origin * 16f, intersection * 16f), intersectTile, intersectNPC);
         }
         public static float Remap(float value, float oldMin, float oldMax, float newMin, float newMax)
         {

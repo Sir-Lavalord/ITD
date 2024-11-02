@@ -36,9 +36,12 @@ namespace ITD.Utilities
     }
     public static class TileHelpers
     {
+        public const int TileSheetHeight = 270;
         public static bool TileType(int i, int j, int t) => Framing.GetTileSafely(i, j).HasTile && Framing.GetTileSafely(i, j).TileType == t;
         public static bool TileType(Tile tile, int t) => tile.HasTile && tile.TileType == t;
+        public static bool SolidTile(Point tileCoord) => SolidTile(tileCoord.X, tileCoord.Y);
         public static bool SolidTile(int i, int j) => Framing.GetTileSafely(i, j).HasTile && Main.tileSolid[Framing.GetTileSafely(i, j).TileType];
+        public static bool SolidTopTile(Point tileCoord) => SolidTopTile(tileCoord.X, tileCoord.Y);
         public static bool SolidTopTile(int i, int j) => Framing.GetTileSafely(i, j).HasTile && (Main.tileSolidTop[Framing.GetTileSafely(i, j).TileType] || Main.tileSolid[Framing.GetTileSafely(i, j).TileType]);
         public static bool EdgeTileCross(int i, int j) => Framing.GetTileSafely(i, j).HasTile && (!Framing.GetTileSafely(i + 1, j).HasTile || !Framing.GetTileSafely(i - 1, j).HasTile || !Framing.GetTileSafely(i, j + 1).HasTile || !Framing.GetTileSafely(i, j - 1).HasTile);
         public static bool EdgeTileX(int i, int j) => Framing.GetTileSafely(i, j).HasTile && (!Framing.GetTileSafely(i + 1, j + 1).HasTile || !Framing.GetTileSafely(i + 1, j - 1).HasTile || !Framing.GetTileSafely(i - 1, j + 1).HasTile || !Framing.GetTileSafely(i - 1, j - 1).HasTile);
@@ -51,6 +54,19 @@ namespace ITD.Utilities
             Rectangle frame = new(t.TileFrameX, t.TileFrameY, 16, 16);
             spriteBatch.Draw(tex, TileExtraPos(i, j, extraOffset), frame, Lighting.GetColor(i, j), 0f, default, 1f, SpriteEffects.None, 0f);
         }
+        public static bool AreaClear(Rectangle area)
+        {
+            for (int i = area.Left; i < area.Right; i++)
+            {
+                for (int j = area.Top; j < area.Bottom; j++)
+                {
+                    if (SolidTile(i, j))
+                        return false;
+                }
+            }
+            return true;
+        }
+        public static bool AptForTree(Point tileCoord, int height, int? saplingType = null) => AptForTree(tileCoord.X, tileCoord.Y, height, saplingType);
         public static bool AptForTree(int i, int j, int height, int? saplingType = null)
         {
             Rectangle rect = new(i - 2, j - height, 5, height);
