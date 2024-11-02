@@ -59,6 +59,11 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                     {
                         int buffType = player.buffType[i];
                         int buffTime = player.buffTime[i];
+
+                        if (buffType == BuffID.Bleeding)
+                        {
+                            buffType = ModContent.BuffType<BleedingII>();
+                        }
                         target.AddBuff(buffType, buffTime);
                     }
                 }
@@ -70,6 +75,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             switch (buffType)
             {
                 case BuffID.Venom:
+                case BuffID.Bleeding:
                 case BuffID.Confused:
                 case BuffID.CursedInferno:
                 case BuffID.Frostburn:

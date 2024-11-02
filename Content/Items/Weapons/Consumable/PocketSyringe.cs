@@ -8,7 +8,7 @@ using ITD.Content.Tiles.Misc;
 using ITD.Content.Items.Placeable;
 using Terraria.DataStructures;
 
-namespace ITD.Content.Items.Consumables
+namespace ITD.Content.Items.Weapons.Consumable
 {
     public class PocketSyringe : ModItem
     {
@@ -40,6 +40,7 @@ namespace ITD.Content.Items.Consumables
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             const int NumProjectiles = 3;
+            Item.damage = 12 - (player.lifeRegen / 2);
 
             for (int i = 0; i < NumProjectiles; i++)
             {

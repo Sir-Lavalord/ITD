@@ -867,7 +867,7 @@ Items: {
 	}
 
 	WheelerTrashCan: {
-		// DisplayName: WheelerTrashCan
+		// DisplayName: Wheeler Trash Can
 		// Tooltip: ""
 	}
 
@@ -938,6 +938,16 @@ Items: {
 	LargeSnowpoffItem: {
 		DisplayName: Montonieve (Adulto)
 		Tooltip: Un montonieve adulto... aun así, no ha llegado a su máximo poder
+	}
+
+	PocketSyringe: {
+		/* Tooltip:
+			'''
+			Shares your debuffs with enemies
+			Deals increased damage depending on your life regen
+			Bleeding deals increased damage to enemies
+			''' */
+		// DisplayName: Pocket Syringe
 	}
 }
 
@@ -1077,6 +1087,7 @@ Projectiles: {
 
 	FrostgripIceCube.DisplayName: Cubo de Agarresfrío
 	FrostgripIcicle.DisplayName: Carámbano de Agarresfrío
+	// PocketSyringeProjectile.DisplayName: Pocket Syringe Projectile
 }
 
 NPCs: {
@@ -1221,6 +1232,11 @@ Buffs: {
 	FrostgripChilledBuff: {
 		// DisplayName: Frostgrip Chilled Buff
 		// Description: Mods.ITD.Buffs.FrostgripChilledBuff.Description
+	}
+
+	BleedingII: {
+		// DisplayName: Bleeding I I
+		// Description: Mods.ITD.Buffs.BleedingII.Description
 	}
 }
 

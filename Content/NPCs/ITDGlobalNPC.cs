@@ -31,6 +31,7 @@ namespace ITD.Content.NPCs
         public bool toasted;
         public bool melomycosis;
         public bool chilled;
+        public bool bleedingII;
         
         private int chilledTimer = 0;
         private const int MAX_CHILLED_DURATION = 60;
@@ -52,6 +53,7 @@ namespace ITD.Content.NPCs
             necrosis = false;
             soulRot = false;
             toasted = false;
+            bleedingII = false;
         }
 
         
@@ -117,8 +119,20 @@ namespace ITD.Content.NPCs
                 }
                 npc.lifeRegen -= 30 + defenseCalc;
 
-                if (damage < 10)
-                    damage = 10;
+                if (damage < 30)
+                    damage = 30;
+            }
+
+            if (bleedingII)
+            {
+                if (npc.lifeRegen > 0)
+                {
+                    npc.lifeRegen = 0;
+                }
+                npc.lifeRegen -= 15;
+
+                if (damage < 15)
+                    damage = 15;
             }
         }
 

@@ -767,12 +767,12 @@ Items: {
 	}
 
 	CyanideArrow: {
-		// DisplayName: Cyanide Arrow
+		// DisplayName: Cyanite Arrow
 		// Tooltip: ""
 	}
 
 	CyanideBullet: {
-		// DisplayName: Cyanide Bullet
+		// DisplayName: Cyanite Bullet
 		// Tooltip: ""
 	}
 
@@ -923,19 +923,29 @@ Items: {
 		/* Tooltip:
 			'''
 			Continually slows down struck enemies
-			'Not to be used in temperatures above 0 kelvins.'
+			'Not to be used in temperatures above 0 Kelvins'
 			[c/{0}:Latch Effect:] Encases the target in ice, dealing heavy damage and throwing ice shards
 			''' */
 	}
 
 	SmallSnowpoffItem: {
-		// DisplayName: Small Snowpoff Item
-		// Tooltip: ""
+		// DisplayName: Snowpoff (Juvenile)
+		// Tooltip: What a cute creature... be careful when handling these
 	}
 
 	LargeSnowpoffItem: {
-		// DisplayName: Large Snowpoff Item
-		// Tooltip: ""
+		// DisplayName: Snowpoff (Adult)
+		// Tooltip: A full-grown Snowpoff... though it hasn't reached its full power
+	}
+
+	PocketSyringe: {
+		/* Tooltip:
+			'''
+			Shares your debuffs with enemies
+			Deals increased damage depending on your life regen
+			Bleeding deals increased damage to enemies
+			''' */
+		// DisplayName: Pocket Syringe
 	}
 }
 
@@ -1041,8 +1051,8 @@ Projectiles: {
 	// BloodPactCut.DisplayName: Blood Pact Cut
 	// BloodPactSpirit.DisplayName: Blood Pact Spirit
 	// CyaniteIceShard.DisplayName: Cyanite Ice Shard
-	// CyanideArrow.DisplayName: Cyanide Arrow
-	// CyanideBullet.DisplayName: Cyanide Bullet
+	// CyanideArrow.DisplayName: Cyanite Arrow
+	// CyanideBullet.DisplayName: Cyanite Bullet
 	// FrostichorArrow.DisplayName: Frostichor Arrow
 	// FrostichorBullet.DisplayName: Frostichor Bullet
 	// CosmicJellyfish_LeftHand.DisplayName: Cosmic Jellyfish_ Left Hand
@@ -1075,6 +1085,7 @@ Projectiles: {
 
 	// FrostgripIceCube.DisplayName: Frostgrip Ice Cube
 	// FrostgripIcicle.DisplayName: Frostgrip Icicle
+	// PocketSyringeProjectile.DisplayName: Pocket Syringe Projectile
 }
 
 NPCs: {
@@ -1127,8 +1138,8 @@ NPCs: {
 		}
 	}
 
-	// SmallSnowpoff.DisplayName: Small Snowpoff
-	// LargeSnowpoff.DisplayName: Large Snowpoff
+	// SmallSnowpoff.DisplayName: Snowpoff
+	// LargeSnowpoff.DisplayName: Snowpoff
 }
 
 Buffs: {
@@ -1219,6 +1230,11 @@ Buffs: {
 	FrostgripChilledBuff: {
 		// DisplayName: Frostgrip Chilled Buff
 		// Description: Mods.ITD.Buffs.FrostgripChilledBuff.Description
+	}
+
+	BleedingII: {
+		// DisplayName: Bleeding I I
+		// Description: Mods.ITD.Buffs.BleedingII.Description
 	}
 }
 

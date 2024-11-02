@@ -940,6 +940,16 @@ Items: {
 		DisplayName: Snowpoff (Adult)
 		Tooltip: A full-grown Snowpoff... though it hasn't reached its full power
 	}
+
+	PocketSyringe: {
+		Tooltip:
+			'''
+			Shares your debuffs with enemies
+			Deals increased damage depending on your life regen
+			Bleeding deals increased damage to enemies
+			'''
+		DisplayName: Pocket Syringe
+	}
 }
 
 Projectiles: {
@@ -1078,6 +1088,7 @@ Projectiles: {
 
 	FrostgripIceCube.DisplayName: Frostgrip Ice Cube
 	FrostgripIcicle.DisplayName: Frostgrip Icicle
+	PocketSyringeProjectile.DisplayName: Pocket Syringe Projectile
 }
 
 NPCs: {
@@ -1222,6 +1233,11 @@ Buffs: {
 	FrostgripChilledBuff: {
 		DisplayName: Frostgrip Chilled Buff
 		Description: Mods.ITD.Buffs.FrostgripChilledBuff.Description
+	}
+
+	BleedingII: {
+		DisplayName: Bleeding I I
+		Description: Mods.ITD.Buffs.BleedingII.Description
 	}
 }
 
