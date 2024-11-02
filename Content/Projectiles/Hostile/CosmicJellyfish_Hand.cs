@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿
+using Terraria;
 using System;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -6,18 +7,33 @@ using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
-using System.Collections.Generic;
+using ITD.Utilities;
 using Terraria.DataStructures;
 using ITD.Content.NPCs.Bosses;
 using ITD.Particles.CosJel;
 using ITD.Particles;
 using System.Linq;
+using Terraria.GameContent.Drawing;
 
 
 namespace ITD.Content.Projectiles.Hostile
 {
+    public enum CosJelHandState
+    {
+        Waiting,
+        MeteorStrike,
+        Charging,
+        Slinging,
+        DownToSize,
+        TemperTantrum
+    }
     public class CosmicJellyfish_Hand : ModProjectile
     {
+        public enum AIState
+        {
+            Normal,
+            Smackdown,
+        }
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
@@ -34,6 +50,16 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
         }
+        public bool isLeftHand = false;
+        public bool bSmackdown;
+        public int iMeteorCount;
+        public int Timer;
+        public float handCharge = 0f;
+        public float handSling = 0f;
+        public float handFollowThrough = 0f;
+        private Vector2 handTarget = Vector2.Zero;
+        public AIState State { get { return (AIState)Projectile.ai[0]; } set { Projectile.ai[0] = (float)value; } }
+        public CosJelHandState HandState { get { return (CosJelHandState)Projectile.ai[2]; } set { Projectile.ai[2] = (float)value; } }
         //AI
         //0.0 is normal
         //0.1 is smackdown
@@ -52,12 +78,10 @@ namespace ITD.Content.Projectiles.Hostile
             }
 
             return true;
-
-
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (Projectile.ai[0] == 1)
+            if (HandState == CosJelHandState.Waiting)
             {
                 Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
                 if (Projectile.tileCollide)
@@ -70,7 +94,7 @@ namespace ITD.Content.Projectiles.Hostile
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
-                        ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), 2f, -1, Projectile.owner);
+                                ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), 2f, -1, Projectile.owner);
                                 Blast.ai[1] = 100f;
                                 Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
                                 Blast.netUpdate = true;
@@ -103,14 +127,255 @@ namespace ITD.Content.Projectiles.Hostile
             for (int i = 0; i < 10; i++)
             {
 
-                    ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f), 5f);
-                    spaceMist.tag = Projectile;
+                ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f), 5f);
+                spaceMist.tag = Projectile;
                 
             }
             SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
         }
         public override void AI()
         {
+            NPC NPC = Main.npc[(int)Projectile.ai[2]];
+            if (NPC.active && NPC.ModNPC is CosmicJellyfish cosJel)
+            {
+                // get the other hand
+                // this shouldn't cause many problems
+                CosmicJellyfish_Hand otherHand = isLeftHand ? cosJel.RightHand : cosJel.LeftHand;
+                Player player = Main.player[NPC.target];
+                if (Projectile.scale < 1f)
+                {
+                    Projectile.scale += 0.05f;
+                }
+                Projectile.timeLeft = 2;
+                int sideMult = isLeftHand ? -1 : 1;
+                Vector2 extendOut = new Vector2((float)Math.Cos(NPC.rotation), (float)Math.Sin(NPC.rotation));
+                Vector2 toPlayer = (player.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
+                Vector2 chargedPosition = NPC.Center - extendOut * (150 * sideMult) + new Vector2(0f, NPC.velocity.Y) - toPlayer * 150f;
+                Vector2 normalCenter = NPC.Center - extendOut * (150 * sideMult) + new Vector2(0f, NPC.velocity.Y);
+                float targetRotation = NPC.rotation;
+                // Animation
+                if (HandState != CosJelHandState.Charging && HandState != CosJelHandState.Slinging && !bSmackdown)
+                {
+                    if (Projectile.frameCounter++ >= 6)
+                    {
+                        Projectile.frameCounter = 0;
+                        Projectile.frame++;
+                        if (Projectile.frame >= 4)
+                        {
+
+                            Projectile.frame = 0;
+                        }
+                    }
+                }
+                else if (HandState == CosJelHandState.Charging)
+                {
+                    Projectile.frame = 5;
+                }
+                else if (HandState == CosJelHandState.Slinging || (HandState == CosJelHandState.MeteorStrike && bSmackdown))
+                {
+                    Projectile.frame = 6;
+                }
+                //
+                switch (HandState)
+                {
+                    case CosJelHandState.Waiting:
+                        Projectile.ai[1] = 0;
+                        iMeteorCount = 0;
+                        bSmackdown = false;
+                        Timer = 0;
+                        handSling = 0f;
+                        handCharge = 0f;
+                        handFollowThrough = 0f;
+                        Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
+                        break;
+                    case CosJelHandState.Charging:
+                        if (handCharge < 1f)
+                        {
+                            handCharge += 0.04f;
+                            targetRotation += handCharge;
+                        }
+                        else
+                        {
+                            if (Timer++ == 0)
+                            {
+                                cosJel.vLockedIn = player.Center;
+                            }
+                            else if (Timer >= cosJel.iDelayTime && cosJel.bSecondStage || Timer >= 0 && !cosJel.bSecondStage)
+                            {
+                                Timer = 0;
+                                if (Projectile.ai[0] != 1)
+                                {
+                                    HandState = CosJelHandState.Slinging;
+                                }
+                                else
+                                {
+                                    Projectile.localAI[2] = 0;
+                                    Timer = 0;
+                                    handSling = 0f;
+                                    handCharge = 0f;
+                                    handFollowThrough = 0f;
+                                    Projectile.velocity.Y += 1.5f;
+                                    bSmackdown = true;
+                                    Projectile.tileCollide = true;
+                                    HandState = CosJelHandState.MeteorStrike;
+                                }
+
+                                Vector2 toTarget = (cosJel.vLockedIn - Projectile.Center).SafeNormalize(Vector2.Zero);
+                                handTarget = cosJel.vLockedIn + toTarget * 120f;
+                            }
+
+
+                        }
+                        Projectile.Center = Vector2.Lerp(normalCenter, chargedPosition, (float)Math.Sin(handCharge * Math.PI));
+                        break;
+                    case CosJelHandState.Slinging:
+                        handCharge = 0f;
+                        if (handSling < 1f)
+                        {
+                            handSling += 0.03f;
+                            targetRotation -= handSling;
+                        }
+                        else
+                        {
+                            if (handFollowThrough < 1f)
+                            {
+                                handFollowThrough += 0.1f;
+                            }
+                            else
+                            {
+                                if (NPC.localAI[2]++ <= 6 && cosJel.bSecondStage)
+                                {
+                                    if (otherHand != null && otherHand.HandState == CosJelHandState.Waiting)
+                                        otherHand.HandState = CosJelHandState.Charging;
+                                }
+                                if (NPC.localAI[2] > 6 || !cosJel.bSecondStage)
+                                {
+                                    Projectile.Kill();
+                                }
+                                HandState = CosJelHandState.Waiting;
+                            }
+                        }
+                        Projectile.Center = Vector2.Lerp(normalCenter, handTarget, (float)Math.Sin(handSling * Math.PI));
+                        break;
+                    case CosJelHandState.DownToSize:
+                        handSling = 0f;
+                        handCharge = 0f;
+                        handFollowThrough = 0f;
+                        Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
+                        if (Timer++ >= 30)
+                        {
+                            if (NPC.ai[3] != 2)
+                            {
+                                if (cosJel.bSecondStage)
+                                {
+                                    if (!isLeftHand)
+                                    {
+                                        if (otherHand != null && otherHand.HandState == CosJelHandState.Waiting)
+                                            otherHand.HandState = CosJelHandState.Charging;
+                                    }
+                                    else
+                                    {
+                                        if (otherHand != null)
+                                            otherHand.HandState = CosJelHandState.Charging;
+                                    }
+                                    HandState = CosJelHandState.Waiting;
+                                }
+                                else
+                                {
+                                    HandState = CosJelHandState.Waiting;
+                                    Projectile.Kill();
+                                }
+                            }
+                            else
+                            {
+                                HandState = CosJelHandState.Waiting;
+                                Projectile.Kill();
+                            }
+                        }
+                        break;
+                    case CosJelHandState.MeteorStrike:
+
+                        if (Projectile.ai[1] == 1)
+                        {
+                            player.GetITDPlayer().Screenshake = 10;
+                            if (iMeteorCount <= 25)
+                            {
+                                if (Timer++ >= 1)
+                                {
+
+                                    Timer = 0;
+                                    iMeteorCount++;
+
+                                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                                    {
+                                        for (int f = 0; f < (isLeftHand ? 2 : 1); f++)
+                                        {
+                                            SoundEngine.PlaySound(SoundID.Item88, player.Center);
+                                            int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(cosJel.vLockedIn.X + (Main.rand.Next(-40, 40)), player.Center.Y - 500)
+                                                , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(isLeftHand? 0.65f : 0.75f, 1.1f), Main.rand.Next(424, 427), Projectile.damage, Projectile.knockBack, player.whoAmI);
+                                            Main.projectile[proj].hostile = true;
+                                            Main.projectile[proj].friendly = false;
+                                            Main.projectile[proj].scale = Main.rand.NextFloat(2, 3f);
+
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Projectile.ai[1] = 0;
+                                bSmackdown = true;
+                                iMeteorCount = 0;
+                                Timer = 0;
+                                HandState = CosJelHandState.Waiting;
+                            }
+                        }
+
+                        else
+                        {
+
+                            cosJel.vLockedIn.X = player.Center.X + (player.velocity.X * 35f);
+                            Timer = 0;
+                            handSling = 0f;
+                            handCharge = 0f;
+                            handFollowThrough = 0f;
+                            Projectile.velocity.Y += 1.5f;
+                            iMeteorCount = 0;
+                            bSmackdown = true;
+
+                        }
+
+
+                        break;
+                }
+                for (int i = 0; i < Main.maxProjectiles; i++)
+                {
+                    Projectile other = Main.projectile[i];
+
+                    if (i != Projectile.whoAmI && other.active && other.type == ProjectileID.CopperShortswordStab && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width)
+                    {
+                        if (Timer == 0 && HandState == CosJelHandState.Slinging && handFollowThrough < 1f &&
+                            player.Distance(Projectile.Center) < 60f
+                            )
+                        {
+                            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
+                                new ParticleOrchestraSettings { PositionInWorld = other.Center }, Projectile.owner);
+                            SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), Projectile.Center);
+                            player.GetITDPlayer().Screenshake = 20;
+                            HandState = CosJelHandState.DownToSize;
+
+                            if (NPC.life > NPC.lifeMax / 10)
+                            {
+                                NPC.life -= NPC.lifeMax / 10;
+                            }
+                            CombatText.NewText(Projectile.Hitbox, Color.Violet, "DOWN TO SIZE", true);
+                            Projectile.velocity = -Projectile.velocity * 2;
+                            // if the achievements mod is on, unlock the parry achievement
+                            ITD.Instance.achievements?.Call("Event", "ParryCosJelHand");
+                        }
+                    }
+                }
+            }
             if (Main.rand.NextBool(3))
             {
                 ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(1f), 0f);
@@ -126,7 +391,18 @@ namespace ITD.Content.Projectiles.Hostile
 
             void DrawAtProj(Texture2D tex)
             {
-                sb.Draw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
+                sb.Draw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f), Projectile.scale, isLeftHand ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+            }
+            if (HandState == CosJelHandState.Slinging || bSmackdown)
+            {
+                for (int k = 0; k < Projectile.oldPos.Length; k++)
+                {
+                    Vector2 center = Projectile.Size / 2f;
+                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + center;
+                    Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                    Vector2 origin = new(outline.Width * 0.5f, (outline.Height / Main.projFrames[Type]) * 0.5f);
+                    sb.Draw(outline, drawPos, frame, color, Projectile.oldRot[k], origin, Projectile.scale, SpriteEffects.None, 0f);
+                }
             }
             DrawAtProj(outline);
             foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))

@@ -40,7 +40,7 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.penetrate = -1;
             Projectile.timeLeft = Lifetime;
         }
-        public override void OnKill(int timeLeft)
+        public override void OnSpawn(IEntitySource source)
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {

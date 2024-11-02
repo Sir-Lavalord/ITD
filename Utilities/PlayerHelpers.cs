@@ -10,7 +10,7 @@ namespace ITD.Utilities
         public static ITDPlayer GetITDPlayer(this Player player) => player.GetModPlayer<ITDPlayer>();
         public static SnaptrapPlayer GetSnaptrapPlayer(this Player player) => player.GetModPlayer<SnaptrapPlayer>();
         public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.myPlayer;
-        public static bool Exists(this Player player) => player.active && !player.dead && player != null;
+        public static bool Exists(this Player player) => player != null && player.active && !player.dead;
         public static Vector2 LookDirection(this Player player) => (player.GetITDPlayer().MousePosition - player.Center).SafeNormalize(Vector2.Zero);
 
 

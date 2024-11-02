@@ -137,7 +137,7 @@ namespace ITD.Content.Projectiles.Hostile
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
-ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), Projectile.knockBack);
+                ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), Projectile.knockBack);
                 explosion.ai[1] = 100f;
                 explosion.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
                 explosion.netUpdate = true;
