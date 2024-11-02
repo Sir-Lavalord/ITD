@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
-using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
 using ITD.Utilities;
 using Terraria.ID;
@@ -39,7 +38,7 @@ namespace ITD.Systems
         {
             Tile tile = Main.tile[i, j];
             TileDrawing tilesRenderer = Main.instance.TilesRenderer;
-            float rotation = tilesRenderer.GetWindCycle(i, j, tilesRenderer._grassWindCounter);
+            float rotation = tilesRenderer.GetWindCycle(i, j, 0.1);
 
             if (!WallID.Sets.AllowsWind[tile.WallType])
                 rotation = 0f;
@@ -67,7 +66,7 @@ namespace ITD.Systems
         private static float GetTreeSway(int i, int j, ref Vector2 pos)
         {
             TileDrawing tilesRenderer = Main.instance.TilesRenderer;
-            float rot = tilesRenderer.GetWindCycle(i, j, tilesRenderer._treeWindCounter);
+            float rot = tilesRenderer.GetWindCycle(i, j, 0.1);
 
             pos.X += rot * 2f;
             pos.Y += Math.Abs(rot) * 2f;

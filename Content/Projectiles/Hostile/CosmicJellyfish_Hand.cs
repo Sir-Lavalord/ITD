@@ -9,6 +9,10 @@ using Terraria.GameContent;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using ITD.Content.NPCs.Bosses;
+using ITD.Particles.CosJel;
+using ITD.Particles;
+using System.Linq;
+
 
 namespace ITD.Content.Projectiles.Hostile
 {
@@ -98,15 +102,45 @@ namespace ITD.Content.Projectiles.Hostile
         {
             for (int i = 0; i < 10; i++)
             {
-                Dust.NewDust(Projectile.Center, 8, 8, DustID.PortalBolt, Projectile.velocity.X, Projectile.velocity.Y, 0, Color.White, 1);
+
+                    ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f), 5f);
+                    spaceMist.tag = Projectile;
+                
             }
             SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
         }
         public override void AI()
         {
+            if (Main.rand.NextBool(3))
+            {
+                ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(1f), 0f);
+                spaceMist.tag = Projectile;
+            }
         }
         public override bool PreDraw(ref Color lightColor)
         {
+            SpriteBatch sb = Main.spriteBatch;
+            Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+
+            void DrawAtProj(Texture2D tex)
+            {
+                sb.Draw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
+            }
+            DrawAtProj(outline);
+            foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
+            {
+                if (mist is SpaceMist sMist)
+                {
+                    sMist.DrawOutline(sb);
+                }
+            }
+            foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
+            {
+                mist.DrawCommon(sb, mist.texture, mist.CanvasOffset);
+            }
+            DrawAtProj(texture);
             return false;
         }
     }

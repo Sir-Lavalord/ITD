@@ -31,6 +31,10 @@ namespace ITD
         }
         public override void PostSetupContent()
         {
+            if (ModLoader.TryGetMod("DialogueTweak", out Mod dialogueTweak))
+            {
+                dialogueTweak.Call("OnPostPortraitDraw", DrawSomething);
+            }
             ExternalModSupport.Init();
         }
         public override object Call(params object[] args) => ModCalls.Call(args);
@@ -61,6 +65,11 @@ namespace ITD
             {
                 wikithis?.Call("AddModURL", this, "https://itdmod.fandom.com/wiki/{}");
             }
+        }
+        private void DrawSomething(SpriteBatch sb, Color textColor, Rectangle panel)
+        {
+            var tex = ModContent.Request<Texture2D>("ITD/Effects/ClassicLifeOverlay");
+            sb.Draw(tex.Value, panel.Location.ToVector2(), Main.DiscoColor);
         }
         public override void Unload()
         {

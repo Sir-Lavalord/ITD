@@ -1067,6 +1067,7 @@ Projectiles: {
 
 	// FrostgripIceCube.DisplayName: Frostgrip Ice Cube
 	// FrostgripIcicle.DisplayName: Frostgrip Icicle
+	// WheelerTrashProj.DisplayName: Wheeler Trash Proj
 }
 
 NPCs: {

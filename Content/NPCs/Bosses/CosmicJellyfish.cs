@@ -27,6 +27,10 @@ using SteelSeries.GameSense;
 using ITD.Content.Dusts;
 using ITD.Content.Items.Armor.Vanity.Masks;
 using Terraria.Graphics.Effects;
+using ITD.Particles.CosJel;
+using ITD.Particles;
+using System.Linq;
+
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -343,10 +347,8 @@ namespace ITD.Content.NPCs.Bosses
                             {
                                 float angle = startAngle + sectorOfSector * i;
                                 Vector2 projectileVelo = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * radius;
-                                if (bSecondStage)
                                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo * 0.01f, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1,0,2);
-                                else
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1);
+                               
                             }
                         }
                     }

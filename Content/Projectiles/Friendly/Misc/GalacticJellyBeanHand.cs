@@ -11,6 +11,10 @@ using ITD.Utilities;
 using ITD.Content.Items.Accessories.Expert;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ID;
+using ITD.Particles.CosJel;
+using ITD.Particles;
+using Terraria.Audio;
+using Terraria.GameContent;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {
@@ -25,7 +29,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             }
         }
 
-        private const float homingDistance = 750f;
+        private const float homingDistance = 500;
         private const float chargeDistance = 150f;
 
         public float rotation = 0f;
@@ -42,32 +46,39 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         private HandState handState = HandState.Default;
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Type] = 5;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10; // The length of old position to be recorded
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording mode
+            Main.projFrames[Type] = 6;
         }
         public override void SetDefaults()
         {
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.height = 64; Projectile.width = 64;
-            Projectile.damage = 50;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 30;
+            Projectile.localNPCHitCooldown = 20;
         }
         private Vector2 handTarget = Vector2.Zero;
 
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+            Projectile.damage = (int)(player.GetDamage(DamageClass.Generic).ApplyTo(50));
             if (!CheckActive(player))
             {
                 return;
             }
+            float attackSpeedMultiplier = player.GetTotalAttackSpeed(DamageClass.Generic);
+            if (attackSpeedMultiplier >= 3f)
+            {
+                attackSpeedMultiplier = 3;
+            }
             if (HomingTarget != null)
             {
-                if (Projectile.ai[0]++ >= 180)
+                if (Projectile.ai[0]++ >= 180 - (40 * attackSpeedMultiplier))
                 {
                     Projectile.ai[0] = 0;
                     if (handState == HandState.Default)
@@ -87,7 +98,8 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         public void Target()
         {
             Player player = Main.player[Projectile.owner];
-            Vector2 offset = new Vector2(player.direction * -26 + 18, -16f + player.gfxOffY);
+            Vector2 offset = new Vector2(-50, -30f + player.gfxOffY);
+            offset.X *= player.direction;
             Vector2 normalCenter = player.Center + offset + new Vector2(0f, player.velocity.Y);
             if (HomingTarget != null)
             {
@@ -106,7 +118,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                         Projectile.frameCounter = 0;
                         Projectile.frame = ++Projectile.frame % (Main.projFrames[Type] - 1);
                     }
-                    Projectile.spriteDirection = Projectile.direction = player.direction;
+                    Projectile.spriteDirection = player.direction;
                     handSling = 0f;
                     handCharge = 0f;
                     handFollowThrough = 0f;
@@ -127,21 +139,21 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     else
                     {
                         handState = HandState.Slinging;
-                        handTarget = HomingTarget.Center + toTarget * 120f;
+                        handTarget = HomingTarget.Center + toTarget * 100f;
                     }
                     Projectile.Center = Vector2.Lerp(normalCenter, chargedPosition, (float)Math.Sin(handCharge * Math.PI));
                     break;
                 case HandState.Slinging:
                     handCharge = 0f;
-                    if (handSling < 0.8f)
+                    if (handSling < 1f)
                     {
                         handSling += 0.1f;
                     }
                     else
                     {
-                        if (handFollowThrough < 0.4f)
+                        if (handFollowThrough <0.2f)
                         {
-                            handFollowThrough += 0.1f;
+                            handFollowThrough += 0.05f;
                         }
                         else
                         {
@@ -186,6 +198,76 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            SoundEngine.PlaySound(SoundID.NPCHit1, target.Center);//Sloppy toppy
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
+            {
+                PositionInWorld = target.Center,
+            }, target.whoAmI);
+
+        }
+        public override void OnKill(int timeLeft)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+
+                ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f), 5f);
+                spaceMist.tag = Projectile;
+
+            }
+            SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            SpriteBatch sb = Main.spriteBatch;
+            Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+            void DrawAtProj(Texture2D tex)
+            {
+                sb.Draw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f), Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+            }
+            DrawAtProj(outline);
+            foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
+            {
+                if (mist is SpaceMist sMist)
+                {
+                    sMist.DrawOutline(sb);
+                }
+            }
+            foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
+            {
+                mist.DrawCommon(sb, mist.texture, mist.CanvasOffset);
+            }
+            DrawAtProj(texture);
+            if (handState == HandState.Slinging|| handState == HandState.Charging)
+            {
+                if (Main.rand.NextBool(1))
+                {
+                    ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f), 0f);
+                    spaceMist.tag = Projectile;
+                    spaceMist.scale = 2f;
+                }
+                int vertSize = texture.Height / Main.projFrames[Projectile.type];
+                Vector2 origin = new Vector2(texture.Width / 2f, texture.Height / 2f / Main.projFrames[Projectile.type]);
+                Rectangle frameRect = new Rectangle(0, vertSize * Projectile.frame, texture.Width, vertSize);
+
+                for (int k = 0; k < Projectile.oldPos.Length; k++)
+                {
+                    Vector2 center = Projectile.Size / 2f;
+                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + center;
+                    Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                    Main.EntitySpriteDraw(outline, drawPos, frameRect, color, Projectile.oldRot[k], origin, Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+
+                    Main.EntitySpriteDraw(texture, drawPos, frameRect, color, Projectile.oldRot[k], origin, Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+                }
+
+                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frameRect, Color.White, Projectile.rotation, origin, Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+            }
+            return false;
         }
     }
 }

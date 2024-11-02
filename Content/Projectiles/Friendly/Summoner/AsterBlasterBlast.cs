@@ -49,6 +49,10 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraLoading"), Projectile.Center);
             }
         }
+        public override bool? CanDamage()
+        {
+            return CurrentRadius <= MaxRadius / 0.8f;
+        }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];

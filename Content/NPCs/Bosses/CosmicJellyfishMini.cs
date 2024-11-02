@@ -91,6 +91,14 @@ namespace ITD.Content.NPCs.Bosses
             inertia = 40;
             if (!IsDashing)
             {
+                for (int i = 0; i < 3; i++)
+                {
+                    float X = NPC.Center.X - NPC.velocity.X / 20f * (float)i;
+                    float Y = NPC.Center.Y - NPC.velocity.Y / 20f * (float)i;
+                    int dust2 = Dust.NewDust(new Vector2(X, Y), NPC.width, NPC.height, DustID.ShimmerTorch, Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(-2, 2), 160, default, 2);
+                    Main.dust[dust2].noGravity = true;
+                    Main.dust[dust2].velocity *= 0.1f;
+                }
                 if (NPC.localAI[2]++ >= 150)
                 {
                     NPC.velocity *= 0.9f;
@@ -108,13 +116,12 @@ namespace ITD.Content.NPCs.Bosses
             }
             else
             {
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     float X = NPC.Center.X - NPC.velocity.X / 20f * (float)i;
                     float Y = NPC.Center.Y - NPC.velocity.Y / 20f * (float)i;
-                    int dust2 = Dust.NewDust(new Vector2(X, Y), NPC.width/2, NPC.height / 2, DustID.ShimmerTorch, 0, 0, 160, Color.WhiteSmoke, 2);
-                    Main.dust[dust2].position.X = X;
-                    Main.dust[dust2].position.Y = Y;
+                    int dust2 = Dust.NewDust(new Vector2(X, Y), NPC.width, NPC.height, DustID.ShimmerTorch, Main.rand.NextFloat(-2,2), Main.rand.NextFloat(-2, 2), 160, Color.WhiteSmoke, 2);
+
                     Main.dust[dust2].noGravity = true;
                     Main.dust[dust2].velocity *= 0.1f;
                 }
