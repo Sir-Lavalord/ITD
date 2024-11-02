@@ -34,6 +34,19 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         }
         public override void OnSpawn(IEntitySource source)
         {
+            if (Projectile.ai[1] == 1)
+            {
+                CanParry = false;
+            }
+            else
+            {
+                Player owner = Main.player[Projectile.owner];
+
+                ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
+                {
+                    PositionInWorld = owner.Center,
+                }, owner.whoAmI);
+            }
         }
         private float Timer
         {
@@ -192,6 +205,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            target.AddBuff(ModContent.BuffType<FishbackerTagDebuff>(), 300);
+
             SoundEngine.PlaySound(SoundID.NPCHit1, target.Center);//Sloppy toppy
 
             
@@ -209,7 +224,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         {
             if (IsReflected)
             {
-                target.AddBuff(ModContent.BuffType<FishbackerTagDebuff>(), 300);
+                target.AddBuff(ModContent.BuffType<FishbackerReflectTagDebuff>(), 900);
             }
         }
     }

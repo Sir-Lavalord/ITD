@@ -9,6 +9,8 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Systems;
+using ITD.Players;
+using ITD.Content.Projectiles.Friendly.Ranger;
 
 namespace ITD.Content.Items.Weapons.Summoner
 {
@@ -43,6 +45,14 @@ namespace ITD.Content.Items.Weapons.Summoner
         public override bool MeleePrefix()
         {
             return true;
+        }
+        int attackCycle;
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            attackCycle = ++attackCycle % 2;
+            Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<FishbackerProj>(), damage, knockback, player.whoAmI,0, attackCycle);
+
+            return false;
         }
         public override void AddRecipes()
         {

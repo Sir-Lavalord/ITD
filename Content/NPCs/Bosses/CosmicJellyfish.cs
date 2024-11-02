@@ -27,6 +27,10 @@ using SteelSeries.GameSense;
 using ITD.Content.Dusts;
 using ITD.Content.Items.Armor.Vanity.Masks;
 using Terraria.Graphics.Effects;
+using ITD.Particles.CosJel;
+using ITD.Particles;
+using System.Linq;
+
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -34,7 +38,6 @@ namespace ITD.Content.NPCs.Bosses
     [AutoloadBossHead]
     public class CosmicJellyfish : ModNPC
     {
-        private readonly Asset<Texture2D> spriteBack = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/CosmicJellyfish_Back");
         private int hand = -1;
         private int hand2 = -1;
 
@@ -47,7 +50,6 @@ namespace ITD.Content.NPCs.Bosses
         };*/
         public float rotation = 0f;
         private Vector2 CorePos;
-        //Hand rigamagig will be controlled seperately from the boss
         public bool bSecondStage;
         public bool bOkuu;
         int goodtransition;//Add to current frame for clean tentacles
@@ -57,7 +59,7 @@ namespace ITD.Content.NPCs.Bosses
             NPCID.Sets.MPAllowedEnemies[Type] = true;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
-            Main.npcFrameCount[NPC.type] = 11;
+            Main.npcFrameCount[NPC.type] = 10;
             NPCID.Sets.TrailCacheLength[Type] = 8;
             NPCID.Sets.TrailingMode[Type] = 4;
         }
@@ -345,10 +347,8 @@ namespace ITD.Content.NPCs.Bosses
                             {
                                 float angle = startAngle + sectorOfSector * i;
                                 Vector2 projectileVelo = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * radius;
-                                if (bSecondStage)
                                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo * 0.01f, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1,0,2);
-                                else
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1);
+                               
                             }
                         }
                     }
@@ -1391,21 +1391,19 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            if (AI_State == MovementState.Ram)
+            if (NPC.ai[3] == 5)
             {
                 Texture2D tex = TextureAssets.Npc[NPC.type].Value;
                 int vertSize = tex.Height / Main.npcFrameCount[NPC.type];
                 Vector2 origin = new Vector2(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);
                 Rectangle frameRect = new Rectangle(0, vertSize * NPC.frame.Y, tex.Width, vertSize);
-                if (handState2 == HandState.Slinging || bSmackdown)
-                {
+
                     for (int k = 0; k < NPC.oldPos.Length; k++)
                     {
                         Vector2 center = NPC.Size / 2f;
                         Vector2 drawPos = NPC.oldPos[k] - Main.screenPosition + center;
                         Color color = NPC.GetAlpha(drawColor) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
-                        spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, NPC.scale, SpriteEffects.FlipHorizontally, 0f);
-                    }
+                        spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, NPC.scale, SpriteEffects.None, 0f);
                 }
             }
             if (hand != -1)
@@ -1446,7 +1444,6 @@ namespace ITD.Content.NPCs.Bosses
                 }
                 spriteBatch.Draw(tex, projectile.Center - screenPos, frameRect, Color.White, projectile.rotation, origin, projectile.scale, SpriteEffects.FlipHorizontally, 0f);
             }
-            spriteBatch.Draw(spriteBack.Value, NPC.Center - screenPos - new Vector2(0f, 46f), NPC.frame, Color.White, NPC.rotation, new Vector2(spriteBack.Width() / 2f, spriteBack.Height() / (Main.npcFrameCount[NPC.type] -1) / 2f), 1f, SpriteEffects.None, default);
             return true;
         }
     }
