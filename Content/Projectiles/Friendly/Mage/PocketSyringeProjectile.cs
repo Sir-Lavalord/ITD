@@ -14,7 +14,7 @@ using ITD.Content.Buffs.Debuffs;
 
 namespace ITD.Content.Projectiles.Friendly.Mage
 {
-    public class PocketSyringe : ModProjectile
+    public class PocketSyringeProjectile : ModProjectile
     {
         public override void SetDefaults()
         {

@@ -22,7 +22,7 @@ namespace ITD.Content.Items.Consumables
             Item.noUseGraphic = true;
             Item.useAnimation = 17;
             Item.useTime = 17;
-            Item.shoot = ModContent.ProjectileType<Content.Projectiles.Friendly.Mage.PocketSyringe>();
+            Item.shoot = ModContent.ProjectileType<Content.Projectiles.Friendly.Mage.PocketSyringeProjectile>();
             Item.shootSpeed = 5f;
             Item.noMelee = true;
             Item.DamageType = DamageClass.Magic;
