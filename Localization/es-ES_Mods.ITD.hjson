@@ -867,8 +867,12 @@ Items: {
 	}
 
 	WheelerTrashCan: {
-		// DisplayName: Wheeler Trash Can
-		// Tooltip: ""
+		// DisplayName: Dorothea
+		/* Tooltip:
+			'''
+			Converts bullets into EXTRA random stuff
+			'Takes the fun back into battles.'
+			''' */
 	}
 
 	AlloyHeadgear: {
@@ -1088,6 +1092,7 @@ Projectiles: {
 	FrostgripIceCube.DisplayName: Cubo de Agarresfrío
 	FrostgripIcicle.DisplayName: Carámbano de Agarresfrío
 	// PocketSyringeProjectile.DisplayName: Pocket Syringe Projectile
+	// WheelerTrashProj.DisplayName: Wheeler Trash Proj
 }
 
 NPCs: {
@@ -1237,6 +1242,11 @@ Buffs: {
 	BleedingII: {
 		// DisplayName: Bleeding I I
 		// Description: Mods.ITD.Buffs.BleedingII.Description
+	}
+
+	FishbackerReflectTagDebuff: {
+		// DisplayName: Fishbacker Reflect Tag Debuff
+		// Description: Mods.ITD.Buffs.FishbackerReflectTagDebuff.Description
 	}
 }
 

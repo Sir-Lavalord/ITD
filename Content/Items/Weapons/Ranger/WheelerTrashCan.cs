@@ -29,6 +29,7 @@ namespace ITD.Content.Items.Weapons.Ranger
             Item.UseSound = SoundID.Item5;
             Item.shoot = ProjectileID.PewMaticHornShot;
             Item.shootSpeed = 10f;
+            Item.useAmmo = AmmoID.Bullet;
             Item.autoReuse = true;
         }
 
@@ -38,6 +39,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         }
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
+            type = ModContent.ProjectileType<WheelerTrashProj>();
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
@@ -51,7 +53,7 @@ namespace ITD.Content.Items.Weapons.Ranger
             {
                 Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(20));
                 newVelocity *= 1f - Main.rand.NextFloat(0.3f);
-                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<WheelerTrashProj>(), damage, knockback, player.whoAmI,Main.rand.Next(0,15));
+                Projectile.NewProjectileDirect(source, position, newVelocity, type, damage, knockback, player.whoAmI,Main.rand.Next(0,15));
             }
             Vector2 muzzleOffset = Vector2.Normalize(velocity) * 60f;
             position += muzzleOffset;

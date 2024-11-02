@@ -107,18 +107,21 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             {
                 HomingTarget ??= Projectile.FindClosestNPC(6000);
 
-                if (!bBounced)
+                if (HomingTarget != null)
                 {
-                    bBounced = true;
-                    if (Math.Abs(Projectile.velocity.X - oldVelocity.X) > float.Epsilon)
+                    if (!bBounced)
                     {
-                        Projectile.velocity.X = Projectile.DirectionTo(HomingTarget.Center).X * 11f;
-                    }
+                        bBounced = true;
+                        if (Math.Abs(Projectile.velocity.X - oldVelocity.X) > float.Epsilon)
+                        {
+                            Projectile.velocity.X = Projectile.DirectionTo(HomingTarget.Center).X * 11f;
+                        }
 
-                    // If the projectile hits the top or bottom side of the tile, reverse the Y velocity
-                    if (Math.Abs(Projectile.velocity.Y - oldVelocity.Y) > float.Epsilon)
-                    {
-                        Projectile.velocity.Y = Projectile.DirectionTo(HomingTarget.Center).Y * 11f;
+                        // If the projectile hits the top or bottom side of the tile, reverse the Y velocity
+                        if (Math.Abs(Projectile.velocity.Y - oldVelocity.Y) > float.Epsilon)
+                        {
+                            Projectile.velocity.Y = Projectile.DirectionTo(HomingTarget.Center).Y * 11f;
+                        }
                     }
                 }
                 return false;
