@@ -32,7 +32,7 @@ namespace ITD.Content.Items.Weapons.Consumable
             Item.autoReuse = true;
             Item.shootSpeed *= 3f;
 
-            Item.damage = 12;
+            Item.damage = 10;
             Item.knockBack = 1;
             Item.crit = 0;
         }
@@ -40,7 +40,11 @@ namespace ITD.Content.Items.Weapons.Consumable
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             const int NumProjectiles = 3;
-            Item.damage = 12 - (player.lifeRegen / 2);
+            Item.damage = 10 - (player.lifeRegen / 2);
+            if (Item.damage < 10)
+            {
+                Item.damage = 10;
+            }
 
             for (int i = 0; i < NumProjectiles; i++)
             {

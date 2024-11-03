@@ -112,15 +112,15 @@ namespace ITD.Content.NPCs
 
             if (melomycosis)
             {
-                int defenseCalc = npc.defense / 2;
+                int defenseCalc = npc.defense;
                 if (npc.lifeRegen > 0)
                 {
                     npc.lifeRegen = 0;
                 }
-                npc.lifeRegen -= 30 + defenseCalc;
+                npc.lifeRegen -= 60 + defenseCalc * 2;
 
-                if (damage < 30)
-                    damage = 30;
+                if (damage < defenseCalc / 2)
+                    damage = defenseCalc / 2;
             }
 
             if (bleedingII)
@@ -129,7 +129,7 @@ namespace ITD.Content.NPCs
                 {
                     npc.lifeRegen = 0;
                 }
-                npc.lifeRegen -= 15;
+                npc.lifeRegen -= 30;
 
                 if (damage < 15)
                     damage = 15;
