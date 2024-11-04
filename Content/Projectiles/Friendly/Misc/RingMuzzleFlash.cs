@@ -61,7 +61,7 @@ namespace ITD.Content.Projectiles.Hostile
 
         public override void PostDraw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position - Main.screenPosition, null, BaseColor * opacity, rotation, texture.Size() / 2f, scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(Texture, position - Main.screenPosition, null, BaseColor * opacity, rotation, Texture.Size() / 2f, scale, SpriteEffects.None, 0);
         }
 
     }

@@ -387,9 +387,12 @@ namespace ITD.Content.Projectiles.Hostile
                     }
                 }
             }
-            if (Main.rand.NextBool(3))
+            if (Main.rand.NextBool(3) && HandState != CosJelHandState.Slinging && HandState != CosJelHandState.Charging && !bSmackdown)
             {
-                ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(1f), 0f);
+                Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
+                Vector2 veloDelta = (Projectile.position - Projectile.oldPosition); // i can't use projectile.velocity here because we're manually changing the position for most of its existence
+                Vector2 sideOffset = new Vector2(30f, 0f) * (isLeftHand ? -1f : 1f); // so the dust appears visually from the wrists
+                ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center + new Vector2(0f, Projectile.height / 2) + sideOffset, ((velo * 3f) + veloDelta).RotatedByRandom(0.6f), 0f);
                 spaceMist.tag = Projectile;
             }
         }
@@ -408,11 +411,11 @@ namespace ITD.Content.Projectiles.Hostile
             {
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
-                    Vector2 center = Projectile.Size / 2f;
+                    Vector2 center = Projectile.Size * 0.5f;
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + center;
                     Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
                     Vector2 origin = new(outline.Width * 0.5f, (outline.Height / Main.projFrames[Type]) * 0.5f);
-                    sb.Draw(outline, drawPos, frame, color, Projectile.oldRot[k], origin, Projectile.scale, SpriteEffects.None, 0f);
+                    sb.Draw(outline, drawPos, frame, color, Projectile.oldRot[k], origin, Projectile.scale, isLeftHand ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
                 }
             }
             DrawAtProj(outline);
@@ -425,7 +428,7 @@ namespace ITD.Content.Projectiles.Hostile
             }
             foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
             {
-                mist.DrawCommon(sb, mist.texture, mist.CanvasOffset);
+                mist.DrawCommon(sb, mist.Texture, mist.CanvasOffset);
             }
             DrawAtProj(texture);
             return false;

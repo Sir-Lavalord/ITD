@@ -20,7 +20,12 @@ namespace ITD.Particles
     public abstract class ITDParticle() : IDisposable
     {
         internal uint type;
-        internal Texture2D texture;
+        internal Texture2D Texture { get { return ModContent.Request<Texture2D>(TexturePath).Value; } }
+        /// <summary>
+        /// this is the default texture path that points to Particles/Textures/nameof(this). this cannot be overriden but you can override TexturePath to change the texture path
+        /// </summary>
+        internal string ExpectedTexturePath;
+        public virtual string TexturePath => ExpectedTexturePath;
         public int frameVertical;
         public int frameHorizontal;
         public int frameCounter;
@@ -71,7 +76,6 @@ namespace ITD.Particles
         }
         public void Dispose()
         {
-            texture = null;
             GC.SuppressFinalize(this);
         }
         /// <summary>
@@ -86,36 +90,23 @@ namespace ITD.Particles
         {
             int framesVertical = ParticleSystem.particleFramesVertical[type];
             int framesHorizontal = ParticleSystem.particleFramesHorizontal[type];
-            int frameHeight = texture.Height / framesVertical;
-            int frameWidth = texture.Width / framesHorizontal;
+            int frameHeight = Texture.Height / framesVertical;
+            int frameWidth = Texture.Width / framesHorizontal;
             return (new Rectangle(frameWidth * frameHorizontal, frameHeight * frameVertical, frameWidth, frameHeight), new Vector2(frameWidth * 0.5f, frameHeight * 0.5f));
         }
         public Vector2 CanvasOffset { get { return canvas == ParticleDrawCanvas.UI ? Vector2.Zero : Main.screenPosition; } }
         private void Draw(SpriteBatch spriteBatch)
         {
-            DrawCommon(spriteBatch, texture, CanvasOffset);
+            DrawCommon(spriteBatch, Texture, CanvasOffset);
         }
         public virtual void PostDraw(SpriteBatch spriteBatch)
         {
 
         }
         /// <summary>
-        /// This method is not called anywhere by default. This is designed to be called somewhere for special cases (like the metaball-esque particles of CosJelHand)
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        public virtual void SpecialDraw(SpriteBatch spriteBatch)
-        {
-
-        }
-        /// <summary>
         /// Draws something on the center of the particle (this is called in the regular particle draw call, but can be used for other cases)
         /// The data from GetFramingData() will be used unless specified otherwise here (origin and sourceRect)
-        /// 
         /// </summary>
-        /// <param name="spriteBatch"></param>
-        /// <param name="texture"></param>
-        /// <param name="offset"></param>
-        /// <param name="color"></param>
         public void DrawCommon(SpriteBatch spriteBatch, Texture2D texture, Vector2 offset = default, Color? color = null, Rectangle? sourceRect = null, Vector2? origin = null, float? rotation = null, float? scale = null)
         {
             (Rectangle, Vector2) data = GetFramingData();
@@ -132,7 +123,7 @@ namespace ITD.Particles
         public void DrawParticle(SpriteBatch spriteBatch)
         {
             Rectangle screen = canvas == ParticleDrawCanvas.UI ? new(0, 0, (int)(Main.screenWidth/Main.UIScale), (int)(Main.screenHeight/Main.UIScale)) : new((int)Main.screenPosition.X, (int)Main.screenPosition.Y, Main.screenWidth, Main.screenHeight);
-            int maxSize = (int)Math.Max((texture.Height / ParticleSystem.particleFramesVertical[type]) * scale, (texture.Width / ParticleSystem.particleFramesHorizontal[type]) * scale);
+            int maxSize = (int)Math.Max((Texture.Height / ParticleSystem.particleFramesVertical[type]) * scale, (Texture.Width / ParticleSystem.particleFramesHorizontal[type]) * scale);
             Rectangle particleBoundingBox = new((int)position.X - maxSize / 2, (int)position.Y - maxSize / 2, maxSize, maxSize);
             // debug: see particle bounding box vvv
             //spriteBatch.Draw(TextureAssets.MagicPixel.Value, particleBoundingBox, Color.Red * 0.5f);

@@ -60,7 +60,7 @@ namespace ITD.Content.Projectiles.Unused
             }
             foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
             {
-                mist.DrawCommon(sb, mist.texture, mist.CanvasOffset);
+                mist.DrawCommon(sb, mist.Texture, mist.CanvasOffset);
             }
             DrawAtProj(texture);
             return false;

@@ -1,23 +1,22 @@
-﻿using ITD.Content.Projectiles.Unused;
-using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terraria;
 using Terraria.ModLoader;
+using Terraria;
+using ITD.Utilities;
 
-namespace ITD.Particles.CosJel
+namespace ITD.Particles.Misc
 {
-    public class SpaceMist : ITDParticle
+    public class BeanMist : ITDParticle
     {
         public override void SetDefaults()
         {
             canvas = ParticleDrawCanvas.WorldUnderProjectiles;
-            scale *= 1.3f;
-            timeLeft = 60;
+            scale *= 1.2f;
+            timeLeft = 30;
         }
         public override void AI()
         {
@@ -26,7 +25,7 @@ namespace ITD.Particles.CosJel
         }
         public void DrawOutline(SpriteBatch spriteBatch)
         {
-            Texture2D tex = ModContent.Request<Texture2D>("ITD/Particles/Textures/SpaceMist_Outline").Value;
+            Texture2D tex = ModContent.Request<Texture2D>("ITD/Particles/Textures/BeanMist_Outline").Value;
             DrawCommon(spriteBatch, tex, CanvasOffset);
         }
         public override bool PreDraw(SpriteBatch spriteBatch)

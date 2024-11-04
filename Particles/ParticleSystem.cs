@@ -35,7 +35,7 @@ namespace ITD.Particles
                     newInstance.type = value.type;
                     if (!Main.dedServ)
                     {
-                        newInstance.texture = ModContent.Request<Texture2D>($"ITD/Particles/Textures/{particleType.Name}").Value;
+                        newInstance.ExpectedTexturePath = $"ITD/Particles/Textures/{particleType.Name}";
                     }
                     newInstance.Initialize();
                     newInstance.position = position;

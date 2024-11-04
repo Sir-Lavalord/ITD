@@ -15,6 +15,8 @@ using ITD.Particles.CosJel;
 using ITD.Particles;
 using Terraria.Audio;
 using Terraria.GameContent;
+using ITD.Particles.Misc;
+using ITD.Content.Projectiles.Hostile;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {
@@ -54,7 +56,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         {
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.height = 64; Projectile.width = 64;
+            Projectile.height = Projectile.width = 48;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
@@ -107,6 +109,14 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 HomingTarget = null;
             }
             Target();
+            if (Main.rand.NextBool(3) && handState == HandState.Default)
+            {
+                Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
+                Vector2 veloDelta = (Projectile.position - Projectile.oldPosition); // i can't use projectile.velocity here because we're manually changing the position for most of its existence
+                Vector2 sideOffset = new Vector2(-10f, 0f) * Projectile.spriteDirection; // so the dust appears visually from the wrists
+                ITDParticle beanMist = ParticleSystem.NewParticle<BeanMist>(Projectile.Center + new Vector2(0f, Projectile.height / 2 - 20) + sideOffset, ((velo * 2f) + veloDelta).RotatedByRandom(0.6f), 0f);
+                beanMist.tag = Projectile;
+            }
         }
         Vector2 toTarget;
         Vector2 chargedPosition;
@@ -259,14 +269,14 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             DrawAtProj(outline);
             foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
             {
-                if (mist is SpaceMist sMist)
+                if (mist is BeanMist sMist)
                 {
                     sMist.DrawOutline(sb);
                 }
             }
             foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
             {
-                mist.DrawCommon(sb, mist.texture, mist.CanvasOffset);
+                mist.DrawCommon(sb, mist.Texture, mist.CanvasOffset);
             }
             DrawAtProj(texture);
             return false;

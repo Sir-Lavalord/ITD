@@ -31,10 +31,9 @@ namespace ITD.Content.Items.Accessories.Expert
             {
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<GalacticJellyBeanHand>()] <= 0)
                 {
-                    int projID =Projectile.NewProjectile(Player.GetSource_FromThis(),Player.Center,Vector2.Zero,
+                    int projID = Projectile.NewProjectile(Player.GetSource_FromThis(),Player.Center,Vector2.Zero,
                         ModContent.ProjectileType<GalacticJellyBeanHand>(),(int)(Player.GetDamage(DamageClass.Generic).ApplyTo(50)),10f,Player.whoAmI);//knock yo clock off
-                    Main.projectile[projID].scale = 0.75f;
-
+                    Main.projectile[projID].scale = 1f;
                 }
             }
         }
