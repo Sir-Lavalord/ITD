@@ -26,6 +26,7 @@ using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Utilities;
 using ITD.Networking;
 using ITD.Networking.Packets;
+using ITD.Content.UI;
 
 namespace ITD.Players
 {
@@ -212,6 +213,19 @@ namespace ITD.Players
 
             UpdateMouse();
 
+            // See if player is right clicking on a Recruited NPC to open up the Unrecruitment UI
+            if (Main.mouseRight)
+            {
+                foreach (var npc in Main.ActiveNPCs)
+                {
+                    if (npc.ModNPC is RecruitedNPC rNPC && rNPC.GetRecruitmentData().Recruiter == Player.whoAmI)
+                    {
+                        // open UnrecruitmentUI
+                        UILoader.GetUIState<UnrecruitmentGui>().Open(npc.Center, npc.whoAmI);
+                    }
+                }
+            }
+
             prevTime = curTime;
             curTime = Main.dayTime;
 
@@ -359,7 +373,7 @@ namespace ITD.Players
                 // transform recruited npc back to original type
                 RecruitmentData recruitmentData = player.GetITDPlayer().recruitmentData;
                 if (recruitmentData.WhoAmI > -1)
-                    Main.npc[recruitmentData.WhoAmI].Transform(recruitmentData.OriginalType);
+                    TownNPCRecruitmentLoader.Unrecruit(recruitmentData.WhoAmI, player);
             }
         }
 		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)

@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Terraria;
 using Terraria.ID;
 using System.Collections.Generic;
+using Terraria.Localization;
 
 namespace ITD.Systems.Recruitment
 {
@@ -13,14 +14,14 @@ namespace ITD.Systems.Recruitment
     public class RecruitmentData
     {
         public int WhoAmI { get; set; } = -1;
-        public string FullName { get; set; } = "";
+        public NetworkText FullName { get; set; } = null;
         public int OriginalType { get; set; } = -1;
         public int Recruiter { get; set; } = -1;
         public bool IsShimmered { get; set; } = false;
         public void Clear()
         {
             WhoAmI = -1;
-            FullName = string.Empty;
+            FullName = null;
             OriginalType = -1;
             Recruiter = -1;
             IsShimmered = false;
@@ -60,11 +61,13 @@ namespace ITD.Systems.Recruitment
                 if (true is true || true is !false && true) // just for testing yaehahh
                 {
                     data.WhoAmI = npc.whoAmI;
-                    data.FullName = npc.FullName;
+                    data.FullName = npc.GetFullNetName();
                     data.OriginalType = npc.type;
                     data.Recruiter = player.whoAmI;
                     data.IsShimmered = npc.IsShimmerVariant;
+
                     npc.Transform(ModContent.NPCType<RecruitedNPC>());
+
                     if (npc.ModNPC is RecruitedNPC rNpc)
                     {
                         rNpc.Recruiter = player.whoAmI;
@@ -81,11 +84,17 @@ namespace ITD.Systems.Recruitment
             Main.NewText(npc.FullName + " cannot be recruited!", Color.Red); //a plapa local sutf
             return false;
         }
-        public static void Unrecruit(int whoAmI, Player player)
+        public static void Unrecruit(int whoAmI, Player player = null)
         {
             NPC npc = Main.npc[whoAmI];
+            if (player is null && npc.ModNPC is RecruitedNPC rNPC)
+            {
+                npc.Transform(rNPC.originalType);
+                return;
+            }
             RecruitmentData data = player.GetITDPlayer().recruitmentData;
             npc.Transform(data.OriginalType);
+            npc.GivenName = data.FullName.ToString().Split(' ')[0];
             data.Clear();
         }
     }

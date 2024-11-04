@@ -1,6 +1,8 @@
 ﻿using ITD.Networking;
 using Microsoft.Xna.Framework;
 using NVorbis.Contracts;
+using StructureHelper.Core.Loaders.UILoading;
+
 /*using StructureHelper.Core.Loaders.UILoading;
 */using System;
 using System.Collections.Generic;
@@ -39,6 +41,10 @@ namespace ITD.Content.UI
             }
             UserInterfaces = null;
             UIStates = null;
+        }
+        public static T GetUIState<T>() where T : ITDUIState
+        {
+            return UIStates.FirstOrDefault(n => n is T) as T;
         }
         public static void AddLayer(List<GameInterfaceLayer> layers, UIState state, int index, bool visible, InterfaceScaleType scale)
         {

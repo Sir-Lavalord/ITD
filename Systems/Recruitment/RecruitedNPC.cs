@@ -27,7 +27,6 @@ namespace ITD.Systems.Recruitment
         }
         public override void SetDefaults()
         {
-            NPC.townNPC = true;
             NPC.width = 18;
             NPC.height = 40;
             NPC.lifeMax = 100;
@@ -57,24 +56,8 @@ namespace ITD.Systems.Recruitment
         {
             originalType = tag.GetInt("originalType");
         }
-        public override void ModifyTypeName(ref string typeName) => typeName = GetRecruitmentData().FullName;
+        public override void ModifyTypeName(ref string typeName) => typeName = GetRecruitmentData().FullName.ToString();
 
-        // this implementation using the vanilla interface sucks because it requires NPC.townNPC to be set to true. is there something better?
-        public override string GetChat()
-        {
-            return base.GetChat();
-        }
-        public override void SetChatButtons(ref string button, ref string button2)
-        {
-            button = "Unrecruit";
-        }
-        public override void OnChatButtonClicked(bool firstButton, ref string shopName)
-        {
-            if (firstButton)
-            {
-                TownNPCRecruitmentLoader.Unrecruit(NPC.whoAmI, Main.player[(int)Recruiter]);
-            }
-        }
         // i'm not even going to try to code AI cuz i suck at it but i had the idea of having a common AI method that handles player following and such.
         // these smaller methods would handle stuff specific to that npc (obviously).
         // the common method would also be called in these smaller methods (just in case something needs to be done conditionally)
@@ -87,8 +70,11 @@ namespace ITD.Systems.Recruitment
         }
         public override void AI()
         {
-            if (Recruiter < 0)
+            if (Recruiter < 0 || GetRecruitmentData().FullName is null)
+            {
+                TownNPCRecruitmentLoader.Unrecruit(NPC.whoAmI);
                 return;
+            }
             Player player = Main.player[(int)Recruiter];
             // testing AI
             NPC.velocity.X = Math.Sign(player.Center.X - NPC.Center.X)*2f;
