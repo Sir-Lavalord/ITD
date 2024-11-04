@@ -102,7 +102,7 @@ namespace ITD.Content.Projectiles.Hostile
                 if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
                 {
                     Player player = Main.player[CosJel.target];
-                    if (player.Distance(Projectile.Center) < 20)
+                    if (player.Distance(Projectile.Center) < 60)
                     {
                         if (pulseTime++ >= 5)
                         {

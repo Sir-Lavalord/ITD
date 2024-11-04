@@ -27,8 +27,8 @@ namespace ITD.Content.NPCs.Bosses
     [AutoloadBossHead]
     public class CosmicJellyfish : ModNPC
     {
-        private int hand = -1;
-        private int hand2 = -1;
+        public int hand = -1;
+        public int hand2 = -1;
         public CosmicJellyfish_Hand RightHand
         {
             get
@@ -70,8 +70,8 @@ namespace ITD.Content.NPCs.Bosses
             NPCID.Sets.BossBestiaryPriority.Add(Type);
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
             Main.npcFrameCount[NPC.type] = 10;
-            NPCID.Sets.TrailCacheLength[Type] = 8;
-            NPCID.Sets.TrailingMode[Type] = 4;
+            NPCID.Sets.TrailCacheLength[Type] = 6;
+            NPCID.Sets.TrailingMode[Type] = 3;
         }
         public override void SendExtraAI(BinaryWriter writer)
         {
@@ -107,8 +107,8 @@ namespace ITD.Content.NPCs.Bosses
 
         public override void SetDefaults()
         {
-            NPC.width = 120;
-            NPC.height = 200;
+            NPC.width = 180;
+            NPC.height = 252;
             NPC.damage = 8;
             NPC.defense = 5;
             NPC.lifeMax = 3000;
@@ -221,6 +221,11 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override void AI()
         {
+            //the sin
+            if (NPC.ai[3] != 4 && NPC.ai[3] != 6)
+            {
+                TryKillBothHands();
+            }
             CorePos = new Vector2(NPC.Center.X, NPC.Center.Y - 100);
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
@@ -418,14 +423,14 @@ namespace ITD.Content.NPCs.Bosses
                                 {
                                     if (hand == -1)
                                     {
-                                        hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(),20, 0.1f);
+                                        hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(),20, 0.1f,-1,0,NPC.whoAmI);
                                     }
                                 }
                                 else
                                 {
                                     if (hand2 == -1)
                                     {
-                                        hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f);
+                                        hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI);
                                         LeftHand.isLeftHand = true;
                                     }
                                 }
@@ -449,11 +454,11 @@ namespace ITD.Content.NPCs.Bosses
                             
                             if (hand == -1) 
                             {
-                                hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f);
+                                hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI);
                             }
                             if (hand2 == -1)
                             {
-                                hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f);
+                                hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI); ;
                                 LeftHand.isLeftHand = true;
                             }
                         }
@@ -502,11 +507,11 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         if (hand == -1)
                         {
-                            hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f,-1,1,0,NPC.whoAmI);
+                            hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f,-1,1,NPC.whoAmI);
                         }
                         if (hand2 == -1)
                         {
-                            hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f, -1, 1, 0, NPC.whoAmI);
+                            hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f, -1, 1,NPC.whoAmI);
                             LeftHand.isLeftHand = true;
                         }
                     }
@@ -518,8 +523,8 @@ namespace ITD.Content.NPCs.Bosses
                         NPC.localAI[1] = 0;
 
                         NPC.localAI[2] = 0;
-                        NetSync();
                         TryKillBothHands();
+                        NetSync();
                     }
                     break;
                 case 7:
@@ -612,7 +617,7 @@ namespace ITD.Content.NPCs.Bosses
                                 }
 
                             }
-                            float Range = 8000;
+                            float Range = 3000;
                             float Power = 0.125f + 1.5f * 0.125f;
                             for (int i = 0; i < Main.maxPlayers; i++)
                             {
@@ -854,7 +859,7 @@ namespace ITD.Content.NPCs.Bosses
                     Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(), ModContent.ProjectileType<CosmicJellyfishBlackholeAura>(), 0, 0, -1, NPC.whoAmI);
                 }
                 AI_State = MovementState.Explode;
-                Main.NewText("BLACKHOLE BLACKHOLE BLACKHOLE BLACKHOLE BLACKHOLE BLACKHOLE BLACHKOLE BLACKHOLE.", Color.Violet);
+                Main.NewText("Slop slop slop slop.", Color.Violet);
                 return false;
 
             }
@@ -876,6 +881,14 @@ namespace ITD.Content.NPCs.Bosses
             {
                 TryKillBothHands();
             }
+            if (RightHand == null)
+            {
+                hand = -1;
+            }
+            if (LeftHand == null)
+            {
+                hand2 = -1;
+            }
         }
 
         #endregion
@@ -892,11 +905,13 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (NPC.ai[3] == 5)
             {
+                //Rgb effect like the hand later
+                /*                Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
+                */
                 Texture2D tex = TextureAssets.Npc[NPC.type].Value;
                 int vertSize = tex.Height / Main.npcFrameCount[NPC.type];
                 Vector2 origin = new Vector2(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);
-                Rectangle frameRect = new Rectangle(0, vertSize * NPC.frame.Y, tex.Width, vertSize);
-
+                Rectangle frameRect = new Rectangle(0, NPC.frame.Y, tex.Width, vertSize);
                 for (int k = 0; k < NPC.oldPos.Length; k++)
                 {
                     Vector2 center = NPC.Size / 2f;
