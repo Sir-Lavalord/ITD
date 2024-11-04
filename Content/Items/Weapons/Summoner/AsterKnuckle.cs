@@ -65,16 +65,21 @@ namespace ITD.Content.Items.Weapons.Summoner
             Blast.ai[1] = 100f;
             Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
             Blast.netUpdate = true;
-            Vector2 Shootpos = -Vector2.Normalize(Main.MouseWorld - player.MountedCenter) * 10;
-            for (int i = 0; i < 4; i++)
+            Vector2 Shootpos = -Vector2.Normalize(Main.MouseWorld - player.MountedCenter) * Main.rand.NextFloat(12,16);
+            for (int i = 0; i < 8; i++)
             {
-                int dust1 = Dust.NewDust(player.Center, 5, 5, DustID.TintableDustLighted, Shootpos.X, Shootpos.Y, 0, Color.MediumPurple, 2f);
+                int dust3 = Dust.NewDust(player.Center, Item.width, Item.headSlot, DustID.TintableDustLighted, Main.rand.NextFloat(-4,4), Main.rand.NextFloat(-4, 4), 100, Color.MediumPurple, Main.rand.NextFloat(1, 1.5f));
+                Main.dust[dust3].noGravity = true;
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                int dust1 = Dust.NewDust(player.Center, 20, 20, DustID.TintableDustLighted, Shootpos.X, Shootpos.Y, 80, Color.MediumPurple, Main.rand.NextFloat(1.5f, 2.5f));
                 Main.dust[dust1].noGravity = true;
 
-                int dust = Dust.NewDust(player.Center, 5,5, DustID.TintableDustLighted, Shootpos.X, Shootpos.Y, 0, Color.Turquoise, 2f);
+                int dust = Dust.NewDust(player.Center, 10,10, DustID.TintableDustLighted, Shootpos.X, Shootpos.Y, 80, Color.Turquoise, Main.rand.NextFloat(1.5f, 2.5f));
                 Main.dust[dust].noGravity = true;
 
-                int dust2 = Dust.NewDust(player.Center, 5, 5, DustID.TintableDustLighted, Shootpos.X, Shootpos.Y, 0, Color.Turquoise, 2f);
+                int dust2 = Dust.NewDust(player.Center, 30, 30, DustID.TintableDustLighted, Shootpos.X, Shootpos.Y, 80, Color.LightGoldenrodYellow, Main.rand.NextFloat(1.5f, 2.5f));
                 Main.dust[dust2].noGravity = true;
             }
 

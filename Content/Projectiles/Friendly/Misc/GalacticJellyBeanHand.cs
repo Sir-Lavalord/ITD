@@ -46,7 +46,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         private HandState handState = HandState.Default;
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10; // The length of old position to be recorded
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording mode
             Main.projFrames[Type] = 6;
         }
@@ -63,10 +63,25 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         }
         private Vector2 handTarget = Vector2.Zero;
 
+        bool expertMode = Main.expertMode;
+        bool masterMode = Main.masterMode;
+        float damagescale;
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.damage = (int)(player.GetDamage(DamageClass.Generic).ApplyTo(50));
+            if (expertMode)//is good
+            {
+                damagescale = 1.5f;
+            }
+            else if (masterMode)
+            {
+                damagescale = 2f;
+            }
+            else
+            {
+                damagescale = 1;
+            }
+            Projectile.damage = (int)(player.GetDamage(DamageClass.Generic).ApplyTo(50 * damagescale));
             if (!CheckActive(player))
             {
                 return;
@@ -78,7 +93,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             }
             if (HomingTarget != null)
             {
-                if (Projectile.ai[0]++ >= 180 - (40 * attackSpeedMultiplier))
+                if (Projectile.ai[0]++ >= 200 - (60 * attackSpeedMultiplier))
                 {
                     Projectile.ai[0] = 0;
                     if (handState == HandState.Default)
@@ -87,7 +102,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             }
             HomingTarget ??= Projectile.FindClosestNPC(homingDistance);
 
-            if (HomingTarget != null && player.Distance(HomingTarget.Center) > homingDistance)
+            if (HomingTarget != null && (player.Distance(HomingTarget.Center) > homingDistance || HomingTarget.immortal))
             {
                 HomingTarget = null;
             }
@@ -219,16 +234,27 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             }
             SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
         }
-
         public override bool PreDraw(ref Color lightColor)
         {
             SpriteBatch sb = Main.spriteBatch;
             Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+
             void DrawAtProj(Texture2D tex)
             {
                 sb.Draw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f), Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+            }
+            if (handState == HandState.Slinging|| handState == HandState.Charging)
+            {
+                for (int k = 0; k < Projectile.oldPos.Length; k++)
+                {
+                    Vector2 center = Projectile.Size / 2f;
+                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + center;
+                    Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                    Vector2 origin = new(outline.Width * 0.5f, (outline.Height / Main.projFrames[Type]) * 0.5f);
+                    sb.Draw(outline, drawPos, frame, color, Projectile.oldRot[k], origin, Projectile.scale, SpriteEffects.None, 0f);
+                }
             }
             DrawAtProj(outline);
             foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
@@ -243,30 +269,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 mist.DrawCommon(sb, mist.texture, mist.CanvasOffset);
             }
             DrawAtProj(texture);
-            if (handState == HandState.Slinging|| handState == HandState.Charging)
-            {
-                if (Main.rand.NextBool(1))
-                {
-                    ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f), 0f);
-                    spaceMist.tag = Projectile;
-                    spaceMist.scale = 2f;
-                }
-                int vertSize = texture.Height / Main.projFrames[Projectile.type];
-                Vector2 origin = new Vector2(texture.Width / 2f, texture.Height / 2f / Main.projFrames[Projectile.type]);
-                Rectangle frameRect = new Rectangle(0, vertSize * Projectile.frame, texture.Width, vertSize);
-
-                for (int k = 0; k < Projectile.oldPos.Length; k++)
-                {
-                    Vector2 center = Projectile.Size / 2f;
-                    Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + center;
-                    Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                    Main.EntitySpriteDraw(outline, drawPos, frameRect, color, Projectile.oldRot[k], origin, Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
-
-                    Main.EntitySpriteDraw(texture, drawPos, frameRect, color, Projectile.oldRot[k], origin, Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
-                }
-
-                Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frameRect, Color.White, Projectile.rotation, origin, Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
-            }
             return false;
         }
     }

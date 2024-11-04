@@ -70,53 +70,51 @@ namespace ITD.Content.Projectiles.Hostile
         {
             width = 15;
             height = 15;
-            NPC NPC = Main.npc[(int)Projectile.ai[2]];
+            NPC NPC = Main.npc[(int)Projectile.ai[1]];
             if (NPC.active && NPC.type == ModContent.NPCType<CosmicJellyfish>())
             {
                 Player player = Main.player[NPC.target];
-                fallThrough = player.Center.Y >= Projectile.Bottom.Y - 10 && Projectile.ai[1] != 1;
+                fallThrough = player.Center.Y >= Projectile.Bottom.Y - 10 && !bStopfalling;
             }
 
             return true;
         }
+        public bool bStopfalling;
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            if (HandState == CosJelHandState.Waiting)
+            if (HandState == CosJelHandState.MeteorStrike)
             {
                 Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
-                if (Projectile.tileCollide)
+
+                if (!bStopfalling)
                 {
-                    if (Projectile.ai[1] != 1)
+                    if (expertMode || masterMode)
                     {
-                        if (expertMode || masterMode)
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
+                            Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
+                            ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), 2f, -1, Projectile.owner);
+                            Blast.ai[1] = 100f;
+                            Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+                            Blast.netUpdate = true;
 
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
-                                ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), 2f, -1, Projectile.owner);
-                                Blast.ai[1] = 100f;
-                                Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
-                                Blast.netUpdate = true;
-
-                            }
                         }
-                        for (int i = 0; i < 12; i++)
-                        {
-                            Dust.NewDustPerfect(Projectile.Center, DustID.ShimmerTorch, new Vector2(Main.rand.NextFloat() * 6f, -8f + 8f * Main.rand.NextFloat()), 0, default(Color), 1.5f).noGravity = true;
-                        }
-                        Projectile.ai[1] = 1;
-
-                        Projectile.position += Projectile.velocity;
-                        Projectile.velocity = Vector2.Zero;
                     }
+                    for (int i = 0; i < 12; i++)
+                    {
+                        Dust.NewDustPerfect(Projectile.Center, DustID.ShimmerTorch, new Vector2(Main.rand.NextFloat() * 6f, -8f + 8f * Main.rand.NextFloat()), 0, default(Color), 1.5f).noGravity = true;
+                    }
+                    Projectile.ai[1] = 1;
+
+                    Projectile.position += Projectile.velocity;
+                    Projectile.velocity = Vector2.Zero;
                 }
+                bStopfalling = true;
                 Projectile.netUpdate = true;
-
             }
-
             return false;
-
+                
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -124,9 +122,19 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override void OnKill(int timeLeft)
         {
+
+                NPC NPC = Main.npc[(int)Projectile.ai[1]];
+                if (NPC.active && NPC.ModNPC is CosmicJellyfish cosJel)
+                {
+                    if (isLeftHand)
+                    {
+                    cosJel.hand2 = -1;
+                    }
+                    else
+                    cosJel.hand = -1;
+                }
             for (int i = 0; i < 10; i++)
             {
-
                 ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f), 5f);
                 spaceMist.tag = Projectile;
                 
@@ -135,7 +143,7 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override void AI()
         {
-            NPC NPC = Main.npc[(int)Projectile.ai[2]];
+            NPC NPC = Main.npc[(int)Projectile.ai[1]];
             if (NPC.active && NPC.ModNPC is CosmicJellyfish cosJel)
             {
                 // get the other hand
@@ -179,9 +187,9 @@ namespace ITD.Content.Projectiles.Hostile
                 switch (HandState)
                 {
                     case CosJelHandState.Waiting:
-                        Projectile.ai[1] = 0;
                         iMeteorCount = 0;
                         bSmackdown = false;
+                        bStopfalling = false;
                         Timer = 0;
                         handSling = 0f;
                         handCharge = 0f;
@@ -245,6 +253,7 @@ namespace ITD.Content.Projectiles.Hostile
                             {
                                 if (NPC.localAI[2]++ <= 6 && cosJel.bSecondStage)
                                 {
+                                    NPC.netUpdate = true;
                                     if (otherHand != null && otherHand.HandState == CosJelHandState.Waiting)
                                         otherHand.HandState = CosJelHandState.Charging;
                                 }
@@ -268,6 +277,8 @@ namespace ITD.Content.Projectiles.Hostile
                             {
                                 if (cosJel.bSecondStage)
                                 {
+                                    NPC.localAI[2]++;
+                                    NPC.netUpdate = true;
                                     if (!isLeftHand)
                                     {
                                         if (otherHand != null && otherHand.HandState == CosJelHandState.Waiting)
@@ -295,7 +306,7 @@ namespace ITD.Content.Projectiles.Hostile
                         break;
                     case CosJelHandState.MeteorStrike:
 
-                        if (Projectile.ai[1] == 1)
+                        if (bStopfalling)
                         {
                             player.GetITDPlayer().Screenshake = 10;
                             if (iMeteorCount <= 25)
@@ -323,8 +334,8 @@ namespace ITD.Content.Projectiles.Hostile
                             }
                             else
                             {
-                                Projectile.ai[1] = 0;
-                                bSmackdown = true;
+                                bStopfalling = false;
+                                bSmackdown = false;
                                 iMeteorCount = 0;
                                 Timer = 0;
                                 HandState = CosJelHandState.Waiting;
@@ -393,7 +404,7 @@ namespace ITD.Content.Projectiles.Hostile
             {
                 sb.Draw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f), Projectile.scale, isLeftHand ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
             }
-            if (HandState == CosJelHandState.Slinging || bSmackdown)
+            if (HandState == CosJelHandState.Slinging || bSmackdown || HandState == CosJelHandState.Charging)
             {
                 for (int k = 0; k < Projectile.oldPos.Length; k++)
                 {
