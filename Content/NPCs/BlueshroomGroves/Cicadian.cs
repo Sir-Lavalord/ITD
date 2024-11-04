@@ -240,11 +240,5 @@ namespace ITD.Content.NPCs.BlueshroomGroves
             //return drawColor.MultiplyRGB(new Color(clamped, clamped, clamped, 1f));
             return drawColor;
         }
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)
-                return 0.1f;
-            return 0f;
-        }
     }
 }

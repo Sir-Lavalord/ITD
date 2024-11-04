@@ -19,7 +19,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)
-                return 0.1f;
+                return 0.2f;
             return 0f;
         }
     }

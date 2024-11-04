@@ -61,7 +61,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
         {
             if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)
             {
-                return 0.25f;
+                return 0.45f;
             }
             return 0f;
         }

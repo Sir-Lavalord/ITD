@@ -1304,4 +1304,5 @@ Achievements: {
 UI: {
 	FavorSlot.MouseHoverName: Favor
 	RecruitmentButton.MouseHoverName: Reclutar
+	// UnrecruitmentButton.MouseHoverName: Dismiss
 }

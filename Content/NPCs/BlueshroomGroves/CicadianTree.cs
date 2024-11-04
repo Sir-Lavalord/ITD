@@ -9,6 +9,7 @@ using ITD.Content.Projectiles.Other;
 using ReLogic.Content;
 using ITD.Content.Tiles.BlueshroomGroves;
 using ITD.Content.Dusts;
+using ITD.Utilities;
 
 namespace ITD.Content.NPCs.BlueshroomGroves
 {
@@ -102,6 +103,12 @@ namespace ITD.Content.NPCs.BlueshroomGroves
                 int offset1 = 20;
                 Dust.NewDust(NPC.Center + offset - new Vector2(offset1, offset1 + 42), 16 + offset1 * 2, 16 + offset1 * 2, ModContent.DustType<BlueshroomSporesDust>());
             }
+        }
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)
+                return 0.1f;
+            return 0f;
         }
     }
 }
