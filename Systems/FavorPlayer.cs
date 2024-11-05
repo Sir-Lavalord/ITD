@@ -7,6 +7,7 @@ using Terraria.ModLoader.IO;
 using ITD.Utilities;
 using ITD.Content.Buffs.Debuffs;
 using System.Linq;
+using Terraria.GameInput;
 
 namespace ITD.Systems
 {
@@ -81,12 +82,15 @@ namespace ITD.Systems
                 favorItem.ChargeFavor(favorItem.ChargeAmount(new ChargeData(ChargeType.DamageTaken, nPC, proj, info.Damage, 0f)));
             }
         }
-        public override void PostUpdate()
+        public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (TryUseFavor())
             {
                 UseFavor();
             }
+        }
+        public override void PostUpdate()
+        {
             Vector2 distanceTraveled = Player.position - Player.oldPosition;
             if (distanceTraveled != Vector2.Zero && FavorItem != null && FavorItem.ModItem is Favor favorItem)
             {

@@ -15,7 +15,7 @@ namespace ITD.Content.UI
     public class UnrecruitmentGui : ITDUIState
     {
         private UnrecruitmentButton unrecruitmentButton;
-        private bool isOpen = false;
+        public bool isOpen = false;
         public int npc = -1;
         public override bool Visible => isOpen;
         public override int InsertionIndex(List<GameInterfaceLayer> layers)
@@ -40,6 +40,10 @@ namespace ITD.Content.UI
         }
         public void Open(Vector2 atWorldPosition, int npcWhoAmI)
         {
+            if (isOpen)
+                return;
+            RemoveAllChildren();
+            OnInitialize();
             Recalculate();
             npc = npcWhoAmI;
             isOpen = true;

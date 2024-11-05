@@ -114,7 +114,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
                 Vector2 veloDelta = (Projectile.position - Projectile.oldPosition); // i can't use projectile.velocity here because we're manually changing the position for most of its existence
                 Vector2 sideOffset = new Vector2(-16f, 0f) * Projectile.spriteDirection; // so the dust appears visually from the wrists
-                ITDParticle beanMist = ParticleSystem.NewParticle<BeanMist>(Projectile.Center + new Vector2(0f, Projectile.height / 2 - 20) + sideOffset, ((velo * 2f) + veloDelta).RotatedByRandom(0.6f), 0f);
+                ITDParticle beanMist = ParticleSystem.NewParticle<BeanMist>(Projectile.Center + new Vector2(0f, Projectile.height / 2 - 14) + sideOffset, ((velo * 2f) + veloDelta).RotatedByRandom(0.6f), 0f);
                 beanMist.tag = Projectile;
             }
         }

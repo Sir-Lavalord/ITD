@@ -27,6 +27,8 @@ using ITD.Utilities;
 using ITD.Networking;
 using ITD.Networking.Packets;
 using ITD.Content.UI;
+using Terraria.GameInput;
+using log4net.Core;
 
 namespace ITD.Players
 {
@@ -172,7 +174,6 @@ namespace ITD.Players
                 Player.lifeRegen -= 5 + defenseCalc;
             }
 		}
-
         public override void PostUpdateEquips()
         {
             if (setAlloy)
@@ -205,24 +206,29 @@ namespace ITD.Players
 
             UpdateMouse();
 
-            // See if player is right clicking on a Recruited NPC to open up the Unrecruitment UI
-            if (Main.mouseRight)
-            {
-                foreach (var npc in Main.ActiveNPCs)
-                {
-                    if (npc.ModNPC is RecruitedNPC rNPC && rNPC.GetRecruitmentData().Recruiter == Player.whoAmI)
-                    {
-                        // open UnrecruitmentUI
-                        UILoader.GetUIState<UnrecruitmentGui>().Open(npc.Center, npc.whoAmI);
-                    }
-                }
-            }
-
             prevTime = curTime;
             curTime = Main.dayTime;
 
             NaturalSpawns.CosmicJellyfishSpawn(curTime, prevTime, Player);
                 //Suffocation Here
+        }
+        public override void ProcessTriggers(TriggersSet triggersSet)
+        {
+            // see if player just right clicked on a Recruited NPC to open up the Unrecruitment UI
+            if (Main.mouseRight && Main.mouseRightRelease)
+            {
+                foreach (var npc in Main.ActiveNPCs)
+                {
+                    if (npc.Hitbox.Contains(MousePosition.ToPoint()) && npc.ModNPC is RecruitedNPC rNPC && rNPC.GetRecruitmentData().Recruiter == Player.whoAmI)
+                    {
+                        UnrecruitmentGui gui = UILoader.GetUIState<UnrecruitmentGui>();
+                        if (gui.isOpen)
+                            gui.Close();
+                        else
+                            gui.Open(npc.Center, npc.whoAmI);
+                    }
+                }
+            }
         }
         public void UpdateMouse()
         {
