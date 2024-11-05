@@ -78,14 +78,6 @@ namespace ITD.Players
         public int Screenshake;
         //Recruitment data
         public RecruitmentData recruitmentData = new();
-        public override void SaveData(TagCompound tag)
-        {
-            tag["recruitmentOriginalType"] = recruitmentData.OriginalType;
-        }
-        public override void LoadData(TagCompound tag)
-        {
-            recruitmentData.OriginalType = tag.GetInt("recruitmentOriginalType");
-        }
         public override void ResetEffects()
         {
             //Screenshake
@@ -284,7 +276,6 @@ namespace ITD.Players
 				}
 			}
 		}
-		
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
 			if (modifiers.Dodgeable && Main.rand.NextFloat(1f) < blockChance) // Chance to block attacks

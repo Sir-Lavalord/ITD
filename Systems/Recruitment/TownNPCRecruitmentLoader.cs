@@ -27,9 +27,9 @@ namespace ITD.Systems.Recruitment
             IsShimmered = false;
         }
     }
-    public class ExternalRecruitmentData (Delegate aiDelegate, Mod modInstance, string texturePath)
+    public class ExternalRecruitmentData (Action<NPC, Player> aiDelegate, Mod modInstance, string texturePath)
     {
-        public Delegate AIDelegate { get; set; } = aiDelegate;
+        public Action<NPC, Player> AIDelegate { get; set; } = aiDelegate;
         public Mod ModInstance { get; set; } = modInstance;
         public string TexturePath {  get; set; } = texturePath;
     }
@@ -40,7 +40,7 @@ namespace ITD.Systems.Recruitment
         [
             NPCID.Merchant
         ];
-        public static void RegisterRecruitmentData(Mod mod, int npcType, Delegate recruitmentAI, string texturePath)
+        public static void RegisterRecruitmentData(Mod mod, int npcType, Action<NPC, Player> recruitmentAI, string texturePath)
         {
             ITD.Instance.Logger.Info("Trying to add recruitment data for NPC of ID " +  npcType + " from mod " + mod.Name);
             recruitmentDataRegistry[npcType] = new ExternalRecruitmentData(recruitmentAI, mod, texturePath);

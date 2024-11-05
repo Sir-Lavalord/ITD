@@ -75,7 +75,8 @@ namespace ITD.Systems.Recruitment
                 TownNPCRecruitmentLoader.Unrecruit(NPC.whoAmI);
                 return;
             }
-            Player player = Main.player[(int)Recruiter];
+
+            Player player = Main.player[Recruiter];
             // testing AI
             NPC.velocity.X = Math.Sign(player.Center.X - NPC.Center.X)*2f;
             NPC.spriteDirection = NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
@@ -83,7 +84,7 @@ namespace ITD.Systems.Recruitment
             ExternalRecruitmentData extData = TownNPCRecruitmentLoader.GetExternalRecruitmentData(originalType);
             if (extData?.AIDelegate != null) // try to run custom mod AI
             {
-                extData.AIDelegate.Method.Invoke(extData.AIDelegate.Target, [ NPC, player ]);
+                extData.AIDelegate(NPC, player); // here's an idea: once common AI methods like FollowPlayer() and Jump() or others, send them through the delegate here to be captured in the other mod and used
             }
             else
             {

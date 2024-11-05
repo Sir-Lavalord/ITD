@@ -12,6 +12,8 @@ using System.Linq;
 using System.Collections.Generic;
 using ITD.Content.Items.Other;
 using ITD.Content.Items.Weapons.Melee;
+using ITD.Utilities;
+using ITD.Systems.Recruitment;
 
 namespace ITD.Systems
 {
@@ -74,6 +76,18 @@ namespace ITD.Systems
         public override void PostUpdateDusts()
         {
             BlueshroomTree.opac = ((float)Math.Sin(Main.GameUpdateCount / 40f) + 1f) / 2f;
+        }
+        public override void PostUpdateTime()
+        {
+            // prevent recruited town NPCs from spawning again
+            foreach (var npc in Main.ActiveNPCs)
+            {
+                if (npc.ModNPC is not RecruitedNPC rNPC)
+                    continue;
+                int originalType = rNPC.originalType;
+                if (originalType > -1)
+                    Main.townNPCCanSpawn[originalType] = false;
+            }
         }
     }
 }

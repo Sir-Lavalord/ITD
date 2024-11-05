@@ -50,13 +50,13 @@ namespace ITD.Systems
         {
             Mod mod = null;
             int npcType = -1;
-            Delegate aiDelegate = null;
+            Action<NPC, Player> aiDelegate = null;
             string npcTexturePath = null;
             try
             {
                 mod = args[1] as Mod;
                 npcType = (int)args[2];
-                aiDelegate = args[3] as Delegate;
+                aiDelegate = args[3] as Action<NPC, Player>;
                 npcTexturePath = args[4].ToString();
                 TownNPCRecruitmentLoader.RegisterRecruitmentData(mod, npcType, aiDelegate, npcTexturePath);
                 return true;
