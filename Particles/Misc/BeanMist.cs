@@ -15,8 +15,8 @@ namespace ITD.Particles.Misc
         public override void SetDefaults()
         {
             canvas = ParticleDrawCanvas.WorldUnderProjectiles;
-            scale *= 1.2f;
-            timeLeft = 30;
+            scale *= 1.6f;
+            timeLeft = 40;
         }
         public override void AI()
         {

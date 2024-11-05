@@ -56,7 +56,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         {
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.height = Projectile.width = 48;
+            Projectile.height = Projectile.width = 56;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
@@ -113,7 +113,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             {
                 Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
                 Vector2 veloDelta = (Projectile.position - Projectile.oldPosition); // i can't use projectile.velocity here because we're manually changing the position for most of its existence
-                Vector2 sideOffset = new Vector2(-10f, 0f) * Projectile.spriteDirection; // so the dust appears visually from the wrists
+                Vector2 sideOffset = new Vector2(-16f, 0f) * Projectile.spriteDirection; // so the dust appears visually from the wrists
                 ITDParticle beanMist = ParticleSystem.NewParticle<BeanMist>(Projectile.Center + new Vector2(0f, Projectile.height / 2 - 20) + sideOffset, ((velo * 2f) + veloDelta).RotatedByRandom(0.6f), 0f);
                 beanMist.tag = Projectile;
             }
