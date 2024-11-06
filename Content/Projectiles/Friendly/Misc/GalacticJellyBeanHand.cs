@@ -48,7 +48,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         private HandState handState = HandState.Default;
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12; // The length of old position to be recorded
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording mode
             Main.projFrames[Type] = 6;
         }
@@ -109,7 +109,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 HomingTarget = null;
             }
             Target();
-            if (Main.rand.NextBool(3) && handState == HandState.Default)
+            if (Main.rand.NextBool(3)/* && handState == HandState.Default*/)
             {
                 Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
                 Vector2 veloDelta = (Projectile.position - Projectile.oldPosition); // i can't use projectile.velocity here because we're manually changing the position for most of its existence

@@ -14,6 +14,7 @@ using ITD.Particles.CosJel;
 using ITD.Particles;
 using System.Linq;
 using Terraria.GameContent.Drawing;
+using System.IO;
 
 
 namespace ITD.Content.Projectiles.Hostile
@@ -36,7 +37,7 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12; // The length of old position to be recorded
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording mode
             Main.projFrames[Projectile.type] = 7;//I'm very mature
         }
@@ -57,15 +58,44 @@ namespace ITD.Content.Projectiles.Hostile
         public float handCharge = 0f;
         public float handSling = 0f;
         public float handFollowThrough = 0f;
+        public bool bStopfalling;
+
         private Vector2 handTarget = Vector2.Zero;
         public AIState State { get { return (AIState)Projectile.ai[0]; } set { Projectile.ai[0] = (float)value; } }
         public CosJelHandState HandState { get { return (CosJelHandState)Projectile.ai[2]; } set { Projectile.ai[2] = (float)value; } }
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(bStopfalling);
+            writer.Write(isLeftHand);
+            writer.Write(bSmackdown);
+            writer.Write(iMeteorCount);
+            writer.Write(Timer);
+            writer.Write(handCharge);
+            writer.Write(handSling);
+            writer.Write(handFollowThrough);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            bStopfalling = reader.ReadBoolean();
+            isLeftHand = reader.ReadBoolean();
+            bSmackdown = reader.ReadBoolean();
+
+            iMeteorCount = reader.ReadInt32();
+            Timer = reader.ReadInt32();
+
+            handCharge = reader.ReadSingle();
+            handSling = reader.ReadSingle();
+            handFollowThrough = reader.ReadSingle();
+        }
         //AI
         //0.0 is normal
         //0.1 is smackdown
         //1.1 is call to stop spawn explosion
         bool expertMode = Main.expertMode;
         bool masterMode = Main.masterMode;
+
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
             width = 15;
@@ -79,7 +109,6 @@ namespace ITD.Content.Projectiles.Hostile
 
             return true;
         }
-        public bool bStopfalling;
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             if (HandState == CosJelHandState.MeteorStrike)
@@ -195,6 +224,7 @@ namespace ITD.Content.Projectiles.Hostile
                         handCharge = 0f;
                         handFollowThrough = 0f;
                         Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
+                        NetSync();
                         break;
                     case CosJelHandState.Charging:
                         if (handCharge < 1f)
@@ -213,11 +243,11 @@ namespace ITD.Content.Projectiles.Hostile
                                 Timer = 0;
                                 if (Projectile.ai[0] != 1)
                                 {
+                                    NetSync();
                                     HandState = CosJelHandState.Slinging;
                                 }
                                 else
                                 {
-                                    Projectile.localAI[2] = 0;
                                     Timer = 0;
                                     handSling = 0f;
                                     handCharge = 0f;
@@ -226,6 +256,8 @@ namespace ITD.Content.Projectiles.Hostile
                                     bSmackdown = true;
                                     Projectile.tileCollide = true;
                                     HandState = CosJelHandState.MeteorStrike;
+                                    NetSync();
+
                                 }
 
                                 Vector2 toTarget = (cosJel.vLockedIn - Projectile.Center).SafeNormalize(Vector2.Zero);
@@ -251,14 +283,18 @@ namespace ITD.Content.Projectiles.Hostile
                             }
                             else
                             {
-                                if (NPC.localAI[2]++ <= 6 && cosJel.bSecondStage)
+                                if (cosJel.bSecondStage)
                                 {
-                                    NPC.netUpdate = true;
+                                    if (cosJel.attackCount++ >= 6)
+                                        Projectile.Kill();
+
+                                    NetSync();
                                     if (otherHand != null && otherHand.HandState == CosJelHandState.Waiting)
                                         otherHand.HandState = CosJelHandState.Charging;
                                 }
-                                if (NPC.localAI[2] > 6 || !cosJel.bSecondStage)
+                                else
                                 {
+                                    NetSync();
                                     Projectile.Kill();
                                 }
                                 HandState = CosJelHandState.Waiting;
@@ -273,32 +309,25 @@ namespace ITD.Content.Projectiles.Hostile
                         Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
                         if (Timer++ >= 30)
                         {
-                            if (NPC.ai[3] != 2)
+                            if (cosJel.bSecondStage)
                             {
-                                if (cosJel.bSecondStage)
+                                NPC.localAI[2]++;
+                                NetSync();
+                                if (!isLeftHand)
                                 {
-                                    NPC.localAI[2]++;
-                                    NPC.netUpdate = true;
-                                    if (!isLeftHand)
-                                    {
-                                        if (otherHand != null && otherHand.HandState == CosJelHandState.Waiting)
-                                            otherHand.HandState = CosJelHandState.Charging;
-                                    }
-                                    else
-                                    {
-                                        if (otherHand != null)
-                                            otherHand.HandState = CosJelHandState.Charging;
-                                    }
-                                    HandState = CosJelHandState.Waiting;
+                                    if (otherHand != null && otherHand.HandState == CosJelHandState.Waiting)
+                                        otherHand.HandState = CosJelHandState.Charging;
                                 }
                                 else
                                 {
-                                    HandState = CosJelHandState.Waiting;
-                                    Projectile.Kill();
+                                    if (otherHand != null)
+                                        otherHand.HandState = CosJelHandState.Charging;
                                 }
+                                HandState = CosJelHandState.Waiting;
                             }
                             else
                             {
+                                NetSync();
                                 HandState = CosJelHandState.Waiting;
                                 Projectile.Kill();
                             }
@@ -316,7 +345,7 @@ namespace ITD.Content.Projectiles.Hostile
 
                                     Timer = 0;
                                     iMeteorCount++;
-
+                                    NetSync();
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
                                     {
                                         for (int f = 0; f < (isLeftHand ? 2 : 1); f++)
@@ -334,6 +363,7 @@ namespace ITD.Content.Projectiles.Hostile
                             }
                             else
                             {
+                                NetSync();
                                 bStopfalling = false;
                                 bSmackdown = false;
                                 iMeteorCount = 0;
@@ -353,6 +383,8 @@ namespace ITD.Content.Projectiles.Hostile
                             Projectile.velocity.Y += 1.5f;
                             iMeteorCount = 0;
                             bSmackdown = true;
+                            NetSync();
+
 
                         }
 
@@ -374,6 +406,7 @@ namespace ITD.Content.Projectiles.Hostile
                             SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), Projectile.Center);
                             player.GetITDPlayer().Screenshake = 20;
                             HandState = CosJelHandState.DownToSize;
+                            NetSync();
 
                             if (NPC.life > NPC.lifeMax / 10)
                             {
@@ -387,14 +420,20 @@ namespace ITD.Content.Projectiles.Hostile
                     }
                 }
             }
-            if (Main.rand.NextBool(3) && HandState != CosJelHandState.Slinging && HandState != CosJelHandState.Charging && !bSmackdown)
+            if (Main.rand.NextBool(3)/* && HandState != CosJelHandState.Slinging && HandState != CosJelHandState.Charging && !bSmackdown*/)
             {
                 Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
                 Vector2 veloDelta = (Projectile.position - Projectile.oldPosition); // i can't use projectile.velocity here because we're manually changing the position for most of its existence
-                Vector2 sideOffset = new Vector2(30f, 0f) * (isLeftHand ? -1f : 1f); // so the dust appears visually from the wrists
+                Vector2 sideOffset = new Vector2(30f * (bSmackdown ? -1f : 1f), 0f) * (isLeftHand ? -1f : 1f); //hacky asf
                 ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center + new Vector2(0f, Projectile.height / 2) + sideOffset, ((velo * 3f) + veloDelta).RotatedByRandom(0.6f), 0f);
                 spaceMist.tag = Projectile;
             }
+        }
+        private void NetSync()//I weep
+        {
+            NPC NPC = Main.npc[(int)Projectile.ai[1]];
+            NPC.netUpdate = true;
+            Projectile.netUpdate = true;
         }
         public override bool PreDraw(ref Color lightColor)
         {

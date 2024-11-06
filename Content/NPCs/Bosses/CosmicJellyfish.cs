@@ -19,7 +19,8 @@ using System.IO;
 using ITD.Content.Dusts;
 using ITD.Content.Items.Armor.Vanity.Masks;
 using Terraria.Graphics.Effects;
-
+using ITD.Particles.CosJel;
+using ITD.Particles;
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -63,7 +64,7 @@ namespace ITD.Content.NPCs.Bosses
         public bool bSecondStage;
         public bool bOkuu;
         int goodtransition;//Add to current frame for clean tentacles
-
+        public int attackCount;
         public override void SetStaticDefaults()
         {
             NPCID.Sets.MPAllowedEnemies[Type] = true;
@@ -222,10 +223,27 @@ namespace ITD.Content.NPCs.Bosses
         public override void AI()
         {
             //the sin
-            if (NPC.ai[3] != 4 && NPC.ai[3] != 6)
+/*            if (NPC.ai[3] != 4 && NPC.ai[3] != 6)
             {
-                TryKillBothHands();
-            }
+                if (RightHand != null)
+                {
+                    if (RightHand.HandState == CosJelHandState.Waiting)
+                    {
+                        RightHand.Projectile.Kill();
+                        NPC.netUpdate = true;
+                        RightHand.Projectile.netUpdate = true;
+                    }
+                }
+                if (LeftHand != null)
+                {
+                    if (LeftHand.HandState == CosJelHandState.Waiting)
+                    {
+                        LeftHand.Projectile.Kill();
+                        NPC.netUpdate = true;
+                        LeftHand.Projectile.netUpdate = true;
+                    }
+                }
+            }*/
             CorePos = new Vector2(NPC.Center.X, NPC.Center.Y - 100);
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
@@ -444,22 +462,27 @@ namespace ITD.Content.NPCs.Bosses
                                     RightHand.HandState = CosJelHandState.Charging;
                             }
 
-                                if (NPC.localAI[2] > 6)
-                                {
-                                    NPC.localAI[1] = 0;
-                                    NPC.localAI[2] = 0;
-                                    NPC.ai[3]++;
-                                    TryKillBothHands(CosJelHandState.Waiting);
-                                }
-                            
-                            if (hand == -1) 
+                            if (attackCount >= 6)
                             {
-                                hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI);
+                                NPC.localAI[1] = 0;
+                                NPC.localAI[2] = 0;
+                                attackCount = 0;
+                                NPC.ai[3]++;
+                                TryKillBothHands();
+                                NetSync();
                             }
-                            if (hand2 == -1)
+                            else
                             {
-                                hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI); ;
-                                LeftHand.isLeftHand = true;
+
+                                if (hand == -1)
+                                {
+                                    hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI);
+                                }
+                                if (hand2 == -1)
+                                {
+                                    hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI); ;
+                                    LeftHand.isLeftHand = true;
+                                }
                             }
                         }
                     }
@@ -503,18 +526,6 @@ namespace ITD.Content.NPCs.Bosses
                                 RightHand.HandState = CosJelHandState.Charging;
                         }
                     }
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        if (hand == -1)
-                        {
-                            hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f,-1,1,NPC.whoAmI);
-                        }
-                        if (hand2 == -1)
-                        {
-                            hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f, -1, 1,NPC.whoAmI);
-                            LeftHand.isLeftHand = true;
-                        }
-                    }
                     if (NPC.localAI[2]++ >= 600 + Main.rand.Next(100, 200))
                     {
                         NPC.ai[3]++;
@@ -526,7 +537,23 @@ namespace ITD.Content.NPCs.Bosses
                         TryKillBothHands();
                         NetSync();
                     }
-                    break;
+                    else
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            if (hand == -1)
+                            {
+                                hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f, -1, 1, NPC.whoAmI);
+                            }
+                            if (hand2 == -1)
+                            {
+                                hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f, -1, 1, NPC.whoAmI);
+                                LeftHand.isLeftHand = true;
+                            }
+                        }
+                    }    
+                        break;
+                    
                 case 7:
                     BlackholeDusting();
                     AI_State = MovementState.Explode;
@@ -763,23 +790,27 @@ namespace ITD.Content.NPCs.Bosses
                     NPC.localAI[2]++;
                     if (NPC.localAI[2] < 10)
                     {
-                        NPC.velocity *= 0.9f;
-                        NetSync();
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            NPC.velocity *= 0.9f;
+                            NetSync();
+                        }
                     }
                     //very hard coded
                     if (NPC.localAI[2] == 10)//set where to dash
                     {
-                        dashvel = Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
-                        NPC.velocity = dashvel;
-                        NetSync();
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            dashvel = Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
+                            NPC.velocity = dashvel;
+                            NetSync();
+                        }
                     }
 
                     if (NPC.localAI[2] > 10 && NPC.localAI[2] < 30)//xcel
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            NetSync();
-
                             NPC.velocity *= 1.18f;
                             NetSync();
                         }
@@ -865,9 +896,6 @@ namespace ITD.Content.NPCs.Bosses
             }
             return true;
         }
-
-        //Forgive me terry
-        //Netcode and hands do not work
         #region HandRigamagic
 
         bool expertMode = Main.expertMode;
@@ -880,6 +908,7 @@ namespace ITD.Content.NPCs.Bosses
             if (!player.Exists())
             {
                 TryKillBothHands();
+                NetSync();
             }
             if (RightHand == null)
             {
