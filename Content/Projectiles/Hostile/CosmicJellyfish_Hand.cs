@@ -51,7 +51,7 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
         }
-        public bool isLeftHand = false;
+        public bool isLeftHand;
         public bool bSmackdown;
         public int iMeteorCount;
         public int Timer;

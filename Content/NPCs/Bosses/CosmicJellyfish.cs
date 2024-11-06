@@ -21,6 +21,9 @@ using ITD.Content.Items.Armor.Vanity.Masks;
 using Terraria.Graphics.Effects;
 using ITD.Particles.CosJel;
 using ITD.Particles;
+using Terraria.UI.Chat;
+using Terraria.Chat;
+using Terraria.Localization;
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -60,6 +63,7 @@ namespace ITD.Content.NPCs.Bosses
         }
 
         public float rotation = 0f;
+        public float AIRand = 0f;
         private Vector2 CorePos;
         public bool bSecondStage;
         public bool bOkuu;
@@ -82,6 +86,7 @@ namespace ITD.Content.NPCs.Bosses
             writer.Write(NPC.localAI[0]);
             writer.Write(NPC.localAI[1]);
             writer.Write(NPC.localAI[2]);
+            writer.Write(AIRand);
 
         }
 
@@ -94,6 +99,7 @@ namespace ITD.Content.NPCs.Bosses
             NPC.localAI[0] = reader.ReadSingle();
             NPC.localAI[1] = reader.ReadSingle();
             NPC.localAI[2] = reader.ReadSingle();
+            AIRand = reader.ReadSingle();
         }
 
         private enum MovementState
@@ -318,6 +324,26 @@ namespace ITD.Content.NPCs.Bosses
             return;
 
         }
+        private void CreateLeftHand()
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
+            hand2 = Projectile.NewProjectile(
+                NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI
+                );
+            (Main.projectile[hand2].ModProjectile as CosmicJellyfish_Hand).isLeftHand = true;
+            NetSync();
+        }
+        private void CreateRightHand()
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;
+            hand = Projectile.NewProjectile(
+                NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI
+                );
+            (Main.projectile[hand].ModProjectile as CosmicJellyfish_Hand).isLeftHand = false;
+            NetSync();
+        }
         //TODO: FIX CODE FOR MULTIPLAYER
         private void Attacks(Player player)//___________________________________________________________________________________________________________________________________________________
         {
@@ -437,19 +463,21 @@ namespace ITD.Content.NPCs.Bosses
                             }
                             if (RightHand is null && LeftHand is null)
                             {
-                                if (Main.rand.NextBool(2))
+                                AIRand = Main.rand.Next(2);
+                                NetSync();
+                                bool b = AIRand == 0;
+                                if (b)
                                 {
                                     if (hand == -1)
                                     {
-                                        hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(),20, 0.1f,-1,0,NPC.whoAmI);
+                                        CreateRightHand();
                                     }
                                 }
                                 else
                                 {
                                     if (hand2 == -1)
                                     {
-                                        hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI);
-                                        LeftHand.isLeftHand = true;
+                                        CreateLeftHand();
                                     }
                                 }
                             }
@@ -473,15 +501,13 @@ namespace ITD.Content.NPCs.Bosses
                             }
                             else
                             {
-
                                 if (hand == -1)
                                 {
-                                    hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI);
+                                    CreateRightHand();
                                 }
                                 if (hand2 == -1)
                                 {
-                                    hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, 0, NPC.whoAmI); ;
-                                    LeftHand.isLeftHand = true;
+                                    CreateLeftHand();
                                 }
                             }
                         }
@@ -526,7 +552,9 @@ namespace ITD.Content.NPCs.Bosses
                                 RightHand.HandState = CosJelHandState.Charging;
                         }
                     }
-                    if (NPC.localAI[2]++ >= 600 + Main.rand.Next(100, 200))
+                    AIRand = Main.rand.Next(100, 200);
+                    NetSync();
+                    if (NPC.localAI[2]++ >= 600 + AIRand)
                     {
                         NPC.ai[3]++;
                         NPC.localAI[0] = 0;
@@ -543,12 +571,11 @@ namespace ITD.Content.NPCs.Bosses
                         {
                             if (hand == -1)
                             {
-                                hand = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f, -1, 1, NPC.whoAmI);
+                                CreateRightHand();
                             }
                             if (hand2 == -1)
                             {
-                                hand2 = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 30, 0.1f, -1, 1, NPC.whoAmI);
-                                LeftHand.isLeftHand = true;
+                                CreateLeftHand();
                             }
                         }
                     }    
@@ -586,7 +613,9 @@ namespace ITD.Content.NPCs.Bosses
                             NPC.localAI[1] = 0;
                             SoundEngine.PlaySound(SoundID.Item20, NPC.Center);
                             //P2 stat garbage here
-                            int projectileAmount = Main.rand.Next(20, 24);
+                            AIRand = Main.rand.Next(20, 24);
+                            NetSync();
+                            int projectileAmount = (int)AIRand;
                             float radius = 6.5f;
                             float sector = (float)(MathHelper.TwoPi);
                             float sectorOfSector = sector / projectileAmount;
@@ -610,7 +639,9 @@ namespace ITD.Content.NPCs.Bosses
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 NPC.localAI[0]++;
-                                int saferange = Main.rand.Next(600, 800);
+                                AIRand = Main.rand.Next(600, 800);
+                                NetSync();
+                                int saferange = (int)AIRand;
                                 float offset = NPC.localAI[0] > 0 && player.velocity != Vector2.Zero
                                     ? Main.rand.NextFloat((float)Math.PI * 2) : player.velocity.ToRotation();
                                 float rotation = offset + (float)Math.PI * 2 / Main.rand.Next(10);
