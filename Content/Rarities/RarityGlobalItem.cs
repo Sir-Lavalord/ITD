@@ -16,6 +16,11 @@ namespace ITD.Content.Rarities
                     DespoticRarity.DrawCustomTooltipLine(line);
                     return false;
                 }
+				else if (item.rare == ModContent.RarityType<UnTerrRarity>())
+				{
+					UnTerrRarity.DrawCustomTooltipLine(line);
+                    return false;
+				}
             }
             return true;
         }

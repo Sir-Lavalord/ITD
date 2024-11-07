@@ -9,13 +9,11 @@ using Terraria.UI.Chat;
 namespace ITD.Content.Rarities
 {
     public static class RarityHelper // it came from the infernum
-    {
-		Texture2D baseRarityGlow = ModContent.Request<Texture2D>("ITD/Content/Rarities/Textures/BaseRarityGlow").Value;
-		
+    {		
         public static void DrawBaseTooltipTextAndGlow(DrawableTooltipLine tooltipLine, Color glowColor, Color textOuterColor, Color? textInnerColor = null, Texture2D glowTexture = null, Vector2? glowScaleOffset = null)
         {
             textInnerColor ??= Color.Black;
-            glowTexture ??= baseRarityGlow;
+            glowTexture ??= ModContent.Request<Texture2D>("ITD/Content/Rarities/Textures/BaseRarityGlow").Value;
             glowScaleOffset ??= Vector2.One;
             // Get the text of the tooltip line.
             string text = tooltipLine.Text;

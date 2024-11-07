@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Ranger;
+using ITD.Content.Rarities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
@@ -21,7 +22,7 @@ namespace ITD.Content.Items.Weapons.Ranger
             Item.channel = true;
             Item.knockBack = 8f;
             Item.value = 999;
-            Item.rare = ItemRarityID.Purple;
+            Item.rare = ModContent.RarityType<UnTerrRarity>();
             Item.noUseGraphic = true;
             Item.UseSound = SoundID.DD2_DefenseTowerSpawn;
             Item.autoReuse = true;
