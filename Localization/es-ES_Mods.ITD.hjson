@@ -953,6 +953,11 @@ Items: {
 			''' */
 		// DisplayName: Pocket Syringe
 	}
+
+	AlloyBar: {
+		// DisplayName: Alloy Bar
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

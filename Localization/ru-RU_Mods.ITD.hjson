@@ -1,0 +1,1310 @@
+Items: {
+	ElectrumBar: {
+		DisplayName: Слиток электрума
+		Tooltip: ""
+	}
+
+	RhodiumBar: {
+		DisplayName: Слиток родия
+		Tooltip: ""
+	}
+
+	AlloySword: {
+		DisplayName: Alloy Sword
+		Tooltip: ""
+	}
+
+	ElectrumBow: {
+		DisplayName: Electrum Bow
+		Tooltip: Electrifies wooden arrows
+	}
+
+	RhodiumBroadsword: {
+		DisplayName: Rhodium Broadsword
+		Tooltip: Struck enemies release damaging sparks
+	}
+
+	ElectrumSpear: {
+		Tooltip: ""
+		DisplayName: Electrum Spear
+	}
+
+	Blueshroom: {
+		DisplayName: Голубой гриб
+		Tooltip: ""
+	}
+
+	DashingFeather: {
+		DisplayName: Dashing Feather
+		Tooltip: Double tap any direction while on the ground to start a dash you can control for a short while
+	}
+
+	DespoticSnaptrap: {
+		DisplayName: Maw of The Deep
+		Tooltip: "[c/{0}:Latch Effect:] Creates jaws that damage the target and surrounding enemies"
+	}
+
+	EmberSlasher: {
+		DisplayName: Пылающая коса
+		// Tooltip: Creates a fiery explosion
+	}
+
+	Snaptrap: {
+		DisplayName: Snaptrap
+		Tooltip:
+			'''
+			"'Ey 'bert! I put a goshdurn beartrap on me chain whip! Yeeehawww!"
+			[c/{0}:Latch Effect:] Increases crit chance by 4%
+			'''
+	}
+
+	SpacePrawn: {
+		DisplayName: Космическая креветка
+		Tooltip: Призывает Космическую Медузу ночью
+	}
+
+	VocalZero: {
+		DisplayName: Vocal Zero
+		Tooltip: "[c/{0}:Latch Effect:] Increases damage by 10% every second, maxes out at 100%"
+	}
+
+	WormholeRipper: {
+		DisplayName: Потрошитель Червоточин
+		Tooltip:
+			'''
+			"Lightspeed!"
+			Атаки заряжают меч.
+			ПКМ для рывка при полном заряде.
+			'''
+	}
+
+	CosmicJellyfishTrophy: {
+		Tooltip: ""
+		DisplayName: Трофей Космической Медузы
+	}
+
+	CosmicJellyfishBag: {
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+		DisplayName: Treasure Bag (Cosmic Jellyfish)
+	}
+
+	CosmicJam: {
+		Tooltip: Summons a pet Jammyfish
+		DisplayName: Космический джем
+	}
+
+	ChainWeight: {
+		Tooltip: Adds some heft to a Snaptrap's chains, also increasing Snaptrap damage by 10%
+		DisplayName: Chain Weight
+	}
+
+	Sniptrap: {
+		Tooltip: For cutting LEAF PAPER only, no cardstock!
+		DisplayName: Sniptrap
+	}
+
+	MrSnapkins: {
+		DisplayName: Mr. Snapkins
+		Tooltip:
+			'''
+			"My dearest Snapkins..."
+			[c/{0}:Latch Effect:] Periodically summons bowties in eight directions
+			'''
+	}
+
+	TheScorpion: {
+		DisplayName: Скорпион
+		Tooltip:
+			'''
+			"GET OVER HERE!"
+			[c/{0}:Latch Effect:] Pulls the latched enemy towards you
+			'''
+	}
+
+	CosmicJellyfishRelic: {
+		Tooltip: ""
+		DisplayName: Cosmic Jellyfish Relic
+	}
+
+	Subfrost: {
+		Tooltip: Вызывает обморожение
+		DisplayName: Мерзлота
+	}
+
+	CyaniteOre: {
+		DisplayName: Cyanite Ore
+		Tooltip: ""
+	}
+
+	Soulsnapper: {
+		DisplayName: Soulsnapper
+		Tooltip: "[c/{0}:Latch Effect:] Continuously spits globs of corruption"
+	}
+
+	Spidermeal: {
+		Tooltip:
+			'''
+			Best used for murdering townsfolk
+			"Everything changed after I got bitten by a radioactive spider..."
+			'''
+		DisplayName: Spidermeal
+	}
+
+	Crimeratrap: {
+		DisplayName: Crimeratrap
+		Tooltip: "[c/{0}:Latch Effect:] Continuously spits globs of crimson"
+	}
+
+	Diorite: {
+		Tooltip: ""
+		DisplayName: Диорит
+	}
+
+	Pegmatite: {
+		DisplayName: Пегматит
+		Tooltip: ""
+	}
+
+	EmberlionSclerite: {
+		DisplayName: Склерит Жар-льва
+		Tooltip: ""
+	}
+
+	FirestormInABottle: {
+		DisplayName: Пожар в бутылке
+		Tooltip:
+			'''
+			Allows the holder to double jump.
+			Upon using the Double-Jump, a firestorm appears beneath the player,
+			dealing a total of 50 DMG a second for up to 3 seconds, while also inflicting 'On Fire!'
+			'''
+	}
+
+	TwisterInABottle: {
+		DisplayName: Смерч в бутылке
+		Tooltip:
+			'''
+			Allows the holder to do an improved double jump and swiftly change directions in air
+			Upon using the Double-Jump, wind will cycle below the player
+			dealing a total of 70 DMG a second for a course of 2 seconds
+			'''
+	}
+
+	StormInABottle: {
+		DisplayName: Гроза в бутылке
+		Tooltip:
+			'''
+			Allows the holder to double jump.
+			Upon using the Double-Jump, a tornado appears beneath the player,
+			striking nearby enemies with electricity, dealing 300 DMG per hit
+			'''
+	}
+
+	DisasterInABottle: {
+		DisplayName: Беда в бутылке
+		Tooltip:
+			'''
+			Allows the holder to triple jump
+			First jump: Summons a firestorm and circling wind beneath the player
+			Second jump: Summons a tornado striking enemies, dealing electrical damage
+			'''
+	}
+
+	Shale: {
+		DisplayName: Сланец
+		Tooltip: ""
+	}
+
+	Depthrock: {
+		Tooltip: ""
+		DisplayName: Глубинный камень
+	}
+
+	Skullmet: {
+		DisplayName: Skullmet
+		Tooltip: Makes some skeletal enemies unable to hurt you
+	}
+
+	AlloyHelmet: {
+		SetBonus: Increases melee damage by 10%
+		DisplayName: Alloy Helmet
+		Tooltip: ""
+	}
+
+	AlloyChestplate: {
+		DisplayName: Alloy Chestplate
+		Tooltip: ""
+	}
+
+	AlloyLeggings: {
+		DisplayName: Alloy Leggings
+		Tooltip: ""
+	}
+
+	SwimshieldWipers: {
+		DisplayName: Swimshield Wipers
+		Tooltip: Immunity to vision related debuffs
+	}
+
+	ThunderStaff: {
+		DisplayName: Посох молний
+		Tooltip: ""
+	}
+
+	VenusSnaptrap: {
+		DisplayName: Venus Snaptrap
+		Tooltip:
+			'''
+			"Queen of the marsh"; Darwin's most beautiful plant
+			[c/{0}:Latch Effect:] Poisons enemies in your grip
+			'''
+	}
+
+	BlueshroomCapBlock: {
+		DisplayName: Шляпка Голубого Гриба
+		Tooltip: ""
+	}
+
+	SnowyLantern: {
+		DisplayName: Снежный фонарь
+		Tooltip: Summons a lantern-bearning Snowpoff
+	}
+
+	DriversIncense: {
+		DisplayName: Driver's Incense
+		Tooltip: Permanently increases mount speed by 10%
+		MunchiesExplanation: Shimmer an otherwordly vehicle's unlocker
+	}
+
+	BlueCatacombBrick: {
+		DisplayName: Синий Кирпич Катакомб
+		Tooltip: ""
+	}
+
+	GreenCatacombBrick: {
+		DisplayName: Зелёный Кирпич Катакомб
+		Tooltip: ""
+	}
+
+	PinkCatacombBrick: {
+		DisplayName: Розовый Кирпич Катакомб
+		Tooltip: ""
+	}
+
+	BlueCatacombBrickWall: {
+		DisplayName: Blue Catacomb Brick Wall
+		Tooltip: ""
+	}
+
+	BlueCatacombChair: {
+		DisplayName: Синий Стул Катакомб
+		Tooltip: ""
+	}
+
+	BlueshroomStem: {
+		DisplayName: Ножка Голубого Гриба
+		Tooltip: ""
+	}
+
+	Cryptite: {
+		DisplayName: Криптит
+		Tooltip: ""
+	}
+
+	GreenCatacombBrickWall: {
+		DisplayName: Green Catacomb Brick Wall
+		Tooltip: ""
+	}
+
+	GreenCatacombChair: {
+		DisplayName: Зелёный Стул Катакомб
+		Tooltip: ""
+	}
+
+	MonsoonCryptite: {
+		DisplayName: Мусонный Криптит
+		Tooltip: ""
+	}
+
+	MossyGreenCatacombBrick: {
+		DisplayName: Замшелый Зелёный Кирпич Катакомб
+		Tooltip: ""
+	}
+
+	PinkCatacombBrickWall: {
+		DisplayName: Pink Catacomb Brick Wall
+		Tooltip: ""
+	}
+
+	PinkCatacombChair: {
+		DisplayName: Розовый Стул Катакомб
+		Tooltip: ""
+	}
+
+	WornBlueCatacombBrick: {
+		DisplayName: Worn Blue Catacomb Brick
+		Tooltip: ""
+	}
+
+	BlueCatacombTable: {
+		DisplayName: Синий Стол Катакомб
+		Tooltip: ""
+	}
+
+	GreenCatacombTable: {
+		DisplayName: Зелёный Стол Катакомб
+		Tooltip: ""
+	}
+
+	PinkCatacombTable: {
+		DisplayName: Розовый Стол Катакомб
+		Tooltip: ""
+	}
+
+	BlueCatacombLamp: {
+		DisplayName: Синяя Лампа Катакомб
+		Tooltip: ""
+	}
+
+	GreenCatacombLamp: {
+		DisplayName: Зелёная Лампа Катакомб
+		Tooltip: ""
+	}
+
+	PinkCatacombLamp: {
+		DisplayName: Розовая Лампа Катакомб
+		Tooltip: ""
+	}
+
+	DreadShell: {
+		DisplayName: Dread Shell
+		Tooltip:
+			'''
+			10% chance to block attacks
+			Releases a blast of red ink that confuses enemies when damage is blocked
+			'''
+	}
+
+	StarlitOre: {
+		DisplayName: Звёздная руда
+		Tooltip: ""
+	}
+
+	StarlitBar: {
+		DisplayName: Звёздная слиток
+		Tooltip: ""
+	}
+
+	Electroshroom: {
+		DisplayName: Электрогриб
+		Tooltip: ""
+	}
+
+	RefinedCyanite: {
+		DisplayName: Refined Cyanite
+		Tooltip: ""
+	}
+
+	BadassSunglasses: {
+		DisplayName: @%#$нные очки
+		Tooltip:
+			'''
+			Rapidly builds up critical strike chance
+			Landing a non-lethal hit resets the critical strike chance bonus
+			'''
+
+		KillMessages: {
+			0: Nice!
+			1: Sick!
+			2: Gnarly!
+		}
+	}
+
+	BlueCatacombDoor: {
+		DisplayName: Blue Catacomb Door
+		Tooltip: ""
+	}
+
+	GreenCatacombDoor: {
+		DisplayName: Green Catacomb Door
+		Tooltip: ""
+	}
+
+	PinkCatacombDoor: {
+		DisplayName: Pink Catacomb Door
+		Tooltip: ""
+	}
+
+	Ectoblade: {
+		DisplayName: Эктомеч
+		Tooltip: ""
+	}
+
+	Houndboom: {
+		DisplayName: Houndboom
+		Tooltip: ""
+	}
+
+	ImpulseShackles: {
+		DisplayName: Impulse Shackles
+		Tooltip: Empowers your first jump
+	}
+
+	Dunebarrel: {
+		DisplayName: Dunebarrels
+		Tooltip: ""
+	}
+
+	Quasar: {
+		DisplayName: Квазар
+		Tooltip: ""
+	}
+
+	StarlightStaff: {
+		DisplayName: Посох звёздного света
+		Tooltip: ""
+	}
+
+	BluegrassSeeds: {
+		DisplayName: Семена голубой травы
+		Tooltip: ""
+	}
+
+	CosmicJellyfishMask: {
+		DisplayName: Маска Космической Медузы
+		Tooltip: ""
+	}
+
+	WindCape: {
+		DisplayName: Windstrumican Cape
+		Tooltip:
+			'''
+			10% increased movement speed
+			Wind follows your step
+			'''
+	}
+
+	SandberusBag: {
+		DisplayName: Treasure Bag (Sandberus)
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+	}
+
+	RazedWine: {
+		DisplayName: Razed Wine
+		Tooltip:
+			'''
+			Increases all damage by 10%
+			Automatically throws glass bottles at nearby enemies
+			Struck enemies have increased damage, decreased defense, and take damage over time
+			'''
+	}
+
+	GravityBoots: {
+		DisplayName: Zero Gravity Dancers
+		Tooltip:
+			'''
+			Hold jump to reduce gravity
+			Increased air mobility
+			'Take a walk on cosmic lane!'
+			'''
+	}
+
+	Necromatome: {
+		DisplayName: Книга Омертвления
+		Tooltip: Испускает облака миазмы
+	}
+
+	Fishbacker: {
+		DisplayName: Fishbacker
+		Tooltip:
+			'''
+			8 summon tag damage
+			Can reflect projectiles
+			Reflected projectiles tag enemy on hit
+			'''
+	}
+
+	CrimsonAntidote: {
+		DisplayName: Crimson Antidote
+		Tooltip:
+			'''
+			Healing items heal 20% more HP
+			Upon using a healing item, grants massively increased life regeneration for 4 seconds
+			Reduces the effect of Potion Sickness by 15%
+			'''
+	}
+
+	CorruptAntidote: {
+		DisplayName: Corrupt Antidote
+		Tooltip:
+			'''
+			Mana items grant 20% more Mana
+			Upon using a Mana Item, grants -25% Mana Usage and +25% Magic Damage for 4 seconds
+			Reduces the effect of Mana Sickness by 15%
+			'''
+	}
+
+	JumpingBean: {
+		DisplayName: Прыгучий Боб
+		Tooltip:
+			'''
+			Увеличивает скорость движения на 8 %
+			Незначительно увеличивает высоту прыжка
+			'''
+	}
+
+	CupOJoe: {
+		DisplayName: Cup O' Joe
+		Tooltip: Grants immunity to non-damaging Ice Themed Debuffs
+	}
+
+	RooksBrew: {
+		DisplayName: Rooks Brew
+		Tooltip:
+			'''
+			Grants immunity to non-damaging Ice Themed Debuffs
+			8% increased Movement Speed
+			Slightly increases Jump Height
+			Double tap any direction while on the ground to start a dash you can control for a short while
+			'''
+	}
+
+	CyaniteBoomerang: {
+		DisplayName: Cyanite Boomerang
+		Tooltip: ""
+	}
+
+	CyaniteSpear: {
+		DisplayName: Cyanite Spear
+		Tooltip: ""
+	}
+
+	GalacticJellyBean: {
+		DisplayName: Galactic Jelly Bean
+		Tooltip: Summons a cosmic hand to attack your foes
+	}
+
+	EoWTail: {
+		DisplayName: Tail of the Eater
+		Tooltip:
+			'''
+			Splits your life into two
+			Fatal damage does not carry onto next life
+			This can only happen every 1 minute
+			Cooldown only reduces when you have max life
+			'''
+		TailLost: TAIL LOSS
+	}
+
+	Prophylaxis: {
+		DisplayName: Профилактика
+		Tooltip:
+			'''
+			Using a healing item causes you to bleed out
+			Losing life gained and reducing damage taken
+			'''
+	}
+
+	BottomlessSandBucket: {
+		DisplayName: Бездонное ведро песка
+		Tooltip:
+			'''
+			Содержит бесконечное количество песка
+			Можно высыпать
+			'''
+	}
+
+	KSGland: {
+		DisplayName: Slime Secretion Gland
+		Tooltip:
+			'''
+			Creates a slimy coating which absorbs half of all incoming damage
+			Coating massively increases your hitbox size
+			'''
+	}
+
+	KeepersShovel: {
+		DisplayName: Лопата Могильщика
+		Tooltip: Выкапывает скелетов, которые сражаются за вас
+	}
+
+	PetPigSummon: {
+		DisplayName: Rubber Bacon
+		Tooltip: Summons a balloon pig with a penchant for loot
+	}
+
+	EoCInsight: {
+		DisplayName: Eye of Eldritch Insight
+		Tooltip: Show love to see what should not be seen
+	}
+
+	BarOfSoap: {
+		DisplayName: Мыло
+		Tooltip:
+			'''
+			Instantly purifies all Evil Tiles in a 20 tile radius
+			Grants the Squeaky Clean buff for 4 minutes
+			Deal damage to increase charge. Every hit of damage grants 1% charge
+			Press {0} to use when at full charge
+			'A strange, self-cleaning bar of solidified fat...'
+			'''
+	}
+
+	AceOfHearts: {
+		DisplayName: Ace Of Hearts
+		Tooltip:
+			'''
+			Grants Invulnerability
+			All damage taken during invulnerability is inflicted after effect ends
+			Can be used indefinitely, but effect duration is reduced per use until deactivation
+			Press {0} to use
+			'Jackpot!'
+			'''
+	}
+
+	GravekeeperBag: {
+		DisplayName: Treasure Bag (Gravekeeper)
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+	}
+
+	AsterKnuckle: {
+		Tooltip: "'RECONSTRUCT WHAT!?'"
+		DisplayName: Aster-Knuckle
+	}
+
+	WindTrident: {
+		Tooltip: Hold down the attack button to charge the trident, readying a more powerful attack
+		DisplayName: Wind Trident
+	}
+
+	IncrediblySharpKnife: {
+		DisplayName: Невероятно острый нож
+		Tooltip:
+			'''
+			Summons a ring of shadow knives to slash through your enemies
+			Can be used indefinitely, but costs you 20% of your max health per use
+			Press {0} to use
+			'Cutting edge technology.'
+			'''
+	}
+
+	StrawmanItem: {
+		DisplayName: Strawman
+		Tooltip:
+			'''
+			Current Mode:
+			Spawns a strawman
+			Right Click while in inventory to change to next mode
+			Right Click while holding Shift in inventory to return previous mode
+			'''
+
+		DummyType: {
+			0: Perfect
+			1: Heavy
+			2: Windswept
+			3: Thorny
+			4: Terminal
+			5: Armed
+			6: Demoted
+		}
+
+		Mode: {
+			0: DEFAULT
+			1: 50 DEF
+			2: KNOCKBACK
+			3: CONTACT DAMAGE
+			4: KILLABLE
+			5: RANGED DAMAGE
+			6: NOT A BOSS
+		}
+	}
+
+	BloodPact: {
+		DisplayName: Blood Pact
+		Tooltip:
+			'''
+			Hold down {0} to rapidly drain your own blood
+			Once released, this will summon a powerful spirit to help you in battle
+			The duration and damage this spirit deals increases as you sacrifice more blood
+			You may not summon more than one spirit at the same time
+			'Blood for the blood god.'
+			'''
+	}
+
+	CyaniteHelm: {
+		SetBonus: Mods.ITD.Items.CyaniteHelm.SetBonus
+		DisplayName: Cyanite Helm
+		Tooltip: ""
+	}
+
+	CyaniteHood: {
+		SetBonus: Mods.ITD.Items.CyaniteHood.SetBonus
+		DisplayName: Cyanite Hood
+		Tooltip: ""
+	}
+
+	CyaniteMask: {
+		SetBonus: Mods.ITD.Items.CyaniteMask.SetBonus
+		DisplayName: Cyanite Mask
+		Tooltip: ""
+	}
+
+	CyaniteGreaves: {
+		DisplayName: Cyanite Greaves
+		Tooltip: ""
+	}
+
+	CyanitePlating: {
+		DisplayName: Cyanite Plating
+		Tooltip: ""
+	}
+
+	HardmodeGravekeeperBag: {
+		DisplayName: Treasure Bag (Gravekeeper - Rematch)
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+	}
+
+	DuneSkull: {
+		DisplayName: Dune Skull
+		Tooltip: Summons Sandberus during a sandstorm
+	}
+
+	CyanideArrow: {
+		DisplayName: Cyanide Arrow
+		Tooltip: ""
+	}
+
+	CyanideBullet: {
+		DisplayName: Cyanide Bullet
+		Tooltip: ""
+	}
+
+	FrostichorArrow: {
+		DisplayName: Frostichor Arrow
+		Tooltip: ""
+	}
+
+	FrostichorBullet: {
+		DisplayName: Frostichor Bullet
+		Tooltip: ""
+	}
+
+	CyaniteHammer: {
+		DisplayName: Cyanite Hammer
+		Tooltip: ""
+	}
+
+	CyanitePickaxe: {
+		DisplayName: Cyanite Pickaxe
+		Tooltip: ""
+	}
+
+	HunterrGreatbow: {
+		DisplayName: Hun-Terr Greatbow
+		Tooltip:
+			'''
+			Hold Right Click to charge up an arrow
+			Fully-charged arrow can topple enemies
+			While not charging, the bow can block projectiles
+			'''
+	}
+
+	Calcium: {
+		DisplayName: Кальций
+		Tooltip:
+			'''
+			'Douse in milk every 48 hours.'
+			[c/{0}:Latch Effect:] Grants passive regeneration
+			'''
+	}
+
+	CopperMandibles: {
+		DisplayName: Copper Mandibles
+		Tooltip:
+			'''
+			'Not to be confused with Steel Mandibles'
+			[c/{0}:Latch Effect:] Increases damage dealt depending on the target's remaining life
+			'''
+	}
+
+	Winch: {
+		DisplayName: Winch
+		Tooltip:
+			'''
+			Snaptraps retract faster
+			+10% Snaptrap Length
+			'''
+	}
+
+	CharmOfTheAccursed: {
+		DisplayName: Charm of the Accursed
+		Tooltip: Releases damaging spirits after taking 100 damage
+	}
+
+	Chainwhip: {
+		DisplayName: Chainwhip
+		Tooltip:
+			'''
+			Press RMB or LMB to fire a snaptrap
+			RMB to whip enemies while a snaptrap is latched
+			'It's a chain, AND a whip!'
+			[c/{0}:Latch Effect:] Increases summon damage and movement speed over a course of 20 seconds
+			'''
+	}
+
+	GrabbOMatic20000: {
+		DisplayName: Grabb-O-Matic 20000
+		Tooltip: ""
+	}
+
+	BlackMoldItem: {
+		DisplayName: Black Mold
+		Tooltip: Not great for the lungs
+	}
+
+	BlackFlask: {
+		DisplayName: Black Flask
+		Tooltip: Melee and whip attacks deal damage over time to enemies
+	}
+
+	WheelerTrashCan: {
+		DisplayName: Wheeler Trash Can
+		Tooltip: ""
+	}
+
+	AlloyHeadgear: {
+		SetBonus: Increases ranged damage by 8%
+		DisplayName: Alloy Headgear
+		Tooltip: ""
+	}
+
+	AlloyVisor: {
+		SetBonus: Increases magic damage by 6%
+		DisplayName: Alloy Visor
+		Tooltip: ""
+	}
+
+	ElectrumVisor: {
+		SetBonus: Hitting enemies releases chain lightning
+		DisplayName: Electrum Visor
+		Tooltip: 8% increased movement speed
+	}
+
+	ElectrumChestplate: {
+		DisplayName: Electrum Chestplate
+		Tooltip: 8% increased movement speed
+	}
+
+	ElectrumLeggings: {
+		DisplayName: Electrum Leggings
+		Tooltip: 8% increased movement speed
+	}
+
+	RhodiumVisor: {
+		SetBonus: Mods.ITD.Items.RhodiumVisor.SetBonus
+		DisplayName: Rhodium Visor
+		Tooltip: 4% increased critical strike chance
+	}
+
+	RhodiumChestplate: {
+		DisplayName: Rhodium Chestplate
+		Tooltip: 4% increased critical strike chance
+	}
+
+	RhodiumLeggings: {
+		DisplayName: Rhodium Leggings
+		Tooltip: 4% increased critical strike chance
+	}
+
+	DespoticSuperMeleeSword: {
+		DisplayName: Бессмертный Бедлам
+		Tooltip: ""
+	}
+
+	Frostgrip: {
+		DisplayName: Frostgrip
+		Tooltip:
+			'''
+			Continually slows down struck enemies
+			'Not to be used in temperatures above 0 kelvins.'
+			[c/{0}:Latch Effect:] Encases the target in ice, dealing heavy damage and throwing ice shards
+			'''
+	}
+
+	SmallSnowpoffItem: {
+		DisplayName: Small Snowpoff Item
+		Tooltip: ""
+	}
+
+	LargeSnowpoffItem: {
+		DisplayName: Large Snowpoff Item
+		Tooltip: ""
+	}
+
+	PocketSyringe: {
+		/* Tooltip:
+			'''
+			Shares your debuffs with enemies
+			Deals increased damage depending on your life regen
+			Bleeding deals increased damage to enemies
+			''' */
+		// DisplayName: Pocket Syringe
+	}
+
+	AlloyBar: {
+		// DisplayName: Alloy Bar
+		// Tooltip: ""
+	}
+}
+
+Projectiles: {
+	ElectrumSpearProjectile.DisplayName: Electrum Spear
+	CosmicSludgeBomb.DisplayName: Cosmic Sludge Bomb
+	CosmicVoidShard.DisplayName: Cosmic Void Shard
+	EmberSlash.DisplayName: Ember Slasher
+
+	DespoticSnaptrapProjectile: {
+		DisplayName: Maw of the Deep
+		OneTimeLatchMessage: Munchity munch...
+	}
+
+	SnaptrapProjectile: {
+		DisplayName: Snaptrap
+		OneTimeLatchMessage: +{0}% crit chance!
+	}
+
+	VocalZeroProjectile: {
+		DisplayName: Vocal Zero
+		OneTimeLatchMessage: +{0}% damage!
+	}
+
+	CosmicJamPet.DisplayName: Jammyfish
+	SniptrapProjectile.DisplayName: Sniptrap
+
+	MrSnapkinsProjectile: {
+		DisplayName: Mr. Snapkins
+		OneTimeLatchMessage: Commence the bowtying...
+	}
+
+	SnapkinsBowtie.DisplayName: Snapkins Bowtie
+	TheScorpionProjectile.DisplayName: The Scorpion
+	CosmicJellyfish_Hand.DisplayName: Космическая Медуза
+	DespoticJawProjectile.DisplayName: Despotic Jaw
+
+	SoulsnapperProjectile: {
+		DisplayName: Soulsnapper
+		OneTimeLatchMessage: Spitting...
+	}
+
+	CrimeratrapProjectile: {
+		OneTimeLatchMessage: Spitting...
+		DisplayName: Crimeratrap
+	}
+
+	EvilSpitProjectile.DisplayName: Evil Spit
+	CicadianTreeEnd.DisplayName: Cicadian Tree End
+	IcyBoulder.DisplayName: Icy Boulder
+	LightningStaffStrike.DisplayName: Молния
+
+	VenusSnaptrapProjectile: {
+		OneTimeLatchMessage: Poisoned!
+		DisplayName: Venus Snaptrap
+	}
+
+	CalciumProjectile: {
+		OneTimeLatchMessage: Vampirism!
+		DisplayName: Calcium
+	}
+
+	WingedSnowpoffPet.DisplayName: Летучая ряженка
+	WRipperSlash.DisplayName: Wormhole Ripper
+	WRipperRift.DisplayName: Wormhole Ripper
+	GhostlyBlade.DisplayName: Ghostly Blade
+	DunebarrelRightGun.DisplayName: Dunebarrel Right Gun
+	ElectrifiedArrow.DisplayName: Electrified Arrow
+	StarlightProj.DisplayName: Starlight Proj
+	RhodiumSwordBeam.DisplayName: Rhodium Sword Beam
+	ElectrumSpearBeam.DisplayName: Electrum Spear Beam
+	StarlightStaffProj.DisplayName: Collapsing Star
+	BlankExplosion.DisplayName: Blank Explosion
+	DunebarrelRotate.DisplayName: Dunebarrel
+	SandSpike.DisplayName: Песчаный Шип
+	SandberusSkull.DisplayName: Sandberus Skull
+	SandBoulder.DisplayName: Песчаный Булыжник
+	CosmicJellyfishMiniProj.DisplayName: Космическая Медуза
+	CosmicLightningOrb.DisplayName: Шаровая Молния
+	CosmicRay.DisplayName: Космический Луч
+	CosmicRayWarn.DisplayName: Космический Луч
+	TouhouBullet.DisplayName: Космическая Сфера
+	RazedWineBottle.DisplayName: Razed Wine Bottle
+	EmberSlashOld.DisplayName: Ember Slash Old
+	NecromatomeProjectile.DisplayName: Омертвление
+	FishbackerProj.DisplayName: Fishbacker
+	CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang
+	CyaniteSpearProjectile.DisplayName: Cyanite Spear
+	GalacticJellyBeanHand.DisplayName: Космическая Рука
+	FishbackerReflectProj.DisplayName: How did you get this?
+	SuffocationAura.DisplayName: Аура Удушения
+	TheUnburied.DisplayName: The Unburied
+	PetPigPet.DisplayName: Balloon Pig
+	GasLeak.DisplayName: Gas Leak
+	Necroskull.DisplayName: Necroskull
+	SoulLeak.DisplayName: Soul Leak
+	NecroSkull.DisplayName: Necro Skull
+	SoulSkull.DisplayName: Soul Skull
+	CosmicLightningBlast.DisplayName: Cosmic Lightning Blast
+	AsterBlasterBlast.DisplayName: Aster Blaster Blast
+	WindTridentProjectile.DisplayName: Wind Trident Projectile
+	ShadowKnife.DisplayName: Нож Тени
+	BloodPactCut.DisplayName: Blood Pact Cut
+	BloodPactSpirit.DisplayName: Blood Pact Spirit
+	CyaniteIceShard.DisplayName: Cyanite Ice Shard
+	CyanideArrow.DisplayName: Cyanide Arrow
+	CyanideBullet.DisplayName: Cyanide Bullet
+	FrostichorArrow.DisplayName: Frostichor Arrow
+	FrostichorBullet.DisplayName: Frostichor Bullet
+	CosmicJellyfish_LeftHand.DisplayName: Cosmic Jellyfish_ Left Hand
+	CosmicJellyfish_RightHand.DisplayName: Cosmic Jellyfish_ Right Hand
+	HunterrGreatbowProj.DisplayName: Hunterr Greatbow
+	HunterrGreatarrow.DisplayName: Hunterr Greatarrow
+
+	CopperMandiblesProjectile: {
+		OneTimeLatchMessage: Infestation!
+		DisplayName: Copper Mandibles
+	}
+
+	MiniMandible.DisplayName: Mini Mandible
+	AccursedSpirit.DisplayName: Accursed Spirit
+
+	ChainwhipSnaptrapProjectile: {
+		OneTimeLatchMessage: Agility!
+		DisplayName: Chainwhip Snaptrap Projectile
+	}
+
+	ChainwhipWhip.DisplayName: Chainwhip Whip
+	CosmicJellyfishBlackholeAura.DisplayName: Cosmic Jellyfish Blackhole Aura
+	DespoticSuperMeleeProj.DisplayName: Despotic Super Melee Proj
+	CosJelHandTest.DisplayName: Cos Jel Hand Test
+
+	FrostgripProjectile: {
+		OneTimeLatchMessage: Ice Cold!
+		DisplayName: Frostgrip Projectile
+	}
+
+	FrostgripIceCube.DisplayName: Frostgrip Ice Cube
+	FrostgripIcicle.DisplayName: Frostgrip Icicle
+	// PocketSyringeProjectile.DisplayName: Pocket Syringe Projectile
+	// WheelerTrashProj.DisplayName: Wheeler Trash Proj
+}
+
+NPCs: {
+	CosmicJellyfish: {
+		DisplayName: Космическая Медуза
+		SpawnWarning: It's going to be a wiggly night...
+	}
+
+	FloralDevourer.DisplayName: Садовый Поедатель
+	FloralDevourerSegment.DisplayName: Садовый Поедатель
+	EmberlionPiercer.DisplayName: Жар-лев пронзатель
+	DesertBat.DisplayName: Пустынная мышь
+	EmberlionMiner.DisplayName: Жар-лев шахтёр
+
+	Cicadian: {
+		DisplayName: Cicadian
+		Bestiary: A crab which has developed a symbiotic relationship with the Blueshrooms. The crab can lure prey easier while the Blueshroom gets protection.
+	}
+
+	CicadianTree.DisplayName: Cicadian Tree
+
+	CicadianHive: {
+		Bestiary: When a female cicadian pupates, it grows wings and experiences rapid growth, becoming rotund and awkward. Once shedding its stomach and becoming hollow, the Hive will rapidly produce larvae- until eventually starving to death.
+		DisplayName: Cicadian Hive
+	}
+
+	FlamingSkull.DisplayName: Пылающий череп
+	AmbushBones.DisplayName: Ambush Bones
+	ShroomishSlime.DisplayName: Shroomish Slime
+	CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
+	Sandberus.DisplayName: Sandberus
+	KSGlandNPC.DisplayName: Slimy Coating
+	Gravekeeper.DisplayName: Gravekeeper
+	HauntedTombstone.DisplayName: Haunted Tombstone
+	GhastlyTombstone.DisplayName: Ghastly Tombstone
+	StrawmanDummy.DisplayName: Strawman
+
+	RecruitedNPC: {
+		DisplayName: Recruited N P C
+
+		TownNPCMood: {
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
+			LikeNPC_Princess: I like {NPCName}.
+			Princess_LovesNPC: I like {NPCName}.
+		}
+	}
+
+	SmallSnowpoff.DisplayName: Мелкая ряженка
+	LargeSnowpoff.DisplayName: Крупная ряженка
+}
+
+Buffs: {
+	CosmicJamBuff: {
+		Description: COME ON AND JAM!
+		DisplayName: Jammyfish
+	}
+
+	SandyBuff: {
+		DisplayName: Песок в носках
+		Description: Чешется как.
+	}
+
+	SnowyLanternBuff: {
+		DisplayName: Летучая ряженка
+		Description: Летучая ряженка освещает твой путь
+	}
+
+	ToastedBuff: {
+		DisplayName: Toasted Buff
+		Description: aaaaAAAaaaAAAAAH it BURNS!!!!
+	}
+
+	BloodlettingBuff: {
+		DisplayName: Bloodletting
+		Description: Your blood is shielding you from damage
+	}
+
+	CrimsonAntidoteBuff: {
+		DisplayName: Crimson Antidote
+		Description: Massively increased life regeneration
+	}
+
+	CorruptAntidoteBuff: {
+		DisplayName: Corrupt Antidote
+		Description: -25% Mana Usage and +25% Magic Damage
+	}
+
+	FishbackerTagDebuff: {
+		DisplayName: Fishbacker Tag Debuff
+		Description: Tag, you're it!
+	}
+
+	PetPigBuff: {
+		DisplayName: Balloon Pig
+		Description: A balloon pig follows you, showing you nearby loot
+	}
+
+	NecrosisBuff: {
+		DisplayName: Омертвление
+		Description: Быстрая потеря здоровья
+	}
+
+	SoulRotBuff: {
+		DisplayName: Гниение Души
+		Description: Быстрая потеря здоровья
+	}
+
+	FavorFatigue: {
+		DisplayName: Favor Fatigue
+		Description: Cannot use favor abilities
+	}
+
+	SqueakyClean: {
+		DisplayName: Squeaky Clean
+		Description:
+			'''
+			Grants immunity to various debuffs
+			Decreased enemy spawn rate
+			'''
+	}
+
+	ToppledDebuff: {
+		DisplayName: Toppled
+		Description: KB
+	}
+
+	MelomycosisBuff: {
+		DisplayName: Melomycosis
+		Description: Deals increased damage based on your defense
+	}
+
+	WeaponImbueMelomycosis: {
+		DisplayName: Weapon Imbue: Melomycosis
+		Description: Melee attacks deal damage over time to enemies
+	}
+
+	FrostgripChilledBuff: {
+		DisplayName: Frostgrip Chilled Buff
+		Description: Mods.ITD.Buffs.FrostgripChilledBuff.Description
+	}
+
+	BleedingII: {
+		DisplayName: Кровотечение II
+		// Description: Mods.ITD.Buffs.BleedingII.Description
+	}
+
+	FishbackerReflectTagDebuff: {
+		// DisplayName: Fishbacker Reflect Tag Debuff
+		// Description: Mods.ITD.Buffs.FishbackerReflectTagDebuff.Description
+	}
+}
+
+DeathMessage: {
+	Necrosis: succumbed to necrosis.
+	SoulRot: became a soulless husk.
+	IncrediblySharpKnife: cut a little too deep.
+	BloodPact: ran out of blood.
+	KSGlandAftershock: was crushed by the aftershock.
+}
+
+WorldGen: {
+	BluesoilPassMessage: Blueifying the Underground Tundra...
+	DeepDesertPassMessage: Compressing the Desert...
+}
+
+Tiles: {
+	BlueshroomSapling.MapEntry: Blueshroom Primordium
+	CyaniteOreTile.MapEntry: Cyanite
+	BlueshroomTree.MapEntry: Giant Blueshroom
+	StarlitOreTile.MapEntry: Starlit Ore
+}
+
+Biomes: {
+	BlueshroomGrovesBiome: {
+		TownNPCDialogueName: Глубины голубых грибов
+		DisplayName: Глубины голубых грибов
+	}
+
+	BlueshroomGrovesSurfaceBiome: {
+		TownNPCDialogueName: Поверхность голубых грибов
+		DisplayName: Поверхность голубых грибов
+	}
+
+	DeepDesertBiome: {
+		DisplayName: Глубины пустыни
+		TownNPCDialogueName: Глубины пустыни
+	}
+}
+
+Keybinds.UseFavor.DisplayName: Использовать сувенир
+
+Achievements: {
+	CosmicConundrum: {
+		Name: Cosmic Conundrum
+		Description: Defeat the Cosmic Jellyfish, mutated aquatic alien from outer space, for the first time.
+	}
+
+	+PARRY: {
+		Name: +PARRY
+		Description: Parry the Cosmic Jellyfish’s slap attack.
+	}
+}
+
+UI: {
+	FavorSlot.MouseHoverName: Сувенир
+	RecruitmentButton.MouseHoverName: Recruit
+	// UnrecruitmentButton.MouseHoverName: Dismiss
+}
