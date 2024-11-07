@@ -86,6 +86,10 @@ namespace ITD.Particles
         {
             return true;
         }
+        public virtual Color GetAlpha()
+        {
+            return Lighting.GetColor(position.ToTileCoordinates());
+        }
         public (Rectangle, Vector2) GetFramingData()
         {
             int framesVertical = ParticleSystem.particleFramesVertical[type];
@@ -114,7 +118,7 @@ namespace ITD.Particles
                 data.Item1 = sourceRect.Value;
             if (origin != null)
                 data.Item2 = origin.Value;
-            Color drawColor = color == null ? Color.White : color.Value;
+            Color drawColor = color == null ? GetAlpha() : color.Value;
             float drawRotation = rotation == null ? this.rotation : 0f;
             float drawScale = scale == null ? this.scale : 1f;
 

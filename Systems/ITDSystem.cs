@@ -14,6 +14,7 @@ using ITD.Content.Items.Other;
 using ITD.Content.Items.Weapons.Melee;
 using ITD.Utilities;
 using ITD.Systems.Recruitment;
+using ITD.Particles;
 
 namespace ITD.Systems
 {

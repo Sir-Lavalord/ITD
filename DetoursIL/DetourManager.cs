@@ -25,6 +25,11 @@ namespace ITD.DetoursIL
                 instance.Load();
             }
         }
+        public override void SetStaticDefaults()
+        {
+            foreach (DetourGroup instance in detours)
+                instance.SetStaticDefaults();
+        }
         public override void Unload()
         {
             foreach(DetourGroup instance in detours)

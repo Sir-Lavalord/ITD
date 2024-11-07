@@ -9,6 +9,7 @@ using ITD.Skies;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.Graphics.Shaders;
+using System.Collections.Generic;
 
 namespace ITD
 {
@@ -17,6 +18,7 @@ namespace ITD
         public static ITD Instance;
         public ITD() => Instance = this;
         public const string BlankTexture = "ITD/Content/BlankTexture";
+        public static readonly Dictionary<string, ArmorShaderData> ITDArmorShaders = [];
 
         internal Mod itdMusic = null;
 
@@ -44,6 +46,17 @@ namespace ITD
             Asset<Effect> screen = ModContent.Request<Effect>(path, AssetRequestMode.ImmediateLoad);
             Filters.Scene[name] = new Filter(new ScreenShaderData(screen, name + "Pass"), EffectPriority.High);
             Filters.Scene[name].Load();
+        }
+        public static ArmorShaderData LoadArmorShader(string name, string path, string? uImage = null)
+        {
+            Asset<Texture2D> overlay = null;
+            if (uImage != null)
+                overlay = ModContent.Request<Texture2D>(uImage, AssetRequestMode.ImmediateLoad);
+            ArmorShaderData data = new(ModContent.Request<Effect>(path), name + "Pass");
+            if (overlay != null)
+                data = data.UseImage(overlay);
+            ITDArmorShaders[name] = data;
+            return data;
         }
         public override void Load()
         {
@@ -73,6 +86,7 @@ namespace ITD
         }
         public override void Unload()
         {
+            ITDArmorShaders?.Clear();
             itdMusic = null;
             wikithis = null;
             bossChecklist = null;

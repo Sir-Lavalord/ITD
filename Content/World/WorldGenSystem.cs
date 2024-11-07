@@ -12,6 +12,7 @@ using ITD.Particles.Testing;
 using ITD.Content.Tiles.Misc;
 using ITD.Utilities;
 using Terraria.ObjectData;
+using ITD.Particles.CosJel;
 
 namespace ITD.Content.World
 {
@@ -60,8 +61,8 @@ namespace ITD.Content.World
         {
             // test UI particle (change particle.canvas in particle type)
             //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
-            // test world particle (change particle.canvas in particle type)
-            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+            //test world particle (change particle.canvas in particle type)
+            //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
             /* test triangle creation
             testPoints.Add(pos);

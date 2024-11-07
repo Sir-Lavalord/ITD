@@ -51,6 +51,11 @@ namespace ITD.Particles
         {
             particles.RemoveAll(x => x.GetType() == typeof(T));
         }
+        public override void SetStaticDefaults()
+        {
+            foreach (ITDParticle prototype in particlePrototypes)
+                prototype.SetStaticDefaults();
+        }
         public override void Load()
         {
             if (Main.dedServ)
@@ -72,7 +77,6 @@ namespace ITD.Particles
                 particleFramesVertical[prototype.type] = 1;
                 particleFramesHorizontal[prototype.type] = 1;
                 particleShaders[prototype.type] = null;
-                prototype.SetStaticDefaults();
             }
             On_Main.DrawSuperSpecialProjectiles += DrawParticlesUnderProjectiles; // subscribe to events for drawing
             On_Main.DrawCachedProjs += DrawParticlesOverProjectiles;
@@ -126,7 +130,8 @@ namespace ITD.Particles
                     if (shader != null)
                     {
                         (Rectangle source, Vector2 origin) = particle.GetFramingData();
-                        shader.Apply(null, null);
+                        DrawData dd = new(particle.Texture, particle.position, source, particle.GetAlpha(), particle.rotation, origin, particle.scale, SpriteEffects.None);
+                        shader.Apply(null, dd);
                     }
                     particle.DrawParticle(Main.spriteBatch);
                 }

@@ -958,6 +958,11 @@ Items: {
 		// DisplayName: Alloy Bar
 		// Tooltip: ""
 	}
+
+	CosmicDye: {
+		// DisplayName: Cosmic Dye
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
