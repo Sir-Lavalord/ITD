@@ -41,7 +41,7 @@ namespace ITD.Systems.Recruitment
             {
                 Recruiter = TownNPCRecruitmentLoader.TryFindRecruiterOf(originalType).whoAmI;
             }
-            return Main.player[(int)Recruiter].GetITDPlayer().recruitmentData;
+            return Main.player[Recruiter].GetITDPlayer().recruitmentData;
         }
         public override void SendExtraAI(BinaryWriter writer)
         {

@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.Graphics.Shaders;
 using System.Collections.Generic;
+using ITD.Systems.Recruitment;
+using Terraria.ID;
 
 namespace ITD
 {
@@ -38,6 +40,8 @@ namespace ITD
                 dialogueTweak.Call("OnPostPortraitDraw", DrawSomething);
             }
             ExternalModSupport.Init();
+            if (!Main.dedServ)
+                LoadRecruitmentTextures();
         }
         public override object Call(params object[] args) => ModCalls.Call(args);
         public override void HandlePacket(BinaryReader reader, int whoAmI) => NetSystem.HandlePacket(reader, whoAmI);
@@ -78,6 +82,29 @@ namespace ITD
             {
                 wikithis?.Call("AddModURL", this, "https://itdmod.fandom.com/wiki/{}");
             }
+        }
+        /// <summary>
+        /// I DON'T LIKE THE FLICKER THEY DO WHEN THEY'RE FIRST RECRUITED
+        /// </summary>
+        private void LoadRecruitmentTextures()
+        {
+            int[] canBeRecruited = TownNPCRecruitmentLoader.NPCsThatCanBeRecruited;
+            foreach (int i in canBeRecruited)
+            {
+                string path = $"ITD/Systems/Recruitment/{nameof(RecruitedNPC)}_{i}";
+                LoadRecruitmentTexture(path, i);
+            }
+            // "so what about modded NPCs?"
+            // this logic is handled in the Mod.Call to register a new NPC
+        }
+        public static void LoadRecruitmentTexture(string path, int i)
+        {
+            // load regular texture
+            ModContent.Request<Texture2D>(path);
+            // load shimmer texture if it exists (note: some mods might choose not to add a shimmer texture. in this case, use ModContent.RequestIfExists
+            // if an NPC is shimmered but there's no shimmer texture, it'll be automatically handled in the drawcode, so we don't have to worry about that
+            if (NPCID.Sets.ShimmerTownTransform[i])
+                ModContent.RequestIfExists<Texture2D>(path + "_Shimmer", out _);
         }
         private void DrawSomething(SpriteBatch sb, Color textColor, Rectangle panel)
         {

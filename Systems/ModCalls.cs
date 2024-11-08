@@ -59,6 +59,8 @@ namespace ITD.Systems
                 aiDelegate = args[3] as Action<NPC, Player>;
                 npcTexturePath = args[4].ToString();
                 TownNPCRecruitmentLoader.RegisterRecruitmentData(mod, npcType, aiDelegate, npcTexturePath);
+                if (!Main.dedServ)
+                    ITD.LoadRecruitmentTexture(npcTexturePath, npcType);
                 return true;
             }
             catch
