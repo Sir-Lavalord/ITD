@@ -13,10 +13,13 @@ using Terraria.DataStructures;
 using System.IO;
 using ITD.Particles;
 using ITD.Particles.Testing;
+using ITD.Content.NPCs;
+using ITD.Content.UI;
+using Terraria.Audio;
 
 namespace ITD.Systems.Recruitment
 {
-    public class RecruitedNPC : ModNPC
+    public class RecruitedNPC : ITDNPC
     {
         public int Recruiter = 0;
         public int originalType = -1;
@@ -55,6 +58,20 @@ namespace ITD.Systems.Recruitment
         public override void LoadData(TagCompound tag)
         {
             originalType = tag.GetInt("originalType");
+        }
+        public override void OnRightClick(Player player)
+        {
+            if (GetRecruitmentData().Recruiter != player.whoAmI)
+                return;
+            UnrecruitmentGui gui = UILoader.GetUIState<UnrecruitmentGui>();
+            if (gui.isOpen)
+            {
+                gui.Close();
+                SoundEngine.PlaySound(SoundID.MenuClose);
+                return;
+            }
+            gui.Open(NPC.Center, NPC.whoAmI);
+            SoundEngine.PlaySound(SoundID.MenuTick);
         }
         public override void ModifyTypeName(ref string typeName) => typeName = GetRecruitmentData().FullName.ToString();
 

@@ -12,6 +12,14 @@ namespace ITD.Content.NPCs
     public abstract class ITDNPC : ModNPC
     {
         public Rectangle HitboxTiles { get { return new Rectangle((int)(NPC.position.X / 16), (int)(NPC.position.Y / 16), NPC.width / 16, NPC.height / 16); } }
+        /// <summary>
+        /// Allows you to do stuff when this NPC is right clicked.
+        /// </summary>
+        /// <param name="player"></param>
+        public virtual void OnRightClick(Player player)
+        {
+
+        }
         public void CommonFrameLoop(int frameHeight, int maxFrame, float max = 5f, float increment = 1f)
         {
             NPC.frameCounter += increment;
