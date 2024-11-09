@@ -1,4 +1,5 @@
-﻿using ITD.Content.Projectiles.Unused;
+﻿using ITD.Content.Items.Dyes;
+using ITD.Content.Projectiles.Unused;
 using ITD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -7,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace ITD.Particles.CosJel
@@ -24,6 +27,7 @@ namespace ITD.Particles.CosJel
             scale = spawnScale * ProgressOneToZero;
             velocity *= 0.95f;
         }
+        public override Color GetAlpha() => Color.White;
         public void DrawOutline(SpriteBatch spriteBatch)
         {
             Texture2D tex = ModContent.Request<Texture2D>("ITD/Particles/Textures/SpaceMist_Outline").Value;

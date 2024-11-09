@@ -12,6 +12,10 @@ namespace ITD.DetoursIL
     {
         public static void LogError(string message) => ITD.Instance.Logger.Error(message);
         public static void DumpIL(ILContext il) => MonoModHooks.DumpIL(ITD.Instance, il);
+        public virtual void SetStaticDefaults()
+        {
+
+        }
         public virtual void Load()
         {
 

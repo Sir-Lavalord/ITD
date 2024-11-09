@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
+using ITD.Content.Rarities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,7 +16,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
         public override void SetDefaults()
         {
             Item.DefaultToSnaptrap(30, 10, ModContent.ProjectileType<DespoticSnaptrapProjectile>(), 12f, 8, 8900);
-            Item.rare = ItemRarityID.Purple;
+            Item.rare = ModContent.RarityType<DespoticRarity>();
             Item.value = Item.sellPrice(platinum: 1);
         }
         public override bool CanUseItem(Player player) => player.GetSnaptrapPlayer().CanUseSnaptrap;

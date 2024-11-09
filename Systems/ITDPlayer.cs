@@ -222,18 +222,14 @@ namespace ITD.Players
         }
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            // see if player just right clicked on a Recruited NPC to open up the Unrecruitment UI
+            // see if player just right clicked on an ITDNPC to call OnRightClick
             if (Main.mouseRight && Main.mouseRightRelease)
             {
                 foreach (var npc in Main.ActiveNPCs)
                 {
-                    if (npc.Hitbox.Contains(MousePosition.ToPoint()) && npc.ModNPC is RecruitedNPC rNPC && rNPC.GetRecruitmentData().Recruiter == Player.whoAmI)
+                    if (npc.Hitbox.Contains(MousePosition.ToPoint()) && npc.ModNPC is ITDNPC itdNPC)
                     {
-                        UnrecruitmentGui gui = UILoader.GetUIState<UnrecruitmentGui>();
-                        if (gui.isOpen)
-                            gui.Close();
-                        else
-                            gui.Open(npc.Center, npc.whoAmI);
+                        itdNPC.OnRightClick(Player);
                     }
                 }
             }

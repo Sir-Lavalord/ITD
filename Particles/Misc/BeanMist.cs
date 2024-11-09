@@ -23,6 +23,7 @@ namespace ITD.Particles.Misc
             scale = spawnScale * ProgressOneToZero;
             velocity *= 0.95f;
         }
+        public override Color GetAlpha() => Color.White;
         public void DrawOutline(SpriteBatch spriteBatch)
         {
             Texture2D tex = ModContent.Request<Texture2D>("ITD/Particles/Textures/BeanMist_Outline").Value;

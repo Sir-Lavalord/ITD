@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee;
+using ITD.Content.Rarities;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -16,7 +17,7 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.knockBack = 7f;
             Item.value = Item.sellPrice(platinum: 1);
-            Item.rare = ItemRarityID.Purple;
+            Item.rare = ModContent.RarityType<DespoticRarity>();
             Item.channel = true;
             Item.autoReuse = false;
             Item.noMelee = true;
