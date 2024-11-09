@@ -134,12 +134,11 @@ namespace ITD.Content.Projectiles.Hostile
                     {
                         Dust.NewDustPerfect(Projectile.Center, DustID.ShimmerTorch, new Vector2(Main.rand.NextFloat() * 6f, -8f + 8f * Main.rand.NextFloat()), 0, default(Color), 1.5f).noGravity = true;
                     }
-                    Projectile.ai[1] = 1;
-
                     Projectile.position += Projectile.velocity;
                     Projectile.velocity = Vector2.Zero;
+                    bStopfalling = true;
+
                 }
-                bStopfalling = true;
                 Projectile.netUpdate = true;
             }
             return false;
