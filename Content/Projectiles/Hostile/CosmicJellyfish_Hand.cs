@@ -337,7 +337,7 @@ namespace ITD.Content.Projectiles.Hostile
 
                         if (bStopfalling)
                         {
-                            player.GetITDPlayer().Screenshake = 10;
+                            player.GetITDPlayer().BetterScreenshake(10, 5, 10, true);
                             if (iMeteorCount <= 25)
                             {
                                 if (Timer++ >= 1)
@@ -404,7 +404,7 @@ namespace ITD.Content.Projectiles.Hostile
                             ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
                                 new ParticleOrchestraSettings { PositionInWorld = other.Center }, Projectile.owner);
                             SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), Projectile.Center);
-                            player.GetITDPlayer().Screenshake = 20;
+                            player.GetITDPlayer().BetterScreenshake(20, 5, 5, true);
                             HandState = CosJelHandState.DownToSize;
                             NetSync();
 

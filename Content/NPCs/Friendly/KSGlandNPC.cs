@@ -52,7 +52,7 @@ namespace ITD.Content.NPCs.Friendly
         }
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
-            cooldownSlot = ImmunityCooldownID.Bosses; // use the boss immunity cooldown counter, to prevent ignoring boss attacks by taking damage from other sources
+            cooldownSlot = ImmunityCooldownID.Bosses;
             return false;
         }
         int iRetardedIframe;
@@ -76,7 +76,7 @@ namespace ITD.Content.NPCs.Friendly
             }
             if (!player.GetModPlayer<KSGlandPlayer>().ksMasterAcc)
             {
-                player.GetModPlayer<KSGlandPlayer>().RegrowCD = 900;
+                player.GetModPlayer<KSGlandPlayer>().RegrowCD = 1800;
                 NPC.checkDead();
                 NPC.life = 0;
             }
@@ -92,9 +92,9 @@ namespace ITD.Content.NPCs.Friendly
         {
             Player player = Main.player[(int)NPC.ai[0]];
             string death = Language.GetTextValue($"Mods.ITD.DeathMessage.KSGlandAftershock");
-            player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} {death}"), (int)(hit.Damage),0);
+            player.Hurt(PlayerDeathReason.ByCustomReason($"{player.name} {death}"), (int)(hit.Damage * 1.25f),0);
             player.immune = true;
-            player.immuneTime = 60;
+            player.immuneTime = 30;
         }
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
@@ -122,7 +122,7 @@ namespace ITD.Content.NPCs.Friendly
                 dust2.noGravity = true;
             }
             Player player = Main.player[(int)NPC.ai[0]];
-            player.GetModPlayer<KSGlandPlayer>().RegrowCD = 900;
+            player.GetModPlayer<KSGlandPlayer>().RegrowCD = 1800;
         }
         public override void DrawBehind(int index)
         {
@@ -155,7 +155,7 @@ namespace ITD.Content.NPCs.Friendly
         {
             if (owner.dead || !owner.active)
             {
-                owner.GetModPlayer<KSGlandPlayer>().RegrowCD = 900;
+                owner.GetModPlayer<KSGlandPlayer>().RegrowCD = 1800;
                 owner.GetModPlayer<KSGlandPlayer>().ksMasterAcc = false;
                 NPC.life = 0;
                 NPC.checkDead();

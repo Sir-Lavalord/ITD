@@ -288,7 +288,7 @@ namespace ITD.Content.NPCs.Bosses
 						Teleposition = Main.player[NPC.target].Center - new Vector2(0, 240f);
 					}
 					
-					Main.player[Main.myPlayer].GetITDPlayer().Screenshake = 20;
+					Main.player[Main.myPlayer].GetITDPlayer().BetterScreenshake(20, 4, 4, false);
 					SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
 					SoundEngine.PlaySound(SoundID.NPCDeath51, NPC.Center);
 					break;

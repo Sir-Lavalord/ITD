@@ -7,6 +7,7 @@ using ITD.Content.Items.Other;
 using ITD.Content.Items.Weapons.Melee.Snaptraps;
 using ITD.Content.NPCs.BlueshroomGroves.Critters;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
+using ITD.Content.Projectiles.Friendly.Ranger;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
@@ -32,7 +33,9 @@ namespace ITD.Content.NPCs
         public bool melomycosis;
         public bool chilled;
         public bool bleedingII;
-        
+        public bool toppled;
+
+        public float originalKB;
         private int chilledTimer = 0;
         private const int MAX_CHILLED_DURATION = 60;
 
@@ -54,8 +57,18 @@ namespace ITD.Content.NPCs
             soulRot = false;
             toasted = false;
             bleedingII = false;
+            toppled = false;
+            if (!toppled)
+
+            {
+                npc.knockBackResist = originalKB;
+            }
         }
 
+        public override void OnSpawn(NPC npc, IEntitySource source)
+        {
+            originalKB = npc.knockBackResist;
+        }
         
         public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
         {
@@ -71,7 +84,17 @@ namespace ITD.Content.NPCs
                 modifiers.SourceDamage += ToastedBuff.DamageMultiplier;
             }
         }
-
+        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
+        {
+            if (toppled)
+            {
+                if (npc.type != NPCID.TargetDummy)//awful fix but it's fine since target dummy is the only one like this
+                {
+                    if (projectile.type == ModContent.ProjectileType<HunterrGreatarrow>())
+                        npc.knockBackResist += 0.05f;
+                }
+            }
+        }
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
             if (necrosis)

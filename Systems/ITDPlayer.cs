@@ -76,15 +76,18 @@ namespace ITD.Players
         public bool CosJellSuffocated;
         public const int CosJellEscapeMax = 10;
         public int CosJellEscapeCurrent;
-        //Screenshake
-        public int Screenshake;
+        //shakeDuration
+        public int shakeDuration;
+        public float shakeIntensityX;
+        public float shakeIntensityY;
+        public bool shakeDecay;
         //Recruitment data
         public RecruitmentData recruitmentData = new();
         public override void ResetEffects()
         {
-            //Screenshake
-            if (Screenshake > 0)
-                Screenshake--;
+            //shakeDuration
+            if (shakeDuration > 0)
+                shakeDuration--;
             //Suffocrap
             if (CosJellSuffocated)
             {
@@ -138,8 +141,8 @@ namespace ITD.Players
         {
             CosJellSuffocated = false;
             CosJellEscapeCurrent = 0;
-            if (Screenshake > 0)
-                Screenshake--; 
+            if (shakeDuration > 0)
+                shakeDuration--; 
             itemVar = new float[4];
 		}
 		
@@ -194,7 +197,12 @@ namespace ITD.Players
                 }
             }
         }
-		
+		public void BetterScreenshake(int dur, float powerX, float powerY, bool Decay)
+        {
+            shakeDuration = dur;
+            shakeIntensityX = powerX; shakeIntensityY = powerX;
+            shakeDecay = Decay;
+        }
         public override void PreUpdate()
         {
             ITDSystem system = ModContent.GetInstance<ITDSystem>();
@@ -243,9 +251,15 @@ namespace ITD.Players
         }
         public override void ModifyScreenPosition()
         {
-            if (Screenshake > 0)
+            if (shakeDuration > 0)
             {
-                Main.screenPosition += Main.rand.NextVector2Circular(4, 4);
+                if (shakeDecay)
+                {
+                    shakeIntensityY = float.Lerp(shakeIntensityY, 0, 0.025f);
+
+                    shakeIntensityX = float.Lerp(shakeIntensityX, 0, 0.025f);
+                }
+                Main.screenPosition += Main.rand.NextVector2Circular(shakeIntensityX, shakeIntensityY);
             }
         }
 		
