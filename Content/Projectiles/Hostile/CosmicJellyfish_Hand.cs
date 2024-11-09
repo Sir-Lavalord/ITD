@@ -134,12 +134,11 @@ namespace ITD.Content.Projectiles.Hostile
                     {
                         Dust.NewDustPerfect(Projectile.Center, DustID.ShimmerTorch, new Vector2(Main.rand.NextFloat() * 6f, -8f + 8f * Main.rand.NextFloat()), 0, default(Color), 1.5f).noGravity = true;
                     }
-                    Projectile.ai[1] = 1;
-
                     Projectile.position += Projectile.velocity;
                     Projectile.velocity = Vector2.Zero;
+                    bStopfalling = true;
+
                 }
-                bStopfalling = true;
                 Projectile.netUpdate = true;
             }
             return false;
@@ -337,7 +336,7 @@ namespace ITD.Content.Projectiles.Hostile
 
                         if (bStopfalling)
                         {
-                            player.GetITDPlayer().Screenshake = 10;
+                            player.GetITDPlayer().BetterScreenshake(10, 5, 10, true);
                             if (iMeteorCount <= 25)
                             {
                                 if (Timer++ >= 1)
@@ -404,7 +403,7 @@ namespace ITD.Content.Projectiles.Hostile
                             ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
                                 new ParticleOrchestraSettings { PositionInWorld = other.Center }, Projectile.owner);
                             SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), Projectile.Center);
-                            player.GetITDPlayer().Screenshake = 20;
+                            player.GetITDPlayer().BetterScreenshake(20, 5, 5, true);
                             HandState = CosJelHandState.DownToSize;
                             NetSync();
 

@@ -39,15 +39,14 @@ namespace ITD.Content.Projectiles.Hostile
             NPC CosJel = Main.npc[(int)Projectile.ai[0]];
             if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
             {
-                Vector2 CorePos = new Vector2(CosJel.Center.X, CosJel.Center.Y - 100);
 
                 if (Projectile.ai[1] != 2)
-                    Projectile.velocity = (CorePos - Projectile.Center).SafeNormalize(Vector2.Zero) * 2f;
+                    Projectile.velocity = (CosJel.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 2f;
                 else
                 {
                     scaleX = 0.2f;
                     scaleY = 0.2f;
-                    Projectile.velocity = (CorePos - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.05f;
+                    Projectile.velocity = (CosJel.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.05f;
                 }
             }
             else

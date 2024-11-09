@@ -1,5 +1,6 @@
 ﻿using ITD.Content.Buffs.Debuffs;
 using ITD.Content.Items.Weapons.Ranger;
+using ITD.Content.NPCs;
 using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Utilities.Placeholders;
 using Terraria;
@@ -16,31 +17,10 @@ namespace ITD.Content.Buffs.Debuffs
         public override void SetStaticDefaults()
         {
         }
+        public override void Update(NPC npc, ref int buffIndex)
+        {
+            npc.GetGlobalNPC<ITDGlobalNPC>().toppled = true;
+        }
 
-    }
-    public class ToppledNPC : GlobalNPC
-    {
-        public override bool InstancePerEntity => true;
-        float OriginalKB;
-        public override void OnSpawn(NPC npc, IEntitySource source)
-        {
-            OriginalKB = npc.knockBackResist;
-        }
-        public override void ResetEffects(NPC npc)
-        {
-            if (!npc.HasBuff<ToppledDebuff>())
-
-            {
-                npc.knockBackResist = OriginalKB;
-            }
-        }
-        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
-        {
-            if (npc.HasBuff<ToppledDebuff>())
-            {
-                if (projectile.type == ModContent.ProjectileType<HunterrGreatarrow>())
-                npc.knockBackResist += 0.05f;
-            }
-        }
     }
 }

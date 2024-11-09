@@ -22,8 +22,6 @@ namespace ITD.Content.Projectiles.Hostile
         {
             base.SetStaticDefaults();
         }
-        public Vector2 CorePos;
-
         public override void AI()
         {
             Vector2? vector78 = null;
@@ -46,11 +44,9 @@ namespace ITD.Content.Projectiles.Hostile
             }
             NPC CosJel = Main.npc[(int)Projectile.ai[1]];
             Player player = Main.player[CosJel.target];
-            player.GetITDPlayer().Screenshake = 20;
+            player.GetITDPlayer().BetterScreenshake(20, 5, 5, true);
             if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
             {
-                CorePos = new Vector2(CosJel.Center.X, CosJel.Center.Y - 140);
-
                 if (CosJel != null && !CosJel.dontTakeDamage)
                 {
                     Projectile.Center = CosJel.Center;

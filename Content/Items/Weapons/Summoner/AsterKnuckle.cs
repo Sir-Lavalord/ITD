@@ -59,7 +59,7 @@ namespace ITD.Content.Items.Weapons.Summoner
             SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraPunch"), player.Center);
             ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
             modPlayer.recoilFront = 0.1f;
-            modPlayer.Screenshake = 10;
+            modPlayer.BetterScreenshake(10, 5, 5, true);
             Projectile Blast = Projectile.NewProjectileDirect(player.GetSource_FromThis(), Item.Center, Vector2.Zero,
     ModContent.ProjectileType<AsterBlasterBlast>(), (int)(Item.damage), Item.knockBack, player.whoAmI);
             Blast.ai[1] = 100f;
