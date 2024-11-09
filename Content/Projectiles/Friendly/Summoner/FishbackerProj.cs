@@ -89,7 +89,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                             CanParry = false;
                             SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), points[points.Count - 1]);
                             CombatText.NewText(Projectile.Hitbox, Color.LimeGreen, "PARRY", true);
-                            Main.player[Projectile.owner].GetModPlayer<ITDPlayer>().Screenshake = 20;
+                            Main.player[Projectile.owner].GetModPlayer<ITDPlayer>().BetterScreenshake(20, 5, 5, true);
                             other.GetGlobalProjectile<FishbackerReflectedProj>().IsReflected = true;
                             other.owner = Main.myPlayer;
                             other.velocity.X *= -3f;

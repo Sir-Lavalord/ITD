@@ -11,6 +11,7 @@ using Terraria.ModLoader;
 using ITD.Systems;
 using ITD.Players;
 using ITD.Content.Projectiles.Friendly.Ranger;
+using ITD.Content.Items.Materials;
 
 namespace ITD.Content.Items.Weapons.Summoner
 {
@@ -56,6 +57,12 @@ namespace ITD.Content.Items.Weapons.Summoner
         }
         public override void AddRecipes()
         {
+            CreateRecipe(1)
+                .AddIngredient(ItemID.Star, 5)
+                .AddIngredient(ItemID.MeteoriteBar, 3)
+                .AddIngredient(ModContent.ItemType<StarlitBar>(), 6)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {

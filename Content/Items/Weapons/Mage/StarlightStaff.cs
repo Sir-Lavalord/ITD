@@ -9,6 +9,7 @@ using Terraria.GameContent.Creative;
 using ITD.Content.Projectiles.Friendly.Mage;
 using ITD.Systems;
 using Microsoft.Xna.Framework.Graphics;
+using ITD.Content.Items.Materials;
 
 namespace ITD.Content.Items.Weapons.Mage
 {
@@ -53,6 +54,15 @@ namespace ITD.Content.Items.Weapons.Mage
 
             spriteBatch.Draw(texture, new Vector2(Item.position.X - Main.screenPosition.X + Item.width * 0.5f, Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height * 0.5f),
                 new Rectangle(0, 0, texture.Width, texture.Height), Color.White * 0.7f, rotation, texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe(1)
+                .AddIngredient(ItemID.Star, 5)
+                .AddIngredient(ItemID.MeteoriteBar, 3)
+                .AddIngredient(ModContent.ItemType<StarlitBar>(), 6)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

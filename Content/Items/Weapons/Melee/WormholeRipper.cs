@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 using ITD.Utilities;
 using Terraria.Audio;
+using ITD.Content.Items.Materials;
 
 namespace ITD.Content.Items.Weapons.Melee
 {
@@ -85,6 +86,15 @@ namespace ITD.Content.Items.Weapons.Melee
 			proj.spriteDirection = player.direction;
             proj.CritChance = Item.crit;
             return false;
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe(1)
+                .AddIngredient(ItemID.Star, 5)
+                .AddIngredient(ItemID.MeteoriteBar, 3)
+                .AddIngredient(ModContent.ItemType<StarlitBar>(), 6)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

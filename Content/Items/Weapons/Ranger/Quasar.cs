@@ -5,6 +5,7 @@ using Terraria.DataStructures;
 using ITD.Content.Projectiles;
 using ITD.Content.Dusts;
 using Microsoft.Xna.Framework;
+using ITD.Content.Items.Materials;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {
@@ -47,5 +48,14 @@ namespace ITD.Content.Items.Weapons.Ranger
 		public override Vector2? HoldoutOffset() {
 			return new Vector2(-4f, 0f);
 		}
+        public override void AddRecipes()
+        {
+            CreateRecipe(1)
+                .AddIngredient(ItemID.Star, 5)
+                .AddIngredient(ItemID.MeteoriteBar, 3)
+                .AddIngredient(ModContent.ItemType<StarlitBar>(), 6)
+                .AddTile(TileID.Anvils)
+                .Register();
+        }
     }
 }

@@ -8,7 +8,7 @@ using ITD.Content.Tiles.Misc;
 using ITD.Content.Items.Placeable;
 using Terraria.DataStructures;
 
-namespace ITD.Content.Items.Weapons.Consumable
+namespace ITD.Content.Items.Weapons.Mage
 {
     public class PocketSyringe : ModItem
     {
@@ -22,7 +22,7 @@ namespace ITD.Content.Items.Weapons.Consumable
             Item.noUseGraphic = true;
             Item.useAnimation = 17;
             Item.useTime = 17;
-            Item.shoot = ModContent.ProjectileType<Content.Projectiles.Friendly.Mage.PocketSyringeProjectile>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.Friendly.Mage.PocketSyringeProjectile>();
             Item.shootSpeed = 5f;
             Item.noMelee = true;
             Item.DamageType = DamageClass.Magic;
@@ -40,7 +40,7 @@ namespace ITD.Content.Items.Weapons.Consumable
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             const int NumProjectiles = 3;
-            Item.damage = 10 - (player.lifeRegen / 2);
+            Item.damage = 10 - player.lifeRegen / 2;
             if (Item.damage < 10)
             {
                 Item.damage = 10;

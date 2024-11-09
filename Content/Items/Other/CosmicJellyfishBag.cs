@@ -6,6 +6,8 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Items.Armor.Vanity.Masks;
+using ITD.Content.Items.Accessories.Expert;
+using ITD.Content.Items.Accessories.Movement.Boots;
 
 namespace ITD.Content.Items.Other
 {
@@ -36,8 +38,10 @@ namespace ITD.Content.Items.Other
         public override void ModifyItemLoot(ItemLoot itemLoot)
         {
             itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<CosmicJellyfishMask>(), 7));
-/*            itemLoot.Add(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, CosmicJellyfish.oneFromOptionsDrops));
-*/			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<StarlitOre>(), 1, 15, 30));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<GalacticJellyBean>(),1));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<StarlitOre>(), 1, 25, 45));
+            itemLoot.Add(ItemDropRule.Common(ItemID.Star, 1, 10, 20));
+            itemLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<GravityBoots>()));
             itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(ModContent.NPCType<CosmicJellyfish>()));
         }
     }

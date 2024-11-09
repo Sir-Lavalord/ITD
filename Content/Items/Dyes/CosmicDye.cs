@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using ITD.Content.Items.Materials;
+using ITD.Content.Items.Placeable;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.Graphics.Shaders;
@@ -24,6 +26,14 @@ namespace ITD.Content.Items.Dyes
             int temp = Item.dye;
             Item.CloneDefaults(ItemID.BlackDye);
             Item.dye = temp;
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe(1)
+                .AddIngredient(ItemID.BlackDye, 1)
+                .AddIngredient(ModContent.ItemType<StarlitOre>(), 4)
+                .AddTile(TileID.DyeVat)
+                .Register();
         }
     }
 }
