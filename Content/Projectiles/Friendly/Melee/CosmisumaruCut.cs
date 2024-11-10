@@ -7,11 +7,13 @@ using Terraria.GameContent;
 using Terraria.DataStructures;
 using ITD.Content.Tiles.Misc;
 using ITD.Content.Dusts;
+using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {
     public class CosmisumaruCut : ModProjectile
     {
+        public int attackRate;
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 10;
@@ -36,7 +38,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            target.immune[Projectile.owner] = 5;
+            Player player = Main.player[Projectile.owner];
+            target.immune[Projectile.owner] = 8;
+
+            player.GetITDPlayer().charge++;
         }
 
         public override void AI()

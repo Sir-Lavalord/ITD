@@ -36,8 +36,9 @@ namespace ITD.Players
     {
         public float[] itemVar = new float[4];
 		int heldItem;
-		
-		public float recoilFront = 0f;
+
+        public int charge = 0;
+        public float recoilFront = 0f;
 		public float recoilBack = 0f;
 
         public Vector2 MousePosition { get; set; }
@@ -113,7 +114,8 @@ namespace ITD.Players
             if (heldItem != Player.inventory[Player.selectedItem].type)
 			{
 				itemVar = new float[4];
-				heldItem = Player.inventory[Player.selectedItem].type;
+                charge = 0;
+                heldItem = Player.inventory[Player.selectedItem].type;
 			}
 			if (recoilFront > 0f)
 				recoilFront -= 0.02f;

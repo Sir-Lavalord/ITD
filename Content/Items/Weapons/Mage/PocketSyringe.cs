@@ -72,15 +72,5 @@ namespace ITD.Content.Items.Weapons.Mage
                 .AddTile(TileID.WorkBenches)
                 .Register();
         }
-
-        public override void ModifyTooltips(List<TooltipLine> tooltips)
-        {
-            var line = new TooltipLine(Mod, "Tooltip0", "Shares your debuffs with enemies");
-            var line2 = new TooltipLine(Mod, "Tooltip1", "Deals increased damage depending on your life regen");
-            var line3 = new TooltipLine(Mod, "Tooltip2", "Bleeding deals increased damage to enemies");
-            tooltips.Add(line);
-            tooltips.Add(line2);
-            tooltips.Add(line3);
-        }
     }
 }

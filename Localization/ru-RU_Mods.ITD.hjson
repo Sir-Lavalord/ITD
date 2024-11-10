@@ -943,7 +943,12 @@ Items: {
 
 	PocketSyringe: {
 		// DisplayName: Pocket Syringe
-		// Tooltip: ""
+		/* Tooltip:
+			'''
+				Shares your debuffs with enemies
+			    Deals increased damage depending on your life regen
+			    Bleeding deals increased damage to enemies
+			''' */
 	}
 
 	AlloyBar: {
@@ -963,12 +968,17 @@ Items: {
 
 	TemperedGlassItem: {
 		// DisplayName: Tempered Glass Item
-		// Tooltip: ""
+		// Tooltip: "'Glass but stronger.'"
 	}
 
 	Cosmisumaru: {
 		// DisplayName: Cosmisumaru
-		// Tooltip: ""
+		/* Tooltip:
+			'''
+			After dealing enough damage, the bearer begins to glow
+			Press RMB to release a Cosmic Pheonix while glowing
+			'A cosmic heirloom passed down from the stars above.'
+			''' */
 	}
 }
 
@@ -1111,6 +1121,8 @@ Projectiles: {
 	// PocketSyringeProjectile.DisplayName: Pocket Syringe Projectile
 	// WheelerTrashProj.DisplayName: Wheeler Trash Proj
 	// CosmisumaruCut.DisplayName: Cosmisumaru Cut
+	// CosmisumaruPheonix.DisplayName: Cosmisumaru Pheonix
+	// CosmisumaruPheonixImpact.DisplayName: Cosmisumaru Pheonix Impact
 }
 
 NPCs: {
