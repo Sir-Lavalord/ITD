@@ -946,13 +946,8 @@ Items: {
 	}
 
 	PocketSyringe: {
-		Tooltip:
-			'''
-			Shares your debuffs with enemies
-			Deals increased damage depending on your life regen
-			Bleeding deals increased damage to enemies
-			'''
 		DisplayName: Pocket Syringe
+		Tooltip: ""
 	}
 
 	AlloyBar: {
@@ -962,6 +957,21 @@ Items: {
 
 	CosmicDye: {
 		DisplayName: Cosmic Dye
+		Tooltip: ""
+	}
+
+	EmberlionMandible: {
+		DisplayName: Emberlion Mandible
+		Tooltip: ""
+	}
+
+	TemperedGlassItem: {
+		DisplayName: Tempered Glass Item
+		Tooltip: ""
+	}
+
+	Cosmisumaru: {
+		DisplayName: Cosmisumaru
 		Tooltip: ""
 	}
 }
@@ -1104,6 +1114,7 @@ Projectiles: {
 	FrostgripIcicle.DisplayName: Frostgrip Icicle
 	PocketSyringeProjectile.DisplayName: Pocket Syringe Projectile
 	WheelerTrashProj.DisplayName: Wheeler Trash Proj
+	CosmisumaruCut.DisplayName: Cosmisumaru Cut
 }
 
 NPCs: {
