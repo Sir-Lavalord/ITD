@@ -2,6 +2,7 @@
 ##### by the ITDevs
 ITD is a Terraria mod you may install through [tModLoader](https://github.com/tModLoader/tModLoader). It focuses on adding new content, including new biomes, bosses, items and mechanics.
 This mod does not contain the ITD music tracks to reduce download size. Music can be added through the Into the Depths Music mod, also available in tModLoader.
+(Mods not available for download through tModLoader currently! Expect a first release next year!)
 
 As of right now, the mod contains the following:
 - 3 new bosses  
