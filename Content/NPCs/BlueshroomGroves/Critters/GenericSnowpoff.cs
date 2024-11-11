@@ -70,7 +70,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
                     NPC.velocity.Y -= 1.5f;
                     AITimer = 0f;
                 }
-                if (hit.DamageType != DamageClass.Magic)
+                if (!hit.DamageType.CountsAsClass(DamageClass.Magic))
                     switch (AI_State)  // try turn into ball
                     {
                         case ActionState.Wandering:
@@ -89,6 +89,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
             if (modifiers.DamageType == DamageClass.Magic)
                 return;
             modifiers.Defense += 9999;
+            modifiers.FinalDamage *= 0;
             modifiers.HideCombatText();
         }
         public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
@@ -97,7 +98,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
         }
         public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
-            if (hit.DamageType != DamageClass.Magic)
+            if (!hit.DamageType.CountsAsClass(DamageClass.Magic))
                 NPC.life += damageDone;
         }
         public override void FindFrame(int frameHeight) // using this for all relevant visuals

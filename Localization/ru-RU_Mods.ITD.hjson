@@ -945,9 +945,9 @@ Items: {
 		// DisplayName: Pocket Syringe
 		/* Tooltip:
 			'''
-				Shares your debuffs with enemies
-			    Deals increased damage depending on your life regen
-			    Bleeding deals increased damage to enemies
+			Shares your debuffs with enemies
+			Deals increased damage depending on your life regen
+			Bleeding deals increased damage to enemies
 			''' */
 	}
 
@@ -1162,17 +1162,6 @@ NPCs: {
 
 	RecruitedNPC: {
 		DisplayName: Recruited N P C
-
-		TownNPCMood: {
-			Content: I am content.
-			NoHome: I hate not having a home.
-			FarFromHome: I am too far from home.
-			LoveSpace: I love having so much space.
-			DislikeCrowded: I dislike how crowded I am.
-			HateCrowded: I hate how crowded I am.
-			LikeNPC_Princess: I like {NPCName}.
-			Princess_LovesNPC: I like {NPCName}.
-		}
 	}
 
 	SmallSnowpoff.DisplayName: Мелкая ряженка
@@ -1335,4 +1324,10 @@ UI: {
 	FavorSlot.MouseHoverName: Сувенир
 	RecruitmentButton.MouseHoverName: Recruit
 	// UnrecruitmentButton.MouseHoverName: Dismiss
+}
+
+RecruitmentSystem: {
+	// RecruitmentAccepted: Recruited {0}!
+	// NotHappyEnough: "{0} is not at maximum happiness!"
+	// RecruitmentDenied: "{0} cannot be recruited!"
 }

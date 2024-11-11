@@ -288,8 +288,8 @@ namespace ITD.Content.NPCs.Bosses
             {
                 float[][] leg =
                 [
-                    KineChain.CreateKineSegment(82f),
                     KineChain.CreateKineSegment(81f),
+                    KineChain.CreateKineSegment(97f),
                 ];
                 legFront = new KineChain(NPC.Center.X, NPC.Center.Y, leg);
                 legBack = new KineChain(NPC.Center.X, NPC.Center.Y, leg);

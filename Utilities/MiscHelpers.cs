@@ -12,11 +12,11 @@ namespace ITD.Utilities
 {
     public static class MiscHelpers
     {
-        public static Entity[] EntityQuery<T>(this Entity entity, int maxAmount = -1, bool ignoreSelf = true, Func<Entity, bool> predicate = null) where T : Entity
+        public static T[] EntityQuery<T>(T ignore = null, int maxAmount = -1, Func<T, bool> predicate = null) where T : Entity
         {
             Type entityType = typeof(T);
 
-            Entity[] entities = entityType switch
+            Entity[] entitiesTemp = entityType switch
             {
                 Type t when t == typeof(NPC) => Main.npc,
                 Type t when t == typeof(Projectile) => Main.projectile,
@@ -24,11 +24,14 @@ namespace ITD.Utilities
                 Type t when t == typeof(Item) => Main.item,
                 _ => null
             };
+            if (entitiesTemp is null) return [];
 
-            if (entities is null) return [];
+            T[] entities = entitiesTemp.Cast<T>().ToArray();
 
-            Entity[] result = entities
-            .Where(e => e is T && predicate(e) && (!ignoreSelf || e.whoAmI != entity.whoAmI))
+            bool shouldTryIgnoringSelf = ignore != null && entityType == ignore.GetType();
+
+            T[] result = entities
+            .Where(e => predicate(e) && (!shouldTryIgnoringSelf || ignore.whoAmI != e.whoAmI))
             .Take(maxAmount > 0 ? maxAmount : entities.Length)
             .ToArray();
 
