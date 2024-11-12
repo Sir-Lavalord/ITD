@@ -1,4 +1,4 @@
-﻿
+﻿/*
 using Terraria;
 using System;
 using Terraria.ID;
@@ -54,6 +54,7 @@ namespace ITD.Content.Projectiles.Hostile
         public bool isLeftHand;
         public bool bSmackdown;
         public int iMeteorCount;
+        public int iDisFromBoss = 160;
         public int Timer;
         public float handCharge = 0f;
         public float handSling = 0f;
@@ -186,8 +187,8 @@ namespace ITD.Content.Projectiles.Hostile
                 int sideMult = isLeftHand ? -1 : 1;
                 Vector2 extendOut = new Vector2((float)Math.Cos(NPC.rotation), (float)Math.Sin(NPC.rotation));
                 Vector2 toPlayer = (player.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
-                Vector2 chargedPosition = NPC.Center - extendOut * (150 * sideMult) + new Vector2(0f, NPC.velocity.Y) - toPlayer * 150f;
-                Vector2 normalCenter = NPC.Center - extendOut * (150 * sideMult) + new Vector2(0f, NPC.velocity.Y);
+                Vector2 chargedPosition = NPC.Center - extendOut * (iDisFromBoss * sideMult) + new Vector2(0f, NPC.velocity.Y) - toPlayer * 150f;
+                Vector2 normalCenter = NPC.Center - extendOut * (iDisFromBoss * sideMult) + new Vector2(0f, NPC.velocity.Y);
                 float targetRotation = NPC.rotation;
                 // Animation
                 if (HandState != CosJelHandState.Charging && HandState != CosJelHandState.Slinging && !bSmackdown)
@@ -210,6 +211,14 @@ namespace ITD.Content.Projectiles.Hostile
                 else if (HandState == CosJelHandState.Slinging || (HandState == CosJelHandState.MeteorStrike && bSmackdown))
                 {
                     Projectile.frame = 6;
+                }
+                if (Projectile.ai[1] == 1)
+                {
+                    iDisFromBoss = 200;
+                }
+                else
+                {
+                    iDisFromBoss = 160;
                 }
                 //
                 switch (HandState)
@@ -237,7 +246,7 @@ namespace ITD.Content.Projectiles.Hostile
                             {
                                 cosJel.vLockedIn = player.Center;
                             }
-                            else if (Timer >= cosJel.iDelayTime && cosJel.bSecondStage || Timer >= 0 && !cosJel.bSecondStage)
+                            else if (Timer >= cosJel.iDelayTime && cosJel.bSecondStage() || Timer >= 0 && !cosJel.bSecondStage())
                             {
                                 Timer = 0;
                                 if (Projectile.ai[0] != 1)
@@ -282,7 +291,7 @@ namespace ITD.Content.Projectiles.Hostile
                             }
                             else
                             {
-                                if (cosJel.bSecondStage)
+                                if (cosJel.bSecondStage())
                                 {
                                     if (cosJel.attackCount++ >= 6)
                                         Projectile.Kill();
@@ -308,7 +317,7 @@ namespace ITD.Content.Projectiles.Hostile
                         Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
                         if (Timer++ >= 30)
                         {
-                            if (cosJel.bSecondStage)
+                            if (cosJel.bSecondStage())
                             {
                                 NPC.localAI[2]++;
                                 NetSync();
@@ -336,10 +345,11 @@ namespace ITD.Content.Projectiles.Hostile
 
                         if (bStopfalling)
                         {
+                            Projectile.Center += Main.rand.NextVector2Circular(1, 1);
                             player.GetITDPlayer().BetterScreenshake(10, 5, 10, true);
-                            if (iMeteorCount <= 25)
+                            if (iMeteorCount <= 12)
                             {
-                                if (Timer++ >= 1)
+                                if (Timer++ >= 2)
                                 {
 
                                     Timer = 0;
@@ -374,12 +384,12 @@ namespace ITD.Content.Projectiles.Hostile
                         else
                         {
 
-                            cosJel.vLockedIn.X = player.Center.X + (player.velocity.X * 35f);
+                            cosJel.vLockedIn.X = player.Center.X + (player.velocity.X * 40f);
                             Timer = 0;
                             handSling = 0f;
                             handCharge = 0f;
                             handFollowThrough = 0f;
-                            Projectile.velocity.Y += 1.5f;
+                            Projectile.velocity.Y += 1.25f;
                             iMeteorCount = 0;
                             bSmackdown = true;
                             NetSync();
@@ -419,7 +429,7 @@ namespace ITD.Content.Projectiles.Hostile
                     }
                 }
             }
-            if (Main.rand.NextBool(3)/* && HandState != CosJelHandState.Slinging && HandState != CosJelHandState.Charging && !bSmackdown*/)
+            if (Main.rand.NextBool(3)*//* && HandState != CosJelHandState.Slinging && HandState != CosJelHandState.Charging && !bSmackdown*//*)
             {
                 Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
                 Vector2 veloDelta = (Projectile.position - Projectile.oldPosition); // i can't use projectile.velocity here because we're manually changing the position for most of its existence
@@ -473,3 +483,4 @@ namespace ITD.Content.Projectiles.Hostile
         }
     }
 }
+*/

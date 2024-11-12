@@ -1154,6 +1154,7 @@ NPCs: {
 
 	SmallSnowpoff.DisplayName: Мелкая ряженка
 	LargeSnowpoff.DisplayName: Крупная ряженка
+	// CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
 }
 
 Buffs: {

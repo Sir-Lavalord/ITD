@@ -38,6 +38,8 @@ namespace ITD.Content.NPCs
         public float originalKB;
         private int chilledTimer = 0;
         private const int MAX_CHILLED_DURATION = 60;
+        //shit
+        public static int cosjelBoss = -1;
 
         private static int[] shouldDropSandberusSummon =
             [

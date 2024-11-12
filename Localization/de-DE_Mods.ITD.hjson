@@ -1155,6 +1155,7 @@ NPCs: {
 
 	// SmallSnowpoff.DisplayName: Snowpoff
 	// LargeSnowpoff.DisplayName: Snowpoff
+	// CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
 }
 
 Buffs: {

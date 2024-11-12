@@ -1157,6 +1157,7 @@ NPCs: {
 
 	SmallSnowpoff.DisplayName: Montonieve
 	LargeSnowpoff.DisplayName: Montonieve
+	// CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
 }
 
 Buffs: {
