@@ -32,7 +32,7 @@ namespace ITD.Content.Items.Other.GrabbOMatic20000
         private static readonly Asset<Texture2D> armMidTex = ModContent.Request<Texture2D>(toTex + "SegMid");
         private static readonly Asset<Texture2D> handTex = ModContent.Request<Texture2D>(toTex + "SegHand");
         public bool Active;
-        public GrabbOMaticArm arm = null;
+        public KineChain arm = null;
         public override void ResetEffects()
         {
             Active = false;
@@ -41,21 +41,16 @@ namespace ITD.Content.Items.Other.GrabbOMatic20000
         {
             if (!Active)
                 return;
-            arm ??= new GrabbOMaticArm(Player.Center.X, Player.Center.Y);
-            arm.ChainBase = Player.Center;
-            for (int i = 0; i < 2; i++)
-                arm.Update(Player.GetITDPlayer().MousePosition);
-            arm.Draw(Main.spriteBatch, Main.screenPosition, Color.White, Player.direction == 1, armMidTex.Value, armTex.Value, handTex.Value);
+            float[][] armP =
+                [
+                    KineChain.CreateKineSegment(42f),
+                    KineChain.CreateKineSegment(42f),
+                    KineChain.CreateKineSegment(42f),
+                ];
+            arm ??= new KineChain(Player.Center.X, Player.Center.Y, armP);
+            arm.basePoint = Player.Center;
+            arm.GenUpdate(Player.GetITDPlayer().MousePosition);
+            arm.Draw(Main.spriteBatch, Main.screenPosition, Color.White, Player.direction == 1, armMidTex.Value, handTex.Value, armTex.Value);
         }
-    }
-    public class GrabbOMaticArm(float x, float y) : KineChain(x, y)
-    {
-        private KineSegment[] segments =
-        [
-            new KineSegment(x, y, 42f),
-            new KineSegment(x, y, 42f),
-            new KineSegment(x, y, 42f),
-        ];
-        public override KineSegment[] Segments => segments;
     }
 }

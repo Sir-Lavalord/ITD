@@ -73,15 +73,16 @@ namespace ITD.Systems.Recruitment
                         rNpc.Recruiter = player.whoAmI;
                         rNpc.originalType = data.OriginalType;
                     }
-                    Main.NewText("Recruited " + data.FullName + "!", Color.LimeGreen); // replace with localizable stuff
+                    Main.NewText(ITD.Instance.GetLocalization("RecruitmentSystem.RecruitmentAccepted").Format(npc.FullName), Color.LimeGreen);
+
                     return true;
                 }
                 else
                 {
-                    Main.NewText(npc.FullName + " is not at maximum happiness!", Color.Red); // replace with lolcalzic stuf
+                    Main.NewText(ITD.Instance.GetLocalization("RecruitmentSystem.NotHappyEnough").Format(npc.FullName), Color.Red);
                 }
             }
-            Main.NewText(npc.FullName + " cannot be recruited!", Color.Red); //a plapa local sutf
+            Main.NewText(ITD.Instance.GetLocalization("RecruitmentSystem.RecruitmentDenied").Format(npc.FullName), Color.Red);
             return false;
         }
         public static void Unrecruit(int whoAmI, Player player = null)

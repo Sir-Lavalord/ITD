@@ -7,6 +7,13 @@ using ITD.Content.Buffs.GeneralBuffs;
 using ITD.Content.Tiles.Misc;
 using ITD.Content.Items.Placeable;
 using Terraria.DataStructures;
+using ITD.Content.Items.Materials;
+using System.Collections.Generic;
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
+using Microsoft.Xna.Framework;
+using System.Linq;
+using ITD.Utilities;
+using Terraria.WorldBuilding;
 
 namespace ITD.Content.Items.Weapons.Mage
 {
@@ -61,7 +68,7 @@ namespace ITD.Content.Items.Weapons.Mage
         public override void AddRecipes()
         {
             CreateRecipe(4)
-                .AddIngredient(ItemID.Glass, 8)
+                .AddIngredient(ModContent.ItemType<TemperedGlassItem>(), 4)
                 .AddTile(TileID.WorkBenches)
                 .Register();
         }

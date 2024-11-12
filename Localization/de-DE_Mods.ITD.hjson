@@ -926,7 +926,6 @@ Items: {
 		// DisplayName: Frostgrip
 		/* Tooltip:
 			'''
-			Continually slows down struck enemies
 			'Not to be used in temperatures above 0 Kelvins'
 			[c/{0}:Latch Effect:] Encases the target in ice, dealing heavy damage and throwing ice shards
 			''' */
@@ -943,13 +942,13 @@ Items: {
 	}
 
 	PocketSyringe: {
+		// DisplayName: Pocket Syringe
 		/* Tooltip:
 			'''
 			Shares your debuffs with enemies
 			Deals increased damage depending on your life regen
 			Bleeding deals increased damage to enemies
 			''' */
-		// DisplayName: Pocket Syringe
 	}
 
 	AlloyBar: {
@@ -960,6 +959,26 @@ Items: {
 	CosmicDye: {
 		// DisplayName: Cosmic Dye
 		// Tooltip: ""
+	}
+
+	EmberlionMandible: {
+		// DisplayName: Emberlion Mandible
+		// Tooltip: ""
+	}
+
+	TemperedGlassItem: {
+		// DisplayName: Tempered Glass Item
+		// Tooltip: "'Glass but stronger.'"
+	}
+
+	Cosmisumaru: {
+		// DisplayName: Cosmisumaru
+		/* Tooltip:
+			'''
+			After dealing enough damage, the bearer begins to glow
+			Press RMB to release a Cosmic Pheonix while glowing
+			'A cosmic heirloom passed down from the stars above.'
+			''' */
 	}
 }
 
@@ -1101,6 +1120,10 @@ Projectiles: {
 	// FrostgripIcicle.DisplayName: Frostgrip Icicle
 	// PocketSyringeProjectile.DisplayName: Pocket Syringe Projectile
 	// WheelerTrashProj.DisplayName: Wheeler Trash Proj
+	// CosmisumaruCut.DisplayName: Cosmisumaru Cut
+	// CosmisumaruPheonix.DisplayName: Cosmisumaru Pheonix
+	// CosmisumaruPheonixImpact.DisplayName: Cosmisumaru Pheonix Impact
+	// DespoticSuperMeleeProjOld.DisplayName: Despotic Super Melee Proj Old
 }
 
 NPCs: {
@@ -1137,22 +1160,7 @@ NPCs: {
 	// HauntedTombstone.DisplayName: Haunted Tombstone
 	// GhastlyTombstone.DisplayName: Ghastly Tombstone
 	// StrawmanDummy.DisplayName: Strawman
-
-	RecruitedNPC: {
-		// DisplayName: Recruited N P C
-
-		TownNPCMood: {
-			// Content: I am content.
-			// NoHome: I hate not having a home.
-			// FarFromHome: I am too far from home.
-			// LoveSpace: I love having so much space.
-			// DislikeCrowded: I dislike how crowded I am.
-			// HateCrowded: I hate how crowded I am.
-			// LikeNPC_Princess: I like {NPCName}.
-			// Princess_LovesNPC: I like {NPCName}.
-		}
-	}
-
+	// RecruitedNPC.DisplayName: Recruited N P C
 	// SmallSnowpoff.DisplayName: Snowpoff
 	// LargeSnowpoff.DisplayName: Snowpoff
 	// CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
@@ -1314,4 +1322,10 @@ UI: {
 	// FavorSlot.MouseHoverName: Favor
 	// RecruitmentButton.MouseHoverName: Recruit
 	// UnrecruitmentButton.MouseHoverName: Dismiss
+}
+
+RecruitmentSystem: {
+	// RecruitmentAccepted: Recruited {0}!
+	// NotHappyEnough: "{0} is not at maximum happiness!"
+	// RecruitmentDenied: "{0} cannot be recruited!"
 }

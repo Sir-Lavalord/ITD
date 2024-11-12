@@ -867,12 +867,12 @@ Items: {
 	}
 
 	WheelerTrashCan: {
-		// DisplayName: Dorothea
-		/* Tooltip:
+		DisplayName: Dorotea
+		Tooltip:
 			'''
-			Converts bullets into EXTRA random stuff
-			'Takes the fun back into battles.'
-			''' */
+			Convierte las balas en cosas EXTRA aleatorias
+			'Brinda la diversión de vuelta a las batallas'
+			'''
 	}
 
 	AlloyHeadgear: {
@@ -945,23 +945,43 @@ Items: {
 	}
 
 	PocketSyringe: {
-		/* Tooltip:
+		DisplayName: Jeringa de bolsillo
+		Tooltip:
 			'''
-			Shares your debuffs with enemies
-			Deals increased damage depending on your life regen
-			Bleeding deals increased damage to enemies
-			''' */
-		// DisplayName: Pocket Syringe
+			Comparte tus efectos negativos con los enemigos
+			Hace mayor daño dependiendo de tu regeneración de vida
+			El efecto Hemorragia da mayor daño a los enemigos
+			'''
 	}
 
 	AlloyBar: {
-		// DisplayName: Alloy Bar
+		DisplayName: Lingote de aleación
 		// Tooltip: ""
 	}
 
 	CosmicDye: {
-		// DisplayName: Cosmic Dye
+		DisplayName: Tinte cósmico
 		// Tooltip: ""
+	}
+
+	EmberlionMandible: {
+		DisplayName: Mandíbula de brasaleón
+		// Tooltip: ""
+	}
+
+	TemperedGlassItem: {
+		DisplayName: Vidrio templado
+		Tooltip: "'Es vidrio... pero más fuerte.'"
+	}
+
+	Cosmisumaru: {
+		DisplayName: Cosmisumaru
+		Tooltip:
+			'''
+			Después de hacer suficiente daño, el portador comienza a brillar
+			Haz clic derecho para lanzar un fénix cósmico mientras brillas
+			'Una reliquia cósmica heredada de las estrellas vislumbrantes'
+			'''
 	}
 }
 
@@ -1101,8 +1121,12 @@ Projectiles: {
 
 	FrostgripIceCube.DisplayName: Cubo de Agarresfrío
 	FrostgripIcicle.DisplayName: Carámbano de Agarresfrío
-	// PocketSyringeProjectile.DisplayName: Pocket Syringe Projectile
-	// WheelerTrashProj.DisplayName: Wheeler Trash Proj
+	PocketSyringeProjectile.DisplayName: Jeringa de bolsillo
+	WheelerTrashProj.DisplayName: Basura
+	CosmisumaruCut.DisplayName: Corte de Cosmisumaru
+	CosmisumaruPheonix.DisplayName: Fénix de Cosmisumaru
+	CosmisumaruPheonixImpact.DisplayName: Fénix de Cosmisumaru
+	// DespoticSuperMeleeProjOld.DisplayName: Despotic Super Melee Proj Old
 }
 
 NPCs: {
@@ -1139,22 +1163,7 @@ NPCs: {
 	HauntedTombstone.DisplayName: Tumba embrujada
 	GhastlyTombstone.DisplayName: Tumba fantasmagórica
 	StrawmanDummy.DisplayName: Hombre de paja
-
-	RecruitedNPC: {
-		// DisplayName: Recruited N P C
-
-		TownNPCMood: {
-			// Content: I am content.
-			// NoHome: I hate not having a home.
-			// FarFromHome: I am too far from home.
-			// LoveSpace: I love having so much space.
-			// DislikeCrowded: I dislike how crowded I am.
-			// HateCrowded: I hate how crowded I am.
-			// LikeNPC_Princess: I like {NPCName}.
-			// Princess_LovesNPC: I like {NPCName}.
-		}
-	}
-
+	// RecruitedNPC.DisplayName: Recruited N P C
 	SmallSnowpoff.DisplayName: Montonieve
 	LargeSnowpoff.DisplayName: Montonieve
 	// CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
@@ -1315,5 +1324,11 @@ Achievements: {
 UI: {
 	FavorSlot.MouseHoverName: Favor
 	RecruitmentButton.MouseHoverName: Reclutar
-	// UnrecruitmentButton.MouseHoverName: Dismiss
+	UnrecruitmentButton.MouseHoverName: Despedir
+}
+
+RecruitmentSystem: {
+	RecruitmentAccepted: ¡{0} ahora es parte de tu equipo!
+	NotHappyEnough: ¡{0} no tiene la felicidad máxima!
+	RecruitmentDenied: ¡{0} no puede entrar a tu equipo!
 }

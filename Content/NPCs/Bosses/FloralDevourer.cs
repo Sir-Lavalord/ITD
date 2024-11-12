@@ -191,7 +191,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             for (int i = 0; i < floralDevourerSegments.Length; i++)
             {
-                if (IsSegment(floralDevourerSegments[i], out NPC npc))
+                if (IsSegment(floralDevourerSegments[i], out NPC npc) && npc.ModNPC is FloralDevourerSegment seg)
                 {
                     Color color = Lighting.GetColor(npc.Center.ToTileCoordinates());
                     SpriteEffects direction = npc.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
@@ -205,15 +205,30 @@ namespace ITD.Content.NPCs.Bosses
             {
                 PreDrawSegments(spriteBatch, screenPos);
                 PostDrawSegments(spriteBatch, screenPos);
+                for (int i = 0; i < floralDevourerSegments.Length; i++)
+                {
+                    if (IsSegment(floralDevourerSegments[i], out NPC npc) && npc.ModNPC is FloralDevourerSegment seg)
+                    {
+                        bool isFacingRight = seg.direction.X > 0f;
+                        Texture2D femur = FloralDevourerSegment.femurTexture.Value;
+                        Texture2D tibia = FloralDevourerSegment.tibiaTexture.Value;
+                        seg.legFront?.Draw(spriteBatch, screenPos, Color.White, isFacingRight, femur, tibia, femur);
+                    }
+                }
             }
             return true;
+        }
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            if (NPC.IsABestiaryIconDummy)
+                return;
         }
     }
 
     public class FloralDevourerSegment : ModNPC
     {
-        private static readonly Asset<Texture2D> femurTexture = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerFemur");
-        private static readonly Asset<Texture2D> tibiaTexture = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerTibia");
+        public static readonly Asset<Texture2D> femurTexture = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerFemur");
+        public static readonly Asset<Texture2D> tibiaTexture = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerTibia");
 
         public Vector2 frontLegPosition;
         public Vector2 backLegPosition;
@@ -235,8 +250,8 @@ namespace ITD.Content.NPCs.Bosses
             get => NPC.ai[3] == 1f;
             set => NPC.ai[3] = value ? 1f : 0f;
         }
-        private WomrLeg legFront;
-        private WomrLeg legBack;
+        public KineChain legFront;
+        private KineChain legBack;
         public int ID
         {
             get => (int)NPC.ai[0];
@@ -271,8 +286,13 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (HasLegs)
             {
-                legFront = new WomrLeg(NPC.Center.X, NPC.Center.Y);
-                legBack = new WomrLeg(NPC.Center.X, NPC.Center.Y);
+                float[][] leg =
+                [
+                    KineChain.CreateKineSegment(81f),
+                    KineChain.CreateKineSegment(97f),
+                ];
+                legFront = new KineChain(NPC.Center.X, NPC.Center.Y, leg);
+                legBack = new KineChain(NPC.Center.X, NPC.Center.Y, leg);
             }
         }
         public override bool? CanBeHitByItem(Player player, Item item) => false;
@@ -316,32 +336,18 @@ namespace ITD.Content.NPCs.Bosses
                             backStepping = false;
                         }
                     }
-                    legFront.Update(frontLegPosition);
-                    legBack.Update(backLegPosition);
-                    legFront.ChainBase = NPC.Center;
-                    legBack.ChainBase = NPC.Center + new Vector2(direction.X * 32f, 0f);
+                    legFront.GenUpdate(frontLegPosition);
+                    legBack.GenUpdate(backLegPosition);
+                    legFront.basePoint = NPC.Center;
+                    legBack.basePoint = NPC.Center + new Vector2(direction.X * 32f, 0f);
                 }
             }
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             bool isFacingRight = direction.X > 0f;
-            legBack?.Draw(spriteBatch, screenPos, Color.Gray, isFacingRight, femurTexture.Value, femurTexture.Value, tibiaTexture.Value);
+            legBack?.Draw(spriteBatch, screenPos, Color.Gray, isFacingRight, femurTexture.Value, tibiaTexture.Value, femurTexture.Value);
             return false;
         }
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-        {
-            bool isFacingRight = direction.X > 0f;
-            legFront?.Draw(spriteBatch, screenPos, Color.White, isFacingRight, femurTexture.Value, femurTexture.Value, tibiaTexture.Value);
-        }
-    }
-    public class WomrLeg(float x, float y) : KineChain(x, y)
-    {
-        private KineSegment[] segments =
-        [
-            new KineSegment(x, y, 97f),
-            new KineSegment(x, y, 81f),
-        ];
-        public override KineSegment[] Segments => segments;
     }
 }
