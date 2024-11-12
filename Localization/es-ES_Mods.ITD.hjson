@@ -1126,6 +1126,7 @@ Projectiles: {
 	CosmisumaruCut.DisplayName: Corte de Cosmisumaru
 	CosmisumaruPheonix.DisplayName: Fénix de Cosmisumaru
 	CosmisumaruPheonixImpact.DisplayName: Fénix de Cosmisumaru
+	// DespoticSuperMeleeProjOld.DisplayName: Despotic Super Melee Proj Old
 }
 
 NPCs: {
@@ -1162,11 +1163,7 @@ NPCs: {
 	HauntedTombstone.DisplayName: Tumba embrujada
 	GhastlyTombstone.DisplayName: Tumba fantasmagórica
 	StrawmanDummy.DisplayName: Hombre de paja
-
-	RecruitedNPC: {
-		// DisplayName: Recruited N P C
-	}
-
+	// RecruitedNPC.DisplayName: Recruited N P C
 	SmallSnowpoff.DisplayName: Montonieve
 	LargeSnowpoff.DisplayName: Montonieve
 }
@@ -1330,7 +1327,7 @@ UI: {
 }
 
 RecruitmentSystem: {
-	RecruitmentAccepted: "¡{0} ahora es parte de tu equipo!"
-	NotHappyEnough: "¡{0} no tiene la felicidad máxima!"
-	RecruitmentDenied: "¡{0} no puede entrar a tu equipo!"
+	RecruitmentAccepted: ¡{0} ahora es parte de tu equipo!
+	NotHappyEnough: ¡{0} no tiene la felicidad máxima!
+	RecruitmentDenied: ¡{0} no puede entrar a tu equipo!
 }

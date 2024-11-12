@@ -1123,6 +1123,7 @@ Projectiles: {
 	// CosmisumaruCut.DisplayName: Cosmisumaru Cut
 	// CosmisumaruPheonix.DisplayName: Cosmisumaru Pheonix
 	// CosmisumaruPheonixImpact.DisplayName: Cosmisumaru Pheonix Impact
+	// DespoticSuperMeleeProjOld.DisplayName: Despotic Super Melee Proj Old
 }
 
 NPCs: {
@@ -1159,11 +1160,7 @@ NPCs: {
 	// HauntedTombstone.DisplayName: Haunted Tombstone
 	// GhastlyTombstone.DisplayName: Ghastly Tombstone
 	// StrawmanDummy.DisplayName: Strawman
-
-	RecruitedNPC: {
-		// DisplayName: Recruited N P C
-	}
-
+	// RecruitedNPC.DisplayName: Recruited N P C
 	// SmallSnowpoff.DisplayName: Snowpoff
 	// LargeSnowpoff.DisplayName: Snowpoff
 }
