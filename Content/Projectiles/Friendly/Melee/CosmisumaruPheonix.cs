@@ -25,7 +25,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         {
             Projectile.width = 68;
             Projectile.height = 72;
-            Projectile.aiStyle = 1;
+            Projectile.aiStyle = -1;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.DamageType = DamageClass.Melee;
@@ -36,8 +36,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.ignoreWater = true;
             Projectile.tileCollide = true;
             Projectile.extraUpdates = 1;
+            Projectile.damage = 360;
 
-            Projectile.damage = 45;
+            Projectile.damage = 90;
             Projectile.CritChance = 4;
         }
 
@@ -83,6 +84,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 
         public override void OnKill(int timeLeft)
         {
+
             Player player = Main.LocalPlayer;
             if (Projectile.owner == Main.myPlayer)
             {

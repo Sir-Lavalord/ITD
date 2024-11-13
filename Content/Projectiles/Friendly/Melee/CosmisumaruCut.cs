@@ -41,7 +41,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Player player = Main.player[Projectile.owner];
             target.immune[Projectile.owner] = 8;
 
-            player.GetITDPlayer().charge++;
+            player.GetITDPlayer().charge += damageDone;
         }
 
         public override void AI()

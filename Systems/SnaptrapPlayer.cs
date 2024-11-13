@@ -15,6 +15,8 @@ namespace ITD.Systems
         public bool ChainWeightEquipped;
         public float LengthIncrease;
         public float RetractMultiplier;
+        public int LatchTimeModifer;
+        public int WarningModifer;
         public bool CanUseSnaptrap
         {
             get
@@ -29,6 +31,8 @@ namespace ITD.Systems
             ChainWeightEquipped = false;
             LengthIncrease = 0f;
             RetractMultiplier = 0f;
+            LatchTimeModifer = 0;
+            WarningModifer = 0;
         }
         public bool ShootSnaptrap()
         {
