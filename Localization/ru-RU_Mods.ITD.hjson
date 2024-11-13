@@ -967,7 +967,7 @@ Items: {
 	}
 
 	TemperedGlassItem: {
-		// DisplayName: Tempered Glass Item
+		// DisplayName: Tempered Glass
 		// Tooltip: "'Glass but stronger.'"
 	}
 
