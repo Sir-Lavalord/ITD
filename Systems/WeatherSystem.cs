@@ -40,7 +40,7 @@ namespace ITD.Systems
         {
             Tile tile = Main.tile[i, j];
             TileDrawing tilesRenderer = Main.instance.TilesRenderer;
-            double windCounter = (double)ReflectionHelpers.Get<FieldInfo>("_grassWindCounter", instance: tilesRenderer, flags: BindingFlags.NonPublic | BindingFlags.Instance);
+            double windCounter = ReflectionHelpers.Get<FieldInfo, double>("_grassWindCounter", instance: tilesRenderer, flags: BindingFlags.NonPublic | BindingFlags.Instance);
             float rotation = tilesRenderer.GetWindCycle(i, j, windCounter);
 
             if (!WallID.Sets.AllowsWind[tile.WallType])
@@ -69,7 +69,7 @@ namespace ITD.Systems
         private static float GetTreeSway(int i, int j, ref Vector2 pos)
         {
             TileDrawing tilesRenderer = Main.instance.TilesRenderer;
-            double windCounter = (double)ReflectionHelpers.Get<FieldInfo>("_treeWindCounter", instance: tilesRenderer, flags: BindingFlags.NonPublic | BindingFlags.Instance);
+            double windCounter = ReflectionHelpers.Get<FieldInfo, double>("_treeWindCounter", instance: tilesRenderer, flags: BindingFlags.NonPublic | BindingFlags.Instance);
             float rot = tilesRenderer.GetWindCycle(i, j, windCounter);
 
             pos.X += rot * 2f;

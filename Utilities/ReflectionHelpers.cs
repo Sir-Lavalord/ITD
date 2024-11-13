@@ -28,10 +28,10 @@ namespace ITD.Utilities
         /// <summary>
         /// Get any private value through reflection
         /// </summary>
-        public static object Get<T>(string memberName, object instance = null, Type staticClass = null, BindingFlags? flags = null) where T : MemberInfo
+        public static TValue Get<TType, TValue>(string memberName, object instance = null, Type staticClass = null, BindingFlags? flags = null) where TType : MemberInfo
         {
-            bool isField = typeof(T) == typeof(FieldInfo);
-            bool isProperty = typeof(T) == typeof(PropertyInfo);
+            bool isField = typeof(TType) == typeof(FieldInfo);
+            bool isProperty = typeof(TType) == typeof(PropertyInfo);
             if (isField)
             {
                 FieldInfo field;
@@ -39,14 +39,14 @@ namespace ITD.Utilities
                 if (staticClass != null)
                 {
                     field = staticClass.GetField(memberName, flags ?? DefaultLookup);
-                    value = field.GetValue(staticClass);
+                    value = field.GetValue(null);
                 }
                 else
                 {
                     field = instance.GetType().GetField(memberName, flags ?? DefaultLookup);
                     value = field.GetValue(instance);
                 }
-                return value;
+                return (TValue)value;
             }
             if (isProperty)
             {
@@ -55,16 +55,18 @@ namespace ITD.Utilities
                 if (staticClass != null)
                 {
                     property = staticClass.GetProperty(memberName, flags ?? DefaultLookup);
-                    value = property.GetValue(staticClass);
+                    value = property.GetValue(null);
                 }
                 else
                 {
                     property = instance.GetType().GetProperty(memberName, flags ?? DefaultLookup);
                     value = property.GetValue(instance);
                 }
-                return value;
+                return (TValue)value;
             }
-            return null;
+            // If you do everything right this shouldn't show up at all
+            Main.NewText($"[ITD]: Reflect access unsuccessful for {memberName}");
+            return default;
         }
     }
 }
