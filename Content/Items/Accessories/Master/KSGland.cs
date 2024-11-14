@@ -9,7 +9,7 @@ using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Content.NPCs.Friendly;
 namespace ITD.Content.Items.Accessories.Master
 {
-    public class SlimeSecretionGland : ModItem
+    public class KSGland : ModItem
     {
         public override void SetStaticDefaults()
         {

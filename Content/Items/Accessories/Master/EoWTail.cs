@@ -9,7 +9,7 @@ using Terraria.Localization;
 using ITD.Content.Items.Other;
 namespace ITD.Content.Items.Accessories.Master
 {
-    public class EatersTail : ModItem
+    public class EoWTail : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -124,7 +124,7 @@ namespace ITD.Content.Items.Accessories.Master
                     eowFirstBar = false;
                     tailregained = false;
                     revtime = 3600;
-                    string Lost = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(EatersTail)}.TailLost")).Value;
+                    string Lost = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(EoWTail)}.TailLost")).Value;
                     RevText = Lost;
                     CombatText.NewText(new Rectangle((int)Player.Center.X, (int)Player.Center.Y, 12, 4), Color.Red, RevText, true);
                     return false;

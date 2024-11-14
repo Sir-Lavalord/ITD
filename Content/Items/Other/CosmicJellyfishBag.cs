@@ -37,11 +37,11 @@ namespace ITD.Content.Items.Other
 
         public override void ModifyItemLoot(ItemLoot itemLoot)
         {
-            itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<GravityBoots>(), 10));
             itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<CosmicJellyfishMask>(), 7));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<GalacticJellyBean>(),1));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<StarlitOre>(), 1, 25, 45));
             itemLoot.Add(ItemDropRule.Common(ItemID.Star, 1, 10, 20));
+            itemLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<GravityBoots>()));
             itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(ModContent.NPCType<CosmicJellyfish>()));
         }
     }
