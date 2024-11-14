@@ -8,6 +8,7 @@ namespace ITD
     public class ITDSets
     {
         public static int[] ToScrapeableMoss = TileID.Sets.Factory.CreateIntSet(-1);
+        public static int[] LeafGrowFX = TileID.Sets.Factory.CreateIntSet(GoreID.TreeLeaf_Normal);
         public static bool[] SnowpoffDiggable = TileID.Sets.Factory.CreateBoolSet(TileID.SnowBlock);
     }
 }

@@ -10,6 +10,8 @@ using ITD.Content.Items.Placeable;
 using ITD.Systems;
 using ITD.Content.NPCs.BlueshroomGroves.Critters;
 using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.GameContent;
 
 namespace ITD.Content.Tiles.BlueshroomGroves
 {
@@ -20,6 +22,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
         public static float opac = 1f;
         public override void SetStaticTreeDefaults()
         {
+            ITDSets.LeafGrowFX[Type] = GoreType<BlueshroomGrowLeaves>();
             DustType = DustType<BlueshroomSporesDust>();
             MapColor = new Color(179, 167, 134);
             WoodType = ItemType<BlueshroomStem>();
@@ -46,6 +49,15 @@ namespace ITD.Content.Tiles.BlueshroomGroves
                     Dust.NewDust(worldCoords-new Vector2(offset, offset+64), 16+offset*2, 16+offset*2, DustType<BlueshroomSporesDust>());
                 }
             }
+        }
+    }
+    public class BlueshroomGrowLeaves : ModGore
+    {
+        public override void SetStaticDefaults()
+        {
+            ChildSafety.SafeGore[Type] = true;
+            GoreID.Sets.SpecialAI[Type] = 3;
+            GoreID.Sets.PaintedFallingLeaf[Type] = true;
         }
     }
 }

@@ -38,6 +38,8 @@ namespace ITD.Content.NPCs
         public float originalKB;
         private int chilledTimer = 0;
         private const int MAX_CHILLED_DURATION = 60;
+        //shit
+        public static int cosjelBoss = -1;
 
         private static int[] shouldDropSandberusSummon =
             [
@@ -57,9 +59,11 @@ namespace ITD.Content.NPCs
             soulRot = false;
             toasted = false;
             bleedingII = false;
-            toppled = false;
+            if (!npc.HasBuff(ModContent.BuffType<ToppledDebuff>()))
+            {
+                toppled = false;
+            }
             if (!toppled)
-
             {
                 npc.knockBackResist = originalKB;
             }
@@ -221,7 +225,7 @@ namespace ITD.Content.NPCs
             }
             if (npc.type == NPCID.KingSlime)
             {
-                npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<KSGland>()));
+                npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<SlimeSecretionGland>()));
             }
             if (npc.type == NPCID.EyeofCthulhu)
             {
@@ -230,7 +234,7 @@ namespace ITD.Content.NPCs
             if (npc.type == NPCID.EaterofWorldsHead || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail)
             {
                 LeadingConditionRule IsABoss = new LeadingConditionRule(new Conditions.LegacyHack_IsABoss());
-                IsABoss.OnSuccess(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<EoWTail>()));
+                IsABoss.OnSuccess(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<EatersTail>()));
                 npcLoot.Add(IsABoss);
             }
             if (npc.type == NPCID.BrainofCthulhu)

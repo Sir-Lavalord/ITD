@@ -32,7 +32,6 @@ namespace ITD.Content.Tiles
         /// Leave null for no acorn drops
         /// </summary>
         public int? DropAcorns { get; set; } = null;
-        public int GrowFXGore { get; set; }
         public virtual TreeShakeSettings TreeShakeSettings => TreeShakeSettings.Common;
         public static bool IsTopTile(int i, int j)
         {
@@ -139,7 +138,7 @@ namespace ITD.Content.Tiles
             None
         }
         /// <summary>
-        /// Override to set dust type, map color, wood type, acorn type, grow leaf type, and tree shake settings.
+        /// Override to set dust type, map color, wood type, acorn type, and tree shake settings.
         /// </summary>
         public virtual void SetStaticTreeDefaults()
         {
@@ -147,7 +146,6 @@ namespace ITD.Content.Tiles
             MapColor = Color.White;
             WoodType = ItemID.Wood;
             DropAcorns = ItemID.Acorn;
-            GrowFXGore = GoreID.TreeLeaf_Normal;
         }
         public override void SetStaticDefaults()
         {
@@ -206,21 +204,24 @@ namespace ITD.Content.Tiles
             t.TileFrameY = (short)(y + verticalRandom);
         }
         /// <summary>
-        /// Grow a tree of a type at the given coordinates
+        /// Try to grow a tree of a type at the given coordinates
         /// </summary>
         public static bool Grow(int i, int j, int type = 0, int minHeight = 5, int maxHeight = 10, int? saplingType = null)
         {
+            // default tree type to avoid trying to grow a dirt tree (though i'm curious abt what that would do)
             if (type == 0)
             {
                 type = ModContent.TileType<BlueshroomTree>();
             }
             int height = Main.rand.Next(minHeight, maxHeight + 1);
+            // if the ceiling's too low for the chosen height, keep trying until it's a good height. if you still can't place a tree in that case, just return false
             while (!TileHelpers.AptForTree(i, j, height, saplingType))
             {
                 height--;
                 if (height < minHeight)
                     return false;
             }
+            // if this tree is grown from a sapling (which would be at (i, j)), remove the sapling before growing the tree to avoid sapling drops
             if (saplingType != null)
             {
                 Framing.GetTileSafely(i, j).HasTile = false;
@@ -232,8 +233,10 @@ namespace ITD.Content.Tiles
                 }
                 Framing.GetTileSafely(i, j + otherOffset).HasTile = false;
             }
+            // actually grow the tree
             for (int k = 0; k < height; k++)
             {
+                // new tiles and tiles that are framed need to be synced
                 bool mp = Main.netMode != NetmodeID.SinglePlayer;
 
                 WorldGen.PlaceTile(i, j - k, type);
@@ -357,7 +360,8 @@ namespace ITD.Content.Tiles
 
             if (treeHeight > 0)
             {
-                int gore = (TileLoader.GetTile(Main.tile[x, y].TileType) as ITDTree).GrowFXGore;
+                int gore = ITDSets.LeafGrowFX[Framing.GetTileSafely(x, y).TileType];
+                //Main.NewText(gore + " heehoo");
 
                 if (Main.netMode == NetmodeID.Server)
                     NetMessage.SendData(MessageID.SpecialFX, -1, -1, null, 1, x, y, treeHeight, gore);
@@ -545,11 +549,11 @@ namespace ITD.Content.Tiles
             // leaf gores
             if (Main.netMode == NetmodeID.Server)
             {
-                NetMessage.SendData(MessageID.SpecialFX, -1, -1, null, 1, bottom.X, bottom.Y, 1f, GrowFXGore);
+                NetMessage.SendData(MessageID.SpecialFX, -1, -1, null, 1, bottom.X, bottom.Y, 1f, ITDSets.LeafGrowFX[Type]);
             }
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                WorldGen.TreeGrowFX(bottom.X, bottom.Y, 1, GrowFXGore, hitTree: true);
+                WorldGen.TreeGrowFX(bottom.X, bottom.Y, 1, ITDSets.LeafGrowFX[Type], hitTree: true);
             }
         }
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
