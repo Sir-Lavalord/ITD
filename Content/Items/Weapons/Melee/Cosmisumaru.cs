@@ -29,7 +29,7 @@ namespace ITD.Content.Items.Weapons.Melee
         public override void SetDefaults()
         {
             Item.mana = 0;
-            Item.damage = 160;
+            Item.damage = 220;
             Item.crit = 4;
             Item.DamageType = DamageClass.Melee;
             Item.width = 50;
@@ -151,7 +151,7 @@ namespace ITD.Content.Items.Weapons.Melee
                     direction.Normalize();
                     float projectileSpeed = 8f;
 
-                    Projectile.NewProjectile(player.GetSource_FromThis(), player.position.X, player.position.Y, direction.X * projectileSpeed, direction.Y * projectileSpeed, ModContent.ProjectileType<CosmisumaruPheonix>(), 360, 0f, player.whoAmI);
+                    Projectile.NewProjectile(player.GetSource_FromThis(), player.position.X, player.position.Y, direction.X * projectileSpeed, direction.Y * projectileSpeed, ModContent.ProjectileType<CosmisumaruPheonix>(), 540, 0f, player.whoAmI);
 
                     for (int d = 0; d < 30; d++)
                     {

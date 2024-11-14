@@ -15,12 +15,20 @@ namespace ITD.Content.Tiles.Misc
         {
             Main.tileSolid[Type] = true;
             Main.tileBlockLight[Type] = false;
-            MinPick = 30;
+            Main.tileLighted[Type] = true;
 
-            HitSound = SoundID.Item48;
+            MinPick = 30;
+            MineResist = 0.001f;
+
+            HitSound = SoundID.Shatter;
             DustType = DustID.Glass;
 
             AddMapEntry(Color.LightSkyBlue);
+        }
+
+        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+        {
+            
         }
     }
 }

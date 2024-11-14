@@ -38,7 +38,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.extraUpdates = 1;
             Projectile.damage = 360;
 
-            Projectile.damage = 90;
+            Projectile.damage = 540;
             Projectile.CritChance = 4;
         }
 
@@ -90,7 +90,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(player.direction, 0f), ModContent.ProjectileType<CosmisumaruPheonixImpact>(), 60, 0f);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(player.direction, 0f), ModContent.ProjectileType<CosmisumaruPheonixImpact>(), 90, 0f);
                 }
             }
 

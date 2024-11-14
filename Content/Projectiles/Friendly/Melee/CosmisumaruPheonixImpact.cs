@@ -34,7 +34,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.ownerHitCheckDistance = 300f;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.light = 0.1f;
-            Projectile.damage = 45;
+            Projectile.damage = 90;
             Projectile.CritChance = 4;
             Projectile.ignoreWater = true;
             Projectile.alpha = 100;

@@ -40,7 +40,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 
         public override void OnKill(int timeLeft)
         {
-            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            SoundEngine.PlaySound(SoundID.Shatter, Projectile.position);
 
             for (int i = 0; i < 10; i++)
             {

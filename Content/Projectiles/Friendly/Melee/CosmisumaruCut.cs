@@ -32,6 +32,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.ownerHitCheck = true;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.light = 0.1f;
+            Projectile.damage = 220;
 
             Projectile.noEnchantmentVisuals = true;
         }
