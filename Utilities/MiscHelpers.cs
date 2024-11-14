@@ -100,6 +100,23 @@ namespace ITD.Utilities
             else
             return false;
         }
+        public static Vector2 SafeDirectionTo(this Entity entity, Vector2 destination, Vector2? fallback = null)
+        {
+            if (!fallback.HasValue)
+                fallback = Vector2.Zero;
+
+            return (destination - entity.Center).SafeNormalize(fallback.Value);
+        }
+        public static NPC NPCExists(int whoAmI, params int[] types)
+        {
+            return whoAmI > -1 && whoAmI < Main.maxNPCs && Main.npc[whoAmI].active && (types.Length == 0 || types.Contains(Main.npc[whoAmI].type)) ? Main.npc[whoAmI] : null;
+        }
+
+        public static NPC NPCExists(float whoAmI, params int[] types)
+        {
+            return NPCExists((int)whoAmI, types);
+        }
+
         public static void ExpandHitboxBy(this Projectile projectile, int width, int height)
         {
             projectile.position = projectile.Center;
