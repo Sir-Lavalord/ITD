@@ -1,31 +1,19 @@
 ﻿using ITD.Content.Items.Other;
 using ITD.Content.Items.PetSummons;
 using ITD.Content.Items.Placeable;
-using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Content.Projectiles.Hostile;
-using ITD.Content.NPCs.Bosses;
 using ITD.Players;
 using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using System.IO;
 using ITD.Content.Dusts;
 using ITD.Content.Items.Armor.Vanity.Masks;
-using Terraria.Graphics.Effects;
-using ITD.Particles.CosJel;
-using ITD.Particles;
-using Terraria.UI.Chat;
-using Terraria.Chat;
-using Terraria.Localization;
 using ITD.Content.Items.Accessories.Movement.Boots;
-using ITD.Content.NPCs.Bosses;
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -55,7 +43,6 @@ namespace ITD.Content.NPCs.Bosses
             writer.Write(NPC.localAI[1]);
             writer.Write(NPC.localAI[2]);
             writer.Write(AIRand);
-
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)

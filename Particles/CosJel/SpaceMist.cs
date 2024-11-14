@@ -35,7 +35,7 @@ namespace ITD.Particles.CosJel
         }
         public override bool PreDraw(SpriteBatch spriteBatch)
         {
-            if (!(tag is Projectile projectile && projectile.Exists()))
+            if (!(tag is NPC npc && npc.Exists()))
             {
                 DrawOutline(spriteBatch);
                 return true;
