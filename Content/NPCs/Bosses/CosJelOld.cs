@@ -1,5 +1,4 @@
-﻿/*
-using ITD.Content.Items.Other;
+﻿/*using ITD.Content.Items.Other;*//*
 using ITD.Content.Items.PetSummons;
 using ITD.Content.Items.Placeable;
 using ITD.Content.Projectiles.Friendly.Misc;
@@ -30,7 +29,7 @@ namespace ITD.Content.NPCs.Bosses
 
 {
     [AutoloadBossHead]
-    public class CosJelOld : ModNPC
+    public class CosmicJellyfish : ModNPC
     {
         public int hand = -1;
         public int hand2 = -1;
@@ -38,7 +37,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             get
             {
-                if (hand > -1)
+                if (hand != -1)
                 {
                     Projectile proj = Main.projectile[hand];
                     if (!proj.active)
@@ -52,7 +51,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             get
             {
-                if (hand2 > -1)
+                if (hand2 != -1)
                 {
                     Projectile proj = Main.projectile[hand2];
                     if (!proj.active)
@@ -79,6 +78,10 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override void SendExtraAI(BinaryWriter writer)
         {
+
+            writer.Write(hand);
+            writer.Write(hand2);
+            writer.Write(bSecondStage);
             writer.Write(bOkuu);
             writer.Write(goodtransition);
             writer.Write(NPC.localAI[0]);
@@ -90,6 +93,17 @@ namespace ITD.Content.NPCs.Bosses
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
+            if (hand != -1)
+            {
+                hand = reader.ReadInt32();
+
+            }
+            if (hand2 != -1)
+            {
+                hand2 = reader.ReadInt32();
+
+            }
+            bSecondStage = reader.ReadBoolean();
             bOkuu = reader.ReadBoolean();
 
             goodtransition = reader.ReadInt32();
@@ -98,7 +112,6 @@ namespace ITD.Content.NPCs.Bosses
             NPC.localAI[2] = reader.ReadSingle();
             AIRand = reader.ReadSingle();
         }
-
         private enum MovementState
         {
             FollowingRegular,
@@ -108,7 +121,6 @@ namespace ITD.Content.NPCs.Bosses
             Explode
         }
         private MovementState AI_State = MovementState.FollowingRegular;
-
         public override void SetDefaults()
         {
             NPC.width = 180;
@@ -172,7 +184,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             int startFrame = 0;
             int finalFrame = 4;
-            if (bSecondStage())
+            if (bSecondStage)
             {
                 goodtransition = 5;
             }
@@ -204,7 +216,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (!bOkuu)
             {
-                if (!bSecondStage())
+                if (!bSecondStage)
                 {
                     Dust.NewDust(NPC.Center + new Vector2(Main.rand.Next(NPC.width) - NPC.width / 2, 0), 1, 1, DustID.ShimmerTorch, 0f, 0f, 0, default, 1f);
                 }
@@ -229,7 +241,6 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override void AI()
         {
-        
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
                 NPC.TargetClosest();
@@ -242,7 +253,23 @@ namespace ITD.Content.NPCs.Bosses
                 NPC.EncourageDespawn(10);
                 return;
             }
-            if (bSecondStage())
+            if (!bOkuu)
+            {
+                CheckSecondStage();
+            }
+            if (!SkyManager.Instance["ITD:CosjelOkuuSky"].IsActive() && bOkuu)
+            {
+                SkyManager.Instance.Activate("ITD:CosjelOkuuSky");
+            }
+            Attacks(player);
+            Movement(player);
+            HandControl(player);
+            iDelayTime = masterMode ? 0 : expertMode ? 4 : 6;
+        }
+        public bool bSecondStage;
+        private void CheckSecondStage()
+        {
+            if (bSecondStage)
             {
                 if (NPC.ai[3] >= 8)
                 {
@@ -256,33 +283,37 @@ namespace ITD.Content.NPCs.Bosses
                     NPC.ai[3] = 1;
                 }
             }
-            if (!SkyManager.Instance["ITD:CosjelOkuuSky"].IsActive() && bOkuu)
+
+            if (NPC.life * 100 / NPC.lifeMax < 50)
             {
-                SkyManager.Instance.Activate("ITD:CosjelOkuuSky");
-            }
-            Attacks(player);
-            Movement(player);
-            HandControl(player);
-            iDelayTime = masterMode ? 0 : expertMode ? 4 : 6;
-        }
-        public bool bSecondStage()
-        {
-            if (Main.expertMode && NPC.life < NPC.lifeMax * (2f / 3))
-            {
-                if (Main.netMode != NetmodeID.MultiplayerClient)
+                if (!bSecondStage)
                 {
-                    NPC.localAI[0] = 0;
-                    NPC.localAI[1] = 0;
-                    NPC.localAI[2] = 0;
-                    NPC.ai[0] = 0;
-                    NPC.ai[1] = 0;
-                    NPC.ai[2] = 0;
-                    NPC.ai[3] = 0;
-                    NPC.netUpdate = true;
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        //Explosion goes here
+                        Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<BlankExplosion>(), NPC.damage, 0, Main.myPlayer);
+                        proj.scale = 3f;//300x300
+                        proj.hostile = true;
+                        proj.friendly = false;
+                        proj.knockBack = 3f;
+                    }
+                    if (Main.netMode != NetmodeID.Server)//Drop some gore when changing phase
+                    {
+
+                        bSecondStage = true;
+                        NPC.localAI[0] = 0;
+
+                        NPC.localAI[1] = 0;
+
+                        NPC.localAI[2] = 0;
+                        NPC.ai[3]++;
+                        TryKillBothHands();
+                    }
+                    NetSync();
                 }
-                return true;
             }
-            return false;
+            return;
+
         }
         private void CreateLeftHand(int AttackID)
         {
@@ -292,6 +323,8 @@ namespace ITD.Content.NPCs.Bosses
                 NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, AttackID, NPC.whoAmI
                 );
             (Main.projectile[hand2].ModProjectile as CosmicJellyfish_Hand).isLeftHand = true;
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, hand2);
             NetSync();
         }
         private void CreateRightHand(int AttackID)
@@ -302,6 +335,8 @@ namespace ITD.Content.NPCs.Bosses
                 NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicJellyfish_Hand>(), 20, 0.1f, -1, AttackID, NPC.whoAmI
                 );
             (Main.projectile[hand].ModProjectile as CosmicJellyfish_Hand).isLeftHand = false;
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, hand);
             NetSync();
         }
         //TODO: FIX CODE FOR MULTIPLAYER
@@ -325,7 +360,7 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         int projectileAmount = Main.rand.Next(5, 8);
 
-                        if (bSecondStage())
+                        if (bSecondStage)
                         {
                             projectileAmount = Main.rand.Next(7, 10);
                         }
@@ -344,7 +379,7 @@ namespace ITD.Content.NPCs.Bosses
                             }
                         }
                     }
-                    else if (NPC.localAI[1] == 150 || NPC.localAI[1] == 100 && bSecondStage())
+                    else if (NPC.localAI[1] == 150 || NPC.localAI[1] == 100 && bSecondStage)
                     {
                         NPC.ai[3]++;
                         NPC.localAI[1] = 0;
@@ -388,7 +423,7 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)//Fix later, this will do for now
                         {
-                            if (!bSecondStage())
+                            if (!bSecondStage)
                             {
                                 NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X, NPC.Center.Y - 100), ModContent.NPCType<CosmicJellyfishMini>());
                             }
@@ -410,7 +445,7 @@ namespace ITD.Content.NPCs.Bosses
                 case 4:
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        if (!bSecondStage())
+                        if (!bSecondStage)
                         {
                             if (NPC.localAI[1]++ >= 100)
                             {
@@ -431,6 +466,8 @@ namespace ITD.Content.NPCs.Bosses
                                     if (hand == -1)
                                     {
                                         CreateRightHand(0);
+                                        if (Main.netMode == NetmodeID.Server)
+                                            NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, hand);
                                     }
                                 }
                                 else
@@ -438,6 +475,8 @@ namespace ITD.Content.NPCs.Bosses
                                     if (hand2 == -1)
                                     {
                                         CreateLeftHand(0);
+                                        if (Main.netMode == NetmodeID.Server)
+                                            NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, hand2);
                                     }
                                 }
                             }
@@ -464,10 +503,14 @@ namespace ITD.Content.NPCs.Bosses
                                 if (hand == -1)
                                 {
                                     CreateRightHand(0);
+                                    if (Main.netMode == NetmodeID.Server)
+                                        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, hand);
                                 }
                                 if (hand2 == -1)
                                 {
                                     CreateLeftHand(0);
+                                    if (Main.netMode == NetmodeID.Server)
+                                        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, hand2);
                                 }
                             }
                         }
@@ -480,7 +523,7 @@ namespace ITD.Content.NPCs.Bosses
                         if (AI_State != MovementState.Suffocate)
                             AI_State = MovementState.Ram;
                     }
-                    if (NPC.localAI[0] >= 2 && !bSecondStage() || NPC.localAI[0] >= 3 && bSecondStage() || NPC.localAI[1] >= 400)
+                    if (NPC.localAI[0] >= 2 && !bSecondStage || NPC.localAI[0] >= 3 && bSecondStage || NPC.localAI[1] >= 400)
                     {
                         //can't believe i have to do this, since the checking doesn't even fucking work
                         NPC.ai[3]++;
@@ -520,15 +563,13 @@ namespace ITD.Content.NPCs.Bosses
                             RightHand.HandState = CosJelHandState.Charging;
                             LeftHand.HandState = CosJelHandState.Charging;
                         }
-
-                        *//*                        NPC.ai[3]++;
-*/
-/*                        NPC.localAI[0] = 0;
+                     NPC.ai[3]++;
+                        NPC.localAI[0] = 0;
 
                         NPC.localAI[1] = 0;
 
                         NPC.localAI[2] = 0;
-                        TryKillBothHands();*//*
+                        TryKillBothHands();
                         NetSync();
                     }
                     else
@@ -540,10 +581,14 @@ namespace ITD.Content.NPCs.Bosses
                                 if (hand == -1)
                                 {
                                     CreateRightHand(1);
+                                    if (Main.netMode == NetmodeID.Server)
+                                        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, hand);
                                 }
                                 if (hand2 == -1)
                                 {
                                     CreateLeftHand(1);
+                                    if (Main.netMode == NetmodeID.Server)
+                                        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, hand2);
                                 }
                             }
                         }
@@ -936,9 +981,6 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (NPC.ai[3] == 5)
             {
-                //Rgb effect like the hand later
-                *//*                Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
-                *//*
                 Texture2D tex = TextureAssets.Npc[NPC.type].Value;
                 int vertSize = tex.Height / Main.npcFrameCount[NPC.type];
                 Vector2 origin = new Vector2(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);

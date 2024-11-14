@@ -584,16 +584,16 @@ Items: {
 		Tooltip: Summons a cosmic hand to attack your foes
 	}
 
-	EoWTail: {
-		DisplayName: Tail of the Eater
-		Tooltip:
+	EatersTail: {
+		// DisplayName: Tail of the Eater
+		/* Tooltip:
 			'''
 			Splits your life into two
 			Fatal damage does not carry onto next life
 			This can only happen every 1 minute
 			Cooldown only reduces when you have max life
-			'''
-		TailLost: TAIL LOSS
+			''' */
+		// TailLost: TAIL LOSS
 	}
 
 	Prophylaxis: {
@@ -614,13 +614,13 @@ Items: {
 			'''
 	}
 
-	KSGland: {
-		DisplayName: Slime Secretion Gland
-		Tooltip:
+	SlimeSecretionGland: {
+		// DisplayName: Slime Secretion Gland
+		/* Tooltip:
 			'''
-			Creates a slimy coating which absorbs half of all incoming damage
+			Creates a slimy coating which absorbs 25% of all incoming damage
 			Coating massively increases your hitbox size
-			'''
+			''' */
 	}
 
 	KeepersShovel: {

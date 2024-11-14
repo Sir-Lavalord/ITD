@@ -67,6 +67,7 @@ namespace ITD.Content.Projectiles.Hostile
 
         public override void SendExtraAI(BinaryWriter writer)
         {
+            
             writer.Write(bStopfalling);
             writer.Write(isLeftHand);
             writer.Write(bSmackdown);
@@ -143,7 +144,7 @@ namespace ITD.Content.Projectiles.Hostile
                 Projectile.netUpdate = true;
             }
             return false;
-                
+
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -152,21 +153,26 @@ namespace ITD.Content.Projectiles.Hostile
         public override void OnKill(int timeLeft)
         {
 
-                NPC NPC = Main.npc[(int)Projectile.ai[1]];
-                if (NPC.active && NPC.ModNPC is CosmicJellyfish cosJel)
+            NPC NPC = Main.npc[(int)Projectile.ai[1]];
+            if (NPC.active && NPC.ModNPC is CosmicJellyfish cosJel)
+            {
+                if (isLeftHand)
                 {
-                    if (isLeftHand)
-                    {
                     cosJel.hand2 = -1;
-                    }
-                    else
+                    NetSync();
+                }
+                else
+                {
+                                        NetSync();
+
                     cosJel.hand = -1;
                 }
+            }
             for (int i = 0; i < 10; i++)
             {
                 ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f), 5f);
                 spaceMist.tag = Projectile;
-                
+
             }
             SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
         }
@@ -246,7 +252,7 @@ namespace ITD.Content.Projectiles.Hostile
                             {
                                 cosJel.vLockedIn = player.Center;
                             }
-                            else if (Timer >= cosJel.iDelayTime && cosJel.bSecondStage() || Timer >= 0 && !cosJel.bSecondStage())
+                            else if (Timer >= cosJel.iDelayTime && cosJel.bSecondStage || Timer >= 0 && !cosJel.bSecondStage)
                             {
                                 Timer = 0;
                                 if (Projectile.ai[0] != 1)
@@ -291,7 +297,7 @@ namespace ITD.Content.Projectiles.Hostile
                             }
                             else
                             {
-                                if (cosJel.bSecondStage())
+                                if (cosJel.bSecondStage)
                                 {
                                     if (cosJel.attackCount++ >= 6)
                                         Projectile.Kill();
@@ -317,7 +323,7 @@ namespace ITD.Content.Projectiles.Hostile
                         Projectile.Center = Vector2.Lerp(Projectile.Center, normalCenter, 0.3f);
                         if (Timer++ >= 30)
                         {
-                            if (cosJel.bSecondStage())
+                            if (cosJel.bSecondStage)
                             {
                                 NPC.localAI[2]++;
                                 NetSync();
@@ -361,7 +367,7 @@ namespace ITD.Content.Projectiles.Hostile
                                         {
                                             SoundEngine.PlaySound(SoundID.Item88, player.Center);
                                             int proj = Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(cosJel.vLockedIn.X + (Main.rand.Next(-40, 40)), player.Center.Y - 500)
-                                                , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(isLeftHand? 0.65f : 0.75f, 1.1f), Main.rand.Next(424, 427), Projectile.damage, Projectile.knockBack, player.whoAmI);
+                                                , new Vector2(0, 6).RotatedByRandom(0.01) * Main.rand.NextFloat(isLeftHand ? 0.65f : 0.75f, 1.1f), Main.rand.Next(424, 427), Projectile.damage, Projectile.knockBack, player.whoAmI);
                                             Main.projectile[proj].hostile = true;
                                             Main.projectile[proj].friendly = false;
                                             Main.projectile[proj].scale = Main.rand.NextFloat(2, 3f);
@@ -429,7 +435,7 @@ namespace ITD.Content.Projectiles.Hostile
                     }
                 }
             }
-            if (Main.rand.NextBool(3)*//* && HandState != CosJelHandState.Slinging && HandState != CosJelHandState.Charging && !bSmackdown*//*)
+            if (Main.rand.NextBool(3) && HandState != CosJelHandState.Slinging && HandState != CosJelHandState.Charging && !bSmackdown)
             {
                 Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
                 Vector2 veloDelta = (Projectile.position - Projectile.oldPosition); // i can't use projectile.velocity here because we're manually changing the position for most of its existence
