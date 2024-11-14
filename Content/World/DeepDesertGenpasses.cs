@@ -29,79 +29,20 @@ namespace ITD.Content.World
 
         private static Point GetGenStartPoint()
         {
-            Point deepDesertStart = new();
-            for (int j = Main.maxTilesY; j >= 0 && deepDesertStart == Point.Zero; j--)
-            {
-                for (int i = Main.maxTilesX; i >= 0; i--)
-                {
-                    if (Main.tile[i, j].TileType == TileID.Sandstone)
-                    {
-                        deepDesertStart = new Point(i, j);
-                        break;
-                    }
-                }
-            }
-            return deepDesertStart;
+            return GenVars.UndergroundDesertLocation.Bottom().ToPoint();
         }
 
-        private static void GenDeepDesert(float x, float y, int seed)
+        private static void GenDeepDesert(int x, int y, int seed)
         {
             int width = Main.maxTilesX / 15;
             int height = Main.maxTilesY / 6;
             var rectangle = new Rectangle((int)x - (width / 2), (int)y - (height / 2), width, height);
-            List<Rectangle> tunnelsList = [];
-            bool inTunnels(int i, int j)
+            ITDShapes.Parabola parab = new(x, y, x, y - 100, 300);
+            ITDShapes.Banana banan = new(parab, y - 200, 0.7d);
+            banan.LoopThroughPoints(p =>
             {
-                for(int k = 0; k < tunnelsList.Count; k++)
-                {
-                    if (tunnelsList[k].Contains(i, j))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            //WorldUtils.Gen(rectangle.Center, new Shapes.Circle(width/2, height/2), Actions.Chain(
-            WorldUtils.Gen(rectangle.Center, new Shapes.Slime(width/2, 1f, 1f), Actions.Chain(
-            [
-                new Actions.SetTile((ushort)diorite),
-                new Actions.PlaceWall((ushort)pegmatiteWall)
-            ]));
-            int tunnelsAmount = WorldGen.genRand.Next(7, 10);
-            int tunnelSize = (int)5f * (int)(tunnelsAmount / 7f);
 
-            for (int i = rectangle.Left; i <= rectangle.Right; i++)
-            {
-                for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
-                {
-                    if (TileHelpers.TileType(i, j, diorite))
-                    {
-                        if (WorldGen.genRand.NextBool(2) && !inTunnels(i,j))
-                        {
-                            int dir = Math.Sign((rectangle.Center.ToVector2() - new Vector2(i, j)).X);
-                            int padding = 54;
-                            tunnelsList.Add(new Rectangle(i-padding, j-padding, 200+padding*2, 6+padding*2));
-                            int steps = WorldGen.genRand.Next(90, 300);
-                            for (int k = 0; k < steps; k++)
-                            {
-                                WorldGen.digTunnel(i + (dir==1?k:-k), j, dir, 0, 5, tunnelSize);
-                            }
-                            WorldGen.digTunnel(i + WorldGen.genRand.Next(0, steps), j, 0, 2, 60, 8);
-                        }
-                    }
-                }
-            }
-            tunnelsList.Clear();
-            for (int i = rectangle.Left; i <= rectangle.Right; i++)
-            {
-                for (int j = rectangle.Top; j <= rectangle.Bottom; j++)
-                {
-                    if (TileHelpers.EdgeTile(i, j) && TileHelpers.TileType(i, j, diorite))
-                    {
-                        WorldGen.TileRunner(i, j, 5, 2, pegmatite);
-                    }
-                }
-            }
+            });
         }
     }
 }

@@ -970,7 +970,7 @@ Items: {
 	}
 
 	TemperedGlassItem: {
-		DisplayName: Tempered Glass Item
+		DisplayName: Tempered Glass
 		Tooltip: "'Glass but stronger.'"
 	}
 
@@ -982,6 +982,25 @@ Items: {
 			Press RMB to release a Cosmic Pheonix while glowing
 			'A cosmic heirloom passed down from the stars above.'
 			'''
+	}
+
+	SafetyLatch: {
+		Tooltip: Snaptraps stay attached slightly longer when out of range
+		DisplayName: Safety Latch
+	}
+
+	MagicPolish: {
+		Tooltip:
+			'''
+			Latch effects activate faster
+			Snaptraps retract slightly faster
+			'''
+		DisplayName: Magic Polish
+	}
+
+	UnyieldingChain: {
+		DisplayName: Unyielding Chain
+		Tooltip: +25% Snaptrap Length
 	}
 }
 

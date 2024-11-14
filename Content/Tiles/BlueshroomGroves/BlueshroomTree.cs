@@ -8,6 +8,8 @@ using Terraria;
 using System;
 using ITD.Content.Items.Placeable;
 using ITD.Systems;
+using ITD.Content.NPCs.BlueshroomGroves.Critters;
+using Terraria.ID;
 
 namespace ITD.Content.Tiles.BlueshroomGroves
 {
@@ -23,6 +25,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             WoodType = ItemType<BlueshroomStem>();
             DropAcorns = ItemType<Blueshroom>();
         }
+        public override TreeShakeSettings TreeShakeSettings => new([NPCType<SmallSnowpoff>()], [NPCType<LargeSnowpoff>()], [NPCID.Firefly], [NPCID.GoldButterfly], [ItemID.Starfruit]);
         public override void PostDrawTreeTops(int i, int j, SpriteBatch spriteBatch, Rectangle sourceRect, Vector2 offset, Vector2 origin, Color color)
         {
             WeatherSystem.DrawTreeSway(i, j, spriteBatch, glow.Value, sourceRect, offset, origin);

@@ -24,6 +24,7 @@ namespace ITD.Content.Items.Weapons.Melee
     public class Cosmisumaru : ModItem
     {
         public int attackCycle = 0;
+        public float damageDealt;
         public Vector2 dustPosition;
         public override void SetDefaults()
         {
@@ -80,7 +81,7 @@ namespace ITD.Content.Items.Weapons.Melee
                 player.itemLocation.X = player.Center.X - 40f;
             }
 
-            if (player.GetITDPlayer().charge > 39)
+            if (player.GetITDPlayer().charge > 1499)
             {
                 if (Main.rand.NextBool(3))
                 {
@@ -107,7 +108,7 @@ namespace ITD.Content.Items.Weapons.Melee
                 player.itemLocation.X = player.Center.X - 40f;
             }
 
-            if (player.GetITDPlayer().charge > 39)
+            if (player.GetITDPlayer().charge > 1499)
             {
                 if (Main.rand.NextBool(3))
                 {
@@ -123,7 +124,7 @@ namespace ITD.Content.Items.Weapons.Melee
         {
             if (player.altFunctionUse == 2)
             {
-                if (player.GetITDPlayer().charge < 39)
+                if (player.GetITDPlayer().charge < 1499)
                 {
                     return false;
                 }
@@ -142,7 +143,7 @@ namespace ITD.Content.Items.Weapons.Melee
         {
             if (player.altFunctionUse == 2)
             {
-                if (player.GetITDPlayer().charge > 39)
+                if (player.GetITDPlayer().charge > 1499)
                 {
                     player.GetITDPlayer().charge = 0;
                     Vector2 mousePosition = Main.MouseWorld;
@@ -177,7 +178,7 @@ namespace ITD.Content.Items.Weapons.Melee
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (player.altFunctionUse == 2 && player.GetITDPlayer().charge > 39)
+            if (player.altFunctionUse == 2 && player.GetITDPlayer().charge > 1499)
             {
                 position.Y = Main.MouseWorld.Y;
                 position.X = Main.MouseWorld.X;

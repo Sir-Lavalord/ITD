@@ -86,6 +86,10 @@ namespace ITD.Content.Projectiles
         //Use floats in the form of percentages to increase this
         private float retractMultiplier = 0f;
         //Use floats in the form of decimals to increase this. Base is 0.4f.
+        private int latchModifer;
+        //Simply edits the amount of hits required to activate a latch effect. Defaults to subtracting.
+        private int warningModifier;
+        //Amount of frames your warning frames is increased by. Defaults to addition.
 
         public bool IsStickingToTarget
         {
@@ -153,6 +157,8 @@ namespace ITD.Content.Projectiles
             chainWeight = snaptrapPlayer.ChainWeightEquipped;
             lengthIncrease = snaptrapPlayer.LengthIncrease;
             retractMultiplier = snaptrapPlayer.RetractMultiplier;
+            latchModifer = snaptrapPlayer.LatchTimeModifer;
+            warningModifier = snaptrapPlayer.WarningModifer;
         }
 
         public override void OnSpawn(IEntitySource source)
@@ -375,7 +381,7 @@ namespace ITD.Content.Projectiles
             if (damageTimer >= FramesBetweenHits)
             {
                 damageTimer = 0;
-                if (currentDamageAmount < FullPowerHitsAmount)
+                if (currentDamageAmount < FullPowerHitsAmount - latchModifer)
                 {
                     currentDamageAmount += 1;
                 }
@@ -394,7 +400,7 @@ namespace ITD.Content.Projectiles
             if (chainLength-ExtraFlexibility >= ShootRange)
             {
                 warningTimer += 1;
-                if (warningTimer > WarningFrames)
+                if (warningTimer > WarningFrames + warningModifier)
                 {
                     SoundEngine.PlaySound(snaptrapForcedRetract, Projectile.Center);
                     retracting = true;

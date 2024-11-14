@@ -21,7 +21,7 @@ namespace ITD.Content.World
         public static LocalizedText BluesoilPassMessage { get; private set; }
         public static LocalizedText DeepDesertPassMessage { get; private set; }
 
-        //public static List<Point> testPoints = [];
+        public static List<Point> testPoints = [];
         public override void SetStaticDefaults()
         {
             BluesoilPassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{nameof(BluesoilPassMessage)}"));
@@ -64,6 +64,26 @@ namespace ITD.Content.World
             //test world particle (change particle.canvas in particle type)
             //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
+            /*
+            testPoints.Add(pos);
+            if (testPoints.Count == 2)
+            {
+                ITDShapes.Parabola par = new(testPoints[0].X, testPoints[0].Y, testPoints[1].X, testPoints[1].Y, 50);
+                
+                //par.LoopThroughPoints(p =>
+                //{
+                //    WorldGen.PlaceTile(p.X, p.Y, TileID.BlueDungeonBrick);
+                //});
+                
+                double tightness = 0.9d;
+                ITDShapes.Banana ban = new(par, testPoints[1].Y, tightness);
+                ban.LoopThroughPoints(p =>
+                {
+                    WorldGen.PlaceTile(p.X, p.Y, TileID.BlueDungeonBrick);
+                });
+                testPoints.Clear();
+            }
+            */
             /* test triangle creation
             testPoints.Add(pos);
             if (testPoints.Count == 3)

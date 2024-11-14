@@ -23,10 +23,11 @@ namespace ITD.Content.Tiles
         /// Used as a consequent in UnifiedRandom.NextBool() to determine how fast a sapling will grow. Less means faster.
         /// </summary>
         public int GrowSlow { get; set; }
+        public int FertilizerType { get; set; } = ProjectileID.Fertilizer;
         public Color MapColor { get; set; }
 
         /// <summary>
-        /// Override to set DustType, MapColor, GrowSlow, GrowIntoTreeType, MinGrowHeight, and MaxGrowHeight
+        /// Override to set DustType, MapColor, GrowSlow, GrowIntoTreeType, MinGrowHeight, MaxGrowHeight, and FertilizerType
         /// </summary>
         public virtual void SetStaticSaplingDefaults()
         {
@@ -71,26 +72,27 @@ namespace ITD.Content.Tiles
         }
 
         public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
-
         public override void RandomUpdate(int i, int j)
         {
             // A random chance to slow down growth
             if (WorldGen.genRand.NextBool(GrowSlow))
             {
-                Tile tile = Framing.GetTileSafely(i, j);
-                bool growSuccess;
-
-                growSuccess = ITDTree.Grow(i, j, GrowsIntoTreeType, MinGrowHeight, MaxGrowHeight, Type);
-                // A flag to check if a player is near the sapling
-                bool isPlayerNear = WorldGen.PlayerLOS(i, j);
-
-                //If growing the tree was a sucess and the player is near, show growing effects
-                // (i'll work on this later)
-                //if (growSucess && isPlayerNear)
-                //    WorldGen.TreeGrowFXCheck(i, j);
+                Grow(i, j);
             }
         }
+        public void Grow(Point p) => Grow(p.X, p.Y);
+        public void Grow(int i, int j)
+        {
+            bool growSuccess;
 
+            growSuccess = ITDTree.Grow(i, j, GrowsIntoTreeType, MinGrowHeight, MaxGrowHeight, Type);
+            // A flag to check if a player is near the sapling
+            bool isPlayerNear = WorldGen.PlayerLOS(i, j);
+
+            //If growing the tree was a sucess and the player is near, show growing effects
+            if (growSuccess && isPlayerNear)
+                ITDTree.TreeGrowFXCheck(i, j);
+        }
         public override void SetSpriteEffects(int i, int j, ref SpriteEffects effects)
         {
             if (i % 2 == 1)

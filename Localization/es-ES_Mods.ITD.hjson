@@ -983,6 +983,25 @@ Items: {
 			'Una reliquia cósmica heredada de las estrellas vislumbrantes'
 			'''
 	}
+
+	SafetyLatch: {
+		// Tooltip: Snaptraps stay attached slightly longer when out of range
+		// DisplayName: Safety Latch
+	}
+
+	MagicPolish: {
+		/* Tooltip:
+			'''
+			Latch effects activate faster
+			Snaptraps retract slightly faster
+			''' */
+		// DisplayName: Magic Polish
+	}
+
+	UnyieldingChain: {
+		// DisplayName: Unyielding Chain
+		// Tooltip: +25% Snaptrap Length
+	}
 }
 
 Projectiles: {
