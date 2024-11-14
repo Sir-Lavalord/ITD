@@ -584,7 +584,7 @@ Items: {
 		Tooltip: Summons a cosmic hand to attack your foes
 	}
 
-	EoWTail: {
+	EatersTail: {
 		DisplayName: Tail of the Eater
 		Tooltip:
 			'''
@@ -614,7 +614,7 @@ Items: {
 			'''
 	}
 
-	KSGland: {
+	SlimeSecretionGland: {
 		DisplayName: Slime Secretion Gland
 		Tooltip:
 			'''
@@ -1185,6 +1185,7 @@ NPCs: {
 	RecruitedNPC.DisplayName: Recruited N P C
 	SmallSnowpoff.DisplayName: Snowpoff
 	LargeSnowpoff.DisplayName: Snowpoff
+	CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
 }
 
 Buffs: {

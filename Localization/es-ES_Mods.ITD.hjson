@@ -584,16 +584,16 @@ Items: {
 		Tooltip: ""
 	}
 
-	EoWTail: {
-		DisplayName: Cola del Devoramundos
-		Tooltip:
+	EatersTail: {
+		// DisplayName: Tail of the Eater
+		/* Tooltip:
 			'''
-			Rompe tu barra de vida en dos
-			La primera barra de vida te protege del daño fatal
-			Este efecto solo puede suceder cada minuto
-			El tiempo de espera solo reduce cuando tienes la máxima cantidad de vida
-			'''
-		TailLost: PÉRDIDA DE COLA
+			Splits your life into two
+			Fatal damage does not carry onto next life
+			This can only happen every 1 minute
+			Cooldown only reduces when you have max life
+			''' */
+		// TailLost: TAIL LOSS
 	}
 
 	Prophylaxis: {
@@ -614,13 +614,13 @@ Items: {
 			'''
 	}
 
-	KSGland: {
-		DisplayName: Glándula de secreción de slime
-		Tooltip:
+	SlimeSecretionGland: {
+		// DisplayName: Slime Secretion Gland
+		/* Tooltip:
 			'''
-			Crea una capa de gel que absorbe la mitad del daño recibido
-			La capa masivamente aumenta tu área de daño
-			'''
+			Creates a slimy coating which absorbs 25% of all incoming damage
+			Coating massively increases your hitbox size
+			''' */
 	}
 
 	KeepersShovel: {
@@ -1185,6 +1185,7 @@ NPCs: {
 	// RecruitedNPC.DisplayName: Recruited N P C
 	SmallSnowpoff.DisplayName: Montonieve
 	LargeSnowpoff.DisplayName: Montonieve
+	// CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
 }
 
 Buffs: {

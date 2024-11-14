@@ -104,5 +104,26 @@ namespace ITD.Utilities
 				}
 			}
 		}
-    }
+		//Copy from fargo test 
+		public static int NewNPCEasy(IEntitySource source, Vector2 spawnPos, int type, int start = 0, float ai0 = 0, float ai1 = 0, float ai2 = 0, float ai3 = 0, int target = 255, Vector2 velocity = default)
+		{
+			if (Main.netMode == NetmodeID.MultiplayerClient)
+				return Main.maxNPCs;
+
+			int n = NPC.NewNPC(source, (int)spawnPos.X, (int)spawnPos.Y, type, start, ai0, ai1, ai2, ai3, target);
+			if (n != Main.maxNPCs)
+			{
+				if (velocity != default)
+				{
+					Main.npc[n].velocity = velocity;
+				}
+
+				if (Main.netMode == NetmodeID.Server)
+					NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, n);
+			}
+
+			return n;
+		}
+
+	}
 }
