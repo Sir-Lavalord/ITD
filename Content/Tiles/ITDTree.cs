@@ -74,6 +74,8 @@ namespace ITD.Content.Tiles
         public static bool IsAnyLeftBranch(Tile t) => IsLeftBranch(t) || IsLeftBranchNormal(t);
         public static bool IsAnyRightBranch(int i, int j) => IsAnyRightBranch(Framing.GetTileSafely(i, j));
         public static bool IsAnyRightBranch(Tile t) => IsRightBranch(t) || IsRightBranchNormal(t);
+        public static bool IsAnyBranch(int i, int j) => IsAnyBranch(Framing.GetTileSafely(i, j));
+        public static bool IsAnyBranch(Tile t) => IsAnyRightBranch(t) || IsAnyLeftBranch(t);
         public static bool IsLeftRoot(int i, int j)
         {
             Tile t = Framing.GetTileSafely(i, j);
@@ -129,6 +131,15 @@ namespace ITD.Content.Tiles
         public static bool IsCenterTrunk(Tile t)
         {
             return (t.TileFrameX == 0) || (t.TileFrameX >= 36 && t.TileFrameX < 90) || (t.TileFrameX >= 108);
+        }
+        /// <summary>
+        /// Why must I be forsooken
+        /// Avoids game hanging if there's a malformed tree for any reason
+        /// </summary>
+        public static bool IsAMalformedCenterRoot(int i, int j)
+        {
+            int t = Framing.GetTileSafely(i, j).TileType;
+            return !IsAnyRoot(i, j) && !IsAnyBranch(i, j) && Framing.GetTileSafely(i, j + 1).TileType != t; 
         }
         private enum SideGrowth
         {
@@ -372,7 +383,7 @@ namespace ITD.Content.Tiles
         }
         private static Point GetTreeBottom(int i, int j)
         {
-            if (IsCenterRoot(i, j))
+            if (IsCenterRoot(i, j) || IsAMalformedCenterRoot(i, j))
                 return new Point(i, j);
             if (IsLeftRoot(i, j) || IsAnyLeftBranch(i, j))
             {
@@ -385,7 +396,11 @@ namespace ITD.Content.Tiles
             if (IsCenterTrunk(i, j))
             {
                 while (!IsCenterRoot(i, j))
+                {
+                    if (IsAMalformedCenterRoot(i, j))
+                        break;
                     j++;
+                }
                 return new Point(i, j);
             }
             return new Point(i, j);
