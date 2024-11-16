@@ -30,7 +30,7 @@ namespace ITD.Content.World
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {
             int blueshroomIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Lakes"));
-            int deepdesertIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Full Desert"));
+            int deepdesertIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Granite"));
             if (blueshroomIndex != -1)
             {
                 tasks.Insert(blueshroomIndex + 1, new BlueshroomGrovesGenPass("Blueshroom Groves", 100f));
@@ -64,6 +64,15 @@ namespace ITD.Content.World
             //test world particle (change particle.canvas in particle type)
             //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
+            testPoints.Add(pos);
+            if (testPoints.Count == 2)
+            {
+                Point origin = testPoints[0];
+                Vector2 sizeDir = (testPoints[1] - testPoints[0]).ToVector2();
+                //WorldGenHelpers.Procedural.DigDirectionQuad(origin, sizeDir, 6, 6, 4, true);
+                WorldGenHelpers.Procedural.DigQuadTunnel(origin, sizeDir, 6, 3, 3);
+                testPoints.Clear();
+            }
             /*
             testPoints.Add(pos);
             if (testPoints.Count == 2)

@@ -21,7 +21,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 		public VertexStrip TrailStrip = new VertexStrip();
 		public NPC TargetLock;
 		public int hitDelay = 0;
-		
+		public ref float FadeIn => ref Projectile.ai[0];
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Ranged;
@@ -39,6 +39,9 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 			Player player = Main.player[Projectile.owner];
 			ITDPlayer modPlayer = player.GetITDPlayer();
             Vector2 mouse = modPlayer.MousePosition;
+
+			if (FadeIn < 2f)
+				FadeIn += 0.1f;
 
 			Projectile.timeLeft = 60;
 
@@ -90,7 +93,8 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 			
 			if (TargetLock != null)
 			{
-				if (hitDelay == 0)
+                Projectile.direction = Math.Sign(TargetLock.Center.X - Projectile.Center.X);
+                if (hitDelay == 0)
 				{
 					int damage = Projectile.damage;
 					bool crit = false;
@@ -140,16 +144,45 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 		{
 			if (TargetLock != null)
 			{
-				float toTarget = (TargetLock.Center - Projectile.Center).ToRotation();
-				Vector2[] positions = {TargetLock.Center, Projectile.Center};
-				float[] rotations = {toTarget, toTarget};
+				//float toTarget = (TargetLock.Center - Projectile.Center).ToRotation();
 
-				MiscShaderData BlueShader = GameShaders.Misc["MagicMissile"];
+				// you can increase this as much as you want
+				// a value this low looks weird in certain positions but that's why i'm limiting the midpoint's position
+				int res = 20;
+
+				// <>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                float yRange = 100f;
+                Vector2 mouse = Main.player[Projectile.owner].GetITDPlayer().MousePosition;
+                Vector2 realMidPoint = Vector2.Lerp(Projectile.Center, TargetLock.Center, 0.5f);
+
+				// clamp to avoid long noodle
+                mouse.Y = MathHelper.Clamp(mouse.Y, Projectile.Center.Y - yRange, TargetLock.Center.Y + yRange);
+                mouse.X = MathHelper.Clamp(mouse.X,
+                    Projectile.direction == 1 ? Projectile.Center.X : TargetLock.Center.X,
+                    Projectile.direction == 1 ? TargetLock.Center.X : Projectile.Center.X);
+
+				// lerp to avoid weird segments
+				float angleDiffRange = 0.5f;
+				float angleDiff = MiscHelpers.AngleDiff(Projectile.Center, mouse, TargetLock.Center);
+				float lerp0 = MathHelper.Clamp(angleDiff / angleDiffRange, 0f, 1f);
+				mouse = Vector2.Lerp(mouse, realMidPoint, lerp0);
+
+				// lerp to avoid more weird segments
+                float closenessRange = 100f;
+                float lerp = MathHelper.Clamp(Projectile.Center.DistanceSQ(TargetLock.Center) / (closenessRange * closenessRange), 0f, 1f);
+				mouse = Vector2.Lerp(mouse, realMidPoint, 1f - lerp);
+				// AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</>
+
+                Vector2[] positions = Bezier.Quadratic(TargetLock.Center, mouse, Projectile.Center, res);
+				float[] rotations = Bezier.Rotations(positions);
+
+                MiscShaderData BlueShader = GameShaders.Misc["MagicMissile"];
 				BlueShader.UseSaturation(-2.8f);
-				BlueShader.UseOpacity(2f);
+				BlueShader.UseOpacity(FadeIn);
 				BlueShader.Apply(null);
 				
 				TrailStrip.PrepareStrip(positions, rotations, StripColorBlue, StripWidth1, - Main.screenPosition, positions.Length, true);
+		
 				TrailStrip.DrawTrail();
 				
 				//MiscShaderData OrangeShader = GameShaders.Misc["FlameLash"];

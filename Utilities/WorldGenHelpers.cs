@@ -2,11 +2,82 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
+using Terraria;
 namespace ITD.Utilities
 {
     public static class WorldGenHelpers
     {
+        public static class Procedural
+        {
+            public static Rectangle DigQuadTunnel(Point origin, Vector2 magnitudeDirection, int width, int quadAmount = 3, int randomRange = 0, Action<Point> callback = null)
+            {
+                // default callback: dig tunnel
+                callback ??= p => Framing.GetTileSafely(p).HasTile = false;
 
+                Vector2 normalizedDirection = magnitudeDirection.SafeNormalize(Vector2.Zero);
+                float segmentLength = magnitudeDirection.Length() / quadAmount;
+
+                Vector2 sizeDir = normalizedDirection * segmentLength;
+
+                QuadDigData prev = new();
+                int currentWidth1 = width;
+
+                for (int i = 0; i < quadAmount; i++)
+                {
+                    if (i == 0)
+                    {
+                        prev = DigDirectionQuad(origin, sizeDir, width, width, randomRange, true, callback);
+                        currentWidth1 = prev.Width2;
+                    }
+                    else
+                    {
+                        prev = DigDirectionQuad(prev.End, sizeDir, currentWidth1, width, randomRange, false, callback);
+                        currentWidth1 = prev.Width2;
+                    }
+                }
+                int dir = Math.Sign(magnitudeDirection.X);
+                // note: this only works for straight tunnels (like those in the DD)
+                return new Rectangle(dir == 1 ? origin.X : origin.X + (int)magnitudeDirection.X, origin.Y - width / 2, (int)magnitudeDirection.Length(), width * 2);
+            }
+            public static QuadDigData DigDirectionQuad(Point origin, Vector2 sizeDirection, int width, int width2 = -1, int randomRange = 0, bool randomizeWidth1 = false, Action<Point> callback = null)
+            {
+                callback ??= p => Framing.GetTileSafely(p).HasTile = false;
+
+                if (randomizeWidth1)
+                    width += WorldGen.genRand.Next(-randomRange, randomRange + 1);
+                if (width2 == -1)
+                    width2 = width;
+                width2 += WorldGen.genRand.Next(-randomRange, randomRange + 1);
+
+                Vector2 normalizedDirection = sizeDirection.SafeNormalize(Vector2.Zero);
+                float quadLength = sizeDirection.Length();
+
+                Point endPoint = new Vector2(origin.X + normalizedDirection.X * quadLength, origin.Y + normalizedDirection.Y * quadLength).ToPoint();
+
+                Vector2 perpendicular = normalizedDirection.RotatedBy(-MathHelper.PiOver2);
+
+                // clockwise listed
+                // width1
+                Point corner4 = new Vector2(origin.X + (int)(perpendicular.X * width), origin.Y + (int)(perpendicular.Y * width)).ToPoint();
+                Point corner1 = new Vector2(origin.X - (int)(perpendicular.X * width), origin.Y - (int)(perpendicular.Y * width)).ToPoint();
+
+                // width2
+                Point corner3 = new Vector2(endPoint.X + (int)(perpendicular.X * width2), endPoint.Y + (int)(perpendicular.Y * width2)).ToPoint();
+                Point corner2 = new Vector2(endPoint.X - (int)(perpendicular.X * width2), endPoint.Y - (int)(perpendicular.Y * width2)).ToPoint();
+
+                new ITDShapes.Quad(corner1, corner2, corner3, corner4).LoopThroughPoints(callback);
+
+                return new QuadDigData(width, width2, origin, endPoint);
+            }
+            public struct QuadDigData(int width1, int width2, Point origin, Point end)
+            {
+                public int Width1 = width1;
+                public int Width2 = width2;
+                public Point Origin = origin;
+                public Point End = end;
+            }
+        }
     }
     public static class ITDShapes
     {
@@ -55,6 +126,27 @@ namespace ITD.Utilities
                 return a >= 0 && b >= 0 && c >= 0;
             }
         }
+        public class Quad : ITDShape
+        {
+            public Point A;
+            public Point B;
+            public Point C;
+            public Point D;
+            public Triangle TriangleA { get { return new Triangle(A, B, D); } }
+            public Triangle TriangleB { get { return new Triangle(B, C, D); } }
+            public Quad(Point a, Point b, Point c, Point d)
+            {
+                A = a;
+                B = b;
+                C = c;
+                D = d;
+            }
+            public override Rectangle Container => MiscHelpers.ContainsRectangles(TriangleA.Container, TriangleB.Container);
+            public override bool Contains(Point point)
+            {
+                return TriangleA.Contains(point) || TriangleB.Contains(point);
+            }
+        }
         public class Ellipse(int x, int y, int xRadius, int yRadius) : ITDShape
         {
             public int X = x;
@@ -69,6 +161,23 @@ namespace ITD.Utilities
 
                 return ((double)(normalized.X * normalized.X) / (XRadius * XRadius)) + ((double)(normalized.Y * normalized.Y) / (YRadius * YRadius))
                     <= 1.0;
+            }
+            public float GetDistanceToEdge(Point point)
+            {
+                double normalizedX = (double)(point.X - X) / XRadius;
+                double normalizedY = (double)(point.Y - Y) / YRadius;
+
+                double magnitude = Math.Sqrt(normalizedX * normalizedX + normalizedY * normalizedY);
+
+                magnitude = Math.Max(0, magnitude);
+
+                double edgeX = normalizedX / magnitude * XRadius;
+                double edgeY = normalizedY / magnitude * YRadius;
+
+                double deltaX = point.X - (X + edgeX);
+                double deltaY = point.Y - (Y + edgeY);
+
+                return (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
             }
         }
         public class Parabola : ITDShape
@@ -152,19 +261,7 @@ namespace ITD.Utilities
             public override Rectangle Container => GetBounding();
             public Rectangle GetBounding()
             {
-                Rectangle rect1 = mainParabola.Container;
-                Rectangle rect2 = secondParabola.Container;
-
-                int minX = Math.Min(rect1.X, rect2.X);
-                int minY = Math.Min(rect1.Y, rect2.Y);
-
-                int maxRight = Math.Max(rect1.Right, rect2.Right);
-                int maxBottom = Math.Max(rect1.Bottom, rect2.Bottom);
-
-                int width = maxRight - minX;
-                int height = maxBottom - minY;
-
-                return new Rectangle(minX, minY, width, height);
+                return MiscHelpers.ContainsRectangles(mainParabola.Container, secondParabola.Container);
             }
             public override bool Contains(Point point)
             {

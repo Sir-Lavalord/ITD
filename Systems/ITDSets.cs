@@ -1,6 +1,7 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using System;
 using System.Collections.Generic;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
@@ -25,14 +26,9 @@ namespace ITD
     }
     public class ITDSets
     {
-        
         public static readonly IDSet<int> ToScrapeableMoss = CreateSet(-1);
         public static readonly IDSet<int> LeafGrowFX = CreateSet(GoreID.TreeLeaf_Normal);
         public static readonly IDSet<bool> SnowpoffDiggable = CreateBoolSet(TileID.SnowBlock);
-        
-        //public static int[] ToScrapeableMoss = TileID.Sets.Factory.CreateIntSet(-1);
-        //public static int[] LeafGrowFX = TileID.Sets.Factory.CreateIntSet(GoreID.TreeLeaf_Normal);
-        //public static bool[] SnowpoffDiggable = TileID.Sets.Factory.CreateBoolSet(TileID.SnowBlock);
         public static IDSet<T> CreateSet<T>(T defaultValue, int[] entries = default, T[] values = default)
         {
             IDSet<T> set = new(defaultValue);

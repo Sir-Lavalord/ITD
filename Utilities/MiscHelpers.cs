@@ -59,6 +59,30 @@ namespace ITD.Utilities
             }
 			return closestNPC;
         }
+        public static Rectangle ContainsRectangles(Rectangle rect1, Rectangle rect2)
+        {
+            int minX = Math.Min(rect1.X, rect2.X);
+            int minY = Math.Min(rect1.Y, rect2.Y);
+
+            int maxRight = Math.Max(rect1.Right, rect2.Right);
+            int maxBottom = Math.Max(rect1.Bottom, rect2.Bottom);
+
+            int width = maxRight - minX;
+            int height = maxBottom - minY;
+
+            return new Rectangle(minX, minY, width, height);
+        }
+        public static float AngleDiff(Vector2 origin, params Vector2[] vecs)
+        {
+            vecs = [origin, .. vecs.OrderBy(v => v.DistanceSQ(origin))];
+
+            float totalAngleDifference = 0f;
+            for (int i = 1; i < vecs.Length; i++)
+            {
+                totalAngleDifference += vecs[i - 1].AngleTo(vecs[i]);
+            }
+            return totalAngleDifference;
+        }
         public static bool Exists(this Entity entity) => entity != null && entity.active;
         //Make the invul boss part untargetable please
         public static bool IsValidTarget(this Projectile projectile, NPC target)
