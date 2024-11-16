@@ -45,7 +45,7 @@ namespace ITD.Content.World
             return Main.keyState.IsKeyDown(key) && !Main.oldKeyState.IsKeyDown(key);
         }
 
-        public override void PostUpdateWorld()
+        /*public override void PostUpdateWorld()
         {
             if (JustPressed(Keys.D1))
             {
@@ -55,7 +55,7 @@ namespace ITD.Content.World
             {
                 TestMethod2();
             }
-        }
+        }*/
 
         private void TestMethod()
         {

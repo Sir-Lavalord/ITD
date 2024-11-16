@@ -1007,6 +1007,17 @@ Items: {
 		DisplayName: Ghostbuster
 		Tooltip: ""
 	}
+
+	Cursebreaker: {
+		DisplayName: Cursebreaker
+		Tooltip:
+			'''
+			Launches a dungeon guardian that deals immense damage
+			Deal damage to increase charge. Every hit of damage grants 1% charge
+			Press {0} to use when at full charge
+			'You only want to socialize (But I don't think we should)'
+			'''
+	}
 }
 
 Projectiles: {
@@ -1153,6 +1164,7 @@ Projectiles: {
 	DespoticSuperMeleeProjOld.DisplayName: Despotic Super Melee Proj Old
 	GhostbusterProj.DisplayName: Ghostbuster Proj
 	QuasarProj.DisplayName: Quasar Proj
+	ThrowableGuardian.DisplayName: Throwable Guardian
 }
 
 NPCs: {

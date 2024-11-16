@@ -1,14 +1,4 @@
-﻿using ITD.Content.Buffs.Debuffs;
-using ITD.Content.Buffs.FavorBuffs;
-using ITD.Content.Items.Accessories.Defensive;
-using ITD.Content.Items.Accessories.Master;
-using ITD.Content.Items.BossSummons;
-using ITD.Content.Items.Other;
-using ITD.Content.Items.Weapons.Melee.Snaptraps;
-using ITD.Content.NPCs.BlueshroomGroves.Critters;
-using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
-using ITD.Content.Projectiles.Friendly.Ranger;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 using System;
@@ -19,6 +9,19 @@ using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using ITD.Content.Buffs.Debuffs;
+using ITD.Content.Buffs.FavorBuffs;
+using ITD.Content.Items.Accessories.Defensive;
+using ITD.Content.Items.Accessories.Master;
+using ITD.Content.Items.BossSummons;
+using ITD.Content.Items.Other;
+using ITD.Content.Items.Favors.Prehardmode;
+using ITD.Content.Items.Weapons.Melee.Snaptraps;
+using ITD.Content.NPCs.BlueshroomGroves.Critters;
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
+using ITD.Content.Projectiles.Friendly.Ranger;
+
 
 namespace ITD.Content.NPCs
 {
@@ -240,6 +243,10 @@ namespace ITD.Content.NPCs
             if (npc.type == NPCID.BrainofCthulhu)
             {
                 npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<Prophylaxis>()));
+            }
+			if (npc.type == NPCID.SkeletronHead)
+            {
+                npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<Cursebreaker>()));
             }
         }
         public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
