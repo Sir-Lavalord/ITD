@@ -148,14 +148,14 @@ namespace ITD.Utilities
 			}
 			if (target != null)
 			{
-				damage = Main.DamageVar(damage, player.luck);
-
 				bool crit = false;
 				if (Main.rand.Next(1, 101) <= critChance)
 				{
 					crit = true;
+					damage *= 2;
 				}
-
+				damage = Main.DamageVar(damage, player.luck);
+				
 				target.StrikeNPC(new NPC.HitInfo
 				{
 					Damage = damage,

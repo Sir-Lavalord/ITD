@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria;
+﻿using Terraria;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 using Terraria.DataStructures;
@@ -9,6 +8,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ITD.Content.Dusts;
 using Terraria.ID;
+
+using ITD.Utilities;
+using ITD.Systems.DataStructures;
+using ITD.Systems.Extensions;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {
@@ -97,10 +100,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			arg_27_0.Apply(null);
 			vertexStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, -Main.screenPosition, new int?(Projectile.oldPos.Length), true);
 			vertexStrip.DrawTrail();
-			Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 			
-			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+			Main.spriteBatch.End(out SpriteBatchData spriteBatchData); // unapply shaders
+            Main.spriteBatch.Begin(spriteBatchData);
 			
 			Vector2 extraHoldout = Projectile.velocity * 2f;
             Vector2 drawPos = Projectile.Center + extraHoldout - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY);

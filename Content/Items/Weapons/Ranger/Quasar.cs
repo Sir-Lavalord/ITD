@@ -2,10 +2,11 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
-using ITD.Content.Projectiles;
-using ITD.Content.Dusts;
 using Microsoft.Xna.Framework;
+
 using ITD.Content.Items.Materials;
+using ITD.Content.Projectiles.Friendly.Ranger;
+using ITD.Content.Dusts;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {
@@ -25,23 +26,24 @@ namespace ITD.Content.Items.Weapons.Ranger
             Item.knockBack = 2;
             Item.value = Item.sellPrice(gold: 1);
             Item.rare = ItemRarityID.LightRed;
-            Item.UseSound = SoundID.Item5;
+            Item.UseSound = SoundID.Item72;
             Item.shoot = ProjectileID.WoodenArrowFriendly;
-            Item.shootSpeed = 16f;
+            Item.shootSpeed = 12f;
             Item.useAmmo = AmmoID.Arrow;
             Item.autoReuse = false;
         }
 		
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-			Projectile proj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
-			proj.GetGlobalProjectile<ITDGlobalProjectile>().aura = 1;
+			Projectile proj = Projectile.NewProjectileDirect(source, position, velocity*0.2f, ModContent.ProjectileType<QuasarProj>(), damage, knockback, player.whoAmI, type, velocity.X, velocity.Y);
 			
-			for (int i = 0; i < 16; i++) {
-				int dust = Dust.NewDust(position-new Vector2(6, 6), 12, 12, ModContent.DustType<StarlitDust>(), 0f, 0f, 0, default, 2f);
+			for (int i = 0; i < 10; i++)
+			{
+				int dust = Dust.NewDust(position, 1, 1, ModContent.DustType<StarlitDust>(), 0f, 0f, 0, default, 2f);
 				Main.dust[dust].noGravity = true;
-				Main.dust[dust].velocity = velocity * Main.rand.NextFloat(1.5f);
+				Main.dust[dust].velocity *= 3f;
 			}
+			
             return false;
         }
 		

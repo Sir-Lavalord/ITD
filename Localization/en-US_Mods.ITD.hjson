@@ -457,7 +457,7 @@ Items: {
 
 	Quasar: {
 		DisplayName: Quasar
-		Tooltip: ""
+		Tooltip: Shoots arrow emitting quasi-stellar objects
 	}
 
 	StarlightStaff: {
@@ -1002,6 +1002,11 @@ Items: {
 		DisplayName: Unyielding Chain
 		Tooltip: +25% Snaptrap Length
 	}
+
+	Ghostbuster: {
+		DisplayName: Ghostbuster
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -1146,6 +1151,8 @@ Projectiles: {
 	CosmisumaruPheonix.DisplayName: Cosmisumaru Pheonix
 	CosmisumaruPheonixImpact.DisplayName: Cosmisumaru Pheonix Impact
 	DespoticSuperMeleeProjOld.DisplayName: Despotic Super Melee Proj Old
+	GhostbusterProj.DisplayName: Ghostbuster Proj
+	QuasarProj.DisplayName: Quasar Proj
 }
 
 NPCs: {

@@ -1002,6 +1002,11 @@ Items: {
 		// DisplayName: Unyielding Chain
 		// Tooltip: +25% Snaptrap Length
 	}
+
+	Ghostbuster: {
+		// DisplayName: Ghostbuster
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -1146,6 +1151,8 @@ Projectiles: {
 	CosmisumaruPheonix.DisplayName: Fénix de Cosmisumaru
 	CosmisumaruPheonixImpact.DisplayName: Fénix de Cosmisumaru
 	// DespoticSuperMeleeProjOld.DisplayName: Despotic Super Melee Proj Old
+	// GhostbusterProj.DisplayName: Ghostbuster Proj
+	// QuasarProj.DisplayName: Quasar Proj
 }
 
 NPCs: {
