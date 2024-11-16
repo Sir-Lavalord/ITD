@@ -20,8 +20,10 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
     {
 		public VertexStrip TrailStrip = new VertexStrip();
 		public NPC TargetLock;
-		public int hitDelay = 0;
+		public Vector2 VacuumCleaner;
+		
 		public ref float FadeIn => ref Projectile.ai[0];
+		
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Ranged;
@@ -30,9 +32,18 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 30;
-            Projectile.ignoreWater = false;
+            Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 10;
         }
+
+		public override bool? CanHitNPC(NPC target)
+		{
+			if (target != TargetLock)
+				return false;
+			return base.CanHitNPC(target);
+		}
 
         public override void AI()
         {
@@ -46,19 +57,10 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 			Projectile.timeLeft = 60;
 
 			Vector2 playerCenter = player.RotatedRelativePoint(player.MountedCenter);
-			if (Main.myPlayer == Projectile.owner) {
-				if (player.channel) {
-					float holdoutDistance = 36f;
-					Vector2 holdoutOffset = holdoutDistance * Vector2.Normalize(mouse - playerCenter).RotatedBy(-0.075f*player.direction);
-					if (holdoutOffset.X != Projectile.velocity.X || holdoutOffset.Y != Projectile.velocity.Y) {
-						Projectile.netUpdate = true;
-					}
-					Projectile.velocity = holdoutOffset;
-				}
-				else {
-					Projectile.Kill();
-				}
-			}
+			
+			if (!player.channel)
+				Projectile.Kill();
+			
 			player.heldProj = Projectile.whoAmI;
 			player.SetDummyItemTime(2);
 			
@@ -68,7 +70,11 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 			value.Y -= 2f;
 			position += value * player.gravDir;
 			
-			Projectile.Center = position;
+			float holdoutDistance = 36f;
+			Vector2 holdoutOffset = holdoutDistance * Vector2.Normalize(mouse - playerCenter).RotatedBy(-0.075f*player.direction);
+			position += holdoutOffset;
+			
+			VacuumCleaner = position;
 			
             NPC closestNPC = null;
 
@@ -92,37 +98,12 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 			TargetLock = closestNPC;
 			
 			if (TargetLock != null)
-			{
-                Projectile.direction = Math.Sign(TargetLock.Center.X - Projectile.Center.X);
-                if (hitDelay == 0)
-				{
-					int damage = Projectile.damage;
-					bool crit = false;
-					if (Main.rand.Next(1, 101) <= player.HeldItem.crit + player.GetCritChance(player.HeldItem.DamageType))
-					{
-						crit = true;
-						damage *= 2;
-					}
-					TargetLock.StrikeNPC(new NPC.HitInfo
-					{
-						Damage = Main.DamageVar(damage, player.luck),
-						Knockback = Projectile.knockBack,
-						HitDirection = TargetLock.Center.X < player.Center.X ? -1 : 1,
-						Crit = crit
-					});
-					hitDelay = 10;
-				}
-			}
-			if (hitDelay > 0)
-				hitDelay--;
+				Projectile.Center = TargetLock.Center;
+			else
+				Projectile.Center = VacuumCleaner;
 			
 			modPlayer.recoilFront = modPlayer.recoilBack = Main.rand.NextFloat(0.15f);
         }
-		
-		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-		{
-			return false;
-		}
 		
 		private Color StripColorBlue(float progressOnStrip)
 		{
@@ -153,27 +134,27 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 				// <>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 float yRange = 100f;
                 Vector2 mouse = Main.player[Projectile.owner].GetITDPlayer().MousePosition;
-                Vector2 realMidPoint = Vector2.Lerp(Projectile.Center, TargetLock.Center, 0.5f);
+                Vector2 realMidPoint = Vector2.Lerp(VacuumCleaner, TargetLock.Center, 0.5f);
 
 				// clamp to avoid long noodle
-                mouse.Y = MathHelper.Clamp(mouse.Y, Projectile.Center.Y - yRange, TargetLock.Center.Y + yRange);
+                mouse.Y = MathHelper.Clamp(mouse.Y, VacuumCleaner.Y - yRange, TargetLock.Center.Y + yRange);
                 mouse.X = MathHelper.Clamp(mouse.X,
-                    Projectile.direction == 1 ? Projectile.Center.X : TargetLock.Center.X,
-                    Projectile.direction == 1 ? TargetLock.Center.X : Projectile.Center.X);
+                    Projectile.direction == 1 ? VacuumCleaner.X : TargetLock.Center.X,
+                    Projectile.direction == 1 ? TargetLock.Center.X : VacuumCleaner.X);
 
 				// lerp to avoid weird segments
 				float angleDiffRange = 0.5f;
-				float angleDiff = MiscHelpers.AngleDiff(Projectile.Center, mouse, TargetLock.Center);
+				float angleDiff = MiscHelpers.AngleDiff(VacuumCleaner, mouse, TargetLock.Center);
 				float lerp0 = MathHelper.Clamp(angleDiff / angleDiffRange, 0f, 1f);
 				mouse = Vector2.Lerp(mouse, realMidPoint, lerp0);
 
 				// lerp to avoid more weird segments
                 float closenessRange = 100f;
-                float lerp = MathHelper.Clamp(Projectile.Center.DistanceSQ(TargetLock.Center) / (closenessRange * closenessRange), 0f, 1f);
+                float lerp = MathHelper.Clamp(VacuumCleaner.DistanceSQ(TargetLock.Center) / (closenessRange * closenessRange), 0f, 1f);
 				mouse = Vector2.Lerp(mouse, realMidPoint, 1f - lerp);
 				// AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</>
 
-                Vector2[] positions = Bezier.Quadratic(TargetLock.Center, mouse, Projectile.Center, res);
+                Vector2[] positions = Bezier.Quadratic(TargetLock.Center, mouse, VacuumCleaner, res);
 				float[] rotations = Bezier.Rotations(positions);
 
                 MiscShaderData BlueShader = GameShaders.Misc["MagicMissile"];

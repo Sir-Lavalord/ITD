@@ -2,6 +2,7 @@
 using Terraria.ID;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using System;
@@ -13,6 +14,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 {
     public class ThrowableGuardian : ModProjectile
     {
+		public override string Texture => "Terraria/Images/NPC_68";
         public override void SetDefaults()
         {
             Projectile.width = Projectile.height = 80;
@@ -29,7 +31,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         }
         public override void AI()
         {
-            Projectile.rotation = Projectile.velocity.ToRotation();
+            Projectile.rotation = Projectile.velocity.ToRotation()+MathHelper.PiOver2;
         }
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
