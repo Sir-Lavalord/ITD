@@ -42,7 +42,7 @@ namespace ITD.Content.Items.Favors.Prehardmode
 			ITDPlayer modPlayer = player.GetITDPlayer();
             Vector2 mouse = modPlayer.MousePosition;
 			
-            Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center - new Vector2(10, 0), Vector2.Normalize(mouse - player.Center)*16f, ModContent.ProjectileType<ThrowableGuardian>(), 999, 0.1f, player.whoAmI);
+            Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center - new Vector2(20, 0), Vector2.Normalize(mouse - player.Center)*16f, ModContent.ProjectileType<ThrowableGuardian>(), 999, 0.1f, player.whoAmI);
 			SoundEngine.PlaySound(SoundID.NPCDeath17, player.Center);
             return true;
         }

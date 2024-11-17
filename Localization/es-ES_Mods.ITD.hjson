@@ -1165,6 +1165,7 @@ Projectiles: {
 	// GhostbusterProj.DisplayName: Ghostbuster Proj
 	// QuasarProj.DisplayName: Quasar Proj
 	// ThrowableGuardian.DisplayName: Throwable Guardian
+	// IncendipedeBreath.DisplayName: Incendipede Breath
 }
 
 NPCs: {
@@ -1205,6 +1206,9 @@ NPCs: {
 	SmallSnowpoff.DisplayName: Montonieve
 	LargeSnowpoff.DisplayName: Montonieve
 	// CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
+	// IncendipedeBody.DisplayName: Incendipede Body
+	// IncendipedeHead.DisplayName: Incendipede Head
+	// IncendipedeTail.DisplayName: Incendipede Tail
 }
 
 Buffs: {

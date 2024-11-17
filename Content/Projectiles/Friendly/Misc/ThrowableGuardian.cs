@@ -17,11 +17,17 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 		public override string Texture => "Terraria/Images/NPC_68";
         public override void SetDefaults()
         {
-            Projectile.width = Projectile.height = 80;
+            Projectile.width = Projectile.height = 40;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.timeLeft = 800;
         }
+		
+		public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        {
+            hitbox.Inflate(24, 24);
+        }
+		
         public override void OnKill(int timeLeft)
         {
 			Main.player[Main.myPlayer].GetITDPlayer().BetterScreenshake(20, 4, 4, false);
