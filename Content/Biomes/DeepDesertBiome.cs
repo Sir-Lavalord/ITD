@@ -3,15 +3,14 @@ using Terraria;
 using Terraria.ModLoader;
 using ITD.Systems;
 using Terraria.ID;
+using Terraria.GameContent;
 
 namespace ITD.Content.Biomes
 {
     public class DeepDesertBiome : ModBiome
     {
-        public override int Music => ITD.Instance.GetMusic("DreadfulDunes") ?? MusicID.UndergroundDesert;
-
+        public override int Music => ITD.Instance.GetMusic("DeepDesert") ?? MusicID.UndergroundDesert;
         public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh; // We have set the SceneEffectPriority to be BiomeLow for purpose of example, however default behavior is BiomeLow.
-
         public override string BestiaryIcon => base.BestiaryIcon;
         public override string BackgroundPath => base.BackgroundPath;
         public override Color? BackgroundColor => base.BackgroundColor;

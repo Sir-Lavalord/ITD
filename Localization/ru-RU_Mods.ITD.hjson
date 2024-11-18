@@ -1015,6 +1015,11 @@ Items: {
 			'You only want to socialize (But I don't think we should)'
 			''' */
 	}
+
+	TopazNecklace: {
+		// DisplayName: Topaz Necklace
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -1327,6 +1332,7 @@ Tiles: {
 	CyaniteOreTile.MapEntry: Cyanite
 	BlueshroomTree.MapEntry: Giant Blueshroom
 	StarlitOreTile.MapEntry: Starlit Ore
+	// Debugger.MapEntry: Debugger
 }
 
 Biomes: {

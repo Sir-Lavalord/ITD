@@ -1,19 +1,68 @@
 ﻿using Humanizer;
+using ITD.Content.Tiles.Unused;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.ModLoader;
 namespace ITD.Utilities
 {
+    public static class WorldSizeID
+    {
+        public const int Small = 0;
+        public const int Medium = 1;
+        public const int Large = 2;
+    }
     public static class WorldGenHelpers
     {
+        public static bool FirstY(int x, Func<Point, bool> match, out int y)
+        {
+            for (int i = 0; i < Main.maxTilesY; i++)
+            {
+                if (match(new Point(x, i)))
+                {
+                    y = i;
+                    return true;
+                }
+            }
+            y = 0;
+            return false;
+        }
+        public static void QuickDebugRectangle(Rectangle rect)
+        {
+            ushort debugTile = (ushort)ModContent.TileType<Debugger>();
+            for (int i = rect.Left; i <= rect.Right; i++)
+            {
+                Tile t = Framing.GetTileSafely(i, rect.Top);
+                t.HasTile = true;
+                t.TileType = debugTile;
+                Tile t2 = Framing.GetTileSafely(i, rect.Bottom);
+                t2.HasTile = true;
+                t2.TileType = debugTile;
+            }
+            for (int i = rect.Top; i <= rect.Bottom; i++)
+            {
+                Tile t = Framing.GetTileSafely(rect.Left, i);
+                t.HasTile = true;
+                t.TileType = debugTile;
+                Tile t2 = Framing.GetTileSafely(rect.Right, i);
+                t2.HasTile = true;
+                t2.TileType = debugTile;
+            }
+        }
         public static class Procedural
         {
-            public static Rectangle DigQuadTunnel(Point origin, Vector2 magnitudeDirection, int width, int quadAmount = 3, int randomRange = 0, Action<Point> callback = null)
+            public static Rectangle DigQuadTunnel(Point origin, Point end, int width, int quadAmount = 3, int randomRange = 0, Action<Point> callback = null)
             {
                 // default callback: dig tunnel
-                callback ??= p => Framing.GetTileSafely(p).HasTile = false;
+                callback ??= p =>
+                {
+                    Tile t = Framing.GetTileSafely(p);
+                        if (t.TileType != ModContent.TileType<Debugger>())
+                    Framing.GetTileSafely(p).HasTile = false;
+                }; 
+                Vector2 magnitudeDirection = (end - origin).ToVector2();
 
                 Vector2 normalizedDirection = magnitudeDirection.SafeNormalize(Vector2.Zero);
                 float segmentLength = magnitudeDirection.Length() / quadAmount;
@@ -42,7 +91,13 @@ namespace ITD.Utilities
             }
             public static QuadDigData DigDirectionQuad(Point origin, Vector2 sizeDirection, int width, int width2 = -1, int randomRange = 0, bool randomizeWidth1 = false, Action<Point> callback = null)
             {
-                callback ??= p => Framing.GetTileSafely(p).HasTile = false;
+                // default callback: dig tunnel
+                callback ??= p =>
+                {
+                    Tile t = Framing.GetTileSafely(p);
+                    if (t.TileType != ModContent.TileType<Debugger>())
+                        Framing.GetTileSafely(p).HasTile = false;
+                };
 
                 if (randomizeWidth1)
                     width += WorldGen.genRand.Next(-randomRange, randomRange + 1);

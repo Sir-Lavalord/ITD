@@ -39,11 +39,20 @@ namespace ITD.Content.World
         {
             int width = GenVars.UndergroundDesertLocation.Width - 6;
             int height = (int)(Main.maxTilesY / 2f);
-            int innerEllipseYRadius = (int)(height * 0.7f);
-            int ellipseCenter = y - innerEllipseYRadius;
-            ITDShapes.Ellipse outerEllipse = new(x, ellipseCenter, width / 2, height);
+            int worldSize = GetWorldSize();
 
-            // idk why this fails half of the time but whatever
+            int innerEllipseYRadius = (int)(height * (worldSize == WorldSizeID.Small ? 0.4f : 0.7f));
+            int ellipseCenter = y - innerEllipseYRadius;
+
+            int desertCurrentHeight = GenVars.UndergroundDesertLocation.Y + GenVars.UndergroundDesertLocation.Height;
+            int minDesertHeight = Main.maxTilesY - 400;
+            int maxDesertHeight = Main.maxTilesY - 200;
+            float multiplierAtLessHeight = 1f;
+            float multiplierAtMaxHeight = worldSize == WorldSizeID.Small ? 0.5f : 0.7f;
+            float multiplier = Utils.Remap(desertCurrentHeight, minDesertHeight, maxDesertHeight, multiplierAtLessHeight, multiplierAtMaxHeight);
+            int outerEllipseHeight = (int)(height * multiplier);
+            ITDShapes.Ellipse outerEllipse = new(x, ellipseCenter, width / 2, outerEllipseHeight);
+
             GenVars.structures.AddProtectedStructure(new Rectangle(outerEllipse.Container.X, outerEllipse.Y, outerEllipse.XRadius * 2, outerEllipse.YRadius));
 
             ITDShapes.Ellipse innerEllipse = new(x, ellipseCenter, width / 2, innerEllipseYRadius);
@@ -64,24 +73,58 @@ namespace ITD.Content.World
                     return;
                 t.HasTile = true;
                 t.TileType = darkPyracotta;
+                if (p.Y < Main.UnderworldLayer)
+                    t.WallType = pegmatiteWall;
                 // if this tile is under the inner ellipse, try to generate tunnels
                 if (p.Y < innerEllipse.Y + innerEllipse.YRadius)
                     return;
                 // make sure to add a random chance to not create a tunnel
-                if (genRand.NextBool(160))
+                if (genRand.NextBool(20))
                 {
                     // if this tile is in a tunnel, dont try to create another tunnel
-                    if (tunnels.Any(r => r.Contains(p)))
+                    // idk why but a positive x doesn't work, it just generates a 1 tile wide vertical line. so restrict tunnel creation to the right side of this ellipse
+                    if (p.X < outerEllipse.X)
                         return;
-                    // tunner direction and length
-                    Vector2 dirSize = new(Math.Sign(outerEllipse.X - p.X) * genRand.Next(8, 16), genRand.NextFloat(-3f, 3f));
+                    int xSize = genRand.Next(100, 250) * -1; //(innerEllipse.X > p.X ? -1 : 1);
+                    int width = 5;
+                    int segments = genRand.Next(8, 16);
 
-                    tunnels.Add(DigQuadTunnel(p, dirSize, 5, 8, 2));
+                    Rectangle expectedRect = new(
+                    p.X + Math.Min(0, xSize), // leftmost point of tunnel
+                    p.Y - width, // rectangle centered around p
+                    Math.Abs(xSize), // width       
+                    width * 2 // height 
+                    );
+
+                    int inflateAmt = 4;
+                    expectedRect.Inflate(inflateAmt, inflateAmt);
+
+                    if (tunnels.Any(r => r.Intersects(expectedRect)))
+                        return;
+                    // tunnel end point (additive)
+                    Point dirSize = new(xSize, genRand.Next(-1, 2));
+
+                    Rectangle rect = DigQuadTunnel(p, p + dirSize, 5, segments, 2);
+                    rect.Inflate(inflateAmt, inflateAmt);
+
+                    tunnels.Add(rect);
                 }
+            });
+
+            tunnels.Clear();
+            // second loop for pegmatite adding
+            outerEllipse.LoopThroughPoints(p =>
+            {
+                if (innerEllipse.Contains(p))
+                    return;
+                if (!TileHelpers.EdgeTile(p))
+                    return;
+                TileRunner(p.X, p.Y, 5, 2, pegmatite);
+                //OreRunner(p.X, p.Y, 4, 2, pegmatite);
             });
             // now let's do a little dithering
             int padding = 40;
-            ITDShapes.Ellipse ditherEllipse = new(x, ellipseCenter, width / 2 + padding, height + padding);
+            ITDShapes.Ellipse ditherEllipse = new(x, ellipseCenter, width / 2 + padding, outerEllipseHeight + padding);
             ditherEllipse.LoopThroughPoints(p =>
             {
                 Tile t = Framing.GetTileSafely(p);
@@ -97,6 +140,10 @@ namespace ITD.Content.World
                 {
                     t.TileType = darkPyracotta;
                 }
+                if (t.TileType == TileID.Sand)
+                    t.TileType = darkPyracotta;
+                if (t.WallType == WallID.HardenedSand || t.WallType == WallID.Sandstone)
+                    t.WallType = pegmatiteWall;
             });
         }
     }

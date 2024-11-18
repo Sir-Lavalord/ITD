@@ -45,7 +45,7 @@ namespace ITD.Content.World
             return Main.keyState.IsKeyDown(key) && !Main.oldKeyState.IsKeyDown(key);
         }
 
-        /*public override void PostUpdateWorld()
+        public override void PostUpdateWorld()
         {
             if (JustPressed(Keys.D1))
             {
@@ -55,7 +55,7 @@ namespace ITD.Content.World
             {
                 TestMethod2();
             }
-        }*/
+        }
 
         private void TestMethod()
         {
@@ -63,7 +63,18 @@ namespace ITD.Content.World
             //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             //test world particle (change particle.canvas in particle type)
             //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
+            
             Point pos = Main.MouseWorld.ToTileCoordinates();
+            Point dirSize = new(
+                    WorldGen.genRand.Next(35, 50) * (1),
+                    -1
+                    );
+            Rectangle rect = WorldGenHelpers.Procedural.DigQuadTunnel(pos, pos + dirSize, 5, 8, 2);
+            Rectangle newRect = new(rect.X * 16, rect.Y * 16, rect.Width * 16, rect.Height * 16);
+            Dust.DrawDebugBox(newRect);
+            WorldGenHelpers.QuickDebugRectangle(rect);
+            
+            /*
             testPoints.Add(pos);
             if (testPoints.Count == 2)
             {
@@ -73,6 +84,7 @@ namespace ITD.Content.World
                 WorldGenHelpers.Procedural.DigQuadTunnel(origin, sizeDir, 6, 3, 3);
                 testPoints.Clear();
             }
+            */
             /*
             testPoints.Add(pos);
             if (testPoints.Count == 2)
