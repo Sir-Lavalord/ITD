@@ -158,25 +158,15 @@ namespace ITD.Content.Items.Favors
         }
         public sealed override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-            if (Charge >= 1f)
-            {
-                chargeScaleDirection = true;
-            }
-            else
-            {
-                chargeScaleDirection = false;
-            }
+            chargeScaleDirection = Charge >= 1f;
             chargeScale = Math.Clamp(chargeScale + (chargeScaleDirection ? 0.01f : -0.01f), 0f, 1f);
             if (chargeScale > 0f)
             {
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null, null, Main.UIScaleMatrix);
+                // it turns out you can just draw the thing using an A of 0 to achieve the same thing as additive blendstate. pretty cool imo
                 Texture2D flare = ModContent.Request<Texture2D>("ITD/Content/UI/LensFlare").Value;
                 float drawScale = (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 2f) + 5f) / 6f;
                 float addDrawScale = drawScale / 8f;
-                spriteBatch.Draw(flare, position, null, Color.White * drawScale * chargeScale, Main.GlobalTimeWrappedHourly, flare.Size() * 0.5f, 0.2f + addDrawScale, SpriteEffects.None, 0f);
-                spriteBatch.End();
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
+                spriteBatch.Draw(flare, position, null, Color.White with { A = 0 } * drawScale * chargeScale, Main.GlobalTimeWrappedHourly, flare.Size() * 0.5f, 0.2f + addDrawScale, SpriteEffects.None, 0f);
                 PreDrawInInventoryAfterSheen(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
             }
             return true;

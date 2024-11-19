@@ -72,19 +72,19 @@ namespace ITD.Content.World
                 t.TileType = darkPyracotta;
                 if (p.Y < Main.UnderworldLayer)
                     t.WallType = pegmatiteWall;
-                // if this tile is under the inner ellipse, try to generate tunnels
-                if (p.Y < innerEllipse.Y + innerEllipse.YRadius)
+            });
+
+            // second loop to dig tunnels without them being overwritten
+            outerEllipse.LoopThroughPoints(p =>
+            {
+                // if we're in the crescent and under the inner ellipse, try to gen tunnels
+                if (p.Y < innerEllipse.Y + innerEllipse.YRadius || p.Y < outerEllipse.Y || innerEllipse.Contains(p))
                     return;
                 // make sure to add a random chance to not create a tunnel
                 if (genRand.NextBool(20))
                 {
-                    DigQuadTunnel(p, p + new Point(100, 1), 5, 9);
-                    return;
                     // if this tile is in a tunnel, dont try to create another tunnel
-                    // idk why but a positive x doesn't work, it just generates a 1 tile wide vertical line. so restrict tunnel creation to the right side of this ellipse
-                    if (p.X < outerEllipse.X)
-                        return;
-                    int xSize = genRand.Next(100, 250) * -1; //(innerEllipse.X > p.X ? -1 : 1);
+                    int xSize = genRand.Next(100, 250) * (innerEllipse.X > p.X ? 1 : -1);
                     int width = 5;
                     int segments = genRand.Next(8, 16);
 
@@ -109,9 +109,9 @@ namespace ITD.Content.World
                     tunnels.Add(rect);
                 }
             });
-
             tunnels.Clear();
-            // second loop for pegmatite adding
+
+            // third loop for pegmatite adding
             outerEllipse.LoopThroughPoints(p =>
             {
                 if (innerEllipse.Contains(p))

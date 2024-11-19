@@ -7,6 +7,7 @@ using ITD.Content.NPCs;
 using ITD.Content.Projectiles;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using ReLogic.Utilities;
 
 namespace ITD.Utilities
 {
@@ -83,6 +84,8 @@ namespace ITD.Utilities
             }
             return totalAngleDifference;
         }
+        public static Vector2D ToRotationVector2D (this double d) => new(Math.Cos(d), Math.Sin(d));
+        public static Vector2D ToRotationVector2D (this float f) => ToRotationVector2D(f);
         public static bool Exists(this Entity entity) => entity != null && entity.active;
         //Make the invul boss part untargetable please
         public static bool IsValidTarget(this Projectile projectile, NPC target)
