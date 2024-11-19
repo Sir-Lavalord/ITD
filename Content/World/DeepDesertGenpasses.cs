@@ -27,7 +27,7 @@ namespace ITD.Content.World
             pegmatite = (ushort)ModContent.TileType<PegmatiteTile>();
             pegmatiteWall = (ushort)ModContent.WallType<PegmatiteWallUnsafe>();
             Point p = GetGenStartPoint();
-            GenDeepDesert(p.X, p.Y, WorldGen._genRandSeed);
+            GenDeepDesert(p.X, p.Y, _genRandSeed);
         }
 
         private static Point GetGenStartPoint()
@@ -37,21 +37,18 @@ namespace ITD.Content.World
 
         private static void GenDeepDesert(int x, int y, int seed)
         {
-            int width = GenVars.UndergroundDesertLocation.Width - 6;
-            int height = (int)(Main.maxTilesY / 2f);
+            Rectangle desert = GenVars.UndergroundDesertLocation;
+            int width = desert.Width;
+            int height = desert.Height;
             int worldSize = GetWorldSize();
 
-            int innerEllipseYRadius = (int)(height * (worldSize == WorldSizeID.Small ? 0.4f : 0.7f));
-            int ellipseCenter = y - innerEllipseYRadius;
+            int innerEllipseYRadius = height / 2;
+            int ellipseCenter = desert.Center.Y;
 
-            int desertCurrentHeight = GenVars.UndergroundDesertLocation.Y + GenVars.UndergroundDesertLocation.Height;
-            int minDesertHeight = Main.maxTilesY - 400;
-            int maxDesertHeight = Main.maxTilesY - 200;
-            float multiplierAtLessHeight = 1f;
-            float multiplierAtMaxHeight = worldSize == WorldSizeID.Small ? 0.5f : 0.7f;
-            float multiplier = Utils.Remap(desertCurrentHeight, minDesertHeight, maxDesertHeight, multiplierAtLessHeight, multiplierAtMaxHeight);
-            int outerEllipseHeight = (int)(height * multiplier);
-            ITDShapes.Ellipse outerEllipse = new(x, ellipseCenter, width / 2, outerEllipseHeight);
+            int distanceFromDesertBottomToHellTop = Main.UnderworldLayer - desert.Bottom; 
+
+            int outerEllipseYRadius = innerEllipseYRadius + distanceFromDesertBottomToHellTop;
+            ITDShapes.Ellipse outerEllipse = new(x, ellipseCenter, width / 2, outerEllipseYRadius);
 
             GenVars.structures.AddProtectedStructure(new Rectangle(outerEllipse.Container.X, outerEllipse.Y, outerEllipse.XRadius * 2, outerEllipse.YRadius));
 
@@ -81,6 +78,8 @@ namespace ITD.Content.World
                 // make sure to add a random chance to not create a tunnel
                 if (genRand.NextBool(20))
                 {
+                    DigQuadTunnel(p, p + new Point(100, 1), 5, 9);
+                    return;
                     // if this tile is in a tunnel, dont try to create another tunnel
                     // idk why but a positive x doesn't work, it just generates a 1 tile wide vertical line. so restrict tunnel creation to the right side of this ellipse
                     if (p.X < outerEllipse.X)
@@ -124,7 +123,7 @@ namespace ITD.Content.World
             });
             // now let's do a little dithering
             int padding = 40;
-            ITDShapes.Ellipse ditherEllipse = new(x, ellipseCenter, width / 2 + padding, outerEllipseHeight + padding);
+            ITDShapes.Ellipse ditherEllipse = new(x, ellipseCenter, width / 2 + padding, outerEllipseYRadius + padding);
             ditherEllipse.LoopThroughPoints(p =>
             {
                 Tile t = Framing.GetTileSafely(p);

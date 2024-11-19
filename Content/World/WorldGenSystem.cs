@@ -65,6 +65,7 @@ namespace ITD.Content.World
             //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             
             Point pos = Main.MouseWorld.ToTileCoordinates();
+            /*
             Point dirSize = new(
                     WorldGen.genRand.Next(35, 50) * (1),
                     -1
@@ -73,7 +74,7 @@ namespace ITD.Content.World
             Rectangle newRect = new(rect.X * 16, rect.Y * 16, rect.Width * 16, rect.Height * 16);
             Dust.DrawDebugBox(newRect);
             WorldGenHelpers.QuickDebugRectangle(rect);
-            
+            */
             /*
             testPoints.Add(pos);
             if (testPoints.Count == 2)
