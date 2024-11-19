@@ -14,6 +14,7 @@ using ITD.Utilities;
 using Terraria.ObjectData;
 using ITD.Particles.CosJel;
 using ITD.Content.Tiles.DeepDesert;
+using ITD.Content.Walls.DeepDesert;
 
 namespace ITD.Content.World
 {
@@ -65,7 +66,25 @@ namespace ITD.Content.World
             //test world particle (change particle.canvas in particle type)
             //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             
-            //Point pos = Main.MouseWorld.ToTileCoordinates();
+            Point pos = Main.MouseWorld.ToTileCoordinates();
+            /*
+            testPoints.Add(pos);
+            if (testPoints.Count == 2)
+            {
+                Point p1 = testPoints[0];
+                Point p2 = testPoints[1];
+                Rectangle rect = MiscHelpers.ContainsRectangles(new Rectangle(p1.X, p1.Y, 1, 1), new Rectangle(p2.X, p2.Y, 1, 1));
+                for (int i = rect.Left; i < rect.Right; i++)
+                {
+                    for (int j = rect.Top; j < rect.Bottom; j++)
+                    {
+                        Framing.GetTileSafely(i, j).WallType = (ushort)ModContent.WallType<ReinforcedPegmatiteBrickWallUnsafe>();
+                        WorldGen.SquareWallFrame(i, j);
+                    }
+                }
+                testPoints.Clear();
+            }
+            */
             /*
             Tile t = Framing.GetTileSafely(pos);
             t.HasTile = true;

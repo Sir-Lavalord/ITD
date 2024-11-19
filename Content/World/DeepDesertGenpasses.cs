@@ -6,12 +6,12 @@ using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using Microsoft.Xna.Framework;
 using System;
-using ITD.Content.Walls;
 using ITD.Content.Tiles.DeepDesert;
 using ITD.Utilities;
 using static Terraria.WorldGen;
 using static ITD.Utilities.WorldGenHelpers.Procedural;
 using System.Linq;
+using ITD.Content.Walls.DeepDesert;
 
 namespace ITD.Content.World
 {

@@ -1025,6 +1025,11 @@ Items: {
 		// DisplayName: Light Pyracotta
 		// Tooltip: ""
 	}
+
+	Pillarificationizerator: {
+		// DisplayName: Pillarificationizerator
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

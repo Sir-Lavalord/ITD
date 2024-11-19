@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -71,6 +72,45 @@ namespace ITD.Utilities
             }
             return true;
         }
+        public static void KillTiles(int i, int j, int width = 1, int height = 1)
+        {
+            for (int k = 0; k < width; k++)
+            {
+                for (int l = 0; l < height; l++)
+                {
+                    WorldGen.KillTile(i + k, j + l);
+                }
+            }
+        }
+        public static void KillTilesForced(int i, int j, int width = 1, int height = 1)
+        {
+            for (int k = 0; k < width; k++)
+            {
+                for (int l = 0; l < height; l++)
+                {
+                    Tile t = Framing.GetTileSafely(i + k, j + l);
+                    t.HasTile = false;
+                }
+            }
+            Sync(i, j, width, height);
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void FrameToPoint(this Tile t, short x = 0, short y = 0, int xRandom = 1, int yRandom = 1)
+        {
+            int horizontalRandom = Main.rand.Next(xRandom) * 18;
+            int verticalRandom = Main.rand.Next(yRandom) * 18;
+            t.TileFrameX = (short)(x + horizontalRandom);
+            t.TileFrameY = (short)(y + verticalRandom);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Sync(int i, int j, int width = 1, int height = 1)
+        {
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                return;
+            NetMessage.SendTileSquare(-1, i, j, width, height);
+        }
+
         public static bool AptForTree(Point tileCoord, int height, int? saplingType = null) => AptForTree(tileCoord.X, tileCoord.Y, height, saplingType);
         public static bool AptForTree(int i, int j, int height, int? saplingType = null)
         {
