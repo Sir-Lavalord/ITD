@@ -40,6 +40,10 @@ namespace ITD.Particles
         public float scale = 1f;
         public float spawnScale;
         public float opacity = 1f;
+        /// <summary>
+        /// Should this particle's sprite be drawn additively? (only applies to particles that don't override regular drawing
+        /// </summary>
+        public bool additive = false;
         public ParticleDrawCanvas canvas;
 
         /// <summary>
@@ -119,6 +123,8 @@ namespace ITD.Particles
             if (origin != null)
                 data.Item2 = origin.Value;
             Color drawColor = color == null ? GetAlpha() : color.Value;
+            if (additive)
+                drawColor = drawColor with { A = 0 };
             float drawRotation = rotation == null ? this.rotation : 0f;
             float drawScale = scale == null ? this.scale : 1f;
 

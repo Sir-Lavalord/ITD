@@ -13,6 +13,7 @@ using ITD.Content.Tiles.Misc;
 using ITD.Utilities;
 using Terraria.ObjectData;
 using ITD.Particles.CosJel;
+using ITD.Content.Tiles.DeepDesert;
 
 namespace ITD.Content.World
 {
@@ -65,6 +66,12 @@ namespace ITD.Content.World
             //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             
             //Point pos = Main.MouseWorld.ToTileCoordinates();
+            /*
+            Tile t = Framing.GetTileSafely(pos);
+            t.HasTile = true;
+            t.TileType = (ushort)ModContent.TileType<ReinforcedPegmatiteBricks>();
+            WorldGen.TileFrame(pos.X, pos.Y);
+            */
             //WorldGenHelpers.Procedural.DigQuadTunnel(pos, pos + new Point(100, 50), 5, 9, 3);
             /*
             Point dirSize = new(

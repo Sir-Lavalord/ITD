@@ -3,16 +3,15 @@ using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable
 {
-    public class Diorite : ModItem
+    public class LightPyracotta : ModItem
     {
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 100;
         }
-
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<DioriteTile>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<LightPyracottaTile>());
         }
     }
 }

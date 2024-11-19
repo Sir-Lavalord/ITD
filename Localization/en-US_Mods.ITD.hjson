@@ -156,13 +156,13 @@ Items: {
 	}
 
 	Diorite: {
-		Tooltip: ""
-		DisplayName: Diorite
+		Tooltip: Warm when freshly mined
+		DisplayName: Dark Pyracotta
 	}
 
 	Pegmatite: {
 		DisplayName: Pegmatite
-		Tooltip: ""
+		Tooltip: "'This stuff's harder than depthrock...'"
 	}
 
 	EmberlionSclerite: {
@@ -1021,6 +1021,11 @@ Items: {
 
 	TopazNecklace: {
 		DisplayName: Topaz Necklace
+		Tooltip: ""
+	}
+
+	LightPyracotta: {
+		DisplayName: Light Pyracotta
 		Tooltip: ""
 	}
 }

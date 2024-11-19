@@ -1023,6 +1023,11 @@ Items: {
 		// DisplayName: Topaz Necklace
 		// Tooltip: ""
 	}
+
+	LightPyracotta: {
+		// DisplayName: Light Pyracotta
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
