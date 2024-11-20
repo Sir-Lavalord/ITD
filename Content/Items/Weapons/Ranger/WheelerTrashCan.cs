@@ -15,7 +15,7 @@ namespace ITD.Content.Items.Weapons.Ranger
 
         public override void SetDefaults()
         {
-            Item.damage = 40;
+            Item.damage = 30;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 30;
             Item.height = 60;
@@ -49,22 +49,23 @@ namespace ITD.Content.Items.Weapons.Ranger
             }
             else if (iCurrentChance >= 98 && iCurrentChance < 98)*/
             SoundEngine.PlaySound(SoundID.Item36, position);
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 4; i++)
             {
                 Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(20));
                 newVelocity *= 1f - Main.rand.NextFloat(0.3f);
                 Projectile.NewProjectileDirect(source, position, newVelocity, type, damage, knockback, player.whoAmI,Main.rand.Next(0,15));
             }
             Vector2 muzzleOffset = Vector2.Normalize(velocity) * 60f;
-            position += muzzleOffset;
             for (int i = 0; i < 16; i++)
             {
                 Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(30));
                 newVelocity *= Main.rand.NextFloat(2f);
-                int dust = Dust.NewDust(position, 20, 20, DustID.Smoke, 0f, 0f, 0, default, 2f);
+                int dust = Dust.NewDust(position, Item.width/2, Item.height / 2, DustID.Smoke, 0f, 0f, 0, default, 2f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity = newVelocity;
             }
+            position += muzzleOffset;
+
             return false;
         }
     }

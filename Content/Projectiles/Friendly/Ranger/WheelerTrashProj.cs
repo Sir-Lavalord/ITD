@@ -1,17 +1,12 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using ITD.Content.Buffs.Debuffs;
+using ITD.Utilities;
+using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
-using ITD.Content.Buffs.Debuffs;
-using ITD.Utilities;
-using System.Collections.Generic;
-using System.Threading;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger
 {
@@ -51,6 +46,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             }
         }
         Vector2 spawnvel;
+
         public override void OnSpawn(IEntitySource source)
         {
             Player player = Main.player[Projectile.owner];
@@ -94,11 +90,16 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 case 14:
                     Projectile.hide = true;
                     Projectile.damage = (int)(Projectile.damage * 4f);
+                    Projectile.spriteDirection = (Vector2.Dot(Projectile.velocity, Vector2.UnitX) >= 0f).ToDirectionInt();
+                    spawnrotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2 - MathHelper.PiOver4 * Projectile.spriteDirection;
+                    spawnvel = Projectile.velocity;
                     break;
             }
         }
         int dustcolor;
         bool bBounced;
+        float spawnrotation;
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Collision.HitTiles(Projectile.position, new Vector2(-spawnvel.X / 2, -spawnvel.Y / 2), Projectile.width, Projectile.height);
@@ -126,7 +127,25 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 }
                 return false;
             }
+            else if (Projectile.ai[0] == 14)
+            {
+                SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
+                grounded = true;
+                Projectile.velocity *= 0f;
+                Projectile.rotation = spawnrotation;
+                Collision.HitTiles(Projectile.position, new Vector2(-spawnvel.X / 2, -spawnvel.Y / 2), Projectile.width, Projectile.height);
+
+                for (int i = 0; i < 8; i++)
+                {
+                    Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width / 4, Projectile.height / 4, DustID.Bone, -spawnvel.X / 2, -spawnvel.Y / 2, 60, default, Main.rand.NextFloat(1f, 1.7f));
+                    dust.noGravity = true;
+                    dust.velocity *= 4f;
+                    Dust.NewDustDirect(Projectile.position, Projectile.width / 4, Projectile.height / 4, DustID.Blood, -spawnvel.X / 2, -spawnvel.Y / 2, 60, default, Main.rand.NextFloat(1f, 1.7f));
+                }
+                return false;
+            }
             else return true;
+
 
         }
         public bool IsStickingToTarget
@@ -162,7 +181,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 dust.noGravity = true;
                 dust.velocity *= 0.9f;
             }
-                switch (Projectile.ai[0])
+            switch (Projectile.ai[0])
             {
                 case 0:
                     dustcolor = DustID.t_Crystal;
@@ -279,7 +298,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-         
+
             if (targetHitbox.Width > 6 && targetHitbox.Height > 6)
             {
                 targetHitbox.Inflate(-targetHitbox.Width / 6, -targetHitbox.Height / 6);
@@ -334,7 +353,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 
                 }
             }
-                switch (Projectile.ai[0])
+            switch (Projectile.ai[0])
             {
                 case 0:
                     break;
@@ -368,6 +387,14 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                         target.AddBuff(i_randomDebuff, 1200);
                     }
                     break;
+                case 14:
+                    javelinstuck++;
+                    IsStickingToTarget = true;
+                    TargetWhoAmI = target.whoAmI;
+                    Projectile.velocity = (target.Center - Projectile.Center) *
+                        0.75f;
+                    Projectile.netUpdate = true;
+                    break;
             }
         }
         public static int i_randomDebuff = 0;
@@ -388,7 +415,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             BuffID.BrokenArmor,
             BuffID.Confused,
             };
-            i_randomDebuff = list[(Main.rand.Next(list.Count +1))];
+            i_randomDebuff = list[(Main.rand.Next(list.Count))];
         }
 
         public override void OnKill(int timeLeft)

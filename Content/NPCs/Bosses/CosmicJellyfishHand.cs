@@ -11,21 +11,30 @@ using ITD.Particles.CosJel;
 using ITD.Particles;
 using System.Runtime.CompilerServices;
 using ITD.Utilities.EntityAnim;
+using System.Diagnostics;
+using ITD.Content.Projectiles.Hostile;
+using Terraria.Audio;
+using Terraria.GameContent.Drawing;
 namespace ITD.Content.NPCs.Bosses
 {
     public class CosmicJellyfishHand : ModNPC
     {
-        // Fargo echamp clone tempo
         // sorry mirrorman but my ahh isn't gonna keep reading NPC.ai[] everywhere whilst having no idea wtf is happening, have some ref properties and enums :pray:
         private enum ActionState
         {
             Waiting,
-            Anticipate,
-            ThrowPunch
+            Charging,
+            Slinging,
+            DownToSize,
+            MeteorStrike,
+            TemperTantrum,
+            ForceKill//it's not just downtosize trust me
         }
         private ActionState AIState { get { return (ActionState)NPC.ai[0]; } set { NPC.ai[0] = (float)value; } }
         public bool IsLeftHand => (int)NPC.ai[3] == 1;
         public int CosJelIndex => (int)NPC.ai[2];
+        private ActionState UpcomingAttack { get { return (ActionState)NPC.ai[1]; } set { NPC.ai[1] = (float)value; } }
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;
@@ -40,19 +49,18 @@ namespace ITD.Content.NPCs.Bosses
             NPC.width = 100;
             NPC.height = 100;
             NPC.damage = 130;
-            NPC.defense = 80;
             NPC.lifeMax = 6000;
-            NPC.HitSound = SoundID.NPCHit41;
+            NPC.HitSound = SoundID.NPCDeath6;
             NPC.DeathSound = SoundID.NPCDeath44;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.knockBackResist = 0f;
-            NPC.lavaImmune = true;
             NPC.aiStyle = -1;
-
             NPC.trapImmune = true;
         }
-
+        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+        {
+        }
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
             //NPC.damage = (int)(NPC.damage * 0.5f);
@@ -62,11 +70,18 @@ namespace ITD.Content.NPCs.Bosses
         public override bool CanHitPlayer(Player target, ref int CooldownSlot)
         {
             CooldownSlot = ImmunityCooldownID.Bosses;
-            return NPC.localAI[3] == 1;
+            return AIState != ActionState.Waiting;
         }
 
         public override void SendExtraAI(BinaryWriter writer)
         {
+            writer.Write(bStopfalling);
+            writer.Write(bSmackdown);
+            writer.Write(iMeteorCount);
+            writer.Write(Timer);
+            writer.Write(handCharge);
+            writer.Write(handSling);
+            writer.Write(handFollowThrough);
             writer.Write(NPC.localAI[0]);
             writer.Write(NPC.localAI[1]);
         }
@@ -75,7 +90,17 @@ namespace ITD.Content.NPCs.Bosses
         {
             NPC.localAI[0] = reader.ReadSingle();
             NPC.localAI[1] = reader.ReadSingle();
+            bStopfalling = reader.ReadBoolean();
+            bSmackdown = reader.ReadBoolean();
+
+            iMeteorCount = reader.ReadInt32();
+            Timer = reader.ReadInt32();
+
+            handCharge = reader.ReadSingle();
+            handSling = reader.ReadSingle();
+            handFollowThrough = reader.ReadSingle();
         }
+
         public bool bSmackdown;
         public int iMeteorCount;
         public int iDisFromBoss = 160;
@@ -85,9 +110,11 @@ namespace ITD.Content.NPCs.Bosses
         public float handFollowThrough = 0f;
         public bool bStopfalling;
         private Vector2 handTarget = Vector2.Zero;
-
+        bool expertMode = Main.expertMode;
+        bool masterMode = Main.masterMode;
         public override void AI()
         {
+            
             NPC body = MiscHelpers.NPCExists(CosJelIndex, ModContent.NPCType<CosmicJellyfish>());
             if (body == null)
             {
@@ -96,18 +123,20 @@ namespace ITD.Content.NPCs.Bosses
                 NPC.active = false;
                 return;
             }
-            NPC.lifeMax = body.lifeMax;
-            NPC.damage = body.damage;
-            NPC.defDamage = body.defDamage;
-            NPC.defense = body.defense;
-            NPC.defDefense = body.defDefense;
             NPC.target = body.target;
-
+            bool bSecondStage = body.localAI[2] != 0;
             NPC.life = NPC.lifeMax;
 
             Player player = Main.player[NPC.target];
             Vector2 targetPos;
-
+            if (Main.zenithWorld)
+            {
+                NPC.dontTakeDamage = false;//little surprise in gfb
+            }
+            else
+            {
+                NPC.dontTakeDamage = true;
+            }
             NPC.direction = NPC.spriteDirection = -(int)NPC.ai[3];
             NPC.localAI[3] = 0;
             if (NPC.scale < 1f)
@@ -132,7 +161,7 @@ namespace ITD.Content.NPCs.Bosses
                     NPC.Center = Vector2.Lerp(NPC.Center, normalCenter, 0.3f);
                     break;
 
-                case ActionState.Anticipate: 
+                case ActionState.Charging:
                     if (handCharge < 1f)
                     {
                         handCharge += 0.04f;
@@ -140,15 +169,27 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     else
                     {
-                        // advance aistate by one (to throwpunch)
-                        AIState++;
+                        //advance aistate by one(to Slinging)
+                        //Stupid story: the text is also shared with p3 transition,
+                        //so i spent several hours looking for the bug in transition, not this line
+                        /*                        Main.NewText("Slop slop slop slop.", Color.Violet);
+                        */
+                        if (UpcomingAttack == ActionState.MeteorStrike)
+                        {
+                            bSmackdown = true;
+                            NPC.noTileCollide = false;
+                            NPC.velocity = Vector2.UnitY * 24f;
+                            NPC.localAI[0] = player.position.Y;
+                            NPC.netUpdate = true;
+                        }
+                        AIState = UpcomingAttack;
                         Vector2 toTarget = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero);
                         handTarget = player.Center + toTarget * 120f;
                     }
                     NPC.Center = Vector2.Lerp(normalCenter, chargedPosition, (float)Math.Sin(handCharge * Math.PI));
                     break;
 
-                case ActionState.ThrowPunch:
+                case ActionState.Slinging:
                     handCharge = 0f;
                     if (handSling < 1f)
                     {
@@ -163,31 +204,136 @@ namespace ITD.Content.NPCs.Bosses
                         }
                         else
                         {
-                            NPC.life = 0;
-                            NPC.checkDead();
-                            NPC.active = false;
-                            return;
+                            if (bSecondStage)
+                            {
+                                body.localAI[1]++;
+                                NetSync();
+                                if (body.localAI[1] >= 6)
+                                {
+                                    NPC.life = 0;
+                                    NPC.checkDead();
+                                    NPC.active = false;
+                                }
+                                else
+                                {
+                                    NetSync();
+                                    OtherHandControl(0, 1, 2);
+                                }
+                            }
+                            else
+                            {
+                                NPC.life = 0;
+                                NPC.checkDead();
+                                NPC.active = false;
+                            }
+                            AIState = ActionState.Waiting;
                         }
                     }
                     NPC.Center = Vector2.Lerp(normalCenter, handTarget, (float)Math.Sin(handSling * Math.PI));
                     break;
+                case ActionState.DownToSize:
+                    handSling = 0f;
+                    handCharge = 0f;
+                    handFollowThrough = 0f;
+                    NPC.Center = Vector2.Lerp(NPC.Center, normalCenter, 0.3f);
+                    if (Timer++ >= 30)
+                    {
+                        if (bSecondStage)
+                        {
+                            body.localAI[1]++;
+                            NetSync();
+                            OtherHandControl(0, 6, 6);
+                        }
+                        else
+                        {
+                            OtherHandControl(0, 1, 2);
+                            AIState = ActionState.Waiting;
+                            NPC.life = 0;
+                            NPC.checkDead();
+                            NPC.active = false;
+                        }
+                    }
+                    break;
+                case ActionState.MeteorStrike:
+                    if (NPC.position.Y + NPC.height > NPC.localAI[0])
+                        NPC.noTileCollide = false;
+                    if (!NPC.noTileCollide)
+                    {
+                        if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height)
+                            || NPC.position.Y + NPC.height > Main.maxTilesY * 16 - 16)
+                            NPC.velocity.Y = 0;
+                    }
 
-                /*                    for (int i = 0; i < Main.maxNPCs; i++) //find the other hand
-                                    {
-                                        if (Main.npc[i].active && Main.npc[i].type == NPC.type && i != NPC.whoAmI && Main.npc[i].ai[2] == NPC.ai[2])
-                                        {
-                                            Main.npc[i].velocity = Vector2.Zero;
-                                            Main.npc[i].ai[0] = NPC.ai[0];
-                                            Main.npc[i].ai[1] = NPC.ai[1];
-                                            Main.npc[i].localAI[0] = NPC.localAI[0];
-                                            Main.npc[i].localAI[1] = NPC.localAI[1];
-                                            Main.npc[i].netUpdate = true;
-                                            break;
-                                        }
-                                    }*/
-                default:
-                    AIState = ActionState.Waiting;
-                    goto case 0;
+                    if (NPC.velocity.Y == 0) //we've hit something
+                    {
+                        if (NPC.localAI[0] != 0)
+                        {
+                            bSmackdown = true;
+                            NPC.localAI[0] = 0;
+                            if (expertMode || masterMode)
+                            {
+
+                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                {
+                                    Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
+                                    ModContent.ProjectileType<CosmicLightningBlast>(), (int)(NPC.damage), 2f, -1, NPC.whoAmI);
+                                    Blast.ai[1] = 100f;
+                                    Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+                                    Blast.netUpdate = true;
+
+                                }
+                            }
+                        }
+                        for (int i = 0; i < 12; i++)
+                        {
+                            Dust.NewDustPerfect(NPC.Center, DustID.ShimmerTorch, new Vector2(Main.rand.NextFloat() * 6f, -8f + 8f * Main.rand.NextFloat()), 0, default(Color), 1.5f).noGravity = true;
+                        }
+                    }
+                    NPC.localAI[1]++;
+
+                    if (NPC.localAI[1] > (body.localAI[2] == 1 ? 20 : 30)) //proceed after short pause
+                    {
+                        NPC.netUpdate = true;
+                        AIState = ActionState.Waiting;
+                        NPC.localAI[0] = 0;
+                        NPC.localAI[1] = 0;
+                    }
+                        break;
+                case ActionState.ForceKill:                    
+                        NPC.life = 0;
+                        NPC.checkDead();
+                        NPC.active = false;
+                    break;
+
+
+            }
+            for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+                Projectile projectile = Main.projectile[i];
+
+                if (projectile.active && projectile.type == ProjectileID.CopperShortswordStab && Math.Abs(NPC.position.X - projectile.position.X) + Math.Abs(NPC.position.Y - projectile.position.Y) < NPC.width)
+                {
+                    if (Timer == 0 && AIState == ActionState.Slinging &&
+                        handFollowThrough < 1f &&
+                        player.Distance(NPC.Center) < 60f)
+                    {
+                        ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
+                            new ParticleOrchestraSettings { PositionInWorld = projectile.Center }, NPC.whoAmI);
+                        SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), NPC.Center);
+                        player.GetITDPlayer().BetterScreenshake(20, 5, 5, true);
+                        AIState = ActionState.DownToSize;
+                        NetSync();
+
+                        if (body.life > body.lifeMax / 10)
+                        {
+                            body.life -= body.lifeMax / 10;
+                        }
+                        CombatText.NewText(NPC.Hitbox, Color.Violet, "DOWN TO SIZE", true);
+                        NPC.velocity = -NPC.velocity * 2;
+                        // if the achievements mod is on, unlock the parry achievement
+                        ITD.Instance.achievements?.Call("Event", "ParryCosJelHand");
+                    }
+                }
 
             }
             NPC.rotation = MathHelper.Lerp(NPC.rotation, targetRotation, 0.05f);
@@ -200,14 +346,66 @@ namespace ITD.Content.NPCs.Bosses
                 spaceMist.tag = NPC;
             }
         }
-
-        public override void FindFrame(int frameHeight)
+        public void OtherHandControl(int currentAttack, int attackID, int upcomingID)
         {
-            NPC.frame.Y = NPC.localAI[3] == 1 ? 0 : frameHeight;
+            for (int i = 0; i < Main.maxNPCs; i++) //control other hand
+            {
+                if (Main.npc[i].active && Main.npc[i].type == NPC.type && i != NPC.whoAmI && Main.npc[i].ai[2] == NPC.ai[2] && Main.npc[i].ai[0] == currentAttack)
+                {
+                    Main.npc[i].velocity = Vector2.Zero;
+                    Main.npc[i].ai[0] = attackID;
+                    Main.npc[i].ai[1] = upcomingID;
+                    Main.npc[i].localAI[0] = NPC.localAI[0];
+                    Main.npc[i].localAI[1] = NPC.localAI[1];
+                    Main.npc[i].netUpdate = true;
+                    break;
+                }
+            }
+        }
+        private void NetSync()//Netsync returns!
+        {
+            NPC body = MiscHelpers.NPCExists(CosJelIndex, ModContent.NPCType<CosmicJellyfish>());
+            if (body == null)
+            {
+                NPC.life = 0;
+                NPC.checkDead();
+                NPC.active = false;
+                return;
+            }
+            body.netUpdate = true;
+            NPC.netUpdate = true;
         }
         public override bool CheckActive()
         {
             return false;
+        }
+        public override void FindFrame(int frameHeight)
+        {
+            int startFrame = 0;
+            int finalFrame = 4;
+            if (AIState != ActionState.Charging && AIState != ActionState.Slinging && !bSmackdown)
+            {
+                int frameSpeed = 5;
+                NPC.frameCounter += 1f;
+                if (NPC.frameCounter > frameSpeed)
+                {
+                    NPC.frameCounter = 0;
+                    NPC.frame.Y += frameHeight;
+
+                    if (NPC.frame.Y > (finalFrame) * frameHeight)
+                    {
+                        NPC.frame.Y = (startFrame) * frameHeight;
+                    }
+                }
+            }
+            else if (AIState == ActionState.Charging)
+            {
+                NPC.frame.Y = (5) * frameHeight;
+            }
+            else if (AIState == ActionState.Slinging || (AIState == ActionState.MeteorStrike && bSmackdown))
+            {
+                NPC.frame.Y = (6) * frameHeight;
+            }
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
@@ -218,7 +416,7 @@ namespace ITD.Content.NPCs.Bosses
             {
                 spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, Color.White, NPC.rotation, origin, NPC.scale, NPC.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
             }
-            if (AIState == ActionState.ThrowPunch || bSmackdown || AIState == ActionState.Anticipate)
+            if (AIState == ActionState.Slinging || bSmackdown || AIState == ActionState.Charging)
             {
                 for (int k = 0; k < NPC.oldPos.Length; k++)
                 {

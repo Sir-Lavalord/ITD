@@ -74,9 +74,7 @@ namespace ITD.Content.Projectiles.Hostile
             NPC CosJel = Main.npc[(int)Projectile.ai[0]];
             if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
             {
-                Vector2 CorePos = new Vector2(CosJel.Center.X, CosJel.Center.Y - 100);
-
-                if (Vector2.Distance(Projectile.Center, CorePos) < 30)
+                if (Vector2.Distance(Projectile.Center, CosJel.Center) < 30)
                 {
                     if (Projectile.ai[1] == 2)
                     {
