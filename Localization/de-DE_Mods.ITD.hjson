@@ -1030,6 +1030,16 @@ Items: {
 		// DisplayName: Pillarificationizerator
 		// Tooltip: ""
 	}
+
+	PortableLab: {
+		// DisplayName: Portable Lab
+		// Tooltip: ""
+	}
+
+	IncomprehensiblePolyhedron: {
+		// DisplayName: Incomprehensible Polyhedron
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

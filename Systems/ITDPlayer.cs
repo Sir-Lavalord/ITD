@@ -61,6 +61,8 @@ namespace ITD.Players
         public bool razedWine = false;
         public int razedCooldown = 0;
 
+        public bool portableLab = false;
+
 		public bool setElectrum = false;
 		public bool setRhodium = false;
 
@@ -130,6 +132,8 @@ namespace ITD.Players
 			dreadBlock = false;
 
             razedWine = false;
+
+            portableLab = false;
 			
 			setElectrum = false;
 			setRhodium = false;
@@ -138,7 +142,6 @@ namespace ITD.Players
             setAlloy_Ranged = false;
             setAlloy_Magic = false;
         }
-		
 		public override void UpdateDead()
         {
             CosJellSuffocated = false;
@@ -147,8 +150,7 @@ namespace ITD.Players
                 shakeDuration--; 
             itemVar = new float[4];
 		}
-		
-		public override void UpdateBadLifeRegen()
+        public override void UpdateBadLifeRegen()
         {
 			if (necrosis)
 			{
