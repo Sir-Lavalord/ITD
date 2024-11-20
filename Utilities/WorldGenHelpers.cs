@@ -29,6 +29,16 @@ namespace ITD.Utilities
             y = 0;
             return false;
         }
+        public static void LoopThroughPoints(this Rectangle rect, Action<Point> callback)
+        {
+            for (int i = rect.Left; i <= rect.Right; i++)
+            {
+                for (int j = rect.Top; j <= rect.Bottom; j++)
+                {
+                    callback.Invoke(new Point(i, j));
+                }
+            }
+        }
         public static void QuickDebugRectangle(Rectangle rect)
         {
             ushort debugTile = (ushort)ModContent.TileType<Debugger>();
@@ -156,14 +166,11 @@ namespace ITD.Utilities
             public virtual void LoopThroughPoints(Action<Point> callback)
             {
                 Rectangle cont = Container;
-                for (int i = cont.Left; i <= cont.Right; i++)
+                cont.LoopThroughPoints(p =>
                 {
-                    for (int j = cont.Top; j <= cont.Bottom; j++)
-                    {
-                        if (Contains(i, j))
-                            callback.Invoke(new Point(i, j));
-                    }
-                }
+                    if (Contains(p))
+                        callback(p);
+                });
             }
         }
         public class Triangle(Point a, Point b, Point c) : ITDShape

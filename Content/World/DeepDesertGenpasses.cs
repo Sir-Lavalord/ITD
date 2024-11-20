@@ -18,12 +18,13 @@ namespace ITD.Content.World
     public class DeepDesertGenPass(string name, float loadWeight) : GenPass(name, loadWeight)
     {
         private static ushort darkPyracotta;
+        private static ushort lightPyracotta;
         private static ushort pegmatite;
         private static ushort pegmatiteWall;
-
         protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
             darkPyracotta = (ushort)ModContent.TileType<DioriteTile>();
+            lightPyracotta = (ushort)ModContent.TileType<LightPyracottaTile>();
             pegmatite = (ushort)ModContent.TileType<PegmatiteTile>();
             pegmatiteWall = (ushort)ModContent.WallType<PegmatiteWallUnsafe>();
             Point p = GetGenStartPoint();
@@ -74,11 +75,17 @@ namespace ITD.Content.World
                     t.WallType = pegmatiteWall;
             });
 
-            // second loop to dig tunnels without them being overwritten
+            // second loop to dig tunnels without them being overwritten, and fill in wall gaps between the desert and the DD
             outerEllipse.LoopThroughPoints(p =>
             {
+                // if we're in the bottom half of the ellipse, fill in empty walls with pegmatite
+                if (p.Y < outerEllipse.Y)
+                    return;
+                Tile t = Framing.GetTileSafely(p);
+                if (t.WallType == WallID.None)
+                    t.WallType = pegmatiteWall;
                 // if we're in the crescent and under the inner ellipse, try to gen tunnels
-                if (p.Y < innerEllipse.Y + innerEllipse.YRadius || p.Y < outerEllipse.Y || innerEllipse.Contains(p))
+                if (p.Y < innerEllipse.Y + innerEllipse.YRadius || innerEllipse.Contains(p))
                     return;
                 // make sure to add a random chance to not create a tunnel
                 if (genRand.NextBool(20))
@@ -144,6 +151,23 @@ namespace ITD.Content.World
                 if (t.WallType == WallID.HardenedSand || t.WallType == WallID.Sandstone)
                     t.WallType = pegmatiteWall;
             });
+
+            // now let's add some lines of light pyracotta tiles along the entirety of the desert.
+            // we will use digquadtunnel's secret ability here... the fact that you can do more than just dig with it.
+            int linesAmount = outerEllipse.YRadius / 20;
+            int spacing = outerEllipse.YRadius / linesAmount;
+            Rectangle rect = outerEllipse.Container;
+            for (int i = 0; i < linesAmount; i++)
+            {
+                Point origin = new(rect.Left, rect.Top + outerEllipse.YRadius + (spacing * i));
+                Point end = origin + new Point(rect.Width, genRand.Next(-20, 21));
+                DigQuadTunnel(origin, end, 2, 18, 1, p =>
+                {
+                    Tile t = Framing.GetTileSafely(p);
+                    if (t.TileType == darkPyracotta)
+                        t.TileType = lightPyracotta;
+                });
+            }
         }
     }
 }
