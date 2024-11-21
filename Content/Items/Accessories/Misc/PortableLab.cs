@@ -49,6 +49,10 @@ namespace ITD.Content.Items.Accessories.Misc
         {
             Item.DefaultToAccessory();
         }
+        public override void UpdateInfoAccessory(Player player)
+        {
+            player.GetITDPlayer().portableLab = true;
+        }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetITDPlayer().portableLab = true;

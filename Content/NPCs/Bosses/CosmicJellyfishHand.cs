@@ -206,10 +206,11 @@ namespace ITD.Content.NPCs.Bosses
                         {
                             if (bSecondStage)
                             {
-                                body.localAI[1]++;
+                                body.ai[0]++;
                                 NetSync();
-                                if (body.localAI[1] >= 6)
+                                if (body.ai[0] >= 6)
                                 {
+                                    NetSync();
                                     NPC.life = 0;
                                     NPC.checkDead();
                                     NPC.active = false;
@@ -240,7 +241,7 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         if (bSecondStage)
                         {
-                            body.localAI[1]++;
+                            body.ai[0]++;
                             NetSync();
                             OtherHandControl(0, 6, 6);
                         }
