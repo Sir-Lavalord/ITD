@@ -201,7 +201,7 @@ namespace ITD.Players
                 }
             }
         }
-		public void BetterScreenshake(int dur, float powerX, float powerY, bool Decay)
+            public void BetterScreenshake(int dur, float powerX, float powerY, bool Decay)
         {
             shakeDuration = dur;
             shakeIntensityX = powerX; shakeIntensityY = powerX;
