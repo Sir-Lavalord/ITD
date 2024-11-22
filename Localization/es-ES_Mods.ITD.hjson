@@ -1335,6 +1335,11 @@ Buffs: {
 		// DisplayName: Fishbacker Reflect Tag Debuff
 		// Description: Mods.ITD.Buffs.FishbackerReflectTagDebuff.Description
 	}
+
+	HauntedBuff: {
+		// DisplayName: Haunted Buff
+		// Description: Mods.ITD.Buffs.HauntedBuff.Description
+	}
 }
 
 DeathMessage: {

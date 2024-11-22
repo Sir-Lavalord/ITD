@@ -160,19 +160,18 @@ namespace ITD.Utilities
 			NPC target = null;
 			float reach = 300;
 			
-			for (int i = 0; i < Main.maxNPCs; i++)
-			{
-				NPC npc = Main.npc[i];
-				if (npc.active && !npc.friendly && npc.CanBeChasedBy())
-				{
-					float distance = Vector2.Distance(npc.Center, origin);
+			foreach (var npc in Main.ActiveNPCs)
+            {
+                if (!npc.friendly && npc.CanBeChasedBy())
+                {
+                    float distance = Vector2.Distance(npc.Center, origin);
 					if (distance < reach && !npc.GetGlobalNPC<ITDGlobalNPC>().zapped)
 					{
 						reach = distance;
 						target = npc;
 					}
-				}
-			}
+                }
+            }
 			if (target != null)
 			{
 				bool crit = false;

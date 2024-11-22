@@ -835,7 +835,7 @@ Items: {
 
 	CharmOfTheAccursed: {
 		// DisplayName: Charm of the Accursed
-		// Tooltip: Releases damaging spirits after taking 100 damage
+		// Tooltip: Stay near enemies to curse them with 25% extra damage taken and mana leach
 	}
 
 	Chainwhip: {
@@ -1331,6 +1331,11 @@ Buffs: {
 	FishbackerReflectTagDebuff: {
 		// DisplayName: Fishbacker Reflect Tag Debuff
 		// Description: Mods.ITD.Buffs.FishbackerReflectTagDebuff.Description
+	}
+
+	HauntedBuff: {
+		// DisplayName: Haunted Buff
+		// Description: Mods.ITD.Buffs.HauntedBuff.Description
 	}
 }
 
