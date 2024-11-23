@@ -1083,6 +1083,16 @@ Items: {
 		DisplayName: Reinforced Pegmatite Brick Wall Item
 		Tooltip: ""
 	}
+
+	SoulTalisman: {
+		DisplayName: Soul Talisman
+		Tooltip: ""
+	}
+
+	OblivionPickaxe: {
+		DisplayName: Oblivion Pickaxe
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -1231,6 +1241,7 @@ Projectiles: {
 	QuasarProj.DisplayName: Quasar Proj
 	ThrowableGuardian.DisplayName: Throwable Guardian
 	IncendipedeBreath.DisplayName: Incendipede Breath
+	SoulTalismanBlast.DisplayName: Soul Talisman Blast
 }
 
 NPCs: {
@@ -1379,6 +1390,11 @@ Buffs: {
 	HauntedBuff: {
 		DisplayName: Haunted Buff
 		Description: Mods.ITD.Buffs.HauntedBuff.Description
+	}
+
+	SoulTalismanBuff: {
+		DisplayName: Soul Talisman Buff
+		Description: Mods.ITD.Buffs.SoulTalismanBuff.Description
 	}
 }
 
