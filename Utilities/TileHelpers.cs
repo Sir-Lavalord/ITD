@@ -90,6 +90,7 @@ namespace ITD.Utilities
                 {
                     Tile t = Framing.GetTileSafely(i + k, j + l);
                     t.HasTile = false;
+                    t.TileType = TileID.Dirt;
                 }
             }
             Sync(i, j, width, height);

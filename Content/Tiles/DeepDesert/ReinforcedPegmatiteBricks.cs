@@ -12,8 +12,10 @@ namespace ITD.Content.Tiles.DeepDesert
     {
         public override void SetStaticDefaults()
         {
+            TileID.Sets.ChecksForMerge[Type] = true;
             Main.tileSolid[Type] = true;
             Main.tileBlockLight[Type] = true;
+            Main.tileMerge[ModContent.TileType<PegmatiteTile>()][Type] = true;
 
             MinPick = 500;
             HitSound = SoundID.Tink;
