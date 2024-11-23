@@ -29,6 +29,9 @@ using ITD.Networking.Packets;
 using ITD.Content.UI;
 using Terraria.GameInput;
 using log4net.Core;
+using ITD.Content.Buffs.AccessoryBuffs;
+using ITD.Content.Projectiles.Friendly.Summoner;
+using ITD.Content.Items.Accessories.Gimmicks.IncomprehensiblePolyhedron;
 
 namespace ITD.Players
 {
@@ -64,7 +67,10 @@ namespace ITD.Players
         public bool portableLab = false;
 
         public bool soulTalisman = false;
+        public bool soulTalismanEffect = false;
         public int soulTalismanStack = 0;
+        public int soulTalismanTally = 0;
+
 
         public bool setElectrum = false;
 		public bool setRhodium = false;
@@ -136,8 +142,19 @@ namespace ITD.Players
 
             razedWine = false;
 
+            if (!soulTalisman)
+            {
+                Player.ClearBuff(ModContent.BuffType<SoulTalismanBuff>());
+                soulTalismanStack = 0;
+                soulTalismanTally = 0;
+            }
+            if (!soulTalismanEffect)
+            {
+                Player.ClearBuff(ModContent.BuffType<SoulTalismanBuff>());
+                soulTalismanStack = 0;
+            }
+            soulTalismanEffect = false;
             soulTalisman = false;
-
             portableLab = false;
 			
 			setElectrum = false;
@@ -149,6 +166,8 @@ namespace ITD.Players
         }
 		public override void UpdateDead()
         {
+            soulTalismanEffect = false;
+            soulTalismanTally = 0;
             soulTalismanStack = 0;
             CosJellSuffocated = false;
             CosJellEscapeCurrent = 0;
@@ -206,8 +225,21 @@ namespace ITD.Players
                     razedCooldown--;
                 }
             }
+            if (soulTalisman)
+            {
+                if (soulTalismanStack >= 4)
+                {
+                    soulTalismanStack = 4;
+                }
+            }
+            if (soulTalismanEffect)
+            {
+                Player.GetDamage<GenericDamageClass>() += 0.04f * (1 + soulTalismanStack);
+                Player.GetAttackSpeed<GenericDamageClass>() += 0.02f * (1 + soulTalismanStack);
+
+            }
         }
-            public void BetterScreenshake(int dur, float powerX, float powerY, bool Decay)
+        public void BetterScreenshake(int dur, float powerX, float powerY, bool Decay)
         {
             shakeDuration = dur;
             shakeIntensityX = powerX; shakeIntensityY = powerX;
@@ -268,8 +300,21 @@ namespace ITD.Players
                 Main.screenPosition += Main.rand.NextVector2Circular(shakeIntensityX, shakeIntensityY);
             }
         }
-		
-		public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (soulTalisman)
+            {
+                soulTalismanTally++;
+                if (soulTalismanTally >= 20)
+                {
+                    soulTalismanTally = 0;
+                    soulTalismanEffect = true;
+                    Player.AddBuff(ModContent.BuffType<SoulTalismanBuff>(), 600);
+                }
+            }
+        }
+
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
 		{
 			if (setElectrum)
 			{
@@ -342,6 +387,16 @@ namespace ITD.Players
 					}
 				}
 			}
+            if (soulTalismanEffect)
+            {
+                BetterScreenshake(10, 5, 5, true);
+                Projectile Blast = Projectile.NewProjectileDirect(Player.GetSource_FromThis(), Player.Center, Vector2.Zero,
+        ModContent.ProjectileType<SoulTalismanBlast>(), (int)Player.GetDamage(DamageClass.Generic).ApplyTo(80 * (soulTalismanStack + 1)), 20f, Player.whoAmI);
+                Blast.ai[1] = 80 * (soulTalismanStack + 1);
+                Blast.localAI[1] = Main.rand.NextFloat(0.1f, 0.3f);
+                Blast.netUpdate = true;
+                soulTalismanEffect = false;
+            }
 		}
 		public PlayerDeathReason DeathByLocalization(string key)
         {

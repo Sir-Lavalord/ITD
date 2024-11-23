@@ -122,7 +122,17 @@ namespace ITD.Content.NPCs
                 var modPlayer = player.GetITDPlayer();
                 if (modPlayer.soulTalisman)
                 {
-                    player.AddBuff(ModContent.BuffType<SoulTalismanBuff>(),400);
+                    modPlayer.soulTalismanEffect = true;
+                    player.AddBuff(ModContent.BuffType<SoulTalismanBuff>(), 400);
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        for (int i = 0; i <= 2 * (modPlayer.soulTalismanStack + 1); i++)
+                        {
+                            Vector2 vel = Main.rand.NextVector2Circular(5,5);
+                                Projectile.NewProjectile(npc.GetSource_Death(), npc.Center, vel, ProjectileID.SpectreWrath,
+                                    (int)player.GetDamage(DamageClass.Generic).ApplyTo(30 * (modPlayer.soulTalismanStack+1)), 0, Main.myPlayer);                            
+                        }
+                    }
                 }
             }
         }

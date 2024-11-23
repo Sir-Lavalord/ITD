@@ -36,12 +36,20 @@ namespace ITD.Content.Buffs.AccessoryBuffs
 
         public override void Update(Player player, ref int buffIndex)
         {
+            var modPlayer = player.GetITDPlayer();
+            modPlayer.soulTalismanEffect = true;
             CurrentStack = player.GetITDPlayer().soulTalismanStack;
         }
         public override bool ReApply(Player player, int time, int buffIndex)
         {
-            player.GetITDPlayer().soulTalismanStack++;
-            return true;
+            var modPlayer = player.GetITDPlayer();
+
+            if (modPlayer.soulTalismanStack < 4)
+            {
+                modPlayer.soulTalismanStack++;
+            }
+            player.buffTime[buffIndex] += time;
+            return false;
         }
     }
 }

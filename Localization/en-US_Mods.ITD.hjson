@@ -270,8 +270,8 @@ Items: {
 		DisplayName: Blueshroom Cap
 		Tooltip:
 			'''
-			+7% Summon damage
-			+1 max minions
+			7% increased summon damage
+			Increases your max number of minions by 1
 			'''
 	}
 
@@ -1059,19 +1059,19 @@ Items: {
 		DisplayName: Blueshroom Hat
 		Tooltip:
 			'''
-			+7% Magic damage
-			-5% Mana cost
+			7% increased magic damage
+			5% reduced mana cost
 			'''
 	}
 
 	BlueshroomCoat: {
 		DisplayName: Blueshroom Coat
-		Tooltip: +3% Attack speed
+		Tooltip: 3% increased attack speed
 	}
 
 	BlueshroomPants: {
 		DisplayName: Blueshroom Pants
-		Tooltip: +3% Attack speed
+		Tooltip: 3% increased attack speed
 	}
 
 	ReinforcedPegmatiteBricksItem: {
@@ -1086,7 +1086,12 @@ Items: {
 
 	SoulTalisman: {
 		DisplayName: Soul Talisman
-		Tooltip: ""
+		Tooltip:
+			'''
+			Striking or defeating enemies provides Soul Charges
+			Soul Charges stacks up to 5 times
+			All Soul Charges are released on hit
+			'''
 	}
 
 	OblivionPickaxe: {
@@ -1241,7 +1246,7 @@ Projectiles: {
 	QuasarProj.DisplayName: Quasar Proj
 	ThrowableGuardian.DisplayName: Throwable Guardian
 	IncendipedeBreath.DisplayName: Incendipede Breath
-	SoulTalismanBlast.DisplayName: Soul Talisman Blast
+	SoulTalismanBlast.DisplayName: Spirit Blast
 }
 
 NPCs: {
@@ -1393,8 +1398,8 @@ Buffs: {
 	}
 
 	SoulTalismanBuff: {
-		DisplayName: Soul Talisman Buff
-		Description: Mods.ITD.Buffs.SoulTalismanBuff.Description
+		DisplayName: Soul Charges
+		Description: Increases damage and attack speed
 	}
 }
 
