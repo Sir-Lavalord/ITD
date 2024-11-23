@@ -1083,6 +1083,11 @@ Items: {
 		DisplayName: Reinforced Pegmatite Brick Wall Item
 		Tooltip: ""
 	}
+
+	OblivionPickaxe: {
+		DisplayName: Oblivion Pickaxe
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

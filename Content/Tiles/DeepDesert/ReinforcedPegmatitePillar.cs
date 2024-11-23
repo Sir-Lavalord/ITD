@@ -115,7 +115,7 @@ namespace ITD.Content.Tiles.DeepDesert
         public static bool Generate(int i, int j, int height)
         {
             int type = ModContent.TileType<ReinforcedPegmatitePillar>();
-            if (!TileHelpers.AptForTree(i, j, height))
+            if (!TileHelpers.AptForTree(i, j, height - 1))
             {
                 Main.NewText("Couldn't generate pillar at the given coordinates: There's not enough space", Color.Red);
                 return false;
