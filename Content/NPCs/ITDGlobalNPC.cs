@@ -21,6 +21,9 @@ using ITD.Content.Items.Weapons.Melee.Snaptraps;
 using ITD.Content.NPCs.BlueshroomGroves.Critters;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 using ITD.Content.Projectiles.Friendly.Ranger;
+using ITD.Utilities;
+using ITD.Content.Items.Accessories.Combat.All;
+using ITD.Content.Buffs.AccessoryBuffs;
 
 
 namespace ITD.Content.NPCs
@@ -108,6 +111,28 @@ namespace ITD.Content.NPCs
                 {
                     if (projectile.type == ModContent.ProjectileType<HunterrGreatarrow>())
                         npc.knockBackResist += 0.05f;
+                }
+            }
+        }
+        public override void OnKill(NPC npc)
+        {
+            if (npc.AnyInteractions())
+            {
+                Player player = Main.player[npc.lastInteraction];//the man behind the slaughter
+                var modPlayer = player.GetITDPlayer();
+                if (modPlayer.soulTalisman)
+                {
+                    modPlayer.soulTalismanEffect = true;
+                    player.AddBuff(ModContent.BuffType<SoulTalismanBuff>(), 400);
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        for (int i = 0; i <= 2 * (modPlayer.soulTalismanStack + 1); i++)
+                        {
+                            Vector2 vel = Main.rand.NextVector2Circular(5,5);
+                                Projectile.NewProjectile(npc.GetSource_Death(), npc.Center, vel, ProjectileID.SpectreWrath,
+                                    (int)player.GetDamage(DamageClass.Generic).ApplyTo(30 * (modPlayer.soulTalismanStack+1)), 0, Main.myPlayer);                            
+                        }
+                    }
                 }
             }
         }

@@ -30,7 +30,7 @@ namespace ITD.Content.Items.Tools.Cyanite
 
         public override void MeleeEffects(Player player, Rectangle hitbox)
         {
-       
+
         }
     }
 }
