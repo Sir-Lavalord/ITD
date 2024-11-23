@@ -20,7 +20,7 @@ namespace ITD.Content.Items.DevTools
             Item.useStyle = ItemUseStyleID.Swing;
             Item.knockBack = 5;
             Item.value = Item.buyPrice(platinum: 90); // Buy this item for one gold - change gold to any coin and change the value to any number <= 100
-            Item.rare = ItemRarityID.Rainbow;
+            Item.rare = ItemRarityID.Red;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
 
