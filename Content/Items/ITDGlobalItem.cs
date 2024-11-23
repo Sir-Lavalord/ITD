@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ITD.Utilities;
-using ITD.Utilities.Placeholders;
-using System;
-using MonoMod.Cil;
-using Mono.Cecil.Cil;
+﻿using ITD.Utilities;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-using ITD.DetoursIL;
 using ITD.Players;
 
 namespace ITD.Content.Items

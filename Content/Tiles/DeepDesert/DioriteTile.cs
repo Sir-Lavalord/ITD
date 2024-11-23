@@ -19,7 +19,7 @@ namespace ITD.Content.Tiles.DeepDesert
             HitSound = SoundID.Tink;
             DustType = DustID.Sandstorm;
 
-            AddMapEntry(new Color(199, 108, 91));
+            AddMapEntry(new Color(191, 88, 65));
         }
         public override void ModifyFrameMerge(int i, int j, ref int up, ref int down, ref int left, ref int right, ref int upLeft, ref int upRight, ref int downLeft, ref int downRight)
         {

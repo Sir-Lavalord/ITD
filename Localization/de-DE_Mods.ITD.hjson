@@ -1090,6 +1090,26 @@ Items: {
 		// DisplayName: Oblivion Pickaxe
 		// Tooltip: ""
 	}
+
+	DarkPyracottaBricksItem: {
+		// DisplayName: Dark Pyracotta Bricks Item
+		// Tooltip: ""
+	}
+
+	LightPyracottaBricksItem: {
+		// DisplayName: Light Pyracotta Bricks Item
+		// Tooltip: ""
+	}
+
+	DarkPyracottaTilesItem: {
+		// DisplayName: Dark Pyracotta Tiles Item
+		// Tooltip: ""
+	}
+
+	LightPyracottaTilesItem: {
+		// DisplayName: Light Pyracotta Tiles Item
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {

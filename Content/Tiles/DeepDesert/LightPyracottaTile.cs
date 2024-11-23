@@ -15,7 +15,7 @@ namespace ITD.Content.Tiles.DeepDesert
             HitSound = SoundID.Tink;
             DustType = DustID.Sandstorm;
 
-            AddMapEntry(new Color(212, 193, 167));
+            AddMapEntry(new Color(196, 162, 126));
         }
     }
 }
