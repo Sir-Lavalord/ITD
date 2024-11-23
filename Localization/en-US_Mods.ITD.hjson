@@ -265,6 +265,16 @@ Items: {
 		Tooltip: ""
 	}
 
+	BlueshroomCap: {
+		SetBonus: Immunity to slowing debuffs
+		DisplayName: Blueshroom Cap
+		Tooltip:
+			'''
+			+7% Summon damage
+			+1 max minions
+			'''
+	}
+
 	SnowyLantern: {
 		DisplayName: Snowy Lantern
 		Tooltip: Summons a lantern-bearning Snowpoff
@@ -1042,6 +1052,26 @@ Items: {
 	IncomprehensiblePolyhedron: {
 		DisplayName: Incomprehensible Polyhedron
 		Tooltip: ""
+	}
+
+	BlueshroomHat: {
+		SetBonus: Immunity to slowing debuffs
+		DisplayName: Blueshroom Hat
+		Tooltip:
+			'''
+			+7% Magic damage
+			-5% Mana cost
+			'''
+	}
+
+	BlueshroomCoat: {
+		DisplayName: Blueshroom Coat
+		Tooltip: +3% Attack speed
+	}
+
+	BlueshroomPants: {
+		DisplayName: Blueshroom Pants
+		Tooltip: +3% Attack speed
 	}
 }
 
