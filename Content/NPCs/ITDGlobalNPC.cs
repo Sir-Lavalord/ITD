@@ -21,6 +21,9 @@ using ITD.Content.Items.Weapons.Melee.Snaptraps;
 using ITD.Content.NPCs.BlueshroomGroves.Critters;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 using ITD.Content.Projectiles.Friendly.Ranger;
+using ITD.Utilities;
+using ITD.Content.Items.Accessories.Combat.All;
+using ITD.Content.Buffs.AccessoryBuffs;
 
 
 namespace ITD.Content.NPCs
@@ -99,6 +102,18 @@ namespace ITD.Content.NPCs
                 {
                     if (projectile.type == ModContent.ProjectileType<HunterrGreatarrow>())
                         npc.knockBackResist += 0.05f;
+                }
+            }
+        }
+        public override void OnKill(NPC npc)
+        {
+            if (npc.AnyInteractions())
+            {
+                Player player = Main.player[npc.lastInteraction];//the man behind the slaughter
+                var modPlayer = player.GetITDPlayer();
+                if (modPlayer.soulTalisman)
+                {
+                    player.AddBuff(ModContent.BuffType<SoulTalismanBuff>(),400);
                 }
             }
         }

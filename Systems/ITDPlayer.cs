@@ -63,7 +63,10 @@ namespace ITD.Players
 
         public bool portableLab = false;
 
-		public bool setElectrum = false;
+        public bool soulTalisman = false;
+        public int soulTalismanStack = 0;
+
+        public bool setElectrum = false;
 		public bool setRhodium = false;
 
         public bool setAlloy_Melee = false;
@@ -133,6 +136,8 @@ namespace ITD.Players
 
             razedWine = false;
 
+            soulTalisman = false;
+
             portableLab = false;
 			
 			setElectrum = false;
@@ -144,6 +149,7 @@ namespace ITD.Players
         }
 		public override void UpdateDead()
         {
+            soulTalismanStack = 0;
             CosJellSuffocated = false;
             CosJellEscapeCurrent = 0;
             if (shakeDuration > 0)
