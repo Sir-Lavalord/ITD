@@ -86,6 +86,7 @@ namespace ITD.Utilities
         }
         public static Vector2D ToRotationVector2D (this double d) => new(Math.Cos(d), Math.Sin(d));
         public static Vector2D ToRotationVector2D (this float f) => ToRotationVector2D(f);
+        public static Vector3 ToVector3(this Vector2 v) => new(v.X, v.Y, 0);
         public static bool Exists(this Entity entity) => entity != null && entity.active;
         //Make the invul boss part untargetable please
         public static bool IsValidTarget(this Projectile projectile, NPC target)

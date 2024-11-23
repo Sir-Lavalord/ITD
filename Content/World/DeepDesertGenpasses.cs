@@ -41,14 +41,13 @@ namespace ITD.Content.World
             Rectangle desert = GenVars.UndergroundDesertLocation;
             int width = desert.Width;
             int height = desert.Height;
-            int worldSize = GetWorldSize();
 
             int innerEllipseYRadius = height / 2;
             int ellipseCenter = desert.Center.Y;
 
             int distanceFromDesertBottomToHellTop = Main.UnderworldLayer - desert.Bottom; 
 
-            int outerEllipseYRadius = innerEllipseYRadius + distanceFromDesertBottomToHellTop;
+            int outerEllipseYRadius = innerEllipseYRadius + (int)(distanceFromDesertBottomToHellTop / 1.5f);
             ITDShapes.Ellipse outerEllipse = new(x, ellipseCenter, width / 2, outerEllipseYRadius);
 
             GenVars.structures.AddProtectedStructure(new Rectangle(outerEllipse.Container.X, outerEllipse.Y, outerEllipse.XRadius * 2, outerEllipse.YRadius));
@@ -56,6 +55,7 @@ namespace ITD.Content.World
             ITDShapes.Ellipse innerEllipse = new(x, ellipseCenter, width / 2, innerEllipseYRadius);
 
             List<Rectangle> tunnels = [];
+            List<Rectangle> sanctuaries = [];
             // main shape gen
             outerEllipse.LoopThroughPoints(p =>
             {
@@ -88,18 +88,18 @@ namespace ITD.Content.World
                 if (p.Y < innerEllipse.Y + innerEllipse.YRadius || innerEllipse.Contains(p))
                     return;
                 // make sure to add a random chance to not create a tunnel
-                if (genRand.NextBool(20))
+                if (genRand.NextBool(10))
                 {
                     // if this tile is in a tunnel, dont try to create another tunnel
-                    int xSize = genRand.Next(100, 250) * (innerEllipse.X > p.X ? 1 : -1);
-                    int width = 5;
-                    int segments = genRand.Next(8, 16);
+                    int xSize = genRand.Next(150, 250) * (innerEllipse.X > p.X ? 1 : -1);
+                    int tunWidth = genRand.Next(5, 9);
+                    int segments = Math.Abs(xSize)/10;
 
                     Rectangle expectedRect = new(
                     p.X + Math.Min(0, xSize), // leftmost point of tunnel
-                    p.Y - width, // rectangle centered around p
+                    p.Y - tunWidth, // rectangle centered around p
                     Math.Abs(xSize), // width       
-                    width * 2 // height 
+                    tunWidth * 2 // height 
                     );
 
                     int inflateAmt = 4;
@@ -110,12 +110,52 @@ namespace ITD.Content.World
                     // tunnel end point (additive)
                     Point dirSize = new(xSize, genRand.Next(-1, 2));
 
-                    Rectangle rect = DigQuadTunnel(p, p + dirSize, 5, segments, 2);
+                    Rectangle rect = DigQuadTunnel(p, p + dirSize, tunWidth, segments, tunWidth / 2);
                     rect.Inflate(inflateAmt, inflateAmt);
 
                     tunnels.Add(rect);
                 }
             });
+            // let's create some tunnel connections before clearing them
+            for (int i = 0; i < tunnels.Count; i++)
+            {
+                Rectangle tunnel = tunnels[i];
+
+                int maxDistanceForConnection = 24;
+
+                Point bottom = tunnel.Bottom().ToPoint();
+
+                int maxRealEdgeLookup = 16;
+
+                Point edge = bottom;
+
+                // try to find the real edge of this tunnel
+                for (int k = 0; k < maxRealEdgeLookup; k++)
+                {
+                    edge.Y--;
+                    if (!TileHelpers.SolidTile(edge))
+                        break;
+                }
+                edge.Y -= 2;
+
+                for (int j = 0; j < maxDistanceForConnection; j++)
+                {
+                    Point query = bottom + new Point(genRand.Next(-6, 7), j);
+                    Rectangle candidate = tunnels.FirstOrDefault(t => t != tunnel && t.Contains(query), Rectangle.Empty);
+                    if (candidate != Rectangle.Empty)
+                    {
+                        // try to find the real edge of this tunnel as well
+                        for (int l = 0; l < maxRealEdgeLookup; l++)
+                        {
+                            query.Y++;
+                            if (!TileHelpers.SolidTile(query))
+                                break;
+                        }
+                        DigQuadTunnel(edge, query + new Point(0, 4), 4, 6, 2, null, false);
+                        break;
+                    }
+                }
+            }
             tunnels.Clear();
 
             // third loop for pegmatite adding

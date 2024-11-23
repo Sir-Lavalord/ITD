@@ -1073,6 +1073,16 @@ Items: {
 		DisplayName: Blueshroom Pants
 		Tooltip: +3% Attack speed
 	}
+
+	ReinforcedPegmatiteBricksItem: {
+		DisplayName: Reinforced Pegmatite Bricks Item
+		Tooltip: ""
+	}
+
+	ReinforcedPegmatiteBrickWallItem: {
+		DisplayName: Reinforced Pegmatite Brick Wall Item
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

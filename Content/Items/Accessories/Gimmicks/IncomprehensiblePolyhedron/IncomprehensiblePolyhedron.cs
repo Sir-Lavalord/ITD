@@ -1,12 +1,16 @@
-﻿using ITD.Utilities.Placeholders;
+﻿using ITD.Utilities;
+using ITD.Utilities.Placeholders;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Items.Accessories.Gimmicks
+namespace ITD.Content.Items.Accessories.Gimmicks.IncomprehensiblePolyhedron
 {
     public class IncomprehensiblePolyhedron : ModItem
     {
+        public const string AssetPath = "ITD/Content/Items/Accessories/Gimmicks/IncomprehensiblePolyhedron/";
         public override string Texture => Placeholder.PHBigGun;
         public override void SetDefaults()
         {
@@ -23,6 +27,15 @@ namespace ITD.Content.Items.Accessories.Gimmicks
         public override void ResetEffects()
         {
             Active = false;
+        }
+        public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+        {
+            if (!Active)
+                return;
+            Matrix world = Matrix.CreateTranslation(-Main.screenPosition.ToVector3());
+            Matrix view = Main.GameViewMatrix.TransformationMatrix;
+            Matrix projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, -1, -1);
+            //model.Draw(world, view, projection);
         }
         public override void HideDrawLayers(PlayerDrawSet drawInfo)
         {

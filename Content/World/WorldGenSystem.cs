@@ -15,6 +15,7 @@ using Terraria.ObjectData;
 using ITD.Particles.CosJel;
 using ITD.Content.Tiles.DeepDesert;
 using ITD.Content.Walls.DeepDesert;
+using System;
 
 namespace ITD.Content.World
 {
@@ -67,6 +68,23 @@ namespace ITD.Content.World
             //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             
             Point pos = Main.MouseWorld.ToTileCoordinates();
+            /*
+            testPoints.Add(pos);
+            if (testPoints.Count == 2)
+            {
+                Point p1 = testPoints[0];
+                Point p2 = testPoints[1];
+                ITDShapes.Ellipse ellipse = new(p1.X, p1.Y, Math.Abs(p2.X - p1.X), Math.Abs(p2.Y - p1.Y));
+                ellipse.LoopThroughPoints(p =>
+                {
+                    Dust d = Dust.NewDustDirect(p.ToWorldCoordinates(), 1, 1, DustID.Torch);
+                    d.noGravity = true;
+                });
+                Point rand = ellipse.RandomPoint(WorldGen.genRand);
+                Dust.DrawDebugBox(new Rectangle(rand.X * 16, rand.Y * 16, 16, 16));
+                testPoints.Clear();
+            }
+            */
             /*
             testPoints.Add(pos);
             if (testPoints.Count == 2)
