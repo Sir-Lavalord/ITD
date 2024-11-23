@@ -17,8 +17,13 @@ namespace ITD.Content.Tiles.DeepDesert
         public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[Type] = true;
+            TileID.Sets.DoesntGetReplacedWithTileReplacement[Type] = true;
+            TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
+            TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
+            TileID.Sets.PreventsTileReplaceIfOnTopOfIt[Type] = true;
         }
         public override bool CanKillTile(int i, int j, ref bool blockDamaged) => false;
+        public override bool CanExplode(int i, int j) => false;
         public override bool KillSound(int i, int j, bool fail) => false;
         public override bool CreateDust(int i, int j, ref int type) => false;
         private static void FrameToPoint(Tile t, short x, short y)
@@ -110,7 +115,7 @@ namespace ITD.Content.Tiles.DeepDesert
         public static bool Generate(int i, int j, int height)
         {
             int type = ModContent.TileType<ReinforcedPegmatitePillar>();
-            if (!TileHelpers.AptForTree(i, j, height))
+            if (!TileHelpers.AptForTree(i, j, height - 1))
             {
                 Main.NewText("Couldn't generate pillar at the given coordinates: There's not enough space", Color.Red);
                 return false;
