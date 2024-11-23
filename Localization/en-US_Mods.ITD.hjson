@@ -157,7 +157,7 @@ Items: {
 
 	Diorite: {
 		Tooltip: Warm when freshly mined
-		DisplayName: Dark Pyracotta
+		DisplayName: Pyracotta
 	}
 
 	Pegmatite: {
@@ -1100,7 +1100,7 @@ Items: {
 	}
 
 	DarkPyracottaBricksItem: {
-		DisplayName: Dark Pyracotta Bricks
+		DisplayName: Pyracotta Bricks
 		Tooltip: ""
 	}
 
@@ -1110,7 +1110,7 @@ Items: {
 	}
 
 	DarkPyracottaTilesItem: {
-		DisplayName: Dark Pyracotta Tile
+		DisplayName: Pyracotta Tile
 		Tooltip: ""
 	}
 
