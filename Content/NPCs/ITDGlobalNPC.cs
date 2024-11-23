@@ -40,10 +40,16 @@ namespace ITD.Content.NPCs
         public bool chilled;
         public bool bleedingII;
         public bool toppled;
-
+		
+		public bool haunted;
+		public bool haunting;
+		public int hauntingProgress = 0;
+		
         public float originalKB;
         private int chilledTimer = 0;
         private const int MAX_CHILLED_DURATION = 60;
+		
+		
         //shit
         public static int cosjelBoss = -1;
 
@@ -65,14 +71,13 @@ namespace ITD.Content.NPCs
             soulRot = false;
             toasted = false;
             bleedingII = false;
-            if (!npc.HasBuff(ModContent.BuffType<ToppledDebuff>()))
-            {
-                toppled = false;
-            }
+			haunted = false;
+			if (!haunting && hauntingProgress > 0)
+                hauntingProgress--;
+			haunting = false;
             if (!toppled)
-            {
                 npc.knockBackResist = originalKB;
-            }
+			toppled = false;
         }
 
         public override void OnSpawn(NPC npc, IEntitySource source)
@@ -85,6 +90,10 @@ namespace ITD.Content.NPCs
             if (toasted)
             {
                 modifiers.Defense *= ToastedBuff.DefenseMultiplier;
+            }
+			if (haunted)
+            {
+                modifiers.SourceDamage += HauntedBuff.DamageTakenMultiplier;
             }
         }
         public override void ModifyHitPlayer(NPC npc, Player target, ref Player.HurtModifiers modifiers)
@@ -308,12 +317,17 @@ namespace ITD.Content.NPCs
                 drawColor.G = 100;
                 drawColor.B = 255;
             }
-
             if (chilled)
             {
                 drawColor.R = 173;
                 drawColor.G = 216;
                 drawColor.B = 230;
+            }
+			if (haunted)
+            {
+                drawColor.R /= 2;
+                drawColor.G /= 2;
+                drawColor.B /= 2;
             }
         }
     }

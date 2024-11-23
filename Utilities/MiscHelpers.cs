@@ -86,6 +86,7 @@ namespace ITD.Utilities
         }
         public static Vector2D ToRotationVector2D (this double d) => new(Math.Cos(d), Math.Sin(d));
         public static Vector2D ToRotationVector2D (this float f) => ToRotationVector2D(f);
+        public static Vector3 ToVector3(this Vector2 v) => new(v.X, v.Y, 0);
         public static bool Exists(this Entity entity) => entity != null && entity.active;
         //Make the invul boss part untargetable please
         public static bool IsValidTarget(this Projectile projectile, NPC target)
@@ -160,19 +161,18 @@ namespace ITD.Utilities
 			NPC target = null;
 			float reach = 300;
 			
-			for (int i = 0; i < Main.maxNPCs; i++)
-			{
-				NPC npc = Main.npc[i];
-				if (npc.active && !npc.friendly && npc.CanBeChasedBy())
-				{
-					float distance = Vector2.Distance(npc.Center, origin);
+			foreach (var npc in Main.ActiveNPCs)
+            {
+                if (!npc.friendly && npc.CanBeChasedBy())
+                {
+                    float distance = Vector2.Distance(npc.Center, origin);
 					if (distance < reach && !npc.GetGlobalNPC<ITDGlobalNPC>().zapped)
 					{
 						reach = distance;
 						target = npc;
 					}
-				}
-			}
+                }
+            }
 			if (target != null)
 			{
 				bool crit = false;

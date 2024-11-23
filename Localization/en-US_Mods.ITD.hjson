@@ -265,6 +265,16 @@ Items: {
 		Tooltip: ""
 	}
 
+	BlueshroomCap: {
+		SetBonus: Immunity to slowing debuffs
+		DisplayName: Blueshroom Cap
+		Tooltip:
+			'''
+			+7% Summon damage
+			+1 max minions
+			'''
+	}
+
 	SnowyLantern: {
 		DisplayName: Snowy Lantern
 		Tooltip: Summons a lantern-bearning Snowpoff
@@ -838,7 +848,7 @@ Items: {
 
 	CharmOfTheAccursed: {
 		DisplayName: Charm of the Accursed
-		Tooltip: Releases damaging spirits after taking 100 damage
+		Tooltip: Stay near enemies to curse them with 25% extra damage taken and mana leach
 	}
 
 	Chainwhip: {
@@ -1041,6 +1051,36 @@ Items: {
 
 	IncomprehensiblePolyhedron: {
 		DisplayName: Incomprehensible Polyhedron
+		Tooltip: ""
+	}
+
+	BlueshroomHat: {
+		SetBonus: Immunity to slowing debuffs
+		DisplayName: Blueshroom Hat
+		Tooltip:
+			'''
+			+7% Magic damage
+			-5% Mana cost
+			'''
+	}
+
+	BlueshroomCoat: {
+		DisplayName: Blueshroom Coat
+		Tooltip: +3% Attack speed
+	}
+
+	BlueshroomPants: {
+		DisplayName: Blueshroom Pants
+		Tooltip: +3% Attack speed
+	}
+
+	ReinforcedPegmatiteBricksItem: {
+		DisplayName: Reinforced Pegmatite Bricks Item
+		Tooltip: ""
+	}
+
+	ReinforcedPegmatiteBrickWallItem: {
+		DisplayName: Reinforced Pegmatite Brick Wall Item
 		Tooltip: ""
 	}
 }
@@ -1334,6 +1374,11 @@ Buffs: {
 	FishbackerReflectTagDebuff: {
 		DisplayName: Fishbacker Reflect Tag Debuff
 		Description: Mods.ITD.Buffs.FishbackerReflectTagDebuff.Description
+	}
+
+	HauntedBuff: {
+		DisplayName: Haunted Buff
+		Description: Mods.ITD.Buffs.HauntedBuff.Description
 	}
 }
 

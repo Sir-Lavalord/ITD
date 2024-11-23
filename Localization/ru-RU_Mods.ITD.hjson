@@ -265,6 +265,16 @@ Items: {
 		Tooltip: ""
 	}
 
+	BlueshroomCap: {
+		// SetBonus: Immunity to slowing debuffs
+		// DisplayName: Blueshroom Cap
+		/* Tooltip:
+			'''
+			+7% Summon damage
+			+1 max minions
+			''' */
+	}
+
 	SnowyLantern: {
 		DisplayName: Снежный фонарь
 		Tooltip: Summons a lantern-bearning Snowpoff
@@ -1040,6 +1050,36 @@ Items: {
 		// DisplayName: Incomprehensible Polyhedron
 		// Tooltip: ""
 	}
+
+	BlueshroomHat: {
+		// SetBonus: Immunity to slowing debuffs
+		// DisplayName: Blueshroom Hat
+		/* Tooltip:
+			'''
+			+7% Magic damage
+			-5% Mana cost
+			''' */
+	}
+
+	BlueshroomCoat: {
+		// DisplayName: Blueshroom Coat
+		// Tooltip: +3% Attack speed
+	}
+
+	BlueshroomPants: {
+		// DisplayName: Blueshroom Pants
+		// Tooltip: +3% Attack speed
+	}
+
+	ReinforcedPegmatiteBricksItem: {
+		// DisplayName: Reinforced Pegmatite Bricks Item
+		// Tooltip: ""
+	}
+
+	ReinforcedPegmatiteBrickWallItem: {
+		// DisplayName: Reinforced Pegmatite Brick Wall Item
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -1331,6 +1371,11 @@ Buffs: {
 	FishbackerReflectTagDebuff: {
 		// DisplayName: Fishbacker Reflect Tag Debuff
 		// Description: Mods.ITD.Buffs.FishbackerReflectTagDebuff.Description
+	}
+
+	HauntedBuff: {
+		// DisplayName: Haunted Buff
+		// Description: Mods.ITD.Buffs.HauntedBuff.Description
 	}
 }
 

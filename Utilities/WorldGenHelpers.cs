@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 namespace ITD.Utilities
 {
     public static class WorldSizeID
@@ -38,6 +39,10 @@ namespace ITD.Utilities
                     callback.Invoke(new Point(i, j));
                 }
             }
+        }
+        public static Point RandomPoint(this Rectangle rect, UnifiedRandom rand)
+        {
+            return new(rect.X + rand.Next(rect.Width + 1), rect.Y + rand.Next(rect.Height + 1));
         }
         public static void QuickDebugRectangle(Rectangle rect)
         {
@@ -172,6 +177,10 @@ namespace ITD.Utilities
                         callback(p);
                 });
             }
+            public virtual Point RandomPoint(UnifiedRandom rand)
+            {
+                return Container.RandomPoint(rand);
+            }
         }
         public class Triangle(Point a, Point b, Point c) : ITDShape
         {
@@ -200,21 +209,14 @@ namespace ITD.Utilities
                 return a >= 0 && b >= 0 && c >= 0;
             }
         }
-        public class Quad : ITDShape
+        public class Quad(Point a, Point b, Point c, Point d) : ITDShape
         {
-            public Point A;
-            public Point B;
-            public Point C;
-            public Point D;
+            public Point A = a;
+            public Point B = b;
+            public Point C = c;
+            public Point D = d;
             public Triangle TriangleA { get { return new Triangle(A, B, D); } }
             public Triangle TriangleB { get { return new Triangle(B, C, D); } }
-            public Quad(Point a, Point b, Point c, Point d)
-            {
-                A = a;
-                B = b;
-                C = c;
-                D = d;
-            }
             public override Rectangle Container => MiscHelpers.ContainsRectangles(TriangleA.Container, TriangleB.Container);
             public override bool Contains(Point point)
             {
@@ -235,6 +237,12 @@ namespace ITD.Utilities
 
                 return ((double)(normalized.X * normalized.X) / (XRadius * XRadius)) + ((double)(normalized.Y * normalized.Y) / (YRadius * YRadius))
                     <= 1.0;
+            }
+            public override Point RandomPoint(UnifiedRandom rand)
+            {
+                double theta = rand.NextDouble() * Math.Tau;
+                double radRand = Math.Sqrt(rand.NextDouble());
+                return new((int)(X + radRand * XRadius * Math.Cos(theta)), (int)(Y + radRand * YRadius * Math.Sin(theta)));
             }
             public float GetDistanceToEdge(Point point)
             {
