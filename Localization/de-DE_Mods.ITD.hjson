@@ -1145,6 +1145,16 @@ Items: {
 		// DisplayName: Rite Of Immolation
 		// Tooltip: 4 summon tag damage
 	}
+
+	Bee17: {
+		// DisplayName: Bee17
+		/* Tooltip:
+			'''
+			Replaces current minion with Grumble Bees
+			Press {0} to use
+			'Bee 17 Bomber'
+			''' */
+	}
 }
 
 Projectiles: {
@@ -1295,6 +1305,7 @@ Projectiles: {
 	// IncendipedeBreath.DisplayName: Incendipede Breath
 	// SoulTalismanBlast.DisplayName: Spirit Blast
 	// RiteOfImmolationProj.DisplayName: Rite Of Immolation Proj
+	// GrumbleBee.DisplayName: Grumble Bee
 }
 
 NPCs: {

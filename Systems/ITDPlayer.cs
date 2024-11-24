@@ -235,8 +235,8 @@ namespace ITD.Players
             if (soulTalismanEffect)
             {
                 Player.GetDamage<GenericDamageClass>() += 0.04f * (1 + soulTalismanStack);
-                Player.GetAttackSpeed<GenericDamageClass>() += 0.02f * (1 + soulTalismanStack);
-
+                Player.GetAttackSpeed<GenericDamageClass>() += 0.03f * (1 + soulTalismanStack);
+                Player.endurance += 0.01f * (1 + soulTalismanStack);
             }
         }
         public void BetterScreenshake(int dur, float powerX, float powerY, bool Decay)
