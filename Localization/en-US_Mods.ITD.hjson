@@ -1118,6 +1118,27 @@ Items: {
 		DisplayName: Light Pyracotta Tile
 		Tooltip: ""
 	}
+
+	BlackCacophany: {
+		DisplayName: Black Cacophany
+		Tooltip:
+			'''
+				Current Mode:
+				Right Click to swap between Windup and Firing mode
+				'Nothing makes a melody like firing massive weapons'
+
+			'''
+
+		CacophanyType: {
+			1: Windup
+			2: Firing
+		}
+
+		Mode: {
+			1: Left Click to stockpile ammunition, increasing effectiveness depending on the amount stored.
+			2: Left Click to fire ammunition.
+		}
+	}
 }
 
 Projectiles: {
