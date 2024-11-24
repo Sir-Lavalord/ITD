@@ -18,22 +18,22 @@ using rail;
 using System.Collections.Generic;
 using ITD.Content.Items.Other;
 using Terraria.Localization;
+using ITD.Content.Projectiles.Other;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {
-    public class BlackCacophany : ModItem
+    public class BlackCacophony : ModItem
     {
         public int windup = 1;
         public int mode = 1;
         public float colorProgress = .02f;
         public bool isRightClickHeld = false;
+        public bool chargedOnce = false;
 
         public override void SetStaticDefaults()
         {
             FrontGunLayer.RegisterData(Item.type);
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-
-
         }
 
         public override void SetDefaults()
@@ -112,30 +112,77 @@ namespace ITD.Content.Items.Weapons.Ranger
                     mode = 1; //Windup state
                     CombatText.NewText(player.getRect(), new Color(145, 145, 145), this.GetLocalization("Messages.WindupMode").Value, false, false);
                 }
+
+
+                SoundStyle blackcacophanymodeswap = new SoundStyle("ITD/Content/Sounds/BlackCacophonyModeSwitch") with
+                {
+                    Volume = 0.75f,
+                    Pitch = 1f,
+                    PitchVariance = 0.1f,
+                    MaxInstances = 3,
+                    SoundLimitBehavior = SoundLimitBehavior.IgnoreNew
+                };
+                SoundEngine.PlaySound(blackcacophanymodeswap, player.Center);
             }
             else
             {
                 if (mode == 1)
                 {
-                    Item.shoot = ProjectileID.None;
-                    Item.useAmmo = AmmoID.None;
-                    Item.useTime = 6;
-                    Item.useAnimation = 6;
-                    SoundStyle blackcacophany = new SoundStyle("ITD/Content/Sounds/BarrelSpinShort") with
+                    if (windup >= 60)
                     {
-                        Volume = 0.75f,
-                        Pitch = 1f * windup / 10,
-                        PitchVariance = 0.1f,
-                        MaxInstances = 3,
-                        SoundLimitBehavior = SoundLimitBehavior.IgnoreNew
-                    };
-                    SoundEngine.PlaySound(blackcacophany, player.Center);
+                        Item.shoot = ProjectileID.None;
+                        Item.useAmmo = AmmoID.None;
+                        Item.useTime = 60;
+                        Item.useAnimation = 60;
+                    } 
+                    else
+                    {
+                        Item.shoot = ProjectileID.None;
+                        Item.useAmmo = AmmoID.None;
+                        Item.useTime = 6;
+                        Item.useAnimation = 6;
+
+                        SoundStyle blackcacophany = new SoundStyle("ITD/Content/Sounds/BarrelSpinShort") with
+                        {
+                            Volume = 0.75f,
+                            Pitch = 1f * windup / 10,
+                            PitchVariance = 0.1f,
+                            MaxInstances = 3,
+                            SoundLimitBehavior = SoundLimitBehavior.IgnoreNew
+                        };
+                        SoundEngine.PlaySound(blackcacophany, player.Center);
+                    }
 
                     windup += 2;
                     if (windup >= 60)
                     {
                         windup = 60;
-                        CombatText.NewText(player.getRect(), new Color(colorProgress, colorProgress, colorProgress), this.GetLocalization("Messages.MaxCharge").Value, true, false);
+                        if (chargedOnce == false)
+                        {
+                            SoundStyle blackcacophanycharged = new SoundStyle("ITD/Content/Sounds/BlackCacophonyCharged") with
+                            {
+                                Volume = 0.75f,
+                                Pitch = 1f,
+                                PitchVariance = 0.1f,
+                                MaxInstances = 3,
+                                SoundLimitBehavior = SoundLimitBehavior.IgnoreNew
+                            };
+                            SoundEngine.PlaySound(blackcacophanycharged, player.Center);
+                        }
+                        else
+                        {
+                            SoundStyle blackcacophanychargedwarn = new SoundStyle("ITD/Content/Sounds/BlackCacophonyChargedWarn") with
+                            {
+                                Volume = 0.75f,
+                                Pitch = 1f,
+                                PitchVariance = 0.1f,
+                                MaxInstances = 3,
+                                SoundLimitBehavior = SoundLimitBehavior.IgnoreNew
+                            };
+                            SoundEngine.PlaySound(blackcacophanychargedwarn, player.Center);
+                        }
+
+                        chargedOnce = true;
                     }
                 }
                 else
@@ -146,7 +193,7 @@ namespace ITD.Content.Items.Weapons.Ranger
                     Item.useAnimation = 8 - windup / 10;
                     if (windup > 2)
                     {
-                        SoundStyle cacophanyfire = new SoundStyle("ITD/Content/Sounds/BlackCacophanyFire") with
+                        SoundStyle cacophanyfire = new SoundStyle("ITD/Content/Sounds/BlackCacophonyFire") with
                         {
                             Volume = 0.5f,
                             Pitch = 0.5f,
@@ -183,6 +230,7 @@ namespace ITD.Content.Items.Weapons.Ranger
                     float shellShift = MathHelper.ToRadians(-50);
                     float SVar = shellShift + MathHelper.ToRadians(Main.rand.Next(-100, 301) / 10);
                     float Sspeed = .05f * Main.rand.Next(15, 41);
+                    Projectile.NewProjectile(source, player.position, new Vector2(MathF.Cos(SVar) * Sspeed * -player.direction, MathF.Sin(SVar) * Sspeed), ModContent.ProjectileType<CacophanyBulletCasing>(), 0, 0, Main.myPlayer);
                     Projectile.NewProjectile(source, position, trueSpeed, type, damage, knockback, player.whoAmI);
                 }
                 colorProgress = .02f;
@@ -220,13 +268,13 @@ namespace ITD.Content.Items.Weapons.Ranger
             {
                 if (line.Mod == "Terraria" && line.Name == "Tooltip0")
                 {
-                    string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(BlackCacophany)}.CacophanyType.{privateMode}")).Value;
+                    string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(BlackCacophony)}.CacophonyType.{privateMode}")).Value;
                     line.Text = textColor + line.Text + "]";
                     line.Text += textColor + " " + Text + "]";
                 }
                 if (line.Mod == "Terraria" && line.Name == "Tooltip4")
                 {
-                    string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(BlackCacophany)}.Mode.{privateMode}")).Value;
+                    string Text = Language.GetOrRegister(Mod.GetLocalizationKey($"Items.{nameof(BlackCacophony)}.Mode.{privateMode}")).Value;
                     line.Text = Text + " " + line.Text;//Fine for now
                 }
             }

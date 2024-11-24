@@ -1122,7 +1122,7 @@ Items: {
 		Tooltip: ""
 	}
 
-	BlackCacophany: {
+	BlackCacophony: {
 		DisplayName: Black Cacophony
 		Tooltip:
 			'''
@@ -1132,7 +1132,7 @@ Items: {
 
 			'''
 
-		CacophanyType: {
+		CacophonyType: {
 			1: Windup
 			2: Firing
 		}
