@@ -74,7 +74,7 @@ Items: {
 			'''
 			"Lightspeed!"
 			Swing at enemies to charge the sword.
-			Once charged, right click to dash, leaving behind a wormhole
+			Once charged, <right> to dash, leaving behind a wormhole
 			'''
 	}
 
@@ -708,8 +708,8 @@ Items: {
 			'''
 			Current Mode:
 			Spawns a strawman
-			Right Click while in inventory to change to next mode
-			Right Click while holding Shift in inventory to return previous mode
+			<right> while in inventory to change to next mode
+			<right> while holding Shift in inventory to return previous mode
 			'''
 
 		DummyType: {
@@ -817,7 +817,7 @@ Items: {
 		DisplayName: Hun-Terr Greatbow
 		Tooltip:
 			'''
-			Hold Right Click to charge up an arrow
+			Hold <right> to charge up an arrow
 			Fully-charged arrow can topple enemies
 			While not charging, the bow can block projectiles
 			'''
@@ -1123,11 +1123,11 @@ Items: {
 	}
 
 	BlackCacophany: {
-		DisplayName: Black Cacophany
+		DisplayName: Black Cacophony
 		Tooltip:
 			'''
 				Current Mode:
-				Right Click to swap between Windup and Firing mode
+				<right> to swap between Windup and Firing mode
 				'Nothing makes a melody like firing massive weapons'
 
 			'''
@@ -1138,8 +1138,14 @@ Items: {
 		}
 
 		Mode: {
-			1: Left Click to stockpile ammunition, increasing effectiveness depending on the amount stored.
-			2: Left Click to fire ammunition.
+			1: <left> to stockpile ammunition, increasing effectiveness depending on the amount stored.
+			2: <left> to fire ammunition.
+		}
+
+		Messages: {
+			FiringMode: Firing Mode
+			WindupMode: Windup Mode
+			MaxCharge: MAX!
 		}
 	}
 

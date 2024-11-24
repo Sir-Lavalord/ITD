@@ -105,12 +105,12 @@ namespace ITD.Content.Items.Weapons.Ranger
                 if (mode == 1)
                 {
                     mode = 2; //Fire state
-                    CombatText.NewText(player.getRect(), new Color(184, 115, 51), "Firing Mode", false, false);
+                    CombatText.NewText(player.getRect(), new Color(184, 115, 51), this.GetLocalization("Messages.FiringMode").Value, false, false);
                 }
                 else
                 {
                     mode = 1; //Windup state
-                    CombatText.NewText(player.getRect(), new Color(145, 145, 145), "Windup Mode", false, false);
+                    CombatText.NewText(player.getRect(), new Color(145, 145, 145), this.GetLocalization("Messages.WindupMode").Value, false, false);
                 }
             }
             else
@@ -135,7 +135,7 @@ namespace ITD.Content.Items.Weapons.Ranger
                     if (windup >= 60)
                     {
                         windup = 60;
-                        CombatText.NewText(player.getRect(), new Color(colorProgress, colorProgress, colorProgress), "MAX!", true, false);
+                        CombatText.NewText(player.getRect(), new Color(colorProgress, colorProgress, colorProgress), this.GetLocalization("Messages.MaxCharge").Value, true, false);
                     }
                 }
                 else

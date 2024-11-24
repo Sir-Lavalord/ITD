@@ -8,7 +8,7 @@ As of right now, the mod contains the following:
 - 3 new bosses  
 - 2 new biomes  
 - 8 new enemies  
-- 130 new items  
+- 177 new items  
 And continues to expand.
 
 # Credit
