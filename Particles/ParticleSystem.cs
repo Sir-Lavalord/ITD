@@ -23,7 +23,7 @@ namespace ITD.Particles
         private static readonly Dictionary<Type, ITDParticle> particlesByType = [];
         public List<ITDParticle> particles;
         public static ParticleSystem Instance => DetourManager.GetInstance<ParticleSystem>();
-        public static ITDParticle NewParticle<T>(Vector2 position, Vector2 velocity, float rotation) where T : ITDParticle
+        public static ITDParticle NewParticle<T>(Vector2 position, Vector2 velocity, float rotation = 0f) where T : ITDParticle
         {
             Type particleType = typeof(T);
             if (particlesByType.TryGetValue(particleType, out ITDParticle value))

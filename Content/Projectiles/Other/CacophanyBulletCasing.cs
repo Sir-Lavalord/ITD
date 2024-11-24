@@ -19,6 +19,7 @@ namespace ITD.Content.Projectiles.Other
             Projectile.tileCollide = true;
 
             Projectile.timeLeft = 90;
+            Projectile.extraUpdates = 1;
         }
 
         public bool runOnce = true;
@@ -36,10 +37,9 @@ namespace ITD.Content.Projectiles.Other
             Projectile.rotation += MathHelper.ToRadians(rotationSpeed);
             if (Projectile.timeLeft <= 20)
             {
-                Projectile.alpha = (int)(255f - ((float)Projectile.timeLeft / 20f) * 255f);
+                Projectile.alpha = (int)(255f - (Projectile.timeLeft / 20f) * 255f);
             }
         }
-
         public override bool OnTileCollide(Vector2 velocityChange)
         {
             Projectile.velocity.X /= 2;

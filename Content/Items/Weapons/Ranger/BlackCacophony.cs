@@ -1,22 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-
 using ITD.Systems;
 using ITD.Players;
 using ITD.Utilities;
-using ITD.Content.Projectiles.Friendly.Ranger;
-using ITD.Content.Projectiles.Friendly.Melee;
-using ITD.Content.Items.Favors;
 using Terraria.GameContent.Creative;
 using System;
-using Mono.Cecil;
-using rail;
 using System.Collections.Generic;
-using ITD.Content.Items.Other;
 using Terraria.Localization;
 using ITD.Content.Projectiles.Other;
 
@@ -132,15 +124,13 @@ namespace ITD.Content.Items.Weapons.Ranger
                     {
                         Item.shoot = ProjectileID.None;
                         Item.useAmmo = AmmoID.None;
-                        Item.useTime = 60;
-                        Item.useAnimation = 60;
+                        Item.useTime = Item.useAnimation = 60;
                     } 
                     else
                     {
                         Item.shoot = ProjectileID.None;
                         Item.useAmmo = AmmoID.None;
-                        Item.useTime = 6;
-                        Item.useAnimation = 6;
+                        Item.useTime = Item.useAnimation = 6;
 
                         SoundStyle blackcacophany = new SoundStyle("ITD/Content/Sounds/BarrelSpinShort") with
                         {
@@ -189,8 +179,7 @@ namespace ITD.Content.Items.Weapons.Ranger
                 {
                     Item.shoot = ProjectileID.Bullet;
                     Item.useAmmo = AmmoID.Bullet;
-                    Item.useTime = 8 - windup / 10;
-                    Item.useAnimation = 8 - windup / 10;
+                    Item.useTime = Item.useAnimation = 8 - windup / 10;
                     if (windup > 2)
                     {
                         SoundStyle cacophanyfire = new SoundStyle("ITD/Content/Sounds/BlackCacophonyFire") with
@@ -217,35 +206,34 @@ namespace ITD.Content.Items.Weapons.Ranger
         {
             chargedOnce = false;
             if (mode == 1)
-            {
                 return true;
-            }
-            else
+            if (player.whoAmI == Main.myPlayer)
             {
+                float shellShift = MathHelper.ToRadians(-50);
+                float SVar = shellShift + MathHelper.ToRadians(Main.rand.Next(-100, 301) / 10);
+                float Sspeed = .09f * Main.rand.Next(15, 41);
+                Projectile.NewProjectile(source, player.position, new Vector2(MathF.Cos(SVar) * Sspeed * -player.direction, MathF.Sin(SVar) * Sspeed), ModContent.ProjectileType<CacophanyBulletCasing>(), 0, 0, player.whoAmI);
+
                 for (int i = 0; i < 4; i++)
                 {
                     Vector2 trueSpeed = velocity.RotatedByRandom(MathHelper.ToRadians(15));
                     float scale = Main.rand.NextFloat(.8f, 1.6f);
                     trueSpeed *= scale;
 
-                    float shellShift = MathHelper.ToRadians(-50);
-                    float SVar = shellShift + MathHelper.ToRadians(Main.rand.Next(-100, 301) / 10);
-                    float Sspeed = .05f * Main.rand.Next(15, 41);
-                    Projectile.NewProjectile(source, player.position, new Vector2(MathF.Cos(SVar) * Sspeed * -player.direction, MathF.Sin(SVar) * Sspeed), ModContent.ProjectileType<CacophanyBulletCasing>(), 0, 0, Main.myPlayer);
                     Projectile.NewProjectile(source, position, trueSpeed, type, damage, knockback, player.whoAmI);
                 }
-                colorProgress = .02f;
-                windup -= 1;
-                if (windup < 0)
-                {
-                    windup = 0;
-                }
-                return false;
             }
+            colorProgress = .02f;
+            windup -= 1;
+            if (windup < 0)
+            {
+                windup = 0;
+            }
+            return false;
         }
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            Vector2 muzzleOffset = Vector2.Normalize(velocity) * 116f;
+            Vector2 muzzleOffset = velocity.SafeNormalize(Vector2.Zero) * 116f;
 
             if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
             {

@@ -8,6 +8,7 @@ using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using ITD.DetoursIL;
+using ITD.Utilities;
 namespace ITD.Particles
 {
     public enum ParticleDrawCanvas
@@ -29,8 +30,13 @@ namespace ITD.Particles
         public int frameVertical;
         public int frameHorizontal;
         public int frameCounter;
+        public int historySize = 1;
+        private int historyIndex = 0;
+        public Vector2[] oldPosition;
         public Vector2 position;
         public Vector2 velocity;
+        public float angularVelocity;
+        public bool tileCollide;
         public Vector2 texMorph;
         public int spawnTimeLeft;
         public int timeLeft;
@@ -63,15 +69,34 @@ namespace ITD.Particles
             SetDefaults();
             spawnTimeLeft = timeLeft;
             spawnScale = scale;
+            oldPosition = new Vector2[historySize];
         }
         public virtual void AI()
         {
 
         }
+        private void RecordPosition(Vector2 position)
+        {
+            oldPosition[historyIndex] = position;
+            historyIndex = (historyIndex + 1) % oldPosition.Length;
+        }
         public void Update()
         {
             AI();
+            RecordPosition(position);
+            if (tileCollide)
+            {
+                Vector2 nextPosition = position + velocity;
+                if (TileHelpers.SolidTile(nextPosition.ToTileCoordinates()))
+                {
+                    if (PreCollide(nextPosition))
+                    {
+                        Collide(nextPosition);
+                    }
+                }
+            }
             position += velocity;
+            rotation += angularVelocity;
             if (timeLeft-- <= 0)
             {
                 DetourManager.GetInstance<ParticleSystem>().particles.Remove(this);
@@ -81,6 +106,18 @@ namespace ITD.Particles
         public void Dispose()
         {
             GC.SuppressFinalize(this);
+        }
+        /// <summary>
+        /// Only called if tileCollide is true.
+        /// </summary>
+        /// <returns>True to run regular collision code</returns>
+        public virtual bool PreCollide(Vector2 nextPosition)
+        {
+            return true;
+        }
+        public void Collide(Vector2 nextPosition)
+        {
+            // idk how to implement this
         }
         /// <summary>
         /// Return false to stop default regular drawing
