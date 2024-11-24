@@ -4,7 +4,9 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
+
 using ITD.Content.Projectiles.Friendly.Summoner;
+using ITD.Content.Buffs.Debuffs;
 
 namespace ITD.Content.Items.Weapons.Summoner
 {
@@ -15,8 +17,8 @@ namespace ITD.Content.Items.Weapons.Summoner
         {
             Item.damage = 20;
             Item.DamageType = DamageClass.SummonMeleeSpeed;
-            Item.width = 60;
-            Item.height = 60;
+            Item.width = 66;
+            Item.height = 66;
             Item.useTime = 20;
             Item.useAnimation = 20;
             Item.useStyle = ItemUseStyleID.Swing;
@@ -26,6 +28,11 @@ namespace ITD.Content.Items.Weapons.Summoner
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
         }
+		
+		public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
+			target.AddBuff(ModContent.BuffType<KeepersShovelTagDebuff>(), 300);
+			player.MinionAttackTargetNPC = target.whoAmI;
+		}
 		
 		public override void MeleeEffects (Player player, Rectangle hitbox)
         {

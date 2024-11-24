@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Systems;
+using ITD.Content.Items.Materials;
 
 namespace ITD.Content.Items.Weapons.Melee
 {
@@ -23,7 +24,7 @@ namespace ITD.Content.Items.Weapons.Melee
 		
 		public override void SetDefaults()
 		{
-			Item.damage = 15;
+			Item.damage = 21;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 48;
 			Item.height = 50;
@@ -52,6 +53,15 @@ namespace ITD.Content.Items.Weapons.Melee
 
             spriteBatch.Draw(texture, new Vector2(Item.position.X - Main.screenPosition.X + Item.width * 0.5f, Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height * 0.5f),
                 new Rectangle(0, 0, texture.Width, texture.Height), Color.White, rotation, texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+        }
+		
+		public override void AddRecipes()
+        {
+            CreateRecipe(1)
+                .AddIngredient(ModContent.ItemType<EmberlionMandible>(), 6)
+				.AddIngredient(ModContent.ItemType<EmberlionSclerite>(), 8)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
 	}
 }

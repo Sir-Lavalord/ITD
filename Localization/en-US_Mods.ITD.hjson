@@ -635,7 +635,11 @@ Items: {
 
 	KeepersShovel: {
 		DisplayName: Gravekeeper's Shovel
-		Tooltip: Digs up skeletons to fight for you
+		Tooltip:
+			'''
+			4 summon tag damage
+			Digs up skeletons to fight for you
+			'''
 	}
 
 	PetPigSummon: {
@@ -848,7 +852,7 @@ Items: {
 
 	CharmOfTheAccursed: {
 		DisplayName: Charm of the Accursed
-		Tooltip: Stay near enemies to curse them with 25% extra damage taken and mana leach
+		Tooltip: Stay near enemies to curse them with 25% extra damage taken and mana leech
 	}
 
 	Chainwhip: {
@@ -1139,6 +1143,11 @@ Items: {
 			2: Left Click to fire ammunition.
 		}
 	}
+
+	RiteOfImmolation: {
+		DisplayName: Rite Of Immolation
+		Tooltip: 4 summon tag damage
+	}
 }
 
 Projectiles: {
@@ -1288,6 +1297,7 @@ Projectiles: {
 	ThrowableGuardian.DisplayName: Throwable Guardian
 	IncendipedeBreath.DisplayName: Incendipede Breath
 	SoulTalismanBlast.DisplayName: Spirit Blast
+	RiteOfImmolationProj.DisplayName: Rite Of Immolation Proj
 }
 
 NPCs: {
@@ -1441,6 +1451,16 @@ Buffs: {
 	SoulTalismanBuff: {
 		DisplayName: Soul Charges
 		Description: Increases damage and attack speed
+	}
+
+	RiteOfImmolationTagDebuff: {
+		DisplayName: Rite Of Immolation Tag Debuff
+		Description: Mods.ITD.Buffs.RiteOfImmolationTagDebuff.Description
+	}
+
+	KeepersShovelTagDebuff: {
+		DisplayName: Keepers Shovel Tag Debuff
+		Description: Mods.ITD.Buffs.KeepersShovelTagDebuff.Description
 	}
 }
 
