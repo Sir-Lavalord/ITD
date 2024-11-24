@@ -35,8 +35,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             Projectile.extraUpdates = 1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
-            Projectile.WhipSettings.Segments = 40;
-            Projectile.WhipSettings.RangeMultiplier = 1f;
+            Projectile.WhipSettings.Segments = 24;
+            Projectile.WhipSettings.RangeMultiplier = 0.72f;
             Projectile.damage = 72;
         }
 
@@ -105,6 +105,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+			//target.AddBuff(ModContent.BuffType<ChainwhipTagDebuff>(), 300);
             Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
             Projectile.damage = (int)(Projectile.damage * 0.7f);
         }
@@ -136,7 +137,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             List<Vector2> list = new List<Vector2>();
             Projectile.FillWhipControlPoints(Projectile, list);
 
-            DrawLine(list);
+            //DrawLine(list);
 
             SpriteEffects flip = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
@@ -155,7 +156,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 if (i == list.Count - 2)
                 {
                     frame = new Rectangle(0, 0, whipHeadTexture.Width, whipHeadTexture.Height);
-
+					Vector2 WhipHeadOrigin = whipHeadTexture.Size() * 0.5f;
+						
                     // Add your scaling logic if required
                     Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out int _, out float _);
                     float t = Timer / timeToFlyOut;
@@ -167,7 +169,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                     float rotation = diff.ToRotation() - MathHelper.PiOver2;
                     Color color = Lighting.GetColor(element.ToTileCoordinates());
 
-                    Main.EntitySpriteDraw(whipHeadTexture, pos - Main.screenPosition, frame, color, rotation, origin, 0.5f, flip, 0);
+                    Main.EntitySpriteDraw(whipHeadTexture, pos - Main.screenPosition, frame, color, rotation, WhipHeadOrigin, 1f, flip, 0);
                 }
                 else
                 {
