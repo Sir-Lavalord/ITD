@@ -1119,17 +1119,17 @@ Items: {
 		// Tooltip: ""
 	}
 
-	BlackCacophany: {
+	BlackCacophony: {
 		// DisplayName: Black Cacophony
 		/* Tooltip:
 			'''
 				Current Mode:
-				"<right> to swap between Windup and Firing mode"
+				<right> to swap between Windup and Firing mode
 				'Nothing makes a melody like firing massive weapons'
 
 			''' */
 
-		CacophanyType: {
+		CacophonyType: {
 			// 1: Windup
 			// 2: Firing
 		}
@@ -1318,6 +1318,7 @@ Projectiles: {
 	// GrumbleBee.DisplayName: Grumble Bee
 	// CicadianSentry.DisplayName: Cicadian Sentry
 	// SummonIcyBoulder.DisplayName: Summon Icy Boulder
+	// CacophanyBulletCasing.DisplayName: Cacophany Bullet Casing
 }
 
 NPCs: {

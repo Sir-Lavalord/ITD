@@ -1321,6 +1321,7 @@ Projectiles: {
 	GrumbleBee.DisplayName: Grumble Bee
 	CicadianSentry.DisplayName: Cicadian Sentry
 	SummonIcyBoulder.DisplayName: Summon Icy Boulder
+	CacophanyBulletCasing.DisplayName: Cacophany Bullet Casing
 }
 
 NPCs: {

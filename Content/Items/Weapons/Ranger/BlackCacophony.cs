@@ -215,6 +215,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
+            chargedOnce = false;
             if (mode == 1)
             {
                 return true;
