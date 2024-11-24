@@ -1117,11 +1117,11 @@ Items: {
 	}
 
 	BlackCacophany: {
-		// DisplayName: Black Cacophany
+		// DisplayName: Black Cacophony
 		/* Tooltip:
 			'''
 				Current Mode:
-				Right Click to swap between Windup and Firing mode
+				"<right> to swap between Windup and Firing mode"
 				'Nothing makes a melody like firing massive weapons'
 
 			''' */
@@ -1132,8 +1132,14 @@ Items: {
 		}
 
 		Mode: {
-			// 1: Left Click to stockpile ammunition, increasing effectiveness depending on the amount stored.
-			// 2: Left Click to fire ammunition.
+			// 1: <left> to stockpile ammunition, increasing effectiveness depending on the amount stored.
+			// 2: <left> to fire ammunition.
+		}
+
+		Messages: {
+			// FiringMode: Firing Mode
+			// WindupMode: Windup Mode
+			// MaxCharge: MAX!
 		}
 	}
 
