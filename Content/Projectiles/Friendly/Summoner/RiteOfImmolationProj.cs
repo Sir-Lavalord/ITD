@@ -28,6 +28,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             Projectile.stopsDealingDamageAfterPenetrateHits = true;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
+			Projectile.manualDirectionChange = true;
         }
 		
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

@@ -64,20 +64,24 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 			{
 				Projectile.frame = 6;
 			}
-
-            Target = Projectile.FindClosestNPC(900f);
-            if (Target == null)
+			NPC target;
+			NPC ownerMinionAttackTargetNPC = Projectile.OwnerMinionAttackTargetNPC;
+			if (ownerMinionAttackTargetNPC != null && ownerMinionAttackTargetNPC.CanBeChasedBy(this, false))
+				target = ownerMinionAttackTargetNPC;
+            else
+				target = Projectile.FindClosestNPC(900f);
+            if (target == null)
             {
                 Projectile.velocity.X *= 0.9f;
             }
             else
             {
-				if (Projectile.velocity.Y == 0 && Projectile.Center.Y > Target.Bottom.Y)
+				if (Projectile.velocity.Y == 0 && Projectile.Center.Y > target.Bottom.Y)
 				{
 					Projectile.velocity.Y = -10f;
 				}
 
-                Projectile.velocity.X += (Target.Center.X - Projectile.Center.X > 0f).ToDirectionInt() * 0.4f;
+                Projectile.velocity.X += (target.Center.X - Projectile.Center.X > 0f).ToDirectionInt() * 0.4f;
                 Projectile.velocity.X = MathHelper.Clamp(Projectile.velocity.X, -6f, 6f);
 				NPCHelpers.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height);
             }

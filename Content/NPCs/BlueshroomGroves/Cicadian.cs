@@ -1,8 +1,4 @@
-﻿using ITD.Content.Biomes;
-using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
-using ITD.Content.Projectiles.Hostile;
-using ITD.Utilities;
-using Microsoft.CodeAnalysis.CodeStyle;
+﻿using Microsoft.CodeAnalysis.CodeStyle;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -10,11 +6,18 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 using Terraria.UI;
+
+using ITD.Content.Biomes;
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
+using ITD.Content.Projectiles.Hostile;
+using ITD.Utilities;
+using ITD.Content.Items.Weapons.Summoner;
 
 namespace ITD.Content.NPCs.BlueshroomGroves
 {
@@ -239,6 +242,10 @@ namespace ITD.Content.NPCs.BlueshroomGroves
             //float clamped = Helpers.Remap(transitionProgress, 0f, 1f, 0.5f, 1f);
             //return drawColor.MultiplyRGB(new Color(clamped, clamped, clamped, 1f));
             return drawColor;
+        }
+		public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CicadianStaff>(), 10));
         }
     }
 }

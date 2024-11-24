@@ -50,7 +50,9 @@ namespace ITD.Content.Items.Weapons.Summoner
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
 			float adjustedItemScale = player.GetAdjustedItemScale(player.inventory[player.selectedItem]);
-			Main.projectile[Projectile.NewProjectile(source, position + velocity * adjustedItemScale, new Vector2(), type, damage, knockback, player.whoAmI, adjustedItemScale)].rotation = Main.rand.NextFloat(MathHelper.Pi);
+			Projectile proj = Main.projectile[Projectile.NewProjectile(source, position + velocity * adjustedItemScale, new Vector2(), type, damage, knockback, player.whoAmI, adjustedItemScale)];
+			proj.rotation = Main.rand.NextFloat(MathHelper.Pi);
+			proj.direction = player.direction;
             return false;
         }
 		

@@ -1154,6 +1154,11 @@ Items: {
 			'Bee 17 Bomber'
 			''' */
 	}
+
+	CicadianStaff: {
+		// DisplayName: Cicadian Staff
+		// Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -1305,6 +1310,8 @@ Projectiles: {
 	// SoulTalismanBlast.DisplayName: Spirit Blast
 	// RiteOfImmolationProj.DisplayName: Rite Of Immolation Proj
 	// GrumbleBee.DisplayName: Grumble Bee
+	// CicadianSentry.DisplayName: Cicadian Sentry
+	// SummonIcyBoulder.DisplayName: Summon Icy Boulder
 }
 
 NPCs: {
