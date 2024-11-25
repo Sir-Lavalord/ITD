@@ -1316,6 +1316,7 @@ Projectiles: {
 	// CicadianSentry.DisplayName: Cicadian Sentry
 	// SummonIcyBoulder.DisplayName: Summon Icy Boulder
 	// CacophanyBulletCasing.DisplayName: Cacophany Bullet Casing
+	// QuartzBlast.DisplayName: Quartz Blast
 }
 
 NPCs: {
@@ -1359,6 +1360,7 @@ NPCs: {
 	// IncendipedeBody.DisplayName: Incendipede Body
 	// IncendipedeHead.DisplayName: Incendipede Head
 	// IncendipedeTail.DisplayName: Incendipede Tail
+	// QuartzElemental.DisplayName: Quartz Elemental
 }
 
 Buffs: {
