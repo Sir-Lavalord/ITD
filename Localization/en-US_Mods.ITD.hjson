@@ -1323,6 +1323,8 @@ Projectiles: {
 	SummonIcyBoulder.DisplayName: Summon Icy Boulder
 	CacophanyBulletCasing.DisplayName: Cacophany Bullet Casing
 	QuartzBlast.DisplayName: Quartz Blast
+	Shroomflake.DisplayName: Shroomflake
+	Sporeflake.DisplayName: Sporeflake
 }
 
 NPCs: {

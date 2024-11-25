@@ -106,7 +106,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)
+            if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground && Main.hardMode)
                 return 0.1f;
             return 0f;
         }
