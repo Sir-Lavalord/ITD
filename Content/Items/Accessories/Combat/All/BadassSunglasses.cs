@@ -104,7 +104,8 @@ namespace ITD.Content.Items.Accessories.Combat.All
                 else
                     opacity = 1f;
                 color.A = (byte)(color.A * 0.5f);
-
+				color *= opacity;
+				
                 int scale1 = (int)(Main.GlobalTimeWrappedHourly * 30) % 30;
                 int scale2 = (int)(Main.GlobalTimeWrappedHourly * 30 + 10) % 30;
                 int scale3 = (int)(Main.GlobalTimeWrappedHourly * 30 + 20) % 30;
@@ -117,9 +118,9 @@ namespace ITD.Content.Items.Accessories.Combat.All
 				else
 					effects = SpriteEffects.FlipVertically;
 				
-                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * opacity * ((30 - scale1) * 0.025f), 0, origin, 0.6f + scale1 * 0.02f, effects, 0f);
-                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * opacity * ((30 - scale2) * 0.025f), 0, origin, 0.6f + scale2 * 0.02f, effects, 0f);
-                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * opacity * ((30 - scale3) * 0.025f), 0, origin, 0.6f + scale3 * 0.02f, effects, 0f);
+                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * ((30 - scale1) * 0.025f), 0, origin, 0.6f + scale1 * 0.02f, effects, 0f);
+                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * ((30 - scale2) * 0.025f), 0, origin, 0.6f + scale2 * 0.02f, effects, 0f);
+                Main.EntitySpriteDraw(texture.Value, position, sourceRectangle, color * ((30 - scale3) * 0.025f), 0, origin, 0.6f + scale3 * 0.02f, effects, 0f);
                 Main.CurrentDrawnEntityShader = 0;
             }
         }

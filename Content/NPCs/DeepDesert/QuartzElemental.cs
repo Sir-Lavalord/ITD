@@ -1,6 +1,10 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Audio;
 
@@ -11,7 +15,7 @@ namespace ITD.Content.NPCs.DeepDesert
 {
     public class QuartzElemental : ModNPC
     {
-		public float speed = 2f;
+		public float speed = 3f;
 		public float hoverPower = 1.5f;
 		public int hoverDistance = 3;
         public override void SetDefaults()
@@ -20,8 +24,8 @@ namespace ITD.Content.NPCs.DeepDesert
             NPC.aiStyle = -1;
             NPC.width = 36;
             NPC.height = 34;
-            NPC.defense = 8;
-            NPC.lifeMax = 60;
+            NPC.defense = 12;
+            NPC.lifeMax = 120;
             NPC.knockBackResist = 0.5f;
 			NPC.noGravity = true;
             NPC.value = 400;
@@ -32,7 +36,7 @@ namespace ITD.Content.NPCs.DeepDesert
         {			
 			if (NPC.ai[2] >= 0f)
 			{
-				int offset = 16;
+				/*int offset = 16; part that makes it run away in fear
 				bool flagX = false;
 				bool flagY = false;
 				if (NPC.position.X > NPC.ai[0] - (float)offset && NPC.position.X < NPC.ai[0] + (float)offset)
@@ -67,7 +71,7 @@ namespace ITD.Content.NPCs.DeepDesert
 					NPC.ai[0] = NPC.position.X;
 					NPC.ai[1] = NPC.position.Y;
 					NPC.ai[2] = 0f;
-				}
+				}*/
 				NPC.TargetClosest(true);
 			}
 			else
@@ -85,11 +89,10 @@ namespace ITD.Content.NPCs.DeepDesert
 			
 			int posX = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction * 2;
 			int posY = (int)((NPC.position.Y + (float)NPC.height) / 16f);
-			bool flag = false;
 			bool fall = true;
 			
-			if (NPC.position.Y + (float)NPC.height > Main.player[NPC.target].position.Y)
-			{
+			//if (NPC.position.Y + (float)NPC.height > Main.player[NPC.target].position.Y)
+			//{
 				int num;
 				for (int i = posY; i < posY + hoverDistance; i = num + 1)
 				{
@@ -98,25 +101,17 @@ namespace ITD.Content.NPCs.DeepDesert
 						tile = new Tile();
 					if ((!tile.IsActuated && Main.tileSolid[(int)tile.TileType]) || tile.LiquidAmount > 0)
 					{
-						if (i <= posY + 1)
-						{
-							flag = true;
-						}
 						fall = false;
 						break;
 					}
 					num = i;
 				}
-			}
+			//}
 
-			if ((Main.player[NPC.target].position - NPC.position).Length() < 200 && Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height))
+			if ((Main.player[NPC.target].position - NPC.position).Length() < 200 && Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height)) // the part where it attacks
 			{
 				if (NPC.ai[3] >= 32f)
-				{
-					int dust = Dust.NewDust(NPC.Center, 0, 0, DustID.GiantCursedSkullBolt, 0f, 0f, 100, default(Color), 1f);
-					Main.dust[dust].noGravity = true;
-					Main.dust[dust].velocity *= 2f;
-				}
+					NPC.velocity *= 0.9f;
 				
 				NPC.ai[3] += 1f;
 				if (NPC.ai[3] >= 64f)
@@ -129,12 +124,12 @@ namespace ITD.Content.NPCs.DeepDesert
 						Main.dust[dust].noGravity = true;
 						Main.dust[dust].velocity *= 3f;
 						if (Main.netMode != NetmodeID.MultiplayerClient)
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(8f, 0f).RotatedBy(MathHelper.PiOver4*j), ModContent.ProjectileType<QuartzBlast>(), 30, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(12f, 0f).RotatedBy(MathHelper.PiOver4*j), ModContent.ProjectileType<QuartzBlast>(), 30, 0, -1);
 					}
 				}
 			}
-			else
-				NPC.ai[3] = 0f;
+			else if (NPC.ai[3] > 0f)
+				NPC.ai[3]--;
 			
 			if (fall)
 			{
@@ -146,7 +141,7 @@ namespace ITD.Content.NPCs.DeepDesert
 			}
 			else
 			{
-				if ((NPC.directionY < 0 && NPC.velocity.Y > 0f) || flag)
+				if (NPC.directionY < 0 && NPC.velocity.Y > 0f)
 				{
 					NPC.velocity.Y = NPC.velocity.Y - 0.1f;
 				}
@@ -268,13 +263,30 @@ namespace ITD.Content.NPCs.DeepDesert
 			float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);
 			NPC.rotation = rotationFactor;
         }
-		public override bool? CanFallThroughPlatforms ()
+		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            return true;
+            Vector2 position = NPC.Center - screenPos;
+			Texture2D glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+            Rectangle glowSourceRectangle = glowTexture.Frame(1, 1);
+            Vector2 glowOrigin = glowSourceRectangle.Size() / 2f;
+			
+			float progress = Math.Clamp((NPC.ai[3] - 32f) / 32f, 0, 1);
+			
+            Color color = new Color(200, 100, 255, 0) * progress;
+			
+            Main.EntitySpriteDraw(glowTexture, position, glowSourceRectangle, color, MathHelper.Pi * progress, glowOrigin, 2.4f - progress * 1.6f, SpriteEffects.None, 0f);
+			
+			Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+			Rectangle sourceRectangle = texture.Frame(1, 1);
+            Vector2 origin = sourceRectangle.Size() / 2f;
+			
+            Main.EntitySpriteDraw(texture, position, sourceRectangle, Color.Lerp(Color.White, drawColor, 0.5f), NPC.rotation, origin, NPC.scale, SpriteEffects.None, 0f);
+			return false;
         }
+		public override bool? CanFallThroughPlatforms() => true;
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
+            if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert && Main.hardMode)
             {
                 return 0.25f;
             }
