@@ -108,11 +108,11 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
             int loopFrame = ballFrame - 1;
             if (NPC.IsOnStandableGround() && AI_State == ActionState.Wandering)
             {
-                CommonFrameLoop(frameHeight, loopFrame);
+                CommonFrameLoop(frameHeight, 0, loopFrame);
             }
             else if (AI_State == ActionState.Digging) // fast diggy movement
             {
-                CommonFrameLoop(frameHeight, loopFrame, 3f);
+                CommonFrameLoop(frameHeight, 0, loopFrame, 3f);
                 NPC.rotation = MathHelper.PiOver2 * NPC.direction;
             }
             else if (AI_State == ActionState.Ball)

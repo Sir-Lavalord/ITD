@@ -1,211 +1,276 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ITD.Utilities;
 using System;
-using System.IO;
+using System.Linq;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Audio;
-
-using ITD.Content.NPCs;
-using ITD.Content.Projectiles.Hostile;
 
 namespace ITD.Content.NPCs.DeepDesert
 {
-	// These three class showcase usage of the WormHead, WormBody and WormTail classes from Worm.cs
-	internal class IncendipedeHead : WormHead
-	{
-		public override int BodyType => ModContent.NPCType<IncendipedeBody>();
-
-		public override int TailType => ModContent.NPCType<IncendipedeTail>();
-
-		public override void SetStaticDefaults() {
-			var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() { // Influences how the NPC looks in the Bestiary
-				CustomTexturePath = "ITD/Content/NPCs/DeepDesert/Incendipede_Bestiary", // If the NPC is multiple parts like a worm, a custom texture for the Bestiary is encouraged.
-				Position = new Vector2(40f, 24f),
-				PortraitPositionXOverride = 0f,
-				PortraitPositionYOverride = 12f
-			};
-			NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
-		}
-
-		public override void SetDefaults() {
-			// Head is 10 defense, body 20, tail 30.
-			NPC.CloneDefaults(NPCID.DiggerHead);
-			NPC.aiStyle = -1;
-		}
-
-		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
-			// We can use AddRange instead of calling Add multiple times in order to add multiple items at once
-			bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-				// Sets the spawning conditions of this NPC that is listed in the bestiary.
-				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
-				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
-
-				// Sets the description of this NPC that is listed in the bestiary.
-				new FlavorTextBestiaryInfoElement("Looks like a Digger fell into some aqua-colored paint. Oh well.")
-			});
-		}
-
-		public override void Init() {
-			// Set the segment variance
-			// If you want the segment length to be constant, set these two properties to the same value
-			MinSegmentLength = 12;
-			MaxSegmentLength = 18;
-
-			CommonWormInit(this);
-		}
-
-		// This method is invoked from IncendipedeHead, IncendipedeBody and IncendipedeTail
-		internal static void CommonWormInit(Worm worm) {
-			// These two properties handle the movement of the worm
-			worm.MoveSpeed = 5.5f;
-			worm.Acceleration = 0.045f;
-		}
-				
-		public override void HitEffect(NPC.HitInfo hit)
+    public class IncendipedeHead : ITDNPC
+    {
+        public NPC FollowerNPC => Main.npc[(int)NPC.ai[0]];
+        public ref float SineTimer => ref NPC.ai[1];
+        public int WormLength { get { return (int)NPC.ai[2]; } set { NPC.ai[2] = value; } }
+        public const int SpacingBetween = 8;
+        public override void FindFrame(int frameHeight) => CommonFrameLoop(frameHeight);
+        public override void SetStaticDefaults()
         {
-            if (NPC.life > 0)
-			{
-				return;
-			}
-			Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, Mod.Find<ModGore>("IncendipedeGore0").Type);
+            Main.npcFrameCount[Type] = 3;
+            // i'm using this for the actual segment following logic so consider this the length limit for incendipedes
+            NPCID.Sets.TrailCacheLength[Type] = 10 * SpacingBetween;
+            // idc about getting rotations cuz we can just calculate those on the fly
+            NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPC.PosRotEveryFrame;
+            // bestiary stuff
+            BestiaryEntry = this.GetLocalization("Bestiary");
+            var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                CustomTexturePath = "ITD/Content/NPCs/DeepDesert/Incendipede_Bestiary",
+                Position = new Vector2(40f, 24f),
+                PortraitPositionXOverride = 0f,
+                PortraitPositionYOverride = 12f
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifier);
         }
-
-		private int attackCounter;
-		private bool attacking;
-		public override void SendExtraAI(BinaryWriter writer) {
-			writer.Write(attackCounter);
-			writer.Write(attacking);
-		}
-
-		public override void ReceiveExtraAI(BinaryReader reader) {
-			attackCounter = reader.ReadInt32();
-			attacking = reader.ReadBoolean();
-		}
-
-		private bool Collision() {
-			int minTilePosX = (int)(NPC.Left.X / 16) - 1;
-			int maxTilePosX = (int)(NPC.Right.X / 16) + 2;
-			int minTilePosY = (int)(NPC.Top.Y / 16) - 1;
-			int maxTilePosY = (int)(NPC.Bottom.Y / 16) + 2;
-
-			// Ensure that the tile range is within the world bounds
-			if (minTilePosX < 0)
-				minTilePosX = 0;
-			if (maxTilePosX > Main.maxTilesX)
-				maxTilePosX = Main.maxTilesX;
-			if (minTilePosY < 0)
-				minTilePosY = 0;
-			if (maxTilePosY > Main.maxTilesY)
-				maxTilePosY = Main.maxTilesY;
-
-			bool collision = false;
-
-			// This is the initial check for collision with tiles.
-			for (int i = minTilePosX; i < maxTilePosX; ++i) {
-				for (int j = minTilePosY; j < maxTilePosY; ++j) {
-
-					if (WorldGen.SolidTile(i, j, false)) {
-						Vector2 tileWorld = new Point16(i, j).ToWorldCoordinates(0, 0);
-
-						if (NPC.Right.X > tileWorld.X && NPC.Left.X < tileWorld.X + 16 && NPC.Bottom.Y > tileWorld.Y && NPC.Top.Y < tileWorld.Y + 16) {
-							// Collision found
-							collision = true;
-						}
-					}
-				}
-			}
-
-			return collision;
-		}
-
-		public override void AI() {			
-			bool collision = Collision();
-			if (collision && attackCounter < 30) {
-				attackCounter++;
-			}
-			if (!collision) {
-				if (attackCounter == 30)
-				{
-					attacking = true;
-					SoundEngine.PlaySound(SoundID.Item34, NPC.Center);
-				}
-				else if (!attacking)
-					attackCounter = 0;
-				if (attacking)
-				{
-					if (attackCounter % 3 == 0)
-					{
-						if (Main.netMode != NetmodeID.MultiplayerClient) {
-							Vector2 direction = NPC.velocity.SafeNormalize(Vector2.UnitX);
-							direction = direction.RotatedByRandom(MathHelper.ToRadians(10));
-							int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, direction * 8, ModContent.ProjectileType<IncendipedeBreath>(), 20, 0, Main.myPlayer);
-							NPC.netUpdate = true;
-						}
-					}
-					attackCounter--;
-					if (attackCounter == 0)
-						attacking = false;
-				}
-			}
-		}
-	}
-
-	internal class IncendipedeBody : WormBody
-	{
-		public override void SetStaticDefaults() {
-			NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers() {
-				Hide = true // Hides this NPC from the Bestiary, useful for multi-part NPCs whom you only want one entry.
-			};
-			NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
-		}
-
-		public override void SetDefaults() {
-			NPC.CloneDefaults(NPCID.DiggerBody);
-			NPC.aiStyle = -1;
-		}
-
-		public override void Init() {
-			IncendipedeHead.CommonWormInit(this);
-		}
-		
-		public override void HitEffect(NPC.HitInfo hit)
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            if (NPC.life > 0)
-			{
-				return;
-			}
-			Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, Mod.Find<ModGore>("IncendipedeGore1").Type);
+            bestiaryEntry.Info.AddRange([
+                // hello how do you add custom biome to this thanks
+				//BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
+                //BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
+
+				new FlavorTextBestiaryInfoElement(BestiaryEntry.Value)
+            ]);
         }
-	}
-
-	internal class IncendipedeTail : WormTail
-	{
-		public override void SetStaticDefaults() {
-			NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers() {
-				Hide = true // Hides this NPC from the Bestiary, useful for multi-part NPCs whom you only want one entry.
-			};
-			NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
-		}
-
-		public override void SetDefaults() {
-			NPC.CloneDefaults(NPCID.DiggerTail);
-			NPC.aiStyle = -1;
-		}
-
-		public override void Init() {
-			IncendipedeHead.CommonWormInit(this);
-		}
-		
-		public override void HitEffect(NPC.HitInfo hit)
+        public override void SetDefaults()
+         {
+            NPC.width = NPC.height = 16;
+            NPC.damage = 90;
+            NPC.defense = 85;
+            NPC.lifeMax = 400;
+            NPC.HitSound = SoundID.NPCHit31;
+            NPC.DeathSound = SoundID.NPCDeath34;
+            NPC.knockBackResist = 0f;
+            NPC.value = Item.buyPrice(silver: 4);
+            NPC.aiStyle = -1;
+            NPC.noGravity = true;
+            NPC.friendly = false;
+        }
+        // basically copied from exampleworm
+        private int SpawnSegment(int latest, int type, int id)
         {
-            if (NPC.life > 0)
-			{
-				return;
-			}
-			Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, Mod.Find<ModGore>("IncendipedeGore2").Type);
+            int oldLatest = latest;
+            latest = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, type, NPC.whoAmI, 0, latest, id);
+
+            Main.npc[oldLatest].ai[0] = latest;
+
+            Main.npc[latest].realLife = NPC.whoAmI;
+
+            return latest;
         }
-	}
+        public void SpawnSegments(int wormLength)
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                bool hasFollower = NPC.ai[0] > 0;
+                if (!hasFollower)
+                {
+                    NPC.realLife = NPC.whoAmI;
+                    int latestNPC = NPC.whoAmI;
+
+                    int distance = wormLength - 2;
+
+                    while (distance > 0)
+                    {
+                        latestNPC = SpawnSegment(latestNPC, ModContent.NPCType<IncendipedeBodySegment>(), distance);
+                        distance--;
+                    }
+                    SpawnSegment(latestNPC, ModContent.NPCType<IncendipedeTail>(), 0);
+
+                    NPC.netUpdate = true;
+
+                    int count = 0;
+                    foreach (var n in Main.ActiveNPCs)
+                    {
+                        if ((n.type == Type || n.type == ModContent.NPCType<IncendipedeBodySegment>() || n.type == ModContent.NPCType<IncendipedeTail>()) && n.realLife == NPC.whoAmI)
+                            count++;
+                    }
+                    if (count != wormLength)
+                    {
+                        foreach (var n in Main.ActiveNPCs)
+                        {
+                            if ((n.type == Type || n.type == ModContent.NPCType<IncendipedeBodySegment>() || n.type == ModContent.NPCType<IncendipedeTail>()) && n.realLife == NPC.whoAmI)
+                            {
+                                n.active = false;
+                                n.netUpdate = true;
+                            }
+                        }
+                    }
+                    NPC.realLife = -1;
+                    NPC.TargetClosest(true);
+                }
+            }
+        }
+        public override void AI()
+        {
+            //Main.NewText($"WormLength: {WormLength}");
+            // spawn segments here cuz this hook runs on the server
+            if (WormLength == 0)
+            {
+                WormLength = Main.rand.Next(8, 11);
+                SpawnSegments(WormLength);
+            }
+            // this bool returns whether or not the hitbox contains any tiles with a wall, in which case keep moving on the wall
+            bool wall = BigHitboxTiles.Points().Any(p => Framing.GetTileSafely(p).WallType != WallID.None);
+            if (InvalidTarget)
+                NPC.TargetClosest();
+            if (wall)
+                WallMovement();
+            else
+                GroundMovement();
+        }
+        public void WallMovement()
+        {
+            // sine...
+            Vector2 toPlayer = Main.player[NPC.target].Center - NPC.Center;
+            Vector2 toPlayerNorm = toPlayer.SafeNormalize(Vector2.Zero);
+
+            // actual movement speed
+            float speed = 2f;
+
+            // wave properties
+            float sineAmplitude = 32f;
+            float sineFrequency = 0.1f;
+
+            // so we can actually make the NPC move in a sine wave
+            Vector2 perpendicular = toPlayerNorm.RotatedBy(Math.PI / 2d);
+
+            float sineOffset = (float)Math.Sin(SineTimer * sineFrequency) * sineAmplitude;
+
+            NPC.velocity = toPlayerNorm * speed + perpendicular * sineOffset / 16f;
+
+            NPC.rotation = NPC.velocity.ToRotation() + MathHelper.PiOver2;
+
+            SineTimer++;
+        }
+        public void GroundMovement()
+        {
+            // fall down
+            NPC.velocity.Y += 0.1f;
+        }
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
+            {
+                return 0.25f;
+            }
+            return 0f;
+        }
+    }
+    public class IncendipedeBodySegment : ITDNPC
+    {
+        public NPC FollowingNPC => Main.npc[(int)NPC.ai[1]];
+        public NPC FollowerNPC => Main.npc[(int)NPC.ai[0]];
+        public NPC HeadNPC => NPC.realLife > -1 ? Main.npc[NPC.realLife] : null;
+        public int ID => (int)NPC.ai[2];
+        public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
+        public override void FindFrame(int frameHeight) => CommonFrameLoop(frameHeight, maxCounter: 3f);
+        public override void SetStaticDefaults()
+        {
+            Main.npcFrameCount[Type] = 8;
+            HideFromBestiary();
+        }
+        public override void SetDefaults()
+        {
+            NPC.width = NPC.height = 16;
+            NPC.noGravity = true;
+            NPC.friendly = false;
+            NPC.lifeMax = 1;
+            NPC.HitSound = SoundID.NPCHit31;
+            NPC.DeathSound = SoundID.NPCDeath34;
+            NPC.knockBackResist = 0f;
+            NPC.value = Item.buyPrice(silver: 4);
+            NPC.aiStyle = -1;
+            NPC.noGravity = true;
+            NPC.friendly = false;
+        }
+        public override void AI()
+        {
+            if (HeadNPC.Exists() && HeadNPC.type == ModContent.NPCType<IncendipedeHead>())
+            {
+                int wormLength = (int)HeadNPC.ai[2];
+                int spacingIndex = (wormLength - 1 - ID) * IncendipedeHead.SpacingBetween;
+                //Main.NewText($"ID: {ID}, SPID: {spacingIndex}");
+
+                Vector2 possiblePos = HeadNPC.oldPos[spacingIndex];
+                if (possiblePos != Vector2.Zero)
+                {
+                    NPC.position = HeadNPC.oldPos[spacingIndex];
+                    NPC.rotation = HeadNPC.oldRot[spacingIndex];
+                }
+            }
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                if (HeadNPC != null && HeadNPC.life <= 0)
+                {
+                    NPC.HitEffect();
+                    NPC.active = false;
+                }
+            }
+        }
+    }
+    public class IncendipedeTail : ITDNPC
+    {
+        public NPC FollowingNPC => Main.npc[(int)NPC.ai[1]];
+        public NPC HeadNPC => NPC.realLife > -1 ? Main.npc[NPC.realLife] : null;
+        // no ID needed for this one cuz it's just 0 (newest position in NPC.oldPos array)
+        public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
+        public override void FindFrame(int frameHeight) => CommonFrameLoop(frameHeight);
+        public override void SetStaticDefaults()
+        {
+            Main.npcFrameCount[Type] = 3;
+            HideFromBestiary();
+        }
+        public override void SetDefaults()
+        {
+            NPC.width = NPC.height = 16;
+            NPC.noGravity = true;
+            NPC.friendly = false;
+            NPC.lifeMax = 1;
+            NPC.HitSound = SoundID.NPCHit31;
+            NPC.DeathSound = SoundID.NPCDeath34;
+            NPC.knockBackResist = 0f;
+            NPC.value = Item.buyPrice(silver: 4);
+            NPC.aiStyle = -1;
+            NPC.noGravity = true;
+            NPC.friendly = false;
+        }
+        public override void AI()
+        {
+            if (HeadNPC.Exists() && HeadNPC.type == ModContent.NPCType<IncendipedeHead>())
+            {
+                //Main.NewText("can i see a picture of this being worm");
+                int wormLength = (int)HeadNPC.ai[2];
+                int spacingIndex = ((wormLength - 1) * IncendipedeHead.SpacingBetween);
+                //Main.NewText($"ID: {0}, SPID: {spacingIndex}");
+
+                Vector2 possiblePos = HeadNPC.oldPos[spacingIndex];
+                if (possiblePos != Vector2.Zero)
+                {
+                    NPC.position = HeadNPC.oldPos[spacingIndex];
+                    NPC.rotation = HeadNPC.oldRot[spacingIndex];
+                }
+            }
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                if (HeadNPC != null && HeadNPC.life <= 0)
+                {
+                    NPC.HitEffect();
+                    NPC.active = false;
+                }
+            }
+            //Main.NewText("tea is leaf :)");
+        }
+    }
 }

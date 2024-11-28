@@ -2,11 +2,7 @@
 using System.Linq;
 using Terraria.ID;
 using Terraria;
-using Microsoft.Xna.Framework;
 using ITD.Content.NPCs;
-using ITD.Content.Projectiles;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 using ReLogic.Utilities;
 
 namespace ITD.Utilities
@@ -87,7 +83,8 @@ namespace ITD.Utilities
         public static Vector2D ToRotationVector2D (this double d) => new(Math.Cos(d), Math.Sin(d));
         public static Vector2D ToRotationVector2D (this float f) => ToRotationVector2D(f);
         public static Vector3 ToVector3(this Vector2 v) => new(v.X, v.Y, 0);
-        public static bool Exists(this Entity entity) => entity != null && entity.active;
+        public static bool Exists(this NPC n) => n != null && n.active;
+        public static bool Exists(this Projectile p) => p != null && p.active;
         //Make the invul boss part untargetable please
         public static bool IsValidTarget(this Projectile projectile, NPC target)
         {
@@ -212,8 +209,17 @@ namespace ITD.Utilities
 			{
 				num += 1.57079637f * (float)player.direction;
 			}
-			outwardDirection = player.itemRotation.ToRotationVector2().RotatedBy((double)(3.926991f + num), default(Vector2));
+			outwardDirection = player.itemRotation.ToRotationVector2().RotatedBy((double)(3.926991f + num), default);
 			location = player.RotatedRelativePoint(player.itemLocation + outwardDirection * scaleFactor * normalizedPointOnPath * itemScale, false, true);
 		}
+    }
+    public static class TrailingModeID
+    {
+        public static class NPC
+        {
+            public const int PosEveryThreeFrames = 0;
+            public const int PosEveryFrame = 1;
+            public const int PosRotEveryFrame = 3;
+        }
     }
 }

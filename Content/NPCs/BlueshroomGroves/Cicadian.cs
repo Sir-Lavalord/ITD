@@ -44,7 +44,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
             NPCID.Sets.TrailCacheLength[Type] = 5;
             NPCID.Sets.TrailingMode[Type] = 0;
             Main.npcFrameCount[Type] = 7;
-            BestiaryEntry = Language.GetOrRegister(Mod.GetLocalizationKey($"NPCs.{nameof(Cicadian)}.Bestiary"));
+            BestiaryEntry = this.GetLocalization("Bestiary");
         }
         public override void SetDefaults()
         {
@@ -128,7 +128,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
 
             float velocityX = speed * (float)Math.Cos(angle) * toPlayerDirection;
             float velocityY = speed * (float)Math.Sin(angle);
-            Vector2 velocity = new Vector2(velocityX, -velocityY);
+            Vector2 velocity = new(velocityX, -velocityY);
             if (velocity.HasNaNs())
                 velocity = (toPlayerNormalized * speed) + new Vector2(0f, -5f);
 

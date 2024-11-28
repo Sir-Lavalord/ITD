@@ -1,15 +1,9 @@
 ﻿using ITD.Content.Rarities;
-using ITD.Content.UI;
 using ITD.Systems;
-using ITD.Utilities;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using Terraria.Utilities;
-using ReLogic.Utilities;
 using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 

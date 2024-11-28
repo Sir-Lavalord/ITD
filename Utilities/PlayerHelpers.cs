@@ -12,8 +12,6 @@ namespace ITD.Utilities
         public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.myPlayer;
         public static bool Exists(this Player player) => player != null && player.active && !player.dead;
         public static Vector2 LookDirection(this Player player) => (player.GetITDPlayer().MousePosition - player.Center).SafeNormalize(Vector2.Zero);
-
-
         public static void CleanHoldStyle(Player player, float desiredRotation, Vector2 desiredPosition, Vector2 spriteSize, Vector2? rotationOriginFromCenter = null, bool noSandstorm = false, bool flipAngle = false, bool stepDisplace = true)
         {
             if (rotationOriginFromCenter == null)

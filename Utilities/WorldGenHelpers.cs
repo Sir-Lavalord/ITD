@@ -2,8 +2,10 @@
 using ITD.Content.Tiles.Unused;
 using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
+using Steamworks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.Utilities;
@@ -40,6 +42,16 @@ namespace ITD.Utilities
                 }
             }
         }
+        public static IEnumerable<Point> Points(this Rectangle rect)
+        {
+            for (int i = rect.Left; i <= rect.Right; i++)
+            {
+                for (int j = rect.Top; j <= rect.Bottom; j++)
+                {
+                    yield return new Point(i, j);
+                }
+            }
+        }
         public static Point RandomPoint(this Rectangle rect, UnifiedRandom rand)
         {
             return new(rect.X + rand.Next(rect.Width + 1), rect.Y + rand.Next(rect.Height + 1));
@@ -72,12 +84,6 @@ namespace ITD.Utilities
             {
                 // todo: fix issue where the direction doesn't line up with the actual direction (end - origin).
                 // this is likely because of my usage of points. accuracy will decrease with each iteration of the for loop.
-                /*
-                Framing.GetTileSafely(origin).HasTile = true;
-                Framing.GetTileSafely(origin).TileType = (ushort)ModContent.TileType<Debugger>();
-                Framing.GetTileSafely(end).HasTile = true;
-                Framing.GetTileSafely(end).TileType = (ushort)ModContent.TileType<Debugger>();
-                */
                 // default callback: dig tunnel
                 callback ??= p =>
                 {
@@ -176,6 +182,10 @@ namespace ITD.Utilities
                     if (Contains(p))
                         callback(p);
                 });
+            }
+            public virtual IEnumerable<Point> Points()
+            {
+                return Container.Points().Where(Contains);
             }
             public virtual Point RandomPoint(UnifiedRandom rand)
             {

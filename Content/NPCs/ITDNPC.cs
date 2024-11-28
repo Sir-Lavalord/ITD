@@ -1,17 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using ITD.Utilities;
+using Terraria.Localization;
 
 namespace ITD.Content.NPCs
 {
     public abstract class ITDNPC : ModNPC
     {
+        public static LocalizedText BestiaryEntry { get; set; }
         public Rectangle HitboxTiles { get { return new Rectangle((int)(NPC.position.X / 16), (int)(NPC.position.Y / 16), NPC.width / 16, NPC.height / 16); } }
+        public Rectangle BigHitboxTiles
+        {
+            get
+            {
+                // an int cast floors stuff automatically, so no math.floor needed here.
+                int x = (int)(NPC.position.X / 16);
+                int y = (int)(NPC.position.Y / 16);
+                // here's the difference between this and HitboxTiles. since we use ceil here, the resulting hitbox will be larger
+                int width = (int)Math.Ceiling(NPC.width / 16f);
+                int height = (int)Math.Ceiling(NPC.height / 16f);
+
+                return new(x, y, width, height);
+            }
+        }
+        public bool InvalidTarget { get { return NPC.target < 0 || NPC.target == 255 || !Main.player[NPC.target].Exists(); } }
         /// <summary>
         /// Allows you to do stuff when this NPC is right clicked.
         /// </summary>
@@ -20,19 +34,42 @@ namespace ITD.Content.NPCs
         {
 
         }
-        public void CommonFrameLoop(int frameHeight, int maxFrame, float max = 5f, float increment = 1f)
+        /// <summary>
+        /// Use this for loops. Big flexibility
+        /// </summary>
+        /// <param name="frameHeight"></param>
+        /// <param name="minFrame"></param>
+        /// <param name="maxFrame">If left null, this will default to <see cref="Main.npcFrameCount"/> indexed with type, minus one</param>
+        /// <param name="maxCounter"></param>
+        /// <param name="counterIncrement"></param>
+        public void CommonFrameLoop(int frameHeight, int minFrame = 0, int? maxFrame = null, float maxCounter = 5f, float counterIncrement = 1f)
         {
-            NPC.frameCounter += increment;
-            if (NPC.frameCounter > max)
+            // get the real max frame value
+            int realMaxFrame = maxFrame ?? Main.npcFrameCount[Type] - 1;
+            // clamp to min
+            if (NPC.frame.Y < minFrame * realMaxFrame)
+                NPC.frame.Y = minFrame * realMaxFrame;
+            // increase counter by the increment
+            NPC.frameCounter += counterIncrement;
+            // change frames
+            if (NPC.frameCounter > maxCounter)
             {
                 NPC.frameCounter = 0;
                 NPC.frame.Y += frameHeight;
 
-                if (NPC.frame.Y > frameHeight * maxFrame)
+                if (NPC.frame.Y > frameHeight * realMaxFrame)
                 {
-                    NPC.frame.Y = frameHeight;
+                    NPC.frame.Y = frameHeight * minFrame;
                 }
             }
+        }
+        public void HideFromBestiary()
+        {
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new()
+            {
+                Hide = true
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value);
         }
         public void StepUp()
         {
