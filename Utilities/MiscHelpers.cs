@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria;
 using ITD.Content.NPCs;
 using ReLogic.Utilities;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ITD.Utilities
 {

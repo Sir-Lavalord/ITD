@@ -121,9 +121,7 @@ namespace ITD.Utilities
 				if (Main.netMode == NetmodeID.Server)
 					NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, n);
 			}
-
 			return n;
 		}
-
 	}
 }

@@ -13,8 +13,7 @@ namespace ITD.Content.Projectiles.Hostile
 	public class IncendipedeBreath : ModProjectile
 	{		
 		public override void SetDefaults() {
-			Projectile.width = 6;
-			Projectile.height = 6;
+			Projectile.width = Projectile.height = 6;
 			Projectile.hostile = true;
 			Projectile.penetrate = -1;
 			Projectile.tileCollide = true;

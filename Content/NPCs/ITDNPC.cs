@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ModLoader;
 using ITD.Utilities;
 using Terraria.Localization;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ITD.Content.NPCs
 {
@@ -18,7 +19,7 @@ namespace ITD.Content.NPCs
                 // an int cast floors stuff automatically, so no math.floor needed here.
                 int x = (int)(NPC.position.X / 16);
                 int y = (int)(NPC.position.Y / 16);
-                // here's the difference between this and HitboxTiles. since we use ceil here, the resulting hitbox will be larger
+                // here's the difference between this and HitboxTiles. since we use ceil here, the resulting hitbox will be larger in specific cases
                 int width = (int)Math.Ceiling(NPC.width / 16f);
                 int height = (int)Math.Ceiling(NPC.height / 16f);
 
@@ -26,6 +27,7 @@ namespace ITD.Content.NPCs
             }
         }
         public bool InvalidTarget { get { return NPC.target < 0 || NPC.target == 255 || !Main.player[NPC.target].Exists(); } }
+        public SpriteEffects CommonSpriteDirection { get { return NPC.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally; } }
         /// <summary>
         /// Allows you to do stuff when this NPC is right clicked.
         /// </summary>

@@ -1,7 +1,11 @@
-﻿using ITD.Utilities;
+﻿using ITD.Content.Projectiles.Hostile;
+using ITD.Utilities;
+using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 using System.Linq;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,6 +17,8 @@ namespace ITD.Content.NPCs.DeepDesert
         public NPC FollowerNPC => Main.npc[(int)NPC.ai[0]];
         public ref float SineTimer => ref NPC.ai[1];
         public int WormLength { get { return (int)NPC.ai[2]; } set { NPC.ai[2] = value; } }
+        public ref float AITimer => ref NPC.ai[3];
+        public bool Wall;
         public const int SpacingBetween = 8;
         public override void FindFrame(int frameHeight) => CommonFrameLoop(frameHeight);
         public override void SetStaticDefaults()
@@ -112,6 +118,14 @@ namespace ITD.Content.NPCs.DeepDesert
                 }
             }
         }
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(Wall);
+        }
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            Wall = reader.ReadBoolean();
+        }
         public override void AI()
         {
             //Main.NewText($"WormLength: {WormLength}");
@@ -122,18 +136,20 @@ namespace ITD.Content.NPCs.DeepDesert
                 SpawnSegments(WormLength);
             }
             // this bool returns whether or not the hitbox contains any tiles with a wall, in which case keep moving on the wall
-            bool wall = BigHitboxTiles.Points().Any(p => Framing.GetTileSafely(p).WallType != WallID.None);
+            Wall = BigHitboxTiles.Points().Any(p => Framing.GetTileSafely(p).WallType != WallID.None);
             if (InvalidTarget)
                 NPC.TargetClosest();
-            if (wall)
+            if (Wall)
                 WallMovement();
             else
                 GroundMovement();
+            Attacks(Main.player[NPC.target]);
         }
         public void WallMovement()
         {
+            Player plr = Main.player[NPC.target];
             // sine...
-            Vector2 toPlayer = Main.player[NPC.target].Center - NPC.Center;
+            Vector2 toPlayer = plr.Center - NPC.Center;
             Vector2 toPlayerNorm = toPlayer.SafeNormalize(Vector2.Zero);
 
             // actual movement speed
@@ -158,6 +174,53 @@ namespace ITD.Content.NPCs.DeepDesert
         {
             // fall down
             NPC.velocity.Y += 0.1f;
+            // move towards player
+            Player plr = Main.player[NPC.target];
+
+            int playerDirectionX = NPC.Center.X < plr.Center.X ? 1 : -1;
+            float xSpeed = 3f;
+
+            NPC.direction = NPC.spriteDirection = playerDirectionX;
+            NPC.velocity.X = Math.Clamp(NPC.velocity.X + playerDirectionX, -xSpeed, xSpeed);
+            NPC.rotation = 0f;
+
+            StepUp();
+        }
+        public void Attacks(Player plr)
+        {
+            if (Collision.CanHitLine(NPC.Center, 1, 1, plr.Center, 1, 1))
+            {
+                AITimer++;
+            }
+            else
+            {
+                AITimer = 0;
+            }
+            if (AITimer > 120)
+            {
+                if (AITimer % 4 == 0)
+                {
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Vector2 direction = NPC.velocity.SafeNormalize(Vector2.UnitX);
+                        direction = direction.RotatedByRandom(MathHelper.ToRadians(10));
+                        int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, direction * 8, ModContent.ProjectileType<IncendipedeBreath>(), 20, 0);
+                        NPC.netUpdate = true;
+                    }
+                }
+                if (AITimer > 160)
+                    AITimer = 0;
+            }
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Texture2D tex = TextureAssets.Npc[Type].Value;
+            int frameX = Wall ? 0 : tex.Width / 2;
+            Rectangle frame = new(frameX, NPC.frame.Y, tex.Width / 2, NPC.frame.Height);
+            Vector2 origin = new(tex.Width / 4, tex.Height / Main.npcFrameCount[Type] / 2);
+            Vector2 offset = new(!Wall ? -8f * NPC.spriteDirection : 0f, NPC.gfxOffY);
+            Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, frame, drawColor, NPC.rotation, origin, NPC.scale, CommonSpriteDirection);
+            return false;
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
@@ -175,10 +238,12 @@ namespace ITD.Content.NPCs.DeepDesert
         public NPC HeadNPC => NPC.realLife > -1 ? Main.npc[NPC.realLife] : null;
         public int ID => (int)NPC.ai[2];
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
-        public override void FindFrame(int frameHeight) => CommonFrameLoop(frameHeight, maxCounter: 3f);
+        public override void FindFrame(int frameHeight) => CommonFrameLoop(frameHeight, maxCounter: 2f);
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 8;
+            NPCID.Sets.TrailCacheLength[Type] = 2;
+            NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPC.PosEveryFrame;
             HideFromBestiary();
         }
         public override void SetDefaults()
@@ -195,8 +260,26 @@ namespace ITD.Content.NPCs.DeepDesert
             NPC.noGravity = true;
             NPC.friendly = false;
         }
+        public override void HitEffect(NPC.HitInfo hit)
+        {
+            if (NPC.life > 0)
+            {
+                NPC.ai[3] = Main.rand.Next(1, 3);
+                return;
+            }
+        }
         public override void AI()
         {
+            if (NPC.ai[3] > 0)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    float speed = 4f;
+                    Vector2 perp = (NPC.position - NPC.oldPos[1]).RotatedBy((NPC.ai[3] == 1 ? Math.PI : -Math.PI) / 2d).SafeNormalize(Vector2.Zero) * speed;
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, perp, ModContent.ProjectileType<IncendipedeFireSpike>(), 20, 0f);
+                }
+                NPC.ai[3] = 0;
+            }
             if (HeadNPC.Exists() && HeadNPC.type == ModContent.NPCType<IncendipedeHead>())
             {
                 int wormLength = (int)HeadNPC.ai[2];
@@ -216,8 +299,21 @@ namespace ITD.Content.NPCs.DeepDesert
                 {
                     NPC.HitEffect();
                     NPC.active = false;
+                    NPC.netUpdate = true;
                 }
             }
+            NPC.spriteDirection = (NPC.position - NPC.oldPos[1]).X > 0 ? 1 : -1;
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Texture2D tex = TextureAssets.Npc[Type].Value;
+            bool Wall = Framing.GetTileSafely(NPC.Center.ToTileCoordinates()).WallType != WallID.None;
+            int frameX = Wall ? 0 : tex.Width / 2;
+            Rectangle frame = new(frameX, NPC.frame.Y, tex.Width / 2, NPC.frame.Height);
+            Vector2 origin = new(tex.Width / 4, tex.Height / Main.npcFrameCount[Type] / 2);
+            Vector2 offset = new(0, NPC.gfxOffY);
+            Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, frame, drawColor, NPC.rotation, origin, NPC.scale, CommonSpriteDirection);
+            return false;
         }
     }
     public class IncendipedeTail : ITDNPC
@@ -230,6 +326,8 @@ namespace ITD.Content.NPCs.DeepDesert
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 3;
+            NPCID.Sets.TrailCacheLength[Type] = 2;
+            NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPC.PosEveryFrame;
             HideFromBestiary();
         }
         public override void SetDefaults()
@@ -246,8 +344,29 @@ namespace ITD.Content.NPCs.DeepDesert
             NPC.noGravity = true;
             NPC.friendly = false;
         }
+        public override void HitEffect(NPC.HitInfo hit)
+        {
+            if (NPC.life > 0)
+            {
+                NPC.ai[3] = 1;
+                return;
+            }
+        }
         public override void AI()
         {
+            if (NPC.ai[3] > 0)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    float speed = 4f;
+                    Vector2 perp = (NPC.position - NPC.oldPos[1]).RotatedBy(Math.PI / 2d).SafeNormalize(Vector2.Zero) * speed;
+                    Vector2 behind = (NPC.oldPos[1] - NPC.position).SafeNormalize(Vector2.Zero) * speed;
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, perp, ModContent.ProjectileType<IncendipedeFireSpike>(), 20, 0f);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, perp.RotatedBy(Math.PI), ModContent.ProjectileType<IncendipedeFireSpike>(), 20, 0f);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, behind, ModContent.ProjectileType<IncendipedeFireSpike>(), 20, 0f);
+                }
+                NPC.ai[3] = 0;
+            }
             if (HeadNPC.Exists() && HeadNPC.type == ModContent.NPCType<IncendipedeHead>())
             {
                 //Main.NewText("can i see a picture of this being worm");
@@ -268,9 +387,22 @@ namespace ITD.Content.NPCs.DeepDesert
                 {
                     NPC.HitEffect();
                     NPC.active = false;
+                    NPC.netUpdate = true;
                 }
             }
+            NPC.spriteDirection = (NPC.position - NPC.oldPos[1]).X > 0 ? 1 : -1;
             //Main.NewText("tea is leaf :)");
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Texture2D tex = TextureAssets.Npc[Type].Value;
+            bool Wall = Framing.GetTileSafely(NPC.Center.ToTileCoordinates()).WallType != WallID.None;
+            int frameX = Wall ? 0 : tex.Width / 2;
+            Rectangle frame = new(frameX, NPC.frame.Y, tex.Width / 2, NPC.frame.Height);
+            Vector2 origin = new(tex.Width / 4, tex.Height / Main.npcFrameCount[Type] / 2);
+            Vector2 offset = new(0, NPC.gfxOffY);
+            Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, frame, drawColor, NPC.rotation, origin, NPC.scale, CommonSpriteDirection);
+            return false;
         }
     }
 }

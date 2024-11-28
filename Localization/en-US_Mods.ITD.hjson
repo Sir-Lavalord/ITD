@@ -1325,6 +1325,7 @@ Projectiles: {
 	QuartzBlast.DisplayName: Quartz Blast
 	Shroomflake.DisplayName: Shroomflake
 	Sporeflake.DisplayName: Sporeflake
+	IncendipedeFireSpike.DisplayName: Incendipede Fire Spike
 }
 
 NPCs: {
