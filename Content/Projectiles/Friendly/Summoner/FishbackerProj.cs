@@ -26,11 +26,18 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
         public override void SetDefaults()
         {
-            Projectile.DefaultToWhip();
             Projectile.width = 28;
-            Projectile.WhipSettings.RangeMultiplier = 1f;
+            Projectile.height = 18;
+            Projectile.friendly = true;
+            Projectile.penetrate = -1;
+            Projectile.tileCollide = false;
+            Projectile.ownerHitCheck = true; // This prevents the projectile from hitting through solid tiles.
+            Projectile.extraUpdates = 1;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
             Projectile.WhipSettings.Segments = 12;
-            Projectile.light = 0.5f;
+            Projectile.WhipSettings.RangeMultiplier = 0.72f;
+            //
         }
         public override void OnSpawn(IEntitySource source)
         {
