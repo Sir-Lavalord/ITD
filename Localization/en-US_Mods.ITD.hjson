@@ -1155,7 +1155,7 @@ Items: {
 	}
 
 	Bee17: {
-		DisplayName: Bee17
+		DisplayName: Bee-17
 		Tooltip:
 			'''
 			Replaces current minion with Grumble Bees

@@ -189,8 +189,8 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                                     }
                                     SoundEngine.PlaySound(SoundID.NPCHit42, Projectile.Center);
                                     Projectile.velocity = other.velocity / 1.5f;
-                                    CombatText.NewText(Projectile.Hitbox, Color.Orange, "BLOCKED", true);
-                                    other.owner = Main.myPlayer;
+/*                                    CombatText.NewText(Projectile.Hitbox, Color.Orange, "BLOCKED", true);
+*/                                    other.owner = Main.myPlayer;
                                     other.Kill();
                                     other.friendly = true;
                                     other.hostile = false;
