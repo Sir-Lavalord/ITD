@@ -17,7 +17,7 @@ namespace ITD.Content.Items.Favors.Prehardmode
     public class Bee17 : Favor
     {
         public override string Texture => Placeholder.PHAxe;
-        public override int FavorFatigueTime => 20;
+        public override int FavorFatigueTime => 60;
         public override bool IsCursedFavor => true;
         public override void SetStaticDefaults()
         {
@@ -27,7 +27,6 @@ namespace ITD.Content.Items.Favors.Prehardmode
             Item.width = Item.height = 32;
             Item.master = true;
         }
-        int MinionCount = 0;
         public override bool UseFavor(Player player)
         {
             for (int i = 0; i < Main.maxProjectiles; i++)
@@ -37,10 +36,13 @@ namespace ITD.Content.Items.Favors.Prehardmode
                 {
                     for (int f = 0; f < player.slotsMinions; f++)
                     {
-                        Projectile bee = Projectile.NewProjectileDirect(player.GetSource_FromThis(), p.Center, Vector2.Zero,
-                            ModContent.ProjectileType<GrumbleBee>(), 20, p.knockBack, player.whoAmI);
-                        bee.minionSlots = p.minionSlots;
-                        p.Kill();
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            Projectile bee = Projectile.NewProjectileDirect(player.GetSource_FromThis(), p.Center, Vector2.Zero,
+                            ModContent.ProjectileType<GrumbleBee>(), p.damage, p.knockBack, player.whoAmI);
+                            bee.minionSlots = p.minionSlots;
+                            p.Kill();
+                        }
                     }
                 }
             }
@@ -48,10 +50,6 @@ namespace ITD.Content.Items.Favors.Prehardmode
         }
         public override void UpdateFavor(Player player, bool hideVisual)
         {
-            if (!FavorPlayer.UseFavorKey.Current)
-            {
-                MinionCount = 0;
-            }
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
