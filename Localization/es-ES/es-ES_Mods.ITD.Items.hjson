@@ -1,0 +1,1166 @@
+ElectrumBar: {
+	DisplayName: Lingote de electro
+	Tooltip: ""
+}
+
+RhodiumBar: {
+	DisplayName: Lingote de rodio
+	Tooltip: ""
+}
+
+AlloySword: {
+	DisplayName: Espada de aleación
+	Tooltip: ""
+}
+
+ElectrumBow: {
+	DisplayName: Arco de electro
+	Tooltip: Electrifica las flechas de madera
+}
+
+RhodiumBroadsword: {
+	DisplayName: Espada de rodio
+	Tooltip: Dispara un rayo eléctrico
+}
+
+ElectrumSpear: {
+	Tooltip: ""
+	DisplayName: Lanza de electro
+}
+
+Blueshroom: {
+	DisplayName: Champizúl
+	Tooltip: ""
+}
+
+DashingFeather: {
+	DisplayName: Pluma airosa
+	Tooltip: Toca cualquier dirección 2 veces en el suelo para comenzar un dash que puedes controlar por un corto tiempo
+}
+
+DespoticSnaptrap: {
+	DisplayName: Fauces del Abísmo
+	Tooltip: "[c/{0}:Efecto de Enganche:] Invoca mandíbulas que se almuerzan a los enemigos"
+}
+
+EmberSlasher: {
+	DisplayName: Tajadora de llamarada
+	Tooltip: Crea una explosión de fuego
+}
+
+Snaptrap: {
+	DisplayName: Enganchadora
+	Tooltip:
+		'''
+		"Oye 'bert! Le monté una trampa de osos a esta cadena! Yijaaa!"
+		[c/{0}:Efecto de Enganche:] Aumenta el porcentaje de ataque crítico por un 4%
+		'''
+}
+
+SpacePrawn: {
+	DisplayName: Camarón espacial
+	Tooltip: Invoca a la Medusa Cósmica durante la noche
+}
+
+VocalZero: {
+	DisplayName: Vocal Zero
+	Tooltip: "[c/{0}:Efecto de Enganche:] Aumenta el daño por 10% cada segundo, máximo hasta el 100%"
+}
+
+WormholeRipper: {
+	DisplayName: Desgarradora del Espaciotiempo
+	Tooltip:
+		'''
+		"A velocidad luz!"
+		Ataca a enemigos para cargar la espada.
+		Una vez cargada, haz clic derecho para embestir, dejando atrás un agujero de gusano
+		'''
+}
+
+CosmicJellyfishTrophy: {
+	Tooltip: ""
+	DisplayName: Trofeo de Medusa Cósmica
+}
+
+CosmicJellyfishBag: {
+	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+	DisplayName: Bolsa del tesoro (Medusa Cósmica)
+}
+
+CosmicJam: {
+	Tooltip: Invoca una Medusilla mascota
+	DisplayName: Mermelada Cósmica
+}
+
+ChainWeight: {
+	Tooltip: Le añade peso a las cadenas de las Enganchadoras, aumentando su daño por un 10%
+	DisplayName: Pesa para cadena
+}
+
+Sniptrap: {
+	Tooltip: Solo para cortar PAPEL, no cartulina!
+	DisplayName: Enganchadorcilla
+}
+
+MrSnapkins: {
+	DisplayName: Sr. Snapkins
+	Tooltip:
+		'''
+		"Mi queridísimo Snapkins..."
+		[c/{0}:Efecto de Enganche:] Periódicamente lanza corbatas en ocho direcciones
+		'''
+}
+
+TheScorpion: {
+	DisplayName: El Jalacrán
+	Tooltip:
+		'''
+		"GET OVER HERE!"
+		[c/{0}:Efecto de Enganche:] Jala al enemigo enganchado hacia tí
+		'''
+}
+
+CosmicJellyfishRelic: {
+	Tooltip: ""
+	DisplayName: Reliquia de Medusa Cósmica
+}
+
+Subfrost: {
+	Tooltip: Podría congelarte
+	DisplayName: Subescarcha
+}
+
+CyaniteOre: {
+	DisplayName: Mineral de cianita
+	Tooltip: ""
+}
+
+Soulsnapper: {
+	DisplayName: Enganchaalmas
+	Tooltip: "[c/{0}:Efecto de Enganche:] Continuamente lanza escupitajos de corrupción"
+}
+
+Spidermeal: {
+	Tooltip:
+		'''
+		Ideal para causar genocidio en los pueblos
+		"Todo cambió cuando me mordió una araña radioactiva..."
+		'''
+	DisplayName: Comida de araña
+}
+
+Crimeratrap: {
+	DisplayName: Carmengancho
+	Tooltip: "[c/{0}:Efecto de Enganche:] Continuamente lanza escupitajos de carmesí"
+}
+
+Diorite: {
+	Tooltip: ""
+	DisplayName: Diorita
+}
+
+Pegmatite: {
+	DisplayName: Pegmatita
+	Tooltip: ""
+}
+
+EmberlionSclerite: {
+	DisplayName: Esclerito de brasaleón
+	Tooltip: ""
+}
+
+FirestormInABottle: {
+	DisplayName: Tormenta de fuego embotellada
+	Tooltip:
+		'''
+		Su portador puede realizar saltos dobles
+		Al usar el doble salto, una tormenta de fuego aparece debajo del jugador,
+		haciendo 50 puntos de daño cada segundo por 3 segundos, también causando el efecto '¡En llamas!'
+		'''
+}
+
+TwisterInABottle: {
+	DisplayName: Tornado embotellado
+	Tooltip:
+		'''
+		Su portador puede realizar saltos dobles mejorados y cambiar dirección rapidamente en el aire
+		Al usar el doble salto, el viento comenzará a circular debajo del jugador
+		haciendo 70 puntos de daño cada segundo por 2 segundos
+		'''
+}
+
+StormInABottle: {
+	DisplayName: Tormenta embotellada
+	Tooltip:
+		'''
+		Su portador puede realizar saltos dobles
+		Al usar el doble salto, una tormenta fuerte aparece debajo del jugador,
+		provocando descargas eléctricas que hacen 300 puntos de daño a los enemigos
+		'''
+}
+
+DisasterInABottle: {
+	DisplayName: Desastre embotellado
+	Tooltip:
+		'''
+		Su portador puede realizar saltos triples
+		Primer salto: Invoca una tormenta de fuego y viento circular debajo del jugador
+		Segundo salto: Invoca una tormenta fuerte que provoca descargas eléctricas, haciendo daño eléctrico
+		'''
+}
+
+Shale: {
+	DisplayName: Esquistón
+	Tooltip: ""
+}
+
+Depthrock: {
+	Tooltip: ""
+	DisplayName: Profonrroca
+}
+
+Skullmet: {
+	DisplayName: Calavet
+	Tooltip: Ciertos esqueletos no pueden herirte
+}
+
+AlloyHelmet: {
+	SetBonus: Aumenta el daño cuerpo-a-cuerpo por un 10%
+	DisplayName: Yelmo de aleación
+	Tooltip: ""
+}
+
+AlloyChestplate: {
+	DisplayName: Cota de malla de aleación
+	Tooltip: ""
+}
+
+AlloyLeggings: {
+	DisplayName: Grebas de aleación
+	Tooltip: ""
+}
+
+SwimshieldWipers: {
+	DisplayName: Limpiaparabrisas
+	Tooltip: Inmunidad a varios debuffs de visión
+}
+
+ThunderStaff: {
+	DisplayName: Bastón del Trueno
+	Tooltip: ""
+}
+
+VenusSnaptrap: {
+	DisplayName: Venus Enganchamoscas
+	Tooltip:
+		'''
+		"Reina del pantano"; La planta más bella de Darwin
+		[c/{0}:Efecto de Enganche:] Envenena al enemigo enganchado
+		'''
+}
+
+BlueshroomCapBlock: {
+	DisplayName: Bloque de sombrero de Champizúl
+	Tooltip: ""
+}
+
+BlueshroomCap: {
+	// SetBonus: Immunity to slowing debuffs
+	// DisplayName: Blueshroom Cap
+	/* Tooltip:
+		'''
+		7% increased summon damage
+		Increases your max number of minions by 1
+		''' */
+}
+
+SnowyLantern: {
+	DisplayName: Linterna de nieve
+	Tooltip: Invoca un Montonieve que carga una linterna
+}
+
+DriversIncense: {
+	DisplayName: Incienso de conducir
+	Tooltip: Permanentemente aumenta la velocidad de las monturas por un 10%
+	MunchiesExplanation: Transforma en Fulgor una llave de otro mundo
+}
+
+BlueCatacombBrick: {
+	DisplayName: Ladrillo de catacumba azul
+	Tooltip: ""
+}
+
+GreenCatacombBrick: {
+	DisplayName: Ladrillo de catacumba verde
+	Tooltip: ""
+}
+
+PinkCatacombBrick: {
+	DisplayName: Ladrillo de catacumba rosa
+	Tooltip: ""
+}
+
+BlueCatacombBrickWall: {
+	DisplayName: Pared de ladrillo de catacumba azul
+	Tooltip: ""
+}
+
+BlueCatacombChair: {
+	DisplayName: Silla de catacumba azul
+	Tooltip: ""
+}
+
+BlueshroomStem: {
+	DisplayName: Estipe de Champizúl
+	Tooltip: ""
+}
+
+Cryptite: {
+	DisplayName: Criptita
+	Tooltip: ""
+}
+
+GreenCatacombBrickWall: {
+	DisplayName: Pared de ladrillo de catacumba verde
+	Tooltip: ""
+}
+
+GreenCatacombChair: {
+	DisplayName: Silla de catacumba verde
+	Tooltip: ""
+}
+
+MonsoonCryptite: {
+	DisplayName: Criptita de monzón
+	Tooltip: ""
+}
+
+MossyGreenCatacombBrick: {
+	DisplayName: Ladrillo de catacumba verde musgoso
+	Tooltip: ""
+}
+
+PinkCatacombBrickWall: {
+	DisplayName: Pared de ladrillo de catacumba rosa
+	Tooltip: ""
+}
+
+PinkCatacombChair: {
+	DisplayName: Silla de catacumba rosa
+	Tooltip: ""
+}
+
+WornBlueCatacombBrick: {
+	DisplayName: Ladrillo de catacumba azul deteriorado
+	Tooltip: ""
+}
+
+BlueCatacombTable: {
+	DisplayName: Mesa de catacumba azul
+	Tooltip: ""
+}
+
+GreenCatacombTable: {
+	DisplayName: Mesa de catacumba verde
+	Tooltip: ""
+}
+
+PinkCatacombTable: {
+	DisplayName: Mesa de catacumba rosa
+	Tooltip: ""
+}
+
+BlueCatacombLamp: {
+	DisplayName: Lámpara de catacumba azul
+	Tooltip: ""
+}
+
+GreenCatacombLamp: {
+	DisplayName: Lámpara de catacumba verde
+	Tooltip: ""
+}
+
+PinkCatacombLamp: {
+	DisplayName: Lámpara de catacumba rosa
+	Tooltip: ""
+}
+
+DreadShell: {
+	DisplayName: Caparazón horrible
+	Tooltip:
+		'''
+		Una probabilidad del 10% de bloquear un ataque
+		Crea una explosión de tinta roja que confunde a los enemigos al bloquear
+		'''
+}
+
+StarlitOre: {
+	DisplayName: Mineral de estralumbre
+	Tooltip: ""
+}
+
+StarlitBar: {
+	DisplayName: Lingote de estralumbre
+	Tooltip: ""
+}
+
+Electroshroom: {
+	DisplayName: Champiléctrico
+	Tooltip: ""
+}
+
+RefinedCyanite: {
+	DisplayName: Cianita refinada
+	Tooltip: ""
+}
+
+BadassSunglasses: {
+	DisplayName: Lentes de sol Bad@$$
+	Tooltip:
+		'''
+		Rapidamente incrementa la probabilidad de ataque crítico
+		Al realizar un golpe no-letal, este bonus se reinicia
+		'''
+
+	KillMessages: {
+		0: ¡Bien!
+		1: ¡Cool!
+		2: ¡Radical!
+	}
+}
+
+BlueCatacombDoor: {
+	DisplayName: Puerta de catacumba azul
+	Tooltip: ""
+}
+
+GreenCatacombDoor: {
+	DisplayName: Puerta de catacumba verde
+	Tooltip: ""
+}
+
+PinkCatacombDoor: {
+	DisplayName: Puerta de catacumba rosa
+	Tooltip: ""
+}
+
+Ectoblade: {
+	DisplayName: Ectoespada
+	Tooltip: ""
+}
+
+Houndboom: {
+	DisplayName: Explocazadora
+	Tooltip: ""
+}
+
+ImpulseShackles: {
+	DisplayName: Esposas de impulso
+	Tooltip: Apodera tu primer salto
+}
+
+Dunebarrel: {
+	DisplayName: Cañones de dunas
+	Tooltip: ""
+}
+
+Quasar: {
+	DisplayName: Cuásar
+	Tooltip: ""
+}
+
+StarlightStaff: {
+	DisplayName: Bastón de Luz Astral
+	Tooltip: ""
+}
+
+BluegrassSeeds: {
+	DisplayName: Semillas de césped azul
+	Tooltip: ""
+}
+
+CosmicJellyfishMask: {
+	DisplayName: Máscara de Medusa Cósmica
+	Tooltip: ""
+}
+
+WindCape: {
+	DisplayName: Capa Ventiscípula
+	Tooltip:
+		'''
+		Velocidad de movimiento aumentada por un 10%
+		El viento te sigue
+		'''
+}
+
+SandberusBag: {
+	DisplayName: Bolsa del tesoro (Desierbero)
+	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+}
+
+RazedWine: {
+	DisplayName: Vino arrasado
+	Tooltip:
+		'''
+		Daño aumentado por un 10%
+		Automaticamente lanza botellas de vidrio a los enemigos cercanos
+		Los enemigos afectados tienen un daño aumentado, defensa reducida, y toman daño con el tiempo
+		'''
+}
+
+GravityBoots: {
+	DisplayName: Danzantes de Gravedad Zero
+	Tooltip:
+		'''
+		Mantén presionado el salto para reducir la gravedad
+		Movilidad aérea aumentada
+		'¡Paséate por la calle cósmica!'
+		'''
+}
+
+Necromatome: {
+	DisplayName: Necromatomo
+	Tooltip: Expulsa nubes de miasma
+}
+
+Fishbacker: {
+	DisplayName: Fishbacker
+	Tooltip:
+		'''
+		Los súbditos hacen 8 de daño adicional a los enemigos marcados
+		Puede reflejar proyectiles
+		Los proyectiles reflejados marcan a los enemigos al golpearlos
+		'''
+}
+
+CrimsonAntidote: {
+	DisplayName: Antídoto carmesí
+	Tooltip:
+		'''
+		Los objetos de curación son más efectivos por un 20%
+		Al usar un objeto de curación, aumenta la regeneración masivamente por 4 segundos
+		Reduce el efecto de la Enfermedad de poción por un 15%
+		'''
+}
+
+CorruptAntidote: {
+	DisplayName: Antídoto corrupto
+	Tooltip:
+		'''
+		Los objetos de maná dan 20% más maná
+		Al usar un objeto de maná, el uso de maná se reduce por un 25% y el daño mágico se aumenta por un 25% por 4 segundos 
+		Reduce el efecto de la Locura de maná por un 15%
+		'''
+}
+
+JumpingBean: {
+	DisplayName: Frijol saltarín
+	Tooltip:
+		'''
+		Velocidad de movimiento aumentada por un 8%
+		Aumenta la altura de salto
+		'''
+}
+
+CupOJoe: {
+	DisplayName: Taza de café
+	Tooltip: Otorga inmunidad a los efectos negativos relacionados con el hielo que no hacen daño
+}
+
+RooksBrew: {
+	DisplayName: Rooks Brew
+	Tooltip:
+		'''
+		Otorga inmunidad a los efectos negativos relacionados con el hielo que no hacen daño
+		Velocidad de movimiento aumentada por un 8%
+		Aumenta la altura de salto
+		Toca cualquier dirección 2 veces en el suelo para comenzar un dash que puedes controlar por un corto tiempo
+		'''
+}
+
+CyaniteBoomerang: {
+	DisplayName: Bumerán de cianita
+	Tooltip: ""
+}
+
+CyaniteSpear: {
+	DisplayName: Lanza de cianita
+	Tooltip: ""
+}
+
+GalacticJellyBean: {
+	DisplayName: Gomita galáctica
+	Tooltip: ""
+}
+
+EatersTail: {
+	// DisplayName: Tail of the Eater
+	/* Tooltip:
+		'''
+		Splits your life into two
+		Fatal damage does not carry onto next life
+		This can only happen every 1 minute
+		Cooldown only reduces when you have max life
+		''' */
+	// TailLost: TAIL LOSS
+}
+
+Prophylaxis: {
+	DisplayName: Prophylaxis
+	Tooltip:
+		'''
+		Using a healing item causes you to bleed out
+		Losing life gained and reducing damage taken
+		'''
+}
+
+BottomlessSandBucket: {
+	DisplayName: Cubo de arena sin fondo
+	Tooltip:
+		'''
+		Contiene una cantidad ilimitada de arena
+		Puede ser vertida
+		'''
+}
+
+SlimeSecretionGland: {
+	// DisplayName: Slime Secretion Gland
+	/* Tooltip:
+		'''
+		Creates a slimy coating which absorbs 25% of all incoming damage
+		Coating massively increases your hitbox size
+		''' */
+}
+
+KeepersShovel: {
+	DisplayName: Pala del Guardatumbas
+	Tooltip: Desentierra esqueletos para que peleen por ti
+}
+
+PetPigSummon: {
+	DisplayName: Tocino de hule
+	Tooltip: Invoca un cerdo con globo con una afición para los tesoros
+}
+
+EoCInsight: {
+	DisplayName: Ojo del conocimiento prohibido
+	Tooltip: Muestrale amor a lo que no debe ser visto
+}
+
+BarOfSoap: {
+	DisplayName: Barra de jabón
+	Tooltip:
+		'''
+		Purifica los bloques en un rango de 20 bloques
+		Otorga el efecto de Limpieza máxima por 4 minutos
+		Haz daño para cargar. Cada golpe de daño carga este favor por 1%
+		Presiona {0} para usar al tener carga máxima
+		'Una barra extraña y autolimpiante de grasa solida...'
+		'''
+}
+
+AceOfHearts: {
+	DisplayName: As de corazones
+	Tooltip:
+		'''
+		Otorga invulnerabilidad
+		Todo el daño tomado durante la invulnerabilidad es infligido al terminar el efecto
+		Puede ser usado indefinidamente, pero la duración del efecto se reduce por uso hasta la desactivación
+		Presiona {0} para usar al tener carga máxima
+		'Premio mayor!'
+		'''
+}
+
+GravekeeperBag: {
+	DisplayName: Bolsa del tesoro (Guardatumbas)
+	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+}
+
+AsterKnuckle: {
+	Tooltip: "'¿¡RECONSTRUIR QUÉ!?'"
+	DisplayName: Aster-Knuckle
+}
+
+WindTrident: {
+	Tooltip: ""
+	DisplayName: Tridente de viento
+}
+
+IncrediblySharpKnife: {
+	DisplayName: Cuchillo increiblemente afilado
+	Tooltip:
+		'''
+		Invoca un anillo de cuchillos de sombra para cortar a tus enemigos
+		Puede ser usado indefinidamente, pero tomas el 20% de tu vida máxima como daño por cada uso
+		Presiona {0} para usar
+		'Tecnología acuchilleante'
+		'''
+}
+
+StrawmanItem: {
+	DisplayName: Hombre de paja
+	Tooltip:
+		'''
+		Modo actual:
+		Invoca un hombre de paja
+		Hazle click derecho en el inventario para cambiar modos
+		Hazle click derecho mientras presionas Shift en el inventario para regresar al anterior modo
+		'''
+
+	DummyType: {
+		0: Perfección -
+		1: Pesadez -
+		2: Ligeridad -
+		3: Espinosidad -
+		4: Terminalidad -
+		5: Violencia -
+		6: Debilidad -
+	}
+
+	Mode: {
+		0: POR DEFECTO
+		1: 50 DEFENSA
+		2: KNOCKBACK
+		3: DAÑO DE CONTACTO
+		4: MATABLE
+		5: DAÑO A RANGO
+		6: NO ES UN JEFE
+	}
+}
+
+BloodPact: {
+	DisplayName: Pacto de sangre
+	Tooltip:
+		'''
+		Mantén presionado {0} para drenar tu propia sangre
+		Al soltar el botón, esto invocará un espíritu poderoso para ayudarte en batalla
+		La duración y el daño de este espíritu aumenta con más sangre sacrificada
+		No puedes invocar más de un espíritu al mismo tiempo
+		'''
+}
+
+CyaniteHelm: {
+	SetBonus: Mods.ITD.Items.CyaniteHelm.SetBonus
+	DisplayName: Yelmo de cianita
+	Tooltip: ""
+}
+
+CyaniteHood: {
+	SetBonus: Mods.ITD.Items.CyaniteHood.SetBonus
+	DisplayName: Capucha de cianita
+	Tooltip: ""
+}
+
+CyaniteMask: {
+	SetBonus: Mods.ITD.Items.CyaniteMask.SetBonus
+	DisplayName: Máscara de cianita
+	Tooltip: ""
+}
+
+CyaniteGreaves: {
+	DisplayName: Grebas de cianita
+	Tooltip: ""
+}
+
+CyanitePlating: {
+	DisplayName: Blindaje de cianita
+	Tooltip: ""
+}
+
+HardmodeGravekeeperBag: {
+	DisplayName: Bolsa del tesoro (Guardatumbas - Revancha)
+	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+}
+
+DuneSkull: {
+	DisplayName: Calavera de las dunas
+	Tooltip: Invoca a Desierbero durante una tormenta de arena
+}
+
+CyanideArrow: {
+	DisplayName: Flecha de cianita
+	Tooltip: ""
+}
+
+CyanideBullet: {
+	DisplayName: Bala de cianita
+	Tooltip: ""
+}
+
+FrostichorArrow: {
+	DisplayName: Flecha de icor congelado
+	Tooltip: ""
+}
+
+FrostichorBullet: {
+	DisplayName: Bala de icor congelado
+	Tooltip: ""
+}
+
+CyaniteHammer: {
+	DisplayName: Martillo de cianita
+	Tooltip: ""
+}
+
+CyanitePickaxe: {
+	DisplayName: Pico de cianita
+	Tooltip: ""
+}
+
+HunterrGreatbow: {
+	DisplayName: Gran arco del Hun-Terr
+	Tooltip:
+		'''
+		Mantén presionado clic derecho para cargar una flecha
+		Flechas completamente cargadas pueden derribar a los enemigos
+		Mientras no esta cargandose, el arco puede bloquear proyectiles
+		'''
+}
+
+Calcium: {
+	DisplayName: Calcio
+	Tooltip:
+		'''
+		'Sumergir en leche cada 48 horas.'
+		[c/{0}:Efecto de Enganche:] Te da regeneración pasiva
+		'''
+}
+
+CopperMandibles: {
+	DisplayName: Mandíbulas de cobre
+	Tooltip:
+		'''
+		'No se debe confundir con las Mandíbulas de acero'
+		[c/{0}:Efecto de Enganche:] Aumenta el daño dado dependiendo en la vida restante del enemigo
+		'''
+}
+
+Winch: {
+	DisplayName: Cabrestante
+	Tooltip:
+		'''
+		Las enganchadoras se retraen más rápido
+		+10% de longitud de enganchadoras
+		'''
+}
+
+CharmOfTheAccursed: {
+	DisplayName: Talismán de los condenados
+	Tooltip: Libera espíritus que hacen daño tras tomar 100 de daño
+}
+
+Chainwhip: {
+	DisplayName: Látigo de cadena
+	Tooltip:
+		'''
+		Haz clic izquierdo o derecho para lanzar una enganchadora
+		Clic derecho para darle latigazos a tus enemigos mientras una enganchadora esta enganchada
+		'¡Es una cadena, Y un látigo!'
+		[c/{0}:Latch Effect:] Aumenta daño de invocación y velocidad de movimiento en un período de 20 segundos
+		'''
+}
+
+GrabbOMatic20000: {
+	DisplayName: Agarr-O-Matic 20000
+	Tooltip: ""
+}
+
+BlackMoldItem: {
+	DisplayName: Moho negro
+	Tooltip: No es muy bueno para los pulmones
+}
+
+BlackFlask: {
+	DisplayName: Frasco negro
+	Tooltip: Ataques de látigo y cuerpo-a-cuerpo dan daño a lo largo del tiempo a los enemigos
+}
+
+WheelerTrashCan: {
+	DisplayName: Dorotea
+	Tooltip:
+		'''
+		Convierte las balas en cosas EXTRA aleatorias
+		'Brinda la diversión de vuelta a las batallas'
+		'''
+}
+
+AlloyHeadgear: {
+	SetBonus: Aumenta el daño a distancia por un 8%
+	DisplayName: Casco de aleación
+	// Tooltip: ""
+}
+
+AlloyVisor: {
+	SetBonus: Aumenta el daño mágico por un 6%
+	DisplayName: Visor de aleación
+	// Tooltip: ""
+}
+
+ElectrumVisor: {
+	SetBonus: Al golpear enemigos, lanza un relámpago en cadena
+	DisplayName: Visor de electro
+	Tooltip: Aumenta la velocidad de movimiento por un 8%
+}
+
+ElectrumChestplate: {
+	DisplayName: Cota de malla de electro
+	Tooltip: Aumenta la velocidad de movimiento por un 8%
+}
+
+ElectrumLeggings: {
+	DisplayName: Grebas de electro
+	Tooltip: Aumenta la velocidad de movimiento por un 8%
+}
+
+RhodiumVisor: {
+	// SetBonus: Mods.ITD.Items.RhodiumVisor.SetBonus
+	DisplayName: Visor de rodio
+	Tooltip: Aumenta el porcentaje de ataque crítico por un 4%
+}
+
+RhodiumChestplate: {
+	DisplayName: Cota de malla de rodio
+	Tooltip: Aumenta el porcentaje de ataque crítico por un 4%
+}
+
+RhodiumLeggings: {
+	DisplayName: Grebas de rodio
+	Tooltip: Aumenta el porcentaje de ataque crítico por un 4%
+}
+
+DespoticSuperMeleeSword: {
+	DisplayName: Caos Incesable
+	// Tooltip: ""
+}
+
+Frostgrip: {
+	DisplayName: Agarresfrío
+	Tooltip:
+		'''
+		Continuamente congela el movimiento de los enemigos
+		'No se debe usar en temperaturas sobre 0 Kelvin'
+		[c/{0}:Efecto de Enganche:] Encierra al enemigo en hielo, infligiendo gran daño y lanzando fragmentos de hielo
+		'''
+}
+
+SmallSnowpoffItem: {
+	DisplayName: Montonieve (Joven)
+	Tooltip: Qué criatura tan adorable... ten cuidado al interactuar con ellos
+}
+
+LargeSnowpoffItem: {
+	DisplayName: Montonieve (Adulto)
+	Tooltip: Un montonieve adulto... aun así, no ha llegado a su máximo poder
+}
+
+PocketSyringe: {
+	DisplayName: Jeringa de bolsillo
+	Tooltip:
+		'''
+		Comparte tus efectos negativos con los enemigos
+		Hace mayor daño dependiendo de tu regeneración de vida
+		El efecto Hemorragia da mayor daño a los enemigos
+		'''
+}
+
+AlloyBar: {
+	DisplayName: Lingote de aleación
+	// Tooltip: ""
+}
+
+CosmicDye: {
+	DisplayName: Tinte cósmico
+	// Tooltip: ""
+}
+
+EmberlionMandible: {
+	DisplayName: Mandíbula de brasaleón
+	// Tooltip: ""
+}
+
+TemperedGlassItem: {
+	DisplayName: Vidrio templado
+	Tooltip: "'Es vidrio... pero más fuerte.'"
+}
+
+Cosmisumaru: {
+	DisplayName: Cosmisumaru
+	Tooltip:
+		'''
+		Después de hacer suficiente daño, el portador comienza a brillar
+		Haz clic derecho para lanzar un fénix cósmico mientras brillas
+		'Una reliquia cósmica heredada de las estrellas vislumbrantes'
+		'''
+}
+
+SafetyLatch: {
+	// Tooltip: Snaptraps stay attached slightly longer when out of range
+	// DisplayName: Safety Latch
+}
+
+MagicPolish: {
+	/* Tooltip:
+		'''
+		Latch effects activate faster
+		Snaptraps retract slightly faster
+		''' */
+	// DisplayName: Magic Polish
+}
+
+UnyieldingChain: {
+	// DisplayName: Unyielding Chain
+	// Tooltip: +25% Snaptrap Length
+}
+
+Ghostbuster: {
+	// DisplayName: Ghostbuster
+	// Tooltip: ""
+}
+
+Cursebreaker: {
+	// DisplayName: Cursebreaker
+	/* Tooltip:
+		'''
+		Launches a dungeon guardian that deals immense damage
+		Deal damage to increase charge. Every hit of damage grants 1% charge
+		Press {0} to use when at full charge
+		'You only want to socialize (But I don't think we should)'
+		''' */
+}
+
+TopazNecklace: {
+	// DisplayName: Topaz Necklace
+	// Tooltip: ""
+}
+
+LightPyracotta: {
+	// DisplayName: Light Pyracotta
+	// Tooltip: ""
+}
+
+Pillarificationizerator: {
+	// DisplayName: Pillarificationizerator
+	// Tooltip: ""
+}
+
+PortableLab: {
+	// DisplayName: Portable Lab
+	// Tooltip: ""
+}
+
+IncomprehensiblePolyhedron: {
+	// DisplayName: Incomprehensible Polyhedron
+	// Tooltip: ""
+}
+
+BlueshroomHat: {
+	// SetBonus: Immunity to slowing debuffs
+	// DisplayName: Blueshroom Hat
+	/* Tooltip:
+		'''
+		7% increased magic damage
+		5% reduced mana cost
+		''' */
+}
+
+BlueshroomCoat: {
+	// DisplayName: Blueshroom Coat
+	// Tooltip: 3% increased attack speed
+}
+
+BlueshroomPants: {
+	// DisplayName: Blueshroom Pants
+	// Tooltip: 3% increased attack speed
+}
+
+ReinforcedPegmatiteBricksItem: {
+	// DisplayName: Reinforced Pegmatite Bricks Item
+	// Tooltip: ""
+}
+
+ReinforcedPegmatiteBrickWallItem: {
+	// DisplayName: Reinforced Pegmatite Brick Wall Item
+	// Tooltip: ""
+}
+
+SoulTalisman: {
+	// DisplayName: Soul Talisman
+	/* Tooltip:
+		'''
+		Striking or defeating enemies provides Soul Charges
+		Soul Charges stacks up to 5 times
+		All Soul Charges are released on hit
+		''' */
+}
+
+OblivionPickaxe: {
+	// DisplayName: Oblivion Pickaxe
+	// Tooltip: ""
+}
+
+DarkPyracottaBricksItem: {
+	// DisplayName: Pyracotta Bricks
+	// Tooltip: ""
+}
+
+LightPyracottaBricksItem: {
+	// DisplayName: Light Pyracotta Bricks
+	// Tooltip: ""
+}
+
+DarkPyracottaTilesItem: {
+	// DisplayName: Pyracotta Tile
+	// Tooltip: ""
+}
+
+LightPyracottaTilesItem: {
+	// DisplayName: Light Pyracotta Tile
+	// Tooltip: ""
+}
+
+BlackCacophony: {
+	// DisplayName: Black Cacophony
+	/* Tooltip:
+		'''
+			Current Mode:
+			<right> to swap between Windup and Firing mode
+			'Nothing makes a melody like firing massive weapons'
+
+		''' */
+
+	CacophonyType: {
+		// 1: Windup
+		// 2: Firing
+	}
+
+	Mode: {
+		// 1: <left> to stockpile ammunition, increasing effectiveness depending on the amount stored.
+		// 2: <left> to fire ammunition.
+	}
+
+	Messages: {
+		// FiringMode: Firing Mode
+		// WindupMode: Windup Mode
+		// MaxCharge: MAX!
+	}
+}
+
+RiteOfImmolation: {
+	// DisplayName: Rite Of Immolation
+	// Tooltip: 4 summon tag damage
+}
+
+Bee17: {
+	// DisplayName: Bee-17
+	/* Tooltip:
+		'''
+		Replaces current minion with Grumble Bees
+		Press {0} to use
+		'Bee 17 Bomber'
+		''' */
+}
+
+CicadianStaff: {
+	// DisplayName: Cicadian Staff
+	// Tooltip: ""
+}

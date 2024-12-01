@@ -1,0 +1,395 @@
+Projectiles: {
+	ElectrumSpearProjectile.DisplayName: Lanza de electro
+	CosmicSludgeBomb.DisplayName: Bomba de lodo cósmico
+	CosmicVoidShard.DisplayName: Fragmento del vacío
+	EmberSlash.DisplayName: Tajadora de llamarada
+
+	DespoticSnaptrapProjectile: {
+		DisplayName: Fauces del Abísmo
+		OneTimeLatchMessage: Ñam ñam...
+	}
+
+	SnaptrapProjectile: {
+		DisplayName: Enganchadora
+		OneTimeLatchMessage: ¡+{0}% de porcentaje de ataque crítico!
+	}
+
+	VocalZeroProjectile: {
+		DisplayName: Vocal Zero
+		OneTimeLatchMessage: ¡+{0}% de daño!
+	}
+
+	CosmicJamPet.DisplayName: Medusilla
+	SniptrapProjectile.DisplayName: Enganchadorcilla
+
+	MrSnapkinsProjectile: {
+		DisplayName: Sr. Snapkins
+		OneTimeLatchMessage: Comienza la corbatación...
+	}
+
+	SnapkinsBowtie.DisplayName: Corbata de Snapkins
+	TheScorpionProjectile.DisplayName: El Jalacrán
+	CosmicJellyfish_Hand.DisplayName: Medusa Cósmica
+	DespoticJawProjectile.DisplayName: Mandíbula Despótica
+
+	SoulsnapperProjectile: {
+		DisplayName: Enganchaalmas
+		OneTimeLatchMessage: Escupiendo...
+	}
+
+	CrimeratrapProjectile: {
+		OneTimeLatchMessage: Escupiendo...
+		DisplayName: Carmengancho
+	}
+
+	EvilSpitProjectile.DisplayName: Escupitajo maligno
+	CicadianTreeEnd.DisplayName: Cicadian Tree End
+	IcyBoulder.DisplayName: Roca de hielo
+	LightningStaffStrike.DisplayName: Relámpago
+
+	VenusSnaptrapProjectile: {
+		OneTimeLatchMessage: ¡Envenenado!
+		DisplayName: Venus Enganchamoscas
+	}
+
+	CalciumProjectile: {
+		OneTimeLatchMessage: ¡Vampirismo!
+		DisplayName: Calcio
+	}
+
+	WingedSnowpoffPet.DisplayName: Montonieve Alado
+	WRipperSlash.DisplayName: Desgarrador del Espaciotiempo
+	WRipperRift.DisplayName: Desgarrador del Espaciotiempo
+	GhostlyBlade.DisplayName: Cuchilla fantasmagórica
+	DunebarrelRightGun.DisplayName: Cañón de dunas
+	ElectrifiedArrow.DisplayName: Flecha electrificada
+	StarlightProj.DisplayName: Luz Astral
+	RhodiumSwordBeam.DisplayName: Espada de rodio
+	ElectrumSpearBeam.DisplayName: Lanza de electro
+	StarlightStaffProj.DisplayName: Bastón de Luz Astral
+	BlankExplosion.DisplayName: Explosión
+	DunebarrelRotate.DisplayName: Cañón de dunas
+	SandSpike.DisplayName: Estaca de arena
+	SandberusSkull.DisplayName: Calavera de Desierbero
+	SandBoulder.DisplayName: Roca de arena
+	CosmicJellyfishMiniProj.DisplayName: Medusa Cósmica
+	CosmicLightningOrb.DisplayName: Órbe de relámpago cósmico
+	CosmicRay.DisplayName: Rayo cósmico
+	CosmicRayWarn.DisplayName: Rayo cósmico
+	TouhouBullet.DisplayName: Órbe cósmica
+	RazedWineBottle.DisplayName: Vino arrasado
+	EmberSlashOld.DisplayName: Tajadora de llamarada
+	NecromatomeProjectile.DisplayName: Necromatomo
+	FishbackerProj.DisplayName: Fishbacker
+	CyaniteBoomerangProjectile.DisplayName: Bumerán de cianita
+	CyaniteSpearProjectile.DisplayName: Lanza de cianita
+	GalacticJellyBeanHand.DisplayName: Mano galáctica
+	FishbackerReflectProj.DisplayName: Wow, que mala suerte
+	SuffocationAura.DisplayName: Aura de asfixia
+	TheUnburied.DisplayName: El Desenterrado
+	PetPigPet.DisplayName: Cerdo con globo
+	GasLeak.DisplayName: Fuga de gas
+	Necroskull.DisplayName: Necrocalavera
+	SoulLeak.DisplayName: Fuga de alma
+	NecroSkull.DisplayName: Necrocalavera
+	SoulSkull.DisplayName: Almacalavera
+	CosmicLightningBlast.DisplayName: Rayo de electricidad cósmica
+	AsterBlasterBlast.DisplayName: Explosión de Aster Knuckle
+	WindTridentProjectile.DisplayName: Tridente de viento
+	ShadowKnife.DisplayName: Cuchillo de la sombra
+	BloodPactCut.DisplayName: Corte sangriento
+	BloodPactSpirit.DisplayName: Espíritu de sangre
+	CyaniteIceShard.DisplayName: Fragmento de cianita
+	CyanideArrow.DisplayName: Flecha de cianita
+	CyanideBullet.DisplayName: Bala de cianita
+	FrostichorArrow.DisplayName: Flecha de icor congelado
+	FrostichorBullet.DisplayName: Bala de icor congelado
+	CosmicJellyfish_LeftHand.DisplayName: Mano de la Medusa Cósmica
+	CosmicJellyfish_RightHand.DisplayName: Mano de la Medusa Cósmica
+	HunterrGreatbowProj.DisplayName: Gran arco del Hun-Terr
+	HunterrGreatarrow.DisplayName: Gran flecha del Hun-Terr
+
+	CopperMandiblesProjectile: {
+		OneTimeLatchMessage: ¡Infestación!
+		DisplayName: Mandíbulas de cobre
+	}
+
+	MiniMandible.DisplayName: Mini mandíbula
+	AccursedSpirit.DisplayName: Espíritu condenado
+
+	ChainwhipSnaptrapProjectile: {
+		OneTimeLatchMessage: ¡Agilidad!
+		DisplayName: Látigo de cadena
+	}
+
+	ChainwhipWhip.DisplayName: Látigo de cadena
+	CosmicJellyfishBlackholeAura.DisplayName: Agujero negro de Medusa Cósmica
+	DespoticSuperMeleeProj.DisplayName: Caos Incesable
+	// CosJelHandTest.DisplayName: Cos Jel Hand Test
+
+	FrostgripProjectile: {
+		OneTimeLatchMessage: ¡Qué helado!
+		DisplayName: Agarresfrío
+	}
+
+	FrostgripIceCube.DisplayName: Cubo de Agarresfrío
+	FrostgripIcicle.DisplayName: Carámbano de Agarresfrío
+	PocketSyringeProjectile.DisplayName: Jeringa de bolsillo
+	WheelerTrashProj.DisplayName: Basura
+	CosmisumaruCut.DisplayName: Corte de Cosmisumaru
+	CosmisumaruPheonix.DisplayName: Fénix de Cosmisumaru
+	CosmisumaruPheonixImpact.DisplayName: Fénix de Cosmisumaru
+	// DespoticSuperMeleeProjOld.DisplayName: Despotic Super Melee Proj Old
+	// GhostbusterProj.DisplayName: Ghostbuster Proj
+	// QuasarProj.DisplayName: Quasar Proj
+	// ThrowableGuardian.DisplayName: Throwable Guardian
+	// IncendipedeBreath.DisplayName: Incendipede Breath
+	// SoulTalismanBlast.DisplayName: Spirit Blast
+	// RiteOfImmolationProj.DisplayName: Rite Of Immolation Proj
+	// GrumbleBee.DisplayName: Grumble Bee
+	// CicadianSentry.DisplayName: Cicadian Sentry
+	// SummonIcyBoulder.DisplayName: Summon Icy Boulder
+	// CacophanyBulletCasing.DisplayName: Cacophany Bullet Casing
+	// QuartzBlast.DisplayName: Quartz Blast
+	// Shroomflake.DisplayName: Shroomflake
+	// Sporeflake.DisplayName: Sporeflake
+	// IncendipedeFireSpike.DisplayName: Incendipede Fire Spike
+}
+
+NPCs: {
+	CosmicJellyfish: {
+		DisplayName: Medusa Cósmica
+		SpawnWarning: Esta va a ser una noche ondulante...
+	}
+
+	FloralDevourer.DisplayName: Devorador Floral
+	FloralDevourerSegment.DisplayName: Devorador Floral
+	EmberlionPiercer.DisplayName: Brasaleón perforador
+	DesertBat.DisplayName: Murciélago del desierto
+	EmberlionMiner.DisplayName: Brasaleón minero
+
+	Cicadian: {
+		DisplayName: Cigadiano
+		Bestiary: Un cangrejo que ha desarrolado una relación simbiótica con los Champizules. El cangrejo puede fácilmente atraer a su presa mientras que el Champizúl obtiene protección.
+	}
+
+	CicadianTree.DisplayName: Árbol Cigadiano
+
+	CicadianHive: {
+		Bestiary: Cuando una cigadiana hembra pupa, experimenta un crecimiento acelerado de sus alas y cuerpo, volviendose rotunda y extraña. Cuando se deshace de su estomago, volviendose hueca, la Madre produce larvas rápidamente, hasta que se muere de hambre.
+		DisplayName: Madre Cigadiana
+	}
+
+	FlamingSkull.DisplayName: Calavera en llamas
+	AmbushBones.DisplayName: Huesitos acechantes
+	ShroomishSlime.DisplayName: Slime champizúl
+	CosmicJellyfishMini.DisplayName: Medusa neptuniana
+	Sandberus.DisplayName: Desierbero
+	KSGlandNPC.DisplayName: Capa de gel
+	Gravekeeper.DisplayName: Guardatumbas
+	HauntedTombstone.DisplayName: Tumba embrujada
+	GhastlyTombstone.DisplayName: Tumba fantasmagórica
+	StrawmanDummy.DisplayName: Hombre de paja
+	// RecruitedNPC.DisplayName: Recruited N P C
+	SmallSnowpoff.DisplayName: Montonieve
+	LargeSnowpoff.DisplayName: Montonieve
+	// CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
+	// IncendipedeBody.DisplayName: Incendipede
+
+	IncendipedeHead: {
+		// DisplayName: Incendipede
+		// Bestiary: This sneaky creature has evolved to be, much like the reigning Emberlions, a dangerous predator, feasting on Emberlion larva and the occasional human. Unlike Emberlions, Incendipedes ironically have an incredible grasp on the usage of fire from a very young age, releasing it both as a weapon and a way to defend themselves.
+	}
+
+	// IncendipedeTail.DisplayName: Incendipede
+	// QuartzElemental.DisplayName: Quartz Elemental
+	// IncendipedeBodySegment.DisplayName: Incendipede
+	// IncendipedeBodyOld.DisplayName: Incendipede Body Old
+	// IncendipedeHeadOld.DisplayName: Incendipede Head Old
+	// IncendipedeTailOld.DisplayName: Incendipede Tail Old
+}
+
+Buffs: {
+	CosmicJamBuff: {
+		Description: COME ON AND JAM!
+		DisplayName: Medusilla
+	}
+
+	SandyBuff: {
+		DisplayName: Arenoso
+		Description: Pica, pica, pica!
+	}
+
+	SnowyLanternBuff: {
+		DisplayName: Montonieve Alado
+		Description: Un Montonieve amigable ilumina tu camino
+	}
+
+	ToastedBuff: {
+		DisplayName: Brindis
+		Description: Mods.ITD.Buffs.ToastedBuff.Description
+	}
+
+	BloodlettingBuff: {
+		DisplayName: Flebotomía
+		Description: Tu sangre te protege del daño
+	}
+
+	CrimsonAntidoteBuff: {
+		DisplayName: Antídoto carmesí
+		Description: Regeneración aumentada masivamente
+	}
+
+	CorruptAntidoteBuff: {
+		DisplayName: Antídoto corrupto
+		Description: -25% de uso de maná y +25% de daño mágico
+	}
+
+	FishbackerTagDebuff: {
+		DisplayName: Fishbacker Tag Debuff
+		Description: Mods.ITD.Buffs.FishbackerTagDebuff.Description
+	}
+
+	PetPigBuff: {
+		DisplayName: Cerdo con globo
+		Description: Un cerdo con globo te sigue, mostrandote cofres cercanos
+	}
+
+	NecrosisBuff: {
+		DisplayName: Necrosis
+		Description: Perdiendo vida rápidamente
+	}
+
+	SoulRotBuff: {
+		DisplayName: Putrefacción del alma
+		Description: Perdiendo vida rápidamente
+	}
+
+	FavorFatigue: {
+		DisplayName: Fatiga de Favor
+		Description: No puedes utilizar Favores
+	}
+
+	SqueakyClean: {
+		DisplayName: Más limpio que una patena
+		Description:
+			'''
+			Inmunidad a varios efectos negativos
+			Disminuye el porcentaje de aparición de monstruos
+			'''
+	}
+
+	ToppledDebuff: {
+		DisplayName: Derribado
+		Description: KB
+	}
+
+	MelomycosisBuff: {
+		DisplayName: Melomicosis
+		Description: Da daño aumentado basado en tu defensa
+	}
+
+	WeaponImbueMelomycosis: {
+		DisplayName: Arma imbuida: Melomicosis
+		Description: Los ataques cuerpo-a-cuerpo dan daño a lo largo del tiempo a los enemigos
+	}
+
+	FrostgripChilledBuff: {
+		// DisplayName: Frostgrip Chilled Buff
+		// Description: Mods.ITD.Buffs.FrostgripChilledBuff.Description
+	}
+
+	BleedingII: {
+		// DisplayName: Bleeding II
+		// Description: Mods.ITD.Buffs.BleedingII.Description
+	}
+
+	FishbackerReflectTagDebuff: {
+		// DisplayName: Fishbacker Reflect Tag Debuff
+		// Description: Mods.ITD.Buffs.FishbackerReflectTagDebuff.Description
+	}
+
+	HauntedBuff: {
+		// DisplayName: Haunted Buff
+		// Description: Mods.ITD.Buffs.HauntedBuff.Description
+	}
+
+	SoulTalismanBuff: {
+		// DisplayName: Soul Charges
+		// Description: Increases damage and attack speed
+	}
+
+	RiteOfImmolationTagDebuff: {
+		// DisplayName: Rite Of Immolation Tag Debuff
+		// Description: Mods.ITD.Buffs.RiteOfImmolationTagDebuff.Description
+	}
+
+	KeepersShovelTagDebuff: {
+		// DisplayName: Keepers Shovel Tag Debuff
+		// Description: Mods.ITD.Buffs.KeepersShovelTagDebuff.Description
+	}
+}
+
+DeathMessage: {
+	Necrosis: sucumbió a la necrosis.
+	SoulRot: se convirtío en una cáscara sin alma.
+	IncrediblySharpKnife: cortó demasiado profundo.
+	BloodPact: se quedó sin sangre.
+	KSGlandAftershock: sufrió un aplanamiento por el aftershock.
+}
+
+WorldGen: {
+	BluesoilPassMessage: Azulificando la Tundra Subterranea...
+	DeepDesertPassMessage: Comprimiendo el Desierto...
+}
+
+Tiles: {
+	BlueshroomSapling.MapEntry: Primordio de champizúl
+	CyaniteOreTile.MapEntry: Cianita
+	BlueshroomTree.MapEntry: Champizúl gigante
+	StarlitOreTile.MapEntry: Mineral de estralumbre
+	// Debugger.MapEntry: Debugger
+}
+
+Biomes: {
+	BlueshroomGrovesBiome: {
+		TownNPCDialogueName: la Fungoleda Champizúl Subterranea
+		DisplayName: Fungoleda Champizúl Subterranea
+	}
+
+	BlueshroomGrovesSurfaceBiome: {
+		TownNPCDialogueName: la Fungoleda Champizúl
+		DisplayName: Fungoleda Champizúl
+	}
+
+	DeepDesertBiome: {
+		DisplayName: Profundidad del Desierto
+		TownNPCDialogueName: la Profundidad del Desierto
+	}
+}
+
+Keybinds.UseFavor.DisplayName: Usar Favor
+
+Achievements: {
+	CosmicConundrum: {
+		Name: Acertijo Cósmico
+		Description: Derrota a la Medusa Cósmica, alienígena mutante del espacio exterior, por la primera vez.
+	}
+
+	+PARRY: {
+		Name: +PARRY
+		Description: Bloquea el ataque de la mano de la Medusa Cósmica.
+	}
+}
+
+UI: {
+	FavorSlot.MouseHoverName: Favor
+	RecruitmentButton.MouseHoverName: Reclutar
+	UnrecruitmentButton.MouseHoverName: Despedir
+}
+
+RecruitmentSystem: {
+	RecruitmentAccepted: ¡{0} ahora es parte de tu equipo!
+	NotHappyEnough: ¡{0} no tiene la felicidad máxima!
+	RecruitmentDenied: ¡{0} no puede entrar a tu equipo!
+}
