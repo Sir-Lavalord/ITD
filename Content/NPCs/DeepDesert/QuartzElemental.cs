@@ -266,16 +266,18 @@ namespace ITD.Content.NPCs.DeepDesert
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Vector2 position = NPC.Center - screenPos;
-			Texture2D glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
-            Rectangle glowSourceRectangle = glowTexture.Frame(1, 1);
-            Vector2 glowOrigin = glowSourceRectangle.Size() / 2f;
-			
-			float progress = Math.Clamp((NPC.ai[3] - 32f) / 32f, 0, 1);
-			
-            Color color = new Color(200, 100, 255, 0) * progress;
-			
-            Main.EntitySpriteDraw(glowTexture, position, glowSourceRectangle, color, MathHelper.Pi * progress, glowOrigin, 2.4f - progress * 1.6f, SpriteEffects.None, 0f);
-			
+			if (NPC.ai[3] > 32f)
+			{
+				Texture2D glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+				Rectangle glowSourceRectangle = glowTexture.Frame(1, 1);
+				Vector2 glowOrigin = glowSourceRectangle.Size() / 2f;
+				
+				float progress = Math.Clamp((NPC.ai[3] - 32f) / 32f, 0, 1);
+				
+				Color color = new Color(200, 100, 255, 0) * progress;
+				
+				Main.EntitySpriteDraw(glowTexture, position, glowSourceRectangle, color, MathHelper.Pi * progress, glowOrigin, 2.4f - progress * 1.6f, SpriteEffects.None, 0f);
+			}
 			Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 			Rectangle sourceRectangle = texture.Frame(1, 1);
             Vector2 origin = sourceRectangle.Size() / 2f;

@@ -69,7 +69,7 @@ Items: {
 	}
 
 	WormholeRipper: {
-		DisplayName: Потрошитель Червоточин
+		DisplayName: Потрошитель червоточин
 		Tooltip:
 			'''
 			"Lightspeed!"
@@ -123,7 +123,7 @@ Items: {
 
 	CosmicJellyfishRelic: {
 		Tooltip: ""
-		DisplayName: Cosmic Jellyfish Relic
+		DisplayName: Реликвия Космической Медузы
 	}
 
 	Subfrost: {
@@ -132,7 +132,7 @@ Items: {
 	}
 
 	CyaniteOre: {
-		DisplayName: Cyanite Ore
+		DisplayName: Баус
 		Tooltip: ""
 	}
 
@@ -411,7 +411,7 @@ Items: {
 	}
 
 	RefinedCyanite: {
-		DisplayName: Refined Cyanite
+		DisplayName: Изящный баус
 		Tooltip: ""
 	}
 
@@ -580,12 +580,12 @@ Items: {
 	}
 
 	CyaniteBoomerang: {
-		DisplayName: Cyanite Boomerang
+		DisplayName: Баусовый бумеранг
 		Tooltip: ""
 	}
 
 	CyaniteSpear: {
-		DisplayName: Cyanite Spear
+		DisplayName: Баусовое копьё
 		Tooltip: ""
 	}
 
@@ -595,14 +595,14 @@ Items: {
 	}
 
 	EatersTail: {
-		// DisplayName: Tail of the Eater
-		/* Tooltip:
+		DisplayName: Хвост пожирателя
+		Tooltip:
 			'''
-			Splits your life into two
-			Fatal damage does not carry onto next life
-			This can only happen every 1 minute
-			Cooldown only reduces when you have max life
-			''' */
+			Делит здоровье на две части
+			Полученный урон действует только на одну часть
+			При полном здоровье потерянная часть перезаряжется
+			Перезарядка занимает 1 минуту
+			'''
 		// TailLost: TAIL LOSS
 	}
 
@@ -634,7 +634,7 @@ Items: {
 	}
 
 	KeepersShovel: {
-		DisplayName: Лопата Могильщика
+		DisplayName: Лопата могильщика
 		Tooltip: Выкапывает скелетов, которые сражаются за вас
 	}
 
@@ -743,29 +743,29 @@ Items: {
 
 	CyaniteHelm: {
 		SetBonus: Mods.ITD.Items.CyaniteHelm.SetBonus
-		DisplayName: Cyanite Helm
+		DisplayName: Баусовый шлем
 		Tooltip: ""
 	}
 
 	CyaniteHood: {
 		SetBonus: Mods.ITD.Items.CyaniteHood.SetBonus
-		DisplayName: Cyanite Hood
+		DisplayName: Баусовый капюшон
 		Tooltip: ""
 	}
 
 	CyaniteMask: {
 		SetBonus: Mods.ITD.Items.CyaniteMask.SetBonus
-		DisplayName: Cyanite Mask
+		DisplayName: Баусовая маска
 		Tooltip: ""
 	}
 
 	CyaniteGreaves: {
-		DisplayName: Cyanite Greaves
+		DisplayName: Баусовые ботинки
 		Tooltip: ""
 	}
 
 	CyanitePlating: {
-		DisplayName: Cyanite Plating
+		DisplayName: Баусовый нагрудник
 		Tooltip: ""
 	}
 
@@ -780,12 +780,12 @@ Items: {
 	}
 
 	CyanideArrow: {
-		DisplayName: Cyanide Arrow
+		DisplayName: Баусовая стрела
 		Tooltip: ""
 	}
 
 	CyanideBullet: {
-		DisplayName: Cyanide Bullet
+		DisplayName: Баусовая пуля
 		Tooltip: ""
 	}
 
@@ -800,12 +800,12 @@ Items: {
 	}
 
 	CyaniteHammer: {
-		DisplayName: Cyanite Hammer
+		DisplayName: Баусовый молот
 		Tooltip: ""
 	}
 
 	CyanitePickaxe: {
-		DisplayName: Cyanite Pickaxe
+		DisplayName: Баусовая кирка
 		Tooltip: ""
 	}
 
@@ -823,7 +823,7 @@ Items: {
 		DisplayName: Кальций
 		Tooltip:
 			'''
-			'Douse in milk every 48 hours.'
+			'Окунать в молоко каждые 48 часов.'
 			[c/{0}:Latch Effect:] Grants passive regeneration
 			'''
 	}
@@ -838,7 +838,7 @@ Items: {
 	}
 
 	Winch: {
-		DisplayName: Winch
+		DisplayName: Лебедка
 		Tooltip:
 			'''
 			Snaptraps retract faster
@@ -868,13 +868,13 @@ Items: {
 	}
 
 	BlackMoldItem: {
-		DisplayName: Black Mold
-		Tooltip: Not great for the lungs
+		DisplayName: Черная плесень
+		Tooltip: Для легких не хорошо
 	}
 
 	BlackFlask: {
-		DisplayName: Black Flask
-		Tooltip: Melee and whip attacks deal damage over time to enemies
+		DisplayName: Флакон с плесенью
+		Tooltip: Атаки кнутом и атаки ближнего боя отравляют врагов плесенью
 	}
 
 	WheelerTrashCan: {
@@ -927,7 +927,7 @@ Items: {
 	}
 
 	DespoticSuperMeleeSword: {
-		DisplayName: Бессмертный Бедлам
+		DisplayName: Бессмертный бедлам
 		Tooltip: ""
 	}
 
@@ -972,7 +972,7 @@ Items: {
 	}
 
 	EmberlionMandible: {
-		// DisplayName: Emberlion Mandible
+		DisplayName: Челюсть Жар-льва
 		// Tooltip: ""
 	}
 
@@ -1235,23 +1235,23 @@ Projectiles: {
 	StarlightStaffProj.DisplayName: Collapsing Star
 	BlankExplosion.DisplayName: Blank Explosion
 	DunebarrelRotate.DisplayName: Dunebarrel
-	SandSpike.DisplayName: Песчаный Шип
+	SandSpike.DisplayName: Песчаный шип
 	SandberusSkull.DisplayName: Sandberus Skull
-	SandBoulder.DisplayName: Песчаный Булыжник
-	CosmicJellyfishMiniProj.DisplayName: Космическая Медуза
-	CosmicLightningOrb.DisplayName: Шаровая Молния
-	CosmicRay.DisplayName: Космический Луч
-	CosmicRayWarn.DisplayName: Космический Луч
+	SandBoulder.DisplayName: Песчаный булыжник
+	CosmicJellyfishMiniProj.DisplayName: Космическая медуза
+	CosmicLightningOrb.DisplayName: Шаровая молния
+	CosmicRay.DisplayName: Космический луч
+	CosmicRayWarn.DisplayName: Космический луч
 	TouhouBullet.DisplayName: Космическая Сфера
 	RazedWineBottle.DisplayName: Razed Wine Bottle
 	EmberSlashOld.DisplayName: Ember Slash Old
 	NecromatomeProjectile.DisplayName: Омертвление
 	FishbackerProj.DisplayName: Fishbacker
-	CyaniteBoomerangProjectile.DisplayName: Cyanite Boomerang
-	CyaniteSpearProjectile.DisplayName: Cyanite Spear
-	GalacticJellyBeanHand.DisplayName: Космическая Рука
+	CyaniteBoomerangProjectile.DisplayName: Баусовый бумеранг
+	CyaniteSpearProjectile.DisplayName: Баусовое копьё
+	GalacticJellyBeanHand.DisplayName: Космическая рука
 	FishbackerReflectProj.DisplayName: How did you get this?
-	SuffocationAura.DisplayName: Аура Удушения
+	SuffocationAura.DisplayName: Аура удушения
 	TheUnburied.DisplayName: The Unburied
 	PetPigPet.DisplayName: Balloon Pig
 	GasLeak.DisplayName: Gas Leak
@@ -1262,12 +1262,12 @@ Projectiles: {
 	CosmicLightningBlast.DisplayName: Cosmic Lightning Blast
 	AsterBlasterBlast.DisplayName: Aster Blaster Blast
 	WindTridentProjectile.DisplayName: Wind Trident Projectile
-	ShadowKnife.DisplayName: Нож Тени
+	ShadowKnife.DisplayName: Нож тени
 	BloodPactCut.DisplayName: Blood Pact Cut
 	BloodPactSpirit.DisplayName: Blood Pact Spirit
 	CyaniteIceShard.DisplayName: Cyanite Ice Shard
-	CyanideArrow.DisplayName: Cyanide Arrow
-	CyanideBullet.DisplayName: Cyanide Bullet
+	CyanideArrow.DisplayName: Баусовая стрела
+	CyanideBullet.DisplayName: Баусовая пуля
 	FrostichorArrow.DisplayName: Frostichor Arrow
 	FrostichorBullet.DisplayName: Frostichor Bullet
 	CosmicJellyfish_LeftHand.DisplayName: Cosmic Jellyfish_ Left Hand
@@ -1347,12 +1347,12 @@ NPCs: {
 	}
 
 	FlamingSkull.DisplayName: Пылающий череп
-	AmbushBones.DisplayName: Ambush Bones
-	ShroomishSlime.DisplayName: Shroomish Slime
+	AmbushBones.DisplayName: Засадные кости
+	ShroomishSlime.DisplayName: Грибковый слизень
 	CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
 	Sandberus.DisplayName: Sandberus
 	KSGlandNPC.DisplayName: Slimy Coating
-	Gravekeeper.DisplayName: Gravekeeper
+	Gravekeeper.DisplayName: Могильщик
 	HauntedTombstone.DisplayName: Haunted Tombstone
 	GhastlyTombstone.DisplayName: Ghastly Tombstone
 	StrawmanDummy.DisplayName: Strawman
@@ -1497,8 +1497,8 @@ Buffs: {
 }
 
 DeathMessage: {
-	Necrosis: succumbed to necrosis.
-	SoulRot: became a soulless husk.
+	Necrosis: полностью омертвел.
+	SoulRot: остался без души.
 	IncrediblySharpKnife: cut a little too deep.
 	BloodPact: ran out of blood.
 	KSGlandAftershock: was crushed by the aftershock.
@@ -1511,7 +1511,7 @@ WorldGen: {
 
 Tiles: {
 	BlueshroomSapling.MapEntry: Blueshroom Primordium
-	CyaniteOreTile.MapEntry: Cyanite
+	CyaniteOreTile.MapEntry: Баус
 	BlueshroomTree.MapEntry: Giant Blueshroom
 	StarlitOreTile.MapEntry: Starlit Ore
 	// Debugger.MapEntry: Debugger
