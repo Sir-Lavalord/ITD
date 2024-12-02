@@ -49,7 +49,7 @@ EmberSlasher: {
 }
 
 Snaptrap: {
-	DisplayName: Snaptrap
+	DisplayName: Капкан
 	Tooltip:
 		'''
 		"'Ey 'bert! I put a goshdurn beartrap on me chain whip! Yeeehawww!"
@@ -63,7 +63,7 @@ SpacePrawn: {
 }
 
 VocalZero: {
-	DisplayName: Vocal Zero
+	DisplayName: Вокальный ноль
 	Tooltip: "[c/{0}:Latch Effect:] Increases damage by 10% every second, maxes out at 100%"
 }
 
@@ -99,11 +99,11 @@ ChainWeight: {
 
 Sniptrap: {
 	Tooltip: For cutting LEAF PAPER only, no cardstock!
-	DisplayName: Sniptrap
+	DisplayName: Мышеловка
 }
 
 MrSnapkins: {
-	DisplayName: Mr. Snapkins
+	DisplayName: Мистер Снапкинс
 	Tooltip:
 		'''
 		"My dearest Snapkins..."
@@ -136,17 +136,17 @@ CyaniteOre: {
 }
 
 Soulsnapper: {
-	DisplayName: Soulsnapper
+	DisplayName: Душехват
 	Tooltip: "[c/{0}:Latch Effect:] Continuously spits globs of corruption"
 }
 
 Spidermeal: {
 	Tooltip:
 		'''
-		Best used for murdering townsfolk
+		Лучше всего подходит для душегубства горожан
 		"Everything changed after I got bitten by a radioactive spider..."
 		'''
-	DisplayName: Spidermeal
+	DisplayName: Ползающая еда
 }
 
 Crimeratrap: {
@@ -156,7 +156,7 @@ Crimeratrap: {
 
 Diorite: {
 	Tooltip: ""
-	DisplayName: Диорит
+	DisplayName: Пиракота
 }
 
 Pegmatite: {
@@ -286,32 +286,32 @@ DriversIncense: {
 }
 
 BlueCatacombBrick: {
-	DisplayName: Синий Кирпич Катакомб
+	DisplayName: Синий кирпич катакомб
 	Tooltip: ""
 }
 
 GreenCatacombBrick: {
-	DisplayName: Зелёный Кирпич Катакомб
+	DisplayName: Зелёный кирпич катакомб
 	Tooltip: ""
 }
 
 PinkCatacombBrick: {
-	DisplayName: Розовый Кирпич Катакомб
+	DisplayName: Розовый кирпич катакомб
 	Tooltip: ""
 }
 
 BlueCatacombBrickWall: {
-	DisplayName: Blue Catacomb Brick Wall
+	DisplayName: Стена из синего кирпича катакомб
 	Tooltip: ""
 }
 
 BlueCatacombChair: {
-	DisplayName: Синий Стул Катакомб
+	DisplayName: Синий стул катакомб
 	Tooltip: ""
 }
 
 BlueshroomStem: {
-	DisplayName: Ножка Голубого Гриба
+	DisplayName: Ножка голубого гриба
 	Tooltip: ""
 }
 
@@ -321,67 +321,67 @@ Cryptite: {
 }
 
 GreenCatacombBrickWall: {
-	DisplayName: Green Catacomb Brick Wall
+	DisplayName: Стена из зелёного кирпича катакомб
 	Tooltip: ""
 }
 
 GreenCatacombChair: {
-	DisplayName: Зелёный Стул Катакомб
+	DisplayName: Зелёный стул катакомб
 	Tooltip: ""
 }
 
 MonsoonCryptite: {
-	DisplayName: Мусонный Криптит
+	DisplayName: Мусонный криптит
 	Tooltip: ""
 }
 
 MossyGreenCatacombBrick: {
-	DisplayName: Замшелый Зелёный Кирпич Катакомб
+	DisplayName: Замшелый зелёный кирпич катакомб
 	Tooltip: ""
 }
 
 PinkCatacombBrickWall: {
-	DisplayName: Pink Catacomb Brick Wall
+	DisplayName: Стена из розового кирпича катакомб
 	Tooltip: ""
 }
 
 PinkCatacombChair: {
-	DisplayName: Розовый Стул Катакомб
+	DisplayName: Розовый стул катакомб
 	Tooltip: ""
 }
 
 WornBlueCatacombBrick: {
-	DisplayName: Worn Blue Catacomb Brick
+	DisplayName: Изношенный синий кирпич катакомб
 	Tooltip: ""
 }
 
 BlueCatacombTable: {
-	DisplayName: Синий Стол Катакомб
+	DisplayName: Синий стол катакомб
 	Tooltip: ""
 }
 
 GreenCatacombTable: {
-	DisplayName: Зелёный Стол Катакомб
+	DisplayName: Зелёный стол катакомб
 	Tooltip: ""
 }
 
 PinkCatacombTable: {
-	DisplayName: Розовый Стол Катакомб
+	DisplayName: Розовый стол катакомб
 	Tooltip: ""
 }
 
 BlueCatacombLamp: {
-	DisplayName: Синяя Лампа Катакомб
+	DisplayName: Синяя лампа катакомб
 	Tooltip: ""
 }
 
 GreenCatacombLamp: {
-	DisplayName: Зелёная Лампа Катакомб
+	DisplayName: Зелёная лампа катакомб
 	Tooltip: ""
 }
 
 PinkCatacombLamp: {
-	DisplayName: Розовая Лампа Катакомб
+	DisplayName: Розовая лампа катакомб
 	Tooltip: ""
 }
 
@@ -430,17 +430,17 @@ BadassSunglasses: {
 }
 
 BlueCatacombDoor: {
-	DisplayName: Blue Catacomb Door
+	DisplayName: Синяя дверь катакомб
 	Tooltip: ""
 }
 
 GreenCatacombDoor: {
-	DisplayName: Green Catacomb Door
+	DisplayName: Зелёная дверь катакомб
 	Tooltip: ""
 }
 
 PinkCatacombDoor: {
-	DisplayName: Pink Catacomb Door
+	DisplayName: Розовая дверь катакомб
 	Tooltip: ""
 }
 
@@ -1031,7 +1031,7 @@ TopazNecklace: {
 }
 
 LightPyracotta: {
-	// DisplayName: Light Pyracotta
+	DisplayName: Светлая пиракота
 	// Tooltip: ""
 }
 
@@ -1096,22 +1096,22 @@ OblivionPickaxe: {
 }
 
 DarkPyracottaBricksItem: {
-	// DisplayName: Pyracotta Bricks
+	DisplayName: Пиракотовый кирпич
 	// Tooltip: ""
 }
 
 LightPyracottaBricksItem: {
-	// DisplayName: Light Pyracotta Bricks
+	DisplayName: Светлый пиракотовый кирпич
 	// Tooltip: ""
 }
 
 DarkPyracottaTilesItem: {
-	// DisplayName: Pyracotta Tile
+	DisplayName: Пиракотовая плитка
 	// Tooltip: ""
 }
 
 LightPyracottaTilesItem: {
-	// DisplayName: Light Pyracotta Tile
+	DisplayName: Светлая пиракотовая плитка
 	// Tooltip: ""
 }
 
