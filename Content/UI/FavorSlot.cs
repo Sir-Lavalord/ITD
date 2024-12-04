@@ -1,17 +1,10 @@
 ﻿using ITD.Content.Items.Favors;
-using Microsoft.Xna.Framework.Graphics;
 using System;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.UI;
 using ITD.Systems;
 using System.Collections.Generic;
-using ReLogic.Graphics;
-using System.Linq;
-using Terraria.GameContent;
 using Terraria.ModLoader.UI;
-using ITD.Content.Items.Other;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace ITD.Content.UI
@@ -31,9 +24,10 @@ namespace ITD.Content.UI
         }
         public override void Update(GameTime gameTime)
         {
+            bool mapIconsShown = Main.screenWidth >= 940; // same check as vanilla
             if (Main.playerInventory)
             {
-                favor.UpdateProperties(52f, Main.screenWidth - 500, 30);
+                favor.UpdateProperties(52f, Main.screenWidth - (mapIconsShown ? 500 : 370), 30);
             }
             else
             {
@@ -54,7 +48,7 @@ namespace ITD.Content.UI
             {
                 Main.LocalPlayer.mouseInterface = true;
                 if (NoItem)
-                    UICommon.TooltipMouseText(Language.GetOrRegister(ITD.Instance.GetLocalizationKey($"UI.{nameof(FavorSlot)}.MouseHoverName")).Value);
+                    UICommon.TooltipMouseText(this.GetLocalization("MouseHoverName").Value);
             }
         }
         public override void PostClickItemOut(ref Item mouseItem)

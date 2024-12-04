@@ -1,12 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using Terraria;
 using System;
-using Terraria.DataStructures;
-using Terraria.ModLoader.Config;
 using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.Graphics.Shaders;
 using ITD.DetoursIL;
 using ITD.Utilities;
 namespace ITD.Particles
@@ -18,6 +13,7 @@ namespace ITD.Particles
         Screen,
         UI
     }
+    // todo: read ParticleSystem ramblings
     public abstract class ITDParticle() : IDisposable
     {
         internal uint type;
@@ -131,6 +127,7 @@ namespace ITD.Particles
         {
             return Lighting.GetColor(position.ToTileCoordinates());
         }
+        // this should be a struct
         public (Rectangle, Vector2) GetFramingData()
         {
             int framesVertical = ParticleSystem.particleFramesVertical[type];

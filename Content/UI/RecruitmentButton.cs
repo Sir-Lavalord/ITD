@@ -1,20 +1,13 @@
-﻿using log4net;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Reflection;
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Config;
 using Terraria.UI;
-using Terraria.Localization;
 using Terraria.ModLoader.UI;
 using ITD.Utilities;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 using ITD.Systems.Recruitment;
-using System;
-using static System.Net.Mime.MediaTypeNames;
 using Terraria.UI.Chat;
 
 namespace ITD.Content.UI
@@ -74,7 +67,7 @@ namespace ITD.Content.UI
             base.Update(gameTime);
         }
     }
-    public class RecruitmentButton : UIElement
+    public class RecruitmentButton : ITDUIElement
     {
         public const string buttonTex = "ITD/Content/UI/RecruitmentButton";
         public const string highlight = buttonTex + "_Highlight";
@@ -97,7 +90,7 @@ namespace ITD.Content.UI
         {
             if (IsMouseHovering)
             {
-                UICommon.TooltipMouseText(ITD.Instance.GetLocalization($"UI.{nameof(RecruitmentButton)}.MouseHoverName").Value);
+                UICommon.TooltipMouseText(this.GetLocalization("MouseHoverName").Value);
             }
         }
         public static void DoRecruit()

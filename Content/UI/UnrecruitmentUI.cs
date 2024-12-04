@@ -1,10 +1,6 @@
 ﻿using ITD.Systems.Recruitment;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.UI;
@@ -54,7 +50,7 @@ namespace ITD.Content.UI
             npc = -1;
         }
     }
-    public class UnrecruitmentButton : UIElement
+    public class UnrecruitmentButton : ITDUIElement
     {
         public const string buttonTex = "ITD/Content/UI/RecruitmentButton";
         public const string highlight = buttonTex + "_Highlight";
@@ -77,7 +73,7 @@ namespace ITD.Content.UI
         {
             if (IsMouseHovering)
             {
-                UICommon.TooltipMouseText(ITD.Instance.GetLocalization($"UI.{nameof(UnrecruitmentButton)}.MouseHoverName").Value);
+                UICommon.TooltipMouseText(this.GetLocalization("MouseHoverName").Value);
                 Main.LocalPlayer.mouseInterface = true;
             }
         }

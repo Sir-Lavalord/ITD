@@ -1,15 +1,6 @@
-﻿using ITD.Networking;
-using Microsoft.Xna.Framework;
-using NVorbis.Contracts;
-using StructureHelper.Core.Loaders.UILoading;
-
-/*using StructureHelper.Core.Loaders.UILoading;
-*/using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;

@@ -1,17 +1,13 @@
-﻿using ITD.Content.Items.Favors;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-/*using StructureHelper.Core.Loaders.UILoading;
-*/using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria;
-using Terraria.GameContent;
 namespace ITD.Content.UI
 {
-    public abstract class ITDItemSlot : UIElement
+    public abstract class ITDItemSlot : ITDUIElement
     {
         public abstract ref Item item { get; }
         public abstract Func<Item, bool> isValid { get; }

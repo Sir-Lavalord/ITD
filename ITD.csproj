@@ -9,49 +9,6 @@
   </PropertyGroup>
 	
   <ItemGroup>
-    <AdditionalFiles Remove="Localization\fr-FR\fr-FR_Mods.ITD.Items.hjson" />
-    <AdditionalFiles Remove="Localization\fr-FR_Mods.ITD.hjson" />
-    <AdditionalFiles Remove="Localization\it-IT\it-IT_Mods.ITD.Items.hjson" />
-    <AdditionalFiles Remove="Localization\it-IT_Mods.ITD.hjson" />
-    <AdditionalFiles Remove="Localization\pl-PL\pl-PL_Mods.ITD.Items.hjson" />
-    <AdditionalFiles Remove="Localization\pl-PL_Mods.ITD.hjson" />
-    <AdditionalFiles Remove="Localization\pt-BR\pt-BR_Mods.ITD.hjson" />
-    <AdditionalFiles Remove="Localization\pt-BR\pt-BR_Mods.ITD.Items.hjson" />
-    <AdditionalFiles Remove="Localization\zh-Hans\zh-Hans_Mods.ITD.Items.hjson" />
-    <AdditionalFiles Remove="Localization\zh-Hans_Mods.ITD.hjson" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <None Remove="Localization\de-DE\de-DE_Mods.ITD.Items.hjson" />
-    <None Remove="Localization\en-US\en-US_Mods.ITD.Items.hjson" />
-    <None Remove="Localization\es-ES\es-ES_Mods.ITD.Items.hjson" />
-    <None Remove="Localization\fr-FR\fr-FR_Mods.ITD.Items.hjson" />
-    <None Remove="Localization\fr-FR_Mods.ITD.hjson" />
-    <None Remove="Localization\it-IT\it-IT_Mods.ITD.Items.hjson" />
-    <None Remove="Localization\it-IT_Mods.ITD.hjson" />
-    <None Remove="Localization\pl-PL\pl-PL_Mods.ITD.Items.hjson" />
-    <None Remove="Localization\pl-PL_Mods.ITD.hjson" />
-    <None Remove="Localization\pt-BR\pt-BR_Mods.ITD.hjson" />
-    <None Remove="Localization\pt-BR\pt-BR_Mods.ITD.Items.hjson" />
-    <None Remove="Localization\ru-RU\ru-RU_Mods.ITD.Items.hjson" />
-    <None Remove="Localization\zh-Hans\zh-Hans_Mods.ITD.Items.hjson" />
-    <None Remove="Localization\zh-Hans_Mods.ITD.hjson" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <Compile Include="Localization\fr-FR\fr-FR_Mods.ITD.Items.hjson" />
-    <Compile Include="Localization\fr-FR\fr-FR_Mods.ITD.hjson" />
-    <Compile Include="Localization\it-IT\it-IT_Mods.ITD.Items.hjson" />
-    <Compile Include="Localization\pl-PL\pl-PL_Mods.ITD.Items.hjson" />
-    <Compile Include="Localization\pt-BR\pt-BR_Mods.ITD.hjson" />
-    <Compile Include="Localization\pt-BR\pt-BR_Mods.ITD.Items.hjson" />
-    <Compile Include="Localization\zh-Hans\zh-Hans_Mods.ITD.Items.hjson" />
-    <Compile Include="Localization\zh-Hans\zh-Hans_Mods.ITD.hjson" />
-    <Compile Include="Localization\pl-PL\pl-PL_Mods.ITD.hjson" />
-    <Compile Include="Localization\it-IT\it-IT_Mods.ITD.hjson" />
-  </ItemGroup>
-	
-  <ItemGroup>
     <Reference Include="StructureHelper">
       <HintPath>..\ModAssemblies\StructureHelper_v2.5.3.dll</HintPath>
     </Reference>

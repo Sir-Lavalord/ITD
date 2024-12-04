@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +6,19 @@ using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.Graphics.Shaders;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
-using Terraria.ID;
 using ITD.DetoursIL;
 
 namespace ITD.Particles
 {
+    // My name is Queue Trisi Angel,
+    // I live at 308 Negra Arroyo Lane, Albuquerque, New Mexico, 87104. This is my confession. If you're watching this tape, I'm probably dead, murdered by my
+
+    // anyway, big to-do list for this one
+    // apparently OOP particles is very bad for performance when there's lots of them in the world so, new idea on how improve this:
+    // have a ParticleEmitter class which does the actual drawing and behavior managing of particles. only these would be OOP
+    // particles themselves would be structs, they would contain the usual information except for custom behavior that would be dictated by the emitter
+    // a ParticleEmitter would have an innate lifetime that can be set freely in order to keep it alive, but if it is no longer being set,
+    // its remaining lifetime would be the same as the largest particle lifetime left. dispose it after that
     public class ParticleSystem : DetourGroup // this also doubles as a particle loader
     {
         private static readonly List<ITDParticle> particlePrototypes = [];
