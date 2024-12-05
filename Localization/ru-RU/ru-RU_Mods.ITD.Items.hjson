@@ -1,10 +1,10 @@
 ElectrumBar: {
-	DisplayName: Слиток электрума
+	DisplayName: Электрумовый слиток
 	Tooltip: ""
 }
 
 RhodiumBar: {
-	DisplayName: Слиток родия
+	DisplayName: Родиевый слиток
 	Tooltip: ""
 }
 
@@ -14,18 +14,18 @@ AlloySword: {
 }
 
 ElectrumBow: {
-	DisplayName: Electrum Bow
-	Tooltip: Electrifies wooden arrows
+	DisplayName: Электрумовый лук
+	Tooltip: Заряжает деревянные стрелы
 }
 
 RhodiumBroadsword: {
-	DisplayName: Rhodium Broadsword
-	Tooltip: Struck enemies release damaging sparks
+	DisplayName: Родиевый Меч
+	Tooltip: При ударах по врагам создаются искры
 }
 
 ElectrumSpear: {
 	Tooltip: ""
-	DisplayName: Electrum Spear
+	DisplayName: Электрумовое копьё
 }
 
 Blueshroom: {
@@ -84,7 +84,7 @@ CosmicJellyfishTrophy: {
 
 CosmicJellyfishBag: {
 	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
-	DisplayName: Treasure Bag (Cosmic Jellyfish)
+	DisplayName: Мешок с сокровищами (Космическая Медуза)
 }
 
 CosmicJam: {
@@ -276,7 +276,7 @@ BlueshroomCap: {
 
 SnowyLantern: {
 	DisplayName: Снежный фонарь
-	Tooltip: Summons a lantern-bearning Snowpoff
+	Tooltip: Призывает ряженку с фонарём
 }
 
 DriversIncense: {
@@ -455,8 +455,8 @@ Houndboom: {
 }
 
 ImpulseShackles: {
-	DisplayName: Impulse Shackles
-	Tooltip: Empowers your first jump
+	DisplayName: Импульсные оковы
+	Tooltip: Усиливает первый прыжок
 }
 
 Dunebarrel: {
@@ -494,7 +494,7 @@ WindCape: {
 }
 
 SandberusBag: {
-	DisplayName: Treasure Bag (Sandberus)
+	DisplayName: Мешок с сокровищами (Sandberus)
 	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 }
 
@@ -534,7 +534,7 @@ Fishbacker: {
 }
 
 CrimsonAntidote: {
-	DisplayName: Crimson Antidote
+	DisplayName: Антидот Багрянца
 	Tooltip:
 		'''
 		Healing items heal 20% more HP
@@ -544,7 +544,7 @@ CrimsonAntidote: {
 }
 
 CorruptAntidote: {
-	DisplayName: Corrupt Antidote
+	DisplayName: Антидот Порчи
 	Tooltip:
 		'''
 		Mana items grant 20% more Mana
@@ -589,8 +589,8 @@ CyaniteSpear: {
 }
 
 GalacticJellyBean: {
-	DisplayName: Galactic Jelly Bean
-	Tooltip: Summons a cosmic hand to attack your foes
+	DisplayName: Галактический желейный боб
+	Tooltip: Призывает космическую руку, которая сражается за вас
 }
 
 EatersTail: {
@@ -672,7 +672,7 @@ AceOfHearts: {
 }
 
 GravekeeperBag: {
-	DisplayName: Treasure Bag (Gravekeeper)
+	DisplayName: Мешок с сокровищами (Могильщик)
 	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 }
 
@@ -769,7 +769,7 @@ CyanitePlating: {
 }
 
 HardmodeGravekeeperBag: {
-	DisplayName: Treasure Bag (Gravekeeper - Rematch)
+	DisplayName: Мешок с сокровищами (Могильщик - реванш)
 	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 }
 
@@ -976,8 +976,8 @@ EmberlionMandible: {
 }
 
 TemperedGlassItem: {
-	// DisplayName: Tempered Glass
-	// Tooltip: "'Glass but stronger.'"
+	DisplayName: Закаленное стекло
+	Tooltip: "'Стекло, но лучше.'"
 }
 
 Cosmisumaru: {
