@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Buffs.AccessoryBuffs
+namespace ITD.Content.Buffs.EquipmentBuffs
 {
     public class CrimsonAntidoteBuff : ModBuff
     {

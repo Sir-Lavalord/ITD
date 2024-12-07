@@ -328,6 +328,11 @@ Buffs: {
 		DisplayName: Keepers Shovel Tag Debuff
 		Description: Mods.ITD.Buffs.KeepersShovelTagDebuff.Description
 	}
+
+	RhodiumRageBuff: {
+		DisplayName: Rhodium Rage
+		Description: 10% increased damage and critical chance
+	}
 }
 
 DeathMessage: {

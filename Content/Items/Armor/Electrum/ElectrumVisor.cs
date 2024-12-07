@@ -1,9 +1,12 @@
-﻿using ITD.Utilities;
-using Terraria.ID;
+﻿using Terraria.ID;
 using Terraria.Localization;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.Audio;
+
+using ITD.Utilities;
 using ITD.Content.Items.Materials;
+using ITD.Content.NPCs;
 
 namespace ITD.Content.Items.Armor.Electrum
 {
@@ -35,7 +38,8 @@ namespace ITD.Content.Items.Armor.Electrum
         }
         public override void UpdateArmorSet(Player player)
         {
-            player.GetITDPlayer().setElectrum = true;
+			SetElectrumPlayer modPlayer = player.GetModPlayer<SetElectrumPlayer>();
+            modPlayer.setBonus = true;
             player.setBonus = SetBonusText.Value;
         }
 		
@@ -45,6 +49,52 @@ namespace ITD.Content.Items.Armor.Electrum
                 .AddIngredient(ModContent.ItemType<ElectrumBar>(), 20)
                 .AddTile(TileID.Anvils)
                 .Register();
+		}
+    }
+	
+	public class SetElectrumPlayer : ModPlayer
+    {
+        public bool setBonus = false;
+
+        public override void ResetEffects()
+        {
+            setBonus = false;
+        }
+
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
+		{
+			if (setBonus)
+			{
+				target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
+				int crit = (int)(Player.GetCritChance(DamageClass.Generic))+(int)(Player.GetCritChance(item.DamageType))+item.crit;
+				float damage = Player.GetDamage(DamageClass.Generic).ApplyTo(Player.GetDamage(item.DamageType).ApplyTo(item.damage));
+				MiscHelpers.Zap(target.Center, Player, (int)(damage * 0.75f), crit, 1);
+				
+				SoundEngine.PlaySound(SoundID.Item94, target.position);
+				for (int i = 0; i < 3; i++)
+				{
+					int dust = Dust.NewDust(target.Center, 1, 1, DustID.Electric, 0f, 0f, 0, default, 1f);
+					Main.dust[dust].noGravity = true;
+					Main.dust[dust].velocity *= 2f;
+				}
+			}
+		}
+		
+		public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
+		{
+			if (setBonus)
+			{
+				target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
+				MiscHelpers.Zap(target.Center, Player, (int)(proj.damage * 0.75f), proj.CritChance, 1);
+				
+				SoundEngine.PlaySound(SoundID.Item94, target.position);
+				for (int i = 0; i < 3; i++)
+				{
+					int dust = Dust.NewDust(target.Center, 1, 1, DustID.Electric, 0f, 0f, 0, default, 1f);
+					Main.dust[dust].noGravity = true;
+					Main.dust[dust].velocity *= 2f;
+				}
+			}
 		}
     }
 }

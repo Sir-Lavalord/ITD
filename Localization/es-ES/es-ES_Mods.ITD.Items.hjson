@@ -913,7 +913,7 @@ ElectrumLeggings: {
 }
 
 RhodiumVisor: {
-	// SetBonus: Mods.ITD.Items.RhodiumVisor.SetBonus
+	// SetBonus: Increases damage and critical chance after taking damage
 	DisplayName: Visor de rodio
 	Tooltip: Aumenta el porcentaje de ataque crítico por un 4%
 }

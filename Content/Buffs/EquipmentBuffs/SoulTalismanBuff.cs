@@ -8,14 +8,14 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Buffs.AccessoryBuffs
+namespace ITD.Content.Buffs.EquipmentBuffs
 {
     public class SoulTalismanBuff : ModBuff
     {
         public static readonly int Stacks = 5;
         public static readonly int AnimationSpeed = 60;
         int CurrentStack;
-        public static readonly string AnimationSheetPath = "ITD/Content/Buffs/AccessoryBuffs/SoulTalismanBuff_Anim";
+        public static readonly string AnimationSheetPath = "ITD/Content/Buffs/EquipmentBuffs/SoulTalismanBuff_Anim";
         private Asset<Texture2D> animatedTexture;
 
         public override void SetStaticDefaults()

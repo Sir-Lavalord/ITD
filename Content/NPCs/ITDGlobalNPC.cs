@@ -23,7 +23,7 @@ using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Utilities;
 using ITD.Content.Items.Accessories.Combat.All;
-using ITD.Content.Buffs.AccessoryBuffs;
+using ITD.Content.Buffs.EquipmentBuffs;
 
 
 namespace ITD.Content.NPCs

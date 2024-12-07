@@ -29,7 +29,7 @@ using ITD.Networking.Packets;
 using ITD.Content.UI;
 using Terraria.GameInput;
 using log4net.Core;
-using ITD.Content.Buffs.AccessoryBuffs;
+using ITD.Content.Buffs.EquipmentBuffs;
 using ITD.Content.Projectiles.Friendly.Summoner;
 using ITD.Content.Items.Accessories.Gimmicks.IncomprehensiblePolyhedron;
 
@@ -70,10 +70,6 @@ namespace ITD.Players
         public bool soulTalismanEffect = false;
         public int soulTalismanStack = 0;
         public int soulTalismanTally = 0;
-
-
-        public bool setElectrum = false;
-		public bool setRhodium = false;
 
         public bool setAlloy_Melee = false;
         public bool setAlloy_Ranged = false;
@@ -156,10 +152,7 @@ namespace ITD.Players
             soulTalismanEffect = false;
             soulTalisman = false;
             portableLab = false;
-			
-			setElectrum = false;
-			setRhodium = false;
-			
+						
             setAlloy_Melee = false;
             setAlloy_Ranged = false;
             setAlloy_Magic = false;
@@ -314,39 +307,6 @@ namespace ITD.Players
             }
         }
 
-        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
-		{
-			if (setElectrum)
-			{
-				target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
-				MiscHelpers.Zap(target.Center, Player, (int)(Player.GetDamage(item.DamageType).ApplyTo(item.damage) * 0.75f), (int)(Player.GetCritChance(item.DamageType)), 1);
-				
-				SoundEngine.PlaySound(SoundID.Item94, target.position);
-				for (int i = 0; i < 3; i++)
-				{
-					int dust = Dust.NewDust(target.Center, 1, 1, DustID.Electric, 0f, 0f, 0, default, 1f);
-					Main.dust[dust].noGravity = true;
-					Main.dust[dust].velocity *= 2f;
-				}
-			}
-		}
-		
-		public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
-		{
-			if (setElectrum)
-			{
-				target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
-				MiscHelpers.Zap(target.Center, Player, (int)(proj.damage * 0.75f), proj.CritChance, 1);
-				
-				SoundEngine.PlaySound(SoundID.Item94, target.position);
-				for (int i = 0; i < 3; i++)
-				{
-					int dust = Dust.NewDust(target.Center, 1, 1, DustID.Electric, 0f, 0f, 0, default, 1f);
-					Main.dust[dust].noGravity = true;
-					Main.dust[dust].velocity *= 2f;
-				}
-			}
-		}
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
 			if (modifiers.Dodgeable && Main.rand.NextFloat(1f) < blockChance) // Chance to block attacks

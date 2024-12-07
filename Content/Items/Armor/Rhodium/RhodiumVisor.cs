@@ -1,9 +1,12 @@
-﻿using ITD.Utilities;
-using Terraria.ID;
+﻿using Terraria.ID;
 using Terraria.Localization;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.Audio;
+
 using ITD.Content.Items.Materials;
+using ITD.Utilities;
+using ITD.Content.Buffs.EquipmentBuffs;
 
 namespace ITD.Content.Items.Armor.Rhodium
 {
@@ -35,7 +38,8 @@ namespace ITD.Content.Items.Armor.Rhodium
         }
         public override void UpdateArmorSet(Player player)
         {
-            player.GetITDPlayer().setRhodium = true;
+            SetRhodiumPlayer modPlayer = player.GetModPlayer<SetRhodiumPlayer>();
+            modPlayer.setBonus = true;
             player.setBonus = SetBonusText.Value;
         }
 		
@@ -45,6 +49,22 @@ namespace ITD.Content.Items.Armor.Rhodium
                 .AddIngredient(ModContent.ItemType<RhodiumBar>(), 20)
                 .AddTile(TileID.Anvils)
                 .Register();
+		}
+    }
+	
+	public class SetRhodiumPlayer : ModPlayer
+    {
+        public bool setBonus = false;
+
+        public override void ResetEffects()
+        {
+            setBonus = false;
+        }
+
+		public override void OnHurt(Player.HurtInfo info)
+		{
+			SoundEngine.PlaySound(SoundID.NPCHit21, Player.Center);
+			Player.AddBuff(ModContent.BuffType<RhodiumRageBuff>(), 600);
 		}
     }
 }
