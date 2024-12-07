@@ -70,6 +70,15 @@ namespace ITD.Utilities
 
             return new Rectangle(minX, minY, width, height);
         }
+        public static Rectangle Inflated(this Rectangle rect, int horizontalValue, int verticalValue)
+        {
+            int newX = rect.X - horizontalValue;
+            int newY = rect.Y - verticalValue;
+            int newW = rect.Width + horizontalValue * 2;
+            int newH = rect.Height + verticalValue * 2;
+            return new(newX, newY, newW, newH);
+        }
+        public static Rectangle Inflated(this Rectangle rect, int value) => rect.Inflated(value, value);
         public static float AngleDiff(Vector2 origin, params Vector2[] vecs)
         {
             vecs = [origin, .. vecs.OrderBy(v => v.DistanceSQ(origin))];
@@ -86,6 +95,7 @@ namespace ITD.Utilities
         public static Vector3 ToVector3(this Vector2 v) => new(v.X, v.Y, 0);
         public static bool Exists(this NPC n) => n != null && n.active;
         public static bool Exists(this Projectile p) => p != null && p.active;
+        public static bool Exists(this Item i) => i != null && i.active && !i.IsAir;
         //Make the invul boss part untargetable please
         public static bool IsValidTarget(this Projectile projectile, NPC target)
         {

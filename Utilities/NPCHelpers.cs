@@ -27,7 +27,7 @@ namespace ITD.Utilities
 			int num4 = height / 16 + ((height % 16 == 0) ? 0 : 1);
 			bool flag = true;
 			bool flag2 = true;
-			if (Main.tile[num2, num3] == null)
+			if (!WorldGen.InWorld(num2, num3) || !Framing.GetTileSafely(num2, num3).HasTile)
 			{
 				return;
 			}

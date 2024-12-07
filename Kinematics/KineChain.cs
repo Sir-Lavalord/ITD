@@ -11,11 +11,11 @@ namespace ITD.Kinematics
         public const float BIAS = 3f;
         public const int ITERATIONS = 32;
         public Vector2 basePoint { get; set; }
-        private const int LIMB_LEN = 0;
-        private const int LIMB_MINANGLE = 1;
-        private const int LIMB_MAXANGLE = 2;
+        public const int LIMB_LEN = 0;
+        public const int LIMB_MINANGLE = 1;
+        public const int LIMB_MAXANGLE = 2;
         public float[][] limbs;
-        Vector2[] joints;
+        public Vector2[] joints;
         float limbsLength
         {
             get
