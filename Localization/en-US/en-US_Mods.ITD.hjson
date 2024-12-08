@@ -154,6 +154,7 @@ Projectiles: {
 	Shroomflake.DisplayName: Shroomflake
 	Sporeflake.DisplayName: Sporeflake
 	IncendipedeFireSpike.DisplayName: Incendipede Fire Spike
+	RoyalJellyProj.DisplayName: Royal Jelly Proj
 }
 
 NPCs: {
@@ -332,6 +333,16 @@ Buffs: {
 	RhodiumRageBuff: {
 		DisplayName: Rhodium Rage
 		Description: 10% increased damage and critical chance
+	}
+
+	RoyalJellyDebuff: {
+		DisplayName: Royal Jelly Debuff
+		Description: Mods.ITD.Buffs.RoyalJellyDebuff.Description
+	}
+
+	RoyalJellyBuff: {
+		DisplayName: Royal Jelly Buff
+		Description: Mods.ITD.Buffs.RoyalJellyBuff.Description
 	}
 }
 

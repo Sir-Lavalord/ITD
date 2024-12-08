@@ -1164,3 +1164,8 @@ CicadianStaff: {
 	// DisplayName: Cicadian Staff
 	// Tooltip: ""
 }
+
+RoyalJellyScepter: {
+	// DisplayName: Royal Jelly Scepter
+	// Tooltip: ""
+}

@@ -24,6 +24,7 @@ using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Utilities;
 using ITD.Content.Items.Accessories.Combat.All;
 using ITD.Content.Buffs.EquipmentBuffs;
+using ITD.Content.Items.Weapons.Mage;
 
 
 namespace ITD.Content.NPCs
@@ -278,7 +279,11 @@ namespace ITD.Content.NPCs
             {
                 npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<Prophylaxis>()));
             }
-			if (npc.type == NPCID.SkeletronHead)
+            if (npc.type == NPCID.QueenBee)
+            {
+                npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<RoyalJellyScepter>()));
+            }
+            if (npc.type == NPCID.SkeletronHead)
             {
                 npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<Cursebreaker>()));
             }
