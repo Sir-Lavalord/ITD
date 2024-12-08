@@ -6,16 +6,20 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using static ITD.Utilities.TrailingModeID;
 
 namespace ITD.Content.NPCs.BlueshroomGroves
 {
     public class CicadianHive : ModNPC
     {
         public static LocalizedText BestiaryEntry { get; private set; }
+        public int frameGroup = 1;
+        public int attackTimer = 0;
         private enum ActionState
         {
+            Spawning,
             Hovering,
-            Escaping
+            Escaping,
         }
         private ActionState AI_State;
         private int timeBetweenFrames;
@@ -41,21 +45,46 @@ namespace ITD.Content.NPCs.BlueshroomGroves
             NPC.aiStyle = -1;
             SpawnModBiomes = [ModContent.GetInstance<BlueshroomGrovesBiome>().Type];
         }
+
         public override void FindFrame(int frameHeight)
         {
             NPC.frameCounter += 1f;
+            int maxFrame;
+            if (frameGroup == 2)
+            {
+                maxFrame = 14;
+            }
+            else
+            {
+                maxFrame = 7;
+            }
+
             if (NPC.frameCounter > timeBetweenFrames)
             {
                 NPC.frameCounter = 0;
-                NPC.frame.Y += frameHeight;
 
-                if (NPC.frame.Y > frameHeight * (Main.npcFrameCount[Type] - 1))
+                if (frameGroup == 2)
                 {
-                    NPC.frame.Y = frameHeight;
+                    NPC.frame.Y += frameHeight; 
+                                              
+                    if (NPC.frame.Y >= frameHeight * maxFrame)
+                    {
+                        NPC.frame.Y = frameHeight * (maxFrame - 7);
+                    }
+                }
+                else
+                {
+                    NPC.frame.Y += frameHeight; 
+                                              
+                    if (NPC.frame.Y >= frameHeight * maxFrame)
+                    {
+                        NPC.frame.Y = 0;
+                    }
                 }
             }
         }
-        public override void HitEffect(NPC.HitInfo hit)
+
+        public override void HitEffect(Terraria.NPC.HitInfo hit)
         {
             if (AI_State == ActionState.Hovering)
             {
@@ -64,6 +93,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
         }
         public override void AI()
         {
+            attackTimer++;
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
                 NPC.TargetClosest();
@@ -78,8 +108,24 @@ namespace ITD.Content.NPCs.BlueshroomGroves
             float rotation = rotationFactor * maxRotation;
             NPC.rotation = rotation;
 
+            if(attackTimer > 360)
+            {
+                if (Vector2.Distance(NPC.Center, player.Center) > tileRange * 16)
+                {
+                    frameGroup = 2;
+                    AI_State = ActionState.Spawning;
+                }
+                attackTimer = 0;
+            }
+
             switch (AI_State)
             {
+                case ActionState.Spawning:
+                    timeBetweenFrames = 4;
+                    spawnEnemies();
+                    frameGroup = 1;
+                    AI_State = ActionState.Escaping;
+                    break;
                 case ActionState.Hovering:
                     timeBetweenFrames = 4;
                     RaycastData ray = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, false, true, 32);
@@ -104,6 +150,13 @@ namespace ITD.Content.NPCs.BlueshroomGroves
                     }
                     break;
             }
+        }
+
+        private void spawnEnemies()
+        {
+            Terraria.NPC.NewNPC(NPC.GetSource_FromAI(), (int)(NPC.Center.X), (int)(NPC.Center.Y + 30f), ModContent.NPCType<Content.NPCs.BlueshroomGroves.ShroomishSlime>());
+            Terraria.NPC.NewNPC(NPC.GetSource_FromAI(), (int)(NPC.Center.X - 20f), (int)(NPC.Center.Y - 30f), ModContent.NPCType<Content.NPCs.BlueshroomGroves.ShroomishSlime>());
+            Terraria.NPC.NewNPC(NPC.GetSource_FromAI(), (int)(NPC.Center.X - 20f), (int)(NPC.Center.Y - 30f), ModContent.NPCType<Content.NPCs.BlueshroomGroves.ShroomishSlime>());
         }
     }
 }
