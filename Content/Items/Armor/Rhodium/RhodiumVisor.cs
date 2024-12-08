@@ -63,8 +63,11 @@ namespace ITD.Content.Items.Armor.Rhodium
 
 		public override void OnHurt(Player.HurtInfo info)
 		{
-			SoundEngine.PlaySound(SoundID.NPCHit21, Player.Center);
-			Player.AddBuff(ModContent.BuffType<RhodiumRageBuff>(), 600);
+			if (setBonus)
+			{
+				SoundEngine.PlaySound(SoundID.NPCHit21, Player.Center);
+				Player.AddBuff(ModContent.BuffType<RhodiumRageBuff>(), 600);
+			}
 		}
     }
 }

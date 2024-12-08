@@ -12,7 +12,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 {
     public class GhostlyBlade : ModProjectile
     {
-		public VertexStrip TrailStrip;
+		public VertexStrip TrailStrip = new VertexStrip();
 		
 		public override void SetStaticDefaults()
         {
@@ -83,7 +83,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
-			TrailStrip ??= new();
             MiscShaderData expr_0F = GameShaders.Misc["MagicMissile"];
 			expr_0F.UseSaturation(-2.8f);
 			expr_0F.UseOpacity(2f);
