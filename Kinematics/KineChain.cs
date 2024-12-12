@@ -6,15 +6,25 @@ using Terraria.ID;
 
 namespace ITD.Kinematics
 {
+    public struct KineLimb(float length, Func<float> minAngle = null, Func<float> maxAngle = null)
+    {
+        public float Length { get; set; } = length;
+        public Func<float> MinAngle { get; set; } = minAngle ?? (() => -MathF.Tau);
+        public Func<float> MaxAngle { get; set; } = maxAngle ?? (() => MathF.Tau);
+        public static void Draw(Vector2[] joints, int i, SpriteBatch spriteBatch, Vector2 screenPos, Color color, Texture2D tex, bool shouldBeMirrored)
+        {
+            Vector2 a = joints[i];
+            Vector2 b = joints[i + 1];
+            Point tileCoords = Vector2.Lerp(a, b, 0.5f).ToTileCoordinates();
+            spriteBatch.Draw(tex, a - screenPos, null, Lighting.GetColor(tileCoords.X, tileCoords.Y).MultiplyRGB(color), a.AngleTo(b), new Vector2(0f, tex.Height / 2f), 1f, shouldBeMirrored ? SpriteEffects.FlipVertically : SpriteEffects.None, default);
+        }
+    }
     public class KineChain
     {
         public const float BIAS = 3f;
         public const int ITERATIONS = 32;
         public Vector2 basePoint { get; set; }
-        public const int LIMB_LEN = 0;
-        public const int LIMB_MINANGLE = 1;
-        public const int LIMB_MAXANGLE = 2;
-        public float[][] limbs;
+        public KineLimb[] limbs;
         public Vector2[] joints;
         float limbsLength
         {
@@ -23,24 +33,21 @@ namespace ITD.Kinematics
                 float add = 0;
                 for (int i = 0; i < limbs.Length; i++)
                 {
-                    add += limbs[i][LIMB_LEN];
+                    //add += limbs[i][LIMB_LEN];
+                    add += limbs[i].Length;
                 }
                 return add;
             }
         }
-        public KineChain(float x, float y, params float[][] limbsP)
+        public KineChain(float x, float y, params KineLimb[] limbsP)
         {
             limbs = limbsP;
             joints = new Vector2[limbs.Length + 1];
             joints[0] = basePoint;
             for (int i = 0; i < limbs.Length; i++)
             {
-                joints[i + 1] = joints[i] + new Vector2(limbs[i][LIMB_LEN], 0);
+                joints[i + 1] = joints[i] + new Vector2(limbs[i].Length, 0);
             }
-        }
-        public static float[] CreateKineSegment(float length, float minAngle = -MathF.Tau, float maxAngle = MathF.Tau)
-        {
-            return [length, minAngle, maxAngle];
         }
         public void GenUpdate(Vector2 target)
         {
@@ -107,9 +114,9 @@ namespace ITD.Kinematics
                 var c = i > 1 ? joints[i - 2] : basePoint;
                 var rootAngle = c.AngleTo(b);
                 var rawDiffAngle = b.AngleTo(a) - rootAngle;
-                var diffAngle = MathHelper.Clamp(rawDiffAngle, limb[LIMB_MINANGLE], limb[LIMB_MAXANGLE]);
+                var diffAngle = MathHelper.Clamp(rawDiffAngle, limb.MinAngle(), limb.MaxAngle());
                 var angle = rootAngle + diffAngle;
-                joints[i - 1] = a + new Vector2(limb[LIMB_LEN], 0).RotatedBy(angle + MathF.PI);
+                joints[i - 1] = a + new Vector2(limb.Length, 0).RotatedBy(angle + MathF.PI);
             }
         }
         public void ForwardPass()
@@ -122,10 +129,10 @@ namespace ITD.Kinematics
                 var a = joints[i];
                 var b = joints[i + 1];
                 var rawDiffAngle = MathHelper.WrapAngle(a.AngleTo(b) - rootAngle);
-                var diffAngle = MathHelper.Clamp(rawDiffAngle, limb[LIMB_MINANGLE], limb[LIMB_MAXANGLE]);
+                var diffAngle = MathHelper.Clamp(rawDiffAngle, limb.MinAngle(), limb.MaxAngle());
                 var angle = rootAngle + diffAngle;
 
-                joints[i + 1] = a + new Vector2(limb[LIMB_LEN], 0).RotatedBy(angle);
+                joints[i + 1] = a + new Vector2(limb.Length, 0).RotatedBy(angle);
                 rootAngle = angle;
             }
         }
@@ -134,23 +141,8 @@ namespace ITD.Kinematics
             for (int i = limbs.Length - 1; i >= 0; i--)
             {
                 Texture2D textureToDraw = i == limbs.Length - 1 && startTexture != null ? startTexture : i == 0 && endTexture != null ? endTexture : texture;
-                limbs[i].Draw(joints, i, spriteBatch, screenPos, color, textureToDraw, shouldBeMirrored);
+                KineLimb.Draw(joints, i, spriteBatch, screenPos, color, textureToDraw, shouldBeMirrored);
             }
-        }
-    }
-    public static class KineExtensions
-    {
-        /// <summary>
-        /// this is kinda cursed
-        /// </summary>
-        public static void Draw(this float[] limb, Vector2[] joints, int i, SpriteBatch spriteBatch, Vector2 screenPos, Color color, Texture2D tex, bool shouldBeMirrored)
-        {
-            if (limb.Length != 3)
-                return;
-            Vector2 a = joints[i];
-            Vector2 b = joints[i + 1];
-            Point tileCoords = Vector2.Lerp(a, b, 0.5f).ToTileCoordinates();
-            spriteBatch.Draw(tex, a - screenPos, null, Lighting.GetColor(tileCoords.X, tileCoords.Y).MultiplyRGB(color), a.AngleTo(b), new Vector2(0f, tex.Height / 2f), 1f, shouldBeMirrored ? SpriteEffects.FlipVertically : SpriteEffects.None, default);
         }
     }
 }

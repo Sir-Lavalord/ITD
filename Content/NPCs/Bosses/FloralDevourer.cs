@@ -259,7 +259,7 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override void SetStaticDefaults()
         {
-            NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            NPCID.Sets.NPCBestiaryDrawModifiers bestiaryData = new()
             {
                 Hide = true
             };
@@ -286,10 +286,10 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (HasLegs)
             {
-                float[][] leg =
+                KineLimb[] leg =
                 [
-                    KineChain.CreateKineSegment(81f),
-                    KineChain.CreateKineSegment(97f),
+                    new KineLimb(81f),
+                    new KineLimb(97f),
                 ];
                 legFront = new KineChain(NPC.Center.X, NPC.Center.Y, leg);
                 legBack = new KineChain(NPC.Center.X, NPC.Center.Y, leg);

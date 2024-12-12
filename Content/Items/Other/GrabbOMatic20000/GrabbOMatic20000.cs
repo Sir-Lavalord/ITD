@@ -3,14 +3,10 @@ using ITD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameInput;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Other.GrabbOMatic20000
@@ -42,12 +38,14 @@ namespace ITD.Content.Items.Other.GrabbOMatic20000
         {
             if (!Active)
                 return;
-            float[][] armP =
+
+            KineLimb[] armP =
                 [
-                    KineChain.CreateKineSegment(42f),
-                    KineChain.CreateKineSegment(42f),
-                    KineChain.CreateKineSegment(42f),
+                    new KineLimb(42f),
+                    new KineLimb(42f),
+                    new KineLimb(42f),
                 ];
+
             arm ??= new KineChain(Player.Center.X, Player.Center.Y, armP);
             arm.basePoint = Player.Center;
             arm.GenUpdate(Player.GetITDPlayer().MousePosition);
@@ -64,7 +62,7 @@ namespace ITD.Content.Items.Other.GrabbOMatic20000
                 int inflate = 16;
                 NPC[] grabbedNPCs = MiscHelpers.EntityQuery<NPC>(predicate: n => n.Exists() && n.Hitbox.Inflated(inflate).Contains(mouse));
                 Projectile[] grabbedProjectiles = MiscHelpers.EntityQuery<Projectile>(predicate: p => p.Exists() && p.Hitbox.Inflated(inflate).Contains(mouse));
-                Player[] grabbedPlayers = MiscHelpers.EntityQuery<Player>(ignore: Player, predicate: p => p.Exists() && p.Hitbox.Inflated(inflate).Contains(mouse));
+                Player[] grabbedPlayers = MiscHelpers.EntityQuery(ignore: Player, predicate: p => p.Exists() && p.Hitbox.Inflated(inflate).Contains(mouse));
                 Item[] grabbedItems = MiscHelpers.EntityQuery<Item>(predicate: i => i.Exists() && i.Hitbox.Inflated(inflate).Contains(mouse));
                 Entity[] entities = [.. grabbedNPCs, .. grabbedProjectiles, .. grabbedPlayers, .. grabbedItems];
                 foreach (Entity entity in entities)
