@@ -4,6 +4,7 @@ using System;
 using Terraria.ModLoader;
 using ITD.DetoursIL;
 using ITD.Utilities;
+using Terraria.Utilities;
 namespace ITD.Particles
 {
     public enum ParticleDrawCanvas
@@ -75,6 +76,11 @@ namespace ITD.Particles
         {
             oldPosition[historyIndex] = position;
             historyIndex = (historyIndex + 1) % oldPosition.Length;
+        }
+        public void RandomizeFrame(UnifiedRandom rand)
+        {
+            frameHorizontal = rand.Next(ParticleSystem.particleFramesHorizontal[type]);
+            frameVertical = rand.Next(ParticleSystem.particleFramesVertical[type]);
         }
         public void Update()
         {

@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Terraria.ModLoader;
 
 namespace ITD.Content.Backgrounds
 {
