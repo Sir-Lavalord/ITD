@@ -51,7 +51,7 @@ namespace ITD.Menus
         private readonly List<MenuSnow> snows = [];
         public override bool PreDrawLogo(SpriteBatch spriteBatch, ref Vector2 logoDrawCenter, ref float logoRotation, ref float logoScale, ref Color drawColor)
         {
-            if (Main.rand.NextBool(15))
+            if (Main.rand.NextBool(10))
             {
                 Vector2 spawnPos = Vector2.UnitX * Main.rand.NextFloat(Main.screenWidth);
                 snows.Add(new MenuSnow(spawnPos, 400, Main.rand.NextFloat(1f, 1.5f)) { SpawnIndex = snows.Count });
@@ -75,10 +75,18 @@ namespace ITD.Menus
                 float smooth = snows[i].Scale * (float)Math.Sin(Math.PI * progress);
                 spriteBatch.Draw(tex, snows[i].Position, frame, Color.White, 0f, new Vector2(tex.Width * 0.5f, tex.Height / 3 * 0.5f), smooth, SpriteEffects.None, 0f);
             }
-            drawColor = Color.White;
+            //drawColor = Color.White;
             //Main.dayTime = false;
             //Main.time = Main.nightLength / 2f;
-            return true;
+            logoScale -= 0.2f;
+            logoDrawCenter.Y += 30f;
+            // draw the logo
+            Asset<Texture2D> glowmask = ModContent.Request<Texture2D>("ITD/Menus/Textures/AlphaMenu_Glow");
+            spriteBatch.Draw(Logo.Value, logoDrawCenter, null, drawColor, logoRotation, Logo.Size() * 0.5f, logoScale, SpriteEffects.None, 0f);
+            Color pulse = Color.White * (float)((Math.Sin(Main.timeForVisualEffects / 16f) + 1) / 2f);
+            spriteBatch.Draw(glowmask.Value, logoDrawCenter, null, pulse, logoRotation, Logo.Size() * 0.5f, logoScale, SpriteEffects.None, 0f);
+
+            return false;
         }
     }
 }

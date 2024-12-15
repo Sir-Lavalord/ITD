@@ -16,14 +16,15 @@ And continues to expand.
 Cowsgomoo - Owner, Director  
 Sir Lavalord - Director
 ### Code
-Cowsgomoo, tapenki, Mirrorman, Dice, infixite, Duckman, Elongated1, lolxd87, qAngel
+Cowsgomoo, tapenki, Mirrorman, Dice, infixite, Duckman, Elongated1, lolxd87, qAngel, HAHAjax
 ### Spriting and Art
-Cowsgomoo, Rygel Bluestar, Goopygooger, Asterope, Plague, qAngel, tapenki, Mirrorman, Ant,  amika, El_Juanchooo, pilchardheck, Uğur, Sir Lavalord, Grands
+Cowsgomoo, Rygel Bluestar, Goopygooger, Asterope, Plague, qAngel, tapenki, Mirrorman, Ant,  amika, El_Juanchooo, pilchardheck, Uğur, Sir Lavalord, Grands, Microengine
 ### Music
-Rygel Bluestar, qAngel
+Microengine, Rygel Bluestar, qAngel
 ### Localization
 qAngel, lolxd87 - Spanish  
 Duckman - German
+tapenki - Russian
 ### Special Thanks
 GabeHasWon - Some tile drawing code from Verdant  
 Un-Terr, Ionic - Various feedback
