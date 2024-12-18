@@ -1169,3 +1169,13 @@ RoyalJellyScepter: {
 	// DisplayName: Royal Jelly Scepter
 	// Tooltip: ""
 }
+
+AncientThurible: {
+	// DisplayName: Ancient Thurible
+	// Tooltip: ""
+}
+
+ThuribleWings: {
+	// DisplayName: Thurible Wings
+	// Tooltip: ""
+}

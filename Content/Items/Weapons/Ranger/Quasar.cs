@@ -53,7 +53,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         public override void AddRecipes()
         {
             CreateRecipe(1)
-                .AddIngredient(ItemID.Star, 5)
+                .AddIngredient(ItemID.FallenStar, 5)
                 .AddIngredient(ItemID.MeteoriteBar, 3)
                 .AddIngredient(ModContent.ItemType<StarlitBar>(), 6)
                 .AddTile(TileID.Anvils)
