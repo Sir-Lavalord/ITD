@@ -20,7 +20,7 @@ ElectrumBow: {
 
 RhodiumBroadsword: {
 	DisplayName: Rhodium Broadsword
-	Tooltip: Struck enemies release damaging sparks
+	Tooltip: Struck enemies release a wave of fire
 }
 
 ElectrumSpear: {

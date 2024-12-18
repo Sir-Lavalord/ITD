@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Content.Items.Materials;
 using ITD.Utilities;
@@ -41,13 +42,12 @@ namespace ITD.Content.Items.Weapons.Melee
         }
 		
 		public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
-			int loops = Main.rand.Next(2, 4);
 			Vector2 toTarget = target.Center - player.Center;
 			toTarget.Normalize();
-			for (int j = 0; j < loops; j++)
+			for (int j = 0; j < 3; j++)
 			{
-				Vector2 velocity = toTarget.RotatedByRandom(MathHelper.ToRadians(30)) * Main.rand.NextFloat(4f, 6f);
-				Projectile.NewProjectile(player.GetSource_FromThis(), target.Center.X, target.Center.Y, velocity.X, velocity.Y, 504, (int)player.GetDamage(DamageClass.Melee).ApplyTo(24), 0.5f, player.whoAmI, 0f, 0f, 0f);
+				Vector2 velocity = toTarget.RotatedBy(MathHelper.ToRadians(30)-MathHelper.ToRadians(30)*j)*8f;
+				Projectile.NewProjectile(player.GetSource_FromThis(), target.Center.X, target.Center.Y, velocity.X, velocity.Y, ModContent.ProjectileType<RhodiumBroadswordFlames>(), (int)player.GetDamage(DamageClass.Generic).ApplyTo(player.GetDamage(DamageClass.Melee).ApplyTo(24)), 0.5f, player.whoAmI, 0f, 0f, 0f);
 			}
 		}
 		

@@ -73,9 +73,10 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         {
             SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Glass);
+				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, 0f, 0f, 0, default, 1.5f);
             }
         }
 
