@@ -12,7 +12,7 @@ using ITD.Content.Projectiles;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {
-    public class Chainwhip : ModItem
+    public class Chainwhip : ITDSnaptrapItem
     {
         public override void SetDefaults()
         {
@@ -27,6 +27,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
             return snaptrap == null || snaptrap.IsStickingToTarget;
 		}
         //public override bool AltFunctionUse(Player player) => true;
+        //uh oh custom code
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
             ITDSnaptrap snaptrap = player.GetSnaptrapPlayer().GetActiveSnaptrap();

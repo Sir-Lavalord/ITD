@@ -11,7 +11,7 @@ using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {
-    public class DespoticSnaptrap : ModItem
+    public class DespoticSnaptrap : ITDSnaptrapItem
     {
         public override void SetDefaults()
         {
@@ -19,9 +19,6 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
             Item.rare = ModContent.RarityType<DespoticRarity>();
             Item.value = Item.sellPrice(platinum: 1);
         }
-        public override bool CanUseItem(Player player) => player.GetSnaptrapPlayer().CanUseSnaptrap;
-        public override bool AltFunctionUse(Player player) => true;
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) => player.GetSnaptrapPlayer().ShootSnaptrap();
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             float pulseAmount = Main.mouseTextColor / 255f;
