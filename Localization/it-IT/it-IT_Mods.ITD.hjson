@@ -158,6 +158,8 @@ Projectiles: {
 	// RhodiumBroadswordFlames.DisplayName: Rhodium Broadsword Flames
 	// MandinataBreath.DisplayName: Mandinata Breath
 	// MandinataProjectile.DisplayName: Mandinata Projectile
+	// CicadarangProjectile.DisplayName: Cicadarang Projectile
+	// CicadarangMiniStriker.DisplayName: Cicadarang Mini Striker
 }
 
 NPCs: {
