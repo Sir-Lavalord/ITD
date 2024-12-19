@@ -156,6 +156,8 @@ Projectiles: {
 	IncendipedeFireSpike.DisplayName: Incendipede Fire Spike
 	RoyalJellyProj.DisplayName: Royal Jelly Proj
 	RhodiumBroadswordFlames.DisplayName: Rhodium Broadsword Flames
+	MandinataBreath.DisplayName: Mandinata Breath
+	MandinataProjectile.DisplayName: Mandinata Projectile
 }
 
 NPCs: {

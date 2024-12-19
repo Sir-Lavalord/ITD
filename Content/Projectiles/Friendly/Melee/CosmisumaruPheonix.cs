@@ -46,9 +46,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         {
             Projectile.rotation = Projectile.velocity.ToRotation();
 
-            if (Main.rand.NextBool(5))
+            if (Main.rand.NextBool(2))
             {
-                int choice = Main.rand.Next(3);
+                int choice = Main.rand.Next(2);
                 if (choice == 0)
                 {
                     for (int d = 0; d < 2; d++)
