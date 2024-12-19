@@ -24,15 +24,10 @@ namespace ITD.Content.UI
         }
         public override void Update(GameTime gameTime)
         {
-            bool mapIconsShown = Main.screenWidth >= 940; // same check as vanilla
-            if (Main.playerInventory)
-            {
-                favor.UpdateProperties(52f, Main.screenWidth - (mapIconsShown ? 500 : 370), 30);
-            }
-            else
-            {
-                favor.UpdateProperties(52f, Main.screenWidth - 370, 30);
-            }
+            bool mapIconsShown = Main.screenWidth >= 940 && Main.playerInventory; // same check as vanilla
+
+            favor.UpdateProperties(52f, Main.screenWidth - (mapIconsShown ? 500 : 370), 30);
+
             Recalculate();
             base.Update(gameTime);
         }

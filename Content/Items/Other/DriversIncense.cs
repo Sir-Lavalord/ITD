@@ -3,25 +3,10 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
-using ITD.Systems;
 using Terraria.Localization;
 
 namespace ITD.Content.Items.Other
 {
-    public class SimpleMountData(float run, float dash, float jump, float swim)
-    {
-        public float runSpeed { get; set; } = run;
-        public float dashSpeed { get; set; } = dash;
-        public float jumpSpeed { get; set; } = jump;
-        public float swimSpeed { get; set; } = swim;
-    }
-    public static class MountHelpers
-    {
-        public static SimpleMountData ToSimple(this MountData data)
-        {
-            return new SimpleMountData(data.runSpeed, data.dashSpeed, data.jumpSpeed, data.swimSpeed);
-        }
-    }
     public class DriversIncense : ModItem
     {
         public static LocalizedText MunchiesExplanation { get; private set; }
@@ -47,40 +32,56 @@ namespace ITD.Content.Items.Other
         }
         public override bool? UseItem(Player player)
         {
-            player.GetModPlayer<DriversIncensePlayer>().DriversIncenseConsumed = true;
+            DriversIncensePlayer p = player.GetModPlayer<DriversIncensePlayer>();
+            p.DriversIncenseConsumed = true;
             return true;
         }
     }
     public class DriversIncensePlayer : ModPlayer
     {
         public bool DriversIncenseConsumed = false;
-        private static void ResetMountSpeeds()
-        {
-            for (int i = 0; i < mounts.Length - 1; i++)
-            {
-                MountData mount = mounts[i];
-                mount.runSpeed = ITDSystem.defaultMountData[i].runSpeed;
-                mount.dashSpeed = ITDSystem.defaultMountData[i].dashSpeed;
-                mount.swimSpeed = ITDSystem.defaultMountData[i].swimSpeed;
-                mount.jumpSpeed = ITDSystem.defaultMountData[i].jumpSpeed;
-            }
-        }
-        private static void ApplyDriversIncenseBonus()
-        {
-            for (int i = 0; i < mounts.Length - 1; i++)
-            {
-                MountData mount = mounts[i];
-                mount.runSpeed = ITDSystem.defaultMountData[i].runSpeed * 1.1f;
-                mount.dashSpeed = ITDSystem.defaultMountData[i].dashSpeed * 1.1f;
-                mount.swimSpeed = ITDSystem.defaultMountData[i].swimSpeed * 1.1f;
-                mount.jumpSpeed = ITDSystem.defaultMountData[i].jumpSpeed * 1.1f;
-            }
-        }
+        private bool statsModified = false;
+        private int latestMount = -1;
         public override void PostUpdateEquips()
         {
-            ResetMountSpeeds();
-            if (DriversIncenseConsumed)
-                ApplyDriversIncenseBonus();
+            if (Player.mount.Active)
+            {
+                latestMount = Player.mount._type;
+                if (DriversIncenseConsumed)
+                {
+                    var mount = mounts[latestMount];
+                    mount.runSpeed *= 1.1f;
+                    mount.dashSpeed *= 1.1f;
+                    mount.swimSpeed *= 1.1f;
+                    mount.jumpSpeed *= 1.1f;
+                    statsModified = true;
+                }
+            }
+            /*
+            if (Player.mount.Active && latestMount > -1)
+            {
+                Main.NewText(mounts[latestMount].runSpeed);
+            }
+            */
+        }
+        public override void ResetEffects()
+        {
+            if (statsModified)
+            {
+                var mount = mounts[latestMount];
+                mount.runSpeed /= 1.1f;
+                mount.dashSpeed /= 1.1f;
+                mount.swimSpeed /= 1.1f;
+                mount.jumpSpeed /= 1.1f;
+
+                statsModified = false;
+            }
+            /*
+            if (latestMount > -1)
+            {
+                Main.NewText(mounts[latestMount].runSpeed);
+            }
+            */
         }
         public override void SaveData(TagCompound tag)
         {

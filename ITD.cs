@@ -56,7 +56,7 @@ namespace ITD
             Asset<Texture2D> overlay = null;
             if (uImage != null)
                 overlay = ModContent.Request<Texture2D>(uImage, AssetRequestMode.ImmediateLoad);
-            ArmorShaderData data = new(ModContent.Request<Effect>(path), name + "Pass");
+            ArmorShaderData data = new(ModContent.Request<Effect>(path, AssetRequestMode.ImmediateLoad), name + "Pass");
             if (overlay != null)
                 data = data.UseImage(overlay);
             ITDArmorShaders[name] = data;

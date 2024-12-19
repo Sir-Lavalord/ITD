@@ -2,19 +2,10 @@
 using ITD.Content.Tiles.DeepDesert;
 using System;
 using System.IO;
-using Terraria.ID;
 using Terraria.ModLoader.IO;
 using Terraria.ModLoader;
 using Terraria;
-using static Terraria.Mount;
-using Terraria.Localization;
-using System.Linq;
-using System.Collections.Generic;
-using ITD.Content.Items.Other;
-using ITD.Content.Items.Weapons.Melee;
-using ITD.Utilities;
 using ITD.Systems.Recruitment;
-using ITD.Particles;
 
 namespace ITD.Systems
 {
@@ -35,14 +26,9 @@ namespace ITD.Systems
         public int bluegrassCount;
         public int deepdesertTileCount;
         //misc
-        public static SimpleMountData[] defaultMountData;
         public override void SetStaticDefaults()
         {
             NaturalSpawns.SetStaticDefaults();
-        }
-        public override void PostSetupContent()
-        {
-            defaultMountData = mounts.Select(a => a.ToSimple()).ToArray();
         }
         public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
         {

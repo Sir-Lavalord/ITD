@@ -1,7 +1,4 @@
-﻿using ITD.Content.Items.Materials;
-using ITD.Content.Items.Placeable;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
+﻿using ITD.Content.Items.Placeable;
 using Terraria;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
