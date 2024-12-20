@@ -90,9 +90,9 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 			{
 				Projectile.frame = 0;
 			}
-			if (Projectile.velocity.Y > -16f)
+			if (Projectile.velocity.Y < 16f)
             {
-                Projectile.velocity.Y += 0.3f;
+                Projectile.velocity.Y += 0.4f;
             }
 			
             if (Projectile.velocity.X > 0.25f)
