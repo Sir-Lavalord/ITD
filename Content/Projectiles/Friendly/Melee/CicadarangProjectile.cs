@@ -26,11 +26,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         public ref float OffsetY => ref Projectile.ai[2];
 
         public int cooldown = 0;
-        public bool canSpawnProj = true;
 
         public override void SetStaticDefaults()
         {
-             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
 		
@@ -50,7 +49,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         public override void OnSpawn(IEntitySource source)
         {
             cooldown = 0;
-            canSpawnProj = true;
         }
 
         public override void ModifyDamageHitbox(ref Rectangle hitbox)
@@ -84,7 +82,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 SoundEngine.PlaySound(impact, Projectile.Center);
             }
 
-            if (canSpawnProj)
+            if (cooldown <= 0)
             {
                 for (int i = 0; i < 3; i++)
                 {
@@ -94,7 +92,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 }
 
                 cooldown = 5;
-                canSpawnProj = false;
             }
 
             return false;
@@ -130,7 +127,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 cooldown--;
                 if (cooldown < 1)
                 {
-                    canSpawnProj = true;
                     cooldown = 0;
                 }
             }
