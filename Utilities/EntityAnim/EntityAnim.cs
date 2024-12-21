@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Terraria;
-using ITD.Content.Projectiles.Friendly.Melee;
 
 namespace ITD.Utilities.EntityAnim
 {
@@ -41,7 +39,7 @@ namespace ITD.Utilities.EntityAnim
         /// <summary>
         /// Returns a new <see cref="EntityAnim{T}"/> which adds a <see cref="Keyframe{T}"/> with the given parameters to the end of the Keyframes array.
         /// </summary>
-        public EntityAnim<T> Append(Expression<Func<T>> propertyExpr, Func<T> endValue, int frames, EasingFunctions.EasingFunc easingFunc)
+        public EntityAnim<T> Append(Expression<Func<T>> propertyExpr, Func<T> endValue, int frames, Func<float, float> easingFunc)
         {
             Keyframe<T> newKeyframe = AnimHelpers.CreateFor(Entity, propertyExpr, endValue, frames, easingFunc);
             return new EntityAnim<T>([.. Keyframes, newKeyframe])
@@ -49,8 +47,8 @@ namespace ITD.Utilities.EntityAnim
                 Entity = Entity,
             };
         }
-        /// <inheritdoc cref="Append(Expression{Func{T}}, Func{T}, int, EasingFunctions.EasingFunc)"/>>
-        public EntityAnim<T> Append(Expression<Func<T>> propertyExpr, T endValue, int frames, EasingFunctions.EasingFunc easingFunc)
+        /// <inheritdoc cref="Append(Expression{Func{T}}, Func{T}, int, Func{T, TResult})"/>>
+        public EntityAnim<T> Append(Expression<Func<T>> propertyExpr, T endValue, int frames, Func<float, float> easingFunc)
         {
             Keyframe<T> newKeyframe = AnimHelpers.CreateFor(Entity, propertyExpr, () => endValue, frames, easingFunc);
             return new EntityAnim<T>([.. Keyframes, newKeyframe])
@@ -86,7 +84,7 @@ namespace ITD.Utilities.EntityAnim
             }
             Keyframe<T> playKeyframe = Keyframes[FrameIndex];
             playKeyframe.SetStartValue(PreviousValue);
-            playKeyframe.Play();
+            playKeyframe.Update();
             if (playKeyframe.IsFinished)
             {
                 FrameIndex++;
@@ -112,50 +110,6 @@ namespace ITD.Utilities.EntityAnim
                 Keyframes[keyframe].playFrames = playFrame;
         }
     }
-    public class Keyframe<T>(Func<T> getter, Action<T> setter, Func<T> endValue, EasingFunctions.EasingFunc easingFunc) where T : struct
-    {
-        public bool IsFinished = false;
-        public int frames;
-        /// <summary>
-        /// The actual frame value that changes.
-        /// </summary>
-        public int playFrames = 0;
-        public float Progress { get { return (float)playFrames / frames; } }
-        public readonly Func<T> getter = getter;
-        private readonly Action<T> _setter = value => setter(value);
-        private  T _startValue = getter();
-        private readonly Func<T> _endValue = endValue;
-        private readonly EasingFunctions.EasingFunc _easingFunc = easingFunc;
-        public void SetStartValue(T lastValue)
-        {
-            _startValue = lastValue;
-        }
-        public void Play()
-        {
-            playFrames++;
-            if (Progress >= 1f)
-                IsFinished = true;
-            T interpolatedValue = default;
-            if (typeof(T) == typeof(float))
-            {
-                float start = (float)(object)_startValue;
-                float end = (float)(object)_endValue();
-                interpolatedValue = (T)(object)MathHelper.Lerp(start, end, _easingFunc(Progress));
-            }
-            else if (typeof(T) == typeof(Vector2))
-            {
-                Vector2 start = (Vector2)(object)_startValue;
-                Vector2 end = (Vector2)(object)_endValue();
-                interpolatedValue = (T)(object)Vector2.Lerp(start, end, _easingFunc(Progress));
-            }
-            else
-            {
-                throw new InvalidOperationException("Unsupported keyframe type");
-                // feel free to add your own stuff here but i don't think there's anything else important to add
-            }
-            _setter(interpolatedValue);
-        }
-    }
     public static class AnimHelpers
     {
         /// <summary>
@@ -172,7 +126,7 @@ namespace ITD.Utilities.EntityAnim
             };
             return newAnim;
         }
-        public static Keyframe<T> CreateFor<T>(Entity target, Expression<Func<T>> propertyExpr, Func<T> endValue, int frames, EasingFunctions.EasingFunc easingFunc) where T : struct
+        public static Keyframe<T> CreateFor<T>(Entity target, Expression<Func<T>> propertyExpr, Func<T> endValue, int frames, Func<float, float> easingFunc) where T : struct
         {
             var getter = propertyExpr.Compile();
 

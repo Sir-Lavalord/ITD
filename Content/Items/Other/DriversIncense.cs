@@ -41,6 +41,7 @@ namespace ITD.Content.Items.Other
         public bool DriversIncenseConsumed = false;
         private bool statsModified = false;
         private int latestMount = -1;
+        private const float factor = 1.1f;
         public override void PostUpdateEquips()
         {
             if (Player.mount.Active)
@@ -49,38 +50,26 @@ namespace ITD.Content.Items.Other
                 if (DriversIncenseConsumed)
                 {
                     var mount = mounts[latestMount];
-                    mount.runSpeed *= 1.1f;
-                    mount.dashSpeed *= 1.1f;
-                    mount.swimSpeed *= 1.1f;
-                    mount.jumpSpeed *= 1.1f;
+                    mount.runSpeed *= factor;
+                    mount.dashSpeed *= factor;
+                    mount.swimSpeed *= factor;
+                    mount.jumpSpeed *= factor;
                     statsModified = true;
                 }
             }
-            /*
-            if (Player.mount.Active && latestMount > -1)
-            {
-                Main.NewText(mounts[latestMount].runSpeed);
-            }
-            */
         }
         public override void ResetEffects()
         {
             if (statsModified)
             {
                 var mount = mounts[latestMount];
-                mount.runSpeed /= 1.1f;
-                mount.dashSpeed /= 1.1f;
-                mount.swimSpeed /= 1.1f;
-                mount.jumpSpeed /= 1.1f;
+                mount.runSpeed /= factor;
+                mount.dashSpeed /= factor;
+                mount.swimSpeed /= factor;
+                mount.jumpSpeed /= factor;
 
                 statsModified = false;
             }
-            /*
-            if (latestMount > -1)
-            {
-                Main.NewText(mounts[latestMount].runSpeed);
-            }
-            */
         }
         public override void SaveData(TagCompound tag)
         {

@@ -73,7 +73,7 @@ namespace ITD.Menus
                 float progress = 1f - snows[i].TimeLeft / (float)snows[i].SpawnTime;
                 Rectangle frame = tex.Frame(1, 3, 0, chosenFrame);
                 float smooth = snows[i].Scale * (float)Math.Sin(Math.PI * progress);
-                spriteBatch.Draw(tex, snows[i].Position, frame, Color.White, 0f, new Vector2(tex.Width * 0.5f, tex.Height / 3 * 0.5f), smooth, SpriteEffects.None, 0f);
+                spriteBatch.Draw(tex, snows[i].Position, frame, Color.White, snows[i].TimeLeft / 6f, new Vector2(tex.Width * 0.5f, tex.Height / 3 * 0.5f), smooth, SpriteEffects.None, 0f);
             }
             //drawColor = Color.White;
             //Main.dayTime = false;

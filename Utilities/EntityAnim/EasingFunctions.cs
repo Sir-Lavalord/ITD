@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ITD.Utilities.EntityAnim
 {
     // thanks to Kryzarel for these
     public static class EasingFunctions
     {
-        public delegate float EasingFunc(float t);
         public static float Linear(float t) => t;
 
         public static float InQuad(float t) => t * t;
