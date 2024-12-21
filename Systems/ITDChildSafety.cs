@@ -1,10 +1,7 @@
 ﻿using ITD.DetoursIL;
-using System.Linq;
 using Terraria;
 using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Config;
 
 namespace ITD.Systems
 {
@@ -19,6 +16,9 @@ namespace ITD.Systems
     {
         public override void SetStaticDefaults()
         {
+            if (Main.dedServ)
+                return;
+
             Mod itd = ITD.Instance;
 
             int[] icyBoulderGores = [

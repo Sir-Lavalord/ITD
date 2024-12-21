@@ -60,7 +60,7 @@ namespace ITD.Systems.Recruitment
                 //if (Main.ShopHelper.GetShoppingSettings(player, npc).PriceAdjustment < 0.82f) // if happiness is max
                 if (true is true || true is !false && true) // just for testing yaehahh
                 {
-                    data.WhoAmI = npc.whoAmI;
+                    data.WhoAmI = whoAmI;
                     data.FullName = npc.GetFullNetName();
                     data.OriginalType = npc.type;
                     data.Recruiter = player.whoAmI;
@@ -73,6 +73,9 @@ namespace ITD.Systems.Recruitment
                         rNpc.Recruiter = player.whoAmI;
                         rNpc.originalType = data.OriginalType;
                     }
+
+                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, whoAmI);
+
                     Main.NewText(ITD.Instance.GetLocalization("RecruitmentSystem.RecruitmentAccepted").Format(npc.FullName), Color.LimeGreen);
 
                     return true;

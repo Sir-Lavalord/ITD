@@ -32,8 +32,7 @@ namespace ITD.Content.Items.Other
         }
         public override bool? UseItem(Player player)
         {
-            DriversIncensePlayer p = player.GetModPlayer<DriversIncensePlayer>();
-            p.DriversIncenseConsumed = true;
+            player.GetModPlayer<DriversIncensePlayer>().DriversIncenseConsumed = true;
             return true;
         }
     }
