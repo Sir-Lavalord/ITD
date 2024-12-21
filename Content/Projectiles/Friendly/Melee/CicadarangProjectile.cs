@@ -12,6 +12,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.Graphics;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 using Terraria.Map;
+using Terraria.DataStructures;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {
@@ -24,16 +25,17 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         public ref float OffsetX => ref Projectile.ai[1];
         public ref float OffsetY => ref Projectile.ai[2];
 
+        public int cooldown = 0;
+
         public override void SetStaticDefaults()
         {
-             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
 		
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Melee;
-            Projectile.damage = 140;
             Projectile.width = 54; 
             Projectile.height = 52;
             Projectile.friendly = true;
@@ -43,8 +45,13 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 10;
         }
-		
-		public override void ModifyDamageHitbox(ref Rectangle hitbox)
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            cooldown = 0;
+        }
+
+        public override void ModifyDamageHitbox(ref Rectangle hitbox)
         {
             hitbox.Inflate(16, 16);
         }
@@ -62,13 +69,29 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 
             Projectile.ai[0] += 5;
 
-            SoundEngine.PlaySound(SoundID.Item50, Projectile.Center);
-
-            for (int i = 0; i < 5; i++)
+            if (Main.rand.NextBool(3))
             {
-                float speedX = -Projectile.velocity.X * Main.rand.NextFloat(.4f, .7f) + Main.rand.NextFloat(-8f, 8f);
-                float speedY = -Projectile.velocity.Y * Main.rand.Next(40, 70) * 0.01f + Main.rand.Next(-20, 21) * 0.4f;
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X + speedX, Projectile.position.Y + speedY, speedX, speedY, ModContent.ProjectileType<CicadarangMiniStriker>(), Projectile.damage / 2, 0f, Projectile.owner);
+                SoundStyle impact = new SoundStyle("ITD/Content/Sounds/CicadarangImpact") with
+                {
+                    Volume = 0.75f,
+                    Pitch = 1f,
+                    PitchVariance = 0.1f,
+                    MaxInstances = 3,
+                    SoundLimitBehavior = SoundLimitBehavior.IgnoreNew
+                };
+                SoundEngine.PlaySound(impact, Projectile.Center);
+            }
+
+            if (cooldown <= 0)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    float speedX = -Projectile.velocity.X * Main.rand.NextFloat(.4f, .7f) + Main.rand.NextFloat(-8f, 8f);
+                    float speedY = -Projectile.velocity.Y * Main.rand.Next(40, 70) * 0.01f + Main.rand.Next(-20, 21) * 0.4f;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X + speedX, Projectile.position.Y + speedY, speedX, speedY, ModContent.ProjectileType<CicadarangMiniStriker>(), Projectile.damage / 2, 0f, Projectile.owner);
+                }
+
+                cooldown = 5;
             }
 
             return false;
@@ -86,7 +109,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         public override void PostAI()
         {
 			Projectile.ai[0]++;
-			if (Projectile.ai[0] > 80)
+			if (Projectile.ai[0] > 120)
 			{
 				Projectile.tileCollide = false;
                 Projectile.timeLeft = 999;
@@ -98,6 +121,15 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 if (player.Distance(Projectile.Center) < 32)
 					Projectile.Kill();
 			}
+
+            if (cooldown > 0)
+            {
+                cooldown--;
+                if (cooldown < 1)
+                {
+                    cooldown = 0;
+                }
+            }
 
 			if (Projectile.ai[0] % 10 == 0)
 			{

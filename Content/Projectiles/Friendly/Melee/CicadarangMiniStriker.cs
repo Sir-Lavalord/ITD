@@ -25,7 +25,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
 
@@ -35,9 +35,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.DamageType = DamageClass.Melee;
             Projectile.width = 24;
             Projectile.height = 24;
-            Projectile.friendly = true;
+            Projectile.friendly = false;
             Projectile.hostile = false;
-            Projectile.penetrate = 2;
+            Projectile.penetrate = 1;
             Projectile.timeLeft = 600;
             Projectile.ignoreWater = false;
             Projectile.tileCollide = false;
@@ -56,7 +56,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 
         public override void AI()
         {
-            Projectile.damage = 0;
             float maxDetectRadius = 800f;
 
             if (DelayTimer < 3)
@@ -65,7 +64,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 return;
             }
 
-            Projectile.damage = 10;
+            Projectile.friendly = true;
 
             if (Projectile.penetrate > 0)
             {
@@ -78,7 +77,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 }
                 else
                 {
-
+    
                 }
 
                 Vector2 directionToTarget = HomingTarget.Center - Projectile.Center;
@@ -86,10 +85,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 
                 float length = Projectile.velocity.Length();
                 float targetAngle = Projectile.AngleTo(HomingTarget.Center);
-                Projectile.velocity = Projectile.velocity.ToRotation().AngleTowards(targetAngle, MathHelper.ToRadians(6)).ToRotationVector2() * length;
+                Projectile.velocity = Projectile.velocity.ToRotation().AngleTowards(targetAngle, MathHelper.ToRadians(2)).ToRotationVector2() * length;
                 Projectile.Center += Main.rand.NextVector2Circular(1, 1);
 
-                Projectile.rotation = directionToTarget.ToRotation();
+                Projectile.rotation = directionToTarget.ToRotation() + MathHelper.PiOver2;
             }
             else
             {
