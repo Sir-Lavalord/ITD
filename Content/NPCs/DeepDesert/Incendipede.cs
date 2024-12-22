@@ -27,7 +27,7 @@ namespace ITD.Content.NPCs.DeepDesert
             // i'm using this for the actual segment following logic so consider this the length limit for incendipedes
             NPCID.Sets.TrailCacheLength[Type] = 10 * SpacingBetween;
             // idc about getting rotations cuz we can just calculate those on the fly
-            NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPC.PosRotEveryFrame;
+            NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPCTrailing.PosRotEveryFrame;
             // bestiary stuff
             BestiaryEntry = this.GetLocalization("Bestiary");
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers()
@@ -243,7 +243,7 @@ namespace ITD.Content.NPCs.DeepDesert
         {
             Main.npcFrameCount[Type] = 8;
             NPCID.Sets.TrailCacheLength[Type] = 2;
-            NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPC.PosEveryFrame;
+            NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPCTrailing.PosEveryFrame;
             HideFromBestiary();
         }
         public override void SetDefaults()
@@ -327,7 +327,7 @@ namespace ITD.Content.NPCs.DeepDesert
         {
             Main.npcFrameCount[Type] = 3;
             NPCID.Sets.TrailCacheLength[Type] = 2;
-            NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPC.PosEveryFrame;
+            NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPCTrailing.PosEveryFrame;
             HideFromBestiary();
         }
         public override void SetDefaults()

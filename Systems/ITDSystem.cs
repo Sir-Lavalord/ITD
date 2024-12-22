@@ -13,9 +13,6 @@ using Terraria.Localization;
 using Terraria.Chat;
 using ITD.Networking;
 using ITD.Networking.Packets;
-using Terraria.ID;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ITD.Systems
 {
@@ -88,10 +85,15 @@ namespace ITD.Systems
                     string guidString = key["recdata:".Length..];
                     if (Guid.TryParse(guidString, out Guid guid))
                     {
-                        recruitmentData[guid] = tag.Get<RecruitData>(key);
+                        RecruitData rD = recruitmentData[guid] = tag.Get<RecruitData>(key);
+                        if (Main.dedServ)
+                            NetSystem.SendPacket(new SingleNPCRecruitmentPacket(rD.WhoAmI, guid, rD));
                     }
                 }
             }
+
+            if (Main.dedServ)
+                NetSystem.SendPacket(new SyncRecruitmentPacket());
         }
         public override void NetSend(BinaryWriter writer)
         {
@@ -179,19 +181,13 @@ namespace ITD.Systems
             {
                 QueuedUnrecruitment q = unrecruitment.Dequeue();
                 RecruitData rD = recruitmentData[q.player];
-                Log(rD.WhoAmI.ToString());
                 NPC npc = Main.npc[rD.WhoAmI];
 
                 npc.Transform(rD.OriginalType);
                 npc.GivenName = rD.FullName.ToString().Split(' ')[0];
 
-                Log("TESTING NULLREF0");
-                Log(q.player.ToString());
-                Log("TESTING NULLREF1");
-
                 if (recruitmentData.Remove(q.player))
                 {
-                    Log("test2");
                     if (Main.dedServ)
                         NetSystem.SendPacket(new SyncRecruitmentPacket());
                 }

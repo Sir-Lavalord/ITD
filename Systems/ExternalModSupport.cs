@@ -44,8 +44,8 @@ namespace ITD
             Mod achievements = ITDMod.achievements;
             if (achievements is null)
                 return;
-            string[] slayCosJel = {"Kill_" + NPCType<CosmicJellyfish>() };
-            string[] parryCosJel = { "Event_ParryCosJelHand" };
+            string[] slayCosJel = ["Kill_" + NPCType<CosmicJellyfish>()];
+            string[] parryCosJel = ["Event_ParryCosJelHand"];
             void AddAchievement(string nameNoSpaces, AchievementCategory category, string texturePath, string? customBorderTexturePath, bool showProgressBar, bool showAchievementCard, float achievementCardOrder, string[] conditions)
             {
                 achievements.Call("AddAchievement", ITDMod, nameNoSpaces, category, texturePath, customBorderTexturePath, showProgressBar, showAchievementCard, achievementCardOrder, conditions);

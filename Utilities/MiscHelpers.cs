@@ -226,7 +226,7 @@ namespace ITD.Utilities
     }
     public static class TrailingModeID
     {
-        public static class NPC
+        public static class NPCTrailing
         {
             public const int PosEveryThreeFrames = 0;
             public const int PosEveryFrame = 1;
