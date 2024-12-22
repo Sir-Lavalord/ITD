@@ -393,7 +393,7 @@ namespace ITD.Players
         public override void LoadData(TagCompound tag)
         {
             if (tag.ContainsKey("ITD:playerGuid"))
-                guid = new Guid((byte[])tag["ITD:playerGuid"]);
+                guid = new Guid(tag.GetByteArray("ITD:playerGuid"));
             // idk if it's possible for a guid to be generated with all zeros or what the chance for that is but uhhhh
             while (guid == Guid.Empty)
                 guid = Guid.NewGuid();
@@ -405,7 +405,7 @@ namespace ITD.Players
                 guid = Guid.NewGuid();
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                NetSystem.SendPacket(new SyncGuidPacket(Player));
+                NetSystem.SendPacket(new PlayerJoinedPacket(Player));
             }
         }
         private sealed class ITDPlayerSystem : ModSystem // there's no OnExitWorld hook :death:

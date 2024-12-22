@@ -45,7 +45,10 @@ namespace ITD.Systems
         }
         public int bluegrassCount;
         public int deepdesertTileCount;
-        //misc
+        public override void Load()
+        {
+            On_Main.UpdateTime_SpawnTownNPCs += PreventTownNPCSpawns;
+        }
         public override void SetStaticDefaults()
         {
             NaturalSpawns.SetStaticDefaults();
@@ -86,8 +89,6 @@ namespace ITD.Systems
                     if (Guid.TryParse(guidString, out Guid guid))
                     {
                         RecruitData rD = recruitmentData[guid] = tag.Get<RecruitData>(key);
-                        if (Main.dedServ)
-                            NetSystem.SendPacket(new SingleNPCRecruitmentPacket(rD.WhoAmI, guid, rD));
                     }
                 }
             }
@@ -110,19 +111,19 @@ namespace ITD.Systems
         {
             BlueshroomTree.opac = ((float)Math.Sin(Main.GameUpdateCount / 40f) + 1f) / 2f;
         }
-        public static void Log(string message, Color? color = null)
+        public static void Log(object message, Color? color = null)
         {
             color ??= Color.White;
             if (Main.dedServ)
-                ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral(message), color.Value);
+                ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral(message.ToString()), color.Value);
             else
                 Main.NewText(message, color.Value);
         }
-        public static void LogForPlayer(string message, int player, Color? color = null)
+        public static void LogForPlayer(object message, int player, Color? color = null)
         {
             color ??= Color.White;
             if (Main.dedServ)
-                ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral(message), color.Value, player);
+                ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral(message.ToString()), color.Value, player);
             else
                 Main.NewText(message, color.Value);
         }
@@ -193,9 +194,14 @@ namespace ITD.Systems
                 }
             }
         }
-        public override void PostUpdateTime()
+        private static void PreventTownNPCSpawns(On_Main.orig_UpdateTime_SpawnTownNPCs orig)
         {
-            // prevent recruited town NPCs from spawning again
+            PreventRecruitedNPCSpawn();
+            orig();
+            PreventRecruitedNPCSpawn();
+        }
+        private static void PreventRecruitedNPCSpawn()
+        {
             foreach (var npc in Main.ActiveNPCs)
             {
                 if (npc.ModNPC is not RecruitedNPC rNPC)
