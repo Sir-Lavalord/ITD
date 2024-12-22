@@ -1,12 +1,14 @@
 ﻿using ITD.Players;
 using ITD.Systems;
-using Microsoft.Xna.Framework;
+using System;
+using System.Linq;
 using Terraria;
 
 namespace ITD.Utilities
 {
     public static class PlayerHelpers
     {
+        public static Player FromGuid(Guid guid) => Main.player.FirstOrDefault(p => p.active && p.GetITDPlayer().guid == guid);
         public static ITDPlayer GetITDPlayer(this Player player) => player.GetModPlayer<ITDPlayer>();
         public static SnaptrapPlayer GetSnaptrapPlayer(this Player player) => player.GetModPlayer<SnaptrapPlayer>();
         public static bool IsLocalPlayer(this Player player) => player.whoAmI == Main.myPlayer;

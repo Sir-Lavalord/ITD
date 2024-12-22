@@ -6,13 +6,13 @@ using Terraria.ID;
 
 namespace ITD.Networking.Packets
 {
-    public sealed class MousePositionPacket : ITDPacket
+    public sealed class SyncGuidPacket : ITDPacket
     {
-        public MousePositionPacket(Player player)
+        public SyncGuidPacket(Player player)
         {
             var modPlayer = player.GetITDPlayer();
             Writer.TryWriteSenderPlayer(player);
-            Writer.WriteVector2(modPlayer.MousePosition);
+            Writer.WriteGuid(modPlayer.guid);
         }
         public override void Read(BinaryReader reader, int sender)
         {
@@ -20,10 +20,10 @@ namespace ITD.Networking.Packets
             {
                 return;
             }
-            modPlayer.MousePosition = reader.ReadVector2();
+            modPlayer.guid = reader.ReadGuid();
             if (Main.netMode == NetmodeID.Server)
             {
-                NetSystem.SendPacket(new MousePositionPacket(player), ignoreClient: sender);
+                NetSystem.SendPacket(new SyncGuidPacket(player), ignoreClient: sender);
             }
         }
     }

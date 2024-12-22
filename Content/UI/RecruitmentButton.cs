@@ -9,6 +9,10 @@ using ReLogic.Graphics;
 using Terraria.GameContent;
 using ITD.Systems.Recruitment;
 using Terraria.UI.Chat;
+using Terraria.ID;
+using ITD.Networking;
+using ITD.Networking.Packets;
+using ITD.Systems;
 
 namespace ITD.Content.UI
 {
@@ -96,10 +100,13 @@ namespace ITD.Content.UI
         public static void DoRecruit()
         {
             Player player = Main.LocalPlayer;
-            if (TownNPCRecruitmentLoader.TryRecruit(player.talkNPC, player))
-            {
-                player.SetTalkNPC(-1);
-            }
+
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                TownNPCRecruitmentLoader.QueueRecruit(player.TalkNPC, player);
+            else
+                NetSystem.SendPacket(new QueueRecruitmentPacket(new QueuedRecruitment(player.talkNPC, player.TalkNPC.type, player.GetITDPlayer().guid)));
+
+            player.SetTalkNPC(-1);
         }
         public override void LeftClick(UIMouseEvent evt)
         {

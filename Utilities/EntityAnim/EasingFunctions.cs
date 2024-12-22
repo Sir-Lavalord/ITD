@@ -6,7 +6,6 @@ namespace ITD.Utilities.EntityAnim
     public static class EasingFunctions
     {
         public static float Linear(float t) => t;
-
         public static float InQuad(float t) => t * t;
         public static float OutQuad(float t) => 1 - InQuad(1 - t);
         public static float InOutQuad(float t)

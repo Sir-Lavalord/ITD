@@ -1,29 +1,34 @@
-﻿using ITD.Utilities.Placeholders;
-using ITD.Utilities;
+﻿using ITD.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using ReLogic.Content;
 using System;
 using Terraria.GameContent;
 using Terraria.ModLoader.IO;
-using Terraria.DataStructures;
 using System.IO;
 using ITD.Particles;
 using ITD.Particles.Testing;
 using ITD.Content.NPCs;
 using ITD.Content.UI;
 using Terraria.Audio;
+using System.Linq;
 
 namespace ITD.Systems.Recruitment
 {
     public class RecruitedNPC : ITDNPC
     {
-        public int Recruiter = 0;
-        public int originalType = -1;
+        private enum ActionState : byte
+        {
+            Active,
+            Recovering,
+            WaitingForRecruiter,
+        }
+        public Guid Recruiter = Guid.Empty;
+        public RecruitData recruitmentData = RecruitData.Invalid;
         public int armFrame = 0;
+        public int timeToBeUnrecruited = 2000;
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 15;
@@ -35,33 +40,19 @@ namespace ITD.Systems.Recruitment
             NPC.lifeMax = 100;
             NPC.friendly = true;
         }
-        public RecruitmentData GetRecruitmentData()
-        {
-            if (Recruiter < 0)
-            {
-                Recruiter = TownNPCRecruitmentLoader.TryFindRecruiterOf(originalType).whoAmI;
-            }
-            return Main.player[Recruiter].GetITDPlayer().recruitmentData;
-        }
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            writer.Write(Recruiter);
-        }
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            Recruiter = reader.ReadInt32();
-        }
+        public override bool NeedSaving() => true;
         public override void SaveData(TagCompound tag)
         {
-            tag["originalType"] = originalType;
+            tag["recruiter"] = Recruiter.ToByteArray();
         }
         public override void LoadData(TagCompound tag)
         {
-            originalType = tag.GetInt("originalType");
+            Recruiter = new Guid(tag.GetByteArray("recruiter"));
         }
+        private ActionState AIState = ActionState.Active;
         public override void OnRightClick(Player player)
         {
-            if (GetRecruitmentData().Recruiter != player.whoAmI)
+            if (!RecruiterExists || PlayerHelpers.FromGuid(Recruiter).whoAmI != player.whoAmI)
                 return;
             UnrecruitmentGui gui = UILoader.GetUIState<UnrecruitmentGui>();
             if (gui.isOpen)
@@ -73,11 +64,26 @@ namespace ITD.Systems.Recruitment
             gui.Open(NPC.Center, NPC.whoAmI);
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
-        public override void ModifyTypeName(ref string typeName) => typeName = GetRecruitmentData().FullName.ToString();
+        public override void ModifyTypeName(ref string typeName)
+        {
+            RecruitData recruitData = ITDSystem.recruitmentData.Values.FirstOrDefault(v => v.OriginalType == recruitmentData.OriginalType, RecruitData.Invalid);
+            if (recruitData.INVALIDDATA)
+            {
+                typeName = "";
+                return;
+            }
+            typeName = recruitData.FullName.ToString();
+        }
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write((byte)AIState);
+        }
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            AIState = (ActionState)reader.ReadByte();
+        }
+        public bool RecruiterExists => Main.player.Any(p => p.Exists() && ITDSystem.recruitmentData.TryGetValue(p.GetITDPlayer().guid, out RecruitData recDat) && recDat.OriginalType == recruitmentData.OriginalType);
 
-        // i'm not even going to try to code AI cuz i suck at it but i had the idea of having a common AI method that handles player following and such.
-        // these smaller methods would handle stuff specific to that npc (obviously).
-        // the common method would also be called in these smaller methods (just in case something needs to be done conditionally)
         public void DoMerchantAI()
         {
             if (Main.GameUpdateCount % 20 == 0)
@@ -87,25 +93,39 @@ namespace ITD.Systems.Recruitment
         }
         public override void AI()
         {
-            if (Recruiter < 0 || GetRecruitmentData().FullName is null)
+            if (ITDSystem.recruitmentData.TryGetValue(Recruiter, out RecruitData rd))
             {
-                TownNPCRecruitmentLoader.Unrecruit(NPC.whoAmI);
+                recruitmentData = rd;
+            }
+            if (!RecruiterExists)
+            {
+                AIState = ActionState.WaitingForRecruiter;
+                timeToBeUnrecruited--;
+                if (timeToBeUnrecruited <= 0)
+                {
+                    TownNPCRecruitmentLoader.ServerUnrecruit(NPC.whoAmI);
+                }
                 return;
             }
+            else
+            {
+                AIState = ActionState.Active;
+                timeToBeUnrecruited = 2000;
+            }
 
-            Player player = Main.player[Recruiter];
+            Player player = PlayerHelpers.FromGuid(Recruiter);
             // testing AI
             NPC.velocity.X = Math.Sign(player.Center.X - NPC.Center.X)*2f;
             NPC.spriteDirection = NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
             NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
-            ExternalRecruitmentData extData = TownNPCRecruitmentLoader.GetExternalRecruitmentData(originalType);
+            ExternalRecruitmentData extData = TownNPCRecruitmentLoader.GetExternalRecruitmentData(recruitmentData.OriginalType);
             if (extData?.AIDelegate != null) // try to run custom mod AI
             {
-                extData.AIDelegate(NPC, player); // here's an idea: once common AI methods like FollowPlayer() and Jump() or others, send them through the delegate here to be captured in the other mod and used
+                extData.AIDelegate(NPC, player);
             }
             else
             {
-                switch (originalType) // AI type switch
+                switch (recruitmentData.OriginalType) // AI type switch
                 {
                     case NPCID.Merchant:
                         DoMerchantAI();
@@ -113,7 +133,7 @@ namespace ITD.Systems.Recruitment
                 }
             }
         }
-        private static int MapBaseFrameToArmFrame(int currentFrame) // is this stupid? am i stupid?
+        private static int MapBaseFrameToArmFrame(int currentFrame)
         {
             return currentFrame switch
             {
@@ -154,15 +174,24 @@ namespace ITD.Systems.Recruitment
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            /*
+            foreach (var pairs in ITDSystem.recruitmentData)
+            {
+                Main.NewText(pairs.Key, Color.Blue);
+                Main.NewText(pairs.Value, Color.Yellow);
+            }
+            Main.NewText(recruitmentData.OriginalType, Color.Green);
+            */
+            RecruitData recruitData = ITDSystem.recruitmentData.Values.FirstOrDefault(v => v.OriginalType == recruitmentData.OriginalType, RecruitData.Invalid);
             Asset<Texture2D> tex = null;
-            ExternalRecruitmentData extData = TownNPCRecruitmentLoader.GetExternalRecruitmentData(originalType);
-            string pathToTypeTexture = Texture + "_" + originalType;
+            ExternalRecruitmentData extData = TownNPCRecruitmentLoader.GetExternalRecruitmentData(recruitmentData.OriginalType);
+            string pathToTypeTexture = Texture + "_" + recruitmentData.OriginalType;
             if (extData != null)
             {
                 pathToTypeTexture = extData.TexturePath;
             }
             string pathToShimmerTexture = pathToTypeTexture + "_Shimmer";
-            if (GetRecruitmentData().IsShimmered) // try to load shimmer texture
+            if (recruitData.Shimmered) // try to load shimmer texture
             {
                 ModContent.RequestIfExists(pathToShimmerTexture, out tex);
             }
@@ -177,7 +206,7 @@ namespace ITD.Systems.Recruitment
             Rectangle armQuad = tex.Frame(framesX, framesY, 1, armFrame);
             Vector2 baseOrigin = new (tex.Width() / framesX / 2, tex.Height() / framesY / 2);
             SpriteEffects flip = NPC.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            Vector2 offset = new(0f, -4f); // random ahh magic number?
+            Vector2 offset = new(0f, -4f);
             Main.EntitySpriteDraw(tex.Value, NPC.Center - screenPos + offset, armQuad, drawColor, 0f, baseOrigin, 1f, flip);
             Main.EntitySpriteDraw(tex.Value, NPC.Center - screenPos + offset, baseQuad, drawColor, 0f, baseOrigin, 1f, flip);
             return false;

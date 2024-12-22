@@ -1,10 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
-
-using ReLogic.Graphics;
 
 using Terraria.Audio;
 using Terraria.ID;
@@ -12,26 +7,19 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terraria;
 using Terraria.Localization;
-using Terraria.GameContent;
-using Terraria.ModLoader.IO;
 
 using ITD.Systems;
 using ITD.Content.NPCs;
-using ITD.Content.NPCs.Bosses;
 using ITD.Content.Items.Weapons.Melee;
 using ITD.Content.Dusts;
 using ITD.Physics;
-using ITD.Systems.Recruitment;
 using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Utilities;
 using ITD.Networking;
 using ITD.Networking.Packets;
-using ITD.Content.UI;
 using Terraria.GameInput;
-using log4net.Core;
 using ITD.Content.Buffs.EquipmentBuffs;
-using ITD.Content.Projectiles.Friendly.Summoner;
-using ITD.Content.Items.Accessories.Gimmicks.IncomprehensiblePolyhedron;
+using Terraria.ModLoader.IO;
 
 namespace ITD.Players
 {
@@ -90,7 +78,7 @@ namespace ITD.Players
         public float shakeIntensityY;
         public bool shakeDecay;
         //Recruitment data
-        public RecruitmentData recruitmentData = new();
+        public Guid guid = Guid.Empty;
         public override void ResetEffects()
         {
             //shakeDuration
@@ -247,6 +235,14 @@ namespace ITD.Players
 
             Player.ManageSpecialBiomeVisuals("BlackMold", melomycosis);
 
+            /*
+            foreach (var pairs in ITDSystem.recruitmentData)
+            {
+                Main.NewText(pairs.Key, Color.Blue);
+                Main.NewText(pairs.Value, Color.Yellow);
+            }
+            */
+
             UpdateMouse();
 
             prevTime = curTime;
@@ -390,9 +386,27 @@ namespace ITD.Players
             }
             return [.. npcs];
         }
+        public override void SaveData(TagCompound tag)
+        {
+            tag["ITD:playerGuid"] = guid.ToByteArray();
+        }
+        public override void LoadData(TagCompound tag)
+        {
+            if (tag.ContainsKey("ITD:playerGuid"))
+                guid = new Guid((byte[])tag["ITD:playerGuid"]);
+            // idk if it's possible for a guid to be generated with all zeros or what the chance for that is but uhhhh
+            while (guid == Guid.Empty)
+                guid = Guid.NewGuid();
+        }
         public override void OnEnterWorld()
         {
-
+            // for good measure
+            while (guid == Guid.Empty)
+                guid = Guid.NewGuid();
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                NetSystem.SendPacket(new SyncGuidPacket(Player));
+            }
         }
         private sealed class ITDPlayerSystem : ModSystem // there's no OnExitWorld hook :death:
         {
@@ -401,11 +415,6 @@ namespace ITD.Players
                 Player player = Main.CurrentPlayer;
                 NaturalSpawns.LeaveWorld();
                 PhysicsMethods.ClearAll();
-
-                // transform recruited npc back to original type
-                RecruitmentData recruitmentData = player.GetITDPlayer().recruitmentData;
-                if (recruitmentData.WhoAmI > -1)
-                    TownNPCRecruitmentLoader.Unrecruit(recruitmentData.WhoAmI, player);
             }
         }
 		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)

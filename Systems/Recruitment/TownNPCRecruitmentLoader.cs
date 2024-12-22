@@ -7,24 +7,65 @@ using Terraria;
 using Terraria.ID;
 using System.Collections.Generic;
 using Terraria.Localization;
+using System.IO;
+using Terraria.ModLoader.IO;
 
 namespace ITD.Systems.Recruitment
 {
-    public delegate void RecruitmentAIDelegate(NPC npc, Player recruiter);
-    public class RecruitmentData
+    public struct RecruitData(int whoAmI, int originalType, bool shimmered, NetworkText fullName) : TagSerializable
     {
-        public int WhoAmI { get; set; } = -1;
-        public NetworkText FullName { get; set; } = null;
-        public int OriginalType { get; set; } = -1;
-        public int Recruiter { get; set; } = -1;
-        public bool IsShimmered { get; set; } = false;
-        public void Clear()
+        public int WhoAmI = whoAmI;
+        public int OriginalType = originalType;
+        public bool Shimmered = shimmered;
+        public NetworkText FullName = fullName;
+        public bool INVALIDDATA = false;
+
+        public static readonly Func<TagCompound, RecruitData> DESERIALIZER = Load;
+        public readonly TagCompound SerializeData()
         {
-            WhoAmI = -1;
-            FullName = null;
-            OriginalType = -1;
-            Recruiter = -1;
-            IsShimmered = false;
+            return new TagCompound
+            {
+                ["whoAmI"] = WhoAmI,
+                ["originalType"] = OriginalType,
+                ["shimmered"] = Shimmered,
+                ["fullName"] = FullName,
+            };
+        }
+        public static RecruitData Load(TagCompound tag)
+        {
+            var data = new RecruitData
+            {
+                WhoAmI = tag.GetInt("whoAmI"),
+                OriginalType = tag.GetInt("originalType"),
+                Shimmered = tag.GetBool("shimmered"),
+                FullName = tag.Get<NetworkText>("fullName"),
+            };
+            return data;
+        }
+        public static RecruitData Invalid => new(0, 0, false, null) { INVALIDDATA = true };
+        public override readonly string ToString()
+        {
+            return $"whoAmI: {WhoAmI}, originalType: {OriginalType}, shimmered: {Shimmered}, fullName: {FullName}, invalid: {INVALIDDATA}";
+        }
+    }
+    public class NetTextSerializer : TagSerializer<NetworkText, TagCompound>
+    {
+        public override TagCompound Serialize(NetworkText value)
+        {
+            using var memoryStream = new MemoryStream();
+            using var writer = new BinaryWriter(memoryStream);
+            value.Serialize(writer);
+            return new TagCompound
+            {
+                ["data"] = memoryStream.ToArray()
+            };
+        }
+        public override NetworkText Deserialize(TagCompound tag)
+        {
+            byte[] data = tag.Get<byte[]>("data");
+            using var memoryStream = new MemoryStream(data);
+            using var reader = new BinaryReader(memoryStream);
+            return NetworkText.Deserialize(reader);
         }
     }
     public class ExternalRecruitmentData (Action<NPC, Player> aiDelegate, Mod modInstance, string texturePath)
@@ -50,56 +91,31 @@ namespace ITD.Systems.Recruitment
             return recruitmentDataRegistry.TryGetValue(npcType, out ExternalRecruitmentData data) ? data : null;
         }
         public static bool CanBeRecruited(int type) => NPCsThatCanBeRecruited.Contains(type) || recruitmentDataRegistry.ContainsKey(type);
-        public static Player TryFindRecruiterOf(int type) => Main.player.FirstOrDefault(p => p.GetITDPlayer().recruitmentData.OriginalType == type, Main.player[0]);
-        public static bool TryRecruit(int whoAmI, Player player)
+        public static void QueueRecruit(NPC npc, Player player)
         {
-            NPC npc = Main.npc[whoAmI];
-            RecruitmentData data = player.GetITDPlayer().recruitmentData;
-            if (CanBeRecruited(npc.type))
-            {
-                //if (Main.ShopHelper.GetShoppingSettings(player, npc).PriceAdjustment < 0.82f) // if happiness is max
-                if (true is true || true is !false && true) // just for testing yaehahh
-                {
-                    data.WhoAmI = whoAmI;
-                    data.FullName = npc.GetFullNetName();
-                    data.OriginalType = npc.type;
-                    data.Recruiter = player.whoAmI;
-                    data.IsShimmered = npc.IsShimmerVariant;
-
-                    npc.Transform(ModContent.NPCType<RecruitedNPC>());
-
-                    if (npc.ModNPC is RecruitedNPC rNpc)
-                    {
-                        rNpc.Recruiter = player.whoAmI;
-                        rNpc.originalType = data.OriginalType;
-                    }
-
-                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, whoAmI);
-
-                    Main.NewText(ITD.Instance.GetLocalization("RecruitmentSystem.RecruitmentAccepted").Format(npc.FullName), Color.LimeGreen);
-
-                    return true;
-                }
-                else
-                {
-                    Main.NewText(ITD.Instance.GetLocalization("RecruitmentSystem.NotHappyEnough").Format(npc.FullName), Color.Red);
-                }
-            }
-            Main.NewText(ITD.Instance.GetLocalization("RecruitmentSystem.RecruitmentDenied").Format(npc.FullName), Color.Red);
-            return false;
+            ITDSystem.recruitment.Enqueue(new QueuedRecruitment(npc.whoAmI, npc.type, player.GetITDPlayer().guid));
         }
-        public static void Unrecruit(int whoAmI, Player player = null)
+        public static void QueueUnrecruit(Guid player)
+        {
+            ITDSystem.unrecruitment.Enqueue(new QueuedUnrecruitment(player));
+        }
+        /// <summary>
+        /// Bypasses unrecruit queue. Recruited NPCs call this if they can't find their recruiter for 2000 ticks (around 30 seconds)
+        /// </summary>
+        /// <param name="whoAmI"></param>
+        /// <param name="player"></param>
+        public static void ServerUnrecruit(int whoAmI, Player player = null)
         {
             NPC npc = Main.npc[whoAmI];
             if (player is null && npc.ModNPC is RecruitedNPC rNPC)
             {
-                npc.Transform(rNPC.originalType);
+                npc.Transform(rNPC.recruitmentData.OriginalType);
                 return;
             }
-            RecruitmentData data = player.GetITDPlayer().recruitmentData;
+            RecruitData data = ITDSystem.recruitmentData[player.GetITDPlayer().guid];
             npc.Transform(data.OriginalType);
             npc.GivenName = data.FullName.ToString().Split(' ')[0];
-            data.Clear();
+            ITDSystem.recruitmentData.Remove(player.GetITDPlayer().guid);
         }
     }
 }

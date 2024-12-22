@@ -1,7 +1,13 @@
-﻿using ITD.Systems.Recruitment;
+﻿using ITD.Networking;
+using ITD.Networking.Packets;
+using ITD.Systems;
+using ITD.Systems.Recruitment;
+using ITD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
@@ -81,7 +87,14 @@ namespace ITD.Content.UI
         {
             Player player = Main.LocalPlayer;
             UnrecruitmentGui gui = UILoader.GetUIState<UnrecruitmentGui>();
-            TownNPCRecruitmentLoader.Unrecruit(gui.npc, player);
+            Guid guid = player.GetITDPlayer().guid;
+            RecruitData rData = ITDSystem.recruitmentData[guid];
+
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                TownNPCRecruitmentLoader.QueueUnrecruit(guid);
+            else
+                NetSystem.SendPacket(new QueueUnrecruitmentPacket(guid));
+
             gui.Close();
         }
         public override void LeftClick(UIMouseEvent evt)
