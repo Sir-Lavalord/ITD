@@ -6,28 +6,29 @@ using Terraria.ModLoader;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using ITD.Content.Dusts;
 using Terraria.ID;
+using Terraria.Audio;
 
 using ITD.Utilities;
 using ITD.Systems.DataStructures;
 using ITD.Systems.Extensions;
+using ITD.Content.Dusts;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {
     public class DespoticSuperMeleeProj : ModProjectile
     {
-        public ref float Scale => ref Projectile.ai[0];
+        public ref float special => ref Projectile.ai[0];
 		public ref float direction => ref Projectile.ai[1];
 		public int maxTime = 30;
         public override string Texture => "ITD/Content/Items/Weapons/Melee/DespoticSuperMeleeSword";
-        public const float VisualLength = 90f;
+        public const float visualLength = 90f;
 		
 		public static VertexStrip vertexStrip = new VertexStrip();
 		
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
         }
         public override void SetDefaults()
         {
@@ -39,12 +40,18 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.hide = true;
 			Projectile.timeLeft = 30;
             Projectile.Opacity = 0f;
+			Projectile.scale = 1.75f;
+			Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
         }
         public override void OnSpawn(IEntitySource source)
         {
-            Projectile.scale = Scale;
-            Projectile.width = (int)(Projectile.width * Scale);
-            Projectile.height = (int)(Projectile.height * Scale);
+            if (special == 1f)
+			{
+				maxTime = 60;
+				Projectile.timeLeft = 60;
+				Projectile.extraUpdates = 1;
+			}
 		}
         public override void AI()
         {
@@ -54,6 +61,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 Projectile.Opacity += 0.2f;
             Player player = Main.player[Projectile.owner];
             Projectile.Center = player.MountedCenter;
+			
 			Projectile.velocity = Projectile.velocity.RotatedBy(0.3f * Projectile.timeLeft/maxTime * direction);
 			
 			Projectile.rotation = Projectile.velocity.ToRotation();
@@ -65,18 +73,32 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			}
 			Projectile.oldPos[0] = Projectile.Center + Projectile.velocity * 3f + Projectile.velocity.SafeNormalize(-Vector2.UnitY) * 36f;
 			Projectile.oldRot[0] = Projectile.rotation + MathHelper.PiOver2;
-           		   
+			
             player.heldProj = Projectile.whoAmI;
+			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.PiOver2);
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float num32 = 0f;
-            return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity.SafeNormalize(-Vector2.UnitY) * VisualLength * Projectile.scale, 32f * Projectile.scale, ref num32);
+            return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity.SafeNormalize(-Vector2.UnitY) * visualLength * Projectile.scale, 32f * Projectile.scale, ref num32);
+        }
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+			Main.player[Main.myPlayer].GetITDPlayer().BetterScreenshake(4, 4, 4, false);
+			SoundEngine.PlaySound(SoundID.Item92, target.Center);
+			for (int j = 0; j < 8; ++j)
+			{
+				int dust = Dust.NewDust(target.Center, 0, 0, DustID.DungeonSpirit, 0f, 0f, 100, default(Color), 1.5f);
+				Main.dust[dust].noGravity = true;
+				Main.dust[dust].velocity *= 3f;
+			}   
+			if (special == 1f)
+				Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center.X, target.Center.Y - 320, 0f, 24f, ModContent.ProjectileType<DespoticSuperSpecialProj>(), Projectile.damage, 0f, Projectile.owner);
         }
 		
 		private Color StripColors(float progressOnStrip)
 		{
-			Color result = Color.Lerp(Color.Aqua, Color.MidnightBlue, Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
+			Color result = Color.Aqua;
 			result.A /= 2;
 			return result * Projectile.Opacity * Projectile.Opacity;
 		}
@@ -89,15 +111,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             string path = "ITD/Content/Projectiles/Friendly/Melee/";
             Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
             Texture2D glow = ModContent.Request<Texture2D>(path + "DespoticSword_Glow").Value;
-			MiscShaderData arg_27_0 = GameShaders.Misc["FinalFractal"];
-			int num = 1;
-			int num2 = 0;
-			int num3 = 0;
-			int num4 = 4;
-			arg_27_0.UseShaderSpecificData(new Vector4((float)num, (float)num2, (float)num3, (float)num4));
-			arg_27_0.UseImage0("Images/Extra_" + 201);
-			arg_27_0.UseImage1("Images/Extra_" + 193);
-			arg_27_0.Apply(null);
+			MiscShaderData shader = GameShaders.Misc["LightDisc"];
+			shader.UseImage0("Images/Extra_" + 201);
+			shader.UseImage1("Images/Extra_" + 193);
+			shader.Apply(null);
 			vertexStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, -Main.screenPosition, new int?(Projectile.oldPos.Length), true);
 			vertexStrip.DrawTrail();
 			

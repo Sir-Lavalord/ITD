@@ -160,6 +160,7 @@ Projectiles: {
 	MandinataProjectile.DisplayName: Mandinata Projectile
 	CicadarangProjectile.DisplayName: Cicadarang Projectile
 	CicadarangMiniStriker.DisplayName: Cicadarang Mini Striker
+	DespoticSuperSpecialProj.DisplayName: Despotic Super Special Proj
 }
 
 NPCs: {
