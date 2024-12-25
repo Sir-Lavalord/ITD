@@ -19,11 +19,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee
     {
 		public override string Texture => "ITD/Content/Items/Weapons/Melee/DespoticSuperMeleeSword";
 		
+		public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
 		public VertexStrip TrailStrip = new VertexStrip();
 		
 		public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 		}
 		
@@ -38,6 +39,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.ignoreWater = false;
             Projectile.tileCollide = false;
 			Projectile.scale = 1.75f;
+			
+			Shader.UseImage0("Images/Extra_" + 192);
+			Shader.UseImage1("Images/Extra_" + 194);
+			Shader.UseImage2("Images/Extra_" + 193);
+			Shader.UseSaturation(-2.8f);
+			Shader.UseOpacity(2f);
         }
 
         public override void AI()
@@ -76,26 +83,25 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 		
 		private Color StripColors(float progressOnStrip)
 		{
-			return Color.Black * 0.4f * Projectile.Opacity * Projectile.Opacity;
+			Color result = Color.Lerp(Color.Cyan, Color.Black, Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
+			return result * Projectile.Opacity * Projectile.Opacity;
 		}
 		private float StripWidth(float progressOnStrip)
 		{
-			return 16f;
+			return 96f;
 		}
 		public override bool PreDraw(ref Color lightColor)
         {
             string path = "ITD/Content/Projectiles/Friendly/Melee/";
             Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
             Texture2D glow = ModContent.Request<Texture2D>(path + "DespoticSword_Glow").Value;
-			MiscShaderData shader = GameShaders.Misc["LightDisc"];
-			shader.UseImage0("Images/Extra_" + 201);
-			shader.UseImage1("Images/Extra_" + 193);
-			shader.Apply(null);
+			
+			Shader.Apply(null);
             TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
             TrailStrip.DrawTrail();
 			
 			Main.spriteBatch.End(out SpriteBatchData spriteBatchData); // unapply shaders
-            Main.spriteBatch.Begin(spriteBatchData);
+			Main.spriteBatch.Begin(spriteBatchData);
 			
             Vector2 drawPos = Projectile.Center - Main.screenPosition;
             Main.EntitySpriteDraw(tex, drawPos, null, lightColor * Projectile.Opacity, Projectile.rotation + MathHelper.PiOver4, tex.Size() * 0.5f, Projectile.scale, SpriteEffects.None);

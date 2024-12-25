@@ -162,10 +162,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Vector2 position = Projectile.Center - Main.screenPosition;
             Main.EntitySpriteDraw(texture, position, rectangle, lightColor, Projectile.rotation, rectangle.Size() / 2f, 1f, SpriteEffects.None, 0f);
 
-            MiscShaderData expr_0F = GameShaders.Misc["LightDisc"];
-            expr_0F.UseSaturation(-2.8f);
-            expr_0F.UseOpacity(2f);
-            expr_0F.Apply(null);
+            GameShaders.Misc["LightDisc"].Apply(null);
             TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
             TrailStrip.DrawTrail();
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();

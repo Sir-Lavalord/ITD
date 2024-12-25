@@ -14,6 +14,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
     {
 		public override string Texture => ITD.BlankTexture;
 		
+		public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
 		public VertexStrip TrailStrip = new VertexStrip();
 		
 		public override void SetStaticDefaults()
@@ -32,6 +33,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.timeLeft = 30;
             Projectile.ignoreWater = false;
             Projectile.tileCollide = false;
+			
+			Shader.UseImage0("Images/Extra_" + 191);
+			Shader.UseImage1("Images/Extra_" + 194);
+			Shader.UseImage2("Images/Extra_" + 190);
+			Shader.UseSaturation(-2.8f);
+			Shader.UseOpacity(2f);
         }
 		
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -73,11 +80,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
-            MiscShaderData expr_0F = GameShaders.Misc["FlameLash"];
-			expr_0F.UseImage1("Images/Extra_194");
-			expr_0F.UseSaturation(-2.8f);
-			expr_0F.UseOpacity(2f);
-			expr_0F.Apply(null);
+			Shader.Apply(null);
             TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
             TrailStrip.DrawTrail();
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();

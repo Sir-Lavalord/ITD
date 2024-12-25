@@ -107,11 +107,11 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 		
 		private Color StripColorBlue(float progressOnStrip)
 		{
-			return new Color(200, 200, 255);
+			return new Color(200, 200, 255) * FadeIn;
 		}
 		private Color StripColorOrange(float progressOnStrip)
 		{
-			return new Color(255, 255, 200);
+			return new Color(255, 255, 200) * FadeIn;
 		}
 		private float StripWidth1(float progressOnStrip)
 		{
@@ -157,10 +157,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 Vector2[] positions = Bezier.Quadratic(TargetLock.Center, mouse, VacuumCleaner, res);
 				float[] rotations = Bezier.Rotations(positions);
 
-                MiscShaderData BlueShader = GameShaders.Misc["MagicMissile"];
-				BlueShader.UseSaturation(-2.8f);
-				BlueShader.UseOpacity(FadeIn);
-				BlueShader.Apply(null);
+				GameShaders.Misc["MagicMissile"].Apply(null);
 				
 				TrailStrip.PrepareStrip(positions, rotations, StripColorBlue, StripWidth1, - Main.screenPosition, positions.Length, true);
 		

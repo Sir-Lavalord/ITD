@@ -83,10 +83,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
-            MiscShaderData expr_0F = GameShaders.Misc["MagicMissile"];
-			expr_0F.UseSaturation(-2.8f);
-			expr_0F.UseOpacity(2f);
-			expr_0F.Apply(null);
+			GameShaders.Misc["MagicMissile"].Apply(null);
             TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
             TrailStrip.DrawTrail();
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();

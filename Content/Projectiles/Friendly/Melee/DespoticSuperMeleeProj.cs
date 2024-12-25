@@ -24,6 +24,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         public override string Texture => "ITD/Content/Items/Weapons/Melee/DespoticSuperMeleeSword";
         public const float visualLength = 90f;
 		
+		public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
 		public static VertexStrip vertexStrip = new VertexStrip();
 		
         public override void SetStaticDefaults()
@@ -43,6 +44,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			Projectile.scale = 1.75f;
 			Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
+			
+			Shader.UseImage0("Images/Extra_" + 201);
+			Shader.UseImage1("Images/Extra_" + 193);
+			Shader.UseImage2("Images/Extra_" + 252);
+			Shader.UseSaturation(-2.8f);
+			Shader.UseOpacity(2f);
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -99,7 +106,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 		private Color StripColors(float progressOnStrip)
 		{
 			Color result = Color.Aqua;
-			result.A /= 2;
+			result.A /= 3;
 			return result * Projectile.Opacity * Projectile.Opacity;
 		}
 		private float StripWidth(float progressOnStrip)
@@ -111,10 +118,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             string path = "ITD/Content/Projectiles/Friendly/Melee/";
             Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
             Texture2D glow = ModContent.Request<Texture2D>(path + "DespoticSword_Glow").Value;
-			MiscShaderData shader = GameShaders.Misc["LightDisc"];
-			shader.UseImage0("Images/Extra_" + 201);
-			shader.UseImage1("Images/Extra_" + 193);
-			shader.Apply(null);
+			
+			Shader.Apply(null);
 			vertexStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, -Main.screenPosition, new int?(Projectile.oldPos.Length), true);
 			vertexStrip.DrawTrail();
 			
