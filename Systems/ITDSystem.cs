@@ -196,7 +196,6 @@ namespace ITD.Systems
         }
         private static void PreventTownNPCSpawns(On_Main.orig_UpdateTime_SpawnTownNPCs orig)
         {
-            PreventRecruitedNPCSpawn();
             orig();
             PreventRecruitedNPCSpawn();
         }

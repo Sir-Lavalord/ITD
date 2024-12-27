@@ -29,16 +29,16 @@ namespace ITD.Content.UI
             unrecruitmentButton = new UnrecruitmentButton();
             Append(unrecruitmentButton);
         }
-        public override void Update(GameTime gameTime)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             float dim = 32f * Main.GameZoomTarget;
             if (npc > -1)
             {
-                Vector2 screenPos = (Main.npc[npc].Center - Main.LocalPlayer.velocity - Vector2.UnitY * 48f).ToScreenPosition(); // why do i have to add localplayer velocity :sob:
+                Vector2 screenPos = (Main.npc[npc].Center - Vector2.UnitY * 48f).ToScreenPosition();
                 unrecruitmentButton?.UpdateProperties(dim, screenPos.X - (dim * 0.5f), screenPos.Y - (dim * 0.5f));
                 Recalculate();
             }
-            base.Update(gameTime);
+            base.Draw(spriteBatch);
         }
         public void Open(Vector2 atWorldPosition, int npcWhoAmI)
         {
