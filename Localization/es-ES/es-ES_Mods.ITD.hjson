@@ -415,3 +415,14 @@ RecruitmentSystem: {
 	NotHappyEnough: ¡{0} no tiene la felicidad máxima!
 	RecruitmentDenied: ¡{0} no puede entrar a tu equipo!
 }
+
+Configs: {
+	ITDServerConfig: {
+		// DisplayName: ITD Server Config
+
+		ResizeDesertForDeepDesert: {
+			// Label: Resize Desert For Deep Desert
+			// Tooltip: Turn on for the vanilla Desert to generate smaller to make space for Deep Desert generation. On by default.
+		}
+	}
+}

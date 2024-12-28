@@ -1,16 +1,14 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 using Terraria.Localization;
 using ITD.Content.Tiles.BlueshroomGroves;
 using Microsoft.Xna.Framework.Graphics;
 using ITD.Utilities;
 using Terraria.DataStructures;
 using ITD.Systems;
-using System.Reflection;
 using Terraria.GameContent;
-using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace ITD.Content.Tiles
 {
@@ -437,16 +435,23 @@ namespace ITD.Content.Tiles
             top = new(i, j);
             return false;
         }
+        [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "numTreeShakes")]
+        extern static ref int GetSetNumTreeShakes(WorldGen type);
+        [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "maxTreeShakes")]
+        extern static ref int GetMaxTreeShakes(WorldGen type);
+        [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "treeShakeX")]
+        extern static ref int[] GetTreeShakeX(WorldGen type);
+        [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "treeShakeY")]
+        extern static ref int[] GetTreeShakeY(WorldGen type);
         public void ShakeTree(int i, int j)
         {
             // adapted from confection rebaked
             // hello kibtenbun
 
-            FieldInfo numTreeShakesR = typeof(WorldGen).GetField("numTreeShakes", BindingFlags.Static | BindingFlags.NonPublic);
-            int numTreeShakes = (int)numTreeShakesR.GetValue(null);
-            int maxTreeShakes = ReflectionHelpers.Get<FieldInfo, int>("maxTreeShakes", staticClass: typeof(WorldGen), flags: BindingFlags.Static | BindingFlags.NonPublic);
-            int[] treeShakeX = ReflectionHelpers.Get<FieldInfo, int[]>("treeShakeX", staticClass: typeof(WorldGen), flags: BindingFlags.Static | BindingFlags.NonPublic);
-            int[] treeShakeY = ReflectionHelpers.Get<FieldInfo, int[]>("treeShakeY", staticClass: typeof(WorldGen), flags: BindingFlags.Static | BindingFlags.NonPublic);
+            ref int numTreeShakes = ref GetSetNumTreeShakes(null);
+            int maxTreeShakes = GetMaxTreeShakes(null);
+            int[] treeShakeX = GetTreeShakeX(null);
+            int[] treeShakeY = GetTreeShakeY(null);
             if (numTreeShakes == maxTreeShakes)
                 return;
             Point bottom = GetTreeBottom(i, j);
@@ -458,7 +463,8 @@ namespace ITD.Content.Tiles
             }
             treeShakeX[numTreeShakes] = bottom.X;
             treeShakeY[numTreeShakes] = bottom.Y;
-            numTreeShakesR.SetValue(null, ++numTreeShakes);
+            numTreeShakes++;
+
             if (!TryGetTreeTop(i, j, out bottom) || Collision.SolidTiles(bottom.X - 2, bottom.X + 2, bottom.Y - 2, bottom.Y + 2))
                 return;
             // spawn bomb in fortheworthy

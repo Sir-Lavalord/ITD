@@ -11,6 +11,7 @@ using ITD.Utilities;
 using Terraria.ID;
 using Terraria.GameContent.Drawing;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace ITD.Systems
 {
@@ -36,11 +37,13 @@ namespace ITD.Systems
             Main.instance.TilesRenderer.GetTileDrawData(i, j, tile, tile.TileType, ref _, ref _, out var tileWidth, out var _, out var tileTop, out var halfBrickHeight, out var _, out var _, out var _, out var _, out var _, out var _);
             return new Vector2(tileWidth / 2, 16 - halfBrickHeight - tileTop);
         }
+        [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_grassWindCounter")]
+        extern static ref double GetGrassWindCounter(TileDrawing instance);
         internal static float GetGrassSway(int i, int j, ref Vector2 position)
         {
             Tile tile = Main.tile[i, j];
             TileDrawing tilesRenderer = Main.instance.TilesRenderer;
-            double windCounter = ReflectionHelpers.Get<FieldInfo, double>("_grassWindCounter", instance: tilesRenderer, flags: BindingFlags.NonPublic | BindingFlags.Instance);
+            double windCounter = GetGrassWindCounter(tilesRenderer);
             float rotation = tilesRenderer.GetWindCycle(i, j, windCounter);
 
             if (!WallID.Sets.AllowsWind[tile.WallType])
@@ -66,10 +69,12 @@ namespace ITD.Systems
 
             spriteBatch.Draw(tex, drawPos, source, col, rot * 0.08f, origin ?? source.Value.Size() / 2f, 1f, effect, 0f);
         }
+        [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_treeWindCounter")]
+        extern static ref double GetTreeWindCounter(TileDrawing instance);
         private static float GetTreeSway(int i, int j, ref Vector2 pos)
         {
             TileDrawing tilesRenderer = Main.instance.TilesRenderer;
-            double windCounter = ReflectionHelpers.Get<FieldInfo, double>("_treeWindCounter", instance: tilesRenderer, flags: BindingFlags.NonPublic | BindingFlags.Instance);
+            double windCounter = GetTreeWindCounter(tilesRenderer);
             float rot = tilesRenderer.GetWindCycle(i, j, windCounter);
 
             pos.X += rot * 2f;

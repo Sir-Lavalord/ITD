@@ -1,15 +1,8 @@
-﻿using ITD.Content.Items.Accessories.Defensive.Defense;
-using Microsoft.Extensions.Logging.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
-using static tModPorter.Rewriters.RenameRewriter;
 
 namespace ITD.Utilities
 {

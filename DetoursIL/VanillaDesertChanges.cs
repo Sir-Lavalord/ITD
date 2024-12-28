@@ -1,10 +1,7 @@
-﻿using ITD.Utilities;
-using MonoMod.Cil;
-using ReLogic.Utilities;
-using System.Reflection;
+﻿using ReLogic.Utilities;
 using Terraria;
 using Terraria.GameContent.Biomes.Desert;
-using System;
+using System.Runtime.CompilerServices;
 
 namespace ITD.DetoursIL
 {
@@ -14,11 +11,45 @@ namespace ITD.DetoursIL
         {
             // we detouring obscure ahh methods with this one
             // i was originally going to IL this but the method's so short a detour suits it better i think
-            // ironically, this may be messier than just an IL edit since i have to use reflection in so many places (why tf are most of these things private)
             On_DesertDescription.CreateFromPlacement += ModifyDesertHeight;
+        }
+        private static class DesertDescriptionAccessors
+        {
+            [UnsafeAccessor(UnsafeAccessorKind.Constructor)]
+            public static extern DesertDescription Create();
+
+            [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_CombinedArea")]
+            public static extern void SetCombinedArea(DesertDescription instance, Rectangle value);
+
+            [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Hive")]
+            public static extern void SetHive(DesertDescription instance, Rectangle value);
+
+            [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Desert")]
+            public static extern void SetDesert(DesertDescription instance, Rectangle value);
+
+            [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_BlockScale")]
+            public static extern void SetBlockScale(DesertDescription instance, Vector2D value);
+
+            [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_BlockColumnCount")]
+            public static extern void SetBlockColumns(DesertDescription instance, int value);
+
+            [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_BlockRowCount")]
+            public static extern void SetBlockRows(DesertDescription instance, int value);
+
+            [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Surface")]
+            public static extern void SetSurface(DesertDescription instance, SurfaceMap value);
+
+            [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_IsValid")]
+            public static extern void SetValid(DesertDescription instance, bool value);
+
+            [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "RowHasInvalidTiles")]
+            public static extern bool RowHasInvalidTiles(DesertDescription type, int startX, int startY, int width);
         }
         private static DesertDescription ModifyDesertHeight(On_DesertDescription.orig_CreateFromPlacement orig, Point origin)
         {
+            // call orig over here because yeah
+            if (!ITD.ServerConfig.ResizeDesertForDeepDesert)
+                return orig(origin);
             // credits to chatgpt for the deobfuscation and for the record this is the only thing i advocate using chatgpt for
             int ScanPadding = 5;
 
@@ -43,7 +74,7 @@ namespace ITD.DetoursIL
             origin.X -= desertWidth / 2;
             SurfaceMap surfaceMap = SurfaceMap.FromArea(origin.X - ScanPadding, desertWidth + ScanPadding * 2);
 
-            if ((bool)ReflectionHelpers.CallMethod("RowHasInvalidTiles", null, typeof(DesertDescription), BindingFlags.Static | BindingFlags.NonPublic, origin.X, surfaceMap.Bottom, desertWidth))
+            if (DesertDescriptionAccessors.RowHasInvalidTiles(null, origin.X, surfaceMap.Bottom, desertWidth))
             {
                 return DesertDescription.Invalid;
             }
@@ -58,24 +89,22 @@ namespace ITD.DetoursIL
                 hiveOffset = (int)(20.0 * worldScale);
             }
 
-            // ew
-            DesertDescription d = (DesertDescription)typeof(DesertDescription).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, Type.EmptyTypes).Invoke(null);
-            BindingFlags lookup = BindingFlags.Public | BindingFlags.Instance;
+            DesertDescription d = DesertDescriptionAccessors.Create();
+
             Rectangle combArea = new(origin.X, averageSurfaceHeight, desertWidth, origin.Y + desertHeight - averageSurfaceHeight);
             Rectangle hive = new(origin.X, origin.Y + hiveOffset, desertWidth, desertHeight - hiveOffset);
             Rectangle desert = new(origin.X, averageSurfaceHeight, desertWidth, origin.Y + desertHeight / 2 - averageSurfaceHeight + hiveOffset);
-            // brother ew
-            ReflectionHelpers.Set<PropertyInfo>("CombinedArea", combArea, d, null, lookup);
-            ReflectionHelpers.Set<PropertyInfo>("Hive", hive, d, null, lookup);
-            ReflectionHelpers.Set<PropertyInfo>("Desert", desert, d, null, lookup);
-            ReflectionHelpers.Set<PropertyInfo>("BlockScale", blockScale, d, null, lookup);
-            ReflectionHelpers.Set<PropertyInfo>("BlockColumnCount", blockColumns, d, null, lookup);
-            ReflectionHelpers.Set<PropertyInfo>("BlockRowCount", blockRows, d, null, lookup);
-            ReflectionHelpers.Set<PropertyInfo>("Surface", surfaceMap, d, null, lookup);
-            ReflectionHelpers.Set<PropertyInfo>("IsValid", true, d, null, lookup);
+
+            DesertDescriptionAccessors.SetCombinedArea(d, combArea);
+            DesertDescriptionAccessors.SetHive(d, hive);
+            DesertDescriptionAccessors.SetDesert(d, desert);
+            DesertDescriptionAccessors.SetBlockScale(d, blockScale);
+            DesertDescriptionAccessors.SetBlockColumns(d, blockColumns);
+            DesertDescriptionAccessors.SetBlockRows(d, blockRows);
+            DesertDescriptionAccessors.SetSurface(d, surfaceMap);
+            DesertDescriptionAccessors.SetValid(d, true);
 
             return d;
-            // never call orig because why would you
         }
     }
 }

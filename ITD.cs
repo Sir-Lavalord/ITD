@@ -12,6 +12,7 @@ using Terraria.Graphics.Shaders;
 using System.Collections.Generic;
 using ITD.Systems.Recruitment;
 using Terraria.ID;
+using ITD.Config;
 
 namespace ITD
 {
@@ -29,6 +30,7 @@ namespace ITD
         internal Mod munchies = null;
         internal Mod achievements = null;
         internal Mod dialogueTweak = null; // this is necessary so the recruitment button doesn't screw up when this mod is on
+        public static ITDServerConfig ServerConfig => ModContent.GetInstance<ITDServerConfig>();
         public int? GetMusic(string trackName)
         {
             return itdMusic is not null ? MusicLoader.GetMusicSlot(itdMusic, "Music/" + trackName) : null;
