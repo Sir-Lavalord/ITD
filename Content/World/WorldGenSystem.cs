@@ -66,7 +66,6 @@ namespace ITD.Content.World
             //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             //test world particle (change particle.canvas in particle type)
             //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
-            
             Point pos = Main.MouseWorld.ToTileCoordinates();
             /*
             testPoints.Add(pos);
