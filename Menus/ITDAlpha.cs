@@ -45,7 +45,7 @@ namespace ITD.Menus
     }
     public class ITDAlpha : ModMenu
     {
-        public override int Music => MusicLoader.GetMusicSlot("ITD/Menus/Music/AlphaMenu");
+        public override int Music => ITD.Instance.GetMusic("AlphaMenu") ?? MusicID.MenuMusic;
         public override Asset<Texture2D> Logo => ModContent.Request<Texture2D>("ITD/Menus/Textures/AlphaMenu");
         public override ModSurfaceBackgroundStyle MenuBackgroundStyle => ModContent.GetInstance<BlueshroomGrovesSurfaceBackgroundStyle>();
         private readonly List<MenuSnow> snows = [];
