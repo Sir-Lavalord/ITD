@@ -148,12 +148,12 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                 if (i == 0)
                 {
                     vector = new Vector2(Projectile.scale) * (0.5f + num);
-                    DelegateMethods.c_1 = new Color(68, 214, 255, 0) * 0.5f;
+                    DelegateMethods.c_1 = new Color(26, 133, 234, 0) * 0.5f;
                 }
                 else
                 {
                     vector = new Vector2(Projectile.scale) * (0.3f + num);
-                    DelegateMethods.c_1 = new Color(154, 230, 255, 0) * 0.5f;
+                    DelegateMethods.c_1 = new Color(185, 219, 209, 0) * 0.5f;
                 }
                 DelegateMethods.f_1 = 1f;
                 for (int j = Projectile.oldPos.Length - 1; j > 0; j--)

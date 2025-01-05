@@ -7,16 +7,31 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using ITD.Utilities;
+using Terraria.Graphics.Shaders;
+using Terraria.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
+using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace ITD.Content.Projectiles.Friendly.Mage
 {
     public class StarlightStaffProj : ModProjectile
     {
+        public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
+
+        public VertexStrip TrailStrip = new VertexStrip();
+        public override string Texture => ITD.BlankTexture;
+
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 5;
-			ProjectileID.Sets.TrailCacheLength [Type] = 6;
-			ProjectileID.Sets.TrailingMode [Type] = 0;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
         private NPC HomingTarget
@@ -29,8 +44,8 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         }
         public override void SetDefaults()
         {
-            Projectile.width = 30;
-            Projectile.height = 30;
+            Projectile.width = 40;
+            Projectile.height = 40;
             Projectile.aiStyle = 0;
             Projectile.DamageType = DamageClass.Magic;
             Projectile.friendly = true;
@@ -42,14 +57,25 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
+            Shader.UseImage0("Images/Extra_" + 192);
+            Shader.UseImage1("Images/Extra_" + 194);
+            Shader.UseImage2("Images/Extra_" + 190);
+            Shader.UseSaturation(-4f);
+            Shader.UseOpacity(2f);
+            Shader.UseColor(Color.Black);
 
         }
         public override void AI()
         {
-            float maxDetectRadius = 200f;
+            Projectile.spriteDirection = (Projectile.velocity.X < 0).ToDirectionInt();
+            if (Projectile.spriteDirection == 1)
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2 * 2;
+            else
+                Projectile.rotation = Projectile.velocity.ToRotation();
+            float maxDetectRadius = 300f;
 
             if (Projectile.timeLeft > 36)
-            {				
+            {
                 HomingTarget ??= Projectile.FindClosestNPC(maxDetectRadius);
 
                 if (HomingTarget == null)
@@ -64,17 +90,8 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             else
             {
                 Projectile.velocity *= 0f;
-                int frameSpeed = 6;
-                Projectile.frameCounter++;
-                if (Projectile.frameCounter >= frameSpeed && Projectile.timeLeft > 10)
-                {
-                    Projectile.frameCounter = 0;
-                    Projectile.frame++;
-                    if (Projectile.frame >= Main.projFrames[Projectile.type])
-                    {
-						SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
-                    }
-                }
+                if (Projectile.timeLeft == 10)
+                    SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
                 if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 10)
                 {
                     Projectile.Resize(200, 200);
@@ -103,7 +120,6 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             if (Projectile.timeLeft > 36)
             {
                 Projectile.timeLeft = 36;
-                Projectile.frame = 1;
             }
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -114,44 +130,97 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             if (Projectile.timeLeft > 36)
             {
                 Projectile.timeLeft = 36;
-                Projectile.frame = 1;
             }
             return false;
         }
-        
+        Color col;
+        Color colTrail;
+        Color colExplode1;
+        Color colExplode2;
+        Color colExplode3;
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (Main.rand.NextBool(2))
+            {
+                Shader.UseImage0("Images/Extra_" + 191);
+                col = new Color(255, 242, 191);
+                colTrail = new Color(255, 247, 0);
+                colExplode1 = new Color(35, 36, 12);
+                colExplode2 = new Color(133, 127, 50);
+                colExplode3 = new Color(255, 253, 191);
+
+            }
+            else
+            {
+                Shader.UseImage0("Images/Extra_" + 192);
+                col = new Color(168, 241, 255);
+                colTrail = new Color(0, 153, 255);
+                colExplode1 = new Color(12, 25, 36);
+                colExplode2 = new Color(50, 78, 133);
+                colExplode3 = new Color(191, 247, 255);
+            }
+        }
         public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;
         }
+        private Color StripColors(float progressOnStrip)
+        {
+            
+            Color result = Color.Lerp(Color.White, colTrail, Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
+            result.A /= 2;
+            return result * Projectile.Opacity * Projectile.Opacity;
+        }
+        private float StripWidth(float progressOnStrip)
+        {
+            return MathHelper.Lerp(40f, 40f, Utils.GetLerpValue(0f, 0.6f, progressOnStrip, true)) * Utils.GetLerpValue(0f, 0.1f, progressOnStrip, true);
+        }
         public override bool PreDraw(ref Color lightColor)
         {
-			if (Projectile.timeLeft > 10)
+            Texture2D effectTexture = TextureAssets.Extra[98].Value;
+            Vector2 effectOrigin = effectTexture.Size() / 2f;
+            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            float scaleX = 0.75f;
+            float scaleY = 1f;
+            Rectangle rectangle = texture.Frame(1, 1);
+            Player player = Main.player[Projectile.owner];
+            lightColor = Lighting.GetColor((int)player.Center.X / 16, (int)player.Center.Y / 16);
+            Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+            if (Projectile.timeLeft > 36)
 			{
-				Texture2D trailTexture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Mage/StarlightStaffProj_Trail").Value;
-				Vector2 origin = trailTexture.Frame(1, 1).Size() / 2f;
-				for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
-				{
-					Vector2 oldPos = Projectile.oldPos[i];
-					Main.EntitySpriteDraw(trailTexture, oldPos + Projectile.Size / 2f - Main.screenPosition + new Vector2(0, Projectile.gfxOffY), new Microsoft.Xna.Framework.Rectangle?(trailTexture.Frame(1, 1)), Color.White, 0, origin, Projectile.scale*1.25f-(Projectile.scale*0.2f*i), SpriteEffects.None, 0);
-				}
-			}
-			else
-			{
-				Vector2 position = Projectile.Center - Main.screenPosition;
-				Texture2D texture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Melee/WRipperRift").Value;
-				Rectangle sourceRectangle = texture.Frame(1, 1);
-				Vector2 origin = sourceRectangle.Size() / 2f;
-				
-				float scaleMultipler = (20f-Projectile.timeLeft)*0.1f;
-				float colorMultiplier = Math.Min(1, Projectile.timeLeft*0.2f);
-				
-				Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(36, 12, 34)*colorMultiplier, scaleMultipler*2f, origin, scaleMultipler*2f, SpriteEffects.None, 0f);
-				Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(133, 50, 88)*colorMultiplier, scaleMultipler*1.5f, origin, scaleMultipler*1.5f, SpriteEffects.None, 0f);
-				Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(255, 244, 191)*colorMultiplier, scaleMultipler, origin, scaleMultipler, SpriteEffects.None, 0f);
+                Shader.Apply(null);
+                TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
+                TrailStrip.DrawTrail();
+                Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+                Main.EntitySpriteDraw(effectTexture, drawPosition, null, col, 0 - MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY), SpriteEffects.None, 0);
 
-			}
+                Main.EntitySpriteDraw(effectTexture, drawPosition, null, col, 0, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY), SpriteEffects.None, 0);
+            }
+            else if (Projectile.timeLeft > 10 && Projectile.timeLeft <= 36)
+            {
+                float scaleMultipler = (40 - Projectile.timeLeft) * 0.05f;
+                float colorMultiplier = Math.Min(1, Projectile.timeLeft * 0.2f);
+                Main.EntitySpriteDraw(effectTexture, drawPosition, null, col * colorMultiplier, 0 - MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * scaleMultipler * 1f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(effectTexture, drawPosition, null, col * colorMultiplier, 0, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * scaleMultipler *1f, SpriteEffects.None, 0);
+            }
+            else if (Projectile.timeLeft <= 10)
+            {
+                Vector2 position = Projectile.Center - Main.screenPosition;
+                Texture2D texture2 = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Melee/WRipperRift").Value;
+                Rectangle sourceRectangle = texture2.Frame(1, 1);
+                Vector2 origin = sourceRectangle.Size() / 2f;
 
-            return Projectile.timeLeft > 10;
+                float scaleMultipler = (20f - Projectile.timeLeft) * 0.1f;
+                float colorMultiplier = Math.Min(1, Projectile.timeLeft * 0.2f);
+
+                Main.EntitySpriteDraw(texture2, position, sourceRectangle, colExplode1 * colorMultiplier, scaleMultipler * 2f, origin, scaleMultipler * 2f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(texture2, position, sourceRectangle, colExplode2 * colorMultiplier, scaleMultipler * 1.5f, origin, scaleMultipler * 1.5f, SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(texture2, position, sourceRectangle, colExplode3 * colorMultiplier, scaleMultipler, origin, scaleMultipler, SpriteEffects.None, 0f);
+
+            }
+
+            return false;
         }
     }
 }

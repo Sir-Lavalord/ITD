@@ -33,17 +33,10 @@ namespace ITD.Content.Items.Weapons.Melee
 		
 		public override  bool CanUseItem (Player player)
         {
-			for (int k = 0; k < 1000; k++)
-			{
-				if (Main.projectile[k].active && Main.projectile[k].owner == Main.myPlayer && Main.projectile[k].type == Item.shoot)
-				{
-					return false;
-				}
-			}
-			return true;
+            return player.ownedProjectileCounts[Item.shoot] < 1;
         }
-		
-		public override void AddRecipes()
+
+        public override void AddRecipes()
 		{
 			CreateRecipe(1)
                 .AddIngredient(ModContent.ItemType<RefinedCyanite>(), 10)

@@ -345,9 +345,9 @@ namespace ITD.Content.NPCs.Bosses
                         }
                         else if (AITimer1 >= 100)
                         {
+                            AttackCount = 0;
                             AttackID++;
                             AITimer1 = 0;
-                            NPC.ai[0] = 0;
                             HandControl(-1, 1, 2, false);
                             HandControl(1, 1, 2, false);
                         }
@@ -366,16 +366,15 @@ namespace ITD.Content.NPCs.Bosses
                                 HandControl(1, 1, 2, false);
                             }
                         }
-                        if (AttackCount >= 6 || AITimer1 >= 600)
+                        if (AITimer1 >= 600)
                         {
-                            AttackCount = 0;
-                            AITimer1 = 0;
-                            NPC.ai[0] = 0;
-                            AttackID = 5;
-                            NetSync();
-                            //ForceKill returns
                             HandControl(1, 6, 3, true);
                             HandControl(-1, 6, 3, true);
+                            NetSync();
+                            AITimer1 = 0;
+                            AttackID++;
+                            AttackCount = 0;
+                            NetSync();
 
                         }
                         if (AITimer1 == 20)
@@ -394,14 +393,15 @@ namespace ITD.Content.NPCs.Bosses
 
                         break;
                 case 5://dash
-                    AITimer1++;
-                    if (AITimer1 == 60)
+                    Main.NewText("555", Color.Violet);
+                    if (AITimer1++ == 60)
                     {
+                        AITimer2 = 0;
                         SoundEngine.PlaySound(SoundID.Zombie101, NPC.Center);
                         if (AI_State != MovementState.Suffocate)
                             AI_State = MovementState.Ram;
                     }
-                    if (AttackCount >= 3 && !bSecondStage || AttackCount >= 4 && bSecondStage)
+                    if (AttackCount++ >= 900)
                     {
                         //can't believe i have to do this, since the checking doesn't even fucking work
                         AttackID++;
@@ -593,8 +593,8 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     if (AITimer2 >= 80)
                     {
-                        AttackCount++;
                         AITimer1 = 0;
+                        AttackCount++;
                         NetSync();
                         AI_State = MovementState.FollowingRegular;
                     }
@@ -609,7 +609,6 @@ namespace ITD.Content.NPCs.Bosses
                     if (!suffer.CosJellSuffocated)
                     {
                         AITimer1 = 0;
-                        NPC.ai[0]++;
                         AI_State = MovementState.FollowingRegular;
 
                     }
@@ -659,7 +658,6 @@ namespace ITD.Content.NPCs.Bosses
                 if (Main.netMode != NetmodeID.Server)
                 {
                 }
-                NPC.ai[0] = 0;
                 AITimer1 = 0;
                 AITimer2 = 0;
                 AttackCount = 0;
@@ -678,7 +676,6 @@ namespace ITD.Content.NPCs.Bosses
             if (!bOkuu)//Subterranean Sun
             {
                 AttackID = -2;
-                NPC.ai[0] = 0;
                 AITimer1 = 0;
                 AITimer2 = 0;
                 AttackCount = 0;

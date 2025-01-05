@@ -161,6 +161,11 @@ Projectiles: {
 	CicadarangProjectile.DisplayName: Cicadarang Projectile
 	CicadarangMiniStriker.DisplayName: Cicadarang Mini Striker
 	DespoticSuperSpecialProj.DisplayName: Despotic Super Special Proj
+	ManuscriptCursor.DisplayName: Manuscript Cursor
+	ManuscriptSneakProj.DisplayName: Manuscript Sneak Proj
+	ManuscriptLumberProj.DisplayName: Manuscript Lumber Proj
+	ManuscriptUIProj.DisplayName: Manuscript U I Proj
+	NightmareManuscriptProj.DisplayName: Nightmare Manuscript Proj
 }
 
 NPCs: {
@@ -349,6 +354,11 @@ Buffs: {
 	RoyalJellyBuff: {
 		DisplayName: Royal Jelly Buff
 		Description: Mods.ITD.Buffs.RoyalJellyBuff.Description
+	}
+
+	ManuscriptLumberBuff: {
+		Description: Mods.ITD.Buffs.ManuscriptLumberBuff.Description
+		DisplayName: Manuscript Lumber Buff
 	}
 }
 
