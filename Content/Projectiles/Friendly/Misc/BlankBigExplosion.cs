@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {
+    //dumbass
     public abstract class BigBlankExplosion : ModProjectile
     {
         public ref float CurrentRadius => ref Projectile.ai[0];

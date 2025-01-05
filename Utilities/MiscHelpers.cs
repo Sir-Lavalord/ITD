@@ -5,6 +5,7 @@ using Terraria;
 using ITD.Content.NPCs;
 using ReLogic.Utilities;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.ModLoader;
 
 namespace ITD.Utilities
 {
@@ -100,6 +101,10 @@ namespace ITD.Utilities
         public static bool IsValidTarget(this Projectile projectile, NPC target)
         {
             return target.CanBeChasedBy() && Collision.CanHit(projectile.Center, 1, 1, target.position, target.width, target.height);
+        }
+        public static T ModProjectile<T>(this Projectile projectile) where T : ModProjectile
+        {
+            return projectile.ModProjectile as T;
         }
         public static void CreateLightningEffects(Vector2 start, Vector2 end)
         {

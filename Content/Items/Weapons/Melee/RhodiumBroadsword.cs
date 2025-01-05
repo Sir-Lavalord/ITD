@@ -39,6 +39,7 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.rare = ItemRarityID.Blue;
             Item.UseSound = SoundID.Item1;
 			Item.shootSpeed = 9.5f;
+
         }
 		
 		public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {

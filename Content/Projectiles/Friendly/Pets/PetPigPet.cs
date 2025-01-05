@@ -79,13 +79,27 @@ namespace ITD.Content.Projectiles.Friendly.Pets
                 }
             }
             if (chosenChest == null)
+            {
                 goToChosenChest = false;
+            }
+            else
+            {
+                for (int chestIndex = 0; chestIndex < Chest.maxItems; chestIndex++)
+                {
+                    if (chosenChest.item[chestIndex] == null)
+                    {
+                        chosenChest = null;
+                        goToChosenChest = false;
+                    }
+                }
+            }
             DoFloating(player, goToChosenChest);
             // this line of code makes it so the rope is always at the bottom of the balloon properly
             pigChain?.UpdateStart(Projectile.Center + Projectile.velocity + Vector2.UnitY*(Projectile.height/2));
         }
         private static Chest DetectChest(Point tile, int radius)
         {
+
             Rectangle rect = new(tile.X - radius, tile.Y - radius, radius + radius, radius + radius);
             static bool inCircle(int i, int j, Rectangle rect) // math things
             {

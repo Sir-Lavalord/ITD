@@ -1189,3 +1189,8 @@ Cicadarang: {
 	// DisplayName: Cicadarang
 	// Tooltip: ""
 }
+
+NightmareManuscript: {
+	// Tooltip: ""
+	// DisplayName: Nightmare Manuscript
+}
