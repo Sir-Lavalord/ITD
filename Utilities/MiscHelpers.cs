@@ -80,6 +80,36 @@ namespace ITD.Utilities
             return new(newX, newY, newW, newH);
         }
         public static Rectangle Inflated(this Rectangle rect, int value) => rect.Inflated(value, value);
+        /// <summary>
+        /// Returns a <see cref="Rectangle"/> that fully contains this Rectangle in tile space. Suitable for tile queries.
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <returns></returns>
+        public static Rectangle ToTileRectangle(this Rectangle rect)
+        {
+            return new Rectangle
+            (
+                x: rect.X / 16,
+                y: rect.Y / 16,
+                width: (int)Math.Ceiling(rect.Width / 16f),
+                height: (int)Math.Ceiling(rect.Height / 16f)
+            );
+        }
+        public static Rectangle ToWorldRectangle(this Rectangle rect) => new(rect.X * 16, rect.Y * 16, rect.Width * 16, rect.Height * 16);
+        /// <summary>
+        /// Returns a <see cref="Rectangle"/> that fully contains this Entity in tile space. Suitable for tile queries. More precise than <see cref="ToTileRectangle(Rectangle)"/> in specific situations.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static Rectangle TileRectangle(this Entity entity)
+        {
+            int x = (int)(entity.position.X / 16);
+            int y = (int)(entity.position.Y / 16);
+            int width = (int)Math.Ceiling(entity.width / 16f);
+            int height = (int)Math.Ceiling(entity.height / 16f);
+
+            return new(x, y, width, height);
+        }
         public static float AngleDiff(Vector2 origin, params Vector2[] vecs)
         {
             vecs = [origin, .. vecs.OrderBy(v => v.DistanceSQ(origin))];

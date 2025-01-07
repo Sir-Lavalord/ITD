@@ -18,7 +18,7 @@ using ITD.Content.Items.Accessories.Defensive.Defense;
 namespace ITD.Content.NPCs.Bosses
 {
 	[AutoloadBossHead]
-    public class Sandberus : ModNPC
+    public class Sandberus : ITDNPC
     {
 		private enum ActionState
         {
@@ -78,7 +78,7 @@ namespace ITD.Content.NPCs.Bosses
 					NPC.spriteDirection = NPC.direction;
 					NPC.velocity.X += NPC.direction * 0.1f;
 					NPC.velocity.X = Math.Clamp(NPC.velocity.X, -4f, 4f);
-					NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
+					StepUp();
 					//Player player = Main.player[NPC.target];
 					//if (NPC.velocity.Y == 0f && player.position.Y < NPC.position.Y)
 					//	NPC.velocity.Y = -8f;
@@ -104,7 +104,7 @@ namespace ITD.Content.NPCs.Bosses
 						NPC.velocity.X *= 0.9f;
 					if (Math.Abs(NPC.velocity.X) > 6 && Main.netMode != NetmodeID.MultiplayerClient)
 						SpikeTrail();
-					NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
+					StepUp();
 					break;
 				case ActionState.Leaping:
 					if (StateTimer > 10)

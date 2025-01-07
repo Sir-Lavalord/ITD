@@ -117,7 +117,7 @@ namespace ITD.Systems.Recruitment
             // testing AI
             NPC.velocity.X = Math.Sign(player.Center.X - NPC.Center.X)*2f;
             NPC.spriteDirection = NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
-            NPCHelpers.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height);
+            StepUp();
             ExternalRecruitmentData extData = TownNPCRecruitmentLoader.GetExternalRecruitmentData(recruitmentData.OriginalType);
             if (extData?.AIDelegate != null) // try to run custom mod AI
             {

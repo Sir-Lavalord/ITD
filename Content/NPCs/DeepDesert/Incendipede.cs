@@ -249,8 +249,6 @@ namespace ITD.Content.NPCs.DeepDesert
         public override void SetDefaults()
         {
             NPC.width = NPC.height = 16;
-            NPC.noGravity = true;
-            NPC.friendly = false;
             NPC.lifeMax = 1;
             NPC.HitSound = SoundID.NPCHit31;
             NPC.DeathSound = SoundID.NPCDeath34;
@@ -259,10 +257,11 @@ namespace ITD.Content.NPCs.DeepDesert
             NPC.aiStyle = -1;
             NPC.noGravity = true;
             NPC.friendly = false;
+            NPC.noTileCollide = true;
         }
         public override void HitEffect(NPC.HitInfo hit)
         {
-            if (NPC.life > 0)
+            if (NPC.life > 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 NPC.ai[3] = Main.rand.Next(1, 3);
                 return;
@@ -333,8 +332,6 @@ namespace ITD.Content.NPCs.DeepDesert
         public override void SetDefaults()
         {
             NPC.width = NPC.height = 16;
-            NPC.noGravity = true;
-            NPC.friendly = false;
             NPC.lifeMax = 1;
             NPC.HitSound = SoundID.NPCHit31;
             NPC.DeathSound = SoundID.NPCDeath34;
@@ -343,6 +340,7 @@ namespace ITD.Content.NPCs.DeepDesert
             NPC.aiStyle = -1;
             NPC.noGravity = true;
             NPC.friendly = false;
+            NPC.noTileCollide = true;
         }
         public override void HitEffect(NPC.HitInfo hit)
         {
