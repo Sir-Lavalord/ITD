@@ -126,7 +126,7 @@ namespace ITD.Utilities.EntityAnim
             };
             return newAnim;
         }
-        public static Keyframe<T> CreateFor<T>(Entity target, Expression<Func<T>> propertyExpr, Func<T> endValue, int frames, Func<float, float> easingFunc) where T : struct
+        public static Keyframe<T> CreateFor<T>(object target, Expression<Func<T>> propertyExpr, Func<T> endValue, int frames, Func<float, float> easingFunc) where T : struct
         {
             var getter = propertyExpr.Compile();
 

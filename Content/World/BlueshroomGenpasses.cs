@@ -5,12 +5,8 @@ using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using Terraria;
-using Microsoft.Xna.Framework;
 using ITD.Content.Tiles;
 using ITD.Utilities;
-using ITD.Content.Tiles.LayersRework;
-using static System.Net.Mime.MediaTypeNames;
-using System.Diagnostics;
 
 namespace ITD.Content.World
 {

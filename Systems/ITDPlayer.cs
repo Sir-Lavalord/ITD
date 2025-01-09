@@ -79,6 +79,8 @@ namespace ITD.Players
         public bool shakeDecay;
         //Recruitment data
         public Guid guid = Guid.Empty;
+        //WorldNPC stuff
+        public int TalkWorldNPC = -1;
         public override void ResetEffects()
         {
             //shakeDuration

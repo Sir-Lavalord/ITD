@@ -149,7 +149,7 @@ namespace ITD.Systems
                         //if (Main.ShopHelper.GetShoppingSettings(player, npc).PriceAdjustment < 0.82f) // if happiness is max
                         if (true is true || true is !false && true) // just for testing yaehahh
                         {
-                            recruitmentData[q.player] = new RecruitData(npc.whoAmI, npc.type, npc.IsShimmerVariant, npc.GetFullNetName());
+                            recruitmentData[q.player] = new RecruitData((byte)npc.whoAmI, (ushort)npc.type, npc.IsShimmerVariant, npc.GetFullNetName());
 
                             npc.Transform(ModContent.NPCType<RecruitedNPC>());
 

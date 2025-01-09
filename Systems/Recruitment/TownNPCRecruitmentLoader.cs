@@ -12,12 +12,15 @@ using Terraria.ModLoader.IO;
 
 namespace ITD.Systems.Recruitment
 {
-    public struct RecruitData(int whoAmI, int originalType, bool shimmered, NetworkText fullName) : TagSerializable
+    public struct RecruitData(byte whoAmI, ushort originalType, bool shimmered, NetworkText fullName) : TagSerializable
     {
-        public int WhoAmI = whoAmI;
-        public int OriginalType = originalType;
+        public byte WhoAmI = whoAmI;
+        public ushort OriginalType = originalType;
         public bool Shimmered = shimmered;
         public NetworkText FullName = fullName;
+        // important: you can't just store the original type of a modded NPC as it may change after mods are reloaded.
+        // so store the source mod, and serialize the name
+        public Mod SourceMod = originalType > NPCID.Count ? NPCLoader.GetNPC(originalType).Mod : null;
         public bool INVALIDDATA = false;
 
         public static readonly Func<TagCompound, RecruitData> DESERIALIZER = Load;
@@ -25,6 +28,7 @@ namespace ITD.Systems.Recruitment
         {
             return new TagCompound
             {
+                ["sourceMod"] = SourceMod is null ? string.Empty : $"{SourceMod.Name}:{NPCLoader.GetNPC(OriginalType).Name}",
                 ["whoAmI"] = WhoAmI,
                 ["originalType"] = OriginalType,
                 ["shimmered"] = Shimmered,
@@ -33,10 +37,18 @@ namespace ITD.Systems.Recruitment
         }
         public static RecruitData Load(TagCompound tag)
         {
+            // the first element of this will be the mod. second element is the internal name of the NPC
+            string[] sourceModData = tag.GetString("sourceMod").Split(':');
+            // explanation: if the "sourceMod" tag doesn't contain a valid mod, it will not have the : character, so the array will only be of length one
+            // the problem is that this doesnt check for if the mod exists before loading, but we handle just under.
+            bool isVanilla = sourceModData.Length == 1;
+            Mod mod = null;
+            bool modActuallyExists = !isVanilla && ModLoader.TryGetMod(sourceModData[0], out mod);
             var data = new RecruitData
             {
-                WhoAmI = tag.GetInt("whoAmI"),
-                OriginalType = tag.GetInt("originalType"),
+                SourceMod = mod,
+                OriginalType = isVanilla ? tag.Get<ushort>("originalType") : (!modActuallyExists || !mod.TryFind<ModNPC>(sourceModData[1], out var modNPC)) ? (ushort)0 : (ushort)modNPC.Type,
+                WhoAmI = tag.GetByte("whoAmI"),
                 Shimmered = tag.GetBool("shimmered"),
                 FullName = tag.Get<NetworkText>("fullName"),
             };

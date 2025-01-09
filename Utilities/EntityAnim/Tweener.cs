@@ -23,7 +23,10 @@ namespace ITD.Utilities.EntityAnim
                 IKeyframe t = _activeTweens[i];
                 t.Update();
                 if (t.IsFinished)
+                {
+                    t.OnFinish();
                     _activeTweens.RemoveAt(i);
+                }
             }
         }
     }

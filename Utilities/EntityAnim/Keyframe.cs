@@ -6,8 +6,9 @@ namespace ITD.Utilities.EntityAnim
     {
         bool IsFinished { get; }
         void Update();
+        void OnFinish();
     }
-    public class Keyframe<T>(Func<T> getter, Action<T> setter, Func<T> endValue, Func<float, float> easingFunc) : IKeyframe where T : struct
+    public class Keyframe<T>(Func<T> getter, Action<T> setter, Func<T> endValue, Func<float, float> easingFunc, Action onFinish = null) : IKeyframe where T : struct
     {
         public bool IsFinished = false;
         public int frames;
@@ -24,11 +25,13 @@ namespace ITD.Utilities.EntityAnim
         private T _startValue = getter();
         private readonly Func<T> _endValue = endValue;
         private readonly Func<float, float> _easingFunc = easingFunc;
+        private readonly Action _onFinish = onFinish;
         public void SetStartValue(T lastValue)
         {
             _startValue = lastValue;
         }
         void IKeyframe.Update() => Update();
+        void IKeyframe.OnFinish() => _onFinish();
         public void Update()
         {
             playFrames++;

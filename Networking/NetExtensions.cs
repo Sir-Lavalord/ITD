@@ -33,8 +33,8 @@ namespace ITD.Networking
             {
                 return new RecruitData
                 {
-                    WhoAmI = reader.ReadInt32(),
-                    OriginalType = reader.ReadInt32(),
+                    WhoAmI = reader.ReadByte(),
+                    OriginalType = reader.ReadUInt16(),
                     Shimmered = reader.ReadBoolean(),
                     FullName = reader.ReadNetworkText()
                 };

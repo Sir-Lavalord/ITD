@@ -125,7 +125,7 @@ namespace ITD.Systems.Recruitment
             }
             else
             {
-                switch (recruitmentData.OriginalType) // AI type switch
+                switch ((short)recruitmentData.OriginalType) // AI type switch
                 {
                     case NPCID.Merchant:
                         DoMerchantAI();

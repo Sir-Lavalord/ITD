@@ -34,6 +34,7 @@ namespace ITD.Content.World
         {
             int blueshroomIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Lakes"));
             int deepdesertIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Granite"));
+            int worldNPCsIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Guide"));
             if (blueshroomIndex != -1)
             {
                 tasks.Insert(blueshroomIndex + 1, new BlueshroomGrovesGenPass("Blueshroom Groves", 100f));
@@ -42,6 +43,9 @@ namespace ITD.Content.World
             {
                 tasks.Insert(deepdesertIndex + 1, new DeepDesertGenPass("Deep Desert", 100f));
             }
+            if (worldNPCsIndex == -1)
+                worldNPCsIndex = tasks.Count - 1;
+            tasks.Insert(worldNPCsIndex + 1, new SpawnWorldNPCsGenpass("World NPCs", 0.016f));
         }
         public static bool JustPressed(Keys key)
         {
