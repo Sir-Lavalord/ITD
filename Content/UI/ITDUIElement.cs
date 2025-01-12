@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
@@ -28,29 +29,49 @@ namespace ITD.Content.UI
         public static void DrawAdjustableBox(SpriteBatch spriteBatch, Texture2D tex, Rectangle rect, Color col)
         {
             Vector2 quadSize = new(tex.Width / 3, tex.Height / 3);
-            var xScale = (rect.Width - quadSize.X * 2) / quadSize.X;
-            var yScale = (rect.Height - quadSize.Y * 2) / quadSize.Y;
+            // scales for the extendable bits of the box.
+            // as an important note, you should probably try to avoid the corners and sides squashing for real applications,
+            // but as a failsafe, i've added these to make sure an adjustablebox never looks weird.
+            float cornerScaleX = Math.Min(1, rect.Width / (quadSize.X * 2));
+            float cornerScaleY = Math.Min(1, rect.Height / (quadSize.Y * 2));
+            float sideScaleX = Math.Max(0, (rect.Width - quadSize.X * 2) / quadSize.X);
+            float sideScaleY = Math.Max(0, (rect.Height - quadSize.Y * 2) / quadSize.Y);
+
+            void DrawSegment(Vector2 position, Rectangle frame, Vector2 scale)
+            {
+                spriteBatch.Draw(tex, position, frame, col, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            }
             // Draw center
             Rectangle centerFrame = tex.Frame(3, 3, 1, 1);
-            spriteBatch.Draw(tex, new Vector2(rect.X + quadSize.X, rect.Y + quadSize.Y), centerFrame, col, 0, default, new Vector2(xScale, yScale), SpriteEffects.None, 0f);
+            DrawSegment(new Vector2(rect.X + quadSize.X * cornerScaleX, rect.Y + quadSize.Y * cornerScaleY), centerFrame, new Vector2(sideScaleX, sideScaleY));
+
             // Draw sides
-            Rectangle topSideFrame = tex.Frame(3, 3, 1);
-            spriteBatch.Draw(tex, new Vector2(rect.X + quadSize.X, rect.Y), topSideFrame, col, 0, default, new Vector2(xScale, 1), SpriteEffects.None, 0f);
+            Rectangle topSideFrame = tex.Frame(3, 3, 1, 0);
+            DrawSegment(new Vector2(rect.X + quadSize.X * cornerScaleX, rect.Y), topSideFrame, new Vector2(sideScaleX, cornerScaleY));
+
             Rectangle leftSideFrame = tex.Frame(3, 3, 0, 1);
-            spriteBatch.Draw(tex, new Vector2(rect.X, rect.Y + quadSize.Y), leftSideFrame, col, 0, default, new Vector2(1, yScale), SpriteEffects.None, 0f);
+            DrawSegment(new Vector2(rect.X, rect.Y + quadSize.Y * cornerScaleY), leftSideFrame, new Vector2(cornerScaleX, sideScaleY));
+
             Rectangle rightSideFrame = tex.Frame(3, 3, 2, 1);
-            spriteBatch.Draw(tex, new Vector2(rect.X + rect.Width - quadSize.X, rect.Y + quadSize.Y), rightSideFrame, col, 0, default, new Vector2(1, yScale), SpriteEffects.None, 0f);
+            DrawSegment(new Vector2(rect.X + rect.Width - quadSize.X * cornerScaleX, rect.Y + quadSize.Y * cornerScaleY), rightSideFrame, new Vector2(cornerScaleX, sideScaleY));
+
             Rectangle bottomSideFrame = tex.Frame(3, 3, 1, 2);
-            spriteBatch.Draw(tex, new Vector2(rect.X + quadSize.X, rect.Y + rect.Height - quadSize.Y), bottomSideFrame, col, 0, default, new Vector2(xScale, 1), SpriteEffects.None, 0f);
+            DrawSegment(new Vector2(rect.X + quadSize.X * cornerScaleX, rect.Y + rect.Height - quadSize.Y * cornerScaleY), bottomSideFrame, new Vector2(sideScaleX, cornerScaleY));
+
             // Draw corners
-            Rectangle topLeftCorner = tex.Frame(3, 3);
-            spriteBatch.Draw(tex, new Vector2(rect.X, rect.Y), topLeftCorner, col, 0, default, 1, SpriteEffects.None, 0f);
-            Rectangle topRightCorner = tex.Frame(3, 3, 2);
-            spriteBatch.Draw(tex, new Vector2(rect.X + rect.Width - quadSize.X, rect.Y), topRightCorner, col, 0, default, 1, SpriteEffects.None, 0f);
+            Vector2 cornerScale = new(cornerScaleX, cornerScaleY);
+
+            Rectangle topLeftCorner = tex.Frame(3, 3, 0, 0);
+            DrawSegment(new Vector2(rect.X, rect.Y), topLeftCorner, cornerScale);
+
+            Rectangle topRightCorner = tex.Frame(3, 3, 2, 0);
+            DrawSegment(new Vector2(rect.X + rect.Width - quadSize.X * cornerScaleX, rect.Y), topRightCorner, cornerScale);
+
             Rectangle bottomLeftCorner = tex.Frame(3, 3, 0, 2);
-            spriteBatch.Draw(tex, new Vector2(rect.X, rect.Y + rect.Height - quadSize.Y), bottomLeftCorner, col, 0, default, 1, SpriteEffects.None, 0f);
+            DrawSegment(new Vector2(rect.X, rect.Y + rect.Height - quadSize.Y * cornerScaleY), bottomLeftCorner, cornerScale);
+
             Rectangle bottomRightCorner = tex.Frame(3, 3, 2, 2);
-            spriteBatch.Draw(tex, new Vector2(rect.X + rect.Width - quadSize.X, rect.Y + rect.Height - quadSize.Y), bottomRightCorner, col, 0, default, 1, SpriteEffects.None, 0f);
+            DrawSegment(new Vector2(rect.X + rect.Width - quadSize.X * cornerScaleX, rect.Y + rect.Height - quadSize.Y * cornerScaleY), bottomRightCorner, cornerScale);
         }
     }
 }

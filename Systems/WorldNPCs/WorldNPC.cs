@@ -18,6 +18,6 @@ namespace ITD.Systems.WorldNPCs
         {
             player.GetITDPlayer().TalkWorldNPC = NPC.whoAmI;
         }
-        public virtual Asset<Texture2D> DialogueBoxStyle => ModContent.Request<Texture2D>("ITD/Systems/WorldNPCs/DefaultDialogueBoxStyle");
+        public virtual Asset<Texture2D> DialogueBoxStyle => ModContent.Request<Texture2D>("ITD/Systems/WorldNPCs/Assets/BoxStyles/DefaultBoxStyle");
     }
 }

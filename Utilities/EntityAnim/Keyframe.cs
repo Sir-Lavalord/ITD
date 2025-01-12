@@ -31,7 +31,7 @@ namespace ITD.Utilities.EntityAnim
             _startValue = lastValue;
         }
         void IKeyframe.Update() => Update();
-        void IKeyframe.OnFinish() => _onFinish();
+        void IKeyframe.OnFinish() => _onFinish?.Invoke();
         public void Update()
         {
             playFrames++;

@@ -20,6 +20,7 @@ namespace ITD.Content.UI
     {
         private WorldNPCDialogueBox dialogueBox;
         public bool isOpen = false;
+        public bool isClosing = false;
         public override bool Visible => isOpen;
         public override int InsertionIndex(List<GameInterfaceLayer> layers)
         {
@@ -32,11 +33,43 @@ namespace ITD.Content.UI
             dialogueBox = new WorldNPCDialogueBox();
             Append(dialogueBox);
         }
+        public void RecalculateBoxDimensions()
+        {
+            if (dialogueBox != null)
+            {
+                float height = (Main.screenHeight / 3f) * dialogueBox.openProgress;
+                float top = Main.screenHeight - WorldNPCDialogueBox.BoxPaddingDown - height;
+                float left = WorldNPCDialogueBox.BoxPaddingSides;
+                float width = Main.screenWidth - WorldNPCDialogueBox.BoxPaddingSides * 2;
+                dialogueBox.SetProperties(top, left, width, height);
+                Recalculate();
+            }
+        }
+        public override void Update(GameTime gameTime)
+        {
+            RecalculateBoxDimensions();
+            base.Update(gameTime);
+        }
         public void Open()
         {
+            isClosing = false;
             if (isOpen)
                 return;
             dialogueBox.Open();
+            RecalculateBoxDimensions();
+            isOpen = true;
+        }
+        public void Close()
+        {
+            if (!isOpen)
+                return;
+            dialogueBox.Close();
+            isClosing = true;
+        }
+        public void ForceClose()
+        {
+            isClosing = false;
+            isOpen = false;
         }
     }
     /// <summary>
@@ -45,8 +78,8 @@ namespace ITD.Content.UI
     public class WorldNPCDialogueBox : ITDUIElement
     {
         private readonly Asset<DynamicSpriteFont> font = FontAssets.MouseText;
-        private const int BoxPaddingSides = 72;
-        private const int BoxPaddingDown = 12;
+        public const int BoxPaddingSides = 72;
+        public const int BoxPaddingDown = 12;
         private Vector2 TextPadding = new(12, 8);
         private bool writing = false;
         private string _text = "";
@@ -57,16 +90,17 @@ namespace ITD.Content.UI
         /// Not in frames, but in text steps. 0 will play a voice clip for every single letter typed.
         /// </summary>
         private int voiceFrequency = 1;
-        private float boxHeight;
-        private float boxBottom;
+        public float openProgress;
         public string Goal { get; set; }
+        public WorldNPCDialogue ParentState => Parent as WorldNPCDialogue;
+        public Keyframe<float> tweenReference;
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             // those who snow
             //Top.Set()
-            var state = Parent as WorldNPCDialogue;
             Rectangle bounds = GetDimensions().ToRectangle();
-            DrawAdjustableBox(spriteBatch, GetTexture().Value, bounds, Color.White);
+            float boxOpacity = EasingFunctions.OutQuad(openProgress);
+            DrawAdjustableBox(spriteBatch, GetTexture().Value, bounds, Color.White * boxOpacity);
             var lines = Utils.WordwrapStringSmart(_text, Color.White, font.Value, 460, 10);
             base.DrawSelf(spriteBatch);
         }
@@ -74,13 +108,34 @@ namespace ITD.Content.UI
         {
             int worldNPC = Main.LocalPlayer.GetITDPlayer().TalkWorldNPC;
             if (worldNPC == -1)
-                return null;
+            {
+                return ModContent.Request<Texture2D>("ITD/Systems/WorldNPCs/Assets/BoxStyles/DefaultBoxStyle");
+                //return null;
+            }
             WorldNPC singleton = NPCLoader.GetNPC(Main.npc[worldNPC].type) as WorldNPC;
             return singleton.DialogueBoxStyle;
         }
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            //Main.NewText(ParentState.isOpen);
+
+        }
         public void Open()
         {
-            //Tweener.Tween(AnimHelpers.CreateFor<float>(this, () => ))
+            openProgress = 0f;
+            tweenReference = (Keyframe<float>)Tweener.Tween(AnimHelpers.CreateFor(this, () => openProgress, () => 1f, 32, EasingFunctions.OutCubic, () => tweenReference = null));
+        }
+        public void Close()
+        {
+            if (tweenReference != null)
+                Tweener.CancelTween(tweenReference);
+
+            Tweener.Tween(AnimHelpers.CreateFor(this, () => openProgress, () => 0f, 32, EasingFunctions.OutCubic, () =>
+            {
+                ParentState.ForceClose();
+                tweenReference = null;
+            }));
         }
     }
 }

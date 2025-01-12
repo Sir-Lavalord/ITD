@@ -16,6 +16,7 @@ using ITD.Particles.CosJel;
 using ITD.Content.Tiles.DeepDesert;
 using ITD.Content.Walls.DeepDesert;
 using System;
+using ITD.Content.UI;
 
 namespace ITD.Content.World
 {
@@ -71,6 +72,18 @@ namespace ITD.Content.World
             //test world particle (change particle.canvas in particle type)
             //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
+
+            /*
+            testPoints.Add(pos);
+            if (testPoints.Count == 1)
+                UILoader.GetUIState<WorldNPCDialogue>().Open();
+            else
+            {
+                UILoader.GetUIState<WorldNPCDialogue>().Close();
+                testPoints.Clear();
+            }
+            */
+
             /*
             testPoints.Add(pos);
             if (testPoints.Count == 2)

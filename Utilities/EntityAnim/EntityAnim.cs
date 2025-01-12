@@ -126,7 +126,7 @@ namespace ITD.Utilities.EntityAnim
             };
             return newAnim;
         }
-        public static Keyframe<T> CreateFor<T>(object target, Expression<Func<T>> propertyExpr, Func<T> endValue, int frames, Func<float, float> easingFunc) where T : struct
+        public static Keyframe<T> CreateFor<T>(object target, Expression<Func<T>> propertyExpr, Func<T> endValue, int frames, Func<float, float> easingFunc, Action onFinish = null) where T : struct
         {
             var getter = propertyExpr.Compile();
 
@@ -140,7 +140,7 @@ namespace ITD.Utilities.EntityAnim
                         property.GetSetMethod() ?? throw new InvalidOperationException("Property has no setter")
                     );
 
-                    return new Keyframe<T>(getter, setter, endValue, easingFunc)
+                    return new Keyframe<T>(getter, setter, endValue, easingFunc, onFinish)
                     {
                         frames = frames
                     };
@@ -152,7 +152,7 @@ namespace ITD.Utilities.EntityAnim
                         field.SetValue(target, value);
                     }
 
-                    return new Keyframe<T>(getter, Setter, endValue, easingFunc)
+                    return new Keyframe<T>(getter, Setter, endValue, easingFunc, onFinish)
                     {
                         frames = frames
                     };

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace ITD.Utilities.EntityAnim
@@ -11,10 +13,22 @@ namespace ITD.Utilities.EntityAnim
         {
             _activeTweens.Clear();
         }
-        public static void Tween(IKeyframe keyframe)
+        public static IKeyframe Tween(IKeyframe keyframe)
         {
             ArgumentNullException.ThrowIfNull(keyframe);
             _activeTweens.Add(keyframe);
+            return keyframe;
+        }
+        public static void CancelTween(IKeyframe keyframe)
+        {
+            IKeyframe lookup = _activeTweens.FirstOrDefault(k => keyframe.Equals(keyframe), null);
+            if (lookup != null)
+            {
+                keyframe.OnFinish();
+                _activeTweens.Remove(keyframe);
+            }
+            else
+                Main.NewText("Error trying to cancel the given tween");
         }
         public override void UpdateUI(GameTime gameTime)
         {
