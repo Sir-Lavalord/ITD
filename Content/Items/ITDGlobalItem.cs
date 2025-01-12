@@ -2,12 +2,9 @@
 using Terraria;
 using Terraria.ModLoader;
 using ITD.Players;
-<<<<<<< Updated upstream
 using ITD.Content.Projectiles;
 using ITD.Content.Items.Weapons.Melee.Snaptraps;
-=======
 using ITD.Common.Prefixes;
->>>>>>> Stashed changes
 
 namespace ITD.Content.Items
 {
@@ -38,14 +35,6 @@ namespace ITD.Content.Items
                 }
             }
             return base.UseItem(item, player);
-        }
-
-        public override void HoldItem(Item item, Player player)
-        {
-            if (item.ModItem is not ITDSnaptrapItem)
-                return;
-
-            var ItemPrefix = PrefixLoader.GetPrefix(item.prefix);
         }
     }
 }
