@@ -17,6 +17,7 @@ namespace ITD.Systems
         public float RetractMultiplier;
         public int LatchTimeModifer;
         public int WarningModifer;
+
         public bool CanUseSnaptrap
         {
             get
