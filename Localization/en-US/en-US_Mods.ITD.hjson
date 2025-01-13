@@ -446,10 +446,26 @@ Prefixes: {
 	}
 
 	SnaptrapPrefix: {
-		CritBonusText: "+{0}% crit chance"
-		DamageBonusText: "+{0}% damage"
-		LengthBonusText: "+{0}% chain length"
-		RetractRateBonusText: "+{0}% retract rate"
-		ShootSpeedBonusText: "+{0}% velocity"
+		CritBonusText: +{0}% crit chance
+		DamageBonusText: +{0}% damage
+		LengthBonusText: +{0}% chain length
+		RetractRateBonusText: +{0}% retract rate
+		ShootSpeedBonusText: +{0}% velocity
 	}
+
+	Abhorrent.DisplayName: Abhorrent
+	Acute.DisplayName: Acute
+	Ample.DisplayName: Ample
+	Barbed.DisplayName: Barbed
+	Dwarf.DisplayName: Dwarf
+	Extensive.DisplayName: Extensive
+	Fabled.DisplayName: Fabled
+	Feral.DisplayName: Feral
+	Immense.DisplayName: Immense
+	Miniscule.DisplayName: Miniscule
+	Scourned.DisplayName: Scourned
+	Sleek.DisplayName: Sleek
+	Smoothed.DisplayName: Smoothed
+	Tapered.DisplayName: Tapered
+	Wretched.DisplayName: Wretched
 }
