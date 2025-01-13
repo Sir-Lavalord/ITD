@@ -8,6 +8,9 @@ using System.Linq;
 using ITD.Utilities;
 using Terraria.DataStructures;
 using Terraria.Utilities;
+using ITD.Common.Prefixes;
+using Mono.Cecil.Cil;
+using System.Security.Permissions;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {
@@ -15,6 +18,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
     {
         public override void SetDefaults()
         {
+            
         }
         public override bool CanUseItem(Player player) => player.GetSnaptrapPlayer().CanUseSnaptrap;
         public override bool AltFunctionUse(Player player) => true;
@@ -28,9 +32,10 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
                     string coloredText = string.Format(line.Text, textColor.Hex3());
                     line.Text = coloredText;
                 }*/
+
         public override int ChoosePrefix(UnifiedRandom rand)
         {
-            return PrefixID.Demonic;
+            return ModContent.PrefixType<Lengthy>();
         }
     }
 }

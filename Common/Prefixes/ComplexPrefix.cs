@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace ITD.Common.Prefixes
@@ -14,9 +15,22 @@ namespace ITD.Common.Prefixes
         {
 
         }
+
         public virtual void UpdateEquippedPrefix(Item item, Player player)
         {
 
         }
+
+        public override bool CanRoll(Item item)
+        {
+            return true;
+        }
+
+        public override float RollChance(Item item)
+        {
+            return 5f;
+        }
     }
 }
+
+        
