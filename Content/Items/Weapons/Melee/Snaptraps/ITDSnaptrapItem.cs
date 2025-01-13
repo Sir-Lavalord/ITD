@@ -1,16 +1,8 @@
-﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
-using Terraria;
-using Terraria.ID;
+﻿using Terraria;
 using Terraria.ModLoader;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using System.Linq;
 using ITD.Utilities;
 using Terraria.DataStructures;
 using Terraria.Utilities;
-using Mono.Cecil.Cil;
-using System.Security.Permissions;
-using ITD.Content.Prefixes;
 using ITD.Content.Prefixes.Snaptrap;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
@@ -32,7 +24,15 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
         public sealed override bool MeleePrefix() => false;
         public sealed override int ChoosePrefix(UnifiedRandom rand)
         {
-            return rand.NextFromList([.. SnaptrapPrefix.SnaptrapPrefixes]);
+            WeightedRandom<int> random = new(rand);
+
+            foreach (int snaptrapPrefix in SnaptrapPrefix.SnaptrapPrefixes)
+            {
+                double weight = PrefixLoader.GetPrefix(snaptrapPrefix).RollChance(Item);
+
+                random.Add(snaptrapPrefix, weight);
+            }
+            return random.Get();
         }
     }
 }

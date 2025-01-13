@@ -446,11 +446,8 @@ Prefixes: {
 	}
 
 	SnaptrapPrefix: {
-		CritBonusText: +{0}% crit chance
-		DamageBonusText: +{0}% damage
-		LengthBonusText: +{0}% chain length
-		RetractRateBonusText: +{0}% retract rate
-		ShootSpeedBonusText: +{0}% velocity
+		LengthBonusText: "{0}% chain length"
+		RetractRateBonusText: "{0}% retract rate"
 	}
 
 	Abhorrent.DisplayName: Abhorrent
@@ -468,4 +465,5 @@ Prefixes: {
 	Smoothed.DisplayName: Smoothed
 	Tapered.DisplayName: Tapered
 	Wretched.DisplayName: Wretched
+	Heroic.DisplayName: Heroic
 }
