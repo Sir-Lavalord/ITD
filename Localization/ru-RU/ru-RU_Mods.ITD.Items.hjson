@@ -1191,3 +1191,8 @@ NightmareManuscript: {
 	// Tooltip: ""
 	// DisplayName: Nightmare Manuscript
 }
+
+WeepingWand: {
+	// Tooltip: ""
+	// DisplayName: Weeping Wand
+}

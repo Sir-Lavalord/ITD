@@ -166,6 +166,7 @@ Projectiles: {
 	ManuscriptLumberProj.DisplayName: Manuscript Lumber Proj
 	ManuscriptUIProj.DisplayName: Manuscript U I Proj
 	NightmareManuscriptProj.DisplayName: Nightmare Manuscript Proj
+	WeepWandWisp.DisplayName: Weep Wand Wisp
 }
 
 NPCs: {
