@@ -436,3 +436,20 @@ Configs: {
 		}
 	}
 }
+
+Prefixes: {
+	PowerTooltip: Mods.ITD.Prefixes.PowerTooltip
+
+	Lengthy: {
+		AdditionalTooltip: Mods.ITD.Prefixes.Lengthy.AdditionalTooltip
+		DisplayName: Lengthy
+	}
+
+	SnaptrapPrefix: {
+		CritBonusText: "+{0}% crit chance"
+		DamageBonusText: "+{0}% damage"
+		LengthBonusText: "+{0}% chain length"
+		RetractRateBonusText: "+{0}% retract rate"
+		ShootSpeedBonusText: "+{0}% velocity"
+	}
+}

@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 using ITD.Utilities;
 using Terraria.DataStructures;
+using Terraria.Utilities;
+using ITD.Content.Prefixes;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {

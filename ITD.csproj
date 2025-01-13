@@ -9,13 +9,6 @@
   </PropertyGroup>
 	
   <ItemGroup>
-    <AdditionalFiles Remove="Content\Prefixes\**" />
-    <Compile Remove="Content\Prefixes\**" />
-    <EmbeddedResource Remove="Content\Prefixes\**" />
-    <None Remove="Content\Prefixes\**" />
-  </ItemGroup>
-	
-  <ItemGroup>
     <Reference Include="StructureHelper">
       <HintPath>..\ModAssemblies\StructureHelper_v2.5.3.dll</HintPath>
     </Reference>

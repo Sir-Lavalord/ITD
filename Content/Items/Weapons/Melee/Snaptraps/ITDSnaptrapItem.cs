@@ -8,18 +8,15 @@ using System.Linq;
 using ITD.Utilities;
 using Terraria.DataStructures;
 using Terraria.Utilities;
-using ITD.Common.Prefixes;
 using Mono.Cecil.Cil;
 using System.Security.Permissions;
+using ITD.Content.Prefixes;
+using ITD.Content.Prefixes.Snaptrap;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {
     public abstract class ITDSnaptrapItem : ModItem
     {
-        public override void SetDefaults()
-        {
-            
-        }
         public override bool CanUseItem(Player player) => player.GetSnaptrapPlayer().CanUseSnaptrap;
         public override bool AltFunctionUse(Player player) => true;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) => player.GetSnaptrapPlayer().ShootSnaptrap();
@@ -32,10 +29,10 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
                     string coloredText = string.Format(line.Text, textColor.Hex3());
                     line.Text = coloredText;
                 }*/
-
-        public override int ChoosePrefix(UnifiedRandom rand)
+        public sealed override bool MeleePrefix() => false;
+        public sealed override int ChoosePrefix(UnifiedRandom rand)
         {
-            return ModContent.PrefixType<Lengthy>();
+            return rand.NextFromList([.. SnaptrapPrefix.SnaptrapPrefixes]);
         }
     }
 }

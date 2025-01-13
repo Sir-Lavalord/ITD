@@ -81,15 +81,16 @@ namespace ITD.Content.Projectiles
         private bool shouldBeWarning = false; //
         private bool hasDoneLatchEffect = false;
 
+        //True if gravity should affect the snaptrap
         private bool chainWeight = false;
-        private float lengthIncrease = 0f;
         //Use floats in the form of percentages to increase this
-        private float retractMultiplier = 0f;
+        private float lengthIncrease = 0f;
         //Use floats in the form of decimals to increase this. Base is 0.4f.
-        private int latchModifer;
+        private float retractMultiplier = 0f;
         //Simply edits the amount of hits required to activate a latch effect. Defaults to subtracting.
-        private int warningModifier;
+        private int latchModifer;
         //Amount of frames your warning frames is increased by. Defaults to addition.
+        private int warningModifier;
 
         public bool IsStickingToTarget
         {

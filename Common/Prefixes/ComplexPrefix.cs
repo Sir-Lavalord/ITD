@@ -15,20 +15,9 @@ namespace ITD.Common.Prefixes
         {
 
         }
-
         public virtual void UpdateEquippedPrefix(Item item, Player player)
         {
 
-        }
-
-        public override bool CanRoll(Item item)
-        {
-            return true;
-        }
-
-        public override float RollChance(Item item)
-        {
-            return 5f;
         }
     }
 }

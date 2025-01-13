@@ -436,3 +436,20 @@ Configs: {
 		}
 	}
 }
+
+Prefixes: {
+	// PowerTooltip: Mods.ITD.Prefixes.PowerTooltip
+
+	Lengthy: {
+		// AdditionalTooltip: Mods.ITD.Prefixes.Lengthy.AdditionalTooltip
+		// DisplayName: Lengthy
+	}
+
+	SnaptrapPrefix: {
+		// CritBonusText: Mods.ITD.Prefixes.SnaptrapPrefix.CritBonusText
+		// DamageBonusText: Mods.ITD.Prefixes.SnaptrapPrefix.DamageBonusText
+		// LengthBonusText: Mods.ITD.Prefixes.SnaptrapPrefix.LengthBonusText
+		// RetractRateBonusText: Mods.ITD.Prefixes.SnaptrapPrefix.RetractRateBonusText
+		// ShootSpeedBonusText: Mods.ITD.Prefixes.SnaptrapPrefix.ShootSpeedBonusText
+	}
+}
