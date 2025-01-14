@@ -220,6 +220,7 @@ NPCs: {
 	IncendipedeBodyOld.DisplayName: Incendipede Body Old
 	IncendipedeHeadOld.DisplayName: Incendipede Head Old
 	IncendipedeTailOld.DisplayName: Incendipede Tail Old
+	Mudkarp.DisplayName: Mudkarp
 }
 
 Buffs: {

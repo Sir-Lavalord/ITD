@@ -1,0 +1,34 @@
+// as a quick explanation (though you can probably deduce most of these things from context), let's start with layout.
+// each worldNPC has an entry in Dialogue (this file).
+// the only things we need to know outside to get all relevant info is which modNPC this dialogue belongs to and the Key of the dialogue instance we wish to use.
+// Language.Exists is very useful here so we can dynamically retrieve this information, however it does have a small problem (see below)
+// Language.Exists doesn't work for detecting objects, so for example Language.Exists("Mods.ITD.WorldNPCDialogue.Mudkarp.FirstTimeSpeaking") returns false.
+// however, we can just check if something inside that object with a valid localization value exists instead. so:
+// Language.Exists("Mods.ITD.WorldNPCDialogue.Mudkarp.FirstTimeSpeaking.Body") returns true.
+Mudkarp: {
+	Name: "{$NPCs.Mudkarp.DisplayName}"
+
+	FirstTimeSpeaking: {
+		Body: hello, how are you, i am under the water, please help me,
+		Appearance: "0"
+
+		Buttons: {
+			Button0: {
+				Key: Mudkarp.FirstTimeSpeaking2
+				Text: ...what?
+			}
+		}
+	}
+
+	FirstTimeSpeaking2: {
+		Body: here too much raining, wuwuwuuw
+		Appearance: "0"
+
+		Buttons: {
+			Button0: {
+				Text: Aren't you supposed to give me a quest or something?
+				Action: KillPlayerInstantly
+			}
+		}
+	}
+}

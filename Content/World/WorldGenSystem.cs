@@ -76,7 +76,7 @@ namespace ITD.Content.World
             /*
             testPoints.Add(pos);
             if (testPoints.Count == 1)
-                UILoader.GetUIState<WorldNPCDialogue>().Open();
+                UILoader.GetUIState<WorldNPCDialogue>().Open("Mudkarp.FirstTimeSpeaking");
             else
             {
                 UILoader.GetUIState<WorldNPCDialogue>().Close();
