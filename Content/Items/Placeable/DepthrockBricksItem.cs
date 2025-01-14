@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable
 {
-    public class Shale : ModItem
+    public class DepthrockBricksItem : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -11,7 +11,7 @@ namespace ITD.Content.Items.Placeable
         }
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<ShaleTile>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<DepthrockBrickTile>());
         }
     }
 }

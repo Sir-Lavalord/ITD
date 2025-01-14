@@ -30,7 +30,7 @@ namespace ITD.Content.Tiles.DeepDesert
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
             Point p = new(i, j);
-            // here we check if the particle hasn't been mined (fail), and if there isn't already a particle that's linked to this tile
+            // here we check if the tile hasn't been mined (fail), and if there isn't already a particle that's linked to this tile
             if (fail && !ParticleSystem.Instance.particles.Any(prt => prt.tag is Point pnt && pnt == p))
             {
                 SoundEngine.PlaySound(SoundID.Item15, p.ToWorldCoordinates());

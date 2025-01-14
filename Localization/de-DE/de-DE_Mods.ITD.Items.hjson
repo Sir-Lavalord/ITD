@@ -1199,3 +1199,13 @@ WeepingWand: {
 	// Tooltip: ""
 	// DisplayName: Weeping Wand
 }
+
+DepthrockBricksItem: {
+	// DisplayName: Depthrock Bricks Item
+	// Tooltip: ""
+}
+
+ShaleBricksItem: {
+	// DisplayName: Shale Bricks Item
+	// Tooltip: ""
+}

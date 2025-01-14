@@ -1,7 +1,4 @@
-﻿using ITD.Content.Tiles.DeepDesert;
-using ITD.Utilities;
-using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -17,7 +14,7 @@ namespace ITD.Content.Tiles.LayersRework
             TileID.Sets.ChecksForMerge[Type] = true;
             Main.tileMerge[TileID.Stone][Type] = true;
 
-            MinPick = 55;
+            MinPick = 40;
             HitSound = SoundID.Tink;
             DustType = DustID.Stone;
 

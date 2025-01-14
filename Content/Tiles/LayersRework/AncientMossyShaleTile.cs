@@ -1,13 +1,10 @@
-﻿using ITD.Content.Tiles.DeepDesert;
-using ITD.Utilities;
-using Microsoft.Xna.Framework;
+﻿using Terraria.ID;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace ITD.Content.Tiles.LayersRework
 {
-    public class DepthrockTile : ModTile
+    public class AncientMossyShaleTile : ModTile
     {
         public override void SetStaticDefaults()
         {
@@ -17,11 +14,11 @@ namespace ITD.Content.Tiles.LayersRework
             TileID.Sets.ChecksForMerge[Type] = true;
             Main.tileMerge[ModContent.TileType<ShaleTile>()][Type] = true;
 
-            MinPick = 45;
+            MinPick = 40;
             HitSound = SoundID.Tink;
             DustType = DustID.Stone;
 
-            AddMapEntry(new Color(82, 82, 90));
+            AddMapEntry(new Color(92, 92, 92));
         }
         public override void ModifyFrameMerge(int i, int j, ref int up, ref int down, ref int left, ref int right, ref int upLeft, ref int upRight, ref int downLeft, ref int downRight)
         {
