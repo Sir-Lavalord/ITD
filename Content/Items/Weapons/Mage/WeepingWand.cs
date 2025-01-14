@@ -13,6 +13,14 @@ using ITD.Content.Projectiles.Friendly.Mage;
 using ITD.Content.Dusts;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 using ITD.Content.Projectiles.Friendly;
+using System;
+using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.Audio;
+using Terraria.Graphics.Shaders;
+using Terraria.Graphics;
 
 
 namespace ITD.Content.Items.Weapons.Mage
@@ -24,9 +32,9 @@ namespace ITD.Content.Items.Weapons.Mage
             Item.width = 40;
             Item.height = 40;
 
-            Item.useStyle = ItemUseStyleID.Swing;
-            Item.useTime = 60;
-            Item.useAnimation = 20;
+            Item.useStyle = ItemUseStyleID.HoldUp;
+            Item.useTime = 32;
+            Item.useAnimation = 32;
             Item.autoReuse = true;
 
             Item.DamageType = DamageClass.Magic;

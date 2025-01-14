@@ -11,15 +11,17 @@ namespace ITD.Content.Projectiles.Friendly.Mage
     public class WeepWandWisp : ModProjectile
     {
         private int DelayTimer = 0;
+        private int deathTimer = 0;
+
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 4;
+            Main.projFrames[Projectile.type] = 8;
         }
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Magic;
-            Projectile.width = 20;
-            Projectile.height = 72;
+            Projectile.width = 18;
+            Projectile.height = 160;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.penetrate = 1;
@@ -30,7 +32,8 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = (15);
 
-            Projectile.frame = 1;
+            Projectile.frame = 0;
+            Projectile.frameCounter = 0;
         }
         private NPC HomingTarget
         {
@@ -40,42 +43,27 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                 Projectile.ai[0] = value == null ? 0 : value.whoAmI + 1;
             }
         }
-
         public override void AI()
         {
-            Projectile.damage = 0;
-            float maxDetectRadius = 400f;
+            float maxDetectRadius = 800f;
 
-            if (DelayTimer < 16)
+            if (Projectile.frame < 7)
             {
-                Projectile.velocity *= 0.85f;
-                DelayTimer += 1;
-                return;
-            } 
-            else
-            {
-                Projectile.velocity *= 1.05f;
-            }
-
-            if (Projectile.frame < 4)
-            {
-                ++Projectile.frame;
-            }
-            else
-            {
-                return;
-            }
-
-            if (Main.rand.NextBool(3))
-            {
-                for (int i = 0; i < 3; i++)
+                if (DelayTimer < 2)
                 {
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<WispDust>(), 0f, 0f, 150, default(Color), 0.5f);
+                    Projectile.velocity *= 0.85f;
+                    DelayTimer += 1;
                 }
+                else
+                {
+                    DelayTimer = 0;
+                    Projectile.frame++;
+                }
+                return;
             }
 
-            Projectile.damage = 7;
-            Projectile.frame = 4;
+            Projectile.friendly = true;
+            Projectile.velocity *= 1.05f;
 
             if (Projectile.penetrate > 0)
             {
@@ -83,28 +71,40 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 
                 if (HomingTarget == null)
                 {
+                    Projectile.velocity *= 0.90f;
+                    deathTimer++;
+                    if (deathTimer > 45)
+                    {
+                        for (int i = 0; i < 6; i++)
+                        {
+                            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<WispDust>(), 0f, 0f, 150, default(Color), 1f);
+                        }
+                        Projectile.Kill();
+                    }
                     return;
-                }
-                else
-                {
-                    //Projectile.alpha = 0;
                 }
 
                 Vector2 directionToTarget = HomingTarget.Center - Projectile.Center;
-                directionToTarget.Normalize();
+
+                float targetAngle = directionToTarget.ToRotation();
+
+                float currentAngle = Projectile.velocity.ToRotation();
+
+                float angleStep = MathHelper.ToRadians(2);
+                float newAngle = currentAngle.AngleTowards(targetAngle, angleStep);
 
                 float length = Projectile.velocity.Length();
-                float targetAngle = Projectile.AngleTo(HomingTarget.Center);
-                Projectile.velocity = Projectile.velocity.ToRotation().AngleTowards(targetAngle, MathHelper.ToRadians(6)).ToRotationVector2() * length;
-                Projectile.Center += Main.rand.NextVector2Circular(1, 1);
+                Projectile.velocity = newAngle.ToRotationVector2() * length;
 
-                Projectile.rotation = directionToTarget.ToRotation();
+                Projectile.Center += Main.rand.NextVector2Circular(0.5f, 0.5f); 
+
+                Projectile.rotation = newAngle + MathHelper.PiOver2;
             }
             else
             {
                 for (int i = 0; i < 6; i++)
                 {
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<WispDust>(), 0f, 0f, 150, default(Color), 0.5f);
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<WispDust>(), 0f, 0f, 150, default(Color), 1f);
                 }
                 Projectile.Kill();
             }

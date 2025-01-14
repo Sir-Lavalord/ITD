@@ -45,6 +45,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = (15);
         }
+
         private NPC HomingTarget
         {
             get => Projectile.ai[0] == 0 ? null : Main.npc[(int)Projectile.ai[0] - 1];
