@@ -23,7 +23,7 @@ namespace ITD.Content.UI
 {
     public class WorldNPCDialogue : ITDUIState
     {
-        private WorldNPCDialogueBox dialogueBox;
+        public WorldNPCDialogueBox dialogueBox;
         public bool isOpen = false;
         public bool isClosing = false;
         public override bool Visible => isOpen;
@@ -90,12 +90,12 @@ namespace ITD.Content.UI
         private bool writing = false;
         private string _text = "";
         private int textStep;
-        private int textSpeed = 2;
+        private int textSpeed = 1;
         private int textTimer;
         /// <summary>
         /// Not in frames, but in text steps. 0 will play a voice clip for every single letter typed.
         /// </summary>
-        private int voiceFrequency = 1;
+        private int voiceFrequency = 6;
         private int voiceTimer;
         public float openProgress;
         public string DialogueInstance => $"{DialogueLanguageKey}.{speakerKey}.{dialogueKey}";
@@ -108,14 +108,25 @@ namespace ITD.Content.UI
         public SpeakerHeadDrawingData DrawingData { 
             get
             {
-                string possiblePath = $"ITD/Systems/WorldNPCs/Assets/SpeakerHeads/{speakerKey}";
-                if (ModContent.HasAsset(possiblePath))
-                {
-                    return new SpeakerHeadDrawingData(ModContent.Request<Texture2D>(possiblePath), 1);
-                }
-                return new SpeakerHeadDrawingData(ModContent.Request<Texture2D>(Placeholder.PHGeneric), 1);
+                return string.IsNullOrEmpty(speakerKey) ? new SpeakerHeadDrawingData(ModContent.Request<Texture2D>(Placeholder.PHGeneric), 1) : (ITD.Instance.Find<ModNPC>(speakerKey) as WorldNPC).DrawingData;
             }
         }
+        public List<SoundStyle> SpeechSounds
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(speakerKey))
+                {
+                    return [SoundID.MenuTick];
+                }
+                else
+                {
+                    return [..(ITD.Instance.Find<ModNPC>(speakerKey) as WorldNPC).GetSpeechSounds()];
+                }
+            }
+        }
+        public SpeakerHeadDrawingData currentData;
+        public List<SoundStyle> currentSpeechSounds;
         public int speakerHeadFrame = 0;
         public WorldNPCDialogue ParentState => Parent as WorldNPCDialogue;
         public WorldNPC TalkNPC { get
@@ -129,8 +140,6 @@ namespace ITD.Content.UI
         public Keyframe<float> tweenReference;
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            // those who snow
-            //Top.Set()
             Rectangle bounds = GetDimensions().ToRectangle();
             float boxOpacity = EasingFunctions.OutQuad(openProgress);
             Texture2D boxStyle = GetTexture().Value;
@@ -138,8 +147,8 @@ namespace ITD.Content.UI
             // draw speaker head
             if (!string.IsNullOrEmpty(speakerKey))
             {
-                Texture2D head = DrawingData.Texture.Value;
-                byte frameCount = DrawingData.FrameCount;
+                Texture2D head = currentData.Texture.Value;
+                byte frameCount = currentData.FrameCount;
                 Rectangle frame = head.Frame(1, frameCount, 0, speakerHeadFrame);
                 Vector2 drawPos = new(bounds.X + TextPadding.X + head.Width / 2, bounds.Y + head.Height / 2 - (head.Height * speakerHeadYPositionPercentOffset));
                 Vector2 drawScale = new(1f / speakerHeadVerticalScale, speakerHeadVerticalScale);
@@ -148,7 +157,6 @@ namespace ITD.Content.UI
             }
 
             // draw label box
-
             string worldNPCKey = $"{DialogueLanguageKey}.{speakerKey}.Name";
 
             string label = Language.Exists(worldNPCKey) ? Language.GetTextValue(worldNPCKey) : "...";
@@ -159,7 +167,7 @@ namespace ITD.Content.UI
             DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, label, labelRect.Location.ToVector2() + new Vector2(TextPadding.X, labelHeight / 3), Color.White * boxOpacity, Color.Black * boxOpacity);
             
             DrawAdjustableBox(spriteBatch, boxStyle, bounds, Color.White * boxOpacity);
-            var lines = Utils.WordwrapStringSmart(_text, Color.White, font.Value, 460, 10);
+            var lines = TextHelpers.WordwrapStringSuperSmart(_text, Color.White, font.Value, bounds.Width - (int)(TextPadding.X * 1.9f), 10);
             for (int i = 0; i < lines.Count; i++)
             {
                 var line = lines[i];
@@ -170,7 +178,7 @@ namespace ITD.Content.UI
             }
             base.DrawSelf(spriteBatch);
         }
-        private static void DrawColorCodedStringWithShadowWithValidOpacity(SpriteBatch spriteBatch, Asset<DynamicSpriteFont> font, string text, Vector2 position, Color color, Color shadowColor, float scale = 1f, float spread = 2f) => DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, [new TextSnippet(text)], position, color, shadowColor, scale, spread);
+        private static void DrawColorCodedStringWithShadowWithValidOpacity(SpriteBatch spriteBatch, Asset<DynamicSpriteFont> font, string text, Vector2 position, Color color, Color shadowColor, float scale = 1f, float spread = 2f) => DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, [..ChatManager.ParseMessage(text, color)], position, color, shadowColor, scale, spread);
         private static void DrawColorCodedStringWithShadowWithValidOpacity(SpriteBatch spriteBatch, Asset<DynamicSpriteFont> font, TextSnippet[] snippets, Vector2 position, Color color, Color shadowColor, float scale = 1f, float spread = 2f)
         {
             for (int i = 0; i < ChatManager.ShadowDirections.Length; i++)
@@ -202,9 +210,20 @@ namespace ITD.Content.UI
                         textStep += 1;
                         textTimer = 0;
                         ++voiceTimer;
+                        while (IsInIncompleteTag(Goal, textStep)) // check if we're inside an incomplete tag (e. g. [mvs], or [c], basically a tag that doesn't have a : end marker.
+                        {
+                            textStep += 1;
+                            if (textStep >= Goal.Length)
+                            {
+                                writing = false;
+                                break;
+                            }
+                            if (!IsInIncompleteTag(Goal, textStep)) // jump ahead right after the while loop is over
+                                textStep += 1;
+                        }
                         if (++voiceTimer > voiceFrequency)
                         {
-                            SoundStyle chosenSound = TalkNPC is null ? SoundID.MenuTick : Main.rand.NextFromList([.. TalkNPC.GetSpeechSounds()]);
+                            SoundStyle chosenSound = Main.rand.NextFromCollection(currentSpeechSounds);
                             SoundEngine.PlaySound(chosenSound);
                             voiceTimer = 0;
                         }
@@ -215,6 +234,16 @@ namespace ITD.Content.UI
             {
                 _text = Goal[..textStep];
             }
+        }
+        private bool IsInIncompleteTag(string text, int step)
+        {
+            int lastOpenBracket = text.LastIndexOf('[', step - 1);
+            if (lastOpenBracket == -1) return false;
+
+            int nextColon = text.IndexOf(':', lastOpenBracket);
+            int nextCloseBracket = text.IndexOf(']', lastOpenBracket);
+
+            return (nextColon == -1 || nextColon >= step) && (nextCloseBracket == -1 || nextCloseBracket >= step);
         }
         public void BeginTypewriter(string key)
         {
@@ -250,6 +279,8 @@ namespace ITD.Content.UI
             {
                 tweenReference = null;
                 BeginTypewriter(key);
+                currentData = DrawingData;
+                currentSpeechSounds = SpeechSounds;
                 TweenSpeakerHead();
             }));
         }

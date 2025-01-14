@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using ITD.Systems.Recruitment;
 using Terraria.ID;
 using ITD.Config;
+using Terraria.UI.Chat;
+using ITD.Common.ChatTags;
 
 namespace ITD
 {
@@ -84,6 +86,14 @@ namespace ITD
             {
                 wikithis?.Call("AddModURL", this, "https://itdmod.fandom.com/wiki/{}");
             }
+            ChatManager.Register<WavyHandler>(
+            [
+                "mvsin"
+            ]);
+            ChatManager.Register<ShakyHandler>(
+            [
+                "mvshake"
+            ]);
         }
         /// <summary>
         /// I DON'T LIKE THE FLICKER THEY DO WHEN THEY'RE FIRST RECRUITED
