@@ -370,6 +370,7 @@ DeathMessage: {
 	IncrediblySharpKnife: cut a little too deep.
 	BloodPact: ran out of blood.
 	KSGlandAftershock: was crushed by the aftershock.
+	// MudkarpEvil: meddled with eldritch terrors.
 }
 
 WorldGen: {

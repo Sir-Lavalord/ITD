@@ -356,6 +356,10 @@ namespace ITD.Players
                 soulTalismanEffect = false;
             }
 		}
+        public void KillByLocalization(string key)
+        {
+            Player.KillMe(DeathByLocalization(key), 10.0, 0);
+        }
 		public PlayerDeathReason DeathByLocalization(string key)
         {
             string death = Language.GetTextValue($"Mods.ITD.DeathMessage.{key}");

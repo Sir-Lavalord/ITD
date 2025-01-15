@@ -15,6 +15,9 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
 using System;
+using Terraria.DataStructures;
+using Microsoft.Xna.Framework.Input;
+using System.Linq;
 
 namespace ITD.Content.UI
 {
@@ -108,6 +111,7 @@ namespace ITD.Content.UI
         public float speakerHeadVerticalScale = 1f;
 
         public List<DialogueButton> buttons = [];
+        public float buttonsOpacity = 0f;
         public SpeakerHeadDrawingData DrawingData { 
             get
             {
@@ -140,7 +144,8 @@ namespace ITD.Content.UI
                 return NPCLoader.GetNPC(Main.npc[worldNPC].type) as WorldNPC;
             }
         }
-        public Keyframe<float> tweenReference;
+        private Keyframe<float> tweenReference;
+        private bool drawSpeakerHead = false;
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             Rectangle bounds = GetDimensions().ToRectangle();
@@ -148,7 +153,7 @@ namespace ITD.Content.UI
             Texture2D boxStyle = GetTexture().Value;
 
             // draw speaker head
-            if (!string.IsNullOrEmpty(speakerKey))
+            if (drawSpeakerHead)
             {
                 Texture2D head = currentData.Texture.Value;
                 byte frameCount = currentData.FrameCount;
@@ -180,7 +185,22 @@ namespace ITD.Content.UI
                 DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, [.. line], drawPos, Color.White * boxOpacity, Color.Black * boxOpacity);
                 
             }
+            DrawButtons(spriteBatch, boxStyle, font);
             base.DrawSelf(spriteBatch);
+        }
+        public void DrawButtons(SpriteBatch spriteBatch, Texture2D texture, Asset<DynamicSpriteFont> font)
+        {
+            if (buttons.Any(b => b.Active))
+            {
+                if (buttonsOpacity < 1f)
+                {
+                    buttonsOpacity += 0.05f;
+                }
+                foreach (DialogueButton button in buttons)
+                {
+                    button.DrawButton(spriteBatch, texture, buttonsOpacity, font);
+                }
+            }
         }
         public static void DrawColorCodedStringWithShadowWithValidOpacity(SpriteBatch spriteBatch, Asset<DynamicSpriteFont> font, string text, Vector2 position, Color color, Color shadowColor, float scale = 1f, float spread = 2f) => DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, [..ChatManager.ParseMessage(text, color)], position, color, shadowColor, scale, spread);
         public static void DrawColorCodedStringWithShadowWithValidOpacity(SpriteBatch spriteBatch, Asset<DynamicSpriteFont> font, TextSnippet[] snippets, Vector2 position, Color color, Color shadowColor, float scale = 1f, float spread = 2f)
@@ -200,6 +220,11 @@ namespace ITD.Content.UI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            if (ContainsPoint(Main.MouseScreen))
+            {
+                Main.LocalPlayer.mouseInterface = true;
+            }
+            PositionButtons();
             if (writing)
             {
                 if (++textTimer > textSpeed)
@@ -207,6 +232,10 @@ namespace ITD.Content.UI
                     if (textStep + 1 > Goal.Length) // message has ended, stop writing.
                     {
                         writing = false;
+                        foreach (var b in buttons)
+                        {
+                            b.Active = true;
+                        }
                     }
                     else
                     {
@@ -253,7 +282,8 @@ namespace ITD.Content.UI
             string[] keyElements = key.Split('.'); // first element will be the WorldNPC key, second will be the specific dialogue key.
             speakerKey = keyElements[0];
             dialogueKey = keyElements[1];
-            godSpeaker = speakerKey;
+            if (string.IsNullOrEmpty(godSpeaker))
+                godSpeaker = speakerKey;
             string lookForKey = DialogueInstance;
             string lookForValidBody = $"{lookForKey}.Body";
             if (!Language.Exists(lookForValidBody))
@@ -266,7 +296,37 @@ namespace ITD.Content.UI
             textStep = 0;
             writing = true;
         }
+        public void PositionButtons()
+        {
+            Rectangle boxBounds = GetDimensions().ToRectangle();
+            Rectangle buttonSpace = new(boxBounds.X + (int)TextPadding.X, boxBounds.Y, boxBounds.Width - (int)TextPadding.X * 2, boxBounds.Height);
+            float countWidth = buttons.Count > 0 ? buttonSpace.Width / buttons.Count : default;
+            for (int i = 0; i < buttons.Count; i++)
+            {
+                DialogueButton button = buttons[i];
+                // buttons must be positioned in accordance to the text padding.
+                // furthermore, we can get the desired width using Helpers.Remap()
+                float stringWidth = font.Value.MeasureString(button.Label).X + TextPadding.X * 2f;
+                float buttonWidth = Math.Max(stringWidth, countWidth);
+                float buttonHeight = 64f;
+                float left = TextPadding.X + buttonWidth * i;
+                float top = boxBounds.Height - buttonHeight - TextPadding.Y;
+                button.SetProperties(top, left, buttonWidth, buttonHeight);
+            }
+        }
         public void GenerateButtons()
+        {
+            var buttonData = GetButtonData();
+            foreach (GeneratedButtonData data in buttonData)
+            {
+                DialogueButton newButton = new(data) { Active = false };
+                Append(newButton);
+                buttons.Add(newButton);
+            }
+            PositionButtons();
+            Recalculate();
+        }
+        public GeneratedButtonData[] GetButtonData()
         {
             List<GeneratedButtonData> buttonBuffer = [];
             int buttonIndex = 0;
@@ -284,6 +344,8 @@ namespace ITD.Content.UI
                 buttonBuffer.Add(new GeneratedButtonData(label, realAction, realKey));
                 buttonIndex++;
             }
+            Main.NewText(buttonBuffer.Count);
+            return [.. buttonBuffer];
         }
         public void TweenSpeakerHead()
         {
@@ -296,15 +358,23 @@ namespace ITD.Content.UI
                 Tweener.Tween(AnimHelpers.CreateFor(this, () => speakerHeadVerticalScale, () => 1f, 8, EasingFunctions.OutCubic));
             }));
         }
+        public void Setup(string key)
+        {
+            buttonsOpacity = 0f;
+            RemoveAllChildren();
+            buttons.Clear();
+            tweenReference = null;
+            BeginTypewriter(key);
+            currentData = DrawingData;
+            currentSpeechSounds = SpeechSounds;
+        }
         public void Open(string key)
         {
             openProgress = 0f;
+            Setup(key);
             tweenReference = (Keyframe<float>)Tweener.Tween(AnimHelpers.CreateFor(this, () => openProgress, () => 1f, 32, EasingFunctions.OutCubic, () =>
             {
-                tweenReference = null;
-                BeginTypewriter(key);
-                currentData = DrawingData;
-                currentSpeechSounds = SpeechSounds;
+                drawSpeakerHead = true;
                 TweenSpeakerHead();
             }));
         }
@@ -325,6 +395,9 @@ namespace ITD.Content.UI
                 godSpeaker = string.Empty;
                 speakerHeadYPositionPercentOffset = 0f;
                 speakerHeadVerticalScale = 1f;
+                RemoveAllChildren();
+                buttons.Clear();
+                drawSpeakerHead = false;
             }));
         }
     }
@@ -349,8 +422,83 @@ namespace ITD.Content.UI
         public DialogueAction Action = action;
         public string GoTo = goTo;
     }
-    public class DialogueButton : ITDUIElement
+    public class DialogueButton(GeneratedButtonData buttonData) : ITDUIElement()
     {
+        public DialogueAction Action { get; private set; } = buttonData.Action;
+        public string Label { get; private set; } = buttonData.Label;
+        public string GoTo { get; private set; } = buttonData.GoTo;
+        public bool Active { get; set; }
+        private Color drawColor = Color.White;
+        private float extraSize = 0f;
+        private Keyframe<float> tweenReference;
+        public void DrawButton(SpriteBatch spriteBatch, Texture2D texture, float opacity, Asset<DynamicSpriteFont> font)
+        {
+            //Main.NewText(opacity);
+            float realOpacity = opacity * EasingFunctions.OutQuad((Parent as WorldNPCDialogueBox).openProgress);
+            Rectangle bounds = GetDimensions().ToRectangle().Inflated((int)extraSize);
+            DrawAdjustableBox(spriteBatch, texture, bounds, drawColor * realOpacity);
+            Vector2 textSize = font.Value.MeasureString(Label);
+            Vector2 textPosition = bounds.Center.ToVector2() - (textSize * 0.5f);
+            WorldNPCDialogueBox.DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, Label, textPosition, Color.White * realOpacity, Color.Black * opacity);
+        }
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            if (IsMouseHovering)
+                Main.LocalPlayer.mouseInterface = true;
+        }
+        public override void MouseOver(UIMouseEvent evt)
+        {
+            if (tweenReference != null)
+            {
+                Tweener.CancelTween(tweenReference);
+                tweenReference = null;
+            }
+            tweenReference = (Keyframe<float>)Tweener.Tween(AnimHelpers.CreateFor(this, () => extraSize, () => 16, 8, EasingFunctions.OutCubic, () =>
+            {
+                tweenReference = null;
+            }));
+            drawColor = Color.Gray;
+            SoundEngine.PlaySound(SoundID.MenuTick);
+        }
+        public override void MouseOut(UIMouseEvent evt)
+        {
+            if (tweenReference != null)
+            {
+                Tweener.CancelTween(tweenReference);
+                tweenReference = null;
+            }
+            tweenReference = (Keyframe<float>)Tweener.Tween(AnimHelpers.CreateFor(this, () => extraSize, () => 0f, 8, EasingFunctions.OutCubic, () =>
+            {
+                tweenReference = null;
+            }));
+            drawColor = Color.White;
+            SoundEngine.PlaySound(SoundID.MenuTick);
+        }
+        public override void LeftClick(UIMouseEvent evt)
+        {
+            base.LeftClick(evt);
+            if (!Active)
+                return;
+            DoAction();
+            if (!string.IsNullOrEmpty(GoTo))
+                (Parent as WorldNPCDialogueBox).Setup(GoTo);
 
+        }
+        public void DoAction()
+        {
+            switch (Action)
+            {
+                case DialogueAction.None:
+                    break;
+                case DialogueAction.KillPlayerInstantly:
+                    Main.LocalPlayer.GetITDPlayer().KillByLocalization("MudkarpEvil");
+                    UILoader.GetUIState<WorldNPCDialogue>().Close();
+                    break;
+                case DialogueAction.OpenMudkarpShop:
+                    // (again, good luck implementing this, Ajax)
+                    break;
+            }
+        }
     }
 }

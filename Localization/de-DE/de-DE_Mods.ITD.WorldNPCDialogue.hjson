@@ -22,25 +22,35 @@ Mudkarp: {
 	// Name: "{$NPCs.Mudkarp.DisplayName}"
 
 	FirstTimeSpeaking: {
-		// Body: Bloop bloop. [mvsin/5.0:(Hello, traveler, welcome to my dear home, the Aetherium Tunnels.)] Who up mudding they karp? Skibidi the rizzmas toilet over the large and very the the the the the the the thet eht eht eh the the the t
+		// Body: Bloop bloop.
 		// Appearance: "0"
 
 		Buttons: {
 			Button0: {
 				// Key: Mudkarp.FirstTimeSpeaking2
-				// Text: ...what?
+				// Text: ...?
 			}
 		}
 	}
 
 	FirstTimeSpeaking2: {
-		// Body: here too much raining, wuwuwuuw
+		// Body: YOU HAVE COMMITTED MANY SINS IN YOUR LIFE, NOW PERISH!
 		// Appearance: "0"
 
 		Buttons: {
 			Button0: {
-				// Text: Aren't you supposed to give me a quest or something?
+				// Text: ...!
 				// Action: KillPlayerInstantly
+			}
+
+			Button1: {
+				// Text: jesus take the wheel
+				// Key: Mudkarp.FirstTimeSpeaking
+			}
+
+			Button2: {
+				// Text: hopefully this works!
+				// Action: OpenMudkarpShop
 			}
 		}
 	}

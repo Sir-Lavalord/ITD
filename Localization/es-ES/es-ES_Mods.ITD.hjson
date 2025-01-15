@@ -370,6 +370,7 @@ DeathMessage: {
 	IncrediblySharpKnife: cortó demasiado profundo.
 	BloodPact: se quedó sin sangre.
 	KSGlandAftershock: sufrió un aplanamiento por el aftershock.
+	// MudkarpEvil: meddled with eldritch terrors.
 }
 
 WorldGen: {
