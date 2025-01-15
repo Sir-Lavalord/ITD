@@ -11,7 +11,7 @@ namespace ITD.Systems.WorldNPCs
         {
             get
             {
-                string dialogue = UILoader.GetUIState<WorldNPCDialogue>().dialogueBox.speakerKey;
+                string dialogue = UILoader.GetUIState<WorldNPCDialogue>().dialogueBox.godSpeaker;
                 if (string.IsNullOrEmpty(dialogue))
                     return MusicID.MenuMusic;
                 return (Mod.Find<ModNPC>(dialogue) as WorldNPC).DialogueMusic;

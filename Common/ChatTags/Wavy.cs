@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using ITD.Content.UI;
+using ITD.Systems.WorldNPCs;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using ReLogic.Graphics;
 using SteelSeries.GameSense;
 using System;
@@ -37,23 +40,34 @@ namespace ITD.Common.ChatTags
         }
         public override bool UniqueDraw(bool justCheckingString, out Vector2 size, SpriteBatch spriteBatch, Vector2 position = default, Color color = default, float scale = 1)
         {
+            // NOTE FOR FUTURE CHATTAGS:
+            // UniqueDraw is ran once for each time a string with said tag is drawn.
+            // This means you have to use ChatManager.DrawColorCodedString here, and not ChatManager.DrawColorCodedStringWithShadow,
+            // because the latter will draw 5x the amount of shadows if the string is drawn using ChatManager.DrawColorCodedStringWithShadow outside of the TextSnippet.
+
+            if (spriteBatch is null || justCheckingString)
+            {
+                size = default;
+                return false;
+            }
+
             Vector2 outSize = Vector2.Zero;
             DynamicSpriteFont font = FontAssets.MouseText.Value;
-            float time = Main.GameUpdateCount / 32f;
+            double time = Main.timeForVisualEffects / 32d;
             Vector2 currentPosition = position;
+
+            //Main.NewText(Main.GameUpdateCount);
 
             for (int i = 0; i < Text.Length; i++)
             {
                 char c = Text[i];
                 float posOffset = currentPosition.X / 16f;
-                float yOffset = MathF.Sin((time + posOffset) * Frequency) * Amplitude;
+                float yOffset = MathF.Sin(((float)time + posOffset) * Frequency) * Amplitude;
                 string str = c.ToString();
                 Vector2 characterSize = font.MeasureString(str);
+                Vector2 characterPosition = currentPosition + Vector2.UnitY * yOffset;
 
-                if (spriteBatch != null)
-                {
-                    ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, str, currentPosition + Vector2.UnitY * yOffset, color, 0f, Vector2.Zero, Vector2.One, spread: 0);
-                }
+                ChatManager.DrawColorCodedString(spriteBatch, font, str, characterPosition, color, 0f, Vector2.Zero, new Vector2(scale));
 
                 currentPosition.X += characterSize.X;
                 outSize.X += characterSize.X;
@@ -61,6 +75,7 @@ namespace ITD.Common.ChatTags
             }
 
             size = outSize;
+
             return true;
         }
     }

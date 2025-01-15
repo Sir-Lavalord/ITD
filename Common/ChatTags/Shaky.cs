@@ -28,6 +28,12 @@ namespace ITD.Common.ChatTags
         }
         public override bool UniqueDraw(bool justCheckingString, out Vector2 size, SpriteBatch spriteBatch, Vector2 position = default, Color color = default, float scale = 1)
         {
+            if (spriteBatch is null || justCheckingString)
+            {
+                size = default;
+                return false;
+            }
+
             Vector2 outSize = Vector2.Zero;
             DynamicSpriteFont font = FontAssets.MouseText.Value;
             Vector2 currentPosition = position;
@@ -38,11 +44,9 @@ namespace ITD.Common.ChatTags
                 Vector2 shake = Main.rand.NextVector2Circular(Strength, Strength);
                 string str = c.ToString();
                 Vector2 characterSize = font.MeasureString(str);
+                Vector2 characterPosition = currentPosition + shake;
 
-                if (spriteBatch != null)
-                {
-                    ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, str, currentPosition + shake, color, 0f, Vector2.Zero, Vector2.One, spread: 0);
-                }
+                ChatManager.DrawColorCodedString(spriteBatch, font, str, characterPosition, color, 0f, Vector2.Zero, new Vector2(scale));
 
                 currentPosition.X += characterSize.X;
                 outSize.X += characterSize.X;

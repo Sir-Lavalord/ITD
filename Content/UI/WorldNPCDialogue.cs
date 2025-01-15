@@ -5,11 +5,7 @@ using ITD.Utilities.Placeholders;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -18,6 +14,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
+using System;
 
 namespace ITD.Content.UI
 {
@@ -29,7 +26,7 @@ namespace ITD.Content.UI
         public override bool Visible => isOpen;
         public override int InsertionIndex(List<GameInterfaceLayer> layers)
         {
-            return layers.FindIndex(layer => layer.Name.Equals("Vanilla: Entity Markers"));
+            return layers.FindIndex(layer => layer.Name.Equals("Vanilla: Fancy UI"));
         }
         public override void OnInitialize()
         {
@@ -99,12 +96,18 @@ namespace ITD.Content.UI
         private int voiceTimer;
         public float openProgress;
         public string DialogueInstance => $"{DialogueLanguageKey}.{speakerKey}.{dialogueKey}";
+        /// <summary>
+        /// This decides which music to use. Jumping between tracks for different speakers (even if it's not realistically possible) would be bad.
+        /// </summary>
+        public string godSpeaker;
         public string speakerKey;
         public string dialogueKey;
         public string Goal { get; set; }
 
         public float speakerHeadYPositionPercentOffset;
         public float speakerHeadVerticalScale = 1f;
+
+        public List<DialogueButton> buttons = [];
         public SpeakerHeadDrawingData DrawingData { 
             get
             {
@@ -167,7 +170,8 @@ namespace ITD.Content.UI
             DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, label, labelRect.Location.ToVector2() + new Vector2(TextPadding.X, labelHeight / 3), Color.White * boxOpacity, Color.Black * boxOpacity);
             
             DrawAdjustableBox(spriteBatch, boxStyle, bounds, Color.White * boxOpacity);
-            var lines = TextHelpers.WordwrapStringSuperSmart(_text, Color.White, font.Value, bounds.Width - (int)(TextPadding.X * 1.9f), 10);
+            int maxTextWidth = bounds.Width - (int)(TextPadding.X * 1.9f);
+            var lines = TextHelpers.WordwrapStringSuperSmart(_text, Color.White, font.Value, maxTextWidth, 10);
             for (int i = 0; i < lines.Count; i++)
             {
                 var line = lines[i];
@@ -178,8 +182,8 @@ namespace ITD.Content.UI
             }
             base.DrawSelf(spriteBatch);
         }
-        private static void DrawColorCodedStringWithShadowWithValidOpacity(SpriteBatch spriteBatch, Asset<DynamicSpriteFont> font, string text, Vector2 position, Color color, Color shadowColor, float scale = 1f, float spread = 2f) => DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, [..ChatManager.ParseMessage(text, color)], position, color, shadowColor, scale, spread);
-        private static void DrawColorCodedStringWithShadowWithValidOpacity(SpriteBatch spriteBatch, Asset<DynamicSpriteFont> font, TextSnippet[] snippets, Vector2 position, Color color, Color shadowColor, float scale = 1f, float spread = 2f)
+        public static void DrawColorCodedStringWithShadowWithValidOpacity(SpriteBatch spriteBatch, Asset<DynamicSpriteFont> font, string text, Vector2 position, Color color, Color shadowColor, float scale = 1f, float spread = 2f) => DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, [..ChatManager.ParseMessage(text, color)], position, color, shadowColor, scale, spread);
+        public static void DrawColorCodedStringWithShadowWithValidOpacity(SpriteBatch spriteBatch, Asset<DynamicSpriteFont> font, TextSnippet[] snippets, Vector2 position, Color color, Color shadowColor, float scale = 1f, float spread = 2f)
         {
             for (int i = 0; i < ChatManager.ShadowDirections.Length; i++)
             {
@@ -189,10 +193,9 @@ namespace ITD.Content.UI
         }
         public Asset<Texture2D> GetTexture()
         {
-            WorldNPC talk = TalkNPC;
-            if (talk is null)
+            if (string.IsNullOrEmpty(speakerKey))
                 return ModContent.Request<Texture2D>("ITD/Systems/WorldNPCs/Assets/BoxStyles/DefaultBoxStyle");
-            return talk.DialogueBoxStyle;
+            return (ITD.Instance.Find<ModNPC>(speakerKey) as WorldNPC).DialogueBoxStyle;
         }
         public override void Update(GameTime gameTime)
         {
@@ -235,7 +238,7 @@ namespace ITD.Content.UI
                 _text = Goal[..textStep];
             }
         }
-        private bool IsInIncompleteTag(string text, int step)
+        private static bool IsInIncompleteTag(string text, int step)
         {
             int lastOpenBracket = text.LastIndexOf('[', step - 1);
             if (lastOpenBracket == -1) return false;
@@ -250,6 +253,7 @@ namespace ITD.Content.UI
             string[] keyElements = key.Split('.'); // first element will be the WorldNPC key, second will be the specific dialogue key.
             speakerKey = keyElements[0];
             dialogueKey = keyElements[1];
+            godSpeaker = speakerKey;
             string lookForKey = DialogueInstance;
             string lookForValidBody = $"{lookForKey}.Body";
             if (!Language.Exists(lookForValidBody))
@@ -257,9 +261,29 @@ namespace ITD.Content.UI
                 Main.NewText($"Error when trying to begin typewriter: the given key, {lookForKey}, was not found to have a valid Body.", Color.Red);
                 return;
             }
+            GenerateButtons();
             Goal = Language.GetTextValue(lookForValidBody);
             textStep = 0;
             writing = true;
+        }
+        public void GenerateButtons()
+        {
+            List<GeneratedButtonData> buttonBuffer = [];
+            int buttonIndex = 0;
+            // while valid buttons are found, add new buttondatas to the buffer.
+            while (Language.Exists($"{DialogueInstance}.Buttons.Button{buttonIndex}.Text"))
+            {
+                string possibleKey = $"{DialogueInstance}.Buttons.Button{buttonIndex}.Key";
+                string realKey = Language.Exists(possibleKey) ? Language.GetTextValue(possibleKey) : null;
+
+                string possibleAction = $"{DialogueInstance}.Buttons.Button{buttonIndex}.Action";
+                DialogueAction realAction = Language.Exists(possibleAction) ? Enum.Parse<DialogueAction>(Language.GetTextValue(possibleAction)) : DialogueAction.None;
+
+                string label = Language.GetTextValue($"{DialogueInstance}.Buttons.Button{buttonIndex}.Text");
+
+                buttonBuffer.Add(new GeneratedButtonData(label, realAction, realKey));
+                buttonIndex++;
+            }
         }
         public void TweenSpeakerHead()
         {
@@ -298,9 +322,35 @@ namespace ITD.Content.UI
                 _text = string.Empty;
                 speakerKey = string.Empty;
                 dialogueKey = string.Empty;
+                godSpeaker = string.Empty;
                 speakerHeadYPositionPercentOffset = 0f;
                 speakerHeadVerticalScale = 1f;
             }));
         }
+    }
+    public enum DialogueAction : ushort
+    {
+        /// <summary>
+        /// Does nothing.
+        /// </summary>
+        None,
+        /// <summary>
+        /// meme
+        /// </summary>
+        KillPlayerInstantly,
+        /// <summary>
+        /// Opens Mudkarp's shop (good luck implementing this, Ajax)
+        /// </summary>
+        OpenMudkarpShop
+    }
+    public struct GeneratedButtonData(string label, DialogueAction action, string goTo)
+    {
+        public string Label = label;
+        public DialogueAction Action = action;
+        public string GoTo = goTo;
+    }
+    public class DialogueButton : ITDUIElement
+    {
+
     }
 }

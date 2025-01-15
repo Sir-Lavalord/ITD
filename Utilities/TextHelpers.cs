@@ -10,6 +10,15 @@ namespace ITD.Utilities
 {
     public static class TextHelpers
     {
+        /// <summary>
+        /// This is functionally the same as <see cref="Terraria.Utils.WordwrapStringSmart(string, Color, DynamicSpriteFont, int, int)"/> except that it always finishes incomplete tags and trims whitespace.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="c"></param>
+        /// <param name="font"></param>
+        /// <param name="maxWidth"></param>
+        /// <param name="maxLines"></param>
+        /// <returns></returns>
         public static List<List<TextSnippet>> WordwrapStringSuperSmart(string text, Color c, DynamicSpriteFont font, int maxWidth, int maxLines)
         {
             TextSnippet[] array = [.. ParseMessage(text, c)];
@@ -116,14 +125,14 @@ namespace ITD.Utilities
             text = EnsureBalancedBrackets(text);
 
             MatchCollection matchCollection = ChatManager.Regexes.Format.Matches(text);
-            List<TextSnippet> list = new List<TextSnippet>();
+            List<TextSnippet> list = [];
             int num = 0;
 
             foreach (Match item in matchCollection)
             {
                 if (item.Index > num)
                 {
-                    string plainText = text.Substring(num, item.Index - num);
+                    string plainText = text[num..item.Index];
                     list.Add(new TextSnippet(plainText.TrimStart(), baseColor));
                 }
 

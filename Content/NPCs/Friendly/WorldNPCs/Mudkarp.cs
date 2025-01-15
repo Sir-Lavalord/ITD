@@ -1,6 +1,7 @@
 ﻿using ITD.Systems.WorldNPCs;
 using ITD.Utilities.Placeholders;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria.Audio;
@@ -16,6 +17,7 @@ namespace ITD.Content.NPCs.Friendly.WorldNPCs
         {
             NPC.width = NPC.height = 32;
         }
+        public override Asset<Texture2D> DialogueBoxStyle => ModContent.Request<Texture2D>(WorldNPCAssetsPath + "BoxStyles/MudkarpBoxStyle");
         public override SpeakerHeadDrawingData DrawingData => new(ModContent.Request<Texture2D>("ITD/Systems/WorldNPCs/Assets/SpeakerHeads/Mudkarp"), 1);
         public override IEnumerable<SoundStyle> GetSpeechSounds()
         {

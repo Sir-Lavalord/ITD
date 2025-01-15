@@ -5,6 +5,19 @@
 // Language.Exists doesn't work for detecting objects, so for example Language.Exists("Mods.ITD.WorldNPCDialogue.Mudkarp.FirstTimeSpeaking") returns false.
 // however, we can just check if something inside that object with a valid localization value exists instead. so:
 // Language.Exists("Mods.ITD.WorldNPCDialogue.Mudkarp.FirstTimeSpeaking.Body") returns true.
+
+// now, into the specifics.
+// all dialogue instances must have a valid body, even if it's an empty string, otherwise a lot of code won't be run and it'll be a mess.
+// each dialogue instance has buttons attached usually, though the close button can be pushed at any time as well.
+// every button must have a valid text label, even if it's an empty string, otherwise that button won't be detected as being valid.
+// buttons have two ways of interacting with dialogue and the outside world. one is via the Key key, which tells the game which dialogue instance to jump to. (example below)
+// the other way is via the Action key. behavior here is defined inside a big switch statement, but it's pretty simple to define new behaviors.
+
+// extra things you should know:
+// - you can in fact use any chat tag you want in the text values.
+// - the Appearance key dictates which horizontal frame to use for the speaker head. whatever that is depends on the specific speaker.
+
+// that should be all you need to write new dialogue instances and have them behave as expected!
 Mudkarp: {
 	Name: "{$NPCs.Mudkarp.DisplayName}"
 
