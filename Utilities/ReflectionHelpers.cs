@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
@@ -21,7 +22,8 @@ namespace ITD.Utilities
             return true;
         }
         /// <summary>
-        /// Get any value through reflection
+        /// Get any value through reflection.
+        /// Note: Use <see cref="UnsafeAccessorAttribute"/> when possible, as it is faster and less convoluted.
         /// </summary>
         public static TValue Get<TMemberType, TValue>(string memberName, object instance = null, Type staticClass = null, BindingFlags? flags = null) where TMemberType : MemberInfo
         {

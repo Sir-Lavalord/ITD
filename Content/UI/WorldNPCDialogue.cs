@@ -112,6 +112,7 @@ namespace ITD.Content.UI
 
         public List<DialogueButton> buttons = [];
         public float buttonsOpacity = 0f;
+        public DialogueButton closeButton;
         public SpeakerHeadDrawingData DrawingData { 
             get
             {
@@ -146,6 +147,11 @@ namespace ITD.Content.UI
         }
         private Keyframe<float> tweenReference;
         private bool drawSpeakerHead = false;
+        public override void OnInitialize()
+        {
+            closeButton = new DialogueButton(new(string.Empty, DialogueAction.CloseDialogueBox, string.Empty)) { Texture = ModContent.Request<Texture2D>(WorldNPC.WorldNPCAssetsPath + "X", AssetRequestMode.ImmediateLoad), Active = true };
+            Append(closeButton);
+        }
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             Rectangle bounds = GetDimensions().ToRectangle();
@@ -158,11 +164,16 @@ namespace ITD.Content.UI
                 Texture2D head = currentData.Texture.Value;
                 byte frameCount = currentData.FrameCount;
                 Rectangle frame = head.Frame(1, frameCount, 0, speakerHeadFrame);
-                Vector2 drawPos = new(bounds.X + TextPadding.X + head.Width / 2, bounds.Y + head.Height / 2 - (head.Height * speakerHeadYPositionPercentOffset));
+                Vector2 drawPos = new(bounds.X + bounds.Width / 4f, bounds.Y + head.Height / 2 - (head.Height * speakerHeadYPositionPercentOffset));
                 Vector2 drawScale = new(1f / speakerHeadVerticalScale, speakerHeadVerticalScale);
                 Vector2 origin = new(head.Width / 2, head.Height / frameCount / 2);
                 spriteBatch.Draw(head, drawPos, frame, Color.White * boxOpacity, 0f, origin, drawScale, SpriteEffects.None, 0f);
             }
+
+            Rectangle half = new(bounds.X, bounds.Y, bounds.Width / 2, bounds.Height);
+            Rectangle otherHalf = new(bounds.X + half.Width, bounds.Y, half.Width, bounds.Height);
+            DrawAdjustableBox(spriteBatch, boxStyle, half, Color.White * boxOpacity);
+            DrawAdjustableBox(spriteBatch, boxStyle, otherHalf, Color.White * boxOpacity);
 
             // draw label box
             string worldNPCKey = $"{DialogueLanguageKey}.{speakerKey}.Name";
@@ -170,18 +181,18 @@ namespace ITD.Content.UI
             string label = Language.Exists(worldNPCKey) ? Language.GetTextValue(worldNPCKey) : "...";
             int labelWidth = (int)(font.Value.MeasureString(label).X + TextPadding.X * 2);
             int labelHeight = 42;
-            Rectangle labelRect = new(bounds.X + bounds.Width - labelWidth, bounds.Y - labelHeight, labelWidth, labelHeight + boxStyle.Height / 3);
+            Rectangle labelRect = new(bounds.X + bounds.Width / 4 - labelWidth / 2, bounds.Y, labelWidth, labelHeight);
             DrawAdjustableBox(spriteBatch, boxStyle, labelRect, Color.White * boxOpacity);
-            DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, label, labelRect.Location.ToVector2() + new Vector2(TextPadding.X, labelHeight / 3), Color.White * boxOpacity, Color.Black * boxOpacity);
-            
-            DrawAdjustableBox(spriteBatch, boxStyle, bounds, Color.White * boxOpacity);
-            int maxTextWidth = bounds.Width - (int)(TextPadding.X * 1.9f);
+            DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, label, labelRect.Location.ToVector2() + new Vector2(TextPadding.X, labelHeight / 4), Color.White * boxOpacity, Color.Black * boxOpacity);
+
+            //int maxTextWidth = bounds.Width - (int)(TextPadding.X * 1.9f);
+            int maxTextWidth = (int)((bounds.Width / 2) - TextPadding.X * 2f);
             var lines = TextHelpers.WordwrapStringSuperSmart(_text, Color.White, font.Value, maxTextWidth, 10);
             for (int i = 0; i < lines.Count; i++)
             {
                 var line = lines[i];
 
-                Vector2 drawPos = new(bounds.X + TextPadding.X, bounds.Y + TextPadding.Y + (i * 32f));
+                Vector2 drawPos = new(bounds.X + TextPadding.X, bounds.Y + TextPadding.Y + labelHeight + (i * 32f));
                 DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, [.. line], drawPos, Color.White * boxOpacity, Color.Black * boxOpacity);
                 
             }
@@ -190,6 +201,7 @@ namespace ITD.Content.UI
         }
         public void DrawButtons(SpriteBatch spriteBatch, Texture2D texture, Asset<DynamicSpriteFont> font)
         {
+            closeButton?.DrawButton(spriteBatch, texture, 1f, font);
             if (buttons.Any(b => b.Active))
             {
                 if (buttonsOpacity < 1f)
@@ -299,19 +311,30 @@ namespace ITD.Content.UI
         public void PositionButtons()
         {
             Rectangle boxBounds = GetDimensions().ToRectangle();
-            Rectangle buttonSpace = new(boxBounds.X + (int)TextPadding.X, boxBounds.Y, boxBounds.Width - (int)TextPadding.X * 2, boxBounds.Height);
-            float countWidth = buttons.Count > 0 ? buttonSpace.Width / buttons.Count : default;
+
+            // position the close button:
+            float dim = 64f;
+            closeButton?.SetProperties(boxBounds.Height - dim - TextPadding.Y, boxBounds.Width - dim - TextPadding.X, dim, dim);
+
+            //Rectangle buttonSpace = new(boxBounds.X + (int)TextPadding.X, boxBounds.Y, boxBounds.Width - (int)TextPadding.X * 2, boxBounds.Height);
+            Rectangle buttonSpace = new(boxBounds.X + (int)TextPadding.X, boxBounds.Y, (boxBounds.Width / 2) - (int)TextPadding.X * 2, (int)(boxBounds.Height - dim - (TextPadding.Y * 3f)));
+            //float countWidth = buttons.Count > 0 ? buttonSpace.Width / buttons.Count : default;
+            float countHeight = buttons.Count > 0 ? buttonSpace.Height / buttons.Count : default;
             for (int i = 0; i < buttons.Count; i++)
             {
                 DialogueButton button = buttons[i];
                 // buttons must be positioned in accordance to the text padding.
-                // furthermore, we can get the desired width using Helpers.Remap()
+                /*
                 float stringWidth = font.Value.MeasureString(button.Label).X + TextPadding.X * 2f;
                 float buttonWidth = Math.Max(stringWidth, countWidth);
                 float buttonHeight = 64f;
                 float left = TextPadding.X + buttonWidth * i;
                 float top = boxBounds.Height - buttonHeight - TextPadding.Y;
-                button.SetProperties(top, left, buttonWidth, buttonHeight);
+                */
+                float buttonWidth = buttonSpace.Width;
+                float left = boxBounds.Width / 2 + TextPadding.X;
+                float top = TextPadding.Y + countHeight * i;
+                button.SetProperties(top, left, buttonWidth, countHeight);
             }
         }
         public void GenerateButtons()
@@ -344,7 +367,6 @@ namespace ITD.Content.UI
                 buttonBuffer.Add(new GeneratedButtonData(label, realAction, realKey));
                 buttonIndex++;
             }
-            Main.NewText(buttonBuffer.Count);
             return [.. buttonBuffer];
         }
         public void TweenSpeakerHead()
@@ -362,6 +384,7 @@ namespace ITD.Content.UI
         {
             buttonsOpacity = 0f;
             RemoveAllChildren();
+            OnInitialize();
             buttons.Clear();
             tweenReference = null;
             BeginTypewriter(key);
@@ -396,6 +419,7 @@ namespace ITD.Content.UI
                 speakerHeadYPositionPercentOffset = 0f;
                 speakerHeadVerticalScale = 1f;
                 RemoveAllChildren();
+                OnInitialize();
                 buttons.Clear();
                 drawSpeakerHead = false;
             }));
@@ -407,6 +431,10 @@ namespace ITD.Content.UI
         /// Does nothing.
         /// </summary>
         None,
+        /// <summary>
+        /// Does as it says.
+        /// </summary>
+        CloseDialogueBox,
         /// <summary>
         /// meme
         /// </summary>
@@ -428,15 +456,21 @@ namespace ITD.Content.UI
         public string Label { get; private set; } = buttonData.Label;
         public string GoTo { get; private set; } = buttonData.GoTo;
         public bool Active { get; set; }
+        public Asset<Texture2D> Texture { get; set; }
         private Color drawColor = Color.White;
         private float extraSize = 0f;
         private Keyframe<float> tweenReference;
         public void DrawButton(SpriteBatch spriteBatch, Texture2D texture, float opacity, Asset<DynamicSpriteFont> font)
         {
             //Main.NewText(opacity);
-            float realOpacity = opacity * EasingFunctions.OutQuad((Parent as WorldNPCDialogueBox).openProgress);
+            WorldNPCDialogueBox parent = Parent as WorldNPCDialogueBox;
+            float realOpacity = opacity;
+            if (parent != null)
+                realOpacity *= EasingFunctions.OutQuad(parent.openProgress);
             Rectangle bounds = GetDimensions().ToRectangle().Inflated((int)extraSize);
             DrawAdjustableBox(spriteBatch, texture, bounds, drawColor * realOpacity);
+            if (Texture != null)
+                spriteBatch.Draw(Texture.Value, bounds.Center.ToVector2(), null, Color.White * opacity, 0f, Texture.Size() / 2f, 1f, SpriteEffects.None, 0f);
             Vector2 textSize = font.Value.MeasureString(Label);
             Vector2 textPosition = bounds.Center.ToVector2() - (textSize * 0.5f);
             WorldNPCDialogueBox.DrawColorCodedStringWithShadowWithValidOpacity(spriteBatch, font, Label, textPosition, Color.White * realOpacity, Color.Black * opacity);
@@ -491,10 +525,15 @@ namespace ITD.Content.UI
             {
                 case DialogueAction.None:
                     break;
-                case DialogueAction.KillPlayerInstantly:
-                    Main.LocalPlayer.GetITDPlayer().KillByLocalization("MudkarpEvil");
+
+                case DialogueAction.CloseDialogueBox:
                     UILoader.GetUIState<WorldNPCDialogue>().Close();
                     break;
+
+                case DialogueAction.KillPlayerInstantly:
+                    Main.LocalPlayer.GetITDPlayer().KillByLocalization("MudkarpEvil");
+                    goto case DialogueAction.CloseDialogueBox;
+
                 case DialogueAction.OpenMudkarpShop:
                     // (again, good luck implementing this, Ajax)
                     break;

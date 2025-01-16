@@ -1,4 +1,5 @@
-﻿using ITD.Players;
+﻿using ITD.Content.NPCs.Friendly.WorldNPCs;
+using ITD.Players;
 using ITD.Systems.Recruitment;
 using ITD.Utilities;
 using System;
@@ -35,6 +36,15 @@ namespace ITD.Systems
                 "blueshroomunderground" or "blueshroomsunderground" or "blueshroomgroves" or "blueshroomgrovesunderground" or "bgunderground" => modPlayer.ZoneBlueshroomsUnderground,
                 "deepdesert" or "dd" => modPlayer.ZoneDeepDesert,
                 "catacombs" => modPlayer.ZoneCatacombs,
+                _ => false,
+            };
+        }
+        public static bool TalkingTo(Player player, string worldNPC)
+        {
+            ITDPlayer modPlayer = player.GetITDPlayer();
+            return worldNPC.ToLower() switch
+            {
+                "mudkarp" => Main.npc[modPlayer.TalkWorldNPC].ModNPC is Mudkarp,
                 _ => false,
             };
         }
@@ -87,6 +97,7 @@ namespace ITD.Systems
                 "Downed" => Downed(args[1].ToString()),
                 "Zone" => Zone(CastToPlayer(args[1]), args[2].ToString()),
                 "RegisterRecruitment" => TryRegisterRecruitment(args),
+                "TalkingTo" or "TalkingToWorldNPC" => TalkingTo(CastToPlayer(args[1]), args[2].ToString()),
                 _ => null,
             };
         }

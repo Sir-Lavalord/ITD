@@ -18,6 +18,11 @@
 // - the Appearance key dictates which horizontal frame to use for the speaker head. whatever that is depends on the specific speaker.
 
 // that should be all you need to write new dialogue instances and have them behave as expected!
+
+// special note:
+// button generation needs a full mod reload in order to work after adding new buttons, because the game doesn't generate new LocalizedTexts on the fly, only on load.
+// changing the functions of those buttons and any text should work with just saving the new language files though.
+
 Mudkarp: {
 	Name: "{$NPCs.Mudkarp.DisplayName}"
 

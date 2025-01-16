@@ -88,7 +88,9 @@ namespace ITD
             }
             ChatManager.Register<WavyHandler>(
             [
-                "mvsin"
+                "mvsin",
+                "mvsine",
+                "mvwave"
             ]);
             ChatManager.Register<ShakyHandler>(
             [
