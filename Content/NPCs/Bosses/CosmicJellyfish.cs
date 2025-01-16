@@ -3,8 +3,6 @@ using ITD.Content.Items.PetSummons;
 using ITD.Content.Items.Placeable;
 using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Content.Projectiles.Hostile;
-using ITD.Content.Projectiles.Hostile.CosjelTest;
-
 using ITD.Players;
 using ITD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
@@ -251,8 +249,6 @@ namespace ITD.Content.NPCs.Bosses
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, vel,
-                             ModContent.ProjectileType<CosmicSlop>(), NPC.damage, 0f, -1, NPC.whoAmI, NPC.whoAmI);
                         }
                     }
                                         if (AITimer1++ >= 400 + Main.rand.Next(-100, 150))

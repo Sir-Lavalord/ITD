@@ -1214,6 +1214,10 @@ ShaleBricksItem: {
 }
 
 Potshot: {
-	// Tooltip: ""
+	/* Tooltip:
+		'''
+		Creates a reticle that targets the closest target
+		Non-target receives more damage on hit
+		''' */
 	// DisplayName: Potshot
 }
