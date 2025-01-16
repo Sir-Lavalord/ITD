@@ -19,8 +19,9 @@ using ITD.Content.Buffs.MinionBuffs;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner
 {
-    public class ManuscriptLumberProj : ModProjectile
+    public class ManuscriptMinerProj : ModProjectile
     {
+        //reverted kys 
         private enum ActionState
         {
             Spawn,
@@ -35,13 +36,10 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         private float JumpX = 0;
         private float JumpY = 0;
         private float lastDir;
-        private float jumpBoost;
-        private float jumpCD;
-        private float seekCD;
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 11;
+            Main.projFrames[Projectile.type] = 13;
             Main.projPet[Type] = true;
             ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Projectile.type], 6)
                 .WithOffset(-10, -20f)
@@ -51,7 +49,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         public override void SetDefaults()
         {
             Projectile.height = 80;
-            Projectile.width = 50;
+            Projectile.width = 80;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.penetrate = -1;
@@ -67,8 +65,9 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         {
             if (Main.mouseRight && player.GetModPlayer<WaxwellPlayer>().codexClickCD <= 0f)
             {
-/*                Projectile.Kill();
-*/          }
+                /*                Projectile.Kill();
+                */
+            }
         }
         public override Color? GetAlpha(Color lightColor)
         {
@@ -103,16 +102,15 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             else if (Projectile.velocity.X < -0.25f)
                 Projectile.spriteDirection = -1;
             CheckActive(player);
-            Main.NewText(Projectile.velocity.Y.ToString(), Color.Red);
-                Projectile.velocity.Y += 0.3f;
+            Projectile.velocity.Y += 0.6f;
         }
         private void SpawnBehavior()//Not onspawn
         {
             Projectile.frameCounter++;
 
-            if (Projectile.frameCounter > 10)
+            if (Projectile.frameCounter > 8)
             {
-                if (Projectile.frame < 10)
+                if (Projectile.frame < Main.projFrames[Projectile.type] - 1)
                 {
                     Projectile.frame++;
                 }
@@ -123,7 +121,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Projectile.frameCounter = 0;
             }
         }
-            private void IdleBehavior()
+        private void IdleBehavior()
         {
             if (treePos == Point.Zero)
             {
@@ -131,6 +129,10 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 if (Projectile.velocity.Y == 0 && (HasObstacle() || (Projectile.Distance(player.Center) > 205f && Projectile.position.X == Projectile.oldPosition.X)))
                 {
                     Projectile.velocity.Y = -10f;
+                }
+                if (Projectile.velocity.Y > -16f)
+                {
+                    Projectile.velocity.Y += 0.3f;
                 }
                 if (Math.Abs(player.Center.X - Projectile.Center.X + 40f * Projectile.minionPos) > 160f)
                 {
@@ -172,6 +174,10 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 {
                     Projectile.velocity.Y = -10f;
                 }
+                if (Projectile.velocity.Y > -16f)
+                {
+                    Projectile.velocity.Y += 0.3f;
+                }
                 Point tileCoords = Projectile.position.ToTileCoordinates();
                 Point tileSize = (Projectile.Size / 16).ToPoint();
                 Rectangle rect = new Rectangle(tileCoords.X, tileCoords.Y, tileSize.X, tileSize.Y);
@@ -185,7 +191,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                             Projectile.frame = 0;
                             continue;
                         }
-                        if (Main.tileAxe[t.TileType] && TileHelpers.SolidTile(i, j + 1))
+                        if (TileID.Sets.IsATreeTrunk[t.TileType] && TileHelpers.SolidTile(i, j + 1))
                         {
                             AI_State = ActionState.Chopping;
 
@@ -222,49 +228,37 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                             Projectile.frame = 5;
                             continue;
                         }
-                        if (Main.tileAxe[t.TileType] && TileHelpers.SolidTile(i, j + 1))
+                        if (TileID.Sets.IsATreeTrunk[t.TileType] && TileHelpers.SolidTile(i, j + 1))
                         {
                             if (++Projectile.frameCounter >= 8)
                             {
-                                    if (Projectile.frame < 10)
-                                    {
-                                        Projectile.frame++;
-                                    }
-                                    else
-                                    {
-                                        Projectile.frame = 5;
-                                    }
-                                    Projectile.frameCounter = 0;
-                                
-                            }
-                            if (FindAxe(player) != null)
-                            {
-                                if (ChopCD-- <= 0)
+                                if (Projectile.frame < Main.projFrames[Projectile.type] - 1)
                                 {
-                                    if (FindAxe(player).useTime < 60)
-                                    {
-                                        ChopCD = FindAxe(player).useTime;
-                                    }
-                                    else
-                                    {
-                                        ChopCD = 60;
-                                    }
-                                    if (FindAxe(player).axe > 30)
-                                    {
-                                        player.PickTile(i, j, FindAxe(player).axe);
-                                    }
-                                    else
-                                        player.PickTile(i, j, 30);
+                                    Projectile.frame++;
                                 }
-                            }
-                            else
-                            {
-                                if (ChopCD-- <= 0)
+                                else
                                 {
-                                    ChopCD = 90;
-                                    player.PickTile(i, j, 30);
+                                    Projectile.frame = 8;
+                                }
+                                Projectile.frameCounter = 0;
 
+                            }
+                            if (ChopCD-- <= 0)
+                            {
+                                if (FindAxe(player).useTime < 60)
+                                {
+                                    ChopCD = FindAxe(player).useTime;
                                 }
+                                else
+                                {
+                                    ChopCD = 60;
+                                }
+                                    if (FindAxe(player).axe > 30)
+                                {
+                                    player.PickTile(i, j, FindAxe(player).axe);
+                                }
+                                else
+                                    player.PickTile(i, j, 30);
                             }
                         }
                     }
@@ -276,12 +270,11 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             }
             else
             {
-                
                 AI_State = ActionState.Idle;
             }
         }
-        
-            public bool HasObstacle()
+
+        public bool HasObstacle()
         {
             int tileWidth = 2;
             int tileX = (int)(Projectile.Center.X / 16f) - tileWidth;
@@ -332,7 +325,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                     {
                         continue;
                     }
-                    if (Main.tileAxe[t.TileType] && TileHelpers.SolidTile(i, j + 1))
+                    if (TileID.Sets.IsATreeTrunk[t.TileType] && TileHelpers.SolidTile(i, j + 1))
                     {
                         detectedPoints.Add(new Point(i, j));
                     }

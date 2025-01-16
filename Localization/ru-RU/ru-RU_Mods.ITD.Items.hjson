@@ -1206,3 +1206,8 @@ ShaleBricksItem: {
 	// DisplayName: Shale Bricks Item
 	// Tooltip: ""
 }
+
+Potshot: {
+	// Tooltip: ""
+	// DisplayName: Potshot
+}

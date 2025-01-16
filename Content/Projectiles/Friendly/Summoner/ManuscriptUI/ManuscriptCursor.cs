@@ -19,8 +19,9 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
             Projectile.aiStyle = 0;
             Projectile.friendly = false;
             Projectile.penetrate = -1;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.timeLeft = 999999;
+            Projectile.extraUpdates = 20;
         }
         public Vector2 PlayerOffset = Vector2.Zero;
 
@@ -60,8 +61,9 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
                 switch (player.GetModPlayer<WaxwellPlayer>().codexMode)
                 {
                     case 1:
-                        Main.NewText("WIP", Color.Violet);
-                        type = ModContent.ProjectileType<ManuscriptSneakProj>();
+                        player.CheckMana(50, true);
+                        player.AddBuff(ModContent.BuffType<ManuscriptLumberBuff>(), 10);
+                        type = ModContent.ProjectileType<ManuscriptMinerProj>();
                         break;
                     case 2:
                         Main.NewText("WIP", Color.Violet);

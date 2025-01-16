@@ -1212,3 +1212,12 @@ ShaleBricksItem: {
 	DisplayName: Shale Bricks Item
 	Tooltip: ""
 }
+
+Potshot: {
+	Tooltip:
+		'''
+		Creates a reticle that targets the closest target
+		Non-target receives more damage on hit
+		'''
+	DisplayName: Potshot
+}

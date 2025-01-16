@@ -121,22 +121,25 @@ namespace ITD.Content.NPCs
             {
                 Player player = Main.player[npc.lastInteraction];//the man behind the slaughter
                 var modPlayer = player.GetITDPlayer();
-                if (modPlayer.soulTalisman)
+                if (npc.CanBeChasedBy())//no critter
                 {
-                    modPlayer.soulTalismanEffect = true;
-                    player.AddBuff(ModContent.BuffType<SoulTalismanBuff>(), 400);
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    if (modPlayer.soulTalisman)
                     {
-                        for (int i = 0; i <= 2 * (modPlayer.soulTalismanStack + 1); i++)
+                        modPlayer.soulTalismanEffect = true;
+                        player.AddBuff(ModContent.BuffType<SoulTalismanBuff>(), 400);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Vector2 vel = Main.rand.NextVector2Circular(5,5);
+                            for (int i = 0; i <= 2; i++)
+                            {
+                                Vector2 vel = Main.rand.NextVector2Circular(5, 5);
                                 Projectile.NewProjectile(npc.GetSource_Death(), npc.Center, vel, ProjectileID.SpectreWrath,
-                                    (int)player.GetDamage(DamageClass.Generic).ApplyTo(30 * (modPlayer.soulTalismanStack+1)), 0, Main.myPlayer);                            
+                                    (int)player.GetDamage(DamageClass.Generic).ApplyTo(30 * (modPlayer.soulTalismanStack + 1)), 0, Main.myPlayer);
+                            }
                         }
                     }
                 }
+                }
             }
-        }
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
             if (necrosis)

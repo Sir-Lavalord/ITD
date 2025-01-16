@@ -48,7 +48,10 @@ namespace ITD.Content.Buffs.EquipmentBuffs
             {
                 modPlayer.soulTalismanStack++;
             }
-            player.buffTime[buffIndex] += time;
+            if (player.buffTime[buffIndex] <= 1200)
+            {
+                player.buffTime[buffIndex] += time;
+            }
             return false;
         }
     }

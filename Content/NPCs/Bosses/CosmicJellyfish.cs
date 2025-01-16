@@ -3,6 +3,8 @@ using ITD.Content.Items.PetSummons;
 using ITD.Content.Items.Placeable;
 using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Content.Projectiles.Hostile;
+using ITD.Content.Projectiles.Hostile.CosjelTest;
+
 using ITD.Players;
 using ITD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
@@ -242,38 +244,24 @@ namespace ITD.Content.NPCs.Bosses
                         AttackCount = 0;
                     }
                     break;
-                case 1: //sludge
-                    AITimer1++;
-                    if (AITimer1 == 50)
+                case 1: //Slop rain
+                    distanceAbove = 400;
+                    if (AITimer2++ == 150)
                     {
-                        int projectileAmount = Main.rand.Next(5, 8);
-
-                        if (bSecondStage)
-                        {
-                            projectileAmount = Main.rand.Next(7, 10);
-                        }
-                        else
-                        {
-                            projectileAmount = Main.rand.Next(3, 6);
-                        }
-                        float XVeloDifference = 2f;
-                        float startXVelo = -((float)(projectileAmount - 1) / 2) * (float)XVeloDifference;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            for (int i = 0; i < projectileAmount; i++)
-                            {
-                                Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -8f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity + projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 30, 0, -1, NPC.whoAmI);
-                            }
+                            Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, vel,
+                             ModContent.ProjectileType<CosmicSlop>(), NPC.damage, 0f, -1, NPC.whoAmI, NPC.whoAmI);
                         }
                     }
-                    else if (AITimer1 == 150 || AITimer1 == 100 && bSecondStage)
+                                        if (AITimer1++ >= 400 + Main.rand.Next(-100, 150))
                     {
-                        AttackID++;
                         AITimer1 = 0;
+                        AITimer2 = 0;
+                        AttackID++;
                     }
-
-                    break;
+                        break;
                 case 2: //zingers
                     if (AITimer2++ >= 260 || expertMode && AITimer2++ >= 220 || masterMode && AITimer2++ >= 180)
                     {
@@ -524,10 +512,10 @@ namespace ITD.Content.NPCs.Bosses
                     break;
             }
         }
+        float distanceAbove = 250f;//True melee
 
         private void Movement(Player player)//___________________________________________________________________________________________________________________________________________________
         {
-            float distanceAbove = 250f;//True melee
             Vector2 toPlayer = player.Center - NPC.Center;
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
             Vector2 abovePlayer = toPlayer + new Vector2(0f, -distanceAbove);
