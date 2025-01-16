@@ -117,7 +117,7 @@ namespace ITD.Content.Items.Weapons.Ranger
             for (int i = 0; i < 4; i++)
             {
                 float piOffsetAmt = (float)i - 3f / 2f;
-                Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(miss * 100));
+                Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(miss * 150));
                 newVelocity *= 1f - Main.rand.NextFloat(miss);
                 Vector2 offsetSpawn = bulletVel.RotatedBy((double)((MathHelper.Pi/10) * piOffsetAmt), default);
                 int proj = Projectile.NewProjectile(source, vector2.X + offsetSpawn.X, vector2.Y + offsetSpawn.Y, newVelocity.X, newVelocity.Y, type, damage, knockback, player.whoAmI);
@@ -127,9 +127,9 @@ namespace ITD.Content.Items.Weapons.Ranger
             for (int i = 0; i < 12; i++)
             {
                 Vector2 offsetSpawn = bulletVel.RotatedBy((double)((MathHelper.Pi / 10)), default);
-                Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(miss * 50));
+                Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(miss * 60));
                 newVelocity *= Main.rand.NextFloat(2f);
-                Dust dust = Dust.NewDustDirect(vector2, Item.width, Item.height/3, DustID.Smoke, 0f, 0f, 0, default, 2f);
+                Dust dust = Dust.NewDustDirect(vector2, Item.width/2, Item.height/2, DustID.Smoke, 0f, 0f, 0, default, 2f);
                 dust.noGravity = true;
                 dust.velocity = -newVelocity;
                 Dust dust2 = Dust.NewDustDirect(vector2, Item.width / 2, Item.height / 2, DustID.Torch, 0f, 0f, 0, default, 2f);
