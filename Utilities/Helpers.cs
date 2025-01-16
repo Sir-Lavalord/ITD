@@ -1,24 +1,21 @@
-﻿using ITD.Content.Tiles.BlueshroomGroves;
-using System;
+﻿using System;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using Terraria.Audio;
 using static ITD.Utilities.TileHelpers;
 
 namespace ITD.Utilities
 {
-    public struct RaycastData(Vector2 end, bool hit, float lengthSQ, Tile? tile = null, NPC npc = null)
+    public readonly record struct RaycastData(Vector2 end, bool hit, float lengthSQ, Tile? tile = null, NPC npc = null)
     {
-        public Vector2 End = end;
-        public bool Hit = hit;
-        public float LengthSQ = lengthSQ;
+        public readonly Vector2 End = end;
+        public readonly bool Hit = hit;
+        public readonly float LengthSQ = lengthSQ;
         public readonly float Length { get { return MathF.Sqrt(LengthSQ); } }
-        public Tile? Tile = tile;
-        public NPC NPC = npc;
+        public readonly Tile? Tile = tile;
+        public readonly NPC NPC = npc;
     }
     public static class Helpers
     {

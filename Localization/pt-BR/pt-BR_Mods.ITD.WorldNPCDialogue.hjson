@@ -60,3 +60,47 @@ Mudkarp: {
 		}
 	}
 }
+
+Phill: {
+	// Name: "{$NPCs.Mudkarp.DisplayName}"
+
+	FirstTimeSpeaking: {
+		// Body: "[mvshake:Oi, fleshface! Whatcha doin' down here with all that heavy stuff? Yar bones will snap like tiny lil' twigs!]"
+		// Appearance: "0"
+
+		Buttons: {
+			Button0: {
+				// Key: Hume.FirstTimeSpeaking
+				// Text: ...
+			}
+		}
+	}
+
+	FirstTimeSpeaking2: {
+		// Body: "[mvshake:Now look at us! Kept alive against our will! Dry like sand, and brittle like eggs!]"
+		// Appearance: "0"
+
+		Buttons: {
+			Button0: {
+				// Action: CloseDialogueBox
+				// Text: ...
+			}
+		}
+	}
+}
+
+Hume: {
+	// Name: "{$NPCs.Mudkarp.DisplayName}"
+
+	FirstTimeSpeaking: {
+		// Body: "[mvshake:That's rite, we used to be young and full of life just like you! Adventurers at heart... until we decided to come down here!]"
+		// Appearance: "0"
+
+		Buttons: {
+			Button0: {
+				// Key: Phill.FirstTimeSpeaking2
+				// Text: ...
+			}
+		}
+	}
+}
