@@ -14,8 +14,8 @@ AlloySword: {
 }
 
 ElectrumBow: {
-	// DisplayName: Electrum Bow
-	// Tooltip: Electrifies wooden arrows
+	DisplayName: Elektrum Bogen
+	Tooltip: Elektrifiziert Holzpfeile
 }
 
 RhodiumBroadsword: {
@@ -266,13 +266,13 @@ BlueshroomCapBlock: {
 }
 
 BlueshroomCap: {
-	// SetBonus: Immunity to slowing debuffs
-	// DisplayName: Blueshroom Cap
-	/* Tooltip:
+	SetBonus: Immun gegen Verlangsamung
+	DisplayName: Blaupilz Kappe
+	Tooltip:
 		'''
-		7% increased summon damage
-		Increases your max number of minions by 1
-		''' */
+		Erhöht den Beschwörungsschaden um 7%
+		erhöht die maximale Anzahl deiner Günstlinge um 1
+		'''
 }
 
 SnowyLantern: {
@@ -281,7 +281,7 @@ SnowyLantern: {
 }
 
 DriversIncense: {
-	DisplayName: Weihrauch für Fahrer
+	DisplayName: Duftbaum
 	Tooltip: Erhöht die Bewegungsgeschwindigkeit von Reittieren permanent um 10%
 	// MunchiesExplanation: Shimmer an otherwordly vehicle's unlocker
 }
@@ -581,29 +581,29 @@ CyaniteBoomerang: {
 }
 
 CyaniteSpear: {
-	// DisplayName: Cyanite Spear
-	// Tooltip: ""
+	DisplayName: Cyanit Speer
+	Tooltip: ""
 }
 
 GalacticJellyBean: {
-	// DisplayName: Galactic Jelly Bean
-	// Tooltip: Summons a cosmic hand to attack your foes
+	DisplayName: Galaktische Gelleé Bohne
+	Tooltip: Beschwört eine kosmische Hand, die deine Gegner angreift
 }
 
 EatersTail: {
-	// DisplayName: Tail of the Eater
-	/* Tooltip:
+	DisplayName: Schwanz des Weltenfressers
+	Tooltip:
 		'''
-		Splits your life into two
-		Fatal damage does not carry onto next life
-		This can only happen every 1 minute
-		Cooldown only reduces when you have max life
-		''' */
-	// TailLost: TAIL LOSS
+		Teilt dein Leben in zwei
+		Tötlicher Schaden wird nicht auf die zweite Hälfte übertragen
+		Dieser Effekt kann nur alle 60 Sekunden verwendet werden
+		Die Abklinzeit verringert sich nur bei vollem Leben
+		'''
+	TailLost: SCHWANZ VERLOREN
 }
 
 Prophylaxis: {
-	// DisplayName: Prophylaxis
+	DisplayName: Prophylaxe
 	/* Tooltip:
 		'''
 		Using a healing item causes you to bleed out
@@ -613,11 +613,11 @@ Prophylaxis: {
 
 BottomlessSandBucket: {
 	// DisplayName: Bottomless Sand Bucket
-	/* Tooltip:
+	Tooltip:
 		'''
-		Contains an endless amount of sand
-		Can be poured out
-		''' */
+		enthält eine unendliche Menge an Sand
+		Kann ausgeschüttet werden
+		'''
 }
 
 SlimeSecretionGland: {
