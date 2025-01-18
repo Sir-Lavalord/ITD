@@ -26,18 +26,23 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 			ITDSnaptrap snaptrap = player.GetSnaptrapPlayer().GetActiveSnaptrap();
             return snaptrap == null || snaptrap.IsStickingToTarget;
 		}
-        //public override bool AltFunctionUse(Player player) => true;
+        public override bool AltFunctionUse(Player player) => true;
         //uh oh custom code
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
             ITDSnaptrap snaptrap = player.GetSnaptrapPlayer().GetActiveSnaptrap();
-            if (snaptrap != null && snaptrap.IsStickingToTarget)
+            if (snaptrap != null && snaptrap.IsStickingToTarget && player.altFunctionUse == 2)
             {
                 type = ModContent.ProjectileType<ChainwhipWhip>();
                 return;
             }
         }
-
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            if (type == ModContent.ProjectileType<ChainwhipWhip>())
+                return player.GetSnaptrapPlayer().GetActiveSnaptrap() != null;
+            return player.GetSnaptrapPlayer().ShootSnaptrap();
+        }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             float pulseAmount = Main.mouseTextColor / 255f;

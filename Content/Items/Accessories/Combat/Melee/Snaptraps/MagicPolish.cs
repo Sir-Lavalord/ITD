@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Systems;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps
 {
@@ -19,8 +20,8 @@ namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<SnaptrapPlayer>().LatchTimeModifer += 1;
-            player.GetModPlayer<SnaptrapPlayer>().RetractMultiplier += 0.05f;
+            player.GetSnaptrapPlayer().FullPowerHitsModifier.Flat += 1;
+            player.GetSnaptrapPlayer().RetractVelocityModifier += 0.05f;
         }
     }
 }

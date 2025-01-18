@@ -10,7 +10,6 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
     public abstract class ITDSnaptrapItem : ModItem
     {
         public override bool CanUseItem(Player player) => player.GetSnaptrapPlayer().CanUseSnaptrap;
-        public override bool AltFunctionUse(Player player) => true;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) => player.GetSnaptrapPlayer().ShootSnaptrap();
         //not all of them (Vocal Zero) use the same tooltip line
         /*        public override void ModifyTooltips(List<TooltipLine> tooltips)

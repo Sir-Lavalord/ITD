@@ -7,33 +7,23 @@ namespace ITD.Systems
     public class SnaptrapPlayer : ModPlayer
     {
         public bool ChainWeightEquipped;
-        public float LengthIncrease;
-        public float RetractMultiplier;
-        public int LatchTimeModifer;
-        public int WarningModifer;
-
-        public bool CanUseSnaptrap
-        {
-            get
-            {
-                if (Player.altFunctionUse == 2 && GetActiveSnaptrap() != null)
-                    return true;
-                return GetActiveSnaptrap() is null;
-            }
-        }
+        public StatModifier LengthModifier;
+        public StatModifier RetractVelocityModifier;
+        public StatModifier FullPowerHitsModifier;
+        public StatModifier WarningModifier;
+        public bool CanUseSnaptrap => (GetActiveSnaptrap() is null || GetActiveSnaptrap().IsStickingToTarget);
         public override void ResetEffects()
         {
             ChainWeightEquipped = false;
-            LengthIncrease = 0f;
-            RetractMultiplier = 0f;
-            LatchTimeModifer = 0;
-            WarningModifer = 0;
+            LengthModifier = StatModifier.Default;
+            RetractVelocityModifier = StatModifier.Default;
+            FullPowerHitsModifier = StatModifier.Default;
+            WarningModifier = StatModifier.Default;
         }
         public bool ShootSnaptrap()
         {
             ITDSnaptrap snaptrap = GetActiveSnaptrap();
-            bool rightClick = Player.altFunctionUse == 2;
-            if (snaptrap is null && !rightClick)
+            if (snaptrap is null)
                 return true;
             else if (snaptrap is not null)
                 snaptrap.retracting = true;
