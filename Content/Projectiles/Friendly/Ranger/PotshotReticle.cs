@@ -78,7 +78,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 Projectile.alpha = (int)(255 * spindown);
                 Projectile.scale = 1 + 2 * spindown;
             }
-            if (!HomingTarget.active || HomingTarget.life <= 0 || HomingTarget.Distance(player.Center) >= 500)
+            if (!HomingTarget.active || HomingTarget.life <= 0 || HomingTarget.Distance(player.Center) >= 400)
             {
                 Projectile.Kill();
             }

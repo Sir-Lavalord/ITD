@@ -43,7 +43,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         }
         public override void SetDefaults()
         {
-            Item.damage = 20;
+            Item.damage = 12;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 70;
             Item.height = 40;
@@ -69,13 +69,13 @@ namespace ITD.Content.Items.Weapons.Ranger
             if (npcs.Length > 0)
             {
 
-                    NPC target = npcs.OrderByDescending(npc => npc.Distance(player.Center)).FirstOrDefault();
+                    NPC target = npcs.OrderByDescending(npc => npc.Distance(player.Center)).LastOrDefault();
                 if (player.ownedProjectileCounts[ModContent.ProjectileType<PotshotReticle>()] < 1)
                 {
                     Vector2 FakeMountedCenter = player.MountedCenter;
                     FakeMountedCenter.Y -= 5;
                     Vector2 vector2 = player.RotatedRelativePoint(FakeMountedCenter, true);
-                    ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.WallOfFleshGoatMountFlames, new ParticleOrchestraSettings
+                    ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.FlameWaders, new ParticleOrchestraSettings
                     {
                         PositionInWorld = vector2,
                     }, player.whoAmI);
@@ -126,13 +126,12 @@ namespace ITD.Content.Items.Weapons.Ranger
             }
             for (int i = 0; i < 12; i++)
             {
-                Vector2 offsetSpawn = bulletVel.RotatedBy((double)((MathHelper.Pi / 10)), default);
                 Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(miss * 60));
                 newVelocity *= Main.rand.NextFloat(2f);
-                Dust dust = Dust.NewDustDirect(vector2, Item.width/2, Item.height/2, DustID.Smoke, 0f, 0f, 0, default, 2f);
+                Dust dust = Dust.NewDustDirect(player.MountedCenter, Item.width/2, Item.height/2, DustID.Smoke, 0f, 0f, 0, default, 2f);
                 dust.noGravity = true;
                 dust.velocity = -newVelocity;
-                Dust dust2 = Dust.NewDustDirect(vector2, Item.width / 2, Item.height / 2, DustID.Torch, 0f, 0f, 0, default, 2f);
+                Dust dust2 = Dust.NewDustDirect(player.MountedCenter, Item.width / 2, Item.height / 2, DustID.Torch, 0f, 0f, 0, default, 2f);
                 dust2.noGravity = true;
                 dust2.velocity = -newVelocity;
             }
