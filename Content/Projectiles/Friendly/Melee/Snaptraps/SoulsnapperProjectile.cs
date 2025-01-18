@@ -14,15 +14,13 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public static LocalizedText OneTimeLatchMessage { get; private set; }
         int constantEffectFrames = 60;
         int constantEffectTimer = 0;
-        public override void SetSnaptrapProperties()
+        public override void SetSnaptrapDefaults()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(SoulsnapperProjectile)}.OneTimeLatchMessage"));
             ShootRange = 16f * 10f;
             RetractAccel = 1.5f;
             ExtraFlexibility = 16f * 2f;
-            FramesBetweenHits = 24;
             MinDamage = 12;
-            MaxDamage = 28;
             FullPowerHitsAmount = 10;
             WarningFrames = 60;
             ChompDust = DustID.CorruptionThorns;
@@ -32,7 +30,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         }
         private void Spit()
         {
-            if (Main.myPlayer == myPlayer.whoAmI)
+            if (Main.myPlayer == Projectile.owner)
             {
                 for (int i = 0; i < 8; i++)
                 {
@@ -40,10 +38,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 }
             }
         }
-        public override void OneTimeLatchEffect()
+        public override bool OneTimeLatchEffect()
         {
-            SoundEngine.PlaySound(snaptrapMetal, Projectile.Center);
-            AdvancedPopupRequest popupSettings = new AdvancedPopupRequest
+            AdvancedPopupRequest popupSettings = new()
             {
                 Text = OneTimeLatchMessage.Value,
                 //Text = "+4% crit chance!",
@@ -53,6 +50,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             };
             PopupText.NewText(popupSettings, Projectile.Center + new Vector2(0f, -50f));
             Spit();
+            return true;
         }
         public override void ConstantLatchEffect()
         {

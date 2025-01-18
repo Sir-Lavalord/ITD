@@ -1,9 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria.ID;
+﻿using Terraria.ID;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ModLoader;
-using Terraria.Audio;
 using ITD.Utilities;
 using System;
 

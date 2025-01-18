@@ -15,26 +15,23 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         int constantEffectTimer = 0;
         int totalEffectTime = 0;
 
-        public override void SetSnaptrapProperties()
+        public override void SetSnaptrapDefaults()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(FrostgripProjectile)}.OneTimeLatchMessage"));
             ShootRange = 18f * 12f;
             RetractAccel = 1.5f;
             ExtraFlexibility = 16f * 2f;
-            FramesBetweenHits = 22;
             MinDamage = 25;
-            MaxDamage = 55;
             FullPowerHitsAmount = 10;
             WarningFrames = 60;
             ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/FrostgripChain";
             ChompDust = DustID.Ice;
             DrawOffsetX = -18;
         }
-        public override void OneTimeLatchEffect()
+        public override bool OneTimeLatchEffect()
         {
             totalEffectTime = 0;
-            SoundEngine.PlaySound(snaptrapMetal, Projectile.Center);
-            AdvancedPopupRequest popupSettings = new AdvancedPopupRequest
+            AdvancedPopupRequest popupSettings = new()
             {
                 Text = OneTimeLatchMessage.Value,
                 //Text = "+4% crit chance!",
@@ -43,8 +40,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 Velocity = Projectile.velocity,
             };
             PopupText.NewText(popupSettings, Projectile.Center + new Vector2(0f, -50f));
-            SoundStyle freeze = new SoundStyle("ITD/Content/Sounds/FrostgripFreeze");
+            SoundStyle freeze = new("ITD/Content/Sounds/FrostgripFreeze");
             SoundEngine.PlaySound(freeze, Projectile.Center);
+            return true;
         }
 
         public override void ConstantLatchEffect()

@@ -1,22 +1,7 @@
-﻿using ITD.Content.Items;
-using ITD.Content.Items.Accessories.Misc;
-using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
-using ITD.Content.Projectiles.Friendly.Summoner;
-using ITD.Physics;
-using ITD.Utilities;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using ReLogic.Utilities;
-using System;
-using System.Collections.Generic;
+﻿using ITD.Utilities;
 using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
-using Terraria.Map;
 using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
@@ -27,24 +12,21 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         int constantEffectFrames = 20;
         int constantEffectTimer = 0;
         float constantEffect = 0f;
-        public override void SetSnaptrapProperties()
+        public override void SetSnaptrapDefaults()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(ChainwhipSnaptrapProjectile)}.OneTimeLatchMessage"));
             ShootRange = 16f * 18f;
             RetractAccel = 1.5f;
             ExtraFlexibility = 16f * 2f;
-            FramesBetweenHits = 22;
             MinDamage = 22;
-            MaxDamage = 66;
             FullPowerHitsAmount = 10;
             WarningFrames = 60;
             ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/ChainwhipChain";
             ChompDust = DustID.Bone;
             DrawOffsetX = -16;
         }
-        public override void OneTimeLatchEffect()
+        public override bool OneTimeLatchEffect()
         {
-            SoundEngine.PlaySound(snaptrapMetal, Projectile.Center);
             AdvancedPopupRequest popupSettings = new AdvancedPopupRequest
             {
                 Text = OneTimeLatchMessage.Value,
@@ -53,6 +35,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 Velocity = Projectile.velocity,
             };
             PopupText.NewText(popupSettings, Projectile.Center + new Vector2(0f, -50f));
+            return true;
         }
 
         public override void ConstantLatchEffect()

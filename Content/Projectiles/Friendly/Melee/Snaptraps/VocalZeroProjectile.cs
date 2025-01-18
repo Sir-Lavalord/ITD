@@ -1,16 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using ReLogic.Utilities;
-using System;
-using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.Graphics.CameraModifiers;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ITD.Content.Dusts;
 using Terraria.Localization;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
@@ -20,19 +10,14 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public static LocalizedText OneTimeLatchMessage { get; private set; }
         int constantEffectFrames = 60;
         int constantEffectTimer = 0;
-        public int maxDamageStatic { get; set; } = 3200; // This is specific to VocalZero
-        float percentageToAdd = 10;
         int effectCount = 0;
-        public override void SetSnaptrapProperties()
+        public override void SetSnaptrapDefaults()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(VocalZeroProjectile)}.OneTimeLatchMessage"));
             ShootRange = 16f * 16f;
             RetractAccel = 1.8f;
-            FramesUntilRetractable = 10;
             ExtraFlexibility = 16f * 4f;
-            FramesBetweenHits = 16;
             MinDamage = 1280;
-            MaxDamage = 3200;
             FullPowerHitsAmount = 10;
             WarningFrames = 80;
             ChompDust = DustID.Blood;
@@ -49,21 +34,21 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 if (effectCount < 10)
                 {
                     effectCount += 1;
-                    float damageToAdd = (float)maxDamageStatic / (100/percentageToAdd);
-                    MaxDamage = maxDamageStatic + ((int)damageToAdd * effectCount);
-                    AdvancedPopupRequest popupSettings = new AdvancedPopupRequest
+                    AdvancedPopupRequest popupSettings = new()
                     {
-                        //Text = "+10% damage!",
-                        Text = OneTimeLatchMessage.WithFormatArgs(percentageToAdd).Value,
+                        Text = OneTimeLatchMessage.WithFormatArgs(10).Value,
                         Color = Color.Red,
-                        DurationInFrames = 60 * 2,
+                        DurationInFrames = 120,
                         Velocity = Projectile.velocity,
                     };
                     PopupText.NewText(popupSettings, Projectile.Center + new Vector2(0f, -50f));
                 }
             }
         }
-
+        public override void ModifyMaxDamage(ref int maxDamage)
+        {
+            maxDamage = (int)(maxDamage * (1f + (effectCount / 10f)));
+        }
         public override void PostAI()
         {
             Dust.NewDust(Projectile.Center, 6, 6, ChompDust, 0f, 0f, 0, default(Color), 1);

@@ -1,21 +1,8 @@
-﻿using ITD.Content.Items;
-using ITD.Content.Items.Accessories.Misc;
-using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
-using ITD.Content.Projectiles.Friendly.Pets;
-using ITD.Physics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using ReLogic.Utilities;
-using System;
-using System.Collections.Generic;
+﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
-using Terraria.Map;
 using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
@@ -26,24 +13,21 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         int constantEffectFrames = 44;
         int constantEffectTimer = 0;
         private int percentage;
-        public override void SetSnaptrapProperties()
+        public override void SetSnaptrapDefaults()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(CopperMandiblesProjectile)}.OneTimeLatchMessage"));
             ShootRange = 16f * 10f;
             RetractAccel = 1.5f;
             ExtraFlexibility = 16f * 2f;
-            FramesBetweenHits = 22;
             MinDamage = 5;
-            MaxDamage = 30;
             FullPowerHitsAmount = 10;
             WarningFrames = 60;
             ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/CopperMandiblesChain";
             ChompDust = DustID.Sand;
             DrawOffsetX = -16;
         }
-        public override void OneTimeLatchEffect()
+        public override bool OneTimeLatchEffect()
         {
-            SoundEngine.PlaySound(snaptrapMetal, Projectile.Center);
             AdvancedPopupRequest popupSettings = new AdvancedPopupRequest
             {
                 Text = OneTimeLatchMessage.Value,
@@ -53,6 +37,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 Velocity = Projectile.velocity,
             };
             PopupText.NewText(popupSettings, Projectile.Center + new Vector2(0f, -50f));
+            return true;
         }
 
         public override void ConstantLatchEffect()
@@ -66,7 +51,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         }
         private void MiniMandible()
         {
-            if (Main.myPlayer == myPlayer.whoAmI)
+            if (Main.myPlayer == Projectile.owner)
             {
                 float speedX = -Projectile.velocity.X * Main.rand.NextFloat(.4f, .7f) + Main.rand.NextFloat(-8f, 8f);
                 float speedY = -Projectile.velocity.Y * Main.rand.Next(40, 70) * 0.01f + Main.rand.Next(-20, 21) * 0.4f;
