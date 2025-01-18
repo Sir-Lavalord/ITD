@@ -2,7 +2,7 @@ Projectiles: {
 	ElectrumSpearProjectile.DisplayName: Elektrumspeer
 	CosmicSludgeBomb.DisplayName: Kosmische Schlammbombe
 	CosmicVoidShard.DisplayName: Kosmischer Splitter der Leere
-	EmberSlash.DisplayName: Bernsteinschlitzer
+	EmberSlash.DisplayName: Glutschlitzer
 
 	DespoticSnaptrapProjectile: {
 		DisplayName: Kiefer der Tiefe
@@ -53,8 +53,8 @@ Projectiles: {
 	}
 
 	CalciumProjectile: {
-		// OneTimeLatchMessage: Vampirism!
-		// DisplayName: Calcium
+		OneTimeLatchMessage: Vampirismus!
+		DisplayName: Kalzium
 	}
 
 	WingedSnowpoffPet.DisplayName: Geflügeltes Schneewölkchen
@@ -78,58 +78,58 @@ Projectiles: {
 	CosmicRayWarn.DisplayName: Gammablitz
 	TouhouBullet.DisplayName: Roter Zwerg
 	RazedWineBottle.DisplayName: Gesprungene Weinflasche
-	EmberSlashOld.DisplayName: Bernsteinschlitzer(alt)
+	EmberSlashOld.DisplayName: Glutschlitzer(alt)
 	NecromatomeProjectile.DisplayName: Zauber der Untoten
 	FishbackerProj.DisplayName: Fangnessel
 	CyaniteBoomerangProjectile.DisplayName: Cyanit Bumerang Projektil
-	// CyaniteSpearProjectile.DisplayName: Cyanite Spear
-	// GalacticJellyBeanHand.DisplayName: Cosmic Hand
-	// FishbackerReflectProj.DisplayName: How did you get this?
+	CyaniteSpearProjectile.DisplayName: Cyanit Speer
+	GalacticJellyBeanHand.DisplayName: Kosmische Hand
+	FishbackerReflectProj.DisplayName: Wie bist du bitte daran gekommen?
 	// SuffocationAura.DisplayName: Suffocation Aura
-	// TheUnburied.DisplayName: The Unburied
-	// PetPigPet.DisplayName: Balloon Pig
-	// GasLeak.DisplayName: Gas Leak
-	// Necroskull.DisplayName: Necroskull
-	// SoulLeak.DisplayName: Soul Leak
-	// NecroSkull.DisplayName: Necro Skull
-	// SoulSkull.DisplayName: Soul Skull
-	// CosmicLightningBlast.DisplayName: Cosmic Lightning Blast
+	TheUnburied.DisplayName: Der Untote
+	PetPigPet.DisplayName: Ballonschweinchen
+	GasLeak.DisplayName: Gasleck
+	Necroskull.DisplayName: Nekroschädel
+	SoulLeak.DisplayName: Seelenleck
+	NecroSkull.DisplayName: Nekroschädel
+	SoulSkull.DisplayName: Seelenschädel
+	CosmicLightningBlast.DisplayName: Kosmischer Blitzschlag
 	// AsterBlasterBlast.DisplayName: Aster Blaster Blast
-	// WindTridentProjectile.DisplayName: Wind Trident Projectile
-	// ShadowKnife.DisplayName: Shadow Knife
+	WindTridentProjectile.DisplayName: Winddreizack Projektil
+	ShadowKnife.DisplayName: Schattenmesser
 	// BloodPactCut.DisplayName: Blood Pact Cut
 	// BloodPactSpirit.DisplayName: Blood Pact Spirit
-	// CyaniteIceShard.DisplayName: Cyanite Ice Shard
-	// CyanideArrow.DisplayName: Cyanite Arrow
-	// CyanideBullet.DisplayName: Cyanite Bullet
-	// FrostichorArrow.DisplayName: Frostichor Arrow
-	// FrostichorBullet.DisplayName: Frostichor Bullet
-	// CosmicJellyfish_LeftHand.DisplayName: Cosmic Jellyfish_ Left Hand
-	// CosmicJellyfish_RightHand.DisplayName: Cosmic Jellyfish_ Right Hand
+	CyaniteIceShard.DisplayName: Cyanit Eissplitter
+	CyanideArrow.DisplayName: Cyanitpfeil
+	CyanideBullet.DisplayName: Cyanitkugel
+	FrostichorArrow.DisplayName: Frostichor Pfeil
+	FrostichorBullet.DisplayName: Frostichor Kugel
+	CosmicJellyfish_LeftHand.DisplayName: Kosmische Qualle_Linke Hand
+	CosmicJellyfish_RightHand.DisplayName: Kosmische Qualle_Rechte Hand
 	// HunterrGreatbowProj.DisplayName: Hunterr Greatbow
 	// HunterrGreatarrow.DisplayName: Hunterr Greatarrow
 
 	CopperMandiblesProjectile: {
-		// OneTimeLatchMessage: Infestation!
-		// DisplayName: Copper Mandibles
+		OneTimeLatchMessage: Befallen!
+		DisplayName: Kupferklauen
 	}
 
-	// MiniMandible.DisplayName: Mini Mandible
-	// AccursedSpirit.DisplayName: Accursed Spirit
+	MiniMandible.DisplayName: Miniklaue
+	AccursedSpirit.DisplayName: Verfluchter Geist
 
 	ChainwhipSnaptrapProjectile: {
-		// OneTimeLatchMessage: Agility!
+		OneTimeLatchMessage: Beweglichkeit!
 		// DisplayName: Chainwhip Snaptrap Projectile
 	}
 
-	// ChainwhipWhip.DisplayName: Chainwhip Whip
-	// CosmicJellyfishBlackholeAura.DisplayName: Cosmic Jellyfish Blackhole Aura
+	ChainwhipWhip.DisplayName: Kettenpeitsche
+	CosmicJellyfishBlackholeAura.DisplayName: Schwarzes Loch
 	// DespoticSuperMeleeProj.DisplayName: Despotic Super Melee Proj
-	// CosJelHandTest.DisplayName: Cos Jel Hand Test
+	CosJelHandTest.DisplayName: Kosmische Qualle Testhand
 
 	FrostgripProjectile: {
-		// OneTimeLatchMessage: Ice Cold!
-		// DisplayName: Frostgrip Projectile
+		OneTimeLatchMessage: Eiskalt!
+		DisplayName: Festgefrohrenes Projektil
 	}
 
 	// FrostgripIceCube.DisplayName: Frostgrip Ice Cube
@@ -180,9 +180,9 @@ NPCs: {
 
 	FloralDevourer.DisplayName: Floraler Verschlinger
 	FloralDevourerSegment.DisplayName: Floraler Verschlinger
-	EmberlionPiercer.DisplayName: Bernsteinlöwenstürmer
+	EmberlionPiercer.DisplayName: Glutlöwenläufer
 	DesertBat.DisplayName: Wüstenfledermaus
-	EmberlionMiner.DisplayName: Bernsteinlöwengräber
+	EmberlionMiner.DisplayName: Glutlöwengräber
 
 	Cicadian: {
 		DisplayName: Zikade
@@ -201,28 +201,28 @@ NPCs: {
 	ShroomishSlime.DisplayName: Pilzschleim
 	CosmicJellyfishMini.DisplayName: Diener der Qualle
 	Sandberus.DisplayName: Dünenfürst
-	// KSGlandNPC.DisplayName: Slimy Coating
-	// Gravekeeper.DisplayName: Gravekeeper
-	// HauntedTombstone.DisplayName: Haunted Tombstone
-	// GhastlyTombstone.DisplayName: Ghastly Tombstone
-	// StrawmanDummy.DisplayName: Strawman
-	// RecruitedNPC.DisplayName: Recruited N P C
+	KSGlandNPC.DisplayName: Schleimhülle
+	Gravekeeper.DisplayName: Totengräber
+	HauntedTombstone.DisplayName: Heimgesuchter Grabstein
+	GhastlyTombstone.DisplayName: Gespenstischer Grabstein
+	StrawmanDummy.DisplayName: Vogelscheuche
+	RecruitedNPC.DisplayName: Rekrutierter NPC
 	// SmallSnowpoff.DisplayName: Snowpoff
 	// LargeSnowpoff.DisplayName: Snowpoff
-	// CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
-	// IncendipedeBody.DisplayName: Incendipede
+	CosmicJellyfishHand.DisplayName: Kosmische Qualle Hand
+	IncendipedeBody.DisplayName: Tausendfüßler
 
 	IncendipedeHead: {
-		// DisplayName: Incendipede
-		// Bestiary: This sneaky creature has evolved to be, much like the reigning Emberlions, a dangerous predator, feasting on Emberlion larva and the occasional human. Unlike Emberlions, Incendipedes ironically have an incredible grasp on the usage of fire from a very young age, releasing it both as a weapon and a way to defend themselves.
+		DisplayName: Tausendfüßler
+		Bestiary: Diese hinterhältige Kreatur hat sich, ähnlich wie die dominierenden Glutlöwen, zu einem gefährlichen Raubtier entwickelt, welches sich von den Larven der Glutlöwen und gelegentlich auch von Menschen ernährt. Im Gegensatz zu Glutlöwen haben Tausendfüßler ironischerweise schon in jungen Jahren ein unglaubliches Gespür für den Einsatz von Feuer und setzen es sowohl als Waffe als auch als Mittel zur Selbstverteidigung ein.
 	}
 
-	// IncendipedeTail.DisplayName: Incendipede
-	// QuartzElemental.DisplayName: Quartz Elemental
-	// IncendipedeBodySegment.DisplayName: Incendipede
-	// IncendipedeBodyOld.DisplayName: Incendipede Body Old
-	// IncendipedeHeadOld.DisplayName: Incendipede Head Old
-	// IncendipedeTailOld.DisplayName: Incendipede Tail Old
+	IncendipedeTail.DisplayName: Tausendfüßler
+	QuartzElemental.DisplayName: Quartz-Elementar
+	IncendipedeBodySegment.DisplayName: Tausendfüßler
+	IncendipedeBodyOld.DisplayName: Tausendfüßler Körper Alt
+	IncendipedeHeadOld.DisplayName: Tausendfüßler Kopf Alt
+	IncendipedeTailOld.DisplayName: Tausendfüßler Schwanz Alt
 	// Mudkarp.DisplayName: Mudkarp
 }
 
@@ -253,33 +253,33 @@ Buffs: {
 	}
 
 	CrimsonAntidoteBuff: {
-		// DisplayName: Crimson Antidote
-		// Description: Massively increased life regeneration
+		DisplayName: Purpurnes Gegenmittel
+		Description: Massive Erhöhung der Lebensregeneration
 	}
 
 	CorruptAntidoteBuff: {
-		// DisplayName: Corrupt Antidote
-		// Description: -25% Mana Usage and +25% Magic Damage
+		DisplayName: Verdorbenes Gegenmittel
+		Description: -25% Manaverbrauch und +25% magischer Schaden
 	}
 
 	FishbackerTagDebuff: {
-		// DisplayName: Fishbacker Tag Debuff
-		// Description: Tag, you're it!
+		DisplayName: Fangnessel-Gefangen Debuff
+		Description: Gefangen, du bist dran!
 	}
 
 	PetPigBuff: {
-		// DisplayName: Balloon Pig
-		// Description: A balloon pig follows you, showing you nearby loot
+		DisplayName: Ballonschweinchen
+		Description: Ein Ballonschweinchen folgt dir und zeigt dir Schätze in der Nähe.
 	}
 
 	NecrosisBuff: {
-		// DisplayName: Necrosis
-		// Description: Rapidly losing life
+		DisplayName: Necrose
+		Description: Leben geht verloren
 	}
 
 	SoulRotBuff: {
-		// DisplayName: Soul Rot
-		// Description: Rapidly losing life
+		DisplayName: Seelenverderben
+		Description: Leben geht verloren
 	}
 
 	FavorFatigue: {
@@ -322,8 +322,8 @@ Buffs: {
 	}
 
 	FishbackerReflectTagDebuff: {
-		// DisplayName: Fishbacker Reflect Tag Debuff
-		// Description: Mods.ITD.Buffs.FishbackerReflectTagDebuff.Description
+		DisplayName: Fangnessel-Reflektiert Debuff
+		Description: Mods.ITD.Buffs.FishbackerReflectTagDebuff.Description
 	}
 
 	HauntedBuff: {
@@ -342,8 +342,8 @@ Buffs: {
 	}
 
 	KeepersShovelTagDebuff: {
-		// DisplayName: Keepers Shovel Tag Debuff
-		// Description: Mods.ITD.Buffs.KeepersShovelTagDebuff.Description
+		DisplayName: Totengräbers Schaufel-Gefangen Debuff
+		Description: Mods.ITD.Buffs.KeepersShovelTagDebuff.Description
 	}
 
 	RhodiumRageBuff: {
@@ -352,28 +352,28 @@ Buffs: {
 	}
 
 	RoyalJellyDebuff: {
-		// DisplayName: Royal Jelly Debuff
-		// Description: Mods.ITD.Buffs.RoyalJellyDebuff.Description
+		DisplayName: Gelée Royale Debuff
+		Description: Mods.ITD.Buffs.RoyalJellyDebuff.Description
 	}
 
 	RoyalJellyBuff: {
-		// DisplayName: Royal Jelly Buff
-		// Description: Mods.ITD.Buffs.RoyalJellyBuff.Description
+		DisplayName: Gelée Royale Buff
+		Description: Mods.ITD.Buffs.RoyalJellyBuff.Description
 	}
 
 	ManuscriptLumberBuff: {
-		// Description: Mods.ITD.Buffs.ManuscriptLumberBuff.Description
-		// DisplayName: Manuscript Lumber Buff
+		Description: Mods.ITD.Buffs.ManuscriptLumberBuff.Description
+		DisplayName: Manuskirpt Holzfäller Buff
 	}
 }
 
 DeathMessage: {
-	// Necrosis: succumbed to necrosis.
-	// SoulRot: became a soulless husk.
-	// IncrediblySharpKnife: cut a little too deep.
-	// BloodPact: ran out of blood.
+	Necrosis: erlag einer schwere Nekrose.
+	SoulRot: wurde die Seele aus dem Körper gerissen.
+	IncrediblySharpKnife: hat mit dem Küchenmesser gespielt.
+	BloodPact: hatte zu wenig Blut.
 	// KSGlandAftershock: was crushed by the aftershock.
-	// MudkarpEvil: meddled with eldritch terrors.
+	MudkarpEvil: mischte sich in unheimlich schreckliche Dinge ein.
 }
 
 WorldGen: {
@@ -383,10 +383,10 @@ WorldGen: {
 
 Tiles: {
 	BlueshroomSapling.MapEntry: Blaupilz Primordium
-	CyaniteOreTile.MapEntry: Cyanit
+	CyaniteOreTile.MapEntry: Cyanit Erz
 	BlueshroomTree.MapEntry: Riesen Blaupilz
 	StarlitOreTile.MapEntry: Sternenglanz Erz
-	// Debugger.MapEntry: Debugger
+	Debugger.MapEntry: Debugger
 }
 
 Biomes: {
@@ -422,54 +422,54 @@ Achievements: {
 
 UI: {
 	// FavorSlot.MouseHoverName: Favor
-	// RecruitmentButton.MouseHoverName: Recruit
-	// UnrecruitmentButton.MouseHoverName: Dismiss
+	RecruitmentButton.MouseHoverName: Rekrutieren
+	UnrecruitmentButton.MouseHoverName: Zurückweisen
 }
 
 RecruitmentSystem: {
-	// RecruitmentAccepted: Recruited {0}!
-	// NotHappyEnough: "{0} is not at maximum happiness!"
-	// RecruitmentDenied: "{0} cannot be recruited!"
+	RecruitmentAccepted: "{0} wurde rekrutiert!"
+	NotHappyEnough: "{0} ist nicht glücklich genug!"
+	RecruitmentDenied: "{0} kann nicht rekrutiert werden!"
 }
 
 Configs: {
 	ITDServerConfig: {
-		// DisplayName: ITD Server Config
+		DisplayName: ITD Server Konfiguration
 
 		ResizeDesertForDeepDesert: {
-			// Label: Resize Desert For Deep Desert
-			// Tooltip: Turn on for the vanilla Desert to generate smaller to make space for Deep Desert generation. On by default.
+			Label: Größenänderung der Wüste
+			Tooltip: Aktivieren, damit die normale Wüste kleiner generiert wird, um mehr Platz für die Tiefe Wüste bereitzustellen. Standartmäßig aktiviert.
 		}
 	}
 }
 
 Prefixes: {
-	// PowerTooltip: Mods.ITD.Prefixes.PowerTooltip
+	PowerTooltip: Mods.ITD.Prefixes.PowerTooltip
 
 	Lengthy: {
-		// AdditionalTooltip: Mods.ITD.Prefixes.Lengthy.AdditionalTooltip
-		// DisplayName: Lengthy
+		AdditionalTooltip: Mods.ITD.Prefixes.Lengthy.AdditionalTooltip
+		DisplayName: Lang
 	}
 
 	SnaptrapPrefix: {
-		// LengthBonusText: "{0}% chain length"
-		// RetractRateBonusText: "{0}% retract rate"
+		LengthBonusText: "{0}% Kettenlänge"
+		RetractRateBonusText: "{0}% Einzugsrate"
 	}
 
-	// Abhorrent.DisplayName: Abhorrent
-	// Acute.DisplayName: Acute
-	// Ample.DisplayName: Ample
-	// Barbed.DisplayName: Barbed
-	// Dwarf.DisplayName: Dwarf
-	// Extensive.DisplayName: Extensive
-	// Fabled.DisplayName: Fabled
-	// Feral.DisplayName: Feral
-	// Immense.DisplayName: Immense
-	// Miniscule.DisplayName: Miniscule
-	// Scourned.DisplayName: Scourned
-	// Sleek.DisplayName: Sleek
-	// Smoothed.DisplayName: Smoothed
-	// Tapered.DisplayName: Tapered
-	// Wretched.DisplayName: Wretched
-	// Heroic.DisplayName: Heroic
+	Abhorrent.DisplayName: Abscheulich
+	Acute.DisplayName: Akut
+	Ample.DisplayName: Reichlich
+	Barbed.DisplayName: Stachelig
+	Dwarf.DisplayName: Zwergenhaft
+	Extensive.DisplayName: Umfangreich
+	Fabled.DisplayName: Sagenhaft
+	Feral.DisplayName: Wild
+	Immense.DisplayName: Imens
+	Miniscule.DisplayName: Winzig
+	Scourned.DisplayName: Verachtet
+	Sleek.DisplayName: Schlank
+	Smoothed.DisplayName: Geglättet
+	Tapered.DisplayName: Konisch
+	Wretched.DisplayName: Erbärmlich
+	Heroic.DisplayName: Heldenhaft
 }
