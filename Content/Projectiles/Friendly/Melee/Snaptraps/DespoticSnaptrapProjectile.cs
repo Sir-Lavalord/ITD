@@ -18,16 +18,13 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         private const string ChainTextureExtra2Path = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/DespoticSnaptrapChain2";
         private readonly int constantEffectFrames = 200;
         int constantEffectTimer = 0;
-        public override void SetSnaptrapProperties()
+        public override void SetSnaptrapDefaults()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(DespoticSnaptrapProjectile)}.OneTimeLatchMessage"));
             ShootRange = 16f * 20f;
             RetractAccel = 1.5f;
-            FramesUntilRetractable = 10;
             ExtraFlexibility = 16f * 6f;
-            FramesBetweenHits = 16;
             MinDamage = 3560;
-            MaxDamage = 8900;
             FullPowerHitsAmount = 10;
             WarningFrames = 200;
             ChompDust = DustID.IceTorch;
@@ -38,7 +35,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         }
         private void SummonJaw()
         {
-            if (Main.myPlayer == myPlayer.whoAmI)
+            if (Main.myPlayer == Projectile.owner)
             {
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<DespoticJawProjectile>(), 0, 0.1f);
             }
@@ -55,9 +52,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 }
             }
         }
-        public override void OneTimeLatchEffect()
+        public override bool OneTimeLatchEffect()
         {
-            SoundEngine.PlaySound(snaptrapMetal, Projectile.Center);
             AdvancedPopupRequest popupSettings = new()
             {
                 Text = OneTimeLatchMessage.Value,
@@ -68,6 +64,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             };
             PopupText.NewText(popupSettings, Projectile.Center + new Vector2(0f, -50f));
             SummonJaw();
+            return true;
         }
 
         public override void ConstantLatchEffect()

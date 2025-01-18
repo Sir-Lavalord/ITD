@@ -1,35 +1,58 @@
-﻿using ITD.Content.Items;
-using ITD.Content.Items.Accessories.Combat.Melee.Snaptraps;
-using Microsoft.Xna.Framework;
+﻿using Terraria.ModLoader;
+using Terraria.Audio;
+using Terraria;
+using ReLogic.Utilities;
+using Terraria.ID;
+using Terraria.DataStructures;
+using ITD.Content.Items.Weapons.Melee.Snaptraps;
+using ITD.Systems;
+using ITD.Utilities;
+using System.IO;
+using Terraria.ModLoader.IO;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using ReLogic.Utilities;
-using System;
-using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using ITD.Systems;
+using ReLogic.Peripherals.RGB;
 
-namespace ITD.Content.Projectiles
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
+    /// <summary>
+    /// <para>General change overview:</para>
+    /// <para>- Instanced fields for <see cref="SoundStyle"/>s is correct. However, set these values in SetStaticDefaults, not SetDefaults. SEE BELOW</para>
+    /// <para>- Update: This doesn't work. SoundStyles need to be instanced per entity so setting them in SetStaticDefaults only sets them for the template projectile (citation needed), todo: find a way around this?.</para>
+    /// <para>- Static field to keep the owner player could be messy. Replace this with an instanced lambda property.</para>
+    /// <para>- Instanced properties for all necessary Snaptrap properties is correct. Keep this as is.</para>
+    /// <para>- Private fields for internal variables is correct. Keep this as is (mostly. make sure to check for possible property replacements)</para>
+    /// <para>- Fields for SnaptrapPlayer flags is incorrect. Do not do this. Simply modify the variables in OnSpawn. See below.</para>
+    /// <para>- Do not introduce unnecessary complexity here, as it may be hard to keep up with when more Snaptraps are introduced.</para>
+    /// <para>- Getter and setter properties for IsStickingToTarget and TargetWhoAmI are correct. Look into how to use the third slot.</para>
+    /// <para>- StickTimer is currently unnecessary as it is incredibly long by itself. Though, consider usage of the third ai[] slot here.</para>
+    /// <para>- Here's the big mistake you've done with projectile damage. Snaptraps damaging by setting the Projectile.damage value is horrible. Look below for fix.</para>
+    /// <para>- Use <see cref="ModProjectile.ModifyHitNPC(NPC, ref NPC.HitModifiers)"/>, <see cref="Projectile.usesLocalNPCImmunity"/> and <see cref="Projectile.localNPCHitCooldown"/> instead. (might need to be synced?)</para>
+    /// <para>Extra notes:</para>
+    /// <para>- Don't be dumb when animating. Make sure animation is friendly for all frame amounts.</para>
+    /// <para>- Most of the current AI is fine.</para>
+    /// <para>- Test MP a lot.</para>
+    /// <para>- Add a new hook for modifying chain position offset. Could be cool. (or just add a ref <see cref="Vector2"/> param to ExtraChainEffects.)</para>
+    /// </summary>
     public abstract class ITDSnaptrap : ModProjectile
     {
-        public string toSnaptrapMetal = "ITD/Content/Sounds/SnaptrapMetal";
-        public SoundStyle snaptrapMetal;
+        // Post-Implementation overview:
+        // Achieved most of the things above.
+        // New way of damaging stuff should be a lot cleaner, less scuffed and more solid.
+
+        public string toSnaptrapChomp = "ITD/Content/Sounds/SnaptrapMetal";
+        public SoundStyle snaptrapChomp;
         public string toSnaptrapForcedRetract = "ITD/Content/Sounds/SnaptrapForcedRetract";
         private SoundStyle snaptrapForcedRetract;
-        SlotId chainUnwindSlot;
+        private SlotId chainUnwindSlot;
         public string toSnaptrapChain = "ITD/Content/Sounds/SnaptrapUnwind";
         private SoundStyle snaptrapChain;
-        SlotId snaptrapWarningSlot;
+        private SlotId snaptrapWarningSlot;
         public string toSnaptrapWarning = "ITD/Content/Sounds/SnaptrapWarning";
         private SoundStyle snaptrapWarning;
-
-        public static Player myPlayer;
+        public Player Owner => Main.player[Projectile.owner];
         /// <summary>
-        /// In pixels. Multiply by 16f to get the tile equivalent.
+        /// In pixels. To work with tile coordinates, simply multiply the number of tiles of reach by 16f.
         /// </summary>
         public float ShootRange { get; set; } = 16f * 8f;
         /// <summary>
@@ -37,90 +60,86 @@ namespace ITD.Content.Projectiles
         /// </summary>
         public float RetractAccel { get; set; } = 1.5f;
         /// <summary>
-        /// Timer. The Snaptrap cannot retract until this value is equal or less than 0. (This is done in the AI)
-        /// </summary>
-        public int FramesUntilRetractable { get; set; } = 10;
-        /// <summary>
-        /// The amount of tiles you can go outside ShootRange without forced retraction.
+        /// The amount of pixels you can go outside ShootRange without forced retraction.
         /// </summary>
         public float ExtraFlexibility { get; set; } = 16f * 2f;
-        /// <summary>
-        /// Amount of frames between each hit the Snaptrap gives. Less is faster.
-        /// </summary>
+
+        /* special note: store the spawn source from onspawn and use the item's useTime for this instead. (might need syncing)
         public int FramesBetweenHits { get; set; } = 60;
+        */
+
         /// <summary>
-        /// Damage at the start, before reaching full power.
+        /// Base damage at the start, before reaching full power.
         /// </summary>
         public int MinDamage { get; set; } = 1;
         /// <summary>
-        /// Damage when reaching full power.
+        /// Base damage when reaching full power.
         /// </summary>
-        public int MaxDamage { get; set; } = 25;
+        private int MaxDamage { get; set; } = 22;
         /// <summary>
         /// Amount of hits it takes for the Snaptrap to reach full power.
         /// </summary>
-        public int FullPowerHitsAmount { get; set; } = 10;
+        public byte FullPowerHitsAmount { get; set; } = 10;
         /// <summary>
-        /// Amount of frames the warning sound should play for before forcefully retracting.
+        /// Amount of frames the player should be warned for before forcefully retracting.
         /// </summary>
-        public int WarningFrames { get; set; } = 60;
+        public ushort WarningFrames { get; set; } = 60;
         /// <summary>
         /// DustID of the dust that appears when the Snaptrap latches onto an enemy.
         /// </summary>
-        public int ChompDust { get; set; } = DustID.Torch;
+        public short ChompDust { get; set; } = DustID.Torch;
         /// <summary>
         /// Chain texture. Override GetChainTexture(), GetChainColor(), and ExtraChainEffects() for customization.
         /// </summary>
-        public string ToChainTexture {  get; set; } = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/SnaptrapChain";
+        public string ToChainTexture { get; set; } = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/SnaptrapChain";
 
         private float staticRotation; //
         public bool retracting = false; //
-        private int damageTimer = 0; //
-        private int currentDamageAmount = 0; //
-        private int warningTimer = 0; //
         private bool shouldBeWarning = false; //
         private bool hasDoneLatchEffect = false;
+        private float gravity = 0f;
+        private byte currentHitsAmount = 0;
+        private float baseAccel = 0f;
 
-        //True if gravity should affect the snaptrap
-        private bool chainWeight = false;
-        //Use floats in the form of percentages to increase this
-        private float lengthIncrease = 0f;
-        //Use floats in the form of decimals to increase this. Base is 0.4f.
-        private float retractMultiplier = 0f;
-        //Simply edits the amount of hits required to activate a latch effect. Defaults to subtracting.
-        private int latchModifer;
-        //Amount of frames your warning frames is increased by. Defaults to addition.
-        private int warningModifier;
+        private EntitySource_ItemUse_WithAmmo source;
+        private ITDSnaptrapItem SourceItem => source.Item.ModItem as ITDSnaptrapItem;
+
+        // everything after the chainWeight bool is ooglyboogly. check notes.
 
         public bool IsStickingToTarget
         {
             get => Projectile.ai[0] == 1f;
             set => Projectile.ai[0] = value ? 1f : 0f;
         }
-
         public int TargetWhoAmI
         {
             get => (int)Projectile.ai[1];
             set => Projectile.ai[1] = value;
         }
-
-        public float StickTimer
+        public int WarningTimer
         {
-            get => Projectile.localAI[0];
-            set => Projectile.localAI[0] = value;
+            get => (int)Projectile.ai[2];
+            set => Projectile.ai[2] = value;
         }
-
-        public virtual void SetSnaptrapProperties()
+        public virtual void SetSnaptrapDefaults()
         {
 
         }
+        /// <summary>
+        /// Override to set static default values, such as ProjectileID sets.
+        /// </summary>
+        public virtual void SetSnaptrapStaticDefaults()
+        {
 
-        public override void SetStaticDefaults()
+        }
+        public sealed override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
             ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+
+            SetSnaptrapStaticDefaults();
         }
-        public override void SetDefaults()
+        public sealed override void SetDefaults()
         {
             Projectile.width = 16;
             Projectile.height = 16;
@@ -130,12 +149,13 @@ namespace ITD.Content.Projectiles
             Projectile.alpha = 0;
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Melee;
-            Projectile.usesIDStaticNPCImmunity = true;
+            // do the other part in OnSpawn
+            Projectile.usesLocalNPCImmunity = true;
             DrawOffsetX = -12;
             DrawOriginOffsetY = -16;
             //Projectile.hide = true;
-            SetSnaptrapProperties();
-            snaptrapMetal = new SoundStyle(toSnaptrapMetal);
+            SetSnaptrapDefaults();
+            snaptrapChomp = new SoundStyle(toSnaptrapChomp);
             snaptrapForcedRetract = new SoundStyle(toSnaptrapForcedRetract);
             snaptrapChain = new SoundStyle(toSnaptrapChain)
             {
@@ -145,93 +165,116 @@ namespace ITD.Content.Projectiles
             {
                 IsLooped = true,
             };
+            baseAccel = RetractAccel;
         }
-
-        public override Color? GetAlpha(Color lightColor)
+        /// <summary>
+        /// Called after storing the EntitySource and accessing SnaptrapPlayer variables (Which means using the <see cref="SourceItem"/> property is safe here.)
+        /// </summary>
+        public virtual void OnSnaptrapSpawn()
         {
-            var tileCoords = Projectile.Center.ToTileCoordinates();
-            return Lighting.GetColor(tileCoords.X, tileCoords.Y);
-        }
 
-        private void SetSnaptrapPlayerFlags(SnaptrapPlayer snaptrapPlayer)
+        }
+        private void SetSnaptrapPlayerFlags(SnaptrapPlayer player)
         {
-            chainWeight = snaptrapPlayer.ChainWeightEquipped;
-            lengthIncrease = snaptrapPlayer.LengthIncrease;
-            retractMultiplier = snaptrapPlayer.RetractMultiplier;
-            latchModifer = snaptrapPlayer.LatchTimeModifer;
-            warningModifier = snaptrapPlayer.WarningModifer;
-        }
 
-        public override void OnSpawn(IEntitySource source)
+        }
+        public sealed override void OnSpawn(IEntitySource source)
         {
-            myPlayer = Main.player[Projectile.owner];
-            Projectile.netUpdate = true;
-            Projectile.idStaticNPCHitCooldown = FramesBetweenHits;
-            if (myPlayer.TryGetModPlayer(out SnaptrapPlayer modPlayer))
-            {
-                SetSnaptrapPlayerFlags(modPlayer);
-            }
-            if (chainWeight)
-            {
-                MinDamage += MinDamage / 10;
-                MaxDamage += MaxDamage / 10;
-            }
-            Projectile.damage = MinDamage;
-
-            ShootRange = ShootRange + (ShootRange * lengthIncrease);
+            this.source = source as EntitySource_ItemUse_WithAmmo;
+            Projectile.localNPCHitCooldown = SourceItem.Item.useTime;
+            MaxDamage = SourceItem.Item.damage;
+            SetSnaptrapPlayerFlags(this.source.Player.GetSnaptrapPlayer());
+            OnSnaptrapSpawn();
         }
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            if (!retracting && !IsStickingToTarget)
-            { 
-                staticRotation = Projectile.rotation;
-                IsStickingToTarget = true;
-                TargetWhoAmI = target.whoAmI;
-                Projectile.velocity = target.velocity;
-                Projectile.netUpdate = true;
-                if (damageDone > 0)
-                {
-                    Projectile.damage = 0;
-                }
-            }
-        }
-
-        public bool Chomped = false;
-
-        public override bool OnTileCollide(Vector2 oldVelocity)
+        public sealed override bool OnTileCollide(Vector2 oldVelocity)
         {
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
             SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
             retracting = true;
+            Projectile.netUpdate = true;
             return false;
         }
-
-        private static int ReMapDamage(int currentHitNum, int maxHitNum, int minDmg, int maxDmg)
+        public sealed override void SendExtraAI(BinaryWriter writer)
         {
-            return (int)(minDmg + ((maxDmg - minDmg) * ((currentHitNum - 1) / (float)(maxHitNum - 1))));
+            writer.WriteFlags(retracting, hasDoneLatchEffect);
+        }
+        public sealed override void ReceiveExtraAI(BinaryReader reader)
+        {
+            reader.ReadFlags(out retracting, out hasDoneLatchEffect);
+        }
+        public sealed override bool? CanHitNPC(NPC target)
+        {
+            if (retracting)
+                return false;
+            return null;
+        }
+        public sealed override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            int maxDamage = MaxDamage;
+            ModifyMaxDamage(ref maxDamage);
+            float currentBaseDamage = Helpers.Remap(currentHitsAmount, 0, FullPowerHitsAmount, MinDamage, maxDamage);
+            modifiers.ModifyHitInfo += (ref NPC.HitInfo hit) =>
+            {
+                hit.Damage = (int)Owner.GetDamage(DamageClass.Melee).ApplyTo(currentBaseDamage);
+            };
+        }
+        public sealed override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (!IsStickingToTarget)
+            {
+                staticRotation = Projectile.rotation;
+                IsStickingToTarget = true;
+                TargetWhoAmI = target.whoAmI;
+                Projectile.Center = target.Center;
+                Projectile.velocity = target.velocity;
+                Projectile.netUpdate = true;
+            }
+            if (!hasDoneLatchEffect && ++currentHitsAmount >= FullPowerHitsAmount)
+            {
+                PerHitLatchEffect();
+                if (OneTimeLatchEffect())
+                {
+                    SoundEngine.PlaySound(snaptrapChomp, Projectile.Center);
+                    for (int i = 0; i < 6; ++i)
+                    {
+                        Dust.NewDust(Projectile.Center, 6, 6, ChompDust, 0f, 0f, 0, default, 1);
+                    }
+                }
+                hasDoneLatchEffect = true;
+            }
+            else if (hasDoneLatchEffect)
+            {
+                PerHitLatchEffect();
+            }
+        }
+        public virtual void ModifyMaxDamage(ref int maxDamage)
+        {
+
         }
         public virtual void PerHitLatchEffect()
         {
 
         }
-
-        public virtual void OneTimeLatchEffect()
+        /// <summary>
+        /// Return false to stop the chomp sound from playing and chomp dust from being spawned.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool OneTimeLatchEffect()
         {
-
+            return true;
         }
-
         public virtual void ConstantLatchEffect()
         {
 
         }
         public override void AI()
         {
-            if (myPlayer.dead)
+            if (Owner.dead)
             {
                 Projectile.Kill();
                 return;
             }
-            Vector2 mountedCenter = myPlayer.MountedCenter;
+            Vector2 mountedCenter = Owner.MountedCenter;
             Vector2 toOwner = mountedCenter - Projectile.Center;
 
             if (retracting)
@@ -243,24 +286,23 @@ namespace ITD.Content.Projectiles
 
             float chainLength = toOwner.Length();
 
-            if (chainWeight && !IsStickingToTarget)
+            // apply gravity (i. e. chainWeight)
+            if (!IsStickingToTarget)
             {
-                Projectile.velocity.Y += 0.4f/(Projectile.extraUpdates+1);
+                Projectile.velocity.Y += gravity / (Projectile.extraUpdates + 1);
             }
 
             if (IsStickingToTarget)
             {
-                if (Chomped == false)
+                if (++Projectile.frameCounter >= 3 * (Projectile.extraUpdates + 1) && Projectile.frame < Main.projFrames[Type] - 1)
                 {
-                    if (++Projectile.frameCounter >= 3 * (Projectile.extraUpdates + 1))
+                    Projectile.frameCounter = 0;
+                    Projectile.frame++;
+                    if (Projectile.frame == Main.projFrames[Type] - 2)
                     {
-                        Projectile.frameCounter = 0;
-                        Projectile.frame++;
-                        if (Projectile.frame == 3)
+                        if (OnChomp())
                         {
-                            Chomped = true;
-                            Projectile.damage = 0;
-                            SoundEngine.PlaySound(snaptrapMetal, Projectile.Center);
+                            SoundEngine.PlaySound(snaptrapChomp, Projectile.Center);
                             for (int i = 0; i < 6; ++i)
                             {
                                 Dust.NewDust(Projectile.Center, 6, 6, ChompDust, 0f, 0f, 0, default, 1);
@@ -288,13 +330,21 @@ namespace ITD.Content.Projectiles
                 ConstantLatchEffect();
             }
         }
+        /// <summary>
+        /// Return false to prevent sound and dust.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool OnChomp()
+        {
+            return true;
+        }
         private bool BasicSoundUpdateCallback(ProjectileAudioTracker tracker, ActiveSound soundInstance, int type)
         {
             // Update sound location according to projectile position
             if (type == 0)
             {
                 soundInstance.Position = Projectile.position;
-                if (!Chomped || retracting) 
+                if (!hasDoneLatchEffect || retracting)
                 {
                     return tracker.IsActiveAndInGame();
                 }
@@ -305,11 +355,11 @@ namespace ITD.Content.Projectiles
             }
             else
             {
-                soundInstance.Position = myPlayer.position;
+                soundInstance.Position = Owner.Center;
                 if (shouldBeWarning)
                 {
-                    soundInstance.Volume = 0f + ((float)warningTimer / (float)WarningFrames);
-                    soundInstance.Pitch = 0f + ((float)warningTimer / (float)WarningFrames);
+                    soundInstance.Volume = 0f + (WarningTimer / (float)WarningFrames);
+                    soundInstance.Pitch = 0f + (WarningTimer / (float)WarningFrames);
                 }
                 else
                 {
@@ -326,7 +376,6 @@ namespace ITD.Content.Projectiles
                 }
             }
         }
-
         private void NormalAI(Vector2 mountedCenter, float chainLength)
         {
             if (chainLength >= ShootRange)
@@ -336,10 +385,10 @@ namespace ITD.Content.Projectiles
             if (retracting)
             {
                 Vector2 towardsOwner = Projectile.DirectionTo(mountedCenter).SafeNormalize(Vector2.Zero);
-                RetractAccel += 0.4f + retractMultiplier;
-                Projectile.velocity = towardsOwner*RetractAccel;
+                RetractAccel += baseAccel;
+                Projectile.velocity = towardsOwner * RetractAccel;
                 Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
-                if (Projectile.Distance(mountedCenter) <= RetractAccel)
+                if (Projectile.DistanceSQ(mountedCenter) <= RetractAccel * RetractAccel)
                 {
                     Projectile.Kill(); // Kill the projectile once it is close enough to the player
                 }
@@ -350,18 +399,14 @@ namespace ITD.Content.Projectiles
                 Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             }
         }
-
-        private const int StickTime = 60 * 40; // 40 seconds,
         private void StickyAI(float chainLength)
         {
             Projectile.rotation = staticRotation;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
-            StickTimer += 1f;
-            damageTimer += 1;
 
             int npcTarget = TargetWhoAmI;
-            if (StickTimer >= StickTime || npcTarget < 0 || npcTarget >= 200)
+            if (npcTarget < 0 || npcTarget >= 200)
             {
                 retracting = true;
             }
@@ -372,58 +417,44 @@ namespace ITD.Content.Projectiles
                 if (!SoundEngine.TryGetActiveSound(snaptrapWarningSlot, out var activeSound))
                 {
                     var tracker = new ProjectileAudioTracker(Projectile);
-                    snaptrapWarningSlot = SoundEngine.PlaySound(snaptrapWarning, myPlayer.Center, soundInstance => BasicSoundUpdateCallback(tracker, soundInstance, 1));
+                    snaptrapWarningSlot = SoundEngine.PlaySound(snaptrapWarning, Owner.Center, soundInstance => BasicSoundUpdateCallback(tracker, soundInstance, 1));
                 }
             }
             else
             {
                 retracting = true;
             }
-            if (damageTimer >= FramesBetweenHits)
+            if (chainLength - ExtraFlexibility >= ShootRange)
             {
-                damageTimer = 0;
-                if (currentDamageAmount < FullPowerHitsAmount - latchModifer)
-                {
-                    currentDamageAmount += 1;
-                }
-                else
-                {
-                    if (!hasDoneLatchEffect)
-                    {
-                        hasDoneLatchEffect = true;
-                        OneTimeLatchEffect();
-                    }
-                    PerHitLatchEffect();
-                }
-                int dmg = ReMapDamage(currentDamageAmount, FullPowerHitsAmount, MinDamage, MaxDamage);
-                Projectile.damage = dmg;
-            }
-            if (chainLength-ExtraFlexibility >= ShootRange)
-            {
-                warningTimer += 1;
-                if (warningTimer > WarningFrames + warningModifier)
+                WarningTimer += 1;
+                if (WarningTimer > WarningFrames)
                 {
                     SoundEngine.PlaySound(snaptrapForcedRetract, Projectile.Center);
                     retracting = true;
-                    warningTimer = WarningFrames;
+                    WarningTimer = WarningFrames;
                 }
                 shouldBeWarning = true;
             }
             else
             {
                 shouldBeWarning = false;
-                warningTimer = 0;
+                WarningTimer = 0;
             }
+        }
+        public override Color? GetAlpha(Color lightColor)
+        {
+            var tileCoords = Projectile.Center.ToTileCoordinates();
+            return Lighting.GetColor(tileCoords.X, tileCoords.Y);
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="chainDrawPosition">Position this chain is being drawn at. Divide by 16 to get tile coordinates.</param>
+        /// <param name="chainDrawPosition">Position this chain is being drawn at.</param>
         /// <param name="chainCount">Position of this chain segment in the chain, starting from the Snaptrap and ending at the player's arms.</param>
         /// <returns></returns>
         public virtual Color GetChainColor(Vector2 chainDrawPosition, int chainCount)
         {
-            return Lighting.GetColor((int)chainDrawPosition.X / 16, (int)(chainDrawPosition.Y / 16f));
+            return Lighting.GetColor(chainDrawPosition.ToTileCoordinates());
         }
 
         public virtual Asset<Texture2D> GetChainTexture(Asset<Texture2D> defaultTexture, Vector2 chainDrawPosition, int chainCount)
@@ -431,11 +462,13 @@ namespace ITD.Content.Projectiles
             return defaultTexture;
         }
 
-        public virtual void ExtraChainEffects(Vector2 chainDrawPosition, int chaincount)
+        public virtual void ExtraChainEffects(ref Vector2 chainDrawPosition, int chaincount)
         {
-
+            if (retracting)
+                return;
+            float factor = WarningTimer / (float)WarningFrames * 2.25f;
+            chainDrawPosition += Main.rand.NextVector2Circular(factor, factor);
         }
-
         public override bool PreDraw(ref Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
@@ -457,16 +490,16 @@ namespace ITD.Content.Projectiles
             float chainLengthRemainingToDraw = vectorFromProjectileToPlayer.Length() + chainSegmentLength / 2f;
             while (chainLengthRemainingToDraw > 0f)
             {
-                ExtraChainEffects(chainDrawPosition, chainCount);
+                ExtraChainEffects(ref chainDrawPosition, chainCount);
                 Color chainDrawColor = GetChainColor(chainDrawPosition, chainCount);
                 var chainTextureToDraw = GetChainTexture(chainTexture, chainDrawPosition, chainCount);
                 Main.spriteBatch.Draw(chainTextureToDraw.Value, chainDrawPosition - Main.screenPosition, chainSourceRectangle, chainDrawColor, chainRotation, chainOrigin, 1f, SpriteEffects.None, 0f);
-                
+
                 chainDrawPosition += unitVectorFromProjectileToPlayerArms * chainSegmentLength;
                 chainCount++;
                 chainLengthRemainingToDraw -= chainSegmentLength;
             }
             return true;
-        } 
+        }
     }
 }

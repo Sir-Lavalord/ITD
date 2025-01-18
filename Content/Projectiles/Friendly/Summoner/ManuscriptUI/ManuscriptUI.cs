@@ -1,22 +1,9 @@
 ﻿using ITD.Content.Items.Weapons.Summoner;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
-using System.IO;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 using ITD.Utilities;
-using ITD.Content.Projectiles.Friendly.Mage;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
 {
@@ -112,7 +99,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
             Texture2D MinerIcon = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Summoner/ManuscriptUI/ManuscriptMiner").Value;
             Texture2D HoveredIcon = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Summoner/ManuscriptUI/ManuscriptMinerHover").Value;
             Texture2D textureToDraw = MinerIcon;
-            Vector2 iconOffset = new Vector2(100f, -100f);
+            Vector2 iconOffset = new(100f, -100f);
             Vector2 drawPosition = Projectile.Center + iconOffset;
             Rectangle iconFrame = Utils.CenteredRectangle(drawPosition, textureToDraw.Size());
             if (MouseRectangle.Intersects(iconFrame))
@@ -143,7 +130,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
             Texture2D DuelistIcon = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Summoner/ManuscriptUI/ManuscriptDuelist").Value;
             Texture2D HoveredIcon = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Summoner/ManuscriptUI/ManuscriptMinerHover").Value;
             Texture2D textureToDraw = DuelistIcon;
-            Vector2 iconOffset = new Vector2(0, -100f);
+            Vector2 iconOffset = new(0, -100f);
             Vector2 drawPosition = Projectile.Center + iconOffset;
             Rectangle iconFrame = Utils.CenteredRectangle(drawPosition, textureToDraw.Size());
                 if (MouseRectangle.Intersects(iconFrame))
@@ -175,7 +162,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
             Texture2D LumberIcon = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Summoner/ManuscriptUI/ManuscriptLumber").Value;
             Texture2D HoveredIcon = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Summoner/ManuscriptUI/ManuscriptMinerHover").Value;
             Texture2D textureToDraw = LumberIcon;
-            Vector2 iconOffset = new Vector2(-100f, 100f);
+            Vector2 iconOffset = new(-100f, 100f);
             Vector2 drawPosition = Projectile.Center + iconOffset;
             Rectangle iconFrame = Utils.CenteredRectangle(drawPosition, textureToDraw.Size());
             if (MouseRectangle.Intersects(iconFrame))
@@ -206,7 +193,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
             Texture2D SneakIcon = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Summoner/ManuscriptUI/ManuscriptSneak").Value;
             Texture2D HoveredIcon = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Summoner/ManuscriptUI/ManuscriptMinerHover").Value;
             Texture2D textureToDraw = SneakIcon;
-            Vector2 iconOffset = new Vector2(100f, 100f);
+            Vector2 iconOffset = new(100f, 100f);
             Vector2 drawPosition = Projectile.Center + iconOffset;
             Rectangle iconFrame = Utils.CenteredRectangle(drawPosition, textureToDraw.Size());
             if (MouseRectangle.Intersects(iconFrame))

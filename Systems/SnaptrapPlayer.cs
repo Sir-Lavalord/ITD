@@ -1,10 +1,4 @@
-﻿using ITD.Content.Projectiles;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using Terraria;
 using Terraria.ModLoader;
 
