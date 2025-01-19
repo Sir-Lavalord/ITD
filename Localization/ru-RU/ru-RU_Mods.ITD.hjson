@@ -10,12 +10,12 @@ Projectiles: {
 	}
 
 	SnaptrapProjectile: {
-		DisplayName: Snaptrap
+		DisplayName: Капкан
 		OneTimeLatchMessage: +{0}% crit chance!
 	}
 
 	VocalZeroProjectile: {
-		DisplayName: Vocal Zero
+		DisplayName: Вокальный ноль
 		OneTimeLatchMessage: +{0}% damage!
 	}
 
@@ -23,7 +23,7 @@ Projectiles: {
 	SniptrapProjectile.DisplayName: Sniptrap
 
 	MrSnapkinsProjectile: {
-		DisplayName: Mr. Snapkins
+		DisplayName: Мистер Снапкинс
 		OneTimeLatchMessage: Commence the bowtying...
 	}
 
@@ -48,13 +48,13 @@ Projectiles: {
 	LightningStaffStrike.DisplayName: Молния
 
 	VenusSnaptrapProjectile: {
-		OneTimeLatchMessage: Poisoned!
-		DisplayName: Venus Snaptrap
+		OneTimeLatchMessage: Отравление!
+		DisplayName: Венерин капкан
 	}
 
 	CalciumProjectile: {
 		OneTimeLatchMessage: Vampirism!
-		DisplayName: Calcium
+		DisplayName: Кальций
 	}
 
 	WingedSnowpoffPet.DisplayName: Летучая ряженка
@@ -86,7 +86,7 @@ Projectiles: {
 	GalacticJellyBeanHand.DisplayName: Космическая рука
 	FishbackerReflectProj.DisplayName: How did you get this?
 	SuffocationAura.DisplayName: Аура удушения
-	TheUnburied.DisplayName: The Unburied
+	TheUnburied.DisplayName: Неусопший
 	PetPigPet.DisplayName: Balloon Pig
 	GasLeak.DisplayName: Gas Leak
 	Necroskull.DisplayName: Necroskull
@@ -111,7 +111,7 @@ Projectiles: {
 
 	CopperMandiblesProjectile: {
 		OneTimeLatchMessage: Infestation!
-		DisplayName: Copper Mandibles
+		DisplayName: Медная челюсть
 	}
 
 	MiniMandible.DisplayName: Mini Mandible
@@ -347,8 +347,8 @@ Buffs: {
 	}
 
 	RhodiumRageBuff: {
-		// DisplayName: Rhodium Rage
-		// Description: 10% increased damage and critical chance
+		DisplayName: Родиевая ярость
+		Description: Увеличивает урон и шанс критического удара на 10%
 	}
 
 	RoyalJellyDebuff: {
@@ -384,8 +384,8 @@ WorldGen: {
 Tiles: {
 	BlueshroomSapling.MapEntry: Blueshroom Primordium
 	CyaniteOreTile.MapEntry: Баус
-	BlueshroomTree.MapEntry: Giant Blueshroom
-	StarlitOreTile.MapEntry: Starlit Ore
+	BlueshroomTree.MapEntry: Огромный голубой гриб
+	StarlitOreTile.MapEntry: Звёздная руда
 	// Debugger.MapEntry: Debugger
 }
 

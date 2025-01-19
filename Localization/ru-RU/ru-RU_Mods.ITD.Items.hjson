@@ -19,7 +19,7 @@ ElectrumBow: {
 }
 
 RhodiumBroadsword: {
-	DisplayName: Родиевый Меч
+	DisplayName: Родиевый меч
 	Tooltip: При ударах по врагам создаются искры
 }
 
@@ -34,7 +34,7 @@ Blueshroom: {
 }
 
 DashingFeather: {
-	DisplayName: Dashing Feather
+	DisplayName: Стремительное перо
 	Tooltip: Double tap any direction while on the ground to start a dash you can control for a short while
 }
 
@@ -251,7 +251,7 @@ ThunderStaff: {
 }
 
 VenusSnaptrap: {
-	DisplayName: Venus Snaptrap
+	DisplayName: Венерин капкан
 	Tooltip:
 		'''
 		"Queen of the marsh"; Darwin's most beautiful plant
@@ -260,7 +260,7 @@ VenusSnaptrap: {
 }
 
 BlueshroomCapBlock: {
-	DisplayName: Шляпка Голубого Гриба
+	DisplayName: Шляпка голубого гриба
 	Tooltip: ""
 }
 
@@ -519,7 +519,7 @@ GravityBoots: {
 }
 
 Necromatome: {
-	DisplayName: Книга Омертвления
+	DisplayName: Книга омертвления
 	Tooltip: Испускает облака миазмы
 }
 
@@ -534,7 +534,7 @@ Fishbacker: {
 }
 
 CrimsonAntidote: {
-	DisplayName: Антидот Багрянца
+	DisplayName: Антидот багрянца
 	Tooltip:
 		'''
 		Healing items heal 20% more HP
@@ -544,7 +544,7 @@ CrimsonAntidote: {
 }
 
 CorruptAntidote: {
-	DisplayName: Антидот Порчи
+	DisplayName: Антидот порчи
 	Tooltip:
 		'''
 		Mana items grant 20% more Mana
@@ -554,7 +554,7 @@ CorruptAntidote: {
 }
 
 JumpingBean: {
-	DisplayName: Прыгучий Боб
+	DisplayName: Прыгучий боб
 	Tooltip:
 		'''
 		Увеличивает скорость движения на 8 %
@@ -563,12 +563,12 @@ JumpingBean: {
 }
 
 CupOJoe: {
-	DisplayName: Cup O' Joe
+	DisplayName: Кофеёк
 	Tooltip: Grants immunity to non-damaging Ice Themed Debuffs
 }
 
 RooksBrew: {
-	DisplayName: Rooks Brew
+	DisplayName: Отвар ладьи
 	Tooltip:
 		'''
 		Grants immunity to non-damaging Ice Themed Debuffs
@@ -698,7 +698,7 @@ IncrediblySharpKnife: {
 }
 
 StrawmanItem: {
-	DisplayName: Strawman
+	DisplayName: Чучело
 	Tooltip:
 		'''
 		Current Mode:
@@ -828,7 +828,7 @@ Calcium: {
 }
 
 CopperMandibles: {
-	DisplayName: Copper Mandibles
+	DisplayName: Медная челюсть
 	Tooltip:
 		'''
 		'Not to be confused with Steel Mandibles'
@@ -941,12 +941,12 @@ Frostgrip: {
 }
 
 SmallSnowpoffItem: {
-	DisplayName: Small Snowpoff Item
+	DisplayName: Мелкая ряженка
 	Tooltip: ""
 }
 
 LargeSnowpoffItem: {
-	DisplayName: Large Snowpoff Item
+	DisplayName: Крупная ряженка
 	Tooltip: ""
 }
 
@@ -1183,8 +1183,8 @@ Mandinata: {
 }
 
 Cicadarang: {
-	// DisplayName: Cicadarang
-	// Tooltip: ""
+	DisplayName: Цикадаранг
+	Tooltip: ""
 }
 
 NightmareManuscript: {
