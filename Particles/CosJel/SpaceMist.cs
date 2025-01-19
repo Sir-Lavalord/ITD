@@ -31,7 +31,10 @@ namespace ITD.Particles.CosJel
         public void DrawOutline(SpriteBatch spriteBatch)
         {
             Texture2D tex = ModContent.Request<Texture2D>("ITD/Particles/Textures/SpaceMist_Outline").Value;
-            DrawCommon(spriteBatch, tex, CanvasOffset);
+
+            Color color1 = new Color(255, 242, 191);
+            Color color2 = new Color(168, 241, 255);
+            DrawCommon(spriteBatch, tex, CanvasOffset, color: Color.Lerp(color1, color2, Utils.PingPongFrom01To010(MathHelper.Lerp(0,1, (float)timeLeft / 60f))));
         }
         public override bool PreDraw(SpriteBatch spriteBatch)
         {
