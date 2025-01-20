@@ -23,12 +23,14 @@ namespace ITD.Content.World
     {
         public static LocalizedText BluesoilPassMessage { get; private set; }
         public static LocalizedText DeepDesertPassMessage { get; private set; }
+        public static LocalizedText WorldNPCsPassMessage { get; private set; }
 
         public static List<Point> testPoints = [];
         public override void SetStaticDefaults()
         {
             BluesoilPassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{nameof(BluesoilPassMessage)}"));
             DeepDesertPassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{nameof(DeepDesertPassMessage)}"));
+            WorldNPCsPassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{nameof(WorldNPCsPassMessage)}"));
         }
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {

@@ -380,6 +380,7 @@ DeathMessage: {
 WorldGen: {
 	BluesoilPassMessage: Blauifiziere das tiefe Eis...
 	DeepDesertPassMessage: Wüsten müssen verdichtet werden...
+	// WorldNPCsPassMessage: Mods.ITD.WorldGen.WorldNPCsPassMessage
 }
 
 Tiles: {

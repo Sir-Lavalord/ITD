@@ -380,6 +380,7 @@ DeathMessage: {
 WorldGen: {
 	// BluesoilPassMessage: Blueifying the Underground Tundra...
 	// DeepDesertPassMessage: Compressing the Desert...
+	// WorldNPCsPassMessage: Mods.ITD.WorldGen.WorldNPCsPassMessage
 }
 
 Tiles: {

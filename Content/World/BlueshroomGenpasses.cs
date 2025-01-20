@@ -94,7 +94,10 @@ namespace ITD.Content.World
             ellipse.LoopThroughPoints(p => 
             {
                 if (p.Y > GenVars.snowTop)
-                    WorldGen.digTunnel(p.X, p.Y, 0, 0, 1, 1, false);
+                {
+                    Tile t = Framing.GetTileSafely(p);
+                    t.HasTile = false;
+                }
             });
             ellipse.LoopThroughPoints(p =>
             {
@@ -107,11 +110,13 @@ namespace ITD.Content.World
                 float subnoise = noiseForSubfrost.GetNoise(i, j);
                 if (n > placetilefrom)
                 {
-                    WorldGen.PlaceTile(i, j, TileID.SnowBlock);
+                    Tile t = Framing.GetTileSafely(p);
+                    t.HasTile = true;
+                    t.TileType = TileID.SnowBlock;
                 }
                 if (c > -0.18f)
                 {
-                    WorldUtils.Gen(new Point(i, j), new Shapes.Circle(20 + (Main.rand.Next(21) - 10), 3), new Actions.SetTile((ushort)TileID.SnowBlock));
+                    WorldUtils.Gen(p, new Shapes.Circle(20 + (Main.rand.Next(21) - 10), 3), new Actions.SetTile(TileID.SnowBlock));
                 }
                 if (subnoise > -0.45f)
                 {
