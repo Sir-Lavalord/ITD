@@ -9,7 +9,6 @@ using Terraria.GameContent;
 using Terraria.ModLoader.IO;
 using System.IO;
 using ITD.Particles;
-using ITD.Particles.Testing;
 using ITD.Content.NPCs;
 using ITD.Content.UI;
 using Terraria.Audio;
@@ -88,7 +87,7 @@ namespace ITD.Systems.Recruitment
         {
             if (Main.GameUpdateCount % 20 == 0)
             {
-                ParticleSystem.NewParticle<ShaderTestParticle>(NPC.Center, Vector2.Zero,1);
+                //ParticleSystem.NewEmitter<ShaderTestParticle>(NPC.Center, Vector2.Zero,1);
             }
         }
         public override void AI()

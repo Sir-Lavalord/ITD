@@ -14,36 +14,36 @@ using Terraria.ModLoader;
 
 namespace ITD.Particles.CosJel
 {
-    public class SpaceMist : ITDParticle
+    public class SpaceMist : ParticleEmitter
     {
+        /*
         public override void SetDefaults()
         {
-            canvas = ParticleDrawCanvas.WorldUnderProjectiles;
+            canvas = ParticleEmitterDrawCanvas.WorldUnderProjectiles;
             scale *= 1.3f;
             timeLeft = 60;
         }
-        public override void AI()
+        */
+        public override void OnEmitParticle(ref ITDParticle particle)
         {
-            scale = spawnScale * ProgressOneToZero;
-            velocity *= 0.95f;
+            particle.scale *= 1.3f;
+            // timeleft is now set on Emit() call. canvas is set on Emitter initialization.
         }
-        public override Color GetAlpha() => Color.White;
-        public void DrawOutline(SpriteBatch spriteBatch)
+        public override void AI(ref ITDParticle particle)
+        {
+            particle.scale = particle.spawnParameters.Scale * particle.ProgressOneToZero;
+            particle.velocity *= 0.95f;
+        }
+        public override Color GetAlpha(ITDParticle particle) => Color.White;
+        public override void PreDrawAllParticles()
         {
             Texture2D tex = ModContent.Request<Texture2D>("ITD/Particles/Textures/SpaceMist_Outline").Value;
-
-            Color color1 = new Color(255, 242, 191);
-            Color color2 = new Color(168, 241, 255);
-            DrawCommon(spriteBatch, tex, CanvasOffset, color: Color.Lerp(color1, color2, Utils.PingPongFrom01To010(MathHelper.Lerp(0,1, (float)timeLeft / 60f))));
-        }
-        public override bool PreDraw(SpriteBatch spriteBatch)
-        {
-            if (!(tag is NPC npc && npc.Exists()))
+            Color color1 = new(255, 242, 191);
+            Color color2 = new(168, 241, 255);
+            for (int i = 0; i < particles.Count; i++)
             {
-                DrawOutline(spriteBatch);
-                return true;
+                particles[i].DrawCommon(Main.spriteBatch, tex, CanvasOffset, Color.Lerp(color1, color2, Utils.PingPongFrom01To010(MathHelper.Lerp(0, 1, timeLeft / 60f))));
             }
-            return false;
         }
     }
 }

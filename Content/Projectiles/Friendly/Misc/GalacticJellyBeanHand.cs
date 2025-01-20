@@ -52,6 +52,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording mode
             Main.projFrames[Type] = 6;
         }
+        public ParticleEmitter emitter;
         public override void SetDefaults()
         {
             Projectile.friendly = true;
@@ -62,6 +63,8 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 20;
+            emitter = ParticleSystem.NewEmitter<BeanMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+            emitter.tag = Projectile;
         }
         private Vector2 handTarget = Vector2.Zero;
 
@@ -109,13 +112,14 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 HomingTarget = null;
             }
             Target();
+            if (emitter != null)
+                emitter.keptAlive = true;
             if (Main.rand.NextBool(3)/* && handState == HandState.Default*/)
             {
                 Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
                 Vector2 veloDelta = (Projectile.position - Projectile.oldPosition); // i can't use projectile.velocity here because we're manually changing the position for most of its existence
                 Vector2 sideOffset = new Vector2(-16f, 0f) * Projectile.spriteDirection; // so the dust appears visually from the wrists
-                ITDParticle beanMist = ParticleSystem.NewParticle<BeanMist>(Projectile.Center + new Vector2(0f, Projectile.height / 2 - 14) + sideOffset, ((velo * 2f) + veloDelta).RotatedByRandom(0.6f), 0f);
-                beanMist.tag = Projectile;
+                emitter?.Emit(Projectile.Center + new Vector2(0f, Projectile.height / 2 - 14) + sideOffset, ((velo * 2f) + veloDelta).RotatedByRandom(0.6f));
             }
         }
         Vector2 toTarget;
@@ -237,10 +241,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         {
             for (int i = 0; i < 10; i++)
             {
-
-                ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f), 5f);
-                spaceMist.tag = Projectile;
-
+                emitter?.Emit(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f));
             }
             SoundEngine.PlaySound(SoundID.Item27, Projectile.position);
         }
@@ -266,19 +267,8 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     sb.Draw(outline, drawPos, frame, color, Projectile.oldRot[k], origin, Projectile.scale, SpriteEffects.None, 0f);
                 }
             }
-            DrawAtProj(outline);
-            foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
-            {
-                if (mist is BeanMist sMist)
-                {
-                    sMist.DrawOutline(sb);
-                }
-            }
-            foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
-            {
-                mist.DrawCommon(sb, mist.Texture, mist.CanvasOffset);
-            }
-            DrawAtProj(texture);
+            emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => DrawAtProj(outline));
+            emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterPreDrawAll, () => DrawAtProj(texture));
             return false;
         }
     }

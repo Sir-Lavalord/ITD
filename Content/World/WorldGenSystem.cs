@@ -8,7 +8,6 @@ using Terraria.ID;
 using Microsoft.Xna.Framework;
 using ITD.Physics;
 using ITD.Particles;
-using ITD.Particles.Testing;
 using ITD.Content.Tiles.Misc;
 using ITD.Utilities;
 using Terraria.ObjectData;
@@ -68,11 +67,13 @@ namespace ITD.Content.World
         private void TestMethod()
         {
             // test UI particle (change particle.canvas in particle type)
-            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+            //ParticleSystem.NewEmitter(ParticleSystem.ParticleType<TestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             //test world particle (change particle.canvas in particle type)
-            //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
+            //ITDParticle newParticle = ParticleSystem.NewEmitter<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
-
+            Tile t = Framing.GetTileSafely(pos);
+            t.TileType = (ushort)ModContent.TileType<ReinforcedPegmatiteBricks>();
+            t.HasTile = true;
             /*
             testPoints.Add(pos);
             if (testPoints.Count == 1)
@@ -185,9 +186,9 @@ namespace ITD.Content.World
         private void TestMethod2()
         {
             // test UI particle (change particle.canvas in particle type)
-            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+            //ParticleSystem.NewEmitter(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             // test world particle (change particle.canvas in particle type)
-            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+            //ParticleSystem.NewEmitter(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
         }
     }
 }

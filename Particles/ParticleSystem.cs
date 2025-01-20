@@ -5,79 +5,70 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.Graphics.Shaders;
-using Terraria.DataStructures;
 using ITD.DetoursIL;
 
 namespace ITD.Particles
 {
-    // My name is Queue Trisi Angel,
-    // I live at 308 Negra Arroyo Lane, Albuquerque, New Mexico, 87104. This is my confession. If you're watching this tape, I'm probably dead, murdered by my
-
-    // anyway, big to-do list for this one
-    // apparently OOP particles is very bad for performance when there's lots of them in the world so, new idea on how improve this:
-    // have a ParticleEmitter class which does the actual drawing and behavior managing of particles. only these would be OOP
-    // particles themselves would be structs, they would contain the usual information except for custom behavior that would be dictated by the emitter
-    // a ParticleEmitter would have an innate lifetime that can be set freely in order to keep it alive, but if it is no longer being set,
-    // its remaining lifetime would be the same as the largest particle lifetime left. dispose it after that
     public class ParticleSystem : DetourGroup // this also doubles as a particle loader
     {
-        private static readonly List<ITDParticle> particlePrototypes = [];
-        public static int[] particleFramesVertical = [];
-        public static int[] particleFramesHorizontal = [];
+        private static readonly List<ParticleEmitter> emitterPrototypes = [];
+        public static byte[] particleFramesVertical = [];
+        public static byte[] particleFramesHorizontal = [];
         public static ArmorShaderData[] particleShaders = [];
-        private static readonly Dictionary<Type, ITDParticle> particlesByType = [];
-        public List<ITDParticle> particles;
+        private static readonly Dictionary<Type, ParticleEmitter> emmitersByType = [];
+        public List<ParticleEmitter> emitters;
         public static ParticleSystem Instance => DetourManager.GetInstance<ParticleSystem>();
-        public static ITDParticle NewParticle<T>(Vector2 position, Vector2 velocity, float rotation = 0f) where T : ITDParticle
+        public static ParticleEmitter NewEmitter<T>(ParticleEmitterDrawCanvas canvas = ParticleEmitterDrawCanvas.WorldOverProjectiles) where T : ParticleEmitter
         {
             Type particleType = typeof(T);
-            if (particlesByType.TryGetValue(particleType, out ITDParticle value))
+            if (emmitersByType.TryGetValue(particleType, out ParticleEmitter value))
             {
-                var constructor = particleType.GetConstructor(Type.EmptyTypes);
-                if (constructor != null)
+                var newInstance = Activator.CreateInstance<T>();
+
+                newInstance.type = value.type;
+                newInstance.canvas = canvas;
+                if (!Main.dedServ)
                 {
-                    var newInstance = (ITDParticle)constructor.Invoke(null);
-                    newInstance.type = value.type;
-                    if (!Main.dedServ)
-                    {
-                        newInstance.ExpectedTexturePath = $"ITD/Particles/Textures/{particleType.Name}";
-                    }
-                    newInstance.Initialize();
-                    newInstance.position = position;
-                    newInstance.velocity = velocity;
-                    newInstance.rotation = rotation;
-                    DetourManager.GetInstance<ParticleSystem>().particles.Add(newInstance);
-                    return newInstance;
+                    newInstance.ExpectedTexturePath = $"ITD/Particles/Textures/{particleType.Name}";
                 }
+                newInstance.Initialize();
+                DetourManager.GetInstance<ParticleSystem>().emitters.Add(newInstance);
+                return newInstance;
             }
             return null;
         }
+        public static ParticleEmitter NewSingleParticle<T>(Vector2 position, Vector2 velocity, float rotation = 0f, short lifetime = 30, ParticleEmitterDrawCanvas canvas = ParticleEmitterDrawCanvas.WorldOverProjectiles) where T : ParticleEmitter
+        {
+            var emitter = NewEmitter<T>(canvas);
+            emitter.Emit(position, velocity, rotation, lifetime);
+            return emitter;
+        }
         public void ClearParticlesOfType<T>() // this method must be accessed through ModContent.GetInstance<ParticleSystem>();
         {
-            particles.RemoveAll(x => x.GetType() == typeof(T));
+            emitters.RemoveAll(x => x.GetType() == typeof(T));
         }
         public override void SetStaticDefaults()
         {
-            foreach (ITDParticle prototype in particlePrototypes)
+            foreach (var prototype in emitterPrototypes)
                 prototype.SetStaticDefaults();
         }
         public override void Load()
         {
             if (Main.dedServ)
                 return;
-            particles = [];
-            foreach (Type t in ITD.Instance.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ITDParticle)))) // particle loader
+            emitters = [];
+            foreach (Type t in ITD.Instance.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ParticleEmitter)))) // particle loader
             {
-                var instance = (ITDParticle)RuntimeHelpers.GetUninitializedObject(t);
-                instance.type = (uint)particlePrototypes.Count;
-                particlesByType[t] = instance;
+                var instance = (ParticleEmitter)RuntimeHelpers.GetUninitializedObject(t);
+                instance.type = (ushort)emitterPrototypes.Count;
+                emmitersByType[t] = instance;
 
-                particlePrototypes.Add(instance);
+                emitterPrototypes.Add(instance);
             }
-            Array.Resize(ref particleFramesVertical, particlePrototypes.Count + 1);
-            Array.Resize(ref particleFramesHorizontal, particlePrototypes.Count + 1);
-            Array.Resize(ref particleShaders, particlePrototypes.Count + 1);
-            foreach (ITDParticle prototype in particlePrototypes)
+            Array.Resize(ref particleFramesVertical, emitterPrototypes.Count + 1);
+            Array.Resize(ref particleFramesHorizontal, emitterPrototypes.Count + 1);
+            Array.Resize(ref particleShaders, emitterPrototypes.Count + 1);
+            foreach(var prototype in emitterPrototypes)
             {
                 particleFramesVertical[prototype.type] = 1;
                 particleFramesHorizontal[prototype.type] = 1;
@@ -92,59 +83,34 @@ namespace ITD.Particles
         {
             if (Main.dedServ)
                 return;
-            On_Main.DrawSuperSpecialProjectiles -= DrawParticlesUnderProjectiles; // unsubscribe from events on unload
-            On_Main.DrawCachedProjs -= DrawParticlesOverProjectiles;
-            On_Main.DrawInterface -= DrawParticlesOnUI;
-            On_Main.UpdateParticleSystems -= UpdateAllParticles;
-            particles?.Clear();
-            particlePrototypes?.Clear();
-            particlesByType?.Clear();
+            emitters?.Clear();
+            emitterPrototypes?.Clear();
+            emmitersByType?.Clear();
         }
         public void UpdateAllParticles(On_Main.orig_UpdateParticleSystems orig, Main self)
         {
             orig(self);
-            foreach (ITDParticle particle in particles.ToList()) // avoid particle deletion funkiness by cloning the particles list (better way to do this?)
+            for (int i = emitters.Count - 1; i >= 0; i--)
             {
-                particle.Update();
+                ParticleEmitter emitter = emitters[i];
+                emitter.UpdateAllParticles();
+                emitter.timeLeft--;
+                if (emitter.timeLeft < 0)
+                    emitters.RemoveAt(i);
             }
         }
-        
-        public void DrawParticles(ParticleDrawCanvas canvas)
+
+        public void DrawParticles(ParticleEmitterDrawCanvas canvas)
         {
-            Matrix transform = canvas == ParticleDrawCanvas.UI ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix;
-
-            var particlesByType = particles
-                .Where(p => p.canvas == canvas)
-                .GroupBy(p => p.type);
-
-            foreach (var particleGroup in particlesByType)
+            foreach (ParticleEmitter emitter in emitters.Where(e => e.canvas == canvas))
             {
-                uint particleType = particleGroup.Key;
-                var shader = particleShaders[particleType];
-                
-                if (shader != null)
-                {
-                    Main.spriteBatch.End();
+                emitter.FlushDrawActions(ParticleEmitterDrawStep.BeforePreDrawAll);
+                emitter.PreDrawAllParticles();
 
-                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp,
-                        DepthStencilState.None, RasterizerState.CullNone, null, transform);
-                }
+                emitter.FlushDrawActions(ParticleEmitterDrawStep.AfterPreDrawAll);
+                emitter.DrawAllParticles();
 
-                foreach (var particle in particleGroup)
-                {
-                    if (shader != null)
-                    {
-                        (Rectangle source, Vector2 origin) = particle.GetFramingData();
-                        DrawData dd = new(particle.Texture, particle.position, source, particle.GetAlpha(), particle.rotation, origin, particle.scale, SpriteEffects.None);
-                        shader.Apply(null, dd);
-                    }
-                    particle.DrawParticle(Main.spriteBatch);
-                }
-                if (shader != null)
-                {
-                    Main.spriteBatch.End();
-                    Main.spriteBatch.Begin(default, default, SamplerState.PointClamp, default, RasterizerState.CullNone, default, transform);
-                }
+                emitter.FlushDrawActions(ParticleEmitterDrawStep.AfterDrawAll);
             }
         }
         
@@ -157,7 +123,7 @@ namespace ITD.Particles
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
                 DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-            DrawParticles(ParticleDrawCanvas.WorldUnderProjectiles);
+            DrawParticles(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
 
             Main.spriteBatch.End();
 
@@ -167,13 +133,17 @@ namespace ITD.Particles
         public void DrawParticlesOverProjectiles(On_Main.orig_DrawCachedProjs orig, Main self, List<int> projCache, bool startSpriteBatch)
         {
             orig(self, projCache, startSpriteBatch);
+
+            if (projCache != Main.instance.DrawCacheProjsOverPlayers)
+                return;
+
             if (!startSpriteBatch)
                 Main.spriteBatch.End();
 
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
                 DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-            DrawParticles(ParticleDrawCanvas.WorldOverProjectiles);
+            DrawParticles(ParticleEmitterDrawCanvas.WorldOverProjectiles);
 
             Main.spriteBatch.End();
 
@@ -187,7 +157,7 @@ namespace ITD.Particles
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp,
                 DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
 
-            DrawParticles(ParticleDrawCanvas.UI);
+            DrawParticles(ParticleEmitterDrawCanvas.UI);
 
             Main.spriteBatch.End();
         }

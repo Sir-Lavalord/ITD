@@ -1215,3 +1215,8 @@ Potshot: {
 		''' */
 	// DisplayName: Potshot
 }
+
+Flyswatter: {
+	// DisplayName: Flyswatter
+	// Tooltip: ""
+}

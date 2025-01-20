@@ -1,22 +1,10 @@
-﻿using ITD.Content.Projectiles.Friendly.Misc;
-using Microsoft.Xna.Framework;
+﻿// :emoji_23:
+/*
 using Terraria;
-using Terraria.ModLoader;
-using ITD.Content.Buffs.Debuffs;
-using ITD.Players;
-using ITD.Utilities;
-using Microsoft.Build.Evaluation;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
-using Terraria.ID;
-using Microsoft.CodeAnalysis;
-using Terraria.Graphics.Shaders;
 using ITD.Particles;
+using Terraria.Graphics.Renderers;
 
 namespace ITD.Content.Projectiles.Hostile
 {
@@ -30,7 +18,7 @@ namespace ITD.Content.Projectiles.Hostile
         {
             timeLeft = 30;
 
-            canvas = ParticleDrawCanvas.WorldUnderProjectiles;
+            canvas = ParticleEmitterDrawCanvas.WorldUnderProjectiles;
         }
         public RingMuzzleFlash(Vector2 pos, Vector2 vel, Color col, Vector2 morph, float rotation, float originalScale, float finalScale, int lifeTime)
         {
@@ -66,3 +54,4 @@ namespace ITD.Content.Projectiles.Hostile
 
     }
 }
+*/
