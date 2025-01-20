@@ -176,7 +176,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         }
         private void SetSnaptrapPlayerFlags(SnaptrapPlayer player)
         {
-
+            if (player.ChainWeightEquipped)
+                gravity += 2f;
+            ShootRange = player.LengthModifier.ApplyTo(ShootRange);
+            RetractAccel = player.RetractVelocityModifier.ApplyTo(RetractAccel);
+            FullPowerHitsAmount = (byte)player.FullPowerHitsModifier.ApplyTo(FullPowerHitsAmount);
+            WarningFrames = (ushort)player.WarningModifier.ApplyTo(WarningFrames);
         }
         public sealed override void OnSpawn(IEntitySource source)
         {
@@ -341,17 +346,13 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         private bool BasicSoundUpdateCallback(ProjectileAudioTracker tracker, ActiveSound soundInstance, int type)
         {
             // Update sound location according to projectile position
+            // (type 0 is for the chain sound callback. type 1 is for the warning sound callback)
             if (type == 0)
             {
-                soundInstance.Position = Projectile.position;
-                if (!hasDoneLatchEffect || retracting)
-                {
+                soundInstance.Position = Projectile.Center;
+                if (!IsStickingToTarget || retracting)
                     return tracker.IsActiveAndInGame();
-                }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
             else
             {
@@ -367,13 +368,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                     soundInstance.Pitch = 0f;
                 }
                 if (IsStickingToTarget)
-                {
                     return tracker.IsActiveAndInGame();
-                }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
         }
         private void NormalAI(Vector2 mountedCenter, float chainLength)

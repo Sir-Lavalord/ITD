@@ -48,8 +48,12 @@ namespace ITD.Content.Prefixes.Snaptrap
         }
         public sealed override void UpdateHeldPrefix(Item item, Player player)
         {
-            player.GetSnaptrapPlayer().LengthIncrease += lengthBonus;
-            player.GetSnaptrapPlayer().RetractMultiplier += retractRateBonus;
+            // use flat here for flat addition (just straight up addition)
+            // multiplication and addition to the actual modifier is in percentages iirc
+            // so modifier += 1f; would be 100% more.
+            // and modifier *= 2f; would double the damage before addition.
+            player.GetSnaptrapPlayer().LengthModifier += lengthBonus;
+            player.GetSnaptrapPlayer().RetractVelocityModifier += retractRateBonus;
         }
         public sealed override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {

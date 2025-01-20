@@ -29,47 +29,25 @@ namespace ITD.Content.Items.Weapons.Mage
     {
         public override void SetDefaults()
         {
-            Item.width = 40;
-            Item.height = 40;
-
-            Item.useStyle = ItemUseStyleID.HoldUp;
-            Item.useTime = 32;
-            Item.useAnimation = 32;
-            Item.autoReuse = true;
-
+            Item.damage = 9;
             Item.DamageType = DamageClass.Magic;
-            Item.damage = 8;
-            Item.knockBack = 1f;
-            Item.crit = 4;
-            Item.noMelee = true;
-            Item.mana = 6;
-
-            Item.value = Item.buyPrice(silver: 25);
-            Item.rare = 2;
+            Item.width = 38;
+            Item.height = 38;
+            Item.scale = 1.1f;
+            Item.maxStack = 1;
+            Item.useTime = 45;
+            Item.useAnimation = 45;
+            Item.knockBack = 4f;
             Item.UseSound = SoundID.Item71;
+            Item.noMelee = true;
+            Item.channel = true;
+            Item.noUseGraphic = true;
+            Item.useTurn = true;
+            Item.useStyle = 5;
+            Item.value = Item.buyPrice(silver: 25);
+            Item.rare = 5;
             Item.shoot = ModContent.ProjectileType<WeepWandWisp>();
-        }
-
-        public override void MeleeEffects(Player player, Rectangle hitbox)
-        {
-            if (Main.rand.NextBool(3))
-            {
-                Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, ModContent.DustType<Dusts.WispDust>());
-            }
-        }
-
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
-            Vector2 mousePosition = Main.MouseWorld;
-            Vector2 direction = mousePosition - player.position;
-            direction.Normalize();
-            float projectileSpeed = 4f;
-
-            Projectile.NewProjectile(player.GetSource_FromThis(), player.position.X, player.position.Y - 20f, direction.X * projectileSpeed, direction.Y * projectileSpeed, ModContent.ProjectileType<WeepWandWisp>(), 7, 0f, player.whoAmI);
-            Projectile.NewProjectile(player.GetSource_FromThis(), player.position.X, player.position.Y, direction.X * (projectileSpeed * 2f), direction.Y * projectileSpeed, ModContent.ProjectileType<WeepWandWisp>(), 7, 0f, player.whoAmI);
-            Projectile.NewProjectile(player.GetSource_FromThis(), player.position.X, player.position.Y + 20f, direction.X * projectileSpeed, direction.Y * projectileSpeed, ModContent.ProjectileType<WeepWandWisp>(), 7, 0f, player.whoAmI);
-
-            return false;
+            Item.shootSpeed = 5f;
         }
     }
 }
