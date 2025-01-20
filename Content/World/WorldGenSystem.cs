@@ -71,9 +71,11 @@ namespace ITD.Content.World
             //test world particle (change particle.canvas in particle type)
             //ITDParticle newParticle = ParticleSystem.NewEmitter<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
+            /*
             Tile t = Framing.GetTileSafely(pos);
             t.TileType = (ushort)ModContent.TileType<ReinforcedPegmatiteBricks>();
             t.HasTile = true;
+            */
             /*
             testPoints.Add(pos);
             if (testPoints.Count == 1)
