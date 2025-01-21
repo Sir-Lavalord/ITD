@@ -443,6 +443,15 @@ Configs: {
 			Tooltip: Aktivieren, damit die normale Wüste kleiner generiert wird, um mehr Platz für die Tiefe Wüste bereitzustellen. Standartmäßig aktiviert.
 		}
 	}
+
+	ITDClientConfig: {
+		// DisplayName: I T D Client Config
+
+		ScreenshakeIntensity: {
+			// Label: Screenshake Intensity
+			// Tooltip: ""
+		}
+	}
 }
 
 Prefixes: {

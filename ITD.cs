@@ -33,6 +33,7 @@ namespace ITD
         internal Mod achievements = null;
         internal Mod dialogueTweak = null; // this is necessary so the recruitment button doesn't screw up when this mod is on
         public static ITDServerConfig ServerConfig => ModContent.GetInstance<ITDServerConfig>();
+        public static ITDClientConfig ClientConfig => ModContent.GetInstance<ITDClientConfig>();
         public int? GetMusic(string trackName)
         {
             return itdMusic is not null ? MusicLoader.GetMusicSlot(itdMusic, "Music/" + trackName) : null;

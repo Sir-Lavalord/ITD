@@ -282,13 +282,17 @@ namespace ITD.Players
         {
             if (shakeDuration > 0)
             {
-                if (shakeDecay)
+                float configIntensity = ITD.ClientConfig.ScreenshakeIntensity / 100f;
+                if (configIntensity > 0)
                 {
-                    shakeIntensityY = float.Lerp(shakeIntensityY, 0, 0.025f);
+                    if (shakeDecay)
+                    {
+                        shakeIntensityY = float.Lerp(shakeIntensityY, 0, 0.025f) * configIntensity;
 
-                    shakeIntensityX = float.Lerp(shakeIntensityX, 0, 0.025f);
+                        shakeIntensityX = float.Lerp(shakeIntensityX, 0, 0.025f) * configIntensity;
+                    }
+                    Main.screenPosition += Main.rand.NextVector2Circular(shakeIntensityX, shakeIntensityY);
                 }
-                Main.screenPosition += Main.rand.NextVector2Circular(shakeIntensityX, shakeIntensityY);
             }
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

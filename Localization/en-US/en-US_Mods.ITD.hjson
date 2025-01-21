@@ -443,6 +443,15 @@ Configs: {
 			Tooltip: Turn on for the vanilla Desert to generate smaller to make space for Deep Desert generation. On by default.
 		}
 	}
+
+	ITDClientConfig: {
+		DisplayName: ITD Client Config
+
+		ScreenshakeIntensity: {
+			Label: Screenshake Intensity
+			Tooltip: The intensity (in percentage) by which screenshake effects will be visible.
+		}
+	}
 }
 
 Prefixes: {
