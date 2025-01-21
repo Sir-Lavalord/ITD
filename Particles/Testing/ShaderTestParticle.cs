@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿/*
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace ITD.Particles.Testing
         }
         public override void SetDefaults()
         {
-            canvas = ParticleDrawCanvas.WorldUnderProjectiles;
+            canvas = ParticleEmitterDrawCanvas.WorldUnderProjectiles;
             timeLeft = 120;
         }
         public override void AI()
@@ -28,3 +29,4 @@ namespace ITD.Particles.Testing
         }
     }
 }
+*/

@@ -170,6 +170,7 @@ Projectiles: {
 	// CosmicSlop.DisplayName: Cosmic Slop
 	// ManuscriptMinerProj.DisplayName: Manuscript Miner Proj
 	// PotshotReticle.DisplayName: Potshot Reticle
+	// FlyswatterHeldProjectile.DisplayName: Flyswatter Held Projectile
 }
 
 NPCs: {
@@ -379,6 +380,7 @@ DeathMessage: {
 WorldGen: {
 	BluesoilPassMessage: Blueifying the Underground Tundra...
 	DeepDesertPassMessage: Compressing the Desert...
+	// WorldNPCsPassMessage: Mods.ITD.WorldGen.WorldNPCsPassMessage
 }
 
 Tiles: {
@@ -439,6 +441,15 @@ Configs: {
 		ResizeDesertForDeepDesert: {
 			// Label: Resize Desert For Deep Desert
 			// Tooltip: Turn on for the vanilla Desert to generate smaller to make space for Deep Desert generation. On by default.
+		}
+	}
+
+	ITDClientConfig: {
+		// DisplayName: I T D Client Config
+
+		ScreenshakeIntensity: {
+			// Label: Screenshake Intensity
+			// Tooltip: ""
 		}
 	}
 }

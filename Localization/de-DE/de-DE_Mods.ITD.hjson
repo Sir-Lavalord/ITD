@@ -170,6 +170,7 @@ Projectiles: {
 	// CosmicSlop.DisplayName: Cosmic Slop
 	// ManuscriptMinerProj.DisplayName: Manuscript Miner Proj
 	// PotshotReticle.DisplayName: Potshot Reticle
+	// FlyswatterHeldProjectile.DisplayName: Flyswatter Held Projectile
 }
 
 NPCs: {
@@ -379,6 +380,7 @@ DeathMessage: {
 WorldGen: {
 	BluesoilPassMessage: Blauifiziere das tiefe Eis...
 	DeepDesertPassMessage: Wüsten müssen verdichtet werden...
+	// WorldNPCsPassMessage: Mods.ITD.WorldGen.WorldNPCsPassMessage
 }
 
 Tiles: {
@@ -439,6 +441,15 @@ Configs: {
 		ResizeDesertForDeepDesert: {
 			Label: Größenänderung der Wüste
 			Tooltip: Aktivieren, damit die normale Wüste kleiner generiert wird, um mehr Platz für die Tiefe Wüste bereitzustellen. Standartmäßig aktiviert.
+		}
+	}
+
+	ITDClientConfig: {
+		// DisplayName: I T D Client Config
+
+		ScreenshakeIntensity: {
+			// Label: Screenshake Intensity
+			// Tooltip: ""
 		}
 	}
 }

@@ -31,10 +31,11 @@ namespace ITD.Content.Tiles.DeepDesert
         {
             Point p = new(i, j);
             // here we check if the tile hasn't been mined (fail), and if there isn't already a particle that's linked to this tile
-            if (fail && !ParticleSystem.Instance.particles.Any(prt => prt.tag is Point pnt && pnt == p))
+            if (fail && !ParticleSystem.Instance.emitters.Any(prt => prt.tag is Point pnt && pnt == p))
             {
                 SoundEngine.PlaySound(SoundID.Item15, p.ToWorldCoordinates());
-                ITDParticle part = ParticleSystem.NewParticle<ProtectedTileParticle>(p.ToWorldCoordinates(), Vector2.Zero, 0f);
+                ParticleEmitter part = ParticleSystem.NewSingleParticle<ProtectedTileParticle>(p.ToWorldCoordinates(), Vector2.Zero, lifetime: 30);
+                part.additive = true;
                 part.tag = p;
             }
         }

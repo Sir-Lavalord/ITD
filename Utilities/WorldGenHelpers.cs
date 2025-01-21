@@ -82,30 +82,31 @@ namespace ITD.Utilities
         {
             public static Rectangle DigQuadTunnel(Point origin, Point end, int width, int quadAmount = 3, int randomRange = 0, Action<Point> callback = null, bool rounded = true)
             {
-                // todo: fix issue where the direction doesn't line up with the actual direction (end - origin).
-                // this is likely because of my usage of points. accuracy will decrease with each iteration of the for loop.
                 // default callback: dig tunnel
                 callback ??= p =>
                 {
                     Tile t = Framing.GetTileSafely(p);
                     if (t.TileType != ModContent.TileType<Debugger>())
                         Framing.GetTileSafely(p).HasTile = false;
-                }; 
-                Vector2 magnitudeDirection = (end - origin).ToVector2();
+                };
 
-                Vector2 normalizedDirection = magnitudeDirection.SafeNormalize(Vector2.Zero);
-                float segmentLength = magnitudeDirection.Length() / quadAmount;
+                Vector2 originF = origin.ToVector2();
+                Vector2 endF = end.ToVector2();
+                Vector2 direction = endF - originF;
 
+                Vector2 normalizedDirection = direction.SafeNormalize(Vector2.Zero);
+                float segmentLength = direction.Length() / quadAmount;
                 Vector2 sizeDir = normalizedDirection * segmentLength;
 
                 QuadDigData prev = new();
+                Vector2 currentPosition = originF;
                 int currentWidth1 = width;
 
                 for (int i = 0; i < quadAmount; i++)
                 {
                     if (i == 0)
                     {
-                        prev = DigDirectionQuad(origin, sizeDir, width, width, randomRange, true, callback);
+                        prev = DigDirectionQuad(currentPosition.ToPoint(), sizeDir, width, width, randomRange, true, callback);
                         currentWidth1 = prev.Width2;
                         if (rounded)
                             new ITDShapes.Ellipse(origin.X, origin.Y, prev.Width1, prev.Width1).LoopThroughPoints(callback);
@@ -115,12 +116,14 @@ namespace ITD.Utilities
                         prev = DigDirectionQuad(prev.End, sizeDir, currentWidth1, width, randomRange, false, callback);
                         currentWidth1 = prev.Width2;
                     }
+                    currentPosition += sizeDir;
                 }
                 if (rounded)
                     new ITDShapes.Ellipse(prev.End.X, prev.End.Y, prev.Width2, prev.Width2).LoopThroughPoints(callback);
-                int dir = Math.Sign(magnitudeDirection.X);
+
+                int dir = Math.Sign(direction.X);
                 // note: this only works for straight tunnels (like those in the DD)
-                return new Rectangle(origin.X + Math.Min(0, (int)magnitudeDirection.X), origin.Y - width / 2, (int)magnitudeDirection.Length(), width * 2);
+                return new Rectangle(origin.X + Math.Min(0, (int)direction.X), origin.Y - width / 2, (int)direction.Length(), width * 2);
             }
             public static QuadDigData DigDirectionQuad(Point origin, Vector2 sizeDirection, int width, int width2 = -1, int randomRange = 0, bool randomizeWidth1 = false, Action<Point> callback = null)
             {

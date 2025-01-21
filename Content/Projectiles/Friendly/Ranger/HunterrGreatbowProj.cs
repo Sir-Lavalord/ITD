@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System.IO;
+﻿using System.IO;
 using Terraria;
 using System;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,13 +7,6 @@ using ITD.Content.Items.Weapons.Ranger;
 using Terraria.Audio;
 using Terraria.ID;
 using ITD.Utilities;
-using System.Runtime.InteropServices;
-using Terraria.DataStructures;
-using ITD.Content.Projectiles.Friendly.Summoner;
-using ITD.Content.Projectiles.Hostile;
-using ITD.Particles;
-using ITD.Particles.Testing;
-using System.Data;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger
 {
@@ -146,7 +138,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                     Shift = Math.Clamp(Shift + 0.25f, 0f, 1f);
                     if (HaveArrow)
                     {
-                        ParticleSystem.NewParticle<RingMuzzleFlash>(Projectile.Center + Projectile.rotation.ToRotationVector2() * 5f, Vector2.Zero,Projectile.rotation);
+                        //ParticleSystem.NewParticle<RingMuzzleFlash>(Projectile.Center + Projectile.rotation.ToRotationVector2() * 5f, Vector2.Zero, Projectile.rotation);
 
                         //RoundDown
                         Shift = 1;
