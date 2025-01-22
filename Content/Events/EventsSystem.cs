@@ -18,12 +18,21 @@ namespace ITD.Content.Events
         public static readonly Dictionary<Type, ITDEvent> EventsByType = [];
         public static readonly Dictionary<Type, sbyte> IDsByType = [];
         public static sbyte ActiveEvent = -1;
+        /// <summary>
+        /// Starts an event.
+        /// TODO: SYNC THIS IN MP
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         public static void BeginEvent<T>() where T : ITDEvent
         {
             ITDEvent e = EventsByType[typeof(T)];
             ActiveEvent = e.Type;
             e.IsActive = true;
         }
+        /// <summary>
+        /// Stops an event.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         public static void CancelEvent<T>() where T : ITDEvent
         {
             ITDEvent.BarScaleVisualProgress = 0;
@@ -99,10 +108,25 @@ namespace ITD.Content.Events
         public static Color TerrariaBlurple => new(63, 65, 151, 255);
         public static float BarScaleVisualProgress = 0;
         public string LocalizationCategory => "Events";
+        /// <summary>
+        /// The path to the icon texture for this event. Defaults to the event's namespace and name (like other ModTypes)
+        /// </summary>
         public virtual string IconTexture => $"{GetType().Namespace.Replace('.', '/')}/{Name}";
+        /// <summary>
+        /// The color that is used for the event title's frame or "background".
+        /// </summary>
         public virtual Color EventTitleBackgroundColor => TerrariaBlurple;
+        /// <summary>
+        /// The color that is used to draw the progress bar.
+        /// </summary>
         public virtual Color BarColor => Main.OurFavoriteColor;
+        /// <summary>
+        /// The <see cref="ModWaterStyle"/> used while this event is active.
+        /// </summary>
         public virtual ModWaterStyle WaterStyle => null;
+        /// <summary>
+        /// The music track used while this event is active.
+        /// </summary>
         public virtual int Music => -1;
         private bool _isActive = false;
         public bool IsActive
@@ -126,6 +150,10 @@ namespace ITD.Content.Events
         /// It is recommended to set this to true for fine control over spawns, vanilla or otherwise.
         /// </summary>
         public virtual bool OverrideVanillaSpawns => true;
+        /// <summary>
+        /// The visual progress (what will be shown in the progress bar) of this event.
+        /// </summary>
+        /// <returns></returns>
         public virtual float GetVisualProgress() => 0f;
         protected sealed override void Register()
         {
@@ -136,6 +164,9 @@ namespace ITD.Content.Events
         {
             SetStaticDefaults();
         }
+        /// <summary>
+        /// Runs once when this event is activated.
+        /// </summary>
         public virtual void OnActivate()
         {
 
@@ -148,14 +179,28 @@ namespace ITD.Content.Events
         {
             return false;
         }
+        /// <summary>
+        /// Runs every frame while this event is active, but does not run on multiplayer clients.
+        /// For visual effects, override <see cref="VisualsUpdate(Player)"/> instead.
+        /// </summary>
         public virtual void WorldUpdate()
         {
 
         }
+        /// <summary>
+        /// Runs every frame while this event is active, but does not run on the server.
+        /// For actions that must happen on the server, override <see cref="WorldUpdate"/> instead.
+        /// </summary>
+        /// <param name="player"></param>
         public virtual void VisualsUpdate(Player player)
         {
 
         }
+        /// <summary>
+        /// Return false to stop the progress bar from drawing normally.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <returns></returns>
         public virtual bool PreDrawProgressBar(SpriteBatch spriteBatch)
         {
             return true;
@@ -229,6 +274,11 @@ namespace ITD.Content.Events
             // Draw title
             Utils.DrawBorderString(Main.spriteBatch, invasionTitle, boxRect.Right() + Vector2.UnitX * alphaFactor * -22f, Color.White * alphaFactor, alphaFactor * 0.9f, 1f, 0.4f);
         }
+        /// <summary>
+        /// Override to tell the game which NPCs to spawn and when. To change spawn rate, override <see cref="ModifySpawnRate(Player, ref int, ref int)"/>.
+        /// </summary>
+        /// <param name="spawnInfo"></param>
+        /// <returns></returns>
         public virtual IEnumerable<(int, float)> GetPool(NPCSpawnInfo spawnInfo)
         {
             yield return (NPCID.None, 0f);
@@ -237,6 +287,9 @@ namespace ITD.Content.Events
         {
 
         }
+        /// <summary>
+        /// Runs once when deactivated.
+        /// </summary>
         public virtual void OnDeactivate()
         {
 
