@@ -23,23 +23,29 @@ namespace ITD.Content.Events
         /// TODO: SYNC THIS IN MP
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public static void BeginEvent<T>() where T : ITDEvent
+        public static void BeginEvent(ITDEvent e)
         {
-            ITDEvent e = EventsByType[typeof(T)];
             ActiveEvent = e.Type;
             e.IsActive = true;
         }
+        /// <inheritdoc cref="BeginEvent(ITDEvent)"/>
+        public static void BeginEvent<T>() where T : ITDEvent => BeginEvent(EventsByType[typeof(T)]);
+        /// <inheritdoc cref="BeginEvent(ITDEvent)"/>
+        public static void BeginEvent(sbyte type) => BeginEvent(EventsByID[type]);
         /// <summary>
         /// Stops an event.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public static void CancelEvent<T>() where T : ITDEvent
+        public static void StopEvent(ITDEvent e)
         {
-            ITDEvent.BarScaleVisualProgress = 0;
-            ITDEvent e = EventsByType[typeof(T)];
+            ITDEvent.BarScaleVisualProgress = 0f;
             ActiveEvent = -1;
             e.IsActive = false;
         }
+        /// <inheritdoc cref="StopEvent(ITDEvent)"/>
+        public static void StopEvent<T>() where T : ITDEvent => StopEvent(EventsByType[typeof(T)]);
+        /// <inheritdoc cref="StopEvent(ITDEvent)"/>
+        public static void StopEvent(sbyte type) => StopEvent(EventsByID[type]);
         public static sbyte RegisterEvent(ITDEvent instance)
         {
             sbyte newID = (sbyte)EventsByID.Count;
@@ -56,12 +62,18 @@ namespace ITD.Content.Events
             {
                 ITDEvent activeEvent = EventsByID[ActiveEvent];
                 activeEvent.WorldUpdate();
+                if (activeEvent.ShouldStop())
+                    StopEvent(activeEvent);
                 return;
             }
             for (sbyte i = 0; i < EventsByID.Count; i++)
             {
                 ITDEvent @event = EventsByID[i];
-                @event.NaturalSpawn();
+                if (@event.NaturalSpawn())
+                {
+                    BeginEvent(@event);
+                    break;
+                }
             }
         }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -176,6 +188,14 @@ namespace ITD.Content.Events
         /// </summary>
         /// <returns></returns>
         public virtual bool NaturalSpawn()
+        {
+            return false;
+        }
+        /// <summary>
+        /// Runs every frame while this event is active. Use this to set conditions for this event stopping.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool ShouldStop()
         {
             return false;
         }

@@ -191,7 +191,7 @@ namespace ITD.Content.World
         }
         private void TestMethod2()
         {
-            //EventsSystem.CancelEvent<TestChaoticEvent>();
+            //EventsSystem.StopEvent<TestChaoticEvent>();
             // test UI particle (change particle.canvas in particle type)
             //ParticleSystem.NewEmitter(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             // test world particle (change particle.canvas in particle type)
