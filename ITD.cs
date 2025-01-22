@@ -18,6 +18,7 @@ using ITD.Common.ChatTags;
 using System.Text;
 using System.Diagnostics;
 using Terraria.GameContent;
+using ITD.Particles;
 
 namespace ITD
 {
@@ -29,9 +30,10 @@ namespace ITD
         public const string MiscShadersFolderPath = "Shaders/MiscShaders/";
         public const string ArmorShadersFolderPath = "Shaders/ArmorShaders/";
         public const string ScreenShadersFolderPath = "Shaders/ScreenShaders/";
+        public const string MetaballsShadersFolderPath = "Shaders/MetaballsShaders/";
 
         public static readonly Dictionary<string, ArmorShaderData> ITDArmorShaders = [];
-        public static readonly Dictionary<string, MetaballShaderData> ITDMetaBallsShaders = [];
+        public static readonly Dictionary<string, MetaballsShaderData> ITDMetaBallsShaders = [];
 
         internal Mod itdMusic = null;
 
@@ -174,14 +176,35 @@ namespace ITD
             }
 
         }
+        
+        public void LoadMetaballsShaders() 
+        {
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+
+
+                foreach (string path in GetFileNames())
+                {
+                    if (!path.StartsWith(MetaballsShadersFolderPath) || !path.EndsWith(".xnb"))
+                        continue;
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(path);
+                    sb.Remove(0, MetaballsShadersFolderPath.Length);
+                    sb.Replace(".xnb", "");
+                    string shaderName = sb.ToString();
+                    ITDMetaBallsShaders[shaderName] = new MetaballsShaderData(ModContent.Request<Effect>(this.Name + "/" + MetaballsShadersFolderPath + shaderName));
+
+                }
+            }
+        }
+
         public void PreAssignShadersProperties() 
         {
 
-            GameShaders.Misc["CosmicLaser"].UseImage1(TextureAssets.Extra[197]); // noise
-            GameShaders.Misc["CosmicLaser"].UseImage0(TextureAssets.Extra[193]); // smoke
-
-
         }
+        
         public override void Load()
         {
             SkyManager.Instance["ITD:CosjelOkuuSky"] = new CosjelOkuuSky();

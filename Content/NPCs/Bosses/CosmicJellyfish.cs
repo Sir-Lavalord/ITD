@@ -255,7 +255,7 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         AITimer1 = 0;
                         AITimer2 = 0;
-                        AttackID = 7;
+                        AttackID++;
                     }
                         break;
                 case 2: //zingers

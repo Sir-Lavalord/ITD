@@ -16,10 +16,10 @@ namespace ITD.Particles
     {
     }
 
-    public class MetaballRenderTarget : ARenderTargetContentByRequest
+    public class MetaballsRenderTarget : ARenderTargetContentByRequest
     {
 
-        public MetaballRenderTarget() 
+        public MetaballsRenderTarget() 
         {
             Main.OnResolutionChanged += OnResChanged;
         }
@@ -30,7 +30,7 @@ namespace ITD.Particles
             PrepareARenderTarget_AndListenToEvents(ref _target, device, Main.screenWidth, Main.screenHeight, RenderTargetUsage.PreserveContents);
             var oldTargets = device.GetRenderTargets();
             device.SetRenderTarget(_target);
-            device.Clear(Color.Cyan);
+            device.Clear(Color.Transparent);
             device.SetRenderTarget(null);
             _wasPrepared = true;
             device.SetRenderTargets(oldTargets);
@@ -46,16 +46,16 @@ namespace ITD.Particles
     public class MetaballsSystem : ModSystem 
     {
 
-        MetaballRenderTarget MetaballRT;
+        MetaballsRenderTarget MetaballsRT;
 
         public override void Load()
         {
-            Main.ContentThatNeedsRenderTargets.Add(MetaballRT = new MetaballRenderTarget());
+            Main.ContentThatNeedsRenderTargets.Add(MetaballsRT = new MetaballsRenderTarget());
         }
 
         public override void Unload()
         {
-            Main.ContentThatNeedsRenderTargets.Remove(MetaballRT);
+            Main.ContentThatNeedsRenderTargets.Remove(MetaballsRT);
         }
     }
 

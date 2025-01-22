@@ -1,4 +1,5 @@
 #pragma warning (disable : 4717) 
+sampler2D image0 : register(s0);
 sampler2D image1 : register(s1);
 sampler2D image2 : register(s2);
 sampler2D image3 : register(s3);
@@ -45,10 +46,10 @@ VertexShaderOutput ShaderVS(VertexShaderInput input)
 
 float4 ShaderPS(float4 vertexColor : COLOR0, float2 texCoords : TEXCOORD0) : COLOR0
 {
-    float4 color = tex2D(image1,texCoords);
-    float circle = saturate((0.5 - distance(float2(0.5 * 2.0 - 1.0, 0.5 * 2.0 - 1.0), NormalUV)));
-
-    return color * circle;
+    float4 texture = tex2D(image1,texCoords);
+    float circle = saturate((0.5 - distance(float2(0.5 * 2.0 - 1.0, 0.5 * 2.0 - 1.0), texCoords)));
+    
+    return texture * circle;
 }
 
 
