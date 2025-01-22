@@ -445,11 +445,11 @@ Configs: {
 	}
 
 	ITDClientConfig: {
-		// DisplayName: I T D Client Config
+		// DisplayName: ITD Client Config
 
 		ScreenshakeIntensity: {
 			// Label: Screenshake Intensity
-			// Tooltip: ""
+			// Tooltip: The intensity (in percentage) by which screenshake effects will be visible.
 		}
 	}
 }

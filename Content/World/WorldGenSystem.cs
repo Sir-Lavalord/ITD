@@ -16,6 +16,7 @@ using ITD.Content.Tiles.DeepDesert;
 using ITD.Content.Walls.DeepDesert;
 using System;
 using ITD.Content.UI;
+using ITD.Content.Events;
 
 namespace ITD.Content.World
 {
@@ -73,6 +74,7 @@ namespace ITD.Content.World
             //test world particle (change particle.canvas in particle type)
             //ITDParticle newParticle = ParticleSystem.NewEmitter<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
+            //EventsSystem.BeginEvent<TestChaoticEvent>();
             /*
             Tile t = Framing.GetTileSafely(pos);
             t.TileType = (ushort)ModContent.TileType<ReinforcedPegmatiteBricks>();
@@ -189,6 +191,7 @@ namespace ITD.Content.World
         }
         private void TestMethod2()
         {
+            //EventsSystem.CancelEvent<TestChaoticEvent>();
             // test UI particle (change particle.canvas in particle type)
             //ParticleSystem.NewEmitter(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             // test world particle (change particle.canvas in particle type)
