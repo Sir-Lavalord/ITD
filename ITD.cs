@@ -17,6 +17,7 @@ using Terraria.UI.Chat;
 using ITD.Common.ChatTags;
 using System.Text;
 using System.Diagnostics;
+using Terraria.GameContent;
 
 namespace ITD
 {
@@ -30,7 +31,7 @@ namespace ITD
         public const string ScreenShadersFolderPath = "Shaders/ScreenShaders/";
 
         public static readonly Dictionary<string, ArmorShaderData> ITDArmorShaders = [];
-        public static readonly Dictionary<string, MiscShaderData> ITDMiscShader = [];
+        public static readonly Dictionary<string, MetaballShaderData> ITDMetaBallsShaders = [];
 
         internal Mod itdMusic = null;
 
@@ -173,7 +174,14 @@ namespace ITD
             }
 
         }
+        public void PreAssignShadersProperties() 
+        {
 
+            GameShaders.Misc["CosmicLaser"].UseImage1(TextureAssets.Extra[197]); // noise
+            GameShaders.Misc["CosmicLaser"].UseImage0(TextureAssets.Extra[193]); // smoke
+
+
+        }
         public override void Load()
         {
             SkyManager.Instance["ITD:CosjelOkuuSky"] = new CosjelOkuuSky();
@@ -182,6 +190,7 @@ namespace ITD
             LoadScreenShaders();
             LoadArmorShaders();
             LoadArmorShadersOverlays();
+            PreAssignShadersProperties();
             itdMusic = null;
             wikithis = null;
             bossChecklist = null;

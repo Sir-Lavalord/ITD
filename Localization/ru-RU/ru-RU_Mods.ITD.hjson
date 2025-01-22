@@ -170,6 +170,7 @@ Projectiles: {
 	// CosmicSlop.DisplayName: Cosmic Slop
 	// ManuscriptMinerProj.DisplayName: Manuscript Miner Proj
 	// PotshotReticle.DisplayName: Potshot Reticle
+	// CosmicGoo.DisplayName: Cosmic Goo
 }
 
 NPCs: {

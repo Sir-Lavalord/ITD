@@ -1,161 +1,242 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.Audio;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ITD.Content.Projectiles;
-using Terraria.Map;
-using ITD.Content.NPCs.Bosses;
-using ITD.Utilities;
-using SteelSeries.GameSense;
+using ITD.PrimitiveDrawing;
+using Terraria.Graphics.Shaders;
+using Terraria.GameContent;
+using Terraria.DataStructures;
+using System.Collections.Generic;
 namespace ITD.Content.Projectiles.Hostile
 {
-    //TODO: MUST BE RE-WRITTEN ENTIRELY, ELSE REMOVE BEFORE RELEASE
-    public class CosmicRay : Deathray
+    public class CosmicRay : ModProjectile
     {
-        public override string Texture => "ITD/Content/Projectiles/Hostile/CosmicRay";
-        public CosmicRay() : base(180) { }
-        private Vector2 spawnPos;
+        public override string Texture => ITD.BlankTexture;
 
         public override void SetStaticDefaults()
         {
-            base.SetStaticDefaults();
+            ProjectileID.Sets.DrawScreenCheckFluff[Type] = 2400; 
         }
+
+
+        public override void SetDefaults()
+        {
+            Projectile.hostile = true;
+            Projectile.friendly = false;
+            Projectile.width = Projectile.height = 128;
+            Projectile.penetrate = -1;
+            Projectile.aiStyle = -1;
+            Projectile.tileCollide = false;
+
+
+
+
+            // edit the MAX_TIMELEFT instead of this
+            Projectile.timeLeft = 2;
+        }
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.rotation = Rotation + MathHelper.PiOver2;
+            Projectile.timeLeft = MAX_TIMELEFT;
+
+            UpdateLaserCollision();
+            CurrentLasterLength = LasersLength;
+
+
+        }
+        private const int MAX_TIMELEFT = 600;
+        public const int MAX_GOO = 300;
+        private const int MAX_LASER_LENGTH = 3000;
+
+        public List<CosmicGoos> cosmicGoos = new List<CosmicGoos>();
+        public float CurrentHitboxesAmount = 0;
+        private int laserWidth = 225;
+        private int NPCOwner 
+        {
+            get { return (int)Projectile.ai[0]; }
+            set { Projectile.ai[0] = value; }
+        }
+        private int CurrentLasterLength
+        {
+            get { return (int)Projectile.ai[2]; }
+            set { Projectile.ai[2] = value; }
+        }
+        private float Rotation
+        {
+            get { return Projectile.ai[1]; }
+            set { Projectile.ai[1] = value; }
+        }
+        int LasersLength = 0;
+
         public override void AI()
         {
-            Vector2? vector78 = null;
-            if (Projectile.velocity.HasNaNs() || Projectile.velocity == Vector2.Zero)
+            NPC npc = Main.npc[NPCOwner];
+            Player player = Main.player[npc.target];
+
+            Projectile.Center = npc.Center - new Vector2(0,25);
+            // change the projetile rotation for adjusting the laser rotation
+            Projectile.rotation = Projectile.rotation.AngleTowards(Projectile.AngleTo(player.Center), 0.01f);
+            Projectile.velocity = Projectile.rotation.ToRotationVector2();
+
+            UpdateLaserCollision();
+
+            //update current laser length slowly, if you dont want that, just uncomment the comment at the end of the AI hook
+            if (LasersLength > CurrentLasterLength) 
             {
-                Projectile.velocity = -Vector2.UnitY;
-            }
-            /*if (Main.npc[(int)Projectile.ai[1]].active && Main.npc[(int)Projectile.ai[1]].type == ModContent.\1Type<\2>\(\))
-            {
-                Projectile.Center = Main.npc[(int)Projectile.ai[1]].Center;
+                CurrentLasterLength += 25;
+                if (CurrentLasterLength > LasersLength)
+                    CurrentLasterLength = LasersLength;
+
             }
             else
             {
-                Projectile.Kill();
-                return;
-            }*/
-            if (Projectile.velocity.HasNaNs() || Projectile.velocity == Vector2.Zero)
-            {
-                Projectile.velocity = -Vector2.UnitY;
+                CurrentLasterLength -= 25;
+                if (CurrentLasterLength < LasersLength)
+                    CurrentLasterLength = LasersLength;
+
             }
-            NPC CosJel = Main.npc[(int)Projectile.ai[1]];
-            Player player = Main.player[CosJel.target];
-            player.GetITDPlayer().BetterScreenshake(20, 5, 5, true);
-            if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+
+            // goo/stream updating
+            cosmicGoos.ForEach(g => g.timeleft--);
+            cosmicGoos.RemoveAll(g => g.timeleft <= 0);
+            SpawnACosmicGoo();
+
+            //uncomment this for normal laser collision behavouir
+            //CurrentLasterLength = LasersLength;
+        }
+
+        public void SpawnACosmicGoo()
+        {
+
+
+            CosmicGoos cosmicGoo = new CosmicGoos(new Rectangle((int)(Projectile.position.X + Projectile.velocity.X * CurrentLasterLength), (int)(Projectile.position.Y + Projectile.velocity.Y * CurrentLasterLength), Projectile.width, Projectile.height), 120, Main.rand.NextFloat(MathHelper.TwoPi));
+            cosmicGoos.Add(cosmicGoo);
+
+        }
+
+        public void UpdateLaserCollision() 
+        {
+            LasersLength = 0;
+            for (int i = 0; i < MAX_LASER_LENGTH; i++)
             {
-                if (CosJel != null && !CosJel.dontTakeDamage)
-                {
-                    Projectile.Center = CosJel.Center;
-                }
+
+                if (Collision.CanHitWithCheck(Projectile.Center, 15, 15, Projectile.Center + Projectile.velocity * LasersLength, 15, 15, (x, y) => { return Main.tile[x, y].TileType != TileID.Platforms; }))
+                    LasersLength = i;
                 else
-                {
-                    Projectile.Kill();
-                    return;
-                }
-            }
-            else
-            {
-                Projectile.Kill();
-            }
-            if (Projectile.localAI[0] == 0f)
-            {
-                if (!Main.dedServ)
-                    SoundEngine.PlaySound(new SoundStyle("Terraria/Sounds/Zombie_104") { Volume = 0.5f }, Projectile.Center);
-                spawnPos = Projectile.Center;
-            }
-            
-            if (Main.expertMode||Main.masterMode)
-            {
-                Projectile.velocity = Projectile.velocity.ToRotation().AngleLerp(CosJel.DirectionTo(Main.player[CosJel.target].Center + Main.player[CosJel.target].velocity * 6).ToRotation(), 0.01f).ToRotationVector2();
-                Projectile.rotation = Projectile.velocity.ToRotation() - (float)Math.PI / 6;
-            }
-            float num801 = 2f;
-            if (Main.expertMode)
-            {
-                num801 = 3f;
-            }
-            else if (Main.masterMode)
-            {
-                num801 = 5f;
-            }
-            Projectile.localAI[0] += 1f;
+                    break;
 
-            if (Projectile.localAI[0] >= maxTime)
-            {
-                Projectile.Kill();
-                return;
-            }
-            Projectile.scale = (float)Math.Sin(Projectile.localAI[0] * 3.14159274f / maxTime) * num801 * 6f;
-            if (Projectile.scale > num801)
-            {
-                Projectile.scale = num801;
             }
 
-            if (Projectile.localAI[0] > maxTime / 2 && Projectile.scale < num801)
+        }
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            foreach (CosmicGoos hitbox in cosmicGoos)
             {
-                if (Projectile.ai[0] > 0)
-                {
-                    Projectile.ai[0] = 0;
-                }
+                if (hitbox.hitbox.Intersects(targetHitbox))
+                    return true;
             }
 
-            //float num804 = Projectile.velocity.ToRotation();
-            //num804 += Projectile.ai[0];
-            //Projectile.rotation = num804 - 1.57079637f;
-            //float num804 = Main.npc[(int)Projectile.ai[1]].ai[3] - 1.57079637f;
-            //if (Projectile.ai[0] != 0f) num804 -= (float)Math.PI;
-            //Projectile.rotation = num804;
-            //num804 += 1.57079637f;
-            //Projectile.velocity = num804.ToRotationVector2();
-            float num805 = 3f;
-            float num806 = (float)Projectile.width;
-            Vector2 samplingPoint = Projectile.Center;
-            if (vector78.HasValue)
-            {
-                samplingPoint = vector78.Value;
-            }
-            float[] array3 = new float[(int)num805];
-            //Collision.LaserScan(samplingPoint, Projectile.velocity, num806 * Projectile.scale, 3000f, array3);
-            for (int i = 0; i < array3.Length; i++)
-                array3[i] = 3000f;
-            float num807 = 0f;
-            int num3;
-            for (int num808 = 0; num808 < array3.Length; num808 = num3 + 1)
-            {
-                num807 += array3[num808];
-                num3 = num808;
-            }
-            num807 /= num805;
-            float amount = 0.5f;
-            Projectile.localAI[1] = MathHelper.Lerp(Projectile.localAI[1], num807, amount);
-            Vector2 vector79 = Projectile.Center + Projectile.velocity * (Projectile.localAI[1] - 14f);
-            for (int num809 = 0; num809 < 2; num809 = num3 + 1)
-            {
-                float num810 = Projectile.velocity.ToRotation() + ((Main.rand.Next(2) == 1) ? -1f : 1f) * 1.57079637f;
-                float num811 = (float)Main.rand.NextDouble() * 2f + 2f;
-                Vector2 vector80 = new Vector2((float)Math.Cos((double)num810) * num811, (float)Math.Sin((double)num810) * num811);
-                int num812 = Dust.NewDust(vector79, 0, 0, 244, vector80.X, vector80.Y, 0, default(Color), 1f);
-                Main.dust[num812].noGravity = true;
-                Main.dust[num812].scale = 1.7f;
-                num3 = num809;
-            }
-            if (Main.rand.NextBool(5))
-            {
-                Vector2 value29 = Projectile.velocity.RotatedBy(1.5707963705062866, default(Vector2)) * ((float)Main.rand.NextDouble() - 0.5f) * (float)Projectile.width;
-                int num813 = Dust.NewDust(vector79 + value29 - Vector2.One * 4f, 8, 8, 244, 0f, 0f, 100, default(Color), 1.5f);
-                Dust dust = Main.dust[num813];
-                dust.velocity *= 0.5f;
-                Main.dust[num813].velocity.Y = -Math.Abs(Main.dust[num813].velocity.Y);
-            }
-            //DelegateMethods.v3_1 = new Vector3(0.3f, 0.65f, 0.7f);
-            //Utils.PlotTileLine(Projectile.Center, Projectile.Center + Projectile.velocity * Projectile.localAI[1], (float)Projectile.width * Projectile.scale, new Utils.PerLinePoint(DelegateMethods.CastLight));
 
-            Projectile.position -= Projectile.velocity;
-            Projectile.rotation = Projectile.velocity.ToRotation() - 1.57079637f;
+            float f = 0;
+            return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity * CurrentLasterLength, 22, ref f);
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+
+            default(CosmicLaserVertex).Draw(Projectile.Center - Main.screenPosition,Projectile.rotation,new Vector2(Projectile.velocity.Length() * CurrentLasterLength, laserWidth));
+
+            default(CosmicGooVertex).Draw(Projectile.Center - Main.screenPosition + Projectile.velocity * CurrentLasterLength, MathHelper.ToRadians( Projectile.timeLeft), new Vector2(Projectile.width * 2, Projectile.height * 2), Projectile.timeLeft / 120f, Projectile.timeLeft);
+
+            foreach (CosmicGoos goo in cosmicGoos)
+            {
+                default(CosmicGooVertex).Draw(goo.hitbox.Center.ToVector2() - Main.screenPosition, goo.rotation, new Vector2(Projectile.width, Projectile.height), MathHelper.Min((float)goo.timeleft / 120f,(float)Projectile.timeLeft / MAX_TIMELEFT), (float)goo.timeleft / 60f);
+            }
+
+
+            return false;
+        }
+
+        public override void OnKill(int timeLeft)
+        {
+            cosmicGoos.Clear();
+        }
+
+    }
+
+    public class CosmicGoos
+    {
+
+        public CosmicGoos(Rectangle hitbox, int timeleft, float rotation) 
+        {
+            this.hitbox = hitbox;
+            this.timeleft = timeleft;
+            this.rotation = rotation;
+
+        }
+
+        public Rectangle hitbox;
+        public int timeleft;
+        public float rotation;
+        public int whoAmI;
+        public void Update()
+        {
+            this.timeleft--;
+            Main.NewText(timeleft);
+
         }
     }
+
+    public struct CosmicGooVertex
+    {
+
+        private static SimpleSquare square = new SimpleSquare();
+
+        public void Draw(Vector2 position, float rotation, Vector2 size, float timeleftPercentage, float randomOffset)
+        {
+            MiscShaderData shader = GameShaders.Misc["CosmicGoo"];
+
+            shader.UseShaderSpecificData(new Vector4(timeleftPercentage, randomOffset, 0, 0)); //timeleftPercentage, random texture offset, none, none
+            shader.UseImage0(TextureAssets.Extra[193]);
+            shader.UseColor(Color.Beige);
+            shader.UseSecondaryColor(new Color(192, 59, 166));
+            shader.Apply();
+
+            square.Draw(position, rotation: rotation, size: size * 2, rotationCenter: position);
+
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }
+
+
+    }
+    public struct CosmicLaserVertex 
+    {
+    
+        private static SimpleSquare square = new SimpleSquare();
+        
+        public void Draw(Vector2 position, float rotation, Vector2 size)
+        {
+            MiscShaderData shader = GameShaders.Misc["CosmicLaser"];
+
+            //purple laser 
+            shader.UseShaderSpecificData(new Vector4(size.X, 15, 0, 0)); //Laserlength, none, none, none
+            shader.UseImage0(TextureAssets.Extra[193]);
+            shader.UseColor(new Color(192,59,166));
+            shader.Apply();
+
+            square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1.5f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
+
+            //beige laser 
+            shader.UseShaderSpecificData(new Vector4(size.X, 15, 0, 0)); //Laserlength, none, none, none
+            shader.UseImage1(TextureAssets.Extra[193]);
+            shader.UseColor(Color.Beige);
+            shader.Apply();
+
+            square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1,1f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
+
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }
+
+
+    }
+
 }
