@@ -171,6 +171,7 @@ Projectiles: {
 	// ManuscriptMinerProj.DisplayName: Manuscript Miner Proj
 	// PotshotReticle.DisplayName: Potshot Reticle
 	// FlyswatterHeldProjectile.DisplayName: Flyswatter Held Projectile
+	// CosmicGoo.DisplayName: Cosmic Goo
 }
 
 NPCs: {

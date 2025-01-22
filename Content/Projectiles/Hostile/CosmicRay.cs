@@ -97,9 +97,9 @@ namespace ITD.Content.Projectiles.Hostile
             }
 
             // goo/stream updating
-            cosmicGoos.ForEach(g => g.timeleft--);
-            cosmicGoos.RemoveAll(g => g.timeleft <= 0);
-            SpawnACosmicGoo();
+            //cosmicGoos.ForEach(g => g.timeleft--);
+            //cosmicGoos.RemoveAll(g => g.timeleft <= 0);
+            //SpawnACosmicGoo();
 
             //uncomment this for normal laser collision behavouir
             //CurrentLasterLength = LasersLength;
@@ -145,7 +145,7 @@ namespace ITD.Content.Projectiles.Hostile
 
             default(CosmicLaserVertex).Draw(Projectile.Center - Main.screenPosition,Projectile.rotation,new Vector2(Projectile.velocity.Length() * CurrentLasterLength, laserWidth));
 
-            default(CosmicGooVertex).Draw(Projectile.Center - Main.screenPosition + Projectile.velocity * CurrentLasterLength, MathHelper.ToRadians( Projectile.timeLeft), new Vector2(Projectile.width * 2, Projectile.height * 2), Projectile.timeLeft / 120f, Projectile.timeLeft);
+            default(CosmicGooVertex).Draw(Projectile.Center - Main.screenPosition + Projectile.velocity * CurrentLasterLength, MathHelper.ToRadians( Projectile.timeLeft), new Vector2(Projectile.width * 2, Projectile.height * 2), Projectile.timeLeft / 120f, (float)Projectile.timeLeft / 60);
 
             foreach (CosmicGoos goo in cosmicGoos)
             {

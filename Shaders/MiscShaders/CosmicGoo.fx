@@ -48,7 +48,6 @@ float4 CosmicGoo(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR
     float4 noise = tex2D(uImage1, expandInsideOutside(NormalUV));
     float circle = saturate((0.5 - distance(float2(0.5 * 2.0 - 1.0, 0.5 * 2.0 - 1.0), NormalUV)));
     circle *=5.;
-    noise.a = noise.r;
     noise.rgb *= lerp(uColor, uSecondaryColor, noise.a);
 
     
