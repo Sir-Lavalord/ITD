@@ -35,8 +35,8 @@ namespace ITD.Content.Projectiles.Unused
             }
             if (Main.rand.NextBool(3))
             {
-                ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(1f), 0f);
-                spaceMist.tag = Projectile;
+                ///ITDParticle spaceMist = ParticleSystem.NewEmitter<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(1f), 0f);
+                //spaceMist.tag = Projectile;
             }
         }
         public override bool PreDraw(ref Color lightColor)
@@ -51,6 +51,7 @@ namespace ITD.Content.Projectiles.Unused
                 sb.Draw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
             }
             DrawAtProj(outline);
+            /*
             foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == Projectile))
             {
                 if (mist is SpaceMist sMist)
@@ -62,6 +63,7 @@ namespace ITD.Content.Projectiles.Unused
             {
                 mist.DrawCommon(sb, mist.Texture, mist.CanvasOffset);
             }
+            */
             DrawAtProj(texture);
             return false;
         }

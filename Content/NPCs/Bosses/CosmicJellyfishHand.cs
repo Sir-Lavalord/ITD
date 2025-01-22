@@ -34,6 +34,7 @@ namespace ITD.Content.NPCs.Bosses
         public bool IsLeftHand => (int)NPC.ai[3] == 1;
         public int CosJelIndex => (int)NPC.ai[2];
         private ActionState UpcomingAttack { get { return (ActionState)NPC.ai[1]; } set { NPC.ai[1] = (float)value; } }
+        public ParticleEmitter emitter;
 
         public override void SetStaticDefaults()
         {
@@ -57,6 +58,8 @@ namespace ITD.Content.NPCs.Bosses
             NPC.knockBackResist = 0f;
             NPC.aiStyle = -1;
             NPC.trapImmune = true;
+            emitter = ParticleSystem.NewEmitter<SpaceMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+            emitter.tag = NPC;
         }
         public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
@@ -331,13 +334,14 @@ namespace ITD.Content.NPCs.Bosses
 
             }
             NPC.rotation = MathHelper.Lerp(NPC.rotation, targetRotation, 0.05f);
+            if (emitter != null)
+                emitter.keptAlive = true;
             if (Main.rand.NextBool(3))
             {
                 Vector2 velo = NPC.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
                 Vector2 veloDelta = NPC.position - NPC.oldPosition;
                 Vector2 sideOffset = new(-30f * NPC.direction, -20f);
-                ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(NPC.Center + new Vector2(0f, NPC.height / 2) + sideOffset, ((velo * 3f) + veloDelta).RotatedByRandom(0.6f), 0f);
-                spaceMist.tag = NPC;
+                emitter?.Emit(NPC.Center + new Vector2(0f, NPC.height / 2) + sideOffset, ((velo * 3f) + veloDelta).RotatedByRandom(0.6f));
             }
         }
         public void OtherHandControl(int currentAttack, int attackID, int upcomingID)
@@ -420,19 +424,8 @@ namespace ITD.Content.NPCs.Bosses
                     spriteBatch.Draw(outline, drawPos, NPC.frame, color, NPC.oldRot[k], origin, NPC.scale, NPC.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
                 }
             }
-            DrawAtNPC(outline);
-            foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == NPC))
-            {
-                if (mist is SpaceMist sMist)
-                {
-                    sMist.DrawOutline(spriteBatch);
-                }
-            }
-            foreach (ITDParticle mist in ParticleSystem.Instance.particles.Where(p => p.tag == NPC))
-            {
-                mist.DrawCommon(spriteBatch, mist.Texture, mist.CanvasOffset);
-            }
-            DrawAtNPC(tex);
+            emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => DrawAtNPC(outline));
+            emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterPreDrawAll, () => DrawAtNPC(tex));
             return false;
         }
     }

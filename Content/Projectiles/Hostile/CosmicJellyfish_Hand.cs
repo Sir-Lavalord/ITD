@@ -170,7 +170,7 @@ namespace ITD.Content.Projectiles.Hostile
             }
             for (int i = 0; i < 10; i++)
             {
-                ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f), 5f);
+                ITDParticle spaceMist = ParticleSystem.NewEmitter<SpaceMist>(Projectile.Center, (-Projectile.velocity).RotatedByRandom(3f), 5f);
                 spaceMist.tag = Projectile;
 
             }
@@ -440,7 +440,7 @@ namespace ITD.Content.Projectiles.Hostile
                 Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
                 Vector2 veloDelta = (Projectile.position - Projectile.oldPosition); // i can't use projectile.velocity here because we're manually changing the position for most of its existence
                 Vector2 sideOffset = new Vector2(30f * (bSmackdown ? -1f : 1f), 0f) * (isLeftHand ? -1f : 1f); //hacky asf
-                ITDParticle spaceMist = ParticleSystem.NewParticle<SpaceMist>(Projectile.Center + new Vector2(0f, Projectile.height / 2) + sideOffset, ((velo * 3f) + veloDelta).RotatedByRandom(0.6f), 0f);
+                ITDParticle spaceMist = ParticleSystem.NewEmitter<SpaceMist>(Projectile.Center + new Vector2(0f, Projectile.height / 2) + sideOffset, ((velo * 3f) + veloDelta).RotatedByRandom(0.6f), 0f);
                 spaceMist.tag = Projectile;
             }
         }

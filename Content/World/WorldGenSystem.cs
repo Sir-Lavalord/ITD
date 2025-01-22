@@ -8,7 +8,6 @@ using Terraria.ID;
 using Microsoft.Xna.Framework;
 using ITD.Physics;
 using ITD.Particles;
-using ITD.Particles.Testing;
 using ITD.Content.Tiles.Misc;
 using ITD.Utilities;
 using Terraria.ObjectData;
@@ -17,6 +16,7 @@ using ITD.Content.Tiles.DeepDesert;
 using ITD.Content.Walls.DeepDesert;
 using System;
 using ITD.Content.UI;
+using ITD.Content.Events;
 
 namespace ITD.Content.World
 {
@@ -24,12 +24,14 @@ namespace ITD.Content.World
     {
         public static LocalizedText BluesoilPassMessage { get; private set; }
         public static LocalizedText DeepDesertPassMessage { get; private set; }
+        public static LocalizedText WorldNPCsPassMessage { get; private set; }
 
         public static List<Point> testPoints = [];
         public override void SetStaticDefaults()
         {
             BluesoilPassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{nameof(BluesoilPassMessage)}"));
             DeepDesertPassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{nameof(DeepDesertPassMessage)}"));
+            WorldNPCsPassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{nameof(WorldNPCsPassMessage)}"));
         }
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {
@@ -68,11 +70,16 @@ namespace ITD.Content.World
         private void TestMethod()
         {
             // test UI particle (change particle.canvas in particle type)
-            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<TestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+            //ParticleSystem.NewEmitter(ParticleSystem.ParticleType<TestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             //test world particle (change particle.canvas in particle type)
-            //ITDParticle newParticle = ParticleSystem.NewParticle<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
+            //ITDParticle newParticle = ParticleSystem.NewEmitter<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
-
+            //EventsSystem.BeginEvent<TestChaoticEvent>();
+            /*
+            Tile t = Framing.GetTileSafely(pos);
+            t.TileType = (ushort)ModContent.TileType<ReinforcedPegmatiteBricks>();
+            t.HasTile = true;
+            */
             /*
             testPoints.Add(pos);
             if (testPoints.Count == 1)
@@ -184,10 +191,11 @@ namespace ITD.Content.World
         }
         private void TestMethod2()
         {
+            //EventsSystem.StopEvent<TestChaoticEvent>();
             // test UI particle (change particle.canvas in particle type)
-            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+            //ParticleSystem.NewEmitter(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseScreen/Main.UIScale, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
             // test world particle (change particle.canvas in particle type)
-            //ParticleSystem.NewParticle(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
+            //ParticleSystem.NewEmitter(ParticleSystem.ParticleType<ShaderTestParticle>(), Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f);
         }
     }
 }

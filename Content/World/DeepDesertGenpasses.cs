@@ -59,10 +59,11 @@ namespace ITD.Content.World
             // main shape gen
             outerEllipse.LoopThroughPoints(p =>
             {
-                Tile t = Framing.GetTileSafely(p);
                 // if we're on the upper half of the ellipse, don't do anything
                 if (p.Y < outerEllipse.Y)
                     return;
+
+                Tile t = Framing.GetTileSafely(p);
                 // if there's any regular stone in this area, turn it to dark pyracotta
                 if (t.TileType == TileID.Stone)
                     t.TileType = darkPyracotta;
@@ -161,9 +162,7 @@ namespace ITD.Content.World
             // third loop for pegmatite adding
             outerEllipse.LoopThroughPoints(p =>
             {
-                if (innerEllipse.Contains(p))
-                    return;
-                if (!TileHelpers.EdgeTile(p))
+                if (p.Y < outerEllipse.Y || innerEllipse.Contains(p) || !TileHelpers.EdgeTile(p))
                     return;
                 TileRunner(p.X, p.Y, 5, 2, pegmatite);
                 //OreRunner(p.X, p.Y, 4, 2, pegmatite);

@@ -1,4 +1,5 @@
-﻿using ITD.Utilities.EntityAnim;
+﻿/*
+using ITD.Utilities.EntityAnim;
 using ITD.Utilities;
 using Terraria;
 using Terraria.DataStructures;
@@ -125,3 +126,4 @@ namespace ITD.Content.Projectiles.Unused
         }
     }
 }
+*/
