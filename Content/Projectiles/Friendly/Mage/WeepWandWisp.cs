@@ -21,13 +21,13 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 6;
+            Main.projFrames[Projectile.type] = 4;
         }
         public override void SetDefaults()
         {
             Projectile.width = 16;
-            Projectile.height = 180;
-            Projectile.scale = 1.1f;
+            Projectile.height = 16;
+            Projectile.scale = 1.25f;
             Projectile.aiStyle = 0;
             Projectile.friendly = true;
             Projectile.hostile = false;
