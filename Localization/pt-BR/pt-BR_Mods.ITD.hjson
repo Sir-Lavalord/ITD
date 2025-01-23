@@ -488,3 +488,5 @@ Prefixes: {
 	// Wretched.DisplayName: Wretched
 	// Heroic.DisplayName: Heroic
 }
+
+// Events.LavaRainEvent.EventProgressTitle: Lava Rain

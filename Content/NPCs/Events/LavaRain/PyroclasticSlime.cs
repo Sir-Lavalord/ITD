@@ -268,12 +268,14 @@ namespace ITD.Content.NPCs.Events.LavaRain
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D tex = TextureAssets.Npc[Type].Value;
+            Texture2D glow = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
             float texHeight = tex.Height / Main.npcFrameCount[Type];
             Vector2 origin = new(tex.Width / 2, texHeight);
             Vector2 offset = new(0f, NPC.gfxOffY + 1f + texHeight / 2f);
             //Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, NPC.frame, drawColor, 0f, origin, stretchScale, SpriteEffects.None);
             //Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, NPC.frame, drawColor, 0f, origin, 1f, SpriteEffects.None);
             spriteBatch.Draw(tex, NPC.Center - screenPos + offset, NPC.frame, drawColor, 0f, origin, stretchScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(glow, NPC.Center - screenPos + offset, NPC.frame, Color.White, 0f, origin, stretchScale, SpriteEffects.None, 0f);
             return false;
         }
     }

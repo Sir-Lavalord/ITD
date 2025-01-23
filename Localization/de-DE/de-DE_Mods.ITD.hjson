@@ -488,3 +488,5 @@ Prefixes: {
 	Wretched.DisplayName: Erbärmlich
 	Heroic.DisplayName: Heldenhaft
 }
+
+// Events.LavaRainEvent.EventProgressTitle: Lava Rain

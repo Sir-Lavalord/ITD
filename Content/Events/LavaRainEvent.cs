@@ -12,7 +12,6 @@ namespace ITD.Content.Events
     {
         public float Progress = 0f;
         public ParticleEmitter rainParticleEmitter;
-        public override string IconTexture => ITD.BlankTexture;
         public override void OnActivate()
         {
             if (Main.netMode == NetmodeID.Server)
