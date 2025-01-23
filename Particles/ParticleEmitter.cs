@@ -31,8 +31,6 @@ namespace ITD.Particles
         /// </summary>
         internal string ExpectedTexturePath;
         public virtual string TexturePath => ExpectedTexturePath;
-        public byte frameVertical;
-        public byte frameHorizontal;
         public byte frameCounter;
         public short timeLeft;
         public bool keptAlive;
@@ -60,13 +58,13 @@ namespace ITD.Particles
         {
 
         }
-        public ParticleFramingData GetFramingData()
+        public ParticleFramingData GetFramingData(ITDParticle particle)
         {
             int framesVertical = ParticleSystem.particleFramesVertical[type];
             int framesHorizontal = ParticleSystem.particleFramesHorizontal[type];
             int frameHeight = Texture.Height / framesVertical;
             int frameWidth = Texture.Width / framesHorizontal;
-            return new(new Rectangle(frameWidth * frameHorizontal, frameHeight * frameVertical, frameWidth, frameHeight), new Vector2(frameWidth * 0.5f, frameHeight * 0.5f));
+            return new(new Rectangle(frameWidth * particle.frameHorizontal, frameHeight * particle.frameVertical, frameWidth, frameHeight), new Vector2(frameWidth * 0.5f, frameHeight * 0.5f));
         }
         public Vector2 CanvasOffset => canvas == ParticleEmitterDrawCanvas.UI ? Vector2.Zero : Main.screenPosition;
         public virtual Color GetAlpha(ITDParticle particle)
@@ -97,6 +95,8 @@ namespace ITD.Particles
         /// <returns></returns>
         public int Emit(Vector2 position, Vector2 velocity, float rotation = 0f, short lifetime = 30)
         {
+            if (Main.dedServ)
+                return 0;
             ITDParticle particle = new()
             {
                 position = position,

@@ -139,8 +139,9 @@ namespace ITD.Content.NPCs
                         }
                     }
                 }
-                }
             }
+            EventsSystem.OnKill(npc);
+        }
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
             if (necrosis)

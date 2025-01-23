@@ -172,6 +172,8 @@ Projectiles: {
 	// PotshotReticle.DisplayName: Potshot Reticle
 	// FlyswatterHeldProjectile.DisplayName: Flyswatter Held Projectile
 	// CosmicGoo.DisplayName: Cosmic Goo
+	// PyroclasticTrail.DisplayName: Pyroclastic Trail
+	// PyroclasticFireball.DisplayName: Pyroclastic Fireball
 }
 
 NPCs: {
@@ -226,6 +228,7 @@ NPCs: {
 	// IncendipedeHeadOld.DisplayName: Incendipede Head Old
 	// IncendipedeTailOld.DisplayName: Incendipede Tail Old
 	// Mudkarp.DisplayName: Mudkarp
+	// PyroclasticSlime.DisplayName: Pyroclastic Slime
 }
 
 Buffs: {

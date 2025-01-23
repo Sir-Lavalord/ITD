@@ -74,7 +74,18 @@ namespace ITD.Content.World
             //test world particle (change particle.canvas in particle type)
             //ITDParticle newParticle = ParticleSystem.NewEmitter<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
-            //EventsSystem.BeginEvent<TestChaoticEvent>();
+            
+            /*
+            testPoints.Add(pos);
+            if (testPoints.Count == 1)
+                EventsSystem.BeginEvent<LavaRainEvent>();
+            else
+            {
+                EventsSystem.StopEvent<LavaRainEvent>();
+                testPoints.Clear();
+            }
+            */
+            
             /*
             Tile t = Framing.GetTileSafely(pos);
             t.TileType = (ushort)ModContent.TileType<ReinforcedPegmatiteBricks>();
