@@ -24,6 +24,8 @@ using Terraria.UI.Chat;
 using Terraria.Chat;
 using Terraria.Localization;
 using ITD.Content.Items.Accessories.Movement.Boots;
+using ITD.PrimitiveDrawing;
+using Terraria.Graphics.Shaders;
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -799,10 +801,11 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override void DrawBehind(int index)
         {
-            if (bOkuu)
+            if (bOkuu && AttackID != -2)
             {
                 Main.instance.DrawCacheNPCsOverPlayers.Add(index);
             }
+
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
@@ -820,7 +823,31 @@ namespace ITD.Content.NPCs.Bosses
                     spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, NPC.scale, SpriteEffects.None, 0f);
                 }
             }
+            else if(AttackID == -2)
+            {
+                default(BlackholeVertex).Draw(NPC.Center - Main.screenPosition, 1024);
+
+            }
+
+
+
             return true;
         }
+    }
+    public struct BlackholeVertex
+    {
+
+        private static SimpleSquare square = new SimpleSquare();
+
+        public void Draw(Vector2 position, float size)
+        {
+            GameShaders.Misc["Blackhole"].UseImage0(TextureAssets.Extra[193]);
+            GameShaders.Misc["Blackhole"].UseColor(new Color(192, 59, 166));
+            GameShaders.Misc["Blackhole"].UseSecondaryColor(Color.Beige);
+            GameShaders.Misc["Blackhole"].Apply();
+            square.Draw(position, size: new Vector2(size, size));
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }
+
     }
 }

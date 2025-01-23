@@ -10,6 +10,7 @@
 	
   <ItemGroup>
     <None Remove="shaders\metaballsshaders\MetaballsTest.fx" />
+    <None Remove="shaders\miscshaders\Blackhole.fx" />
     <None Remove="Shaders\MiscShaders\CosmicGoo.fx" />
     <None Remove="Shaders\MiscShaders\CosmicLaser - Copy (2).fx" />
     <None Remove="shaders\miscshaders\CosmicLaser.fx" />
