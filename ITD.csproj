@@ -9,12 +9,20 @@
   </PropertyGroup>
 	
   <ItemGroup>
+    <None Remove="shaders\metaballsshaders\MetaballsTest.fx" />
+    <None Remove="Shaders\MiscShaders\CosmicGoo.fx" />
+    <None Remove="Shaders\MiscShaders\CosmicLaser - Copy (2).fx" />
+    <None Remove="shaders\miscshaders\CosmicLaser.fx" />
+  </ItemGroup>
+	
+  <ItemGroup>
     <Reference Include="StructureHelper">
       <HintPath>..\ModAssemblies\StructureHelper_v2.5.3.dll</HintPath>
     </Reference>
   </ItemGroup>
 	
   <ItemGroup>
+    <Folder Include="Shaders\MetaballsShaders\" />
     <Folder Include="Systems\WorldNPCs\Assets\BoxStyles\" />
   </ItemGroup>
 </Project>

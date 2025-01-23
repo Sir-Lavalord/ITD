@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Items.Placeable;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
@@ -10,7 +11,6 @@ namespace ITD.Content.Items.Dyes
     {
         public override void Load()
         {
-            ITD.LoadArmorShader("CosmicDye", "ITD/Shaders/CosmicDyeArmor", "ITD/Shaders/CosmicDyeOverlay");
         }
         public override void SetStaticDefaults()
         {

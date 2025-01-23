@@ -25,6 +25,7 @@ using ITD.Utilities;
 using ITD.Content.Items.Accessories.Combat.All;
 using ITD.Content.Buffs.EquipmentBuffs;
 using ITD.Content.Items.Weapons.Mage;
+using ITD.Content.Events;
 
 
 namespace ITD.Content.NPCs
@@ -299,21 +300,22 @@ namespace ITD.Content.NPCs
                 spawnRate = (int)(spawnRate / factor);
                 maxSpawns = (int)(maxSpawns * factor);
             }
+            sbyte activeEvent = EventsSystem.ActiveEvent;
+            if (activeEvent < 0)
+                return;
+            ITDEvent e = EventsSystem.EventsByID[activeEvent];
+            e.ModifySpawnRate(player, ref spawnRate, ref maxSpawns);
         }
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
         {
-            /* i don't think modifying the pool like this works with vanilla npcs
-            if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
-            {
-                pool[NPCID.CaveBat] = 0f;
-                pool[NPCID.BlueSlime] = 0f;
-                pool[NPCID.GiantWalkingAntlion] = 0f;
-                pool[NPCID.GiantFlyingAntlion] = 0f;
-                pool[NPCID.FlyingAntlion] = 0f;
-                pool[NPCID.WalkingAntlion] = 0f;
-                pool[NPCID.Antlion] = 0f;
-            }
-            */
+            sbyte activeEvent = EventsSystem.ActiveEvent;
+            if (activeEvent < 0)
+                return;
+            ITDEvent e = EventsSystem.EventsByID[activeEvent];
+            if (e.OverrideVanillaSpawns)
+                pool.Clear();
+            foreach (var item in e.GetPool(spawnInfo))
+                pool[item.Item1] = item.Item2;
         }
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {

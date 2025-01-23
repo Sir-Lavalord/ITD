@@ -15,6 +15,10 @@ using Terraria.ID;
 using ITD.Config;
 using Terraria.UI.Chat;
 using ITD.Common.ChatTags;
+using System.Text;
+using System.Diagnostics;
+using Terraria.GameContent;
+using ITD.Particles;
 
 namespace ITD
 {
@@ -23,7 +27,13 @@ namespace ITD
         public static ITD Instance;
         public ITD() => Instance = this;
         public const string BlankTexture = "ITD/Content/BlankTexture";
+        public const string MiscShadersFolderPath = "Shaders/MiscShaders/";
+        public const string ArmorShadersFolderPath = "Shaders/ArmorShaders/";
+        public const string ScreenShadersFolderPath = "Shaders/ScreenShaders/";
+        public const string MetaballsShadersFolderPath = "Shaders/MetaballsShaders/";
+
         public static readonly Dictionary<string, ArmorShaderData> ITDArmorShaders = [];
+        public static readonly Dictionary<string, MetaballsShaderData> ITDMetaBallsShaders = [];
 
         internal Mod itdMusic = null;
 
@@ -56,21 +66,155 @@ namespace ITD
             Filters.Scene[name] = new Filter(new ScreenShaderData(screen, name + "Pass"), EffectPriority.High);
             Filters.Scene[name].Load();
         }
-        public static ArmorShaderData LoadArmorShader(string name, string path, string? uImage = null)
+        //public static ArmorShaderData LoadArmorShader(string name, string path, string? uImage = null)
+        //{
+        //    Asset<Texture2D> overlay = null;
+        //    if (uImage != null)
+        //        overlay = ModContent.Request<Texture2D>(uImage, AssetRequestMode.ImmediateLoad);
+        //    ArmorShaderData data = new(ModContent.Request<Effect>(path, AssetRequestMode.ImmediateLoad), name + "Pass");
+        //    if (overlay != null)
+        //        data = data.UseImage(overlay);
+        //    ITDArmorShaders[name] = data;
+        //    return data;
+        //}
+        public void LoadMiscShaders()
         {
-            Asset<Texture2D> overlay = null;
-            if (uImage != null)
-                overlay = ModContent.Request<Texture2D>(uImage, AssetRequestMode.ImmediateLoad);
-            ArmorShaderData data = new(ModContent.Request<Effect>(path, AssetRequestMode.ImmediateLoad), name + "Pass");
-            if (overlay != null)
-                data = data.UseImage(overlay);
-            ITDArmorShaders[name] = data;
-            return data;
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+
+                foreach (string path in GetFileNames())
+                {
+                    if (!path.StartsWith(MiscShadersFolderPath) || !path.EndsWith(".xnb"))
+                        continue;
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(path);
+                    sb.Remove(0, MiscShadersFolderPath.Length);
+                    sb.Replace(".xnb", "");
+                    string shaderName = sb.ToString();
+                    GameShaders.Misc[shaderName] = new MiscShaderData(ModContent.Request<Effect>(this.Name + "/" + MiscShadersFolderPath + shaderName), shaderName + "Pass");
+                }
+
+
+            }
         }
+        public void LoadArmorShadersOverlays() 
+        {
+
+
+            foreach(string shaderName in ITDArmorShaders.Keys) 
+            {
+                Asset<Texture2D> overlay = null;
+
+                foreach (string overlayPath in GetFileNames())
+                {
+                    if (!overlayPath.StartsWith(ArmorShadersFolderPath) || !overlayPath.EndsWith(".rawimg") || !overlayPath.Contains(shaderName))
+                        continue;
+
+                    StringBuilder sb2 = new StringBuilder();
+                    sb2.Append(overlayPath);
+                    sb2.Remove(0, ArmorShadersFolderPath.Length);
+                    sb2.Replace(".rawimg","");
+                    string overlayName = sb2.ToString();
+                    overlay = ModContent.Request<Texture2D>(this.Name + "/" + ArmorShadersFolderPath + overlayName, AssetRequestMode.ImmediateLoad);
+                }
+
+                if (overlay != null)
+                    ITDArmorShaders[shaderName].UseImage(overlay);
+
+            }
+
+
+
+        }
+        public void LoadArmorShaders() 
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+
+
+                foreach (string path in GetFileNames())
+                {
+                    if (!path.StartsWith(ArmorShadersFolderPath) || !path.EndsWith(".xnb"))
+                        continue;
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(path);
+                    sb.Remove(0, ArmorShadersFolderPath.Length);
+                    sb.Replace(".xnb", "");
+                    string shaderName = sb.ToString();
+                    ITDArmorShaders[shaderName] = new ArmorShaderData(ModContent.Request<Effect>(this.Name + "/" + ArmorShadersFolderPath + shaderName), shaderName + "Pass");
+
+                }
+
+
+            }
+
+
+        }
+
+        public void LoadScreenShaders() 
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+
+                foreach (string path in GetFileNames())
+                {
+                    if (!path.StartsWith(ScreenShadersFolderPath) || !path.EndsWith(".xnb"))
+                        continue;
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(path);
+                    sb.Remove(0, ScreenShadersFolderPath.Length);
+                    sb.Replace(".xnb", "");
+                    string shaderName = sb.ToString();
+
+                    Asset<Effect> screen = ModContent.Request<Effect>(this.Name + "/" + ScreenShadersFolderPath + shaderName, AssetRequestMode.ImmediateLoad);
+                    Filters.Scene[shaderName] = new Filter(new ScreenShaderData(screen, shaderName + "Pass"), EffectPriority.High);
+                    Filters.Scene[shaderName].Load();
+                }
+            }
+
+        }
+        
+        public void LoadMetaballsShaders() 
+        {
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+
+
+                foreach (string path in GetFileNames())
+                {
+                    if (!path.StartsWith(MetaballsShadersFolderPath) || !path.EndsWith(".xnb"))
+                        continue;
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(path);
+                    sb.Remove(0, MetaballsShadersFolderPath.Length);
+                    sb.Replace(".xnb", "");
+                    string shaderName = sb.ToString();
+                    ITDMetaBallsShaders[shaderName] = new MetaballsShaderData(ModContent.Request<Effect>(this.Name + "/" + MetaballsShadersFolderPath + shaderName));
+
+                }
+            }
+        }
+
+        public void PreAssignShadersProperties() 
+        {
+
+        }
+        
         public override void Load()
         {
             SkyManager.Instance["ITD:CosjelOkuuSky"] = new CosjelOkuuSky();
-            LoadShader("BlackMold", "ITD/Shaders/MelomycosisScreen");
+            //LoadShader("BlackMold", "ITD/Shaders/MelomycosisScreen");
+            LoadMiscShaders();
+            LoadScreenShaders();
+            LoadArmorShaders();
+            LoadArmorShadersOverlays();
+            PreAssignShadersProperties();
             itdMusic = null;
             wikithis = null;
             bossChecklist = null;
