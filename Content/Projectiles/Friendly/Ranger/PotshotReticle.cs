@@ -74,11 +74,10 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 Projectile.Center = HomingTarget.Center;
                 HomingTarget.GetGlobalNPC<PotshotTarget>().isTargeted = true;//despite the lock anim, the actual lock happens immediatly to avoid free damage
                 float spindown = 1f - Projectile.ai[1] / 45f;
-                Projectile.rotation = MathHelper.TwoPi * 1.5f * spindown;
                 Projectile.alpha = (int)(255 * spindown);
                 Projectile.scale = 1 + 2 * spindown;
             }
-            if (!HomingTarget.active || HomingTarget.life <= 0 || HomingTarget.Distance(player.Center) >= 400)
+            if (!HomingTarget.active || HomingTarget.life <= 0 || HomingTarget.Distance(player.Center) >= 400 || player.HeldItem.ModItem is not Potshot)
             {
                 Projectile.Kill();
             }
@@ -116,7 +115,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 {
                     if (!isTargeted)
                     {
-                        modifiers.FinalDamage.Flat += 8;
+                        modifiers.FinalDamage.Flat += 4;
                     }
                 }
             }

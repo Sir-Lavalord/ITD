@@ -24,6 +24,7 @@ using Terraria.UI.Chat;
 using Terraria.Chat;
 using Terraria.Localization;
 using ITD.Content.Items.Accessories.Movement.Boots;
+using ITD.Content.Projectiles.Hostile.CosjelTest;
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -72,7 +73,7 @@ namespace ITD.Content.NPCs.Bosses
         private enum MovementState
         {
             FollowingRegular,
-            Wandering,
+            FollowingSlow,
             Ram,
             Suffocate,
             Explode
@@ -243,16 +244,38 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 1: //Slop rain
-                    distanceAbove = 400;
-                    if (AITimer2++ == 150)
+                    distanceAbove = 300;
+                    if (AITimer2++ > 120) //rain down slime balls
                     {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        AI_State = MovementState.FollowingSlow;
+                        NPC.rotation = 0;
+                        if (AITimer2 % 5 == 0)
                         {
-                            Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
+                            SoundEngine.PlaySound(SoundID.Item34, player.Center);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                Vector2 spawnPos = NPC.Center + Main.rand.NextVector2Square(-50, 50) * Vector2.UnitY * 1;
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnPos, new Vector2(0, 5) * 2, ModContent.ProjectileType<CosmicSlop>(), 20, 0, -1, NPC.whoAmI);
+                            }
                         }
-                    }
-                                        if (AITimer1++ >= 400 + Main.rand.Next(-100, 150))
+                        if (AITimer2 % 180 == 0)
+                        {
+                            float XVeloDifference = 1.5f;
+                            float startXVelo = -((float)(6 - 1) / 2) * (float)XVeloDifference;
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                for (int i = 0; i < 8; i++)
+                                {
+                                    Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -2f);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity + projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 30, 0, -1, NPC.whoAmI);
+                                }
+                            }
+                        }
+                        }
+                        if (AITimer1++ >= 1200 + Main.rand.Next(-100, 150))
                     {
+                        AI_State = MovementState.FollowingRegular;
+                        distanceAbove = 250;
                         AITimer1 = 0;
                         AITimer2 = 0;
                         AttackID++;
@@ -517,7 +540,7 @@ namespace ITD.Content.NPCs.Bosses
             Vector2 abovePlayer = toPlayer + new Vector2(0f, -distanceAbove);
             Vector2 aboveNormalized = Vector2.Normalize(abovePlayer);
             Vector2 dashvel;
-            float speed = abovePlayer.Length() / 1.3f;//True melee
+            float speed = abovePlayer.Length() / 1.2f;//True melee
             switch (AI_State)
             {
                 case MovementState.FollowingRegular:
@@ -536,7 +559,19 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     
                     break;
-                case MovementState.Wandering:
+                case MovementState.FollowingSlow:
+                    if (speed > 1.1f)
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            NPC.velocity = aboveNormalized * (speed) / 24;
+                            NetSync();
+                        }
+                    }
+                    else
+                    {
+                        NPC.velocity = Vector2.Zero;
+                    }
                     break;
                 case MovementState.Ram:
                     AITimer2++;
@@ -612,10 +647,14 @@ namespace ITD.Content.NPCs.Bosses
                 NPC.rotation = NPC.velocity.X / 50;
 
             }
-            else
+            else if (AI_State == MovementState.FollowingRegular)
             {
                 rotation = rotationFactor * maxRotation;
                 NPC.rotation = rotation;
+            }
+            else if (AI_State == MovementState.FollowingSlow)
+            {
+                NPC.rotation = 0;
             }
         }
         private void CheckSecondStage()

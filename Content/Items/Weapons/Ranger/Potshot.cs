@@ -3,7 +3,6 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-
 using ITD.Systems;
 using ITD.Players;
 using ITD.Utilities;
@@ -30,7 +29,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         }
         public override void SetDefaults()
         {
-            Item.damage = 12;
+            Item.damage = 10;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 70;
             Item.height = 40;
@@ -39,7 +38,7 @@ namespace ITD.Content.Items.Weapons.Ranger
             Item.reuseDelay = 40;
             Item.useStyle = -1;
             Item.noMelee = true;
-            Item.knockBack = 6;
+            Item.knockBack = 0.1f;
             Item.value = Item.sellPrice(silver: 40);
             Item.rare = ItemRarityID.Blue;
             Item.shoot = 1;

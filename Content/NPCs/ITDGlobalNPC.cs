@@ -270,7 +270,7 @@ namespace ITD.Content.NPCs
             }
             if (npc.type == NPCID.EyeofCthulhu)
             {
-                npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<EoCInsight>()));
+                npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<EyeofEldritchInsight>()));
             }
             if (npc.type == NPCID.EaterofWorldsHead || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail)
             {
