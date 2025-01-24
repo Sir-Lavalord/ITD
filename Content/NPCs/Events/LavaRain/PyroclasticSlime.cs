@@ -20,6 +20,10 @@ namespace ITD.Content.NPCs.Events.LavaRain
     {
         public bool canTriggerLanding = false;
         public Vector2 stretchScale = Vector2.One;
+        public ref float AITimer => ref NPC.ai[0];
+        public bool AIIsUnmasked { get { return NPC.ai[1] == 1f; } set { NPC.ai[1] = value ? 1f : 0f; } }
+        public ref float AIIsActiveOrOppositeDirTimer => ref NPC.ai[2];
+        public ref float AIBigJumpXPosition => ref NPC.ai[3];
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 8;
@@ -39,9 +43,9 @@ namespace ITD.Content.NPCs.Events.LavaRain
         {
             bool aggro = true;
 
-            if (NPC.ai[2] > 1f)
+            if (AIIsActiveOrOppositeDirTimer > 1f)
             {
-                NPC.ai[2] -= 1f;
+                AIIsActiveOrOppositeDirTimer -= 1f;
             }
             if (NPC.wet)
             {
@@ -49,14 +53,14 @@ namespace ITD.Content.NPCs.Events.LavaRain
                 {
                     NPC.velocity.Y = -2f;
                 }
-                if (NPC.velocity.Y < 0f && NPC.ai[3] == NPC.position.X)
+                if (NPC.velocity.Y < 0f && AIBigJumpXPosition == NPC.position.X)
                 {
                     NPC.direction *= -1;
-                    NPC.ai[2] = 200f;
+                    AIIsActiveOrOppositeDirTimer = 200f;
                 }
                 if (NPC.velocity.Y > 0f)
                 {
-                    NPC.ai[3] = NPC.position.X;
+                    AIBigJumpXPosition = NPC.position.X;
                 }
                 if (NPC.velocity.Y > 2f)
                 {
@@ -67,7 +71,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
                 {
                     NPC.velocity.Y = -4f;
                 }
-                if (NPC.ai[2] == 1f & aggro)
+                if (AIIsActiveOrOppositeDirTimer == 1f & aggro)
                 {
                     NPC.TargetClosest(true);
                 }
@@ -75,10 +79,10 @@ namespace ITD.Content.NPCs.Events.LavaRain
             }
 
             NPC.aiAction = 0;
-            if (NPC.ai[2] == 0f)
+            if (AIIsActiveOrOppositeDirTimer == 0f)
             {
-                NPC.ai[0] = -100f;
-                NPC.ai[2] = 1f;
+                AITimer = -100f;
+                AIIsActiveOrOppositeDirTimer = 1f;
                 NPC.TargetClosest(true);
             }
             if (NPC.velocity.Y == 0f)
@@ -94,12 +98,12 @@ namespace ITD.Content.NPCs.Events.LavaRain
                 {
                     NPC.position.X = NPC.position.X - (NPC.velocity.X + (float)NPC.direction);
                 }
-                if (NPC.ai[3] == NPC.position.X)
+                if (AIBigJumpXPosition == NPC.position.X)
                 {
                     NPC.direction *= -1;
-                    NPC.ai[2] = 200f;
+                    AIIsActiveOrOppositeDirTimer = 200f;
                 }
-                NPC.ai[3] = 0f;
+                AIBigJumpXPosition = 0f;
                 NPC.velocity.X = NPC.velocity.X * 0.8f;
                 if ((double)NPC.velocity.X > -0.1 && (double)NPC.velocity.X < 0.1)
                 {
@@ -107,27 +111,27 @@ namespace ITD.Content.NPCs.Events.LavaRain
                 }
                 if (aggro)
                 {
-                    NPC.ai[0] += 1f;
+                    AITimer += 1f;
                 }
-                NPC.ai[0] += 1f;
+                AITimer += 1f;
                 float num31 = -1000f;
                 int num32 = 0;
-                if (NPC.ai[0] >= 0f)
+                if (AITimer >= 0f)
                 {
                     num32 = 1;
                 }
-                if (NPC.ai[0] >= num31 && NPC.ai[0] <= num31 * 0.5f)
+                if (AITimer >= num31 && AITimer <= num31 * 0.5f)
                 {
                     num32 = 2;
                 }
-                if (NPC.ai[0] >= num31 * 2f && NPC.ai[0] <= num31 * 1.5f)
+                if (AITimer >= num31 * 2f && AITimer <= num31 * 1.5f)
                 {
                     num32 = 3;
                 }
                 if (num32 > 0)
                 {
                     NPC.netUpdate = true;
-                    if (aggro && NPC.ai[2] == 1f)
+                    if (aggro && AIIsActiveOrOppositeDirTimer == 1f)
                     {
                         NPC.TargetClosest(true);
                     }
@@ -155,8 +159,8 @@ namespace ITD.Content.NPCs.Events.LavaRain
                         stretchScale.X = 0.25f;
                         NPC.velocity.Y = -12f;
                         NPC.velocity.X = NPC.velocity.X + (float)(3 * NPC.direction);
-                        NPC.ai[0] = -200f;
-                        NPC.ai[3] = NPC.position.X;
+                        AITimer = -200f;
+                        AIBigJumpXPosition = NPC.position.X;
                     }
                     // regular jump
                     else
@@ -165,21 +169,21 @@ namespace ITD.Content.NPCs.Events.LavaRain
                         stretchScale.X = 0.5f;
                         NPC.velocity.Y = -6f;
                         NPC.velocity.X = NPC.velocity.X + (float)(2 * NPC.direction);
-                        NPC.ai[0] = -120f;
+                        AITimer = -120f;
                         if (num32 == 1)
                         {
-                            NPC.ai[0] += num31;
+                            AITimer += num31;
                         }
                         else
                         {
-                            NPC.ai[0] += num31 * 2f;
+                            AITimer += num31 * 2f;
                         }
                     }
                     canTriggerLanding = true;
                 }
                 else
                 {
-                    if (NPC.ai[0] >= -30f)
+                    if (AITimer >= -30f)
                     {
                         NPC.aiAction = 1;
                         return;
@@ -209,7 +213,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
             /*
             // ai0 is a timer
             Main.NewText("ai0: " + NPC.ai[0]);
-            // ai1 is ???
+            // ai1 is ??? (can be used freely)
             Main.NewText("ai1: " + NPC.ai[1]);
             // ai2 is the amount of time a slime should go the opposite direction after trying to jump into a wall
             Main.NewText("ai2: " + NPC.ai[2]);
@@ -219,11 +223,11 @@ namespace ITD.Content.NPCs.Events.LavaRain
         }
         public override void HitEffect(NPC.HitInfo hit)
         {
-            if (NPC.life <= NPC.lifeMax / 2 && NPC.ai[1] == 0f)
+            if (NPC.life <= NPC.lifeMax / 2 && !AIIsUnmasked)
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    NPC.ai[1] = 1f;
+                    AIIsUnmasked = true;
                     NPC.defDefense -= 30;
                     NPC.netUpdate = true;
                 }
@@ -248,14 +252,14 @@ namespace ITD.Content.NPCs.Events.LavaRain
         }
         public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
         {
-            if (NPC.ai[1] == 1f)
+            if (AIIsUnmasked)
                 modifiers.FinalDamage *= 2f;
         }
         public override void FindFrame(int frameHeight)
         {
             stretchScale = Vector2.SmoothStep(stretchScale, Vector2.One, 0.25f);
-            int minFrame = NPC.ai[1] == 1f ? 4 : 0;
-            int maxFrame = NPC.ai[1] == 1f ? 7 : 3;
+            int minFrame = AIIsUnmasked ? 4 : 0;
+            int maxFrame = AIIsUnmasked ? 7 : 3;
             if (NPC.collideY)
                 CommonFrameLoop(frameHeight, minFrame, maxFrame);
             else
@@ -272,8 +276,6 @@ namespace ITD.Content.NPCs.Events.LavaRain
             float texHeight = tex.Height / Main.npcFrameCount[Type];
             Vector2 origin = new(tex.Width / 2, texHeight);
             Vector2 offset = new(0f, NPC.gfxOffY + 1f + texHeight / 2f);
-            //Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, NPC.frame, drawColor, 0f, origin, stretchScale, SpriteEffects.None);
-            //Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, NPC.frame, drawColor, 0f, origin, 1f, SpriteEffects.None);
             spriteBatch.Draw(tex, NPC.Center - screenPos + offset, NPC.frame, drawColor, 0f, origin, stretchScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(glow, NPC.Center - screenPos + offset, NPC.frame, Color.White, 0f, origin, stretchScale, SpriteEffects.None, 0f);
             return false;

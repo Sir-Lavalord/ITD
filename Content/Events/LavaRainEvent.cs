@@ -28,9 +28,9 @@ namespace ITD.Content.Events
             float rangePadding = 100f;
             if (Main.rand.NextBool(2))
             {
-                Vector2 emitPosition = (Main.screenPosition - Vector2.UnitX * rangePadding) + new Vector2(Main.rand.NextFloat(Main.screenWidth + rangePadding + 1f), 0f);
-                Vector2 emitVelocity = (Vector2.UnitY * 20f).RotatedBy(0.2f);
-                rainParticleEmitter?.Emit(emitPosition, emitVelocity, emitVelocity.ToRotation() - MathHelper.PiOver2, 80);
+                Vector2 emitPosition = (Main.screenPosition - Vector2.UnitX * rangePadding) + new Vector2(Main.rand.NextFloat(Main.screenWidth + rangePadding + float.Epsilon), 0f);
+                Vector2 emitVelocity = Vector2.UnitY * 15f;
+                rainParticleEmitter?.Emit(emitPosition, emitVelocity, emitVelocity.ToRotation() - MathHelper.PiOver2, 160);
             }
         }
         public override IEnumerable<(int, float)> GetPool(NPCSpawnInfo spawnInfo)

@@ -75,7 +75,7 @@ namespace ITD.Content.World
             //ITDParticle newParticle = ParticleSystem.NewEmitter<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
             
-            /*
+            
             testPoints.Add(pos);
             if (testPoints.Count == 1)
                 EventsSystem.BeginEvent<LavaRainEvent>();
@@ -84,7 +84,7 @@ namespace ITD.Content.World
                 EventsSystem.StopEvent<LavaRainEvent>();
                 testPoints.Clear();
             }
-            */
+            
             
             /*
             Tile t = Framing.GetTileSafely(pos);
