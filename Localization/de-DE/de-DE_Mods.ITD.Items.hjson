@@ -1223,3 +1223,8 @@ Flyswatter: {
 	// DisplayName: Flyswatter
 	// Tooltip: ""
 }
+
+EyeofEldritchInsight: {
+	// DisplayName: Eyeof Eldritch Insight
+	// Tooltip: ""
+}

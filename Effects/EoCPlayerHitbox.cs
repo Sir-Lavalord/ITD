@@ -1,4 +1,5 @@
-﻿using ITD.Content.Items.Other;
+﻿using ITD.Content.Items.Accessories.Master;
+using ITD.Content.Items.Other;
 using ITD.Players;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

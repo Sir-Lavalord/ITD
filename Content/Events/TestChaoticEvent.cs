@@ -13,8 +13,8 @@ namespace ITD.Content.Events
     {
         public override IEnumerable<(int, float)> GetPool(NPCSpawnInfo spawnInfo)
         {
-            yield return (ModContent.NPCType<EmberlionPiercer>(), 1f);
-            yield return (NPCID.ChaosElemental, 10f);
+            yield return (NPCID.MoonLordCore, 1f);
+            yield return (NPCID.HallowBoss, 1f);
         }
     }
 }
