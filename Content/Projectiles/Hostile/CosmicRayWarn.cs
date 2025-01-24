@@ -23,6 +23,8 @@ namespace ITD.Content.Projectiles.Hostile
         {
             return false;
         }
+        private bool LockIn => Projectile.ai[2] != 0;
+
         public int iTimer;
         public override void AI()
         {
@@ -77,14 +79,17 @@ namespace ITD.Content.Projectiles.Hostile
             //Projectile.rotation = num804;
             //num804 += 1.57079637f;
             //Projectile.velocity = num804.ToRotationVector2();
-
-            if (iTimer++ <= Projectile.ai[0] - 40)
+            if (!LockIn)
             {
-                Projectile.velocity = Projectile.velocity.ToRotation().AngleLerp(CosJel.DirectionTo(Main.player[CosJel.target].Center + Main.player[CosJel.target].velocity * 20).ToRotation(), .1f).ToRotationVector2();
-                Projectile.rotation = Projectile.velocity.ToRotation() - (float)Math.PI /2;
+
+                if (iTimer++ <= Projectile.ai[0] - 40)
+                {
+                    Projectile.velocity = Projectile.velocity.ToRotation().AngleLerp(CosJel.DirectionTo(Main.player[CosJel.target].Center + Main.player[CosJel.target].velocity * 20).ToRotation(), .1f).ToRotationVector2();
+                    Projectile.rotation = Projectile.velocity.ToRotation() - (float)Math.PI / 2;
+                }
             }
 
-            float num805 = 3f;
+                float num805 = 3f;
             float num806 = (float)Projectile.width;
             Vector2 samplingPoint = Projectile.Center;
             if (vector78.HasValue)
@@ -137,7 +142,9 @@ namespace ITD.Content.Projectiles.Hostile
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Projectile.velocity.SafeNormalize(Vector2.UnitY), ModContent.ProjectileType<CosmicRay>(), Projectile.damage, Projectile.knockBack, -1, Projectile.ai[1], Projectile.rotation);
+                    Projectile ray = Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Projectile.velocity.SafeNormalize(Vector2.UnitY), ModContent.ProjectileType<CosmicRay>(), Projectile.damage, Projectile.knockBack, -1, Projectile.ai[1], Projectile.rotation);
+                    ray.localAI[0] = 1;//mog
+                    ray.localAI[1] = 1;//slop
                 }
             }
         }

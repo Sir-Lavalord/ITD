@@ -38,19 +38,18 @@ namespace ITD.Content.Projectiles.Hostile
         {
             Projectile.rotation = Rotation + MathHelper.PiOver2;
             Projectile.timeLeft = MAX_TIMELEFT;
-
             UpdateLaserCollision();
             CurrentLasterLength = LasersLength;
 
 
         }
-        private const int MAX_TIMELEFT = 600;
+        private const int MAX_TIMELEFT = 800;
         public const int MAX_GOO = 300;
         private const int MAX_LASER_LENGTH = 3000;
 
         public List<CosmicGoos> cosmicGoos = new List<CosmicGoos>();
         public float CurrentHitboxesAmount = 0;
-        private int laserWidth = 225;
+        private int laserWidth = 200;
         private int NPCOwner 
         {
             get { return (int)Projectile.ai[0]; }
@@ -66,6 +65,10 @@ namespace ITD.Content.Projectiles.Hostile
             get { return Projectile.ai[1]; }
             set { Projectile.ai[1] = value; }
         }
+        private bool LockIn => Projectile.localAI[0] != 0;
+        private bool DoTileCollide => Projectile.localAI[1] != 0;
+
+
         int LasersLength = 0;
 
         public override void AI()
@@ -75,10 +78,12 @@ namespace ITD.Content.Projectiles.Hostile
 
             Projectile.Center = npc.Center - new Vector2(0,25);
             // change the projetile rotation for adjusting the laser rotation
-            Projectile.rotation = Projectile.rotation.AngleTowards(Projectile.AngleTo(player.Center), 0.01f);
-            Projectile.velocity = Projectile.rotation.ToRotationVector2();
-
-            UpdateLaserCollision();
+            if (!LockIn)
+            {
+                Projectile.rotation = Projectile.rotation.AngleTowards(Projectile.AngleTo(player.Center), 0.01f);
+            }
+                Projectile.velocity = Projectile.rotation.ToRotationVector2();
+                UpdateLaserCollision();
 
             //update current laser length slowly, if you dont want that, just uncomment the comment at the end of the AI hook
             if (LasersLength > CurrentLasterLength) 
@@ -93,22 +98,20 @@ namespace ITD.Content.Projectiles.Hostile
                 CurrentLasterLength -= 25;
                 if (CurrentLasterLength < LasersLength)
                     CurrentLasterLength = LasersLength;
-
             }
 
-            // goo/stream updating
-            //cosmicGoos.ForEach(g => g.timeleft--);
-            //cosmicGoos.RemoveAll(g => g.timeleft <= 0);
-            //SpawnACosmicGoo();
-
-            //uncomment this for normal laser collision behavouir
-            //CurrentLasterLength = LasersLength;
+                // goo/stream updating
+/*                cosmicGoos.ForEach(g => g.timeleft--);
+                cosmicGoos.RemoveAll(g => g.timeleft <= 0);
+                SpawnACosmicGoo();
+*/
+                //uncomment this for normal laser collision behavouir
+                CurrentLasterLength = LasersLength;
+            
         }
 
         public void SpawnACosmicGoo()
         {
-
-
             CosmicGoos cosmicGoo = new CosmicGoos(new Rectangle((int)(Projectile.position.X + Projectile.velocity.X * CurrentLasterLength), (int)(Projectile.position.Y + Projectile.velocity.Y * CurrentLasterLength), Projectile.width, Projectile.height), 120, Main.rand.NextFloat(MathHelper.TwoPi));
             cosmicGoos.Add(cosmicGoo);
 

@@ -245,11 +245,19 @@ namespace ITD.Content.NPCs.Bosses
                     break;
                 case 1: //Slop rain
                     distanceAbove = 300;
-                    if (AITimer2++ > 120) //rain down slime balls
+                    if (AITimer2 == 120) //rain down slime balls
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY,
+                             ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI,1);
+                        }
+                    }
+                        if (AITimer2++ > 120) //rain down slime balls
                     {
                         AI_State = MovementState.FollowingSlow;
                         NPC.rotation = 0;
-                        if (AITimer2 % 5 == 0)
+/*                        if (AITimer2 % 5 == 0)
                         {
                             SoundEngine.PlaySound(SoundID.Item34, player.Center);
                             if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -257,7 +265,7 @@ namespace ITD.Content.NPCs.Bosses
                                 Vector2 spawnPos = NPC.Center + Main.rand.NextVector2Square(-50, 50) * Vector2.UnitY * 1;
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnPos, new Vector2(0, 5) * 2, ModContent.ProjectileType<CosmicSlop>(), 20, 0, -1, NPC.whoAmI);
                             }
-                        }
+                        }*/
                         if (AITimer2 % 180 == 0)
                         {
                             float XVeloDifference = 1.5f;
@@ -471,7 +479,7 @@ namespace ITD.Content.NPCs.Bosses
                             {
                                 Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, vel,
-                                 ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 300, NPC.whoAmI);
+                                 ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI);
                             }
                         }       
                         if (AITimer2 >= 800)

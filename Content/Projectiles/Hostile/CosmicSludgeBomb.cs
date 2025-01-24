@@ -118,7 +118,7 @@ namespace ITD.Content.Projectiles.Hostile
             }*/
             if (isStuck == false)
             {
-                Projectile.velocity.Y += 0.025f;
+                Projectile.velocity.Y += 0.035f;
             }
             if (++Projectile.frameCounter >= 10 - pulseSpeed)
             {
