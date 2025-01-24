@@ -34,7 +34,7 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.timeLeft = 400;
             Projectile.light = 0.5f;
             Projectile.ignoreWater = true;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             DrawOffsetX = -16;
             DrawOriginOffsetY = -16;
             Projectile.hide = true;
@@ -53,7 +53,7 @@ namespace ITD.Content.Projectiles.Hostile
         }
 
         bool isStuck = false;
-        public override bool OnTileCollide(Vector2 oldVelocity)
+/*        public override bool OnTileCollide(Vector2 oldVelocity)
         {
             if (Projectile.ai[1] != 0)
             {
@@ -75,7 +75,7 @@ namespace ITD.Content.Projectiles.Hostile
             }
             return true;
                 
-        }
+        }*/
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = effect.Value;
@@ -96,7 +96,7 @@ namespace ITD.Content.Projectiles.Hostile
         bool masterMode = Main.masterMode;
         public override void AI()
         {
-                if (expertMode || masterMode)
+/*                if (expertMode || masterMode)
                 {
                 NPC CosJel = Main.npc[(int)Projectile.ai[0]];
                 if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
@@ -115,10 +115,10 @@ namespace ITD.Content.Projectiles.Hostile
                         Projectile.Kill();
                     }
                 }
-            }
+            }*/
             if (isStuck == false)
             {
-                Projectile.velocity.Y += 0.2f;
+                Projectile.velocity.Y += 0.035f;
             }
             if (++Projectile.frameCounter >= 10 - pulseSpeed)
             {
@@ -134,14 +134,14 @@ namespace ITD.Content.Projectiles.Hostile
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, Color.Purple, 2f);
                 dust.velocity *= 1.4f;
             }
-            if (Main.netMode != NetmodeID.MultiplayerClient)
+/*            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
                 ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), Projectile.knockBack);
                 explosion.ai[1] = 100f;
                 explosion.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
                 explosion.netUpdate = true;
-            }
+            }*/
             for (int i = 0; i < 10; i++)
             {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.ShimmerTorch, 0f, 0f, 100, default, 3f);
