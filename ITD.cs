@@ -214,6 +214,7 @@ namespace ITD
             LoadScreenShaders();
             LoadArmorShaders();
             LoadArmorShadersOverlays();
+            LoadMetaballsShaders();
             PreAssignShadersProperties();
             itdMusic = null;
             wikithis = null;

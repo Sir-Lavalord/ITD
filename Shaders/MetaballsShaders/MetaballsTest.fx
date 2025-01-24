@@ -7,6 +7,8 @@ float4x4 viewWorldProjection;
 float time;
 float4 shaderData;
 float3 color;
+float2 position;
+float radius;
 
 struct VertexShaderInput
 {
@@ -46,10 +48,14 @@ VertexShaderOutput ShaderVS(VertexShaderInput input)
 
 float4 ShaderPS(float4 vertexColor : COLOR0, float2 texCoords : TEXCOORD0) : COLOR0
 {
-    float4 texture = tex2D(image1,texCoords);
-    float circle = saturate((0.5 - distance(float2(0.5 * 2.0 - 1.0, 0.5 * 2.0 - 1.0), texCoords)));
+    float circle = radius / length(texCoords * 2. - 1. - position);
+    float4 ball = float4(color * circle, circle);
     
-    return texture * circle;
+    float threshold = step(2., ball.a);
+    
+    float4 color = ball * threshold;  
+    
+    return color;
 }
 
 

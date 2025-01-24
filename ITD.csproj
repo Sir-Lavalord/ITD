@@ -15,6 +15,7 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <Folder Include="Particles\MetaBalls\" />
     <Folder Include="Systems\WorldNPCs\Assets\BoxStyles\" />
   </ItemGroup>
 </Project>

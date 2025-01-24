@@ -73,7 +73,7 @@ namespace ITD.Content.Projectiles.Hostile
             NPC npc = Main.npc[NPCOwner];
             Player player = Main.player[npc.target];
 
-            Projectile.Center = npc.Center - new Vector2(0,25);
+            Projectile.Center = npc.Center - new Vector2(0,15);
             // change the projetile rotation for adjusting the laser rotation
             Projectile.rotation = Projectile.rotation.AngleTowards(Projectile.AngleTo(player.Center), 0.01f);
             Projectile.velocity = Projectile.rotation.ToRotationVector2();
@@ -107,11 +107,8 @@ namespace ITD.Content.Projectiles.Hostile
 
         public void SpawnACosmicGoo()
         {
-
-
             CosmicGoos cosmicGoo = new CosmicGoos(new Rectangle((int)(Projectile.position.X + Projectile.velocity.X * CurrentLasterLength), (int)(Projectile.position.Y + Projectile.velocity.Y * CurrentLasterLength), Projectile.width, Projectile.height), 120, Main.rand.NextFloat(MathHelper.TwoPi));
             cosmicGoos.Add(cosmicGoo);
-
         }
 
         public void UpdateLaserCollision() 
@@ -124,9 +121,7 @@ namespace ITD.Content.Projectiles.Hostile
                     LasersLength = i;
                 else
                     break;
-
             }
-
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
@@ -145,12 +140,13 @@ namespace ITD.Content.Projectiles.Hostile
 
             default(CosmicLaserVertex).Draw(Projectile.Center - Main.screenPosition,Projectile.rotation,new Vector2(Projectile.velocity.Length() * CurrentLasterLength, laserWidth));
 
-            default(CosmicGooVertex).Draw(Projectile.Center - Main.screenPosition + Projectile.velocity * CurrentLasterLength, MathHelper.ToRadians( Projectile.timeLeft), new Vector2(Projectile.width * 2, Projectile.height * 2), Projectile.timeLeft / 120f, (float)Projectile.timeLeft / 60);
+            //default(CosmicGooVertex).Draw(Projectile.Center - Main.screenPosition + Projectile.velocity * CurrentLasterLength, MathHelper.ToRadians( Projectile.timeLeft), new Vector2(Projectile.width * 2, Projectile.height * 2), Projectile.timeLeft / 120f, (float)Projectile.timeLeft / 60);
 
             foreach (CosmicGoos goo in cosmicGoos)
             {
                 default(CosmicGooVertex).Draw(goo.hitbox.Center.ToVector2() - Main.screenPosition, goo.rotation, new Vector2(Projectile.width, Projectile.height), MathHelper.Min((float)goo.timeleft / 120f,(float)Projectile.timeLeft / MAX_TIMELEFT), (float)goo.timeleft / 60f);
             }
+
 
 
             return false;
@@ -177,13 +173,7 @@ namespace ITD.Content.Projectiles.Hostile
         public Rectangle hitbox;
         public int timeleft;
         public float rotation;
-        public int whoAmI;
-        public void Update()
-        {
-            this.timeleft--;
-            Main.NewText(timeleft);
 
-        }
     }
 
     public struct CosmicGooVertex
@@ -204,6 +194,7 @@ namespace ITD.Content.Projectiles.Hostile
             square.Draw(position, rotation: rotation, size: size * 2, rotationCenter: position);
 
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
         }
 
 

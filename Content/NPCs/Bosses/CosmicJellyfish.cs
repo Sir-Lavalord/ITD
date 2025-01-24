@@ -823,7 +823,8 @@ namespace ITD.Content.NPCs.Bosses
                     spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, NPC.scale, SpriteEffects.None, 0f);
                 }
             }
-            else if(AttackID == -2)
+
+            if(AttackID == -2)
             {
                 default(BlackholeVertex).Draw(NPC.Center - Main.screenPosition, 1024);
 

@@ -16,10 +16,10 @@ namespace ITD.Particles
     {
     }
 
-    public class MetaballsRenderTarget : ARenderTargetContentByRequest
+    public class MetaballsTestRenderTarget : ARenderTargetContentByRequest
     {
 
-        public MetaballsRenderTarget() 
+        public MetaballsTestRenderTarget() 
         {
             Main.OnResolutionChanged += OnResChanged;
         }
@@ -31,6 +31,7 @@ namespace ITD.Particles
             var oldTargets = device.GetRenderTargets();
             device.SetRenderTarget(_target);
             device.Clear(Color.Transparent);
+
             device.SetRenderTarget(null);
             _wasPrepared = true;
             device.SetRenderTargets(oldTargets);
@@ -43,19 +44,32 @@ namespace ITD.Particles
         }
     }
 
-    public class MetaballsSystem : ModSystem 
+    public class MetaballsSystem : ModSystem
     {
 
-        MetaballsRenderTarget MetaballsRT;
+        MetaballsTestRenderTarget MetaballsTestRT;
 
         public override void Load()
         {
-            Main.ContentThatNeedsRenderTargets.Add(MetaballsRT = new MetaballsRenderTarget());
+            Main.ContentThatNeedsRenderTargets.Add(MetaballsTestRT = new MetaballsTestRenderTarget());
         }
 
         public override void Unload()
         {
-            Main.ContentThatNeedsRenderTargets.Remove(MetaballsRT);
+            Main.ContentThatNeedsRenderTargets.Remove(MetaballsTestRT);
+        }
+
+        public override void PostDrawTiles()
+        {
+            Main.spriteBatch.Begin();
+
+            ITD.ITDMetaBallsShaders["MetaballsTest"].setProperties(Main.LocalPlayer.Center - Main.screenPosition, 256, Color.Cyan);
+            ITD.ITDMetaBallsShaders["MetaballsTest"].apply();
+
+            if (MetaballsTestRT.IsReady)
+                Main.spriteBatch.Draw(MetaballsTestRT.GetTarget(), Main.screenPosition, Color.White);
+
+            Main.spriteBatch.End();
         }
     }
 
@@ -68,6 +82,8 @@ namespace ITD.Particles
         Asset<Texture2D> _texutre2 = null;
         Asset<Texture2D> _texutre3 = null;
         Vector4 _shaderData = new Vector4(0, 0, 0, 0);
+        float _radius = 10;
+        Vector2 _position = new Vector2(0, 0);
         public bool enabled = false;
         public MetaballsShaderData(Asset<Effect> effect)
         {
@@ -75,18 +91,20 @@ namespace ITD.Particles
             this._effect = effect;
 
         }
-        public void setProperties(Color color, Asset<Texture2D> texutre1 = null, Asset<Texture2D> texutre2 = null, Asset<Texture2D> texutre3 = null, Vector4 shaderData = default)
+        public void setProperties(Vector2 position, float radius ,Color color, Asset<Texture2D> texutre1 = null, Asset<Texture2D> texutre2 = null, Asset<Texture2D> texutre3 = null, Vector4 shaderData = default)
         {
             this._color = color;
             this._texutre1 = texutre1;
             this._texutre2 = texutre2;
             this._texutre3 = texutre3;
             this._shaderData = shaderData;
+            this._position = position;
+            this._radius = radius;
         }
 
         public void setupTextures()
         {
-            
+
             if (_texutre1 != null)
             {
                 GraphicsDevice.SamplerStates[1] = SamplerState.LinearWrap;
@@ -112,6 +130,8 @@ namespace ITD.Particles
             effect.Parameters["time"].SetValue(Main.GlobalTimeWrappedHourly);
             effect.Parameters["color"].SetValue(_color.ToVector3());
             effect.Parameters["shaderData"].SetValue(_shaderData);
+            effect.Parameters["position"].SetValue(_position);
+            effect.Parameters["radius"].SetValue(_radius);
             effect.CurrentTechnique.Passes[0].Apply();
 
         }
