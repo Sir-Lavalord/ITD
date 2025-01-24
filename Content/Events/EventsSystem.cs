@@ -18,6 +18,7 @@ namespace ITD.Content.Events
         public static readonly Dictionary<Type, ITDEvent> EventsByType = [];
         public static readonly Dictionary<Type, sbyte> IDsByType = [];
         public static sbyte ActiveEvent = -1;
+        public static T GetEvent<T>() where T : ITDEvent => EventsByType[typeof(T)] as T;
         /// <summary>
         /// Starts an event.
         /// TODO: SYNC THIS IN MP
@@ -75,6 +76,13 @@ namespace ITD.Content.Events
                     break;
                 }
             }
+        }
+        public static void OnKill(NPC npc)
+        {
+            if (ActiveEvent < 0)
+                return;
+            ITDEvent activeEvent = EventsByID[ActiveEvent];
+            activeEvent.OnKill(npc);
         }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
@@ -213,6 +221,14 @@ namespace ITD.Content.Events
         /// </summary>
         /// <param name="player"></param>
         public virtual void VisualsUpdate(Player player)
+        {
+
+        }
+        /// <summary>
+        /// Called whenever any NPC in the world is killed. Use this to check for valid event NPC kills and do stuff accordingly.
+        /// </summary>
+        /// <param name="npc"></param>
+        public virtual void OnKill(NPC npc)
         {
 
         }

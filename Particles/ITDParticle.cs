@@ -16,6 +16,8 @@ namespace ITD.Particles
         public float angularVelocity;
         public float scale = 1f;
         public float opacity = 1f;
+        public byte frameVertical;
+        public byte frameHorizontal;
         public short timeLeft;
         public ParticleEmitter parent;
         public ParticleSpawnParameters spawnParameters;
@@ -23,7 +25,7 @@ namespace ITD.Particles
         public readonly float ProgressOneToZero => 1f - ProgressZeroToOne;
         public void DrawCommon(in SpriteBatch sb, in Texture2D texture, Vector2 offset = default, Color? color = null, Rectangle? sourceRect = null, Vector2? origin = null, float? rotation = null, float? scale = null)
         {
-            ParticleFramingData framingData = parent.GetFramingData();
+            ParticleFramingData framingData = parent.GetFramingData(this);
 
             Color drawColor = color == null ? parent.GetAlpha(this) : color.Value;
             if (parent.additive)

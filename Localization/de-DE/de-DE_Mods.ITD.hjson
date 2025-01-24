@@ -172,6 +172,8 @@ Projectiles: {
 	// PotshotReticle.DisplayName: Potshot Reticle
 	// FlyswatterHeldProjectile.DisplayName: Flyswatter Held Projectile
 	// CosmicGoo.DisplayName: Cosmic Goo
+	// PyroclasticTrail.DisplayName: Pyroclastic Trail
+	// PyroclasticFireball.DisplayName: Pyroclastic Fireball
 }
 
 NPCs: {
@@ -226,6 +228,7 @@ NPCs: {
 	IncendipedeHeadOld.DisplayName: Tausendfüßler Kopf Alt
 	IncendipedeTailOld.DisplayName: Tausendfüßler Schwanz Alt
 	// Mudkarp.DisplayName: Mudkarp
+	// PyroclasticSlime.DisplayName: Pyroclastic Slime
 }
 
 Buffs: {
@@ -485,3 +488,5 @@ Prefixes: {
 	Wretched.DisplayName: Erbärmlich
 	Heroic.DisplayName: Heldenhaft
 }
+
+// Events.LavaRainEvent.EventProgressTitle: Lava Rain

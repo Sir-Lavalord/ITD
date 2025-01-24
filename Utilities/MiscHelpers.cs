@@ -121,6 +121,13 @@ namespace ITD.Utilities
             }
             return totalAngleDifference;
         }
+        public static Color LerpMany(float amount, ReadOnlySpan<Color> colors)
+        {
+            float p = MathHelper.Clamp(amount * (colors.Length - 1), 0, colors.Length - 1);
+            int start = (int)p;
+            int end = Math.Min(start + 1, colors.Length - 1);
+            return Color.Lerp(colors[start], colors[end], p - start);
+        }
         public static Vector2D ToRotationVector2D (this double d) => new(Math.Cos(d), Math.Sin(d));
         public static Vector2D ToRotationVector2D (this float f) => ToRotationVector2D(f);
         public static Vector3 ToVector3(this Vector2 v) => new(v.X, v.Y, 0);

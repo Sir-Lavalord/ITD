@@ -13,7 +13,6 @@ namespace ITD.Config
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
         [DefaultValue(100)]
-        [DrawTicks]
         [Slider]
         [Range(0, 100)]
         public int ScreenshakeIntensity;
