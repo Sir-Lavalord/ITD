@@ -1,13 +1,6 @@
-﻿using ITD.Content.Events;
-using ITD.Content.Projectiles.Hostile;
-using ITD.Utilities;
-using Microsoft.CodeAnalysis.Text;
+﻿using ITD.Content.Projectiles.Hostile;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
