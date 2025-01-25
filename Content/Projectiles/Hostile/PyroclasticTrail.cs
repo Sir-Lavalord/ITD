@@ -4,6 +4,8 @@ using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.ID;
 using ITD.Utilities.EntityAnim;
+using ITD.Particles;
+using ITD.Particles.Misc;
 
 namespace ITD.Content.Projectiles.Hostile
 {
@@ -11,6 +13,7 @@ namespace ITD.Content.Projectiles.Hostile
     {
         private const int LifeTime = 160;
         private float ProgressOneToZero => Projectile.timeLeft / (float)LifeTime;
+        public ParticleEmitter emitter;
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 4;
@@ -23,6 +26,7 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.height = 26;
             Projectile.timeLeft = LifeTime;
             Projectile.penetrate = -1;
+            emitter = ParticleSystem.NewEmitter<PyroclasticParticle>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
@@ -30,6 +34,7 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override void AI()
         {
+            emitter.keptAlive = true;
             Projectile.velocity.Y += 0.4f; //gravity. i think this is the vanilla value for gravity?
             if (Main.rand.NextFloat() < ProgressOneToZero)
             {
@@ -43,6 +48,10 @@ namespace ITD.Content.Projectiles.Hostile
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
+            }
+            if (!Main.dedServ)
+            {
+
             }
         }
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)

@@ -231,6 +231,7 @@ NPCs: {
 	// IncendipedeTailOld.DisplayName: Incendipede Tail Old
 	// Mudkarp.DisplayName: Mudkarp
 	// PyroclasticSlime.DisplayName: Pyroclastic Slime
+	// SmoggyNimbus.DisplayName: Smoggy Nimbus
 }
 
 Buffs: {

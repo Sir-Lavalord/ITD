@@ -9,10 +9,7 @@
   </PropertyGroup>
 	
   <ItemGroup>
-    <None Remove="shaders\metaballsshaders\MetaballsTest.fx" />
-    <None Remove="Shaders\MiscShaders\CosmicGoo.fx" />
-    <None Remove="Shaders\MiscShaders\CosmicLaser - Copy (2).fx" />
-    <None Remove="shaders\miscshaders\CosmicLaser.fx" />
+    <None Remove="Shaders\MiscShaders\Telegraph.fx" />
   </ItemGroup>
 	
   <ItemGroup>
@@ -22,7 +19,7 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <Folder Include="Shaders\MetaballsShaders\" />
+    <Folder Include="Particles\MetaBalls\" />
     <Folder Include="Systems\WorldNPCs\Assets\BoxStyles\" />
   </ItemGroup>
 </Project>

@@ -6,6 +6,8 @@ using ITD.Content.NPCs;
 using ReLogic.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
+using System.Runtime.CompilerServices;
+using static log4net.Appender.ColoredConsoleAppender;
 
 namespace ITD.Utilities
 {
@@ -121,12 +123,202 @@ namespace ITD.Utilities
             }
             return totalAngleDifference;
         }
-        public static Color LerpMany(float amount, ReadOnlySpan<Color> colors)
+        /// <summary>
+        /// <para>Lerps through all members of the provided <see cref="ReadOnlySpan{T}"/>.</para>
+        /// Example: for a Color lerp from [Color.White, Color.Yellow, Color.Red], you would see white at 0f amount, yellow at 0.5f, and red at 1f;
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="amount"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static T LerpMany<T>(float amount, ReadOnlySpan<T> values) where T : struct
         {
-            float p = MathHelper.Clamp(amount * (colors.Length - 1), 0, colors.Length - 1);
+            float p = MathHelper.Clamp(amount * (values.Length - 1), 0, values.Length - 1);
             int start = (int)p;
-            int end = Math.Min(start + 1, colors.Length - 1);
-            return Color.Lerp(colors[start], colors[end], p - start);
+            int end = Math.Min(start + 1, values.Length - 1);
+            return LerpAny(values[start], values[end], p - start);
+        }
+        /// <summary>
+        /// <para>Lerps ANY of the supported types.</para>
+        /// <para>Not for use in general applications. Just use the actual lerp function for your datatype if it exists.</para>
+        /// Sorted by size, then amount of members.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public static T LerpAny<T>(T start, T end, float amount) where T : struct
+        {
+            if (typeof(T) == typeof(byte))
+            {
+                byte result = (byte)MathHelper.Lerp(
+                    Unsafe.As<T, byte>(ref start),
+                    Unsafe.As<T, byte>(ref end),
+                    amount
+                );
+                return Unsafe.As<byte, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(sbyte))
+            {
+                sbyte result = (sbyte)MathHelper.Lerp(
+                    Unsafe.As<T, sbyte>(ref start),
+                    Unsafe.As<T, sbyte>(ref end),
+                    amount
+                );
+                return Unsafe.As<sbyte, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(ushort))
+            {
+                ushort result = (ushort)MathHelper.Lerp(
+                    Unsafe.As<T, ushort>(ref start),
+                    Unsafe.As<T, ushort>(ref end),
+                    amount
+                );
+                return Unsafe.As<ushort, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(short))
+            {
+                short result = (short)MathHelper.Lerp(
+                    Unsafe.As<T, short>(ref start),
+                    Unsafe.As<T, short>(ref end),
+                    amount
+                );
+                return Unsafe.As<short, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(uint))
+            {
+                uint result = (uint)MathHelper.Lerp(
+                    Unsafe.As<T, uint>(ref start),
+                    Unsafe.As<T, uint>(ref end),
+                    amount
+                );
+                return Unsafe.As<uint, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(int))
+            {
+                int result = (int)MathHelper.Lerp(
+                    Unsafe.As<T, int>(ref start),
+                    Unsafe.As<T, int>(ref end),
+                    amount
+                );
+                return Unsafe.As<int, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(float))
+            {
+                float result = MathHelper.Lerp(
+                    Unsafe.As<T, float>(ref start),
+                    Unsafe.As<T, float>(ref end),
+                    amount
+                );
+                return Unsafe.As<float, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(double))
+            {
+                double result = double.Lerp(
+                    Unsafe.As<T, double>(ref start),
+                    Unsafe.As<T, double>(ref end),
+                    amount
+                );
+                return Unsafe.As<double, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(ulong))
+            {
+                ulong result = (ulong)MathHelper.Lerp(
+                    Unsafe.As<T, ulong>(ref start),
+                    Unsafe.As<T, ulong>(ref end),
+                    amount
+                );
+                return Unsafe.As<ulong, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(long))
+            {
+                long result = (long)MathHelper.Lerp(
+                    Unsafe.As<T, long>(ref start),
+                    Unsafe.As<T, long>(ref end),
+                    amount
+                );
+                return Unsafe.As<long, T>(ref result);
+            }
+
+            // here would go decimal but unnecessary (plus decimal doesn't have lerp)
+
+            else if (typeof(T) == typeof(Vector2))
+            {
+                Vector2 result = Vector2.Lerp(
+                    Unsafe.As<T, Vector2>(ref start),
+                    Unsafe.As<T, Vector2>(ref end),
+                    amount
+                );
+                return Unsafe.As<Vector2, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(Vector2D))
+            {
+                Vector2D result = Vector2D.Lerp(
+                    Unsafe.As<T, Vector2D>(ref start),
+                    Unsafe.As<T, Vector2D>(ref end),
+                    amount
+                );
+                return Unsafe.As<Vector2D, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(Vector3))
+            {
+                Vector3 result = Vector3.Lerp(
+                    Unsafe.As<T, Vector3>(ref start),
+                    Unsafe.As<T, Vector3>(ref end),
+                    amount
+                );
+                return Unsafe.As<Vector3, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(Color))
+            {
+                Color result = Color.Lerp(
+                    Unsafe.As<T, Color>(ref start),
+                    Unsafe.As<T, Color>(ref end),
+                    amount
+                );
+                return Unsafe.As<Color, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(Rectangle))
+            {
+                Rectangle startt = Unsafe.As<T, Rectangle>(ref start);
+                Rectangle endd = Unsafe.As<T, Rectangle>(ref end);
+                Rectangle result = new(
+                    (int)MathHelper.Lerp(startt.X, endd.X, amount),
+                    (int)MathHelper.Lerp(startt.Y, endd.Y, amount),
+                    (int)MathHelper.Lerp(startt.Width, endd.Width, amount),
+                    (int)MathHelper.Lerp(startt.Height, endd.Height, amount));
+                return Unsafe.As<Rectangle, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(Vector4))
+            {
+                Vector4 result = Vector4.Lerp(
+                    Unsafe.As<T, Vector4>(ref start),
+                    Unsafe.As<T, Vector4>(ref end),
+                    amount
+                );
+                return Unsafe.As<Vector4, T>(ref result);
+            }
+
+            else
+            {
+                throw new InvalidOperationException("Unsupported lerp type");
+                // feel free to add your own stuff here but i don't think there's anything else important to add
+            }
         }
         public static Vector2D ToRotationVector2D (this double d) => new(Math.Cos(d), Math.Sin(d));
         public static Vector2D ToRotationVector2D (this float f) => ToRotationVector2D(f);

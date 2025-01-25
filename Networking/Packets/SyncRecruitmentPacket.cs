@@ -9,7 +9,7 @@ namespace ITD.Networking.Packets
     {
         public SyncRecruitmentPacket()
         {
-            Writer.Write(ITDSystem.recruitmentData.Count);
+            Writer.Write((ushort)ITDSystem.recruitmentData.Count);
             foreach (var pair in ITDSystem.recruitmentData)
             {
                 Writer.WriteGuid(pair.Key);
@@ -20,7 +20,7 @@ namespace ITD.Networking.Packets
         {
             ITDSystem.recruitmentData.Clear();
 
-            int count = reader.ReadInt32();
+            ushort count = reader.ReadUInt16();
 
             for (int i = 0; i < count; i++)
             {

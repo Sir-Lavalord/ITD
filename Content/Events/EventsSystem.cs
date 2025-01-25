@@ -2,6 +2,7 @@
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -127,6 +128,7 @@ namespace ITD.Content.Events
     {
         public static Color TerrariaBlurple => new(63, 65, 151, 255);
         public static float BarScaleVisualProgress = 0;
+        public sbyte Type { get; private set; }
         public string LocalizationCategory => "Events";
         /// <summary>
         /// The path to the icon texture for this event. Defaults to the event's namespace and name (like other ModTypes)
@@ -164,7 +166,6 @@ namespace ITD.Content.Events
                 _isActive = value;
             }
         }
-        public sbyte Type { get; private set; }
         /// <summary>
         /// <para>Whether this event will disable vanilla spawning while it's active.</para>
         /// It is recommended to set this to true for fine control over spawns, vanilla or otherwise.
@@ -183,6 +184,14 @@ namespace ITD.Content.Events
         public sealed override void SetupContent()
         {
             SetStaticDefaults();
+        }
+        public virtual void NetSend(BinaryWriter writer)
+        {
+
+        }
+        public virtual void NetReceive(BinaryReader reader)
+        {
+
         }
         /// <summary>
         /// Runs once when this event is activated.
@@ -265,7 +274,7 @@ namespace ITD.Content.Events
         /// <returns></returns>
         public virtual string BarSubtitle(float progressAlpha)
         {
-            return $"{progressAlpha * 100f}%";
+            return $"{(progressAlpha * 100f):0.00}%";
         }
         private void DrawProgressPercentage(float alphaFactor, string invasionTitle, Texture2D icon, Color backgroundColor, Color barColor)
         {
