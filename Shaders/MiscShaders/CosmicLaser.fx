@@ -36,13 +36,13 @@ float4 CosmicLaser(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COL
     laser.rgb *= uColor;
 
     //laser smoke 
-    float4 smoke1 = tex2D(uImage1, (RepeatedUV * 2. - 1.) + float2(-uTime * 3, 0));
+    float4 smoke1 = tex2D(uImage1, (RepeatedUV * 2. - 1.) + float2(-uTime * uShaderSpecificData.y * 3, 0));
     smoke1.a = smoke1.r;
     smoke1.rgb *= uColor;
     smoke1 *= smoothstep(0., 1, 1 - abs(RepeatedUV.y * 2));
 
     // the magic, cool 3d stuff
-    float4 smokeOverlay = saturate(tex2D(uImage1, RepeatedUV - float2(uTime *5, 0 )));
+    float4 smokeOverlay = saturate(tex2D(uImage1, RepeatedUV - float2(uTime * uShaderSpecificData.y * 1.5, 0 )));
     
     smoke1 *= smokeOverlay.r;
 

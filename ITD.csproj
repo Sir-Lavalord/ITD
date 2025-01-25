@@ -9,6 +9,10 @@
   </PropertyGroup>
 	
   <ItemGroup>
+    <None Remove="Shaders\MiscShaders\Telegraph.fx" />
+  </ItemGroup>
+	
+  <ItemGroup>
     <Reference Include="StructureHelper">
       <HintPath>..\ModAssemblies\StructureHelper_v2.5.3.dll</HintPath>
     </Reference>

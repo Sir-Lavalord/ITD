@@ -27,25 +27,19 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.aiStyle = -1;
             Projectile.tileCollide = false;
 
-
-
-
-            // edit the MAX_TIMELEFT instead of this
-            Projectile.timeLeft = 2;
+            Projectile.timeLeft = 800;
         }
 
         public override void OnSpawn(IEntitySource source)
         {
+
             Projectile.rotation = Rotation + MathHelper.PiOver2;
-            Projectile.timeLeft = MAX_TIMELEFT;
             UpdateLaserCollision();
             CurrentLasterLength = LasersLength;
 
-
         }
-        private const int MAX_TIMELEFT = 800;
         public const int MAX_GOO = 300;
-        private const int MAX_LASER_LENGTH = 3000;
+        public const int MAX_LASER_LENGTH = 3000;
 
         public List<CosmicGoos> cosmicGoos = new List<CosmicGoos>();
         public float CurrentHitboxesAmount = 0;
@@ -67,7 +61,8 @@ namespace ITD.Content.Projectiles.Hostile
         }
         private bool LockIn => Projectile.localAI[0] != 0;
         private bool DoTileCollide => Projectile.localAI[1] != 0;
-
+        private bool MiniRay => Projectile.localAI[2] != 0;
+        private int max_timeleft;
 
         int LasersLength = 0;
 
@@ -82,8 +77,8 @@ namespace ITD.Content.Projectiles.Hostile
             {
                 Projectile.rotation = Projectile.rotation.AngleTowards(Projectile.AngleTo(player.Center), 0.01f);
             }
-                Projectile.velocity = Projectile.rotation.ToRotationVector2();
-                UpdateLaserCollision();
+            Projectile.velocity = Projectile.rotation.ToRotationVector2();
+            UpdateLaserCollision();
 
             //update current laser length slowly, if you dont want that, just uncomment the comment at the end of the AI hook
             if (LasersLength > CurrentLasterLength) 
@@ -122,11 +117,14 @@ namespace ITD.Content.Projectiles.Hostile
             for (int i = 0; i < MAX_LASER_LENGTH; i++)
             {
 
-                if (Collision.CanHitWithCheck(Projectile.Center, 15, 15, Projectile.Center + Projectile.velocity * LasersLength, 15, 15, (x, y) => { return Main.tile[x, y].TileType != TileID.Platforms; }))
+                if (Collision.CanHitLine(Projectile.Center, 15, 15, Projectile.Center + Projectile.velocity * LasersLength, 15, 15))
                     LasersLength = i;
                 else
                     break;
             }
+
+            if (!DoTileCollide)
+                LasersLength = MAX_LASER_LENGTH;
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
@@ -143,13 +141,15 @@ namespace ITD.Content.Projectiles.Hostile
         public override bool PreDraw(ref Color lightColor)
         {
 
-            default(CosmicLaserVertex).Draw(Projectile.Center - Main.screenPosition,Projectile.rotation,new Vector2(Projectile.velocity.Length() * CurrentLasterLength, laserWidth));
-
+            if(!MiniRay)
+                default(CosmicLaserVertex).Draw(Projectile.Center - Main.screenPosition,Projectile.rotation,new Vector2(Projectile.velocity.Length() * CurrentLasterLength, laserWidth));
+            else
+                default(CosmicLaserMiniVertex).Draw(Projectile.Center - Main.screenPosition, Projectile.rotation, new Vector2(Projectile.velocity.Length() * CurrentLasterLength, laserWidth));
             //default(CosmicGooVertex).Draw(Projectile.Center - Main.screenPosition + Projectile.velocity * CurrentLasterLength, MathHelper.ToRadians( Projectile.timeLeft), new Vector2(Projectile.width * 2, Projectile.height * 2), Projectile.timeLeft / 120f, (float)Projectile.timeLeft / 60);
 
             foreach (CosmicGoos goo in cosmicGoos)
             {
-                default(CosmicGooVertex).Draw(goo.hitbox.Center.ToVector2() - Main.screenPosition, goo.rotation, new Vector2(Projectile.width, Projectile.height), MathHelper.Min((float)goo.timeleft / 120f,(float)Projectile.timeLeft / MAX_TIMELEFT), (float)goo.timeleft / 60f);
+                default(CosmicGooVertex).Draw(goo.hitbox.Center.ToVector2() - Main.screenPosition, goo.rotation, new Vector2(Projectile.width, Projectile.height), MathHelper.Min((float)goo.timeleft / 120f,(float)Projectile.timeLeft / max_timeleft), (float)goo.timeleft / 60f);
             }
 
 
@@ -214,7 +214,7 @@ namespace ITD.Content.Projectiles.Hostile
             MiscShaderData shader = GameShaders.Misc["CosmicLaser"];
 
             //purple laser 
-            shader.UseShaderSpecificData(new Vector4(size.X, 15, 0, 0)); //Laserlength, none, none, none
+            shader.UseShaderSpecificData(new Vector4(size.X, 2, 0, 0)); //Laserlength, Flow speed, none, none
             shader.UseImage0(TextureAssets.Extra[193]);
             shader.UseColor(new Color(192,59,166));
             shader.Apply();
@@ -222,12 +222,43 @@ namespace ITD.Content.Projectiles.Hostile
             square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1.5f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
 
             //beige laser 
-            shader.UseShaderSpecificData(new Vector4(size.X, 15, 0, 0)); //Laserlength, none, none, none
+            shader.UseShaderSpecificData(new Vector4(size.X, 2, 0, 0)); //Laserlength, Flow speed, none, none
             shader.UseImage1(TextureAssets.Extra[193]);
             shader.UseColor(Color.Beige);
             shader.Apply();
 
             square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1,1f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
+
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }
+
+
+    }
+
+    public struct CosmicLaserMiniVertex
+    {
+
+        private static SimpleSquare square = new SimpleSquare();
+
+        public void Draw(Vector2 position, float rotation, Vector2 size)
+        {
+            MiscShaderData shader = GameShaders.Misc["CosmicLaser"];
+
+            //purple laser 
+            shader.UseShaderSpecificData(new Vector4(size.X, 1, 0, 0)); //Laserlength, Flow speed, none, none
+            shader.UseImage0(TextureAssets.Extra[193]);
+            shader.UseColor(new Color(192, 59, 166));
+            shader.Apply();
+
+            square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 0.75f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
+
+            //beige laser 
+            shader.UseShaderSpecificData(new Vector4(size.X, 1, 0, 0)); //Laserlength, Flow speed, none, none
+            shader.UseImage1(TextureAssets.Extra[193]);
+            shader.UseColor(Color.Beige);
+            shader.Apply();
+
+            square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 0.25f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
 
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         }

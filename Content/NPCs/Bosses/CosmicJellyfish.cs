@@ -1,7 +1,6 @@
 ﻿using ITD.Content.Items.Other;
 using ITD.Content.Items.PetSummons;
 using ITD.Content.Items.Placeable;
-using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Content.Projectiles.Hostile;
 using ITD.Players;
 using ITD.Utilities;
@@ -18,13 +17,7 @@ using System.IO;
 using ITD.Content.Dusts;
 using ITD.Content.Items.Armor.Vanity.Masks;
 using Terraria.Graphics.Effects;
-using ITD.Particles.CosJel;
-using ITD.Particles;
-using Terraria.UI.Chat;
-using Terraria.Chat;
-using Terraria.Localization;
 using ITD.Content.Items.Accessories.Movement.Boots;
-using ITD.Content.Projectiles.Hostile.CosjelTest;
 using ITD.PrimitiveDrawing;
 using Terraria.Graphics.Shaders;
 
@@ -251,8 +244,10 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY,
+
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY,
                              ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI,1);
+
                         }
                     }
                         if (AITimer2++ > 120) //rain down slime balls
@@ -475,7 +470,7 @@ namespace ITD.Content.NPCs.Bosses
                     AITimer1++;
                     if (AttackCount >= 30)
                     {
-                        if (AITimer2++ == 150)
+                        if (AITimer2++ == 60)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
@@ -856,6 +851,8 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+
+
             if (AttackID == 5)
             {
                 Texture2D tex = TextureAssets.Npc[NPC.type].Value;
@@ -867,7 +864,7 @@ namespace ITD.Content.NPCs.Bosses
                     Vector2 center = NPC.Size / 2f;
                     Vector2 drawPos = NPC.oldPos[k] - Main.screenPosition + center;
                     Color color = NPC.GetAlpha(drawColor) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
-                    spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, NPC.scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, 1f, SpriteEffects.None, 0f);
                 }
             }
 
@@ -876,6 +873,9 @@ namespace ITD.Content.NPCs.Bosses
                 default(BlackholeVertex).Draw(NPC.Center - Main.screenPosition, 1024);
 
             }
+
+
+
 
 
 
@@ -896,6 +896,28 @@ namespace ITD.Content.NPCs.Bosses
             square.Draw(position, size: new Vector2(size, size));
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         }
+
+    }
+
+    public struct CosmicTelegraphVertex 
+    {
+
+        private static SimpleSquare square = new SimpleSquare();
+
+        public void Draw(Vector2 position, Vector2 size, float rotation)
+        {
+            GameShaders.Misc["Telegraph"].UseColor(new Color(192, 59, 166));
+            GameShaders.Misc["Telegraph"].UseSecondaryColor(Color.Beige);
+            GameShaders.Misc["Telegraph"].UseImage0(TextureAssets.Extra[193]);
+            GameShaders.Misc["Telegraph"].UseShaderSpecificData(new Vector4(300,0,position.X,position.Y));
+
+            GameShaders.Misc["Telegraph"].Apply();
+            square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+        }
+
+
 
     }
 }
