@@ -158,7 +158,7 @@ namespace ITD.Systems
                                 rNpc.Recruiter = player.GetITDPlayer().guid;
                                 rNpc.recruitmentData = recruitmentData[q.player];
                                 if (Main.dedServ)
-                                    NetSystem.SendPacket(new SingleNPCRecruitmentPacket(npc.whoAmI, rNpc.Recruiter, rNpc.recruitmentData));
+                                    NetSystem.SendPacket(new SingleNPCRecruitmentPacket((byte)npc.whoAmI, rNpc.Recruiter, rNpc.recruitmentData));
 
                             }
 

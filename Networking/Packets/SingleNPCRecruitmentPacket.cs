@@ -7,7 +7,7 @@ namespace ITD.Networking.Packets
 {
     public sealed class SingleNPCRecruitmentPacket : ITDPacket
     {
-        public SingleNPCRecruitmentPacket(int npc, Guid recruiter, RecruitData rData)
+        public SingleNPCRecruitmentPacket(byte npc, Guid recruiter, RecruitData rData)
         {
             Writer.Write(npc);
             Writer.WriteGuid(recruiter);
@@ -15,7 +15,7 @@ namespace ITD.Networking.Packets
         }
         public override void Read(BinaryReader reader, int sender)
         {
-            NPC npc = Main.npc[reader.ReadInt32()];
+            NPC npc = Main.npc[reader.ReadByte()];
             Guid recruiter = reader.ReadGuid();
             RecruitData rData = reader.ReadRecruitmentData();
             if (npc.ModNPC is RecruitedNPC rNpc)

@@ -30,7 +30,7 @@ namespace ITD.Networking.Packets
                 foreach (var npc in Main.npc.Where(n => n.ModNPC is RecruitedNPC))
                 {
                     RecruitedNPC rNPC = npc.ModNPC as RecruitedNPC;
-                    NetSystem.SendPacket(new SingleNPCRecruitmentPacket(npc.whoAmI, rNPC.Recruiter, rNPC.recruitmentData));
+                    NetSystem.SendPacket(new SingleNPCRecruitmentPacket((byte)npc.whoAmI, rNPC.Recruiter, rNPC.recruitmentData));
                 }
             }
         }
