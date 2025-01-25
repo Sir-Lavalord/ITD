@@ -229,6 +229,7 @@ NPCs: {
 	IncendipedeTailOld.DisplayName: Tausendfüßler Schwanz Alt
 	// Mudkarp.DisplayName: Mudkarp
 	// PyroclasticSlime.DisplayName: Pyroclastic Slime
+	// SmoggyNimbus.DisplayName: Smoggy Nimbus
 }
 
 Buffs: {
