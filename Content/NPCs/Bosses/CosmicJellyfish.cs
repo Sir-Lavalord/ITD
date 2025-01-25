@@ -25,7 +25,8 @@ using Terraria.Chat;
 using Terraria.Localization;
 using ITD.Content.Items.Accessories.Movement.Boots;
 using ITD.Content.Projectiles.Hostile.CosjelTest;
-
+using System;
+using System.Collections.Generic;
 namespace ITD.Content.NPCs.Bosses
 
 {
@@ -244,7 +245,8 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 1: //Slop rain
-                    distanceAbove = 300;
+/*                    Main.NewText("fuck");
+*/                    distanceAbove = 300;
                     if (AITimer2 == 120) //rain down slime balls
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -320,23 +322,18 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 3://shit enemy spawn
-                    if (AITimer1++ == 60)
+                    if (AITimer2++ == 200)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)//Fix later, this will do for now
                         {
-                            if (!bSecondStage)
+                            for (int i = 0; i <= 1; i++)
                             {
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X, NPC.Center.Y - 100), ModContent.NPCType<CosmicJellyfishMini>());
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(player.Center.X + 500, player.Center.Y + 400 * Main.rand.Next(-1,2)), Vector2.Zero, ModContent.ProjectileType<CosmicWarning>(), NPC.damage, 0f, -1, NPC.whoAmI);
                             }
-                            else
-                            {
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X, NPC.Center.Y - 100), ModContent.NPCType<CosmicJellyfishMini>());
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X - 200, NPC.Center.Y + 100), ModContent.NPCType<CosmicJellyfishMini>());
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X + 200, NPC.Center.Y + 100), ModContent.NPCType<CosmicJellyfishMini>());
-                            }
+                            AITimer2 = 0;
                         }
                     }
-                    else if (AITimer1 >= 300)
+                    else if (AITimer1 >= 2000)
                     {
                         AITimer1 = 0;
                         AttackID++;
