@@ -1231,3 +1231,8 @@ EyeofEldritchInsight: {
 	DisplayName: Eyeof Eldritch Insight
 	Tooltip: ""
 }
+
+Fwoomstick: {
+	DisplayName: Fwoomstick
+	Tooltip: ""
+}
