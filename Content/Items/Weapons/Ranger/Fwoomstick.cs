@@ -24,11 +24,7 @@ namespace ITD.Content.Items.Weapons.Ranger
 {
     public class Fwoomstick : ModItem
     {
-        public int windup = 1;
-        public int mode = 1;
-        public float colorProgress = .02f;
-        public bool isRightClickHeld = false;
-        public bool chargedOnce = false;
+
 
         public override void SetStaticDefaults()
         {
@@ -98,7 +94,7 @@ namespace ITD.Content.Items.Weapons.Ranger
                 newVelocity *= 1f - Main.rand.NextFloat(0.3f);
 
                 int proj = Projectile.NewProjectile(source, position, newVelocity, type, damage, knockback, player.whoAmI);
-                Main.projectile[proj].GetGlobalProjectile<FwoomstickBullet>().isFromFwoomstick = true;
+                Main.projectile[proj].GetGlobalProjectile<PotshotBullet>().isFromFwoomstick = true;
             }
 
             return false;
@@ -111,42 +107,6 @@ namespace ITD.Content.Items.Weapons.Ranger
             if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
             {
                 position += muzzleOffset;
-            }
-        }
-
-        public class FwoomstickBullet : GlobalProjectile
-        {
-            public override bool InstancePerEntity => true;
-            private int ExplodeTimer = 0;
-
-            public bool isFromFwoomstick;
-
-            public override void OnSpawn(Projectile projectile, IEntitySource source)
-            {
-                ExplodeTimer = 0;
-            }
-
-            public override void PostAI(Projectile projectile)
-            {
-                ExplodeTimer++;
-                if (ExplodeTimer > 45)
-                {
-                    projectile.Kill();
-                }
-            }
-
-            public override void OnKill(Projectile projectile, int timeLeft)
-            {
-                if (projectile.owner == Main.myPlayer)
-                {
-                    for (int i = 0; i < 4; i++)
-                    {
-                        float speedX = projectile.velocity.X * Main.rand.NextFloat(.4f, .7f) + Main.rand.NextFloat(-2f, 2f);
-                        float speedY = projectile.velocity.Y * Main.rand.Next(40, 70) * 0.01f + Main.rand.Next(-20, 21) * 0.4f;
-
-                        Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.position.X + speedX, projectile.position.Y + speedY, speedX, speedY, ModContent.ProjectileType<FwoomstickSpark>(), (int)(projectile.damage * 0.5), 0f, projectile.owner, 0f, 0f);
-                    }
-                }
             }
         }
     }
