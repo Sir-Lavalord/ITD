@@ -94,7 +94,7 @@ namespace ITD.Content.Items.Weapons.Ranger
                 newVelocity *= 1f - Main.rand.NextFloat(0.3f);
 
                 int proj = Projectile.NewProjectile(source, position, newVelocity, type, damage, knockback, player.whoAmI);
-                Main.projectile[proj].GetGlobalProjectile<PotshotBullet>().isFromFwoomstick = true;
+                Main.projectile[proj].GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromFwoomstick = true;
             }
 
             return false;

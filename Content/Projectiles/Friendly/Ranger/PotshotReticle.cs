@@ -109,7 +109,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
         public bool isTargeted;
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
-            if (projectile.GetGlobalProjectile<PotshotBullet>().isFromPotshot)
+            if (projectile.GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromPotshot)
             {
                 if (Main.player[projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<PotshotReticle>()] >= 1)
                 {
