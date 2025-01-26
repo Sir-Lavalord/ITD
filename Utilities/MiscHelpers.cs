@@ -125,7 +125,8 @@ namespace ITD.Utilities
         }
         /// <summary>
         /// <para>Lerps through all members of the provided <see cref="ReadOnlySpan{T}"/>.</para>
-        /// Example: for a Color lerp from [Color.White, Color.Yellow, Color.Red], you would see white at 0f amount, yellow at 0.5f, and red at 1f;
+        /// <para>Example: for a Color lerp from [Color.White, Color.Yellow, Color.Red], you would see white at 0f amount, yellow at 0.5f, and red at 1f.</para>
+        /// Special thanks to LolXD for code.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="amount"></param>
@@ -150,6 +151,8 @@ namespace ITD.Utilities
         /// <returns></returns>
         public static T LerpAny<T>(T start, T end, float amount) where T : struct
         {
+            #region EXTENDED LERP TYPES (Unnecessary)
+            /*
             if (typeof(T) == typeof(byte))
             {
                 byte result = (byte)MathHelper.Lerp(
@@ -200,7 +203,29 @@ namespace ITD.Utilities
                 return Unsafe.As<uint, T>(ref result);
             }
 
-            else if (typeof(T) == typeof(int))
+            else if (typeof(T) == typeof(ulong))
+            {
+                ulong result = (ulong)MathHelper.Lerp(
+                    Unsafe.As<T, ulong>(ref start),
+                    Unsafe.As<T, ulong>(ref end),
+                    amount
+                );
+                return Unsafe.As<ulong, T>(ref result);
+            }
+
+            else if (typeof(T) == typeof(long))
+            {
+                long result = (long)MathHelper.Lerp(
+                    Unsafe.As<T, long>(ref start),
+                    Unsafe.As<T, long>(ref end),
+                    amount
+                );
+                return Unsafe.As<long, T>(ref result);
+            }
+            */
+            #endregion
+
+            if (typeof(T) == typeof(int))
             {
                 int result = (int)MathHelper.Lerp(
                     Unsafe.As<T, int>(ref start),
@@ -229,28 +254,6 @@ namespace ITD.Utilities
                 );
                 return Unsafe.As<double, T>(ref result);
             }
-
-            else if (typeof(T) == typeof(ulong))
-            {
-                ulong result = (ulong)MathHelper.Lerp(
-                    Unsafe.As<T, ulong>(ref start),
-                    Unsafe.As<T, ulong>(ref end),
-                    amount
-                );
-                return Unsafe.As<ulong, T>(ref result);
-            }
-
-            else if (typeof(T) == typeof(long))
-            {
-                long result = (long)MathHelper.Lerp(
-                    Unsafe.As<T, long>(ref start),
-                    Unsafe.As<T, long>(ref end),
-                    amount
-                );
-                return Unsafe.As<long, T>(ref result);
-            }
-
-            // here would go decimal but unnecessary (plus decimal doesn't have lerp)
 
             else if (typeof(T) == typeof(Vector2))
             {

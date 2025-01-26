@@ -41,7 +41,17 @@ namespace ITD.Utilities
         public static bool TileType(int i, int j, int t) => Framing.GetTileSafely(i, j).HasTile && Framing.GetTileSafely(i, j).TileType == t;
         public static bool TileType(Tile tile, int t) => tile.HasTile && tile.TileType == t;
         public static bool SolidTile(Point tileCoord) => SolidTile(tileCoord.X, tileCoord.Y);
-        public static bool SolidTile(int i, int j) => Framing.GetTileSafely(i, j).HasTile && Main.tileSolid[Framing.GetTileSafely(i, j).TileType];
+        public static bool SolidTile(int i, int j)
+        {
+            Tile t = Framing.GetTileSafely(i, j);
+            return t.HasTile && Main.tileSolid[t.TileType];
+        }
+        public static bool SolidTile(Point tileCoord, out Tile t) => SolidTile(tileCoord.X, tileCoord.Y, out t);
+        public static bool SolidTile(int i, int j, out Tile t)
+        {
+            t = Framing.GetTileSafely(i, j);
+            return t.HasTile && Main.tileSolid[t.TileType];
+        }
         public static bool SolidTopTile(Point tileCoord) => SolidTopTile(tileCoord.X, tileCoord.Y);
         public static bool SolidTopTile(int i, int j) => Framing.GetTileSafely(i, j).HasTile && (Main.tileSolidTop[Framing.GetTileSafely(i, j).TileType] || Main.tileSolid[Framing.GetTileSafely(i, j).TileType]);
         public static bool EdgeTileCross(int i, int j) => Framing.GetTileSafely(i, j).HasTile && (!Framing.GetTileSafely(i + 1, j).HasTile || !Framing.GetTileSafely(i - 1, j).HasTile || !Framing.GetTileSafely(i, j + 1).HasTile || !Framing.GetTileSafely(i, j - 1).HasTile);

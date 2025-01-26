@@ -5,17 +5,17 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.Audio;
 using static ITD.Utilities.TileHelpers;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ITD.Utilities
 {
-    public readonly record struct RaycastData(Vector2 end, bool hit, float lengthSQ, Tile? tile = null, NPC npc = null)
+    public readonly struct RaycastData(Vector2 end, bool hit, float lengthSQ, Tile? tile = null)
     {
         public readonly Vector2 End = end;
         public readonly bool Hit = hit;
         public readonly float LengthSQ = lengthSQ;
         public readonly float Length { get { return MathF.Sqrt(LengthSQ); } }
         public readonly Tile? Tile = tile;
-        public readonly NPC NPC = npc;
     }
     public static class Helpers
     {
@@ -58,10 +58,20 @@ namespace ITD.Utilities
                 action(point);
             }
         }
-        public static RaycastData QuickRaycast(Vector2 origin, Vector2 direction, bool shouldHitNPCs = false, bool shouldHitPlatforms = false, float maxDistTiles = 64f, bool visualize = false)
+        /// <summary>
+        /// Cast a ray using a DDA algorithm with extra support for half blocks and slopes.
+        /// </summary>
+        /// <param name="origin">The point (in world coordinates) from which this ray should start.</param>
+        /// <param name="direction">A vector representing the direction of the ray. Doesn't need to be normalized.</param>
+        /// <param name="shouldContinue">A delegate that takes in a point and returns whether or not the ray should continue in a condition where it would otherwise stop. Useful for stopping platform collision, for example.</param>
+        /// <param name="maxDistTiles">The tile distance at which the ray should stop if it hasn't found anything.</param>
+        /// <param name="visualize">If true, spawns dust for every tile the ray analyzes. (even if it is skipped due to custom collision calculations)</param>
+        /// <returns></returns>
+        public static RaycastData QuickRaycast(Vector2 origin, Vector2 direction, Func<Point, bool> shouldContinue = null, float maxDistTiles = 64f, bool visualize = false)
         {
+            shouldContinue ??= p => false;
             origin /= 16f;
-            direction = direction.SafeNormalize(Vector2.UnitY);
+            direction = direction.SafeNormalize(Vector2.Zero);
             Vector2 unitStepSize = new (
                 (float)Math.Sqrt(1 + direction.Y / direction.X * (direction.Y / direction.X)),
                 (float)Math.Sqrt(1 + direction.X / direction.Y * (direction.X / direction.Y))
@@ -91,7 +101,6 @@ namespace ITD.Utilities
                 rayLength1D.Y = (tileCheck.Y + 1 - origin.Y) * unitStepSize.Y;
             }
             bool tileFound = false;
-            NPC intersectNPC = null;
             Tile? intersectTile = null;
             while (!tileFound && curDistPixels < maxDistTiles)
             {
@@ -113,25 +122,121 @@ namespace ITD.Utilities
                     Dust d = Dust.NewDustPerfect(tileCheck.ToWorldCoordinates(), DustID.WhiteTorch);
                     d.noGravity = true;
                 }
-                if ((shouldHitPlatforms && SolidTile(tileCheck.X, tileCheck.Y)) || WorldGen.SolidTile(tileCheck.X, tileCheck.Y, false))
+                if (SolidTile(tileCheck, out Tile tile))
                 {
-                    tileFound = true;
-                    intersectTile = Framing.GetTileSafely(tileCheck);
-                }
-                if (shouldHitNPCs)
-                {
-                    Vector2 worldPosition = tileCheck.ToWorldCoordinates();
-                    foreach (var npc in Main.ActiveNPCs)
+                    // set to false to skip this tile
+                    bool isHit = true;
+                    // vector2 that goes from vector2.zero on the top left of the tile to new vector2.one on the bottom right
+                    Vector2 localIntersection = (origin + direction * curDistPixels) - tileCheck.ToVector2();
+                    if (tile.IsHalfBlock)
                     {
-                        if (npc.getRect().Contains(worldPosition.ToPoint()))
+                        bool isTopHalf = localIntersection.Y < 0.5f;
+                        // if the local intersection is on the top half:
+                        if (isTopHalf)
                         {
-                            tileFound = true;
-                            intersectNPC = npc;
+                            // if the raycast is going downwards, run all our logic.
+                            if (direction.Y > 0f)
+                            {
+                                float yRemaining = 0.5f - localIntersection.Y;
+                                float distToNextIntersection = yRemaining / Math.Abs(direction.Y);
+
+                                // now, we could easily just:
+                                // - add distToNextIntersection to curDistPixels
+                                // - recalculate localIntersection
+                                // - see if localIntersection.X is less than 0f, or more than 1f
+                                // but that's a whole one extra flop (probably with more overhead since it's vector math)!
+                                // so instead let's just recalculate x, which is all we need anyway.
+                                float nextX = localIntersection.X + distToNextIntersection * direction.X;
+
+                                if (nextX < 0f || nextX > 1f)
+                                    // out of bounds? that means we missed, so skip this tile.
+                                    isHit = false;
+                                else
+                                    // finally, if we're not out of bounds, add the distance to the ray's pixel distance.
+                                    curDistPixels += distToNextIntersection;
+                            }
+                            // if it's going upwards, that means we missed, so skip this tile.
+                            else
+                            {
+                                isHit = false;
+                            }
                         }
+                        // we don't need to add extra logic for the bottom half because it would just collide like a regular tile then.
+                    }
+                    else if (tile.Slope != SlopeType.Solid)
+                    {
+                        // we can actually calculate all that we need using this. as you can see it's basically the way we did half blocks except we calculate both x and y.
+                        void CalculateSlopedCollision(bool rising)
+                        {
+                            // for a rising slope, the ray's vertical offset decreases as it moves along the slope
+                            // for a falling slope, the ray's vertical offset increases as it moves along the slope
+
+                            // this little function took me about 4 hours to make because i fucking suck at math
+                            // now i can rest easy
+                            float localDiff = rising ? 1f - localIntersection.X - localIntersection.Y : localIntersection.Y - localIntersection.X;
+                            float localDistFactor = rising ? direction.X + direction.Y : direction.X - direction.Y;
+
+                            if (localDistFactor == 0f)
+                            {
+                                isHit = false;
+                                return;
+                            }
+
+                            float distToNextIntersection = localDiff / localDistFactor;
+
+                            float nextX = localIntersection.X + distToNextIntersection * direction.X;
+                            float nextY = localIntersection.Y + distToNextIntersection * direction.Y;
+
+                            if (nextX >= 0f && nextX <= 1f && nextY >= 0f && nextY <= 1f)
+                                curDistPixels += distToNextIntersection;
+                            else
+                                isHit = false;
+                        }
+
+                        switch (tile.Slope)
+                        {
+                            // imagine a square of 4 tiles, sloped to look like a diamond. (image below) (i swear it's not an ip grabber i would never do that i just don't like long links)
+                            // https://bit.ly/4hyqy6N
+
+                            // bottom and right are solid and aligned with tile grid. this would be tile [0, 0] on the diamond. it is a rising slope.
+                            case SlopeType.SlopeDownRight:
+                                // check if custom collision should be done in the first place
+                                if (localIntersection.Y < 1f && localIntersection.X < 1f)
+                                    CalculateSlopedCollision(true);
+                                break;
+
+                            // bottom and left are solid and aligned with tile grid. this would be tile [1, 0] on the diamond. it is a falling slope.
+                            case SlopeType.SlopeDownLeft:
+
+                                // check if custom collision should be done in the first place
+                                if (localIntersection.Y < 1f && localIntersection.X > 0f)
+                                    CalculateSlopedCollision(false);
+                                break;
+
+                            // top and right are solid and aligned with tile grid. this would be tile [0, 1] on the diamond. it is a falling slope.
+                            case SlopeType.SlopeUpRight:
+                                // check if custom collision should be done in the first place
+                                if (localIntersection.Y > 0f && localIntersection.X < 1f)
+                                    CalculateSlopedCollision(false);
+                                break;
+
+                            // top and left are solid and aligned with tile grid. this would be tile [1, 1] on the diamond. it is a rising slope.
+                            case SlopeType.SlopeUpLeft:
+                                // check if custom collision should be done in the first place
+                                if (localIntersection.Y > 0f && localIntersection.X > 0f)
+                                    CalculateSlopedCollision(true);
+                                break;
+                        }
+                    }
+
+                    if (isHit && !shouldContinue(tileCheck))
+                    {
+                        tileFound = true;
+                        intersectTile = tile;
                     }
                 }
             }
-            Vector2 intersection = Vector2.Zero;
+            Vector2 intersection;
             if (tileFound)
             {
                 intersection = origin + direction * curDistPixels;
@@ -140,7 +245,7 @@ namespace ITD.Utilities
             {
                 intersection = origin + direction * maxDistTiles;
             }
-            return new RaycastData(intersection * 16f, tileFound, Vector2.DistanceSquared(origin * 16f, intersection * 16f), intersectTile, intersectNPC);
+            return new RaycastData(intersection * 16f, tileFound, Vector2.DistanceSquared(origin * 16f, intersection * 16f), intersectTile);
         }
         public static float Remap(float value, float oldMin, float oldMax, float newMin, float newMax)
         {

@@ -162,7 +162,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
             {
                 if (Main.rand.NextBool(12))
                 {
-                    Vector2 spawnPosition = Helpers.QuickRaycast(NPC.position, Vector2.UnitY, false, true, 8f).End + new Vector2(NPC.width / amount * i, 0f);
+                    Vector2 spawnPosition = Helpers.QuickRaycast(NPC.position, Vector2.UnitY, maxDistTiles: 8f).End + new Vector2(NPC.width / amount * i, 0f);
                     Gore.NewGoreDirect(NPC.GetSource_FromThis(), spawnPosition, Vector2.Zero, Main.rand.Next(61, 64));
                 }
             }

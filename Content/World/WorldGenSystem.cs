@@ -57,6 +57,10 @@ namespace ITD.Content.World
 
         public override void PostUpdateWorld()
         {
+            if (Main.keyState.IsKeyDown(Keys.D1))
+            {
+                TestConstantMethod();
+            }
             if (JustPressed(Keys.D1))
             {
                 TestMethod();
@@ -66,7 +70,14 @@ namespace ITD.Content.World
                 TestMethod2();
             }
         }
-
+        private void TestConstantMethod()
+        {
+            /*
+            Player p = Main.LocalPlayer;
+            RaycastData d = Helpers.QuickRaycast(p.Center, p.DirectionTo(Main.MouseWorld), visualize: true);
+            Dust.NewDustPerfect(d.End, DustID.Torch, Vector2.Zero);
+            */
+        }
         private void TestMethod()
         {
             // test UI particle (change particle.canvas in particle type)
@@ -75,7 +86,7 @@ namespace ITD.Content.World
             //ITDParticle newParticle = ParticleSystem.NewEmitter<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
             
-            
+            /*
             testPoints.Add(pos);
             if (testPoints.Count == 1)
                 EventsSystem.BeginEvent<LavaRainEvent>();
@@ -84,7 +95,7 @@ namespace ITD.Content.World
                 EventsSystem.StopEvent<LavaRainEvent>();
                 testPoints.Clear();
             }
-            
+            */
             
             /*
             Tile t = Framing.GetTileSafely(pos);

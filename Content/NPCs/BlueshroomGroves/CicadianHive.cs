@@ -128,7 +128,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
                     break;
                 case ActionState.Hovering:
                     timeBetweenFrames = 4;
-                    RaycastData ray = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, false, true, 32);
+                    RaycastData ray = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, maxDistTiles: 32);
                     Vector2 hoverPoint = ray.End - new Vector2(0f, hoverDistance * 16);
                     Vector2 toHoverPoint = (hoverPoint - NPC.Center) / 32f;
                     NPC.velocity = Vector2.Lerp(NPC.velocity, toHoverPoint, 0.05f);
