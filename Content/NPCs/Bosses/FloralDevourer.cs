@@ -73,7 +73,7 @@ namespace ITD.Content.NPCs.Bosses
 
         public override void AI()
         {
-            var ray = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, false, true, raycastFloatLength);
+            var ray = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, maxDistTiles: raycastFloatLength);
             if (ray.Hit)
             {
                 NPC.velocity.Y = -2f;
@@ -307,8 +307,8 @@ namespace ITD.Content.NPCs.Bosses
             direction = (pathPosition - NPC.Center).SafeNormalize(Vector2.Zero);
             if (HasLegs)
             {
-                frontRayPosition = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, false, true, 24f).End;
-                backRayPosition = Helpers.QuickRaycast(NPC.Center + new Vector2(direction.X * 32f, 0f), Vector2.UnitY, false, true, 24f).End;
+                frontRayPosition = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, maxDistTiles: 24f).End;
+                backRayPosition = Helpers.QuickRaycast(NPC.Center + new Vector2(direction.X * 32f, 0f), Vector2.UnitY, maxDistTiles: 24f).End;
                 float step = 80f;
                 if (legFront != null && legBack != null)
                 {
