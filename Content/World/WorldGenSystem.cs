@@ -72,9 +72,11 @@ namespace ITD.Content.World
         }
         private void TestConstantMethod()
         {
+            /*
             Player p = Main.LocalPlayer;
             RaycastData d = Helpers.QuickRaycast(p.Center, p.DirectionTo(Main.MouseWorld), visualize: true);
             Dust.NewDustPerfect(d.End, DustID.Torch, Vector2.Zero);
+            */
         }
         private void TestMethod()
         {
