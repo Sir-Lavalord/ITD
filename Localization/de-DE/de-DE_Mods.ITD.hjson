@@ -174,8 +174,12 @@ Projectiles: {
 	// CosmicGoo.DisplayName: Cosmic Goo
 	// PyroclasticTrail.DisplayName: Pyroclastic Trail
 	// PyroclasticFireball.DisplayName: Pyroclastic Fireball
+<<<<<<< HEAD
 	// CosmicSwarm.DisplayName: Cosmic Swarm
 	// CosmicWarning.DisplayName: Cosmic Warning
+=======
+	// FwoomstickSpark.DisplayName: Fwoomstick Spark
+>>>>>>> 54bcc851691697406c489eb8ed2f7d804fd857c4
 }
 
 NPCs: {
