@@ -2,10 +2,13 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.PrimitiveDrawing;
+using ITD.Utilities;
 using Terraria.Graphics.Shaders;
 using Terraria.GameContent;
 using Terraria.DataStructures;
 using System.Collections.Generic;
+using ITD.PrimitiveDrawing;
+using Terraria.Graphics.Shaders;
 namespace ITD.Content.Projectiles.Hostile
 {
     public class CosmicRay : ModProjectile
@@ -116,9 +119,7 @@ namespace ITD.Content.Projectiles.Hostile
             LasersLength = 0;
             for (int i = 0; i < MAX_LASER_LENGTH; i++)
             {
-
-                if (Collision.CanHitLine(Projectile.Center, 15, 15, Projectile.Center + Projectile.velocity * LasersLength, 15, 15))
-                    LasersLength = i;
+                if (Collision.CanHitWithCheck(Projectile.Center, 15, 15, Projectile.Center + Projectile.velocity * LasersLength, 15, 15, (x, y) => { return Main.tile[x, y].TileType != TileID.Platforms; })) LasersLength = i;
                 else
                     break;
             }
