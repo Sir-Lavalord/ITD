@@ -11,6 +11,8 @@ using Terraria.GameContent.Creative;
 using System.Linq;
 using ITD.Content.Projectiles.Friendly.Ranger;
 using Terraria.GameContent.Drawing;
+using ITD.Content.Projectiles.Other;
+using ITD.Content.Projectiles;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {
@@ -107,7 +109,7 @@ namespace ITD.Content.Items.Weapons.Ranger
                 newVelocity *= 1f - Main.rand.NextFloat(miss);
                 Vector2 offsetSpawn = bulletVel.RotatedBy((double)((MathHelper.Pi/10) * piOffsetAmt), default);
                 int proj = Projectile.NewProjectile(source, vector2.X + offsetSpawn.X, vector2.Y + offsetSpawn.Y, newVelocity.X, newVelocity.Y, type, damage, knockback, player.whoAmI);
-                Main.projectile[proj].GetGlobalProjectile<PotshotBullet>().isFromPotshot = true;
+                Main.projectile[proj].GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromPotshot = true;
 
             }
             for (int i = 0; i < 12; i++)
@@ -159,12 +161,5 @@ namespace ITD.Content.Items.Weapons.Ranger
         {
             return new Vector2(10f, -9f);
         }
-    }
-    public class PotshotBullet : GlobalProjectile//fuck, there must be a better way to implement this
-    {
-        public override bool InstancePerEntity => true;
-
-        public bool isFromPotshot;
-
     }
 }
