@@ -31,7 +31,6 @@ namespace ITD.Particles
         /// </summary>
         internal string ExpectedTexturePath;
         public virtual string TexturePath => ExpectedTexturePath;
-        public byte frameCounter;
         public short timeLeft;
         public bool keptAlive;
         public bool additive = false;
