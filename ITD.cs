@@ -46,7 +46,7 @@ namespace ITD
         public static ITDClientConfig ClientConfig => ModContent.GetInstance<ITDClientConfig>();
         public int? GetMusic(string trackName)
         {
-            return itdMusic is not null ? MusicLoader.GetMusicSlot(itdMusic, "Music/" + trackName) : null;
+            return itdMusic != null ? MusicLoader.GetMusicSlot(itdMusic, "Music/" + trackName) : null;
         }
         public override void PostSetupContent()
         {

@@ -24,7 +24,7 @@ namespace ITD.Networking.Packets
                 return;
             }
             modPlayer.guid = reader.ReadGuid();
-            if (Main.netMode == NetmodeID.Server)
+            if (Main.dedServ)
             {
                 NetSystem.SendPacket(new PlayerJoinedPacket(player), ignoreClient: sender);
                 foreach (var npc in Main.npc.Where(n => n.ModNPC is RecruitedNPC))

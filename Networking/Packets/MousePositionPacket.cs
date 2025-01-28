@@ -21,7 +21,7 @@ namespace ITD.Networking.Packets
                 return;
             }
             modPlayer.MousePosition = reader.ReadVector2();
-            if (Main.netMode == NetmodeID.Server)
+            if (Main.dedServ)
             {
                 NetSystem.SendPacket(new MousePositionPacket(player), ignoreClient: sender);
             }
