@@ -175,6 +175,7 @@ Projectiles: {
 	// PyroclasticTrail.DisplayName: Pyroclastic Trail
 	// PyroclasticFireball.DisplayName: Pyroclastic Fireball
 	// FwoomstickSpark.DisplayName: Fwoomstick Spark
+	// SmoggyNimbusRaindrop.DisplayName: Smoggy Nimbus Raindrop
 }
 
 NPCs: {
