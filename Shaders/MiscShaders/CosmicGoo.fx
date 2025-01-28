@@ -24,15 +24,7 @@ float2 Rotate(float2 uv, float amount)
     return uv2;
     
 }
-float2 expandInsideOutside(float2 uv)
-{
-    float1 t = uShaderSpecificData.y;
-    float2 uv2 = Rotate(uv, t);
-    float1 d = length(uv2);
 
-    return (d * uv2 + ((t) - uv2));
-    
-}
 
 
 float4 CosmicGoo(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
@@ -45,13 +37,18 @@ float4 CosmicGoo(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR
     float2 NormalUV = coords * 2. - 1.;
     float d = saturate(length(NormalUV));
    
-    float4 noise = tex2D(uImage1, expandInsideOutside(NormalUV));
+    float4 noise = tex2D(uImage1, NormalUV * 2 + uTime);
     float circle = saturate((0.5 - distance(float2(0.5 * 2.0 - 1.0, 0.5 * 2.0 - 1.0), NormalUV)));
-    circle *=5.;
-    noise.rgb *= lerp(uColor, uSecondaryColor, noise.a);
-
+    circle *=1.;
+    noise.rgb *= uSecondaryColor;
     
-    return noise * circle;
+    noise.a = noise.r;
+
+    float4 noise2 = tex2D(uImage1, Rotate(NormalUV, 3.141592 / 4) + uTime);
+    noise *= noise2.r;
+    
+    
+    return noise * circle + float3(circle * uSecondaryColor).rgbr;
 }
 
 technique Technique1
@@ -59,6 +56,6 @@ technique Technique1
     pass CosmicGooPass
     {
         
-        PixelShader = compile ps_2_0 CosmicGoo();
+        PixelShader = compile ps_3_0 CosmicGoo();
     }
 }

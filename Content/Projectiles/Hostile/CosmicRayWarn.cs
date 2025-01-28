@@ -77,7 +77,7 @@ namespace ITD.Content.Projectiles.Hostile
                     if(CosJel.AttackID != 7) 
                     {
                         ray.localAI[0] = 1;//mog
-                        ray.localAI[1] = 1;//slop
+                        ray.localAI[1] = 2;// 0 = no collision, 1 = tile collision only, 2 = tile and platform collisions.
                         ray.localAI[2] = 1;
                         ray.timeLeft = 800;
                     }
