@@ -1,10 +1,6 @@
 ﻿using ITD.Content.Events;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Terraria;
 
 namespace ITD.Networking.Packets
 {
@@ -19,6 +15,8 @@ namespace ITD.Networking.Packets
         {
             sbyte eventType = reader.ReadSByte();
             EventsSystem.EventsByID[eventType].NetReceive(reader);
+            if (Main.dedServ)
+                NetSystem.SendPacket(new SyncEventDataPacket(eventType), sender);
         }
     }
 }

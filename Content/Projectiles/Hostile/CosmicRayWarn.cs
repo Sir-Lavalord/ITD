@@ -76,9 +76,9 @@ namespace ITD.Content.Projectiles.Hostile
                     Projectile ray = Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Projectile.velocity.SafeNormalize(Vector2.UnitY), ModContent.ProjectileType<CosmicRay>(), Projectile.damage, Projectile.knockBack, -1, Projectile.ai[1], Projectile.rotation);
                     if(CosJel.AttackID != 7) 
                     {
-                        ray.localAI[0] = 1;//mog(locked in)
-                        ray.localAI[1] = 1;//slop
-                        ray.localAI[2] = 1;//water
+                        ray.localAI[0] = 1;//mog
+                        ray.localAI[1] = 2;// 0 = no collision, 1 = tile collision only, 2 = tile and platform collisions.
+                        ray.localAI[2] = 1;
                         ray.timeLeft = 800;
                     }
                 }

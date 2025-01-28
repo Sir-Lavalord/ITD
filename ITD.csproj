@@ -9,6 +9,7 @@
   </PropertyGroup>
 	
   <ItemGroup>
+    <None Remove="shaders\miscshaders\CosmicLaserImpact.fx" />
     <None Remove="Shaders\MiscShaders\Telegraph.fx" />
   </ItemGroup>
 	

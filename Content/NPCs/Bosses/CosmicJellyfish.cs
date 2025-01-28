@@ -21,6 +21,7 @@ using ITD.Content.Items.Accessories.Movement.Boots;
 using ITD.Content.Projectiles.Hostile.CosjelTest;
 using ITD.PrimitiveDrawing;
 using Terraria.Graphics.Shaders;
+ 
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -28,6 +29,7 @@ namespace ITD.Content.NPCs.Bosses
     [AutoloadBossHead]
     public class CosmicJellyfish : ModNPC
     {
+        
         public float rotation = 0f;
         public float AIRand = 0f;
         public bool bOkuu;
@@ -269,13 +271,13 @@ namespace ITD.Content.NPCs.Bosses
                         }
                     }
                         if (AITimer1++ >= 1200 + Main.rand.Next(-100, 150))
-                    {
+                        {
                         AI_State = MovementState.FollowingRegular;
                         distanceAbove = 250;
                         AITimer1 = 0;
                         AITimer2 = 0;
                         AttackID++;
-                    }
+                        }
                         break;
                 case 2: //zingers
                     if (AITimer2++ >= 260 || expertMode && AITimer2++ >= 220 || masterMode && AITimer2++ >= 180)

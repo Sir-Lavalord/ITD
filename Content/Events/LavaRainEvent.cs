@@ -5,8 +5,11 @@ using ITD.Particles;
 using ITD.Particles.Events;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
+using System.Linq;
+using ITD.Utilities;
+using Terraria.ID;
+using ITD.Content.Tiles;
 
 namespace ITD.Content.Events
 {
@@ -15,11 +18,10 @@ namespace ITD.Content.Events
         public ushort maxProgress;
         public ushort currentProgress;
         public ParticleEmitter rainParticleEmitter;
+        public override int Music => ITD.Instance.GetMusic("LavaRain") ?? MusicID.DukeFishron;
         public override void OnActivate()
         {
-            int count = 0;
-            foreach (var plr in Main.ActivePlayers)
-                count++;
+            int count = Main.player.Where(p => p.Exists()).Count();
             maxProgress = (ushort)(40 + (20 * count));
             currentProgress = 0;
 
@@ -34,8 +36,8 @@ namespace ITD.Content.Events
             rainParticleEmitter.keptAlive = true;
             if (player.whoAmI != Main.myPlayer)
                 return;
-            float rangePadding = 100f;
-            if (Main.rand.NextBool(2))
+            float rangePadding = 250f;
+            if (Main.rand.NextBool())
             {
                 Vector2 emitPosition = (Main.screenPosition - Vector2.UnitX * rangePadding) + new Vector2(Main.rand.NextFloat(Main.screenWidth + rangePadding + float.Epsilon), 0f);
                 Vector2 emitVelocity = Vector2.UnitY * 13.5f;
@@ -52,8 +54,10 @@ namespace ITD.Content.Events
         }
         public override void OnKill(NPC npc)
         {
-            if (npc.type == ModContent.NPCType<PyroclasticSlime>())
+            if (ITDSets.LavaRainEnemy[npc.type])
+            {
                 currentProgress++;
+            }
             NetSystem.SendPacket<SyncEventDataPacket>(new(Type));
         }
         public override void OnDeactivate()

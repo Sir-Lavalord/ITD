@@ -20,6 +20,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 8;
+            ITDSets.LavaRainEnemy[Type] = true;
         }
         public override void SetDefaults()
         {
