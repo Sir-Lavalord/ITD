@@ -6,6 +6,11 @@ using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.Graphics.Shaders;
 using ITD.DetoursIL;
+using ITD.Systems.Extensions;
+using ITD.Systems.DataStructures;
+using Terraria.GameContent;
+using ITD.Content.World;
+using ITD.Particles.Misc;
 
 namespace ITD.Particles
 {
@@ -14,9 +19,11 @@ namespace ITD.Particles
         private static readonly List<ParticleEmitter> emitterPrototypes = [];
         public static byte[] particleFramesVertical = [];
         public static byte[] particleFramesHorizontal = [];
-        public static ArmorShaderData[] particleShaders = [];
+        public static bool[] particleUsesRenderTarget = [];
         private static readonly Dictionary<Type, ParticleEmitter> emmitersByType = [];
+        public static ParticleEmitter currentlyDrawnEmitter;
         public List<ParticleEmitter> emitters;
+        public static ParticlesRT particlesRT;
         public static ParticleSystem Instance => DetourManager.GetInstance<ParticleSystem>();
         public static ParticleEmitter NewEmitter<T>(ParticleEmitterDrawCanvas canvas = ParticleEmitterDrawCanvas.WorldOverProjectiles) where T : ParticleEmitter
         {
@@ -56,6 +63,7 @@ namespace ITD.Particles
         {
             if (Main.dedServ)
                 return;
+            Main.ContentThatNeedsRenderTargets.Add(particlesRT = new());
             emitters = [];
             foreach (Type t in ITD.Instance.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ParticleEmitter)))) // particle loader
             {
@@ -67,12 +75,12 @@ namespace ITD.Particles
             }
             Array.Resize(ref particleFramesVertical, emitterPrototypes.Count + 1);
             Array.Resize(ref particleFramesHorizontal, emitterPrototypes.Count + 1);
-            Array.Resize(ref particleShaders, emitterPrototypes.Count + 1);
+            Array.Resize(ref particleUsesRenderTarget, emitterPrototypes.Count + 1);
             foreach(var prototype in emitterPrototypes)
             {
                 particleFramesVertical[prototype.type] = 1;
                 particleFramesHorizontal[prototype.type] = 1;
-                particleShaders[prototype.type] = null;
+                particleUsesRenderTarget[prototype.type] = false;
             }
             On_Main.DrawSuperSpecialProjectiles += DrawParticlesUnderProjectiles; // subscribe to events for drawing
             On_Main.DrawCachedProjs += DrawParticlesOverProjectiles;
@@ -83,6 +91,7 @@ namespace ITD.Particles
         {
             if (Main.dedServ)
                 return;
+            Main.ContentThatNeedsRenderTargets.Remove(particlesRT);
             emitters?.Clear();
             emitterPrototypes?.Clear();
             emmitersByType?.Clear();
@@ -90,13 +99,26 @@ namespace ITD.Particles
         public void UpdateAllParticles(On_Main.orig_UpdateParticleSystems orig, Main self)
         {
             orig(self);
+            // DEBUG LINE v
+            if (WorldGenSystem.JustPressed(Microsoft.Xna.Framework.Input.Keys.D1))
+            {
+                NewSingleParticle<PyroclasticParticle>(Main.MouseWorld, Vector2.Zero, lifetime: 120, canvas: ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+            }
+            // DEBUG LINE ^
             for (int i = emitters.Count - 1; i >= 0; i--)
             {
                 ParticleEmitter emitter = emitters[i];
                 emitter.UpdateAllParticles();
                 emitter.timeLeft--;
                 if (emitter.timeLeft < 0)
+                {
+                    if (currentlyDrawnEmitter != null)
+                    {
+                        if (currentlyDrawnEmitter.GetHashCode() == emitter.GetHashCode())
+                            currentlyDrawnEmitter = null;
+                    }
                     emitters.RemoveAt(i);
+                }
             }
         }
 
@@ -104,13 +126,15 @@ namespace ITD.Particles
         {
             foreach (ParticleEmitter emitter in emitters.Where(e => e.canvas == canvas))
             {
-                emitter.FlushDrawActions(ParticleEmitterDrawStep.BeforePreDrawAll);
-                emitter.PreDrawAllParticles();
-
-                emitter.FlushDrawActions(ParticleEmitterDrawStep.AfterPreDrawAll);
-                emitter.DrawAllParticles();
-
-                emitter.FlushDrawActions(ParticleEmitterDrawStep.AfterDrawAll);
+                currentlyDrawnEmitter = emitter;
+                if (!particleUsesRenderTarget[currentlyDrawnEmitter.type])
+                {
+                    emitter.DrawFully();
+                    continue;
+                }
+                particlesRT.Request();
+                if (particlesRT.IsReady)
+                    Main.spriteBatch.Draw(particlesRT.GetTarget(), Vector2.Zero, Color.White);
             }
         }
         
@@ -160,6 +184,23 @@ namespace ITD.Particles
             DrawParticles(ParticleEmitterDrawCanvas.UI);
 
             Main.spriteBatch.End();
+        }
+    }
+    public class ParticlesRT : ARenderTargetContentByRequest
+    {
+        protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
+        {
+            PrepareARenderTarget_AndListenToEvents(ref _target, device, Main.screenWidth, Main.screenHeight, RenderTargetUsage.PlatformContents);
+
+            var gd = spriteBatch.GraphicsDevice;
+            var oldTargets = gd.GetRenderTargets();
+            gd.Clear(Color.Transparent);
+            gd.SetRenderTarget(_target);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            ParticleSystem.currentlyDrawnEmitter?.DrawFully();
+            spriteBatch.End();
+            gd.SetRenderTargets(oldTargets);
+            _wasPrepared = true;
         }
     }
 }

@@ -17,6 +17,7 @@ using ITD.Content.Walls.DeepDesert;
 using System;
 using ITD.Content.UI;
 using ITD.Content.Events;
+using ITD.Particles.Misc;
 
 namespace ITD.Content.World
 {
@@ -85,7 +86,8 @@ namespace ITD.Content.World
             //test world particle (change particle.canvas in particle type)
             //ITDParticle newParticle = ParticleSystem.NewEmitter<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
-            
+
+            //ParticleSystem.NewSingleParticle<PyroclasticParticle>(Main.MouseWorld, Vector2.Zero, lifetime: 120, canvas: ParticleEmitterDrawCanvas.WorldUnderProjectiles);
             /*
             testPoints.Add(pos);
             if (testPoints.Count == 1)
