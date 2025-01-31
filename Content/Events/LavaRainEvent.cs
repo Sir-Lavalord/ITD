@@ -57,8 +57,8 @@ namespace ITD.Content.Events
             if (ITDSets.LavaRainEnemy[npc.type])
             {
                 currentProgress++;
+                NetSystem.SendPacket<SyncEventDataPacket>(new(Type));
             }
-            NetSystem.SendPacket<SyncEventDataPacket>(new(Type));
         }
         public override void OnDeactivate()
         {

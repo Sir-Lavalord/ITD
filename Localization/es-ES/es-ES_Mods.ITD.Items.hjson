@@ -1236,5 +1236,5 @@ Fwoomstick: {
 
 Stabtrap: {
 	// DisplayName: Stabtrap
-	// Tooltip: "[c/{0}:Latch Effect:] Unleashes a stinger to stab enemies"
+	// Tooltip: "[c/{0}:Latch Effect:] Unleashes a stinger to stab the trap's target"
 }

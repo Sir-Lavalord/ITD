@@ -23,7 +23,7 @@ namespace ITD.Particles
         private static readonly Dictionary<Type, ParticleEmitter> emmitersByType = [];
         public static ParticleEmitter currentlyDrawnEmitter;
         public List<ParticleEmitter> emitters;
-        public static ParticlesRT particlesRT;
+        //public static ParticlesRT particlesRT;
         public static ParticleSystem Instance => DetourManager.GetInstance<ParticleSystem>();
         public static ParticleEmitter NewEmitter<T>(ParticleEmitterDrawCanvas canvas = ParticleEmitterDrawCanvas.WorldOverProjectiles) where T : ParticleEmitter
         {
@@ -63,7 +63,7 @@ namespace ITD.Particles
         {
             if (Main.dedServ)
                 return;
-            Main.ContentThatNeedsRenderTargets.Add(particlesRT = new());
+            //Main.ContentThatNeedsRenderTargets.Add(particlesRT = new());
             emitters = [];
             foreach (Type t in ITD.Instance.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ParticleEmitter)))) // particle loader
             {
@@ -91,7 +91,7 @@ namespace ITD.Particles
         {
             if (Main.dedServ)
                 return;
-            Main.ContentThatNeedsRenderTargets.Remove(particlesRT);
+            //Main.ContentThatNeedsRenderTargets.Remove(particlesRT);
             emitters?.Clear();
             emitterPrototypes?.Clear();
             emmitersByType?.Clear();
@@ -99,9 +99,6 @@ namespace ITD.Particles
         public void UpdateAllParticles(On_Main.orig_UpdateParticleSystems orig, Main self)
         {
             orig(self);
-            // DEBUG LINE v
-
-            // DEBUG LINE ^
             for (int i = emitters.Count - 1; i >= 0; i--)
             {
                 ParticleEmitter emitter = emitters[i];
@@ -123,6 +120,8 @@ namespace ITD.Particles
         {
             foreach (ParticleEmitter emitter in emitters.Where(e => e.canvas == canvas))
             {
+                emitter.DrawFully();
+                /*
                 currentlyDrawnEmitter = emitter;
                 if (!particleUsesRenderTarget[currentlyDrawnEmitter.type])
                 {
@@ -132,6 +131,7 @@ namespace ITD.Particles
                 particlesRT.Request();
                 if (particlesRT.IsReady)
                     Main.spriteBatch.Draw(particlesRT.GetTarget(), Vector2.Zero, Color.White);
+                */
             }
         }
         
@@ -183,6 +183,7 @@ namespace ITD.Particles
             Main.spriteBatch.End();
         }
     }
+    /*
     public class ParticlesRT : ARenderTargetContentByRequest
     {
         protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
@@ -200,4 +201,5 @@ namespace ITD.Particles
             _wasPrepared = true;
         }
     }
+    */
 }

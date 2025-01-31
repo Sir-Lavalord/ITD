@@ -173,14 +173,6 @@ namespace ITD.Systems.Recruitment
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            /*
-            foreach (var pairs in ITDSystem.recruitmentData)
-            {
-                Main.NewText(pairs.Key, Color.Blue);
-                Main.NewText(pairs.Value, Color.Yellow);
-            }
-            Main.NewText(recruitmentData.OriginalType, Color.Green);
-            */
             RecruitData recruitData = ITDSystem.recruitmentData.Values.FirstOrDefault(v => v.OriginalType == recruitmentData.OriginalType, RecruitData.Invalid);
             Asset<Texture2D> tex = null;
             ExternalRecruitmentData extData = TownNPCRecruitmentLoader.GetExternalRecruitmentData(recruitmentData.OriginalType);
