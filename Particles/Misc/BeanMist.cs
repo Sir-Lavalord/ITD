@@ -20,6 +20,10 @@ namespace ITD.Particles.Misc
             timeLeft = 40;
         }
         */
+        public override void SetStaticDefaults()
+        {
+            ParticleSystem.particleUsesRenderTarget[type] = true;
+        }
         public override void OnEmitParticle(ref ITDParticle particle)
         {
             particle.scale *= 1.6f;

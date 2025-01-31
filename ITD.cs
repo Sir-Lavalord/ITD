@@ -19,6 +19,7 @@ using System.Text;
 using System.Diagnostics;
 using Terraria.GameContent;
 using ITD.Particles;
+using System.Linq;
 
 namespace ITD
 {
@@ -33,7 +34,7 @@ namespace ITD
         public const string MetaballsShadersFolderPath = "Shaders/MetaballsShaders/";
 
         public static readonly Dictionary<string, ArmorShaderData> ITDArmorShaders = [];
-        public static readonly Dictionary<string, MetaballsShaderData> ITDMetaBallsShaders = [];
+        public static readonly Dictionary<string, MetaballShaderData> ITDMetaBallsShaders = [];
 
         internal Mod itdMusic = null;
 
@@ -195,7 +196,7 @@ namespace ITD
                     sb.Remove(0, MetaballsShadersFolderPath.Length);
                     sb.Replace(".xnb", "");
                     string shaderName = sb.ToString();
-                    ITDMetaBallsShaders[shaderName] = new MetaballsShaderData(ModContent.Request<Effect>(this.Name + "/" + MetaballsShadersFolderPath + shaderName));
+                    ITDMetaBallsShaders[shaderName] = new MetaballShaderData(ModContent.Request<Effect>(this.Name + "/" + MetaballsShadersFolderPath + shaderName));
 
                 }
             }
@@ -273,6 +274,8 @@ namespace ITD
         }
         public override void Unload()
         {
+            foreach (MetaballShaderData s in ITDMetaBallsShaders.Values)
+                s.Dispose();
             ITDArmorShaders?.Clear();
             itdMusic = null;
             wikithis = null;

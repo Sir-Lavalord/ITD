@@ -11,6 +11,8 @@
   <ItemGroup>
     <None Remove="shaders\miscshaders\CosmicLaserImpact.fx" />
     <None Remove="Shaders\MiscShaders\Telegraph.fx" />
+    <None Remove="Shaders\ScreenShaders\Metaballs.fx" />
+    <None Remove="Shaders\ScreenShaders\MetaballsTest.fx" />
   </ItemGroup>
 	
   <ItemGroup>
@@ -20,7 +22,6 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <Folder Include="Particles\MetaBalls\" />
     <Folder Include="Systems\WorldNPCs\Assets\BoxStyles\" />
   </ItemGroup>
 </Project>

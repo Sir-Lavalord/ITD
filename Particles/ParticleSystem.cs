@@ -100,10 +100,7 @@ namespace ITD.Particles
         {
             orig(self);
             // DEBUG LINE v
-            if (WorldGenSystem.JustPressed(Microsoft.Xna.Framework.Input.Keys.D1))
-            {
-                NewSingleParticle<PyroclasticParticle>(Main.MouseWorld, Vector2.Zero, lifetime: 120, canvas: ParticleEmitterDrawCanvas.WorldUnderProjectiles);
-            }
+
             // DEBUG LINE ^
             for (int i = emitters.Count - 1; i >= 0; i--)
             {
@@ -190,12 +187,12 @@ namespace ITD.Particles
     {
         protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
         {
-            PrepareARenderTarget_AndListenToEvents(ref _target, device, Main.screenWidth, Main.screenHeight, RenderTargetUsage.PlatformContents);
+            PrepareARenderTarget_AndListenToEvents(ref _target, device, Main.screenWidth, Main.screenHeight, RenderTargetUsage.PreserveContents);
 
             var gd = spriteBatch.GraphicsDevice;
             var oldTargets = gd.GetRenderTargets();
-            gd.Clear(Color.Transparent);
             gd.SetRenderTarget(_target);
+            gd.Clear(Color.Transparent);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             ParticleSystem.currentlyDrawnEmitter?.DrawFully();
             spriteBatch.End();
