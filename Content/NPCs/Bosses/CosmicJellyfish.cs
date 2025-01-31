@@ -18,6 +18,7 @@ using ITD.Content.Dusts;
 using ITD.Content.Items.Armor.Vanity.Masks;
 using Terraria.Graphics.Effects;
 using ITD.Content.Items.Accessories.Movement.Boots;
+using ITD.Content.Projectiles.Hostile.CosjelTest;
 using ITD.PrimitiveDrawing;
 using Terraria.Graphics.Shaders;
  
@@ -241,30 +242,20 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 1: //Slop rain
-                    distanceAbove = 300;
-                    if (AITimer2 == 120) //rain down slime balls
+                    distanceAbove = 400;
+                    if (AITimer2 == 120)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
 
                             Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY,
                              ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI,1);
-
                         }
                     }
-                        if (AITimer2++ > 120) //rain down slime balls
+                    if (AITimer2++ > 120)
                     {
                         AI_State = MovementState.FollowingSlow;
                         NPC.rotation = 0;
-/*                        if (AITimer2 % 5 == 0)
-                        {
-                            SoundEngine.PlaySound(SoundID.Item34, player.Center);
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                Vector2 spawnPos = NPC.Center + Main.rand.NextVector2Square(-50, 50) * Vector2.UnitY * 1;
-                                Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnPos, new Vector2(0, 5) * 2, ModContent.ProjectileType<CosmicSlop>(), 20, 0, -1, NPC.whoAmI);
-                            }
-                        }*/
                         if (AITimer2 % 180 == 0)
                         {
                             float XVeloDifference = 1.5f;
@@ -278,7 +269,7 @@ namespace ITD.Content.NPCs.Bosses
                                 }
                             }
                         }
-                        }
+                    }
                         if (AITimer1++ >= 1200 + Main.rand.Next(-100, 150))
                         {
                         AI_State = MovementState.FollowingRegular;
@@ -319,23 +310,18 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 3://shit enemy spawn
-                    if (AITimer1++ == 60)
+                    if (AITimer2++ == 200)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)//Fix later, this will do for now
                         {
-                            if (!bSecondStage)
+                            for (int i = 0; i <= 1; i++)
                             {
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X, NPC.Center.Y - 100), ModContent.NPCType<CosmicJellyfishMini>());
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(player.Center.X + 500, player.Center.Y + 400 * Main.rand.Next(-1, 2)), Vector2.Zero, ModContent.ProjectileType<CosmicWarning>(), NPC.damage, 0f, -1, NPC.whoAmI);
                             }
-                            else
-                            {
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X, NPC.Center.Y - 100), ModContent.NPCType<CosmicJellyfishMini>());
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X - 200, NPC.Center.Y + 100), ModContent.NPCType<CosmicJellyfishMini>());
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X + 200, NPC.Center.Y + 100), ModContent.NPCType<CosmicJellyfishMini>());
-                            }
+                            AITimer2 = 0;
                         }
                     }
-                    else if (AITimer1 >= 300)
+                    else if (AITimer1 >= 2000)
                     {
                         AITimer1 = 0;
                         AttackID++;

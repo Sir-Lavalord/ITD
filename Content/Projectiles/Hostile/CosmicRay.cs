@@ -7,6 +7,7 @@ using Terraria.GameContent;
 using Terraria.DataStructures;
 using System.Collections.Generic;
 using ITD.Utilities;
+using ITD.Content.Projectiles.Hostile.CosjelTest;
 namespace ITD.Content.Projectiles.Hostile
 {
     public class CosmicRay : ModProjectile
@@ -39,7 +40,7 @@ namespace ITD.Content.Projectiles.Hostile
             CurrentLasterLength = LasersLength;
 
         }
-        public const int MAX_GOO = 300;
+        public const int MAX_GOO = 60;
         public const int MAX_LASER_LENGTH = 3000;
 
         public List<CosmicGoos> cosmicGoos = new List<CosmicGoos>();
@@ -72,7 +73,7 @@ namespace ITD.Content.Projectiles.Hostile
         {
             NPC npc = Main.npc[NPCOwner];
             Player player = Main.player[npc.target];
-
+            player.GetITDPlayer().BetterScreenshake(20, 5, 5, true);
             Projectile.Center = npc.Center - new Vector2(0,15);
             // change the projetile rotation for adjusting the laser rotation
             if (!LockIn)
@@ -98,17 +99,31 @@ namespace ITD.Content.Projectiles.Hostile
             }
 
             //goo / stream updating
-            //cosmicGoos.ForEach(g => g.timeleft--);
-            //cosmicGoos.RemoveAll(g => g.timeleft <= 0);
-            //SpawnACosmicGoo();
+            cosmicGoos.ForEach(g => g.timeleft--);
+            cosmicGoos.RemoveAll(g => g.timeleft <= 0);
+            SpawnACosmicGoo();
 
             //uncomment this for normal laser collision behavouir
             CurrentLasterLength = LasersLength;
             
         }
 
+        int slopTimer;
         public void SpawnACosmicGoo()
         {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                if (slopTimer++ % 200 == 0)
+                {
+                    Projectile.netUpdate = true;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2((int)(Projectile.Center.X + Projectile.velocity.X * CurrentLasterLength),
+                        (int)(Projectile.Center.Y + Projectile.velocity.Y * CurrentLasterLength)),
+                        Vector2.Zero, ModContent.ProjectileType<CosmicSlopWave>(), Projectile.damage, 0f, Main.myPlayer, 0, 1);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2((int)(Projectile.Center.X + Projectile.velocity.X * CurrentLasterLength),
+       (int)(Projectile.Center.Y + Projectile.velocity.Y * CurrentLasterLength)),
+       Vector2.Zero, ModContent.ProjectileType<CosmicSlopWave>(), Projectile.damage, 0f, Main.myPlayer, 0, -1);
+                }
+            }
             CosmicGoos cosmicGoo = new CosmicGoos(new Rectangle((int)(Projectile.position.X + Projectile.velocity.X * CurrentLasterLength), (int)(Projectile.position.Y + Projectile.velocity.Y * CurrentLasterLength), Projectile.width, Projectile.height), 120, Main.rand.NextFloat(MathHelper.TwoPi));
             cosmicGoos.Add(cosmicGoo);
         }
@@ -122,7 +137,7 @@ namespace ITD.Content.Projectiles.Hostile
                 return;
             }
 
-            RaycastData data = Helpers.QuickRaycast(Projectile.Center,Projectile.velocity,(point) => { return ((!Main.tile[point].HasTile) && CollisionType == 2) || (Main.tile[point].HasTile && CollisionType == 1 && Main.tile[point].TileType == TileID.Platforms); }, MAX_LASER_LENGTH);
+            RaycastData data = Helpers.QuickRaycast(Projectile.Center,Projectile.velocity,(point) => { return ((playerCenter.Y >= point.ToWorldCoordinates().Y + 20 && CollisionType == 2 && !Main.tile[point].IsActuated)) || (Main.tile[point].HasTile && CollisionType == 1 && Main.tile[point].TileType == TileID.Platforms); }, MAX_LASER_LENGTH);
             LasersLength = (int)data.Length;
 
         }
@@ -196,7 +211,7 @@ namespace ITD.Content.Projectiles.Hostile
             shader.UseSecondaryColor(new Color(192, 59, 166));
             shader.Apply();
 
-            square.Draw(position, rotation: rotation, size: size * 2, rotationCenter: position);
+            square.Draw(position, rotation: rotation, size: size * 0.5f, rotationCenter: position);
 
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
@@ -269,20 +284,20 @@ namespace ITD.Content.Projectiles.Hostile
             MiscShaderData shader = GameShaders.Misc["CosmicLaser"];
 
             //purple laser 
-            shader.UseShaderSpecificData(new Vector4(size.X, 1, 0, 0)); //Laserlength, Flow speed, none, none
+            shader.UseShaderSpecificData(new Vector4(size.X, 0.5f, 0, 0)); //Laserlength, Flow speed, none, none
             shader.UseImage0(TextureAssets.Extra[193]);
             shader.UseColor(new Color(192, 59, 166));
             shader.Apply();
 
-            square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 0.75f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
+            square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1,1f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
 
             //beige laser 
-            //shader.UseShaderSpecificData(new Vector4(size.X, 1, 0, 0)); //Laserlength, Flow speed, none, none
+            //shader.UseShaderSpecificData(new Vector4((size.X), 0.5f, 0, 0)); //Laserlength, Flow speed, none, none
             //shader.UseImage1(TextureAssets.Extra[193]);
             //shader.UseColor(Color.Beige);
             //shader.Apply();
 
-            //square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 0.25f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
+            //square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
 
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         }

@@ -174,8 +174,18 @@ Projectiles: {
 	// CosmicGoo.DisplayName: Cosmic Goo
 	// PyroclasticTrail.DisplayName: Pyroclastic Trail
 	// PyroclasticFireball.DisplayName: Pyroclastic Fireball
+	// CosmicSwarm.DisplayName: Cosmic Swarm
+	// CosmicWarning.DisplayName: Cosmic Warning
 	// FwoomstickSpark.DisplayName: Fwoomstick Spark
 	// SmoggyNimbusRaindrop.DisplayName: Smoggy Nimbus Raindrop
+
+	StabtrapProjectile: {
+		// OneTimeLatchMessage: LET 'EM RIP
+		// DisplayName: Stabtrap Projectile
+	}
+
+	// StabtrapStingerProjectile.DisplayName: Stabtrap Stinger Projectile
+	// CosmicSlopWave.DisplayName: Cosmic Slop Wave
 }
 
 NPCs: {

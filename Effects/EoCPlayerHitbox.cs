@@ -32,7 +32,7 @@ namespace ITD.Effects
             Rectangle hitbox = drawPlayer.getRect();
             hitbox.Offset((int)-Main.screenPosition.X, (int)-Main.screenPosition.Y);
             hitbox = Main.ReverseGravitySupport(hitbox);
-            DrawData data = new(TextureAssets.MagicPixel.Value, hitbox, Color.LimeGreen * 0.6f);
+            DrawData data = new(TextureAssets.MagicPixel.Value, hitbox, Color.LimeGreen * 0.3f);
             drawInfo.DrawDataCache.Add(data);
         }
     }

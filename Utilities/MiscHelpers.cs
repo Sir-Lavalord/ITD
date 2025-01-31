@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using System.Runtime.CompilerServices;
 using static log4net.Appender.ColoredConsoleAppender;
+using Terraria.DataStructures;
 
 namespace ITD.Utilities
 {
@@ -60,6 +61,40 @@ namespace ITD.Utilities
             }
 			return closestNPC;
         }
+        //swiped off fargo
+
+        public static Projectile NewProjectileDirectSafe(IEntitySource spawnSource, Vector2 pos, Vector2 vel, int type, int damage, float knockback, int owner = 255, float ai0 = 0f, float ai1 = 0f)
+        {
+            int p = Projectile.NewProjectile(spawnSource, pos, vel, type, damage, knockback, owner, ai0, ai1);
+            return p < Main.maxProjectiles ? Main.projectile[p] : null;
+        }
+
+        //SORT of swiped off fargo
+        public static int GetProjectileByIdentity(int player, float projectileIdentity, params int[] projectileType)
+        {
+            return GetProjectileByIdentity(player, (int)projectileIdentity, projectileType);
+        }
+        public static int GetProjectileByIdentity(int player, int projectileIdentity, params int[] projectileType)
+        {
+            for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+                if (Main.projectile[i].active && Main.projectile[i].identity == projectileIdentity && Main.projectile[i].owner == player
+                    && (projectileType.Length == 0 || projectileType.Contains(Main.projectile[i].type)))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        /*        public static int GetProjectileByIdentity(int player, int projectileIdentity, params int[] projectileType)
+                {
+                    foreach (var p in Main.ActiveProjectiles)
+                    {
+                        if (p.identity == projectileIdentity && p.owner == player && (projectileType.Length == 0 || projectileType.Contains(p.type)))
+                            return p.whoAmI;
+                    }
+                    return -1;
+                }*/
         public static Rectangle ContainsRectangles(Rectangle rect1, Rectangle rect2)
         {
             int minX = Math.Min(rect1.X, rect2.X);
