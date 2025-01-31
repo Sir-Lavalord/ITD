@@ -19,7 +19,7 @@ namespace ITD.Content.Projectiles.Hostile
         {
             Projectile.hostile = true;
             Projectile.friendly = false;
-            Projectile.width = Projectile.height = 64;
+            Projectile.width = Projectile.height = 20;
             Projectile.penetrate = -1;
             Projectile.aiStyle = -1;
             Projectile.tileCollide = false;

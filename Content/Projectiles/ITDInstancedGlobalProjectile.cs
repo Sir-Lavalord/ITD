@@ -24,7 +24,6 @@ namespace ITD.Content.Projectiles
                 }
             }
         }
-
         public override void OnKill(Projectile projectile, int timeLeft)
         {
             if (isFromFwoomstick)

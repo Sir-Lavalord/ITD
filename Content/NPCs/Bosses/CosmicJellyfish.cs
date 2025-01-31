@@ -242,7 +242,7 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 1: //Slop rain
-                    distanceAbove = 300;
+                    distanceAbove = 400;
                     if (AITimer2 == 120)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
