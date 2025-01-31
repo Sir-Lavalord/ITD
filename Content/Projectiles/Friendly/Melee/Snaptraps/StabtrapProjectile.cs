@@ -62,7 +62,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 float chainRotation = unitVectorFromProjectileToPlayerArms.ToRotation() + MathHelper.PiOver2;
                 int chainCount = 0;
                 float chainLengthRemainingToDraw = vectorFromProjectileToPlayer.Length() + chainSegmentLength / 2f;
-                while (chainLengthRemainingToDraw > 0f && player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapStingerProjectile>()] <= 0)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapStingerProjectile>()] <= 0)
+            {
+                while (chainLengthRemainingToDraw > 0f)
                 {
                     ExtraChainEffects(ref chainDrawPosition, chainCount);
                     Color chainDrawColor = GetChainColor(chainDrawPosition, chainCount);
@@ -72,7 +74,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                     chainDrawPosition += unitVectorFromProjectileToPlayerArms * chainSegmentLength;
                     chainCount++;
                     chainLengthRemainingToDraw -= chainSegmentLength;
-                
+                }
             }
                 return true;
         }

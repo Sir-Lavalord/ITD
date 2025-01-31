@@ -70,15 +70,31 @@ namespace ITD.Utilities
         }
 
         //SORT of swiped off fargo
+        public static int GetProjectileByIdentity(int player, float projectileIdentity, params int[] projectileType)
+        {
+            return GetProjectileByIdentity(player, (int)projectileIdentity, projectileType);
+        }
         public static int GetProjectileByIdentity(int player, int projectileIdentity, params int[] projectileType)
         {
-            foreach (var p in Main.ActiveProjectiles)
+            for (int i = 0; i < Main.maxProjectiles; i++)
             {
-                if (p.identity == projectileIdentity && p.owner == player && (projectileType.Length == 0 || projectileType.Contains(p.type)))
-                    return p.whoAmI;
+                if (Main.projectile[i].active && Main.projectile[i].identity == projectileIdentity && Main.projectile[i].owner == player
+                    && (projectileType.Length == 0 || projectileType.Contains(Main.projectile[i].type)))
+                {
+                    return i;
+                }
             }
             return -1;
         }
+        /*        public static int GetProjectileByIdentity(int player, int projectileIdentity, params int[] projectileType)
+                {
+                    foreach (var p in Main.ActiveProjectiles)
+                    {
+                        if (p.identity == projectileIdentity && p.owner == player && (projectileType.Length == 0 || projectileType.Contains(p.type)))
+                            return p.whoAmI;
+                    }
+                    return -1;
+                }*/
         public static Rectangle ContainsRectangles(Rectangle rect1, Rectangle rect2)
         {
             int minX = Math.Min(rect1.X, rect2.X);

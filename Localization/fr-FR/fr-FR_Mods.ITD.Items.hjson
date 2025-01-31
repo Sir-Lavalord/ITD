@@ -1228,11 +1228,16 @@ Flyswatter: {
 }
 
 EyeofEldritchInsight: {
-	// DisplayName: Eyeof Eldritch Insight
-	// Tooltip: ""
+	// DisplayName: Eye of Eldritch Insight
+	// Tooltip: All hitboxes become visible
 }
 
 Fwoomstick: {
 	// DisplayName: Fwoomstick
 	// Tooltip: ""
+}
+
+Stabtrap: {
+	// DisplayName: Stabtrap
+	// Tooltip: "[c/{0}:Latch Effect:] Unleashes a stinger to stab enemies"
 }
