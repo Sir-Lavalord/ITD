@@ -1,6 +1,7 @@
 ﻿using ITD.Content.Projectiles.Other;
 using Terraria.ModLoader;
 using Terraria;
+using System;
 
 namespace ITD.Content.Projectiles
 {
@@ -10,6 +11,7 @@ namespace ITD.Content.Projectiles
 
         public bool isFromPotshot;
         public bool isFromFwoomstick;
+        public bool isFromQuasarBow;
 
         private int ExplodeTimer = 0;
 
