@@ -32,6 +32,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
             NPC.value = Item.buyPrice(silver: 4);
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.lavaImmune = true;
         }
         public override void AI()
         {

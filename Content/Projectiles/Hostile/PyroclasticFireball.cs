@@ -1,13 +1,6 @@
 ﻿using ITD.Particles;
 using ITD.Particles.Misc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles.Hostile
@@ -32,6 +25,10 @@ namespace ITD.Content.Projectiles.Hostile
             emitter.keptAlive = true;
             emitter?.Emit(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width / 3, Projectile.height / 3), -Projectile.velocity / 32f);
             base.AI();
+        }
+        public override void OnKill(int timeLeft)
+        {
+            emitter = null;
         }
     }
 }

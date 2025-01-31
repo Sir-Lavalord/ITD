@@ -19,11 +19,11 @@ namespace ITD.Particles.Events
         }
         public override Color GetAlpha(ITDParticle particle)
         {
-            return Color.White;
+            return Color.Lerp(Lighting.GetColor(particle.position.ToTileCoordinates()), Color.White, 0.5f);
         }
         public override void OnEmitParticle(ref ITDParticle particle)
         {
-            particle.scale *= Main.rand.NextFloat(0.5f, 1.1f);
+            particle.scale *= Main.rand.NextFloat(0.5f, 0.8f);
             particle.frameHorizontal = (byte)Main.rand.Next(3);
         }
         public override void AI(ref ITDParticle particle)

@@ -1,3 +1,4 @@
+
 #pragma warning (disable : 4717) 
 sampler2D image0 : register(s0);
 sampler2D image1 : register(s1);
@@ -7,8 +8,11 @@ float4x4 viewWorldProjection;
 float time;
 float4 shaderData;
 float3 color;
-float2 position;
-float radius;
+float outlineThickness;
+float2 screenPosition;
+float3 outlineColor;
+float2 screenResolution;
+float2 positions[50];
 
 struct VertexShaderInput
 {
@@ -24,15 +28,6 @@ struct VertexShaderOutput
     float2 texCoord : TEXCOORD0;
 };
 
-struct MetaballAttributes
-{
-    float color;
-    float2 position;
-    float raduis;
-    float attraction;
-    
-};
-
 VertexShaderOutput ShaderVS(VertexShaderInput input)
 {
     
@@ -46,24 +41,31 @@ VertexShaderOutput ShaderVS(VertexShaderInput input)
 
 }
 
+
 float4 ShaderPS(float4 vertexColor : COLOR0, float2 texCoords : TEXCOORD0) : COLOR0
 {
-    float circle = radius / length(texCoords * 2. - 1. - position);
-    float4 ball = float4(color * circle, circle);
     
-    float threshold = step(2., ball.a);
+    //apply an outline effect
     
-    float4 color = ball * threshold;  
+    const float TwoPI = 3.141592 * 2.;
+    const float steps = 128.;
+    float2 UV = texCoords;
     
-    return color;
-}
+    float4 col1 = float4(0, 0., 0., 0.);
+    for (float i = 0.; i < TwoPI; i += TwoPI / steps)
+    {
+        float2 offset = float2(sin(i), cos(i)) * outlineThickness;
+        col1 += tex2D(image0, UV + offset * 0.0001) * float4(outlineColor.rgb, 1);
+        
 
+    }
+    return (tex2D(image0, UV) * float4(color.rgb, 1) * 30) + col1;
+}
 
 technique t0
 {
-    pass MetaballTestPass
+    pass FakeMetaballsPass
     {
-        VertexShader = compile vs_2_0 ShaderVS();
-        PixelShader = compile ps_2_0 ShaderPS();
+        PixelShader = compile ps_3_0 ShaderPS();
     }
 }

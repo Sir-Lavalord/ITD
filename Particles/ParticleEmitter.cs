@@ -156,6 +156,16 @@ namespace ITD.Particles
                 p.DrawCommon(sb, Texture, CanvasOffset);
             }
         }
+        public void DrawFully()
+        {
+            FlushDrawActions(ParticleEmitterDrawStep.BeforePreDrawAll);
+            PreDrawAllParticles();
+
+            FlushDrawActions(ParticleEmitterDrawStep.AfterPreDrawAll);
+            DrawAllParticles();
+
+            FlushDrawActions(ParticleEmitterDrawStep.AfterDrawAll);
+        }
         public void Dispose()
         {
             tag = null;
