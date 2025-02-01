@@ -18,6 +18,7 @@ using System;
 using ITD.Content.UI;
 using ITD.Content.Events;
 using ITD.Particles.Misc;
+using ITD.Particles.Ambience;
 
 namespace ITD.Content.World
 {
@@ -87,6 +88,7 @@ namespace ITD.Content.World
             //ITDParticle newParticle = ParticleSystem.NewEmitter<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
 
+            //ParticleSystem.NewSingleParticle<LyteflyParticle>(Main.MouseWorld, Vector2.Zero, lifetime: 60);
             //ParticleSystem.NewSingleParticle<PyroclasticParticle>(Main.MouseWorld, Vector2.Zero, lifetime: 120, canvas: ParticleEmitterDrawCanvas.WorldUnderProjectiles);
             /*
             testPoints.Add(pos);

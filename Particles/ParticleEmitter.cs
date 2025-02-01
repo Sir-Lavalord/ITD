@@ -22,10 +22,10 @@ namespace ITD.Particles
         AfterDrawAll,
     }
     public readonly record struct ParticleEmitterDrawAction(ParticleEmitterDrawStep Step, Action Action);
-    public abstract class ParticleEmitter : IDisposable
+    public abstract class ParticleEmitter : ModType, IDisposable
     {
         internal ushort type;
-        internal Texture2D Texture { get { return ModContent.Request<Texture2D>(TexturePath).Value; } }
+        internal Texture2D Texture => ModContent.Request<Texture2D>(TexturePath).Value;
         /// <summary>
         /// this is the default texture path that points to Particles/Textures/nameof(this). this cannot be overriden but you can override TexturePath to change the texture path
         /// </summary>
@@ -38,6 +38,17 @@ namespace ITD.Particles
         private readonly List<ParticleEmitterDrawAction> drawActions = [];
         public List<ITDParticle> particles = [];
         public object tag;
+        protected sealed override void Register()
+        {
+            type = ParticleSystem.RegisterEmitter(this);
+            ParticleSystem.ResizeArrays();
+            ModTypeLookup<ParticleEmitter>.Register(this);
+        }
+        public sealed override void SetupContent()
+        {
+            ParticleSystem.DefaultStaticValues(type);
+            SetStaticDefaults();
+        }
         public void InjectDrawAction(ParticleEmitterDrawStep step, Action action)
         {
             drawActions.Add(new(step, action));
@@ -52,10 +63,6 @@ namespace ITD.Particles
                 action.Action();
                 drawActions.RemoveAt(i);
             }
-        }
-        public virtual void SetStaticDefaults()
-        {
-
         }
         public ParticleFramingData GetFramingData(ITDParticle particle)
         {
