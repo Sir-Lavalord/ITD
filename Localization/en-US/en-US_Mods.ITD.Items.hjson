@@ -1241,3 +1241,8 @@ Stabtrap: {
 	DisplayName: Stabtrap
 	Tooltip: "[c/{0}:Latch Effect:] Unleashes a stinger to stab the trap's target"
 }
+
+DepthrockBow: {
+	Tooltip: "Crackshot but bad"
+	DisplayName: Depthrock Bow
+}

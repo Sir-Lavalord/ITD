@@ -41,8 +41,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
         }
         public override void SetDefaults()
         {
-            Projectile.height = 35;
-            Projectile.width = 35;
+            Projectile.height = 26;
+            Projectile.width = 26;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
@@ -70,11 +70,16 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             else
             {
                 proj = Main.projectile[byIdentity];
+                Vector2 chainStart = Projectile.Center;
                 if (TailChain != null)
                 {
-                    Vector2 chainStart = Projectile.Center;
+
                     TailChain.Update(chainStart, proj.Center);
 
+                }
+                else
+                {
+                    TailChain = PhysicsMethods.CreateVerletChain(22, 10, chainStart, proj.Center, endLength: 0);
                 }
             }
             if (!player.dead && player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapProjectile>()] > 0)
@@ -165,7 +170,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
                 proj = Main.projectile[byIdentity];
                 Vector2 chainStart = Projectile.Center;
                 TailChain = PhysicsMethods.CreateVerletChain(22, 10, chainStart, proj.Center, endLength: 0);
-            }
+            } 
 
         }
         public override void OnKill(int timeLeft)
@@ -178,7 +183,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             NPC HomingTarget = Main.npc[(int)proj.ai[1]];
             if (target == HomingTarget)
             {
-                    Projectile.velocity = -Projectile.velocity;      
+                if (AIState == ActionState.Stabbing)
+                {
+                    Projectile.velocity = -Projectile.velocity;
+                }
             }
         }
         public override bool PreDraw(ref Color lightColor)
