@@ -49,7 +49,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             Projectile.netImportant = true;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 10;
+            Projectile.localNPCHitCooldown = 30;
         }
         Projectile proj;
         public override bool? CanDamage()
@@ -70,12 +70,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             else
             {
                 proj = Main.projectile[byIdentity];
-            }
-            if (TailChain != null)
-            {
-                Vector2 chainStart = Projectile.Center;
-                TailChain.Update(chainStart, proj.Center);
+                if (TailChain != null)
+                {
+                    Vector2 chainStart = Projectile.Center;
+                    TailChain.Update(chainStart, proj.Center);
 
+                }
             }
             if (!player.dead && player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapProjectile>()] > 0)
             {
@@ -85,7 +85,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
 
             if (HomingTarget == null)
             {
-                return;
+                AIState = ActionState.Retract;
             }
             switch (AIState)
             {
@@ -99,7 +99,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
                         AIState = ActionState.Stabbing;
                         float length = Projectile.velocity.Length();
                         float targetAngle = Projectile.AngleTo(HomingTarget.Center);
-                        Projectile.velocity = velo.ToRotation().AngleTowards(targetAngle, MathHelper.ToRadians(4)).ToRotationVector2() * 10;
+                        Projectile.velocity = velo.ToRotation().AngleTowards(targetAngle, MathHelper.ToRadians(3)).ToRotationVector2() * 10;
                     }
                     break;
                 case ActionState.Stabbing:
@@ -115,7 +115,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
                     break;
                 case ActionState.Retract:
                     float baseAccel = 0f;
-                    float RetractAccel = 1.5f;
+                    float RetractAccel = 1.25f;
                     Vector2 towardsOwner = Projectile.DirectionTo(player.MountedCenter).SafeNormalize(Vector2.Zero);
                     RetractAccel += baseAccel;
                     Projectile.velocity = towardsOwner * RetractAccel;
@@ -163,10 +163,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             else
             {
                 proj = Main.projectile[byIdentity];
+                Vector2 chainStart = Projectile.Center;
+                TailChain = PhysicsMethods.CreateVerletChain(22, 10, chainStart, proj.Center, endLength: 0);
             }
 
-            Vector2 chainStart = Projectile.Center;
-            TailChain = PhysicsMethods.CreateVerletChain(22, 10, chainStart, proj.Center, endLength: 0);
         }
         public override void OnKill(int timeLeft)
         {
@@ -178,9 +178,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             NPC HomingTarget = Main.npc[(int)proj.ai[1]];
             if (target == HomingTarget)
             {
-
-                    Projectile.velocity = -Projectile.velocity;
-                
+                    Projectile.velocity = -Projectile.velocity;      
             }
         }
         public override bool PreDraw(ref Color lightColor)
