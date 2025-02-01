@@ -140,7 +140,11 @@ namespace ITD.Particles
                     positions[index] = (Metaballs.Where(b => b.Type == type).ElementAt(index).Position - Main.screenPosition) / Main.LastLoadedResolution.ToVector2();
                 }
 
-
+                // do we want to be setting shader properties every frame? especially since they're static anyway.
+                // this would be better done after setstaticdefaults.
+                // add something else just in case we actually want dynamic properties.
+                // sorry if that's what you were planning on doing anyway :ech:
+                // -q
                 ITD.ITDMetaBallsShaders["Metaballs"].SetProperties(Sets.Color[type], Sets.OutlineColor[type], Sets.OutlineThickness[type], TextureAssets.Extra[87], positions, Metaballs.Where(b => b.Type == type).Count());
                 ITD.ITDMetaBallsShaders["Metaballs"].apply();
 

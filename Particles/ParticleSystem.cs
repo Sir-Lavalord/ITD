@@ -2,33 +2,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Terraria;
-using Terraria.Graphics.Shaders;
 using ITD.DetoursIL;
-using ITD.Systems.Extensions;
-using ITD.Systems.DataStructures;
-using Terraria.GameContent;
-using ITD.Content.World;
-using ITD.Particles.Misc;
 
 namespace ITD.Particles
 {
-    public class ParticleSystem : DetourGroup // this also doubles as a particle loader
+    public class ParticleSystem : DetourGroup
     {
-        private static readonly List<ParticleEmitter> emitterPrototypes = [];
+        private static readonly HashSet<ParticleEmitter> emitterPrototypes = [];
         public static byte[] particleFramesVertical = [];
         public static byte[] particleFramesHorizontal = [];
         public static bool[] particleUsesRenderTarget = [];
-        private static readonly Dictionary<Type, ParticleEmitter> emmitersByType = [];
+        private static readonly Dictionary<Type, ParticleEmitter> emittersByType = [];
         public static ParticleEmitter currentlyDrawnEmitter;
-        public List<ParticleEmitter> emitters;
+        public List<ParticleEmitter> emitters = [];
         //public static ParticlesRT particlesRT;
         public static ParticleSystem Instance => DetourManager.GetInstance<ParticleSystem>();
         public static ParticleEmitter NewEmitter<T>(ParticleEmitterDrawCanvas canvas = ParticleEmitterDrawCanvas.WorldOverProjectiles) where T : ParticleEmitter
         {
             Type particleType = typeof(T);
-            if (emmitersByType.TryGetValue(particleType, out ParticleEmitter value))
+            if (emittersByType.TryGetValue(particleType, out ParticleEmitter value))
             {
                 var newInstance = Activator.CreateInstance<T>();
 
@@ -54,34 +47,35 @@ namespace ITD.Particles
         {
             emitters.RemoveAll(x => x.GetType() == typeof(T));
         }
-        public override void SetStaticDefaults()
+        public static ushort RegisterEmitter(ParticleEmitter instance)
         {
-            foreach (var prototype in emitterPrototypes)
-                prototype.SetStaticDefaults();
+            ushort newID = (ushort)emitterPrototypes.Count;
+            Type t = instance.GetType();
+            emittersByType[t] = instance;
+            emitterPrototypes.Add(instance);
+            return newID;
+        }
+        public static void ResizeArrays()
+        {
+            if (Main.dedServ)
+                return;
+            Array.Resize(ref particleFramesVertical, emitterPrototypes.Count + 1);
+            Array.Resize(ref particleFramesHorizontal, emitterPrototypes.Count + 1);
+            Array.Resize(ref particleUsesRenderTarget, emitterPrototypes.Count + 1);
+        }
+        public static void DefaultStaticValues(ushort type)
+        {
+            if (Main.dedServ)
+                return;
+            particleFramesVertical[type] = 1;
+            particleFramesHorizontal[type] = 1;
+            particleUsesRenderTarget[type] = false;
         }
         public override void Load()
         {
             if (Main.dedServ)
                 return;
             //Main.ContentThatNeedsRenderTargets.Add(particlesRT = new());
-            emitters = [];
-            foreach (Type t in ITD.Instance.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ParticleEmitter)))) // particle loader
-            {
-                var instance = (ParticleEmitter)RuntimeHelpers.GetUninitializedObject(t);
-                instance.type = (ushort)emitterPrototypes.Count;
-                emmitersByType[t] = instance;
-
-                emitterPrototypes.Add(instance);
-            }
-            Array.Resize(ref particleFramesVertical, emitterPrototypes.Count + 1);
-            Array.Resize(ref particleFramesHorizontal, emitterPrototypes.Count + 1);
-            Array.Resize(ref particleUsesRenderTarget, emitterPrototypes.Count + 1);
-            foreach(var prototype in emitterPrototypes)
-            {
-                particleFramesVertical[prototype.type] = 1;
-                particleFramesHorizontal[prototype.type] = 1;
-                particleUsesRenderTarget[prototype.type] = false;
-            }
             On_Main.DrawSuperSpecialProjectiles += DrawParticlesUnderProjectiles; // subscribe to events for drawing
             On_Main.DrawCachedProjs += DrawParticlesOverProjectiles;
             On_Main.DrawInterface += DrawParticlesOnUI;
@@ -94,7 +88,7 @@ namespace ITD.Particles
             //Main.ContentThatNeedsRenderTargets.Remove(particlesRT);
             emitters?.Clear();
             emitterPrototypes?.Clear();
-            emmitersByType?.Clear();
+            emittersByType?.Clear();
         }
         public void UpdateAllParticles(On_Main.orig_UpdateParticleSystems orig, Main self)
         {
@@ -106,11 +100,13 @@ namespace ITD.Particles
                 emitter.timeLeft--;
                 if (emitter.timeLeft < 0)
                 {
+                    /*
                     if (currentlyDrawnEmitter != null)
                     {
                         if (currentlyDrawnEmitter.GetHashCode() == emitter.GetHashCode())
                             currentlyDrawnEmitter = null;
                     }
+                    */
                     emitters.RemoveAt(i);
                 }
             }
@@ -118,9 +114,12 @@ namespace ITD.Particles
 
         public void DrawParticles(ParticleEmitterDrawCanvas canvas)
         {
-            foreach (ParticleEmitter emitter in emitters.Where(e => e.canvas == canvas))
+            for (int i = 0; i < emitters.Count; i++)
             {
-                emitter.DrawFully();
+                ParticleEmitter p = emitters[i];
+                if (p.canvas != canvas)
+                    continue;
+                p.DrawFully();
                 /*
                 currentlyDrawnEmitter = emitter;
                 if (!particleUsesRenderTarget[currentlyDrawnEmitter.type])
