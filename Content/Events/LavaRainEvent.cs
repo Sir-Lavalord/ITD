@@ -51,6 +51,7 @@ namespace ITD.Content.Events
         public override IEnumerable<(int, float)> GetPool(NPCSpawnInfo spawnInfo)
         {
             yield return (ModContent.NPCType<PyroclasticSlime>(), 1f);
+            yield return (ModContent.NPCType<SmoggyNimbus>(), 1f);
         }
         public override void OnKill(NPC npc)
         {

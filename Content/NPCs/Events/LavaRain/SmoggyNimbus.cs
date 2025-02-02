@@ -9,7 +9,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
 {
     public class SmoggyNimbus : ITDNPC
     {
-        public enum _AIState
+        public enum ActionState
         {
             Following,
             Spinning
@@ -17,7 +17,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
         public ref float AITimer => ref NPC.ai[0];
         public ref float AILockOnPeriod => ref NPC.ai[1];
         public ref float AIRand => ref NPC.ai[2];
-        public _AIState AIState { get { return (_AIState)NPC.ai[3]; } set { NPC.ai[3] = (float)value; } }
+        public ActionState AIState { get { return (ActionState)NPC.ai[3]; } set { NPC.ai[3] = (float)value; } }
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 1;
@@ -50,7 +50,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
             Vector2 targetPosition = target.Center - Vector2.UnitY * 216f;
             Vector2 toTargetPosition = targetPosition - NPC.Center;
             Vector2 toTargetPositionNormalized = toTargetPosition.SafeNormalize(Vector2.Zero);
-            if (AIState == _AIState.Following)
+            if (AIState == ActionState.Following)
             {
                 // changing the x velo will be a simple smoothstep. for changing y, let's make it a fixed speed so melee users can actually do stuff against the enemy.
                 NPC.velocity.X = MathHelper.Clamp(MathHelper.SmoothStep(NPC.velocity.X, toTargetPosition.X, 0.04f), -6f, 6f);
@@ -79,7 +79,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
                 }
                 if (AITimer >= attackLength)
                 {
-                    AIState = _AIState.Following;
+                    AIState = ActionState.Following;
                     AIRand = Main.rand.Next(60, 80);
                     NPC.netUpdate = true;
                 }
@@ -99,13 +99,13 @@ namespace ITD.Content.NPCs.Events.LavaRain
                     }
                 }
             }
-            else if (AIState == _AIState.Following)
+            else if (AIState == ActionState.Following)
             {
                 if (--AITimer < -AIRand)
                 {
                     AITimer = 0;
                     NPC.netUpdate = true;
-                    AIState = _AIState.Spinning;
+                    AIState = ActionState.Spinning;
                     NPC.velocity *= 0f;
                 }
             }

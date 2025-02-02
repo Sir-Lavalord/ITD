@@ -5,7 +5,7 @@
       "executablePath": "dotnet",
       "commandLineArgs": "$(tMLPath)",
       "workingDirectory": "$(tMLSteamPath)",
-      "nativeDebugging": true,
+      "nativeDebugging": false,
       "sqlDebugging": false
     },
     "TerrariaServer": {

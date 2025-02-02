@@ -244,6 +244,7 @@ NPCs: {
 	Mudkarp.DisplayName: Mudkarp
 	PyroclasticSlime.DisplayName: Pyroclastic Slime
 	SmoggyNimbus.DisplayName: Smoggy Nimbus
+	Flamgoustine.DisplayName: Flamgoustine
 }
 
 Buffs: {

@@ -36,8 +36,8 @@ namespace ITD.Content.NPCs
             // get the real max frame value
             int realMaxFrame = maxFrame ?? Main.npcFrameCount[Type] - 1;
             // clamp to min
-            if (NPC.frame.Y < minFrame * realMaxFrame)
-                NPC.frame.Y = minFrame * realMaxFrame;
+            if (NPC.frame.Y < minFrame * frameHeight)
+                NPC.frame.Y = minFrame * frameHeight;
             // increase counter by the increment
             NPC.frameCounter += counterIncrement;
             // change frames
