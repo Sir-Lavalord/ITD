@@ -187,6 +187,7 @@ Projectiles: {
 	// StabtrapStingerProjectile.DisplayName: Stabtrap Stinger Projectile
 	// CosmicSlopWave.DisplayName: Cosmic Slop Wave
 	// DepthrockStoneProj.DisplayName: Depthrock Stone Proj
+	// SkyshooterFallingStar.DisplayName: Skyshooter Falling Star
 }
 
 NPCs: {

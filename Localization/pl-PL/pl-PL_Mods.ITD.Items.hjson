@@ -1243,6 +1243,15 @@ Stabtrap: {
 }
 
 DepthrockBow: {
-	// Tooltip: ""
+	// Tooltip: Crackshot but bad
 	// DisplayName: Depthrock Bow
+}
+
+Skyshot: {
+	// DisplayName: Skyshot
+	/* Tooltip:
+		'''
+		Occasionally surrounds arrows with cosmic power
+		Powered arrows rain stars down on enemies
+		''' */
 }
