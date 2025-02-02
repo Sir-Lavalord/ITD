@@ -15,11 +15,10 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 {
     public class SkyshooterFallingStar : ModProjectile
     {
-
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0; 
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         }
 
         public override void SetDefaults()
@@ -32,7 +31,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             Projectile.light = 0.5f;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
-			Projectile.timeLeft = 500;
+            Projectile.timeLeft = 500;
             Projectile.ai[0] = 0;
         }
 
@@ -53,13 +52,13 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             Projectile.rotation += 0.05f;
             Projectile.velocity *= 1.005f;
 
-            Projectile.velocity.Y = Projectile.velocity.Y + 0.4f; 
-            if (Projectile.velocity.Y > 16f) 
+            Projectile.velocity.Y = Projectile.velocity.Y + 0.4f;
+            if (Projectile.velocity.Y > 16f)
             {
                 Projectile.velocity.Y = 16f;
             }
 
-            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CosJelDust>(), Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 150, default(Color), 0.7f);
+            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<StarDust>(), Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 150, default(Color), 0.7f);
         }
 
         public override bool PreDraw(ref Color lightColor)

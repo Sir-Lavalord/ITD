@@ -38,14 +38,12 @@ namespace ITD.Content.Items.Weapons.Ranger
                 Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(8));
 
                 newVelocity *= 1f - Main.rand.NextFloat(0.3f);
-                Item.shootSpeed = 6f;
                 int proj = Projectile.NewProjectile(source, position, newVelocity, type, damage, knockback, player.whoAmI);
                 Main.projectile[proj].GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromSkyProjectileBow = true;
                 return false;
             } 
             else
             {
-                Item.shootSpeed = 8f;
                 return true;
             }
         }
@@ -53,7 +51,8 @@ namespace ITD.Content.Items.Weapons.Ranger
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ModContent.ItemType<ElectrumBar>(), 10);
+            recipe.AddIngredient(ModContent.ItemType<StarlitBar>(), 10);
+            recipe.AddIngredient(ItemID.FallenStar, 4);
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }

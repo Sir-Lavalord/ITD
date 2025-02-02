@@ -21,23 +21,11 @@ namespace ITD.Content.Projectiles
         public bool isFromFwoomstick;
         public bool isFromSkyProjectileBow;
 
-        private Color trailColor;
-        private bool trailActive;
-
         private int ExplodeTimer = 0;
 
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {
 
-        }
-
-        public void SetTrail(Color color)
-        {
-            if (isFromSkyProjectileBow)
-            {
-                trailColor = color;
-                trailActive = true;
-            }
         }
 
         public override void PostAI(Projectile projectile)
@@ -84,15 +72,25 @@ namespace ITD.Content.Projectiles
             {
                 if (projectile.owner == Main.myPlayer)
                 {
+                    int spawnOffset;
+                    if (player.direction == 1)
+                    {
+                        spawnOffset = -800;
+                    }
+                    else
+                    {
+                        spawnOffset = 800;
+                    }
+
                     int projectileAmount = Main.rand.Next(-7, 7);
                     int numberProjectiles = 16 + projectileAmount;
                     for (int index = 0; index < numberProjectiles; ++index)
                     {
-                        Vector2 vector2_1 = new Vector2((float)((double)projectile.position.X + (double)player.width * 0.5 + (double)(Main.rand.Next(201) * -player.direction) + ((double)Main.mouseX + (double)Main.screenPosition.X - (double)projectile.position.X)), (float)((double)projectile.position.Y + (double)player.height * 0.5 - 600.0));   //this defines the projectile width, direction and position
+                        Vector2 vector2_1 = new Vector2((float)((double)projectile.position.X + (double)player.width * 0.5 + (double)(Main.rand.Next(201) * -player.direction) + ((double)Main.mouseX + (double)Main.screenPosition.X - (double)projectile.position.X)) + spawnOffset, (float)((double)projectile.position.Y + (double)player.height * 0.5 - 600.0));   //this defines the projectile width, direction and position
                         vector2_1.X = (float)(((double)vector2_1.X + (double)projectile.Center.X) / 2.0) + (float)Main.rand.Next(-200, 201);
                         vector2_1.Y -= (float)(100 * index);
-                        float num12 = (float)Main.mouseX + Main.screenPosition.X - vector2_1.X;
-                        float num13 = (float)Main.mouseY + Main.screenPosition.Y - vector2_1.Y;
+                        float num12 = (float)projectile.position.X + projectile.position.X - vector2_1.X;
+                        float num13 = (float)projectile.position.Y + projectile.position.Y - vector2_1.Y;
                         if ((double)num13 < 0.0) num13 *= -1f;
                         if ((double)num13 < 20.0) num13 = 20f;
                         float num14 = (float)Math.Sqrt((double)num12 * (double)num12 + (double)num13 * (double)num13);
@@ -101,8 +99,8 @@ namespace ITD.Content.Projectiles
                         float num17 = num13 * num15;
 
                         Vector2 otherVelocity = projectile.velocity * 1.15f;
-                        Vector2 newVelocity = otherVelocity.RotatedByRandom(MathHelper.ToRadians(15));
-                        newVelocity *= 1f - Main.rand.NextFloat(0.3f);
+                        Vector2 newVelocity = otherVelocity.RotatedByRandom(MathHelper.ToRadians(5));
+                        newVelocity *= 1f - Main.rand.NextFloat(0.1f);
 
                         Projectile.NewProjectile(projectile.GetSource_FromThis(), vector2_1, newVelocity, ModContent.ProjectileType<SkyshooterFallingStar>(), 15, 0, Main.myPlayer, 0.0f, (float)Main.rand.Next(5));
                     }
@@ -116,10 +114,10 @@ namespace ITD.Content.Projectiles
             {
                 Texture2D texture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/ArrowTrail").Value;
                 Rectangle rectangle = texture.Frame(1, 1);
-                Vector2 position = projectile.Center - Main.screenPosition;
+                Vector2 position = projectile.position - Main.screenPosition;
                 Main.EntitySpriteDraw(texture, position, rectangle, lightColor, projectile.rotation, rectangle.Size() / 2f, 1f, SpriteEffects.None, 0f);
 
-                return true;
+                return false;
             }
 
             return true;
