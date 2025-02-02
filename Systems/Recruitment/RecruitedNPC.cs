@@ -28,8 +28,9 @@ namespace ITD.Systems.Recruitment
         public RecruitData recruitmentData = RecruitData.Invalid;
         public int armFrame = 0;
         public int timeToBeUnrecruited = 2000;
-        public override void SetStaticDefaults()
+        public override void SetStaticDefaultsSafe()
         {
+            HiddenFromBestiary = true;
             Main.npcFrameCount[Type] = 15;
         }
         public override void SetDefaults()

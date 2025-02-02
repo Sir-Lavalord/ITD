@@ -218,15 +218,29 @@ NPCs: {
 	AmbushBones.DisplayName: Huesitos acechantes
 	ShroomishSlime.DisplayName: Slime champizúl
 	CosmicJellyfishMini.DisplayName: Medusa neptuniana
-	Sandberus.DisplayName: Desierbero
+
+	Sandberus: {
+		DisplayName: Desierbero
+		// Bestiary: Mods.ITD.NPCs.Sandberus.Bestiary
+	}
+
 	KSGlandNPC.DisplayName: Capa de gel
 	Gravekeeper.DisplayName: Guardatumbas
 	HauntedTombstone.DisplayName: Tumba embrujada
 	GhastlyTombstone.DisplayName: Tumba fantasmagórica
 	StrawmanDummy.DisplayName: Hombre de paja
 	// RecruitedNPC.DisplayName: Recruited N P C
-	SmallSnowpoff.DisplayName: Montonieve
-	LargeSnowpoff.DisplayName: Montonieve
+
+	SmallSnowpoff: {
+		DisplayName: Montonieve
+		// Bestiary: Mods.ITD.NPCs.SmallSnowpoff.Bestiary
+	}
+
+	LargeSnowpoff: {
+		DisplayName: Montonieve
+		// Bestiary: Mods.ITD.NPCs.LargeSnowpoff.Bestiary
+	}
+
 	// CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
 	// IncendipedeBody.DisplayName: Incendipede
 
@@ -241,10 +255,26 @@ NPCs: {
 	// IncendipedeBodyOld.DisplayName: Incendipede Body Old
 	// IncendipedeHeadOld.DisplayName: Incendipede Head Old
 	// IncendipedeTailOld.DisplayName: Incendipede Tail Old
-	// Mudkarp.DisplayName: Mudkarp
-	// PyroclasticSlime.DisplayName: Pyroclastic Slime
-	// SmoggyNimbus.DisplayName: Smoggy Nimbus
-	// Flamgoustine.DisplayName: Flamgoustine
+
+	Mudkarp: {
+		// DisplayName: Mudkarp
+		// Bestiary: Mods.ITD.NPCs.Mudkarp.Bestiary
+	}
+
+	PyroclasticSlime: {
+		// DisplayName: Pyroclastic Slime
+		// Bestiary: Mods.ITD.NPCs.PyroclasticSlime.Bestiary
+	}
+
+	SmoggyNimbus: {
+		// DisplayName: Smoggy Nimbus
+		// Bestiary: Mods.ITD.NPCs.SmoggyNimbus.Bestiary
+	}
+
+	Flamgoustine: {
+		// DisplayName: Flamgoustine
+		// Bestiary: Mods.ITD.NPCs.Flamgoustine.Bestiary
+	}
 }
 
 Buffs: {

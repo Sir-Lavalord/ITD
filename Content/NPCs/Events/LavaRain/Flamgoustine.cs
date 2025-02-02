@@ -26,7 +26,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
         public ref float AIDir => ref NPC.ai[3];
         public ref float TrailFadeIn => ref NPC.localAI[0];
         private static readonly VertexStrip vertexStrip = new();
-        public override void SetStaticDefaults()
+        public override void SetStaticDefaultsSafe()
         {
             NPCID.Sets.TrailCacheLength[Type] = 12;
             NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPCTrailing.PosEveryFrame;

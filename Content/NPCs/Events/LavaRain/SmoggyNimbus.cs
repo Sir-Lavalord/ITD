@@ -18,7 +18,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
         public ref float AILockOnPeriod => ref NPC.ai[1];
         public ref float AIRand => ref NPC.ai[2];
         public ActionState AIState { get { return (ActionState)NPC.ai[3]; } set { NPC.ai[3] = (float)value; } }
-        public override void SetStaticDefaults()
+        public override void SetStaticDefaultsSafe()
         {
             Main.npcFrameCount[Type] = 1;
             ITDSets.LavaRainEnemy[Type] = true;

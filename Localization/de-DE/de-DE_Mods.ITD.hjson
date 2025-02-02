@@ -218,15 +218,29 @@ NPCs: {
 	AmbushBones.DisplayName: Überfallskelett
 	ShroomishSlime.DisplayName: Pilzschleim
 	CosmicJellyfishMini.DisplayName: Diener der Qualle
-	Sandberus.DisplayName: Dünenfürst
+
+	Sandberus: {
+		DisplayName: Dünenfürst
+		// Bestiary: Mods.ITD.NPCs.Sandberus.Bestiary
+	}
+
 	KSGlandNPC.DisplayName: Schleimhülle
 	Gravekeeper.DisplayName: Totengräber
 	HauntedTombstone.DisplayName: Heimgesuchter Grabstein
 	GhastlyTombstone.DisplayName: Gespenstischer Grabstein
 	StrawmanDummy.DisplayName: Vogelscheuche
 	RecruitedNPC.DisplayName: Rekrutierter NPC
-	// SmallSnowpoff.DisplayName: Snowpoff
-	// LargeSnowpoff.DisplayName: Snowpoff
+
+	SmallSnowpoff: {
+		// DisplayName: Snowpoff
+		// Bestiary: Mods.ITD.NPCs.SmallSnowpoff.Bestiary
+	}
+
+	LargeSnowpoff: {
+		// DisplayName: Snowpoff
+		// Bestiary: Mods.ITD.NPCs.LargeSnowpoff.Bestiary
+	}
+
 	CosmicJellyfishHand.DisplayName: Kosmische Qualle Hand
 	IncendipedeBody.DisplayName: Tausendfüßler
 
@@ -241,10 +255,26 @@ NPCs: {
 	IncendipedeBodyOld.DisplayName: Tausendfüßler Körper Alt
 	IncendipedeHeadOld.DisplayName: Tausendfüßler Kopf Alt
 	IncendipedeTailOld.DisplayName: Tausendfüßler Schwanz Alt
-	// Mudkarp.DisplayName: Mudkarp
-	// PyroclasticSlime.DisplayName: Pyroclastic Slime
-	// SmoggyNimbus.DisplayName: Smoggy Nimbus
-	// Flamgoustine.DisplayName: Flamgoustine
+
+	Mudkarp: {
+		// DisplayName: Mudkarp
+		// Bestiary: Mods.ITD.NPCs.Mudkarp.Bestiary
+	}
+
+	PyroclasticSlime: {
+		// DisplayName: Pyroclastic Slime
+		// Bestiary: Mods.ITD.NPCs.PyroclasticSlime.Bestiary
+	}
+
+	SmoggyNimbus: {
+		// DisplayName: Smoggy Nimbus
+		// Bestiary: Mods.ITD.NPCs.SmoggyNimbus.Bestiary
+	}
+
+	Flamgoustine: {
+		// DisplayName: Flamgoustine
+		// Bestiary: Mods.ITD.NPCs.Flamgoustine.Bestiary
+	}
 }
 
 Buffs: {

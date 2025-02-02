@@ -35,7 +35,7 @@ namespace ITD.Content.NPCs.Bosses
 		private float JumpX = 0;
 		private float JumpY = 0;
 		private bool ValidTargets = true;
-		public override void SetStaticDefaults()
+		public override void SetStaticDefaultsSafe()
         {
             NPCID.Sets.TrailCacheLength[Type] = 5;
             NPCID.Sets.TrailingMode[Type] = 0;
