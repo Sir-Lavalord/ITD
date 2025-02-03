@@ -20,7 +20,7 @@ namespace ITD.Content.NPCs
         public Rectangle HitboxTiles { get { return new Rectangle((int)(NPC.position.X / 16), (int)(NPC.position.Y / 16), NPC.width / 16, NPC.height / 16); } }
         public Rectangle BigHitboxTiles => MiscHelpers.TileRectangle(NPC);
         public bool InvalidTarget { get { return NPC.target < 0 || NPC.target == 255 || !Main.player[NPC.target].Exists(); } }
-        public SpriteEffects CommonSpriteDirection { get { return NPC.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally; } }
+        public SpriteEffects CommonSpriteDirection { get { return NPC.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally; } }
         public bool HiddenFromBestiary = false;
         public bool DontAutoRegisterBestiaryEntry = false;
         public sealed override void SetStaticDefaults()

@@ -52,6 +52,7 @@ namespace ITD.Content.Events
         {
             yield return (ModContent.NPCType<PyroclasticSlime>(), 1f);
             yield return (ModContent.NPCType<SmoggyNimbus>(), 1f);
+            yield return (ModContent.NPCType<Flamgoustine>(), 2f);
         }
         public override void OnKill(NPC npc)
         {

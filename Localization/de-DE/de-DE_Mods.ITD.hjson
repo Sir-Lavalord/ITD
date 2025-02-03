@@ -275,6 +275,11 @@ NPCs: {
 		// DisplayName: Flamgoustine
 		// Bestiary: Mods.ITD.NPCs.Flamgoustine.Bestiary
 	}
+
+	Magmaripper: {
+		// Bestiary: Mods.ITD.NPCs.Magmaripper.Bestiary
+		// DisplayName: Magmaripper
+	}
 }
 
 Buffs: {

@@ -36,7 +36,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
         public override void SetDefaults()
         {
             NPC.lifeMax = 70;
-            NPC.damage = 30;
+            NPC.damage = 20;
             NPC.defense = 12;
             NPC.width = NPC.height = 28;
             NPC.value = Item.buyPrice(silver: 4);
@@ -126,6 +126,10 @@ namespace ITD.Content.NPCs.Events.LavaRain
                     break;
             }
         }
+        public override bool? CanFallThroughPlatforms()
+        {
+            return !InvalidTarget && Main.player[NPC.target].position.Y > NPC.position.Y;
+        }
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             target.AddBuff(BuffID.OnFire, AIState == ActionState.Spinning ? 30 : 10);
@@ -153,7 +157,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
         }
         private Color StripColors(float progressOnStrip)
         {
-            Color c = Color.Lerp(Color.Orange, Color.Red * 0f, progressOnStrip);
+            Color c = Color.Lerp(Color.Orange, Color.Red * 0.5f, progressOnStrip);
             c.A = 0;
             return c * TrailFadeIn;
         }
