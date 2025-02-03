@@ -106,8 +106,10 @@ namespace ITD.Particles
             orig(self, sw);
 
             //DEBUG
+            /*
             if (WorldGenSystem.JustPressed(Microsoft.Xna.Framework.Input.Keys.D1))
                 Metaball.NewMetaball<DebugMetaBall>(Main.MouseWorld, Vector2.Zero, 100);
+            */
             //DEBUG
 
             Metaballs.RemoveAll(b => !b.Active);

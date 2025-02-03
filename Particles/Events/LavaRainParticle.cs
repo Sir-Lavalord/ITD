@@ -23,9 +23,12 @@ namespace ITD.Particles.Events
         public override void AI(ref ITDParticle particle)
         {
             Vector2 translatedPosition = particle.position + new Vector2(0f, 42f) * particle.scale;
-            if (particle.timeLeft > 2 && TileHelpers.SolidTile(translatedPosition.ToTileCoordinates()))
+            if (particle.timeLeft < 30)
             {
-                particle.timeLeft = 2;
+                if (particle.timeLeft > 2 && TileHelpers.SolidTile(translatedPosition.ToTileCoordinates()))
+                {
+                    particle.timeLeft = 2;
+                }
             }
             if (particle.timeLeft == 1)
             {

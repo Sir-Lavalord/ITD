@@ -1,4 +1,5 @@
-﻿using ITD.Utilities;
+﻿using ITD.Content.Projectiles.Hostile;
+using ITD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Reflection.Metadata;
@@ -7,6 +8,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace ITD.Content.NPCs.Events.LavaRain
 {
@@ -17,6 +19,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
             LavaSwim,
             AirTime,
             Flopping,
+            SwimToPlayer,
         }
         public ref float AITimer => ref NPC.ai[0];
         public ActionState AIState { get { return (ActionState)NPC.ai[1]; } set { NPC.ai[1] = (float)value; } }
@@ -78,6 +81,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
                 if (AfterImageFadeIn > 0f)
                     AfterImageFadeIn -= 0.1f;
             }
+            float grav = 0.2f;
             switch (AIState)
             {
                 case ActionState.LavaSwim:
@@ -91,6 +95,11 @@ namespace ITD.Content.NPCs.Events.LavaRain
                     }
                     if (lava)
                         AIRand = 0;
+                    if (target.lavaWet)
+                    {
+                        AIState = ActionState.SwimToPlayer;
+                        break;
+                    }
                     AIRand++;
                     if (!NPC.noGravity)
                         NPC.noGravity = true;
@@ -105,23 +114,58 @@ namespace ITD.Content.NPCs.Events.LavaRain
                     NPC.velocity.X = AIDir * 9f;
                     if (AITimer > 30)
                     {
-                        RaycastData ray = Helpers.QuickRaycast(NPC.Center, new Vector2(AIDir, 0f), maxDistTiles: 16, visualize: true);
-                        if (ray.Hit)
-                        {
-                            NPC.velocity.Y -= ray.LengthSQ == 0f ? 0f : (1f / ray.Length) * 16f;
-                        }
+                        NPC.velocity.Y -= 0.3f;
                         if (!lava)
                         {
-                            SoundEngine.PlaySound(NPC.HitSound, NPC.Center);
-                            AIState = ActionState.AirTime;
-                            AITimer = 0;
-                            AIRand = 0;
+                            float stickOut = 16f * 38f;
+                            Point tileQuery = new Vector2(NPC.position.X + AIDir * stickOut, NPC.position.Y).ToTileCoordinates();
+                            Point finalQueryPos = Point.Zero;
+                            Vector2 lavaPos = Vector2.Zero;
+
+                            for (int j = 0; j < 32; j++)
+                            {
+                                Point realQuery = tileQuery + new Point(0, j);
+                                Tile t = Framing.GetTileSafely(realQuery);
+                                int amt = 2;
+                                Rectangle checkClear = new(realQuery.X, realQuery.Y - amt, amt, amt);
+                                if (TileHelpers.TileLiquid(realQuery, LiquidID.Lava) && TileHelpers.AreaClear(checkClear))
+                                {
+                                    lavaPos = realQuery.ToWorldCoordinates();
+                                    finalQueryPos = realQuery;
+                                    break;
+                                }
+                                Dust.NewDustPerfect(realQuery.ToWorldCoordinates(), DustID.WhiteTorch);
+                            }
+                            if (lavaPos != Vector2.Zero)
+                            {
+                                Vector2 lavaPoolCenter = MiscHelpers.ComputeLiquidPool(finalQueryPos, LiquidID.Lava).CenterAverage;
+                                if (lavaPoolCenter != Vector2.Zero)
+                                {
+                                    float jumpHeight = 130f;
+                                    float maxJumpHeight = 160f;
+                                    NPC.velocity = MiscHelpers.GetArcVel(NPC.Center, lavaPoolCenter, grav, jumpHeight, maxJumpHeight, 13f);
+                                    SoundEngine.PlaySound(NPC.HitSound, NPC.Center);
+                                    AIState = ActionState.AirTime;
+                                    AITimer = 0;
+                                    AIRand = 0;
+                                }
+                                else
+                                {
+                                    AITimer = 0;
+                                    AIDir *= -1f;
+                                }
+                            }
+                            else
+                            {
+                                AITimer = 0;
+                                AIDir *= -1f;
+                            }
                         }
                     }
                     NPC.rotation = (NPC.velocity * NPC.spriteDirection).ToRotation();
                     break;
                 case ActionState.AirTime:
-                    NPC.noTileCollide = NPC.velocity.Y < 0f && AITimer < 40;
+                    NPC.noTileCollide = true;
                     if (NPC.collideY && NPC.velocity.Y > 0f)
                     {
                         AIState = ActionState.Flopping;
@@ -129,31 +173,9 @@ namespace ITD.Content.NPCs.Events.LavaRain
                         NPC.noGravity = false;
                         break;
                     }
-                    if (AITimer > 20)
+                    if (AITimer > -1)
                     {
-                        if (AIRand < 2f)
-                        {
-                            // quickraycast won't work for this bc no liquid collision (which would be actually kinda easy to implement? but would you want that though)
-                            float stickOut = 32f;
-                            Point tileQuery = new Vector2(NPC.position.X + AIDir * stickOut, NPC.position.Y).ToTileCoordinates();
-                            Vector2 lavaPos = Vector2.Zero;
-                            for (int i = 0; i < 64; i++)
-                            {
-                                Tile t = Framing.GetTileSafely(tileQuery);
-                                if (t.LiquidAmount > 0 && t.LiquidType == LiquidID.Lava)
-                                {
-                                    lavaPos = tileQuery.ToWorldCoordinates();
-                                    break;
-                                }
-                                tileQuery.Y++;
-                            }
-                            if (lavaPos != Vector2.Zero)
-                            {
-                                NPC.velocity += (lavaPos - NPC.Center).SafeNormalize(Vector2.Zero) * NPC.velocity.Length();
-                                AIRand = 2f;
-                            }
-                        }
-                        NPC.velocity.Y += 0.2f;
+                        NPC.velocity.Y += grav;
                         if (lava)
                         {
                             AIState = ActionState.LavaSwim;
@@ -180,6 +202,15 @@ namespace ITD.Content.NPCs.Events.LavaRain
                         AITimer = 0;
                     }
                     NPC.rotation = NPC.velocity.Y / 32f;
+                    break;
+                case ActionState.SwimToPlayer:
+                    if (!lava)
+                        goto case ActionState.LavaSwim;
+                    if (!NPC.noGravity)
+                        NPC.noGravity = true;
+                    float swimSpeed = 8f;
+                    NPC.velocity = toTargetNormalized * swimSpeed;
+                    NPC.rotation = (NPC.velocity * NPC.spriteDirection).ToRotation();
                     break;
             }
         }

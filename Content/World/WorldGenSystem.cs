@@ -19,6 +19,7 @@ using ITD.Content.UI;
 using ITD.Content.Events;
 using ITD.Particles.Misc;
 using ITD.Particles.Ambience;
+using ITD.Content.Projectiles.Hostile;
 
 namespace ITD.Content.World
 {
@@ -100,7 +101,13 @@ namespace ITD.Content.World
                 testPoints.Clear();
             }
             */
-            
+            /*
+            if (TileHelpers.TileLiquid(pos, LiquidID.Lava))
+            {
+                LiquidPoolData p = MiscHelpers.ComputeLiquidPool(pos, LiquidID.Lava, true);
+                Projectile.NewProjectile(Main.npc[0].GetSource_FromThis(), p.CenterAverage, -Vector2.UnitY * 4f, ModContent.ProjectileType<PyroclasticFireball>(), 30, 0f);
+            }
+            */
             /*
             Tile t = Framing.GetTileSafely(pos);
             t.TileType = (ushort)ModContent.TileType<ReinforcedPegmatiteBricks>();
