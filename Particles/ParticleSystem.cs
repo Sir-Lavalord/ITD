@@ -57,16 +57,12 @@ namespace ITD.Particles
         }
         public static void ResizeArrays()
         {
-            if (Main.dedServ)
-                return;
             Array.Resize(ref particleFramesVertical, emitterPrototypes.Count + 1);
             Array.Resize(ref particleFramesHorizontal, emitterPrototypes.Count + 1);
             Array.Resize(ref particleUsesRenderTarget, emitterPrototypes.Count + 1);
         }
         public static void DefaultStaticValues(ushort type)
         {
-            if (Main.dedServ)
-                return;
             particleFramesVertical[type] = 1;
             particleFramesHorizontal[type] = 1;
             particleUsesRenderTarget[type] = false;
