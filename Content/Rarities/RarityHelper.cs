@@ -8,12 +8,20 @@ using Terraria.ModLoader;
 using Terraria.UI.Chat;
 using ITD.Common.Rarities;
 
+using ITD.Systems.DataStructures;
+using ITD.Systems.Extensions;
+
 namespace ITD.Content.Rarities
 {
     public static class RarityHelper // it came from the infernum
     {		
         public static void DrawBaseTooltipTextAndGlow(RarityModifier.DrawData data, Color glowColor, Color textOuterColor, Color? textInnerColor = null, Texture2D glowTexture = null, Vector2? glowScaleOffset = null)
         {
+			Main.spriteBatch.End(out SpriteBatchData spriteBatchData); // restart spritebatch
+			SamplerState oldSampler = spriteBatchData.SamplerState;
+			spriteBatchData.SamplerState = null;
+			Main.spriteBatch.Begin(spriteBatchData);
+			
             textInnerColor ??= Color.Black;
             glowTexture ??= ModContent.Request<Texture2D>("ITD/Content/Rarities/Textures/BaseRarityGlow").Value;
             glowScaleOffset ??= Vector2.One;
@@ -42,6 +50,10 @@ namespace ITD.Content.Rarities
             // Draw the main inner text.
             Color mainTextColor = Color.Lerp(glowColor, textInnerColor.Value, 0.9f);
             ChatManager.DrawColorCodedString(Main.spriteBatch, FontAssets.MouseText.Value, text, textPosition, mainTextColor, data.Rotation, data.Origin, data.Scale, data.MaxWidth);
+			
+			Main.spriteBatch.End();
+			spriteBatchData.SamplerState = oldSampler;
+			Main.spriteBatch.Begin(spriteBatchData);
         }
 	}
 }

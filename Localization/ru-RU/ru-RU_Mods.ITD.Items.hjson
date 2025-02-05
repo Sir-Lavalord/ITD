@@ -840,8 +840,8 @@ Winch: {
 	DisplayName: Лебедка
 	Tooltip:
 		'''
-		Snaptraps retract faster
-		+10% Snaptrap Length
+		Капканы возвращаются быстрее
+		+10% Длина цепи капкана
 		'''
 }
 
@@ -1194,7 +1194,7 @@ NightmareManuscript: {
 
 WeepingWand: {
 	// Tooltip: ""
-	// DisplayName: Weeping Wand
+	DisplayName: Ноющая палочка
 }
 
 DepthrockBricksItem: {
@@ -1217,7 +1217,7 @@ Potshot: {
 }
 
 Flyswatter: {
-	// DisplayName: Flyswatter
+	DisplayName: Мухобойка
 	// Tooltip: ""
 }
 
