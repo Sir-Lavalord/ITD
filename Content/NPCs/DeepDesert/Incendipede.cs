@@ -21,7 +21,7 @@ namespace ITD.Content.NPCs.DeepDesert
         public bool Wall;
         public const int SpacingBetween = 8;
         public override void FindFrame(int frameHeight) => CommonFrameLoop(frameHeight);
-        public override void SetStaticDefaults()
+        public override void SetStaticDefaultsSafe()
         {
             Main.npcFrameCount[Type] = 3;
             // i'm using this for the actual segment following logic so consider this the length limit for incendipedes
@@ -29,7 +29,6 @@ namespace ITD.Content.NPCs.DeepDesert
             // idc about getting rotations cuz we can just calculate those on the fly
             NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPCTrailing.PosRotEveryFrame;
             // bestiary stuff
-            BestiaryEntry = this.GetLocalization("Bestiary");
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 CustomTexturePath = "ITD/Content/NPCs/DeepDesert/Incendipede_Bestiary",
@@ -38,16 +37,6 @@ namespace ITD.Content.NPCs.DeepDesert
                 PortraitPositionYOverride = 12f
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifier);
-        }
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        {
-            bestiaryEntry.Info.AddRange([
-                // hello how do you add custom biome to this thanks
-				//BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
-                //BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
-
-				new FlavorTextBestiaryInfoElement(BestiaryEntry.Value)
-            ]);
         }
         public override void SetDefaults()
          {
@@ -239,12 +228,12 @@ namespace ITD.Content.NPCs.DeepDesert
         public int ID => (int)NPC.ai[2];
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
         public override void FindFrame(int frameHeight) => CommonFrameLoop(frameHeight, maxCounter: 2f);
-        public override void SetStaticDefaults()
+        public override void SetStaticDefaultsSafe()
         {
+            HiddenFromBestiary = true;
             Main.npcFrameCount[Type] = 8;
             NPCID.Sets.TrailCacheLength[Type] = 2;
             NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPCTrailing.PosEveryFrame;
-            HideFromBestiary();
         }
         public override void SetDefaults()
         {
@@ -322,12 +311,12 @@ namespace ITD.Content.NPCs.DeepDesert
         // no ID needed for this one cuz it's just 0 (newest position in NPC.oldPos array)
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
         public override void FindFrame(int frameHeight) => CommonFrameLoop(frameHeight);
-        public override void SetStaticDefaults()
+        public override void SetStaticDefaultsSafe()
         {
+            HiddenFromBestiary = true;
             Main.npcFrameCount[Type] = 3;
             NPCID.Sets.TrailCacheLength[Type] = 2;
             NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPCTrailing.PosEveryFrame;
-            HideFromBestiary();
         }
         public override void SetDefaults()
         {

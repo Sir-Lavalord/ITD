@@ -58,6 +58,8 @@ namespace ITD.Utilities
         public static bool EdgeTileX(int i, int j) => Framing.GetTileSafely(i, j).HasTile && (!Framing.GetTileSafely(i + 1, j + 1).HasTile || !Framing.GetTileSafely(i + 1, j - 1).HasTile || !Framing.GetTileSafely(i - 1, j + 1).HasTile || !Framing.GetTileSafely(i - 1, j - 1).HasTile);
         public static bool EdgeTile(int i, int j) => EdgeTileCross(i, j) || EdgeTileX(i, j);
         public static bool EdgeTile(Point p) => EdgeTile(p.X, p.Y);
+        public static bool TileLiquid(int i, int j, short liquidType) => Framing.GetTileSafely(i, j).LiquidAmount > 0 && Framing.GetTileSafely(i, j).LiquidType == liquidType;
+        public static bool TileLiquid(Point p, short liquidType) => TileLiquid(p.X, p.Y, liquidType);
         public static Vector2 CommonTileOffset => Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
         public static Vector2 TileExtraPos(int i, int j, Vector2 extraOffset = default) => new Vector2(i, j) * 16 - Main.screenPosition + extraOffset + CommonTileOffset;
         public static void DrawTileCommon(SpriteBatch spriteBatch, int i , int j, Texture2D tex, Vector2 extraOffset = default, Rectangle? overrideFrame = null)

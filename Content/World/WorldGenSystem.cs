@@ -18,6 +18,8 @@ using System;
 using ITD.Content.UI;
 using ITD.Content.Events;
 using ITD.Particles.Misc;
+using ITD.Particles.Ambience;
+using ITD.Content.Projectiles.Hostile;
 
 namespace ITD.Content.World
 {
@@ -87,6 +89,7 @@ namespace ITD.Content.World
             //ITDParticle newParticle = ParticleSystem.NewEmitter<TestParticle>(Main.MouseWorld, Main.rand.NextVector2Unit(-MathHelper.PiOver2 - MathHelper.PiOver4, MathHelper.PiOver2) * 6f, 0f);
             Point pos = Main.MouseWorld.ToTileCoordinates();
 
+            //ParticleSystem.NewSingleParticle<LyteflyParticle>(Main.MouseWorld, Vector2.Zero, lifetime: 60);
             //ParticleSystem.NewSingleParticle<PyroclasticParticle>(Main.MouseWorld, Vector2.Zero, lifetime: 120, canvas: ParticleEmitterDrawCanvas.WorldUnderProjectiles);
             /*
             testPoints.Add(pos);
@@ -98,7 +101,13 @@ namespace ITD.Content.World
                 testPoints.Clear();
             }
             */
-            
+            /*
+            if (TileHelpers.TileLiquid(pos, LiquidID.Lava))
+            {
+                LiquidPoolData p = MiscHelpers.ComputeLiquidPool(pos, LiquidID.Lava, true);
+                Projectile.NewProjectile(Main.npc[0].GetSource_FromThis(), p.CenterAverage, -Vector2.UnitY * 4f, ModContent.ProjectileType<PyroclasticFireball>(), 30, 0f);
+            }
+            */
             /*
             Tile t = Framing.GetTileSafely(pos);
             t.TileType = (ushort)ModContent.TileType<ReinforcedPegmatiteBricks>();

@@ -7,8 +7,8 @@ This mod does not contain the ITD music tracks to reduce download size. Music ca
 As of right now, the mod contains the following:
 - 3 new bosses  
 - 2 new biomes  
-- 8 new enemies  
-- 177 new items  
+- 12 new enemies  
+- 188 new items  
 And continues to expand.
 
 # Credit
@@ -16,7 +16,7 @@ And continues to expand.
 Cowsgomoo - Owner, Director  
 Sir Lavalord - Director
 ### Code
-Cowsgomoo, tapenki, Mirrorman, Dice, infixite, Duckman, Elongated1, lolxd87, qAngel, HAHAjax
+Cowsgomoo, tapenki, Mirrorman, Dice, infixite, Duckman, Elongated1, lolxd87, qAngel, HAHAjax, Rakan
 ### Spriting and Art
 Cowsgomoo, Rygel Bluestar, Goopygooger, Asterope, Plague, qAngel, tapenki, Mirrorman, Ant,  amika, El_Juanchooo, pilchardheck, Uğur, Sir Lavalord, Grands, Microengine
 ### Music

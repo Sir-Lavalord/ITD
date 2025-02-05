@@ -17,7 +17,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
         public bool AIIsUnmasked { get { return NPC.ai[1] == 1f; } set { NPC.ai[1] = value ? 1f : 0f; } }
         public ref float AIIsActiveOrOppositeDirTimer => ref NPC.ai[2];
         public ref float AIBigJumpXPosition => ref NPC.ai[3];
-        public override void SetStaticDefaults()
+        public override void SetStaticDefaultsSafe()
         {
             Main.npcFrameCount[Type] = 8;
             ITDSets.LavaRainEnemy[Type] = true;

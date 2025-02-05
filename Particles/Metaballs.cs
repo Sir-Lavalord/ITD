@@ -170,10 +170,11 @@ namespace ITD.Particles
             orig(self, sw);
 
             //DEBUG
+            /*
             if (WorldGenSystem.JustPressed(Microsoft.Xna.Framework.Input.Keys.D1))
                 Metaball.NewMetaball<CosmicMetaball>(Main.MouseWorld, Vector2.Zero, 0.1f, 300);
             //DEBUG
-
+            */
             Metaballs.RemoveAll(b => b.TimeLeft <= 0);
 
             for (int type = 0; type < MetaballInstances.Count; type++) 

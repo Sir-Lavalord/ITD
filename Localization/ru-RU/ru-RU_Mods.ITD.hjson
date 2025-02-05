@@ -174,8 +174,20 @@ Projectiles: {
 	// CosmicGoo.DisplayName: Cosmic Goo
 	// PyroclasticTrail.DisplayName: Pyroclastic Trail
 	// PyroclasticFireball.DisplayName: Pyroclastic Fireball
+	// CosmicSwarm.DisplayName: Cosmic Swarm
+	// CosmicWarning.DisplayName: Cosmic Warning
 	// FwoomstickSpark.DisplayName: Fwoomstick Spark
 	// SmoggyNimbusRaindrop.DisplayName: Smoggy Nimbus Raindrop
+
+	StabtrapProjectile: {
+		// OneTimeLatchMessage: LET 'EM RIP
+		// DisplayName: Stabtrap Projectile
+	}
+
+	// StabtrapStingerProjectile.DisplayName: Stabtrap Stinger Projectile
+	// CosmicSlopWave.DisplayName: Cosmic Slop Wave
+	// DepthrockStoneProj.DisplayName: Depthrock Stone Proj
+	// SkyshooterFallingStar.DisplayName: Skyshooter Falling Star
 }
 
 NPCs: {
@@ -206,15 +218,29 @@ NPCs: {
 	AmbushBones.DisplayName: Засадные кости
 	ShroomishSlime.DisplayName: Грибковый слизень
 	CosmicJellyfishMini.DisplayName: Cosmic Jellyfish Mini
-	Sandberus.DisplayName: Sandberus
+
+	Sandberus: {
+		DisplayName: Sandberus
+		// Bestiary: Mods.ITD.NPCs.Sandberus.Bestiary
+	}
+
 	KSGlandNPC.DisplayName: Slimy Coating
 	Gravekeeper.DisplayName: Могильщик
 	HauntedTombstone.DisplayName: Haunted Tombstone
 	GhastlyTombstone.DisplayName: Ghastly Tombstone
 	StrawmanDummy.DisplayName: Strawman
 	RecruitedNPC.DisplayName: Recruited N P C
-	SmallSnowpoff.DisplayName: Мелкая ряженка
-	LargeSnowpoff.DisplayName: Крупная ряженка
+
+	SmallSnowpoff: {
+		DisplayName: Мелкая ряженка
+		// Bestiary: Mods.ITD.NPCs.SmallSnowpoff.Bestiary
+	}
+
+	LargeSnowpoff: {
+		DisplayName: Крупная ряженка
+		// Bestiary: Mods.ITD.NPCs.LargeSnowpoff.Bestiary
+	}
+
 	// CosmicJellyfishHand.DisplayName: Cosmic Jellyfish Hand
 	// IncendipedeBody.DisplayName: Incendipede
 
@@ -229,9 +255,31 @@ NPCs: {
 	// IncendipedeBodyOld.DisplayName: Incendipede Body Old
 	// IncendipedeHeadOld.DisplayName: Incendipede Head Old
 	// IncendipedeTailOld.DisplayName: Incendipede Tail Old
-	// Mudkarp.DisplayName: Mudkarp
-	// PyroclasticSlime.DisplayName: Pyroclastic Slime
-	// SmoggyNimbus.DisplayName: Smoggy Nimbus
+
+	Mudkarp: {
+		// DisplayName: Mudkarp
+		// Bestiary: Mods.ITD.NPCs.Mudkarp.Bestiary
+	}
+
+	PyroclasticSlime: {
+		// DisplayName: Pyroclastic Slime
+		// Bestiary: Mods.ITD.NPCs.PyroclasticSlime.Bestiary
+	}
+
+	SmoggyNimbus: {
+		// DisplayName: Smoggy Nimbus
+		// Bestiary: Mods.ITD.NPCs.SmoggyNimbus.Bestiary
+	}
+
+	Flamgoustine: {
+		// DisplayName: Flamgoustine
+		// Bestiary: Mods.ITD.NPCs.Flamgoustine.Bestiary
+	}
+
+	Magmaripper: {
+		// Bestiary: Mods.ITD.NPCs.Magmaripper.Bestiary
+		// DisplayName: Magmaripper
+	}
 }
 
 Buffs: {

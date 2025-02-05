@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using ITD.Networking;
+using ITD.Networking.Packets;
+using Microsoft.Build.Tasks.Deployment.ManifestUtilities;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
@@ -29,6 +32,8 @@ namespace ITD.Content.Events
         {
             ActiveEvent = e.Type;
             e.IsActive = true;
+
+            NetSystem.SendPacket(new SyncEventStatePacket(true));
         }
         /// <inheritdoc cref="BeginEvent(ITDEvent)"/>
         public static void BeginEvent<T>() where T : ITDEvent => BeginEvent(EventsByType[typeof(T)]);
@@ -40,6 +45,9 @@ namespace ITD.Content.Events
         /// <typeparam name="T"></typeparam>
         public static void StopEvent(ITDEvent e)
         {
+            // has to be done here otherwise it's gonna try to access the events dict with -1 which will throw
+            NetSystem.SendPacket(new SyncEventStatePacket(false));
+
             ITDEvent.BarScaleVisualProgress = 0f;
             ActiveEvent = -1;
             e.IsActive = false;

@@ -13,12 +13,12 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         public ref float AITimer => ref Projectile.ai[1];
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 3;
+            Main.projFrames[Projectile.type] = 4;
         }
         public override void SetDefaults()
         {
-            Projectile.width = 40;
-            Projectile.height = 56;
+            Projectile.width = 56;
+            Projectile.height = 80;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.timeLeft = 60;
@@ -57,7 +57,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                 }
 				Projectile.timeLeft = 60;
             }
-            if (++Projectile.frameCounter >= 3)
+            if (++Projectile.frameCounter >= 4)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];

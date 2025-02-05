@@ -1228,11 +1228,30 @@ Flyswatter: {
 }
 
 EyeofEldritchInsight: {
-	// DisplayName: Eyeof Eldritch Insight
-	// Tooltip: ""
+	// DisplayName: Eye of Eldritch Insight
+	// Tooltip: All hitboxes become visible
 }
 
 Fwoomstick: {
 	// DisplayName: Fwoomstick
 	// Tooltip: ""
+}
+
+Stabtrap: {
+	// DisplayName: Stabtrap
+	// Tooltip: "[c/{0}:Latch Effect:] Unleashes a stinger to stab the trap's target"
+}
+
+DepthrockBow: {
+	// Tooltip: Crackshot but bad
+	// DisplayName: Depthrock Bow
+}
+
+Skyshot: {
+	// DisplayName: Skyshot
+	/* Tooltip:
+		'''
+		Occasionally surrounds arrows with cosmic power
+		Powered arrows rain stars down on enemies
+		''' */
 }

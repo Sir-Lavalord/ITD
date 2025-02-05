@@ -1,7 +1,9 @@
 global using Microsoft.Xna.Framework;
+global using Terraria;
+global using Terraria.ID;
+global using Terraria.ModLoader;
 using ITD.Networking;
 using System.IO;
-using Terraria;
 using Terraria.ModLoader;
 using ITD.Systems;
 using Terraria.Graphics.Effects;
@@ -11,7 +13,6 @@ using ReLogic.Content;
 using Terraria.Graphics.Shaders;
 using System.Collections.Generic;
 using ITD.Systems.Recruitment;
-using Terraria.ID;
 using ITD.Config;
 using Terraria.UI.Chat;
 using ITD.Common.ChatTags;

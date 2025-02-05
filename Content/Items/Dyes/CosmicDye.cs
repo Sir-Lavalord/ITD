@@ -16,6 +16,8 @@ namespace ITD.Content.Items.Dyes
         {
             Item.ResearchUnlockCount = 3;
 
+            if (Main.dedServ)
+                return;
             GameShaders.Armor.BindShader(Type, ITD.ITDArmorShaders["CosmicDye"]);
         }
         public override void SetDefaults()

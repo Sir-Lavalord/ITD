@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿//might be removed
+
+/*using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
@@ -43,11 +45,11 @@ namespace ITD.Content.Items.Weapons.Ranger
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-/*            if (iCurrentChance >= 98)
+*//*            if (iCurrentChance >= 98)
             {
                 iPicked = 14;
             }
-            else if (iCurrentChance >= 98 && iCurrentChance < 98)*/
+            else if (iCurrentChance >= 98 && iCurrentChance < 98)*//*
             SoundEngine.PlaySound(SoundID.Item36, position);
             for (int i = 0; i < 4; i++)
             {
@@ -70,3 +72,4 @@ namespace ITD.Content.Items.Weapons.Ranger
         }
     }
 }
+*/

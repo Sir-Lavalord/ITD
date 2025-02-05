@@ -31,7 +31,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
         public abstract int HeightAsBall { get; }
         private bool JustSpawned = true;
         private bool DugOut = true;
-        public override void SetStaticDefaults()
+        public override void SetStaticDefaultsSafe()
         {
             Main.npcFrameCount[Type] = 5;
             Main.npcCatchable[Type] = true;

@@ -45,7 +45,7 @@ namespace ITD.Content.NPCs.Friendly
             NPC.knockBackResist = 0.3f;
             NPC.netAlways = true;
             NPC.friendly = true;
-            NPC.scale = 1.25f;
+            NPC.scale = 1.3f;
             NPC.aiStyle = -1;
             NPC.gfxOffY = -10;
             NPC.alpha = 30;
