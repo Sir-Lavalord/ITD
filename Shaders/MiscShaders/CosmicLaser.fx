@@ -60,6 +60,6 @@ technique Technique1
     pass CosmicLaserPass
     {
         
-        PixelShader = compile ps_2_0 CosmicLaser();
+        PixelShader = compile ps_3_0 CosmicLaser();
     }
 }

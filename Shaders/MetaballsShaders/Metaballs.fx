@@ -13,7 +13,9 @@ float2 screenPosition;
 float3 outlineColor;
 float2 screenResolution;
 float2 positions [50];
-int amount;
+float sizes[50];
+int amount = 4;
+float2 pixelization = float2(32,32);
 
 struct VertexShaderInput
 {
@@ -45,23 +47,34 @@ VertexShaderOutput ShaderVS(VertexShaderInput input)
 
 float4 ShaderPS(float4 vertexColor : COLOR0, float2 texCoords : TEXCOORD0) : COLOR0
 {
+    texCoords = round(texCoords * pixelization.x) / pixelization.y;
 
     float total = 0.;
-    float3 col = float3(0,0,0);
+    float4 col = float4(0,0,0,0);
+    
+    float aspect = screenResolution.x / screenResolution.y;
+    
+    float totalPower = 0.;
+    float normal = 2;
+
     for (int i = 0; i < amount; i++)
     {   
+        float2 pos = (texCoords.xy * screenResolution.xy / screenResolution.y - float2(positions[i].x * aspect, positions[i].y));
+        pos = float2(abs(pos.x), abs(pos.y));
+        float normalDist = pow(pos.x, normal) + pow(pos.y, normal);
+        float power = pow(sizes[i], normal) / normalDist;
         
-        float dst = 0.1 * outlineThickness / length(texCoords - positions[i]);
-        float4 SDF = float4(color * dst, dst);
+        totalPower += power;
         
-        total += SDF.a;
-        col += SDF.rgb;
+        col += (color.rgb * power,1);
     }
     
+    if (totalPower < 2.5 || totalPower > 2.5 + pow(1000, normal))
+    {
+        col = float4(0,0,0,0);
+    }
     
-    col *= step(4.5,total/amount);
-    
-    return float4(col, col.r + col.g + col.b);
+    return tex2D(image0, texCoords) + col;
     
 }
 

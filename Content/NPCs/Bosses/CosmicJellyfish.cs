@@ -204,7 +204,7 @@ namespace ITD.Content.NPCs.Bosses
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
-                    ModContent.ProjectileType<CosmicLightningBlast>(), (int)(NPC.damage), 2f, player.whoAmI);
+                            ModContent.ProjectileType<CosmicLightningBlast>(), (int)(NPC.damage), 2f, player.whoAmI);
                             Blast.damage = 0;
                             Blast.localAI[1] = 1000f;
                             Blast.ai[1] = Main.rand.NextFloat(0.18f, 0.3f);
@@ -593,8 +593,23 @@ namespace ITD.Content.NPCs.Bosses
                     //very hard coded
                     if (AITimer2 == 10)//set where to dash
                     {
+                        int projectileAmount = 16;
+                        float radius = 6.5f;
+                        float sector = (float)(MathHelper.TwoPi);
+                        float sectorOfSector = sector / projectileAmount;
+                        float towardsAngle = toPlayer.ToRotation();
+                        float startAngle = towardsAngle - sectorOfSector * (projectileAmount - 1) / 2;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
+
+                            for (int i = 0; i < projectileAmount; i++)
+                            {
+                                float angle = startAngle + sectorOfSector * i;
+                                Vector2 projectileVelo = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * radius;
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo * 0.01f, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1, 0, 2);
+
+                            }
+                            
                             dashvel = Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
                             NPC.velocity = dashvel;
                             NetSync();
@@ -606,6 +621,7 @@ namespace ITD.Content.NPCs.Bosses
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             NPC.velocity *= 1.18f;
+
                             NetSync();
                         }
                     }
@@ -617,9 +633,10 @@ namespace ITD.Content.NPCs.Bosses
                             NetSync();
                         }
                     }
-                    if (AITimer2 >= 80)
+                    if (AITimer2 >= 120) 
                     {
                         AITimer1 = 0;
+                        AITimer2 = 0;
                         AttackCount++;
                         NetSync();
                         AI_State = MovementState.FollowingRegular;
@@ -649,9 +666,8 @@ namespace ITD.Content.NPCs.Bosses
             float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);
             if (AI_State == MovementState.Ram)
             {
-                Vector2 velo = Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
-                NPC.rotation = velo.ToRotation();
-                NPC.rotation = NPC.velocity.X / 50;
+                NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation() + MathHelper.PiOver2,0.2f);
+                
 
             }
             else if (AI_State == MovementState.FollowingRegular)
@@ -853,6 +869,12 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            Vector2 stretch = new Vector2(1f, 1f);
+
+            if(AI_State == MovementState.Ram)
+                stretch = new Vector2(1f, 1f + NPC.velocity.Length() * 0.025f);
+
+
 
 
             if (AttackID == 5)
@@ -878,10 +900,11 @@ namespace ITD.Content.NPCs.Bosses
 
 
 
+            Main.EntitySpriteDraw(TextureAssets.Npc[Type].Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White, NPC.rotation, NPC.frame.Size() / 2f, stretch, SpriteEffects.None);
 
 
 
-            return true;
+            return false;
         }
     }
     public struct BlackholeVertex

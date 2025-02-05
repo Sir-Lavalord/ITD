@@ -13,6 +13,9 @@ float2 screenPosition;
 float3 outlineColor;
 float2 screenResolution;
 float2 positions[50];
+float sizes[50];
+int amount = 4;
+float2 pixelization = float2(32, 32);
 
 struct VertexShaderInput
 {
@@ -48,18 +51,23 @@ float4 ShaderPS(float4 vertexColor : COLOR0, float2 texCoords : TEXCOORD0) : COL
     //apply an outline effect
     
     const float TwoPI = 3.141592 * 2.;
-    const float steps = 128.;
+    const float steps = 8.;
     float2 UV = texCoords;
     
     float4 col1 = float4(0, 0., 0., 0.);
     for (float i = 0.; i < TwoPI; i += TwoPI / steps)
     {
-        float2 offset = float2(sin(i), cos(i)) * outlineThickness;
-        col1 += tex2D(image0, UV + offset * 0.0001) * float4(outlineColor.rgb, 1);
+        float2 offset = float2(sin(i), cos(i)) * 5;
+        float4 temp = saturate(tex2D(image0, UV + offset * 0.001));
         
+        col1 += temp.aaaa * float4(outlineColor.rgb, 1);
 
     }
-    return (tex2D(image0, UV) * float4(color.rgb, 1) * 30) + col1;
+    
+    float4 screen = (tex2D(image0, UV));
+    
+    return lerp(screen, col1, step(screen.a,0));
+
 }
 
 technique t0

@@ -4,20 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terraria.GameContent;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
-using Terraria.ModLoader.Config;
 using Terraria.ModLoader;
 
-namespace ITD.Particles.MetaBalls
+namespace ITD.Particles.CosJel
 {
-    public class DebugMetaBall : Metaball
+    public class CosmicMetaball : Metaball
     {
 
+  
         public override void AI()
         {
-            Size = MathHelper.Lerp(0, Size, (float)TimeLeft / (float)MaxTimeLeft);
         }
 
         public override void SetStaticDefaults()
@@ -26,11 +25,13 @@ namespace ITD.Particles.MetaBalls
             MetaballSystem.Sets.OutlineColor[Type] = Color.BlueViolet;
             MetaballSystem.Sets.OutlineThickness[Type] = 3;
             MetaballSystem.Sets.MiscShader[Type] = GameShaders.Misc["CosmicBall"];
+            MetaballSystem.Sets.MiscShader[Type].UseColor(Color.Purple);
             MetaballSystem.Sets.Type[Type] = MetaballSystem.Sets.MetaballType.Both;
             MetaballSystem.Sets.Image1[Type] = TextureAssets.Extra[193];
             MetaballSystem.Sets.Image2[Type] = ModContent.Request<Texture2D>(Mod.Name + "/" + ITD.MiscShadersFolderPath + "CosmicBallOverlay");
 
         }
+
 
     }
 }

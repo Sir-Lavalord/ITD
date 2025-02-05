@@ -9,6 +9,8 @@
   </PropertyGroup>
 	
   <ItemGroup>
+    <None Remove="shaders\miscshaders\CosmicBall.fx" />
+    <None Remove="Shaders\MiscShaders\CosmicBallOverlay.png" />
     <None Remove="shaders\miscshaders\CosmicLaserImpact.fx" />
     <None Remove="Shaders\MiscShaders\Telegraph.fx" />
     <None Remove="Shaders\ScreenShaders\Metaballs.fx" />

@@ -7,6 +7,8 @@ using Terraria.GameContent;
 using Terraria.DataStructures;
 using System.Collections.Generic;
 using ITD.Utilities;
+using ITD.Particles;
+using ITD.Particles.CosJel;
 namespace ITD.Content.Projectiles.Hostile
 {
     public class CosmicRay : ModProjectile
@@ -98,19 +100,26 @@ namespace ITD.Content.Projectiles.Hostile
             }
 
             //goo / stream updating
-            //cosmicGoos.ForEach(g => g.timeleft--);
-            //cosmicGoos.RemoveAll(g => g.timeleft <= 0);
-            //SpawnACosmicGoo();
+            cosmicGoos.ForEach(g =>
+            {
+                g.timeleft--;
+            });
+            cosmicGoos.RemoveAll(g => g.timeleft <= 0);
+            if(Projectile.timeLeft % 5 == 0)
+            SpawnACosmicGoo();
 
             //uncomment this for normal laser collision behavouir
             CurrentLasterLength = LasersLength;
-            
+
+
         }
 
         public void SpawnACosmicGoo()
         {
             CosmicGoos cosmicGoo = new CosmicGoos(new Rectangle((int)(Projectile.position.X + Projectile.velocity.X * CurrentLasterLength), (int)(Projectile.position.Y + Projectile.velocity.Y * CurrentLasterLength), Projectile.width, Projectile.height), 120, Main.rand.NextFloat(MathHelper.TwoPi));
             cosmicGoos.Add(cosmicGoo);
+            Metaball.NewMetaball<CosmicMetaball>(Projectile.Center + Projectile.velocity * CurrentLasterLength, Main.rand.NextVector2CircularEdge(0.25f, 0.25f), 0.035f, 120);
+
         }
 
         public void UpdateLaserCollision() 
@@ -147,10 +156,10 @@ namespace ITD.Content.Projectiles.Hostile
             else
                 default(CosmicLaserMiniVertex).Draw(Projectile.Center - Main.screenPosition, Projectile.rotation, new Vector2(Projectile.velocity.Length() * CurrentLasterLength, laserWidth));
 
-            foreach (CosmicGoos goo in cosmicGoos)
-            {
-                default(CosmicGooVertex).Draw(goo.hitbox.Center.ToVector2() - Main.screenPosition, goo.rotation, new Vector2(Projectile.width, Projectile.height), MathHelper.Min((float)goo.timeleft / 120f,(float)Projectile.timeLeft / max_timeleft), (float)goo.timeleft / 60f);
-            }
+            //foreach (CosmicGoos goo in cosmicGoos)
+            //{
+            //    default(CosmicGooVertex).Draw(goo.hitbox.Center.ToVector2() - Main.screenPosition, goo.rotation, new Vector2(Projectile.width, Projectile.height), MathHelper.Min((float)goo.timeleft / 120f,(float)Projectile.timeLeft / max_timeleft), (float)goo.timeleft / 60f);
+            //}
 
 
 
