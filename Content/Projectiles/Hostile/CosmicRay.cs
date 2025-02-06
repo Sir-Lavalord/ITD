@@ -122,12 +122,14 @@ namespace ITD.Content.Projectiles.Hostile
                 if (slopTimer++ % 200 == 0)
                 {
                     Projectile.netUpdate = true;
+                    /*
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2((int)(Projectile.Center.X + Projectile.velocity.X * CurrentLasterLength),
                         (int)(Projectile.Center.Y + Projectile.velocity.Y * CurrentLasterLength)),
                         Vector2.Zero, ModContent.ProjectileType<CosmicSlopWave>(), Projectile.damage, 0f, Main.myPlayer, 0, 1);
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2((int)(Projectile.Center.X + Projectile.velocity.X * CurrentLasterLength),
        (int)(Projectile.Center.Y + Projectile.velocity.Y * CurrentLasterLength)),
        Vector2.Zero, ModContent.ProjectileType<CosmicSlopWave>(), Projectile.damage, 0f, Main.myPlayer, 0, -1);
+                    */
                 }
             }
             CosmicGoos cosmicGoo = new CosmicGoos(new Rectangle((int)(Projectile.position.X + Projectile.velocity.X * CurrentLasterLength), (int)(Projectile.position.Y + Projectile.velocity.Y * CurrentLasterLength), Projectile.width, Projectile.height), 120, Main.rand.NextFloat(MathHelper.TwoPi));

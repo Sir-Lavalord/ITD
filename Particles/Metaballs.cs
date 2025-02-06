@@ -61,6 +61,8 @@ namespace ITD.Particles
         public sealed override void SetupContent()
         {
             MetaballSystem.Sets.ResizeArrays(MetaballSystem.MetaballInstances.Count + 1);
+            if (Main.dedServ)
+                return;
             SetStaticDefaults();
         }
 
