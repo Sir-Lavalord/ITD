@@ -1255,3 +1255,8 @@ Skyshot: {
 		Powered arrows rain stars down on enemies
 		''' */
 }
+
+MirrorMan: {
+	// DisplayName: Mirror Man
+	// Tooltip: ""
+}
