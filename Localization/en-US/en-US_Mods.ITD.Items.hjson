@@ -1271,3 +1271,8 @@ Whiplatch: {
 		"[c/{0}:Latch Effect:] Pulls the user toward the target and vice versa if the target is immune to knockback"
 		'''
 }
+
+TomeOfReach: {
+	DisplayName: Tome Of Reach
+	Tooltip: ""
+}

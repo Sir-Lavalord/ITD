@@ -1,6 +1,7 @@
 ﻿using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
+using ITD.Content.Dusts;
 
 namespace ITD.Content.Tiles.DeepDesert
 {
@@ -17,7 +18,7 @@ namespace ITD.Content.Tiles.DeepDesert
 
             MinPick = 55;
             HitSound = SoundID.Tink;
-            DustType = DustID.Sandstorm;
+            DustType = ModContent.DustType<PyracottaDust>();
 
             AddMapEntry(new Color(196, 162, 126));
         }
@@ -35,7 +36,7 @@ namespace ITD.Content.Tiles.DeepDesert
 
             MinPick = 55;
             HitSound = SoundID.Tink;
-            DustType = DustID.Sandstorm;
+            DustType = ModContent.DustType<PyracottaDust>();
 
             AddMapEntry(new Color(191, 88, 65));
         }

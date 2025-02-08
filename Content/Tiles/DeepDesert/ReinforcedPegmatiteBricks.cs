@@ -5,6 +5,7 @@ using ITD.Particles;
 using System.Linq;
 using ITD.Particles.Misc;
 using Terraria.Audio;
+using ITD.Content.Dusts;
 
 namespace ITD.Content.Tiles.DeepDesert
 {
@@ -19,7 +20,7 @@ namespace ITD.Content.Tiles.DeepDesert
 
             MinPick = 500;
             HitSound = SoundID.Tink;
-            DustType = DustID.Sandstorm;
+            DustType = ModContent.DustType<PegmatiteDust>();
 
             AddMapEntry(new Color(199, 108, 91));
         }

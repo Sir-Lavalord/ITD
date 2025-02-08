@@ -12,7 +12,7 @@ namespace ITD.Content.Tiles.Catacombs
         {
             Main.tileSolid[Type] = true;
             HitSound = SoundID.Item101;
-            DustType = DustID.Shadowflame;
+            DustType = ModContent.DustType<PinkCatacombDust>();
             AddMapEntry(new Color(130, 53, 142));
             MinPick = 120;
         }

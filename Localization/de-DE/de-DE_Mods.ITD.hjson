@@ -193,6 +193,8 @@ Projectiles: {
 		// OneTimeLatchMessage: You can't see this line in-game
 		// DisplayName: Whiplatch Hook
 	}
+
+	// ReachingHand.DisplayName: Reaching Hand
 }
 
 NPCs: {

@@ -48,6 +48,7 @@ namespace ITD.Content.Items.Weapons.Mage
             Item.rare = 5;
             Item.shoot = ModContent.ProjectileType<WeepWandWisp>();
             Item.shootSpeed = 5f;
+            Item.mana = 11;
         }
     }
 }

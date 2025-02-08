@@ -15,6 +15,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
             Main.tileShine2[Type] = true;
             Main.tileNoSunLight[Type] = false;
 
+            DustType = ModContent.DustType<BlueshroomStemDust>();
             HitSound = SoundID.Item50;
 
             AddMapEntry(new Color(210, 180, 140));
