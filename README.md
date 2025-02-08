@@ -18,7 +18,7 @@ Sir Lavalord - Director
 ### Code
 Cowsgomoo, tapenki, Mirrorman, Dice, infixite, Duckman, Elongated1, lolxd87, qAngel, HAHAjax, Rakan
 ### Spriting and Art
-Cowsgomoo, Rygel Bluestar, Goopygooger, Asterope, Plague, qAngel, tapenki, Mirrorman, Ant,  amika, El_Juanchooo, pilchardheck, Uğur, Sir Lavalord, Grands, Microengine
+Cowsgomoo, Rygel Bluestar, Goopygooger, Asterope, Plague, qAngel, tapenki, Mirrorman, Ant,  amika, El_Juanchooo, pilchardheck, Uğur, Sir Lavalord, Grands, Microengine, Felixxx
 ### Music
 Microengine, Rygel Bluestar, qAngel
 ### Localization
