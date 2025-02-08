@@ -70,16 +70,16 @@ namespace ITD.Common.ChatTags
                     string str = c.ToString();
                     Vector2 charSize = font.MeasureString(str);
 
-                    tempPos.X += charSize.X;
-
                     if (char.IsWhiteSpace(c))
                     {
                         yOffsets[i] = 0;
-                        continue;
                     }
-
-                    float posOffset = tempPos.X / 16f;
-                    yOffsets[i] = MathF.Sin(((float)time + posOffset) * Frequency) * Amplitude;
+                    else
+                    {
+                        float posOffset = tempPos.X / 16f;
+                        yOffsets[i] = MathF.Sin(((float)time + posOffset) * Frequency) * Amplitude;
+                    }
+                    tempPos.X += charSize.X;
                 }
                 lastpreComputeGUC = Main.GameUpdateCount;
             }
@@ -95,19 +95,13 @@ namespace ITD.Common.ChatTags
                 string str = c.ToString();
                 Vector2 characterSize = font.MeasureString(str);
 
+                Vector2 characterPosition = currentPosition + Vector2.UnitY * yOffsets[i];
+
                 currentPosition.X += characterSize.X;
                 outSize.X += characterSize.X;
                 outSize.Y = Math.Max(outSize.Y, characterSize.Y);
 
-                // avoid calculating stuff if this char is whitespace
-                // i love microoptimizations
-                if (char.IsWhiteSpace(c))
-                    continue;
-
-                Vector2 characterPosition = currentPosition + Vector2.UnitY * yOffsets[i];
-
                 ChatManager.DrawColorCodedString(spriteBatch, font, str, characterPosition, color, 0f, Vector2.Zero, new Vector2(scale));
-
             }
 
             size = outSize;

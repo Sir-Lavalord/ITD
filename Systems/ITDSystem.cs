@@ -13,6 +13,9 @@ using Terraria.Localization;
 using Terraria.Chat;
 using ITD.Networking;
 using ITD.Networking.Packets;
+using Microsoft.Xna.Framework.Graphics;
+using ITD.Content.Items.DevTools;
+using ReLogic.Content;
 
 namespace ITD.Systems
 {
@@ -209,6 +212,16 @@ namespace ITD.Systems
                 if (originalType > -1)
                     Main.townNPCCanSpawn[originalType] = false;
             }
+        }
+        public override void PostDrawTiles()
+        {
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullClockwise, null, Main.GameViewMatrix.TransformationMatrix);
+            Asset<Texture2D> tex = ModContent.Request<Texture2D>("ITD/Content/SelectBox");
+            foreach (var plr in Main.ActivePlayers)
+            {
+                plr.GetITDPlayer().DrawSelectBox(Main.spriteBatch, tex);
+            }
+            Main.spriteBatch.End();
         }
     }
 }

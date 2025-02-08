@@ -20,6 +20,9 @@ using ITD.Networking.Packets;
 using Terraria.GameInput;
 using ITD.Content.Buffs.EquipmentBuffs;
 using Terraria.ModLoader.IO;
+using Microsoft.Xna.Framework.Graphics;
+using ITD.Content.UI;
+using ReLogic.Content;
 
 namespace ITD.Players
 {
@@ -81,6 +84,10 @@ namespace ITD.Players
         public Guid guid = Guid.Empty;
         //WorldNPC stuff
         public int TalkWorldNPC = -1;
+        //cool tools
+        public bool selectBox = false;
+        public Point16 selectTopLeft;
+        public Point16 selectBottomRight;
         public override void ResetEffects()
         {
             //shakeDuration
@@ -255,6 +262,16 @@ namespace ITD.Players
         }
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
+            if (selectBox)
+            {
+                if (selectTopLeft == Point16.Zero)
+                    selectTopLeft = MousePosition.ToTileCoordinates16();
+
+                selectBottomRight = MousePosition.ToTileCoordinates16();
+
+                Dust.NewDustPerfect(selectTopLeft.ToWorldCoordinates(), DustID.WhiteTorch);
+                Dust.NewDustPerfect(selectBottomRight.ToWorldCoordinates(), DustID.BlueTorch);
+            }
             // see if player just right clicked on an ITDNPC to call OnRightClick
             if (Main.mouseRight && Main.mouseRightRelease)
             {
@@ -266,6 +283,13 @@ namespace ITD.Players
                     }
                 }
             }
+        }
+        public void DrawSelectBox(SpriteBatch sb, Asset<Texture2D> tex)
+        {
+            if (!selectBox)
+                return;
+            Rectangle rect = new(selectTopLeft.X, selectTopLeft.Y, selectBottomRight.X - selectTopLeft.X, selectBottomRight.Y - selectTopLeft.Y);
+            ITDUIElement.DrawAdjustableBox(sb, tex.Value, rect.ToWorldRectangle(), Player.shirtColor);
         }
         public void UpdateMouse()
         {
