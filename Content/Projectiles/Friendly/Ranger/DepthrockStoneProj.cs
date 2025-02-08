@@ -85,8 +85,8 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 else
                 {
                     SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
-                    Projectile arrow = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, (int)Projectile.ai[0], (int)(Projectile.damage/2.25f), Projectile.knockBack, Projectile.owner);
-                    arrow.velocity = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 12f;
+                    Projectile arrow = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, (int)Projectile.ai[0], (int)(Projectile.damage/ 1.75f), Projectile.knockBack, Projectile.owner);
+                    arrow.velocity = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 14f;
                     arrow.tileCollide = false;
                 }
             }

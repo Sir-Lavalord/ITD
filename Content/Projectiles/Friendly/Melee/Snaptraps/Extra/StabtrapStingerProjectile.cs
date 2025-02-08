@@ -90,7 +90,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
 
             if (HomingTarget == null)
             {
-                AIState = ActionState.Retract;
+                return;
             }
             switch (AIState)
             {
@@ -132,20 +132,24 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
                     break;
 
             }
-            Vector2 vectorToIdlePosition = proj.Center - Projectile.Center;
-            float distanceToIdlePosition = vectorToIdlePosition.Length();
-            if (distanceToIdlePosition > 150f)
+            Vector2 vectorToTrap= proj.Center - Projectile.Center;
+            float distanceToTrap = vectorToTrap.Length();
+            if (distanceToTrap > 150f || player.GetSnaptrapPlayer().GetActiveSnaptrap().retracting && distanceToTrap > 30f)
             {
                 int where = Projectile.Center.X < proj.Center.X ? 1 : -1;
                 int where2 = Projectile.Center.Y < proj.Center.Y ? 1 : -1;
                 Projectile.velocity.Y += 0.6f * where2;
                 Projectile.velocity.X += 0.6f * where;
             }
-            if (proj.ai[1] == 0)
+            Vector2 vectorToTarget = HomingTarget.Center - Projectile.Center;
+            float distanceToTarget = vectorToTarget.Length();
+            if (distanceToTarget < 10f)
             {
-                AIState = ActionState.Retract;
+                int where = Projectile.Center.X < HomingTarget.Center.X ? 1 : -1;
+                int where2 = Projectile.Center.Y < HomingTarget.Center.Y ? 1 : -1;
+                Projectile.velocity.Y -= 0.6f * where2;
+                Projectile.velocity.X -= 0.6f * where;
             }
-            HomingTarget.AddBuff(BuffID.Ichor, 990);
                 Vector2 directionToTarget = HomingTarget.Center - Projectile.Center;
                 directionToTarget.Normalize();
 

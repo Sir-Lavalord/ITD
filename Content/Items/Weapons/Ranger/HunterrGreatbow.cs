@@ -14,13 +14,13 @@ namespace ITD.Content.Items.Weapons.Ranger
         {
             Item.width = 60;
             Item.height = 86;
-            Item.damage = 1000;
+            Item.damage = 2000;
             Item.DamageType = DamageClass.Ranged;
             Item.useTime = Item.useAnimation = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.channel = true;
-            Item.knockBack = 8f;
+            Item.knockBack = 20f;
             Item.value = 999;
             Item.rare = ModContent.RarityType<UnTerrRarity>();
             Item.noUseGraphic = true;

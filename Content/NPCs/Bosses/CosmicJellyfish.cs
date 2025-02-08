@@ -74,7 +74,8 @@ namespace ITD.Content.NPCs.Bosses
             FollowingSlow,
             Ram,
             Suffocate,
-            Explode
+            Explode,
+            Slamdown
         }
         private MovementState AI_State = MovementState.FollowingRegular;
 
@@ -234,11 +235,31 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 0://Free
+                    distanceAbove = 700;
                     if (AITimer1++ >= 120)//take time to get to the player
                     {
-                        AttackID++;
-                        AITimer1 = 0;
-                        AttackCount = 0;
+                        RaycastData data = Helpers.QuickRaycast(NPC.Center, NPC.velocity, (point) => { return (player.Center.Y >= point.ToWorldCoordinates().Y + 20); }, 600);
+                        if (NPC.Center.Distance(data.End) >= 20)
+                        {
+                            AI_State = MovementState.Slamdown;
+                            NPC.velocity.Y += 0.5f;
+                        }
+                        else
+                        {
+                            AI_State = MovementState.Slamdown;
+                            NPC.velocity *= 0;
+                            if (AITimer2++ > 50)
+                            {
+                                AttackID++;
+                                AITimer1 = 0;
+                                AITimer2 = 0;
+                                AttackCount = 0;
+                            }
+                            if (AITimer2 == 1)
+                            {
+                                player.GetITDPlayer().BetterScreenshake(60, 20, 40, true);//Very shaky, might need some tweaking to the decay
+                            }
+                        }
                     }
                     break;
                 case 1: //Slop rain
@@ -321,7 +342,7 @@ namespace ITD.Content.NPCs.Bosses
                             AITimer2 = 0;
                         }
                     }
-                    else if (AITimer1 >= 2000)
+                    else if (AITimer1++ >= 100)
                     {
                         AITimer1 = 0;
                         AttackID++;
@@ -661,7 +682,7 @@ namespace ITD.Content.NPCs.Bosses
                 rotation = rotationFactor * maxRotation;
                 NPC.rotation = rotation;
             }
-            else if (AI_State == MovementState.FollowingSlow)
+            else if (AI_State == MovementState.FollowingSlow || AI_State == MovementState.Slamdown)
             {
                 NPC.rotation = 0;
             }
@@ -860,10 +881,19 @@ namespace ITD.Content.NPCs.Bosses
             if(AI_State == MovementState.Ram)
                 stretch = new Vector2(1f, 1f + NPC.velocity.Length() * 0.025f);
 
+            if (AI_State == MovementState.Slamdown)
+            {
+                if (NPC.velocity.Y != 0)
+                {
+                    stretch = new Vector2(1f, 1f + NPC.velocity.Length() * 0.02f);
+                }
+                else
+                {
+                    stretch = new Vector2(1f + NPC.oldVelocity.Length() * 0.025f, 1f - NPC.oldVelocity.Length() * 0.01f);
+                }
+            }
 
-
-
-            if (AttackID == 5)
+            if (AttackID == 5 || AI_State == MovementState.Slamdown)
             {
                 Texture2D tex = TextureAssets.Npc[NPC.type].Value;
                 int vertSize = tex.Height / Main.npcFrameCount[NPC.type];

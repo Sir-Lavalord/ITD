@@ -50,9 +50,7 @@ namespace ITD.Content.Items.Weapons.Summoner
         int attackCycle;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            attackCycle = ++attackCycle % 2;
-            Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<FishbackerProj>(), damage, knockback, player.whoAmI,0, attackCycle);
-
+            Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<FishbackerProj>(), damage, knockback, player.whoAmI,0);
             return false;
         }
         public override void AddRecipes()

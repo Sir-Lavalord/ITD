@@ -188,6 +188,11 @@ Projectiles: {
 	CosmicSlopWave.DisplayName: Cosmic Slop Wave
 	DepthrockStoneProj.DisplayName: Depthrock Stone Proj
 	SkyshooterFallingStar.DisplayName: Skyshooter Falling Star
+
+	WhiplatchProjectile: {
+		OneTimeLatchMessage: You can't see this line in-game
+		DisplayName: Whiplatch Hook
+	}
 }
 
 NPCs: {
@@ -420,6 +425,11 @@ Buffs: {
 	ManuscriptLumberBuff: {
 		Description: Mods.ITD.Buffs.ManuscriptLumberBuff.Description
 		DisplayName: Manuscript Lumber Buff
+	}
+
+	WhiplatchBuff: {
+		DisplayName: PPPLACEHOLDER
+		Description: SSSHITSTORM
 	}
 }
 

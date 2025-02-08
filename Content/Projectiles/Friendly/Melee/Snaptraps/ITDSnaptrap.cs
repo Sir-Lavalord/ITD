@@ -95,6 +95,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 
         private float staticRotation; //
         public bool retracting = false; //
+        public bool manualRetract = false; //
         private bool shouldBeWarning = false; //
         private bool hasDoneLatchEffect = false;
         private float gravity = 0f;
@@ -194,7 +195,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public sealed override bool OnTileCollide(Vector2 oldVelocity)
         {
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
-            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            SoundEngine.PlaySound(snaptrapChomp, Projectile.position);
             retracting = true;
             Projectile.netUpdate = true;
             return false;

@@ -2,11 +2,12 @@
   "profiles": {
     "Terraria": {
       "commandName": "Executable",
-      "executablePath": "dotnet",
+      "executablePath": "D:\\Staem Manifesto\\steamapps\\common\\tModLoader\\dotnet\\dotnet.exe",
       "commandLineArgs": "$(tMLPath)",
       "workingDirectory": "$(tMLSteamPath)",
-      "nativeDebugging": false,
-      "sqlDebugging": false
+      "nativeDebugging": true,
+      "sqlDebugging": false,
+      "jsWebView2Debugging": false
     },
     "TerrariaServer": {
       "commandName": "Executable",

@@ -59,7 +59,14 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             HomingTarget ??= Projectile.FindClosestNPC(maxDetectRadius);
 
             if (HomingTarget == null)
+            {
+                Projectile.Kill();
                 return;
+            }
+            if (!HomingTarget.active || HomingTarget.life <= 0 || HomingTarget.Distance(player.Center) >= 400 || player.HeldItem.ModItem is not Potshot)
+            {
+                Projectile.Kill();
+            }
             Projectile.velocity = Vector2.Zero;
 
             if (++Projectile.ai[1] > 45)
@@ -77,13 +84,13 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 Projectile.alpha = (int)(255 * spindown);
                 Projectile.scale = 1 + 2 * spindown;
             }
-            if (!HomingTarget.active || HomingTarget.life <= 0 || HomingTarget.Distance(player.Center) >= 400 || player.HeldItem.ModItem is not Potshot)
-            {
-                Projectile.Kill();
-            }
         }
         public override void OnKill(int timeLeft)
         {
+            if (HomingTarget == null)
+            {
+                return;
+            }
             HomingTarget.GetGlobalNPC<PotshotTarget>().isTargeted = false;
         }
         public override Color? GetAlpha(Color lightColor)

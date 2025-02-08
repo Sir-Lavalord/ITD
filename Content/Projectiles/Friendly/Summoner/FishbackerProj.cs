@@ -41,19 +41,6 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         }
         public override void OnSpawn(IEntitySource source)
         {
-            if (Projectile.ai[1] == 1)
-            {
-                CanParry = false;
-            }
-            else
-            {
-                Player owner = Main.player[Projectile.owner];
-
-                ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
-                {
-                    PositionInWorld = owner.Center,
-                }, owner.whoAmI);
-            }
         }
         private float Timer
         {
