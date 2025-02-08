@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Dusts;
+using ITD.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -9,17 +10,23 @@ namespace ITD.Content.Tiles.Catacombs
 {
     public class MonsoonCryptiteTile : ModTile
     {
+        private Asset<Texture2D> glowmask;
         public override void SetStaticDefaults()
-        {
+        {            
+            glowmask = ModContent.Request<Texture2D>("ITD/Content/Tiles/Catacombs/MonsoonCryptiteTile");
             Main.tileSolid[Type] = true;
             HitSound = SoundID.Item85;
             DustType = DustID.WaterCandle;
-            AddMapEntry(new Color(45, 45, 101));
+            AddMapEntry(new Color(44, 50, 84));
             MinPick = 120;
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
             num = fail ? 1 : 3;
+        }
+        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            TileHelpers.DrawSlopedGlowMask(i, j, glowmask.Value, Color.White, Vector2.Zero);
         }
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
