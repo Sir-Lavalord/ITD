@@ -287,9 +287,9 @@ namespace ITD.Players
                 {
                     if (shakeDecay)
                     {
-                        shakeIntensityY = float.Lerp(shakeIntensityY, 0, 0.025f) * configIntensity;
+                        shakeIntensityY = float.Lerp(shakeIntensityY, 0, 0.01f) * configIntensity;
 
-                        shakeIntensityX = float.Lerp(shakeIntensityX, 0, 0.025f) * configIntensity;
+                        shakeIntensityX = float.Lerp(shakeIntensityX, 0, 0.01f) * configIntensity;
                     }
                     Main.screenPosition += Main.rand.NextVector2Circular(shakeIntensityX, shakeIntensityY);
                 }

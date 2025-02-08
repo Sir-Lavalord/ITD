@@ -1243,7 +1243,7 @@ Stabtrap: {
 }
 
 DepthrockBow: {
-	Tooltip: Crackshot but bad
+	Tooltip: ""
 	DisplayName: Depthrock Bow
 }
 
@@ -1259,4 +1259,15 @@ Skyshot: {
 MirrorMan: {
 	DisplayName: Mirror Man
 	Tooltip: ""
+}
+
+Whiplatch: {
+	DisplayName: Whiplatch
+	Tooltip:
+		'''
+		When manually retracting, applies the PPPLACEHOLDER buff to the user
+		The closer the user is to the target, the stronger is the buff applied
+		The longer the target is latched, the longer the is the buff applied
+		"[c/{0}:Latch Effect:] Pulls the user toward the target and vice versa if the target is immune to knockback"
+		'''
 }

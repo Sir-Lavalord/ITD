@@ -26,7 +26,10 @@ namespace ITD.Systems
             if (snaptrap is null)
                 return true;
             else if (snaptrap is not null)
+            {
+                snaptrap.manualRetract = true;
                 snaptrap.retracting = true;
+            }
             return false;
         }
         public ITDSnaptrap GetActiveSnaptrap()

@@ -1,7 +1,6 @@
 ﻿/*using ITD.Content.Items.Other;
 using ITD.Content.Items.PetSummons;
 using ITD.Content.Items.Placeable;
-using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Content.Projectiles.Hostile;
 using ITD.Players;
 using ITD.Utilities;
@@ -18,12 +17,11 @@ using System.IO;
 using ITD.Content.Dusts;
 using ITD.Content.Items.Armor.Vanity.Masks;
 using Terraria.Graphics.Effects;
-using ITD.Particles.CosJel;
-using ITD.Particles;
-using Terraria.UI.Chat;
-using Terraria.Chat;
-using Terraria.Localization;
 using ITD.Content.Items.Accessories.Movement.Boots;
+using ITD.Content.Projectiles.Hostile.CosjelTest;
+using ITD.PrimitiveDrawing;
+using Terraria.Graphics.Shaders;
+
 
 namespace ITD.Content.NPCs.Bosses
 
@@ -31,6 +29,7 @@ namespace ITD.Content.NPCs.Bosses
     [AutoloadBossHead]
     public class CosmicJellyfish : ModNPC
     {
+
         public float rotation = 0f;
         public float AIRand = 0f;
         public bool bOkuu;
@@ -72,10 +71,11 @@ namespace ITD.Content.NPCs.Bosses
         private enum MovementState
         {
             FollowingRegular,
-            Wandering,
+            FollowingSlow,
             Ram,
             Suffocate,
-            Explode
+            Explode,
+            Slamdown
         }
         private MovementState AI_State = MovementState.FollowingRegular;
 
@@ -235,44 +235,78 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 0://Free
+                    distanceAbove = 700;
                     if (AITimer1++ >= 120)//take time to get to the player
                     {
-                        AttackID++;
-                        AITimer1 = 0;
-                        AttackCount = 0;
-                    }
-                    break;
-                case 1: //sludge
-                    AITimer1++;
-                    if (AITimer1 == 50)
-                    {
-                        int projectileAmount = Main.rand.Next(5, 8);
-
-                        if (bSecondStage)
+                        RaycastData data = Helpers.QuickRaycast(NPC.Center, NPC.velocity, (point) => { return (player.Center.Y >= point.ToWorldCoordinates().Y + 20); }, 600);
+                        if (NPC.Center.Distance(data.End) >= 20)
                         {
-                            projectileAmount = Main.rand.Next(7, 10);
+                            AI_State = MovementState.Slamdown;
+                            NPC.velocity.Y += 0.5f;
                         }
                         else
                         {
-                            projectileAmount = Main.rand.Next(3, 6);
-                        }
-                        float XVeloDifference = 2f;
-                        float startXVelo = -((float)(projectileAmount - 1) / 2) * (float)XVeloDifference;
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            for (int i = 0; i < projectileAmount; i++)
+                            AI_State = MovementState.Slamdown;
+                            NPC.velocity *= 0;
+                            if (AITimer2++ > 50)
                             {
-                                Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -8f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity + projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 30, 0, -1, NPC.whoAmI);
+                                AttackID++;
+                                AITimer1 = 0;
+                                AITimer2 = 0;
+                                AttackCount = 0;
+                            }
+                            if (AITimer2 == 1)
+                            {
+                                player.GetITDPlayer().BetterScreenshake(60, 20, 40, true);//Very shaky, might need some tweaking to the decay
                             }
                         }
                     }
-                    else if (AITimer1 == 150 || AITimer1 == 100 && bSecondStage)
+                    break;
+                case 1: //Slop rain
+                    distanceAbove = 400;
+                    if (AITimer2 == 120)
                     {
-                        AttackID++;
-                        AITimer1 = 0;
-                    }
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY,
+                             ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI, 1);
+                        }
 
+                    }
+                    if (AITimer2++ > 120)
+                    {
+                        *//*                        const int max = 12;
+                                                for (int i = 0; i < max; i++)
+                                                {
+                                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(2 * Math.PI / max * i),
+                                                        ModContent.ProjectileType<CosmicVoidShard>(), NPC.defDamage, 0f, Main.myPlayer, 180, 0.04f);
+                                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(2 * Math.PI / max * (i + 0.5)),
+                                                        ModContent.ProjectileType<CosmicVoidShard>(), (NPC.defDamage), 0f, Main.myPlayer, 180, 0.025f);
+                                                }*//*
+                        AI_State = MovementState.FollowingSlow;
+                        NPC.rotation = 0;
+                        if (AITimer2 % 180 == 0)
+                        {
+                            float XVeloDifference = 1.5f;
+                            float startXVelo = -((float)(6 - 1) / 2) * (float)XVeloDifference;
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                for (int i = 0; i < 8; i++)
+                                {
+                                    Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -2f);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity + projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 30, 0, -1, NPC.whoAmI);
+                                }
+                            }
+                        }
+                    }
+                    if (AITimer1++ >= 600 + Main.rand.Next(-100, 150))
+                    {
+                        AI_State = MovementState.FollowingRegular;
+                        distanceAbove = 250;
+                        AITimer1 = 0;
+                        AITimer2 = 0;
+                        AttackID++;
+                    }
                     break;
                 case 2: //zingers
                     if (AITimer2++ >= 260 || expertMode && AITimer2++ >= 220 || masterMode && AITimer2++ >= 180)
@@ -297,7 +331,7 @@ namespace ITD.Content.NPCs.Bosses
                             }
                         }
                     }
-                    if (AITimer1++ >= 400 + Main.rand.Next(-100, 150))
+                    if (AITimer1++ >= 200 + Main.rand.Next(-100, 150))
                     {
                         AITimer1 = 0;
                         AITimer2 = 0;
@@ -305,23 +339,18 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 3://shit enemy spawn
-                    if (AITimer1++ == 60)
+                    if (AITimer2++ == 200)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)//Fix later, this will do for now
                         {
-                            if (!bSecondStage)
+                            for (int i = 0; i <= 1; i++)
                             {
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X, NPC.Center.Y - 100), ModContent.NPCType<CosmicJellyfishMini>());
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(player.Center.X + 500, player.Center.Y + 400 * Main.rand.Next(-1, 2)), Vector2.Zero, ModContent.ProjectileType<CosmicWarning>(), NPC.damage, 0f, -1, NPC.whoAmI);
                             }
-                            else
-                            {
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X, NPC.Center.Y - 100), ModContent.NPCType<CosmicJellyfishMini>());
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X - 200, NPC.Center.Y + 100), ModContent.NPCType<CosmicJellyfishMini>());
-                                NPC.NewNPCDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X + 200, NPC.Center.Y + 100), ModContent.NPCType<CosmicJellyfishMini>());
-                            }
+                            AITimer2 = 0;
                         }
                     }
-                    else if (AITimer1 >= 300)
+                    else if (AITimer1++ >= 20)
                     {
                         AITimer1 = 0;
                         AttackID++;
@@ -458,13 +487,13 @@ namespace ITD.Content.NPCs.Bosses
                     AITimer1++;
                     if (AttackCount >= 30)
                     {
-                        if (AITimer2++ == 150)
+                        if (AITimer2++ == 60)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, vel,
-                                 ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 300, NPC.whoAmI);
+                                 ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI);
                             }
                         }
                         if (AITimer2 >= 800)
@@ -524,16 +553,16 @@ namespace ITD.Content.NPCs.Bosses
                     break;
             }
         }
+        float distanceAbove = 250f;//True melee
 
         private void Movement(Player player)//___________________________________________________________________________________________________________________________________________________
         {
-            float distanceAbove = 250f;//True melee
             Vector2 toPlayer = player.Center - NPC.Center;
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
             Vector2 abovePlayer = toPlayer + new Vector2(0f, -distanceAbove);
             Vector2 aboveNormalized = Vector2.Normalize(abovePlayer);
             Vector2 dashvel;
-            float speed = abovePlayer.Length() / 1.3f;//True melee
+            float speed = abovePlayer.Length() / 1.2f;//True melee
             switch (AI_State)
             {
                 case MovementState.FollowingRegular:
@@ -552,7 +581,19 @@ namespace ITD.Content.NPCs.Bosses
                     }
 
                     break;
-                case MovementState.Wandering:
+                case MovementState.FollowingSlow:
+                    if (speed > 1.1f)
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            NPC.velocity = aboveNormalized * (speed) / 24;
+                            NetSync();
+                        }
+                    }
+                    else
+                    {
+                        NPC.velocity = Vector2.Zero;
+                    }
                     break;
                 case MovementState.Ram:
                     AITimer2++;
@@ -628,10 +669,14 @@ namespace ITD.Content.NPCs.Bosses
                 NPC.rotation = NPC.velocity.X / 50;
 
             }
-            else
+            else if (AI_State == MovementState.FollowingRegular)
             {
                 rotation = rotationFactor * maxRotation;
                 NPC.rotation = rotation;
+            }
+            else if (AI_State == MovementState.FollowingSlow || AI_State == MovementState.Slamdown)
+            {
+                NPC.rotation = 0;
             }
         }
         private void CheckSecondStage()
@@ -815,13 +860,16 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override void DrawBehind(int index)
         {
-            if (bOkuu)
+            if (bOkuu && AttackID != -2)
             {
                 Main.instance.DrawCacheNPCsOverPlayers.Add(index);
             }
+
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+
+
             if (AttackID == 5)
             {
                 Texture2D tex = TextureAssets.Npc[NPC.type].Value;
@@ -833,10 +881,60 @@ namespace ITD.Content.NPCs.Bosses
                     Vector2 center = NPC.Size / 2f;
                     Vector2 drawPos = NPC.oldPos[k] - Main.screenPosition + center;
                     Color color = NPC.GetAlpha(drawColor) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
-                    spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, NPC.scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, 1f, SpriteEffects.None, 0f);
                 }
             }
+
+            if (AttackID == -2)
+            {
+                default(BlackholeVertex).Draw(NPC.Center - Main.screenPosition, 1024);
+
+            }
+
+
+
+
+
+
             return true;
         }
+    }
+    public struct BlackholeVertex
+    {
+
+        private static SimpleSquare square = new SimpleSquare();
+
+        public void Draw(Vector2 position, float size)
+        {
+            GameShaders.Misc["Blackhole"].UseImage0(TextureAssets.Extra[193]);
+            GameShaders.Misc["Blackhole"].UseColor(new Color(192, 59, 166));
+            GameShaders.Misc["Blackhole"].UseSecondaryColor(Color.Beige);
+            GameShaders.Misc["Blackhole"].Apply();
+            square.Draw(position, size: new Vector2(size, size));
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }
+
+    }
+
+    public struct CosmicTelegraphVertex
+    {
+
+        private static SimpleSquare square = new SimpleSquare();
+
+        public void Draw(Vector2 position, Vector2 size, float rotation)
+        {
+            GameShaders.Misc["Telegraph"].UseColor(new Color(192, 59, 166));
+            GameShaders.Misc["Telegraph"].UseSecondaryColor(Color.Beige);
+            GameShaders.Misc["Telegraph"].UseImage0(TextureAssets.Extra[193]);
+            GameShaders.Misc["Telegraph"].UseShaderSpecificData(new Vector4(300, 0, position.X, position.Y));
+
+            GameShaders.Misc["Telegraph"].Apply();
+            square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+        }
+
+
+
     }
 }*/
