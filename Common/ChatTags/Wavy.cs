@@ -31,12 +31,17 @@ namespace ITD.Common.ChatTags
     {
         public float Amplitude;
         public float Frequency;
+        // we need to do something similar to shakysnippet bc else the shadows are all bad
+        private float[] yOffsets;
+        private uint lastpreComputeGUC;
         public WavySnippet(string text, Color baseColor, float amplitude, float frequency)
         {
             Text = text;
             Color = baseColor;
             Amplitude = amplitude;
             Frequency = frequency;
+            yOffsets = new float[Text.Length];
+            lastpreComputeGUC = 0;
         }
         public override bool UniqueDraw(bool justCheckingString, out Vector2 size, SpriteBatch spriteBatch, Vector2 position = default, Color color = default, float scale = 1)
         {
@@ -51,9 +56,35 @@ namespace ITD.Common.ChatTags
                 return false;
             }
 
-            Vector2 outSize = Vector2.Zero;
             DynamicSpriteFont font = FontAssets.MouseText.Value;
-            double time = Main.timeForVisualEffects / 32d;
+
+            // to have consistent yOffsets for every character, even when drawn with shadows, we can pre-compute new yOffsets for each character every frame.
+            if (lastpreComputeGUC != Main.GameUpdateCount)
+            {
+                Vector2 tempPos = Vector2.Zero;
+                double time = Main.timeForVisualEffects / 32d;
+
+                for (int i = 0; i < Text.Length; i++)
+                {
+                    char c = Text[i];
+                    string str = c.ToString();
+                    Vector2 charSize = font.MeasureString(str);
+
+                    tempPos.X += charSize.X;
+
+                    if (char.IsWhiteSpace(c))
+                    {
+                        yOffsets[i] = 0;
+                        continue;
+                    }
+
+                    float posOffset = tempPos.X / 16f;
+                    yOffsets[i] = MathF.Sin(((float)time + posOffset) * Frequency) * Amplitude;
+                }
+                lastpreComputeGUC = Main.GameUpdateCount;
+            }
+
+            Vector2 outSize = Vector2.Zero;
             Vector2 currentPosition = position;
 
             //Main.NewText(Main.GameUpdateCount);
@@ -61,17 +92,22 @@ namespace ITD.Common.ChatTags
             for (int i = 0; i < Text.Length; i++)
             {
                 char c = Text[i];
-                float posOffset = currentPosition.X / 16f;
-                float yOffset = MathF.Sin(((float)time + posOffset) * Frequency) * Amplitude;
                 string str = c.ToString();
                 Vector2 characterSize = font.MeasureString(str);
-                Vector2 characterPosition = currentPosition + Vector2.UnitY * yOffset;
-
-                ChatManager.DrawColorCodedString(spriteBatch, font, str, characterPosition, color, 0f, Vector2.Zero, new Vector2(scale));
 
                 currentPosition.X += characterSize.X;
                 outSize.X += characterSize.X;
                 outSize.Y = Math.Max(outSize.Y, characterSize.Y);
+
+                // avoid calculating stuff if this char is whitespace
+                // i love microoptimizations
+                if (char.IsWhiteSpace(c))
+                    continue;
+
+                Vector2 characterPosition = currentPosition + Vector2.UnitY * yOffsets[i];
+
+                ChatManager.DrawColorCodedString(spriteBatch, font, str, characterPosition, color, 0f, Vector2.Zero, new Vector2(scale));
+
             }
 
             size = outSize;
