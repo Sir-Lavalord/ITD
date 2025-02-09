@@ -1,8 +1,5 @@
 ﻿using ITD.Content.Tiles.DeepDesert;
 using ITD.Utilities;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.DevTools
 {

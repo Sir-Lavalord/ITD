@@ -1,17 +1,8 @@
-﻿using Humanizer;
-using ITD.Content.UI;
-using ITD.Networking;
+﻿using ITD.Content.UI;
 using ITD.Players;
 using ITD.Systems.DataStructures;
 using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.DataStructures;
 
 namespace ITD.Content.Items.DevTools
@@ -111,34 +102,50 @@ namespace ITD.Content.Items.DevTools
                         int placeJ = mirrorY ? height - 1 - j : j;
                         Tile t = Framing.GetTileSafely(start.X + i, start.Y + j);
                         TinyTile tt = tilesRect[placeI, placeJ];
-                        tt.CopyTo(ref t);
+
+                        if (tt.HasTile)
+                            tt.CopyTileTo(ref t);
+
+                        if (tt.WallType != WallID.None)
+                            tt.CopyWallTo(ref t);
+
+                        tt.CopyWiringTo(ref t);
+                        tt.CopyLiquidTo(ref t);
+
+                        if (!tt.HasTile)
+                            continue;
+
+                        SlopeType originalSlope = t.Slope;
+
                         if (mirrorX)
                         {
-                            if (t.Slope == SlopeType.SlopeDownLeft)
-                                t.Slope = SlopeType.SlopeDownRight;
-                            if (t.Slope == SlopeType.SlopeDownRight)
-                                t.Slope = SlopeType.SlopeDownLeft;
-                            if (t.Slope == SlopeType.SlopeUpLeft)
-                                t.Slope = SlopeType.SlopeUpRight;
-                            if (t.Slope == SlopeType.SlopeUpRight)
-                                t.Slope = SlopeType.SlopeUpLeft;
+                            switch (originalSlope)
+                            {
+                                case SlopeType.SlopeDownLeft: originalSlope = SlopeType.SlopeDownRight; break;
+                                case SlopeType.SlopeDownRight: originalSlope = SlopeType.SlopeDownLeft; break;
+                                case SlopeType.SlopeUpLeft: originalSlope = SlopeType.SlopeUpRight; break;
+                                case SlopeType.SlopeUpRight: originalSlope = SlopeType.SlopeUpLeft; break;
+                            }
                         }
+
                         if (mirrorY)
                         {
-                            if (t.Slope == SlopeType.SlopeDownLeft)
-                                t.Slope = SlopeType.SlopeUpLeft;
-                            if (t.Slope == SlopeType.SlopeUpLeft)
-                                t.Slope = SlopeType.SlopeDownLeft;
-                            if (t.Slope == SlopeType.SlopeDownRight)
-                                t.Slope = SlopeType.SlopeUpRight;
-                            if (t.Slope == SlopeType.SlopeUpRight)
-                                t.Slope = SlopeType.SlopeDownRight;
+                            switch (originalSlope)
+                            {
+                                case SlopeType.SlopeDownLeft: originalSlope = SlopeType.SlopeUpLeft; break;
+                                case SlopeType.SlopeUpLeft: originalSlope = SlopeType.SlopeDownLeft; break;
+                                case SlopeType.SlopeDownRight: originalSlope = SlopeType.SlopeUpRight; break;
+                                case SlopeType.SlopeUpRight: originalSlope = SlopeType.SlopeDownRight; break;
+                            }
                         }
+
+                        t.Slope = originalSlope;
                     }
                 }
-                return true;
+                TileHelpers.CallFraming(start.X, start.Y, width, height);
+                TileHelpers.Sync(start.X, start.Y, width, height);
             }
-            return base.UseItem(player);
+            return true;
         }
     }
 }

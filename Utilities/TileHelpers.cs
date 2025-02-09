@@ -123,7 +123,16 @@ namespace ITD.Utilities
                 return;
             NetMessage.SendTileSquare(-1, i, j, width, height);
         }
-
+        public static void CallFraming(int i, int j, int width = 1, int height = 1)
+        {
+            for (int i0 = 0; i0 < width; i0++)
+            {
+                for (int j0 = 0; j0 < height; j0++)
+                {
+                    WorldGen.TileFrame(i + i0, j + j0, false, true);
+                }
+            }
+        }
         public static bool AptForTree(Point tileCoord, int height, int? saplingType = null) => AptForTree(tileCoord.X, tileCoord.Y, height, saplingType);
         public static bool AptForTree(int i, int j, int height, int? saplingType = null)
         {

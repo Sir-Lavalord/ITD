@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.DataStructures;
-
-namespace ITD.Systems.DataStructures
+﻿namespace ITD.Systems.DataStructures
 {
     public struct TinyTile(Tile t)
     {
@@ -33,32 +26,41 @@ namespace ITD.Systems.DataStructures
         public bool BlueWire = t.BlueWire;
         public bool GreenWire = t.GreenWire;
         public bool YellowWire = t.YellowWire;
-        public readonly void CopyTo(ref Tile t)
+        public readonly void CopyWallTo(ref Tile t)
         {
-            t.TileType = TileType;
-            t.BlockType = BlockType;
-            t.HasTile = HasTile;
-            t.IsTileInvisible = IsTileInvisible;
-            t.IsTileFullbright = IsTileFullbright;
-            t.IsWallInvisible = IsWallInvisible;
-            t.IsWallFullbright = IsWallFullbright;
-            t.LiquidAmount = LiquidAmount;
-            t.LiquidType = LiquidType;
-            t.TileFrameNumber = TileFrameNumber;
-            t.TileFrameX = TileFrameX;
-            t.TileFrameY = TileFrameY;
             t.WallType = WallType;
             t.WallColor = WallColor;
-            t.TileColor = TileColor;
+            t.IsWallInvisible = IsWallInvisible;
+            t.IsWallFullbright = IsWallFullbright;
             t.WallFrameNumber = WallFrameNumber;
             t.WallFrameX = WallFrameX;
             t.WallFrameY = WallFrameY;
+        }
+        public readonly void CopyTileTo(ref Tile t)
+        {
+            t.HasTile = HasTile;
+            t.TileType = TileType;
+            t.TileColor = TileColor;
+            t.BlockType = BlockType;
+            t.IsTileInvisible = IsTileInvisible;
+            t.IsTileFullbright = IsTileFullbright;
+            t.TileFrameNumber = TileFrameNumber;
+            t.TileFrameX = TileFrameX;
+            t.TileFrameY = TileFrameY;
             t.IsActuated = IsActuated;
-            t.HasActuator = HasActuator;
+        }
+        public readonly void CopyLiquidTo(ref Tile t)
+        {
+            t.LiquidType = LiquidType;
+            t.LiquidAmount = LiquidAmount;
+        }
+        public readonly void CopyWiringTo(ref Tile t)
+        {
             t.RedWire = RedWire;
             t.BlueWire = BlueWire;
             t.GreenWire = GreenWire;
             t.YellowWire = YellowWire;
+            t.HasActuator = HasActuator;
         }
     }
 }

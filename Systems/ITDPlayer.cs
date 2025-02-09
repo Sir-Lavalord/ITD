@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 
 using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.DataStructures;
-using Terraria;
 using Terraria.Localization;
 
 using ITD.Systems;
@@ -20,9 +17,7 @@ using ITD.Networking.Packets;
 using Terraria.GameInput;
 using ITD.Content.Buffs.EquipmentBuffs;
 using Terraria.ModLoader.IO;
-using Microsoft.Xna.Framework.Graphics;
 using ITD.Content.UI;
-using ReLogic.Content;
 using ITD.Content.Items.DevTools;
 using Terraria.GameContent;
 using ITD.Systems.DataStructures;
