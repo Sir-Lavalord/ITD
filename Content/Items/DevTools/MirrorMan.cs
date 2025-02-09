@@ -42,13 +42,22 @@ namespace ITD.Content.Items.DevTools
         public override bool AltFunctionUse(Player player) => true;
         public override bool? UseItem(Player player)
         {
+            ITDPlayer plr = player.GetITDPlayer();
             if (player.altFunctionUse == 2)
             {
+                if (plr.selectBox)
+                {
+                    plr.selectTopLeft = Point16.Zero;
+                    plr.selectBottomRight = Point16.Zero;
+                    plr.selectBox = false;
+                    plr.selectBounds = Rectangle.Empty;
+                    Main.NewText("Cancelled select!");
+                    return true;
+                }
                 MirrorManUI ui = UILoader.GetUIState<MirrorManUI>();
                 ui.Toggle();
                 return true;
             }
-            ITDPlayer plr = player.GetITDPlayer();
             Vector2 mouse = plr.MousePosition;
             if (Select)
             {
