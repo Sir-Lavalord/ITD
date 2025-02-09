@@ -193,6 +193,8 @@ Projectiles: {
 		// OneTimeLatchMessage: You can't see this line in-game
 		// DisplayName: Whiplatch Hook
 	}
+
+	// ReachingHand.DisplayName: Reaching Hand
 }
 
 NPCs: {
@@ -491,6 +493,12 @@ UI: {
 	FavorSlot.MouseHoverName: Favor
 	RecruitmentButton.MouseHoverName: Reclutar
 	UnrecruitmentButton.MouseHoverName: Despedir
+
+	MirrorManButton: {
+		// MouseHoverName: Toggle Select Mode
+		// MouseHoverName0: Toggle Horizontal Mirror
+		// MouseHoverName1: Toggle Vertical Mirror
+	}
 }
 
 RecruitmentSystem: {

@@ -1255,7 +1255,12 @@ Skyshot: {
 
 MirrorMan: {
 	// DisplayName: Mirror Man
-	// Tooltip: ""
+	/* Tooltip:
+		'''
+		'What is this...? Some sort of a... Mirrorman?'
+		Open options UI with <right>
+		Use the chosen option (either select or paste) with <left>
+		''' */
 }
 
 Whiplatch: {
@@ -1267,4 +1272,9 @@ Whiplatch: {
 		The longer the target is latched, the longer the is the buff applied
 		"[c/{0}:Latch Effect:] Pulls the user toward the target and vice versa if the target is immune to knockback"
 		''' */
+}
+
+TomeOfReach: {
+	// DisplayName: Tome Of Reach
+	// Tooltip: ""
 }

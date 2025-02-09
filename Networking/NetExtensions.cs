@@ -4,11 +4,21 @@ using Terraria;
 using ITD.Systems.Recruitment;
 using Terraria.Localization;
 using System;
+using Terraria.DataStructures;
 
 namespace ITD.Networking
 {
     public static class NetExtensions // from overhaul. credits to Mirsario
     {
+        public static void WritePoint16(this BinaryWriter writer, Point16 p)
+        {
+            writer.Write(p.X);
+            writer.Write(p.Y);
+        }
+        public static Point16 ReadPoint16(this BinaryReader reader)
+        {
+            return new Point16(reader.ReadInt16(), reader.ReadInt16());
+        }
         public static void WriteGuid(this BinaryWriter writer, Guid guid)
         {
             writer.Write(guid.ToByteArray());

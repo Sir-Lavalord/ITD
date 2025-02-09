@@ -13,6 +13,9 @@ using Terraria.Localization;
 using Terraria.Chat;
 using ITD.Networking;
 using ITD.Networking.Packets;
+using Microsoft.Xna.Framework.Graphics;
+using ITD.Content.Items.DevTools;
+using ReLogic.Content;
 
 namespace ITD.Systems
 {

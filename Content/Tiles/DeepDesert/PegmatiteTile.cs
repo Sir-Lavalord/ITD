@@ -1,4 +1,5 @@
-﻿using ITD.Utilities;
+﻿using ITD.Content.Dusts;
+using ITD.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -17,7 +18,7 @@ namespace ITD.Content.Tiles.DeepDesert
 
             MinPick = 55;
             HitSound = SoundID.Tink;
-            DustType = DustID.Sandstorm;
+            DustType = ModContent.DustType<PegmatiteDust>();
 
             AddMapEntry(new Color(153, 105, 103));
         }

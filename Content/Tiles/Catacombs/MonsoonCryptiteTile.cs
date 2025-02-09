@@ -1,20 +1,24 @@
 ﻿using ITD.Content.Dusts;
+using ITD.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using ReLogic.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ITD.Content.Tiles.Catacombs
 {
     public class MonsoonCryptiteTile : ModTile
     {
+        private Asset<Texture2D> glowmask;
         public override void SetStaticDefaults()
-        {
+        {            
+            glowmask = ModContent.Request<Texture2D>("ITD/Content/Tiles/Catacombs/MonsoonCryptiteTile");
             Main.tileSolid[Type] = true;
             HitSound = SoundID.Item85;
             DustType = DustID.WaterCandle;
-            AddMapEntry(new Color(45, 45, 101));
+            AddMapEntry(new Color(44, 50, 84));
             MinPick = 120;
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
@@ -23,6 +27,7 @@ namespace ITD.Content.Tiles.Catacombs
         }
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
+            TileHelpers.DrawSlopedGlowMask(i, j, glowmask.Value, Color.White, Vector2.Zero);
             if (Main.rand.NextBool(16) && !Main.gameInactive)
                 Rain.NewRainForced(new Point(i, j).ToWorldCoordinates() + Vector2.UnitY * 16f, new Vector2(8f, 16f));
         }

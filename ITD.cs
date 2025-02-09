@@ -2,14 +2,13 @@ global using Microsoft.Xna.Framework;
 global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
+global using ReLogic.Content;
+global using Microsoft.Xna.Framework.Graphics;
 using ITD.Networking;
 using System.IO;
-using Terraria.ModLoader;
 using ITD.Systems;
 using Terraria.Graphics.Effects;
 using ITD.Skies;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria.Graphics.Shaders;
 using System.Collections.Generic;
 using ITD.Systems.Recruitment;
@@ -17,10 +16,7 @@ using ITD.Config;
 using Terraria.UI.Chat;
 using ITD.Common.ChatTags;
 using System.Text;
-using System.Diagnostics;
-using Terraria.GameContent;
 using ITD.Particles;
-using System.Linq;
 
 namespace ITD
 {
