@@ -63,7 +63,15 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             {
                 dur++;
                 //NEED BETTER MATH HERE
-                distance = (player.Distance(npc.Center) - 29) / (16f * 25);
+                distance = (player.Distance(npc.Center) - dur - 30) / (16f * 25);
+                if (distance <= 0)
+                {
+                    distance = 0;
+                }
+                if (distance >= 1)
+                {
+                    distance = 1;
+                }
                 power = 1f - distance;
             }
             if (player.Distance(npc.Center) >= 30)
