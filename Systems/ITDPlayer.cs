@@ -309,7 +309,7 @@ namespace ITD.Players
                     int width = m.tilesRect.GetLength(0);
                     int height = m.tilesRect.GetLength(1);
 
-                    Vector2 baseDrawPos = Main.MouseWorld.ToTileCoordinates().ToWorldCoordinates(0, 0) - Main.screenPosition;
+                    Vector2 baseDrawPos = MousePosition.ToTileCoordinates().ToWorldCoordinates(0, 0) - Main.screenPosition;
 
                     for (int i = 0; i < width; i++)
                     {
