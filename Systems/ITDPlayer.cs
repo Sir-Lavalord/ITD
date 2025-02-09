@@ -268,10 +268,7 @@ namespace ITD.Players
                 if (selectTopLeft == Point16.Zero)
                     selectTopLeft = tileCoords16;
 
-                selectBottomRight = new Point16(tileCoords16.X + 1, tileCoords16.Y + 1);
-
-                //Dust.NewDustPerfect(selectTopLeft.ToWorldCoordinates(), DustID.WhiteTorch);
-                //Dust.NewDustPerfect(selectBottomRight.ToWorldCoordinates(), DustID.BlueTorch);
+                selectBottomRight = tileCoords16;
             }
             ProcessCustomToolInput();
             // see if player just right clicked on an ITDNPC to call OnRightClick
