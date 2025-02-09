@@ -1258,7 +1258,12 @@ Skyshot: {
 
 MirrorMan: {
 	DisplayName: Mirror Man
-	Tooltip: ""
+	Tooltip:
+		'''
+		'What is this...? Some sort of a... Mirrorman?'
+		Open options UI with <right>
+		Use the chosen option (either select or paste) with <left>
+		'''
 }
 
 Whiplatch: {

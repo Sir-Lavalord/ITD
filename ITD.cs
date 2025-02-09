@@ -2,6 +2,8 @@ global using Microsoft.Xna.Framework;
 global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
+global using ReLogic.Content;
+global using Microsoft.Xna.Framework.Graphics;
 using ITD.Networking;
 using System.IO;
 using Terraria.ModLoader;

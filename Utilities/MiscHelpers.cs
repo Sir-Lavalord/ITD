@@ -127,6 +127,20 @@ namespace ITD.Utilities
 
             return new Vector2(DistanceToTravel.X / TravelTime, neededYvel);
         }
+        public static Rectangle DynamicRectangle(Point p1, Point p2, out Point topLeftPoint, out Point bottomRightPoint)
+        {
+            int minX = Math.Min(p1.X, p2.X);
+            int minY = Math.Min(p1.Y, p2.Y);
+
+            topLeftPoint = new Point(minX, minY);
+
+            int maxX = Math.Max(p1.X, p2.X);
+            int maxY = Math.Max(p1.Y, p2.Y);
+
+            bottomRightPoint = new Point(maxX, maxY);
+
+            return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+        }
         public static Rectangle ContainsRectangles(Rectangle rect1, Rectangle rect2)
         {
             int minX = Math.Min(rect1.X, rect2.X);
@@ -164,7 +178,7 @@ namespace ITD.Utilities
                 height: (int)Math.Ceiling(rect.Height / 16f)
             );
         }
-        public static Rectangle ToWorldRectangle(this Rectangle rect) => new(rect.X * 16, rect.Y * 16, rect.Width * 16, rect.Height * 16);
+        public static Rectangle ToWorldRectangle(this Rectangle rect, int addTopLeft = 0, int addBottomRight = 0) => new(rect.X * 16 + addTopLeft, rect.Y * 16 + addTopLeft, rect.Width * 16 + addBottomRight, rect.Height * 16 + addBottomRight);
         /// <summary>
         /// Returns a <see cref="Rectangle"/> that fully contains this Entity in tile space. Suitable for tile queries. More precise than <see cref="ToTileRectangle(Rectangle)"/> in specific situations.
         /// </summary>

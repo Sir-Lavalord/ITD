@@ -493,6 +493,12 @@ UI: {
 	// FavorSlot.MouseHoverName: Favor
 	// RecruitmentButton.MouseHoverName: Recruit
 	// UnrecruitmentButton.MouseHoverName: Dismiss
+
+	MirrorManButton: {
+		// MouseHoverName: Toggle Select Mode
+		// MouseHoverName0: Toggle Horizontal Mirror
+		// MouseHoverName1: Toggle Vertical Mirror
+	}
 }
 
 RecruitmentSystem: {

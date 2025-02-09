@@ -12,10 +12,12 @@ namespace ITD.Content.UI
 {
     public class MirrorManUI : ITDUIState
     {
-        private MirrorManButton horiToggle;
-        private MirrorManButton vertiToggle;
+        public MirrorManButton horiToggle;
+        public MirrorManButton vertiToggle;
+        public MirrorManButton selectToggle;
         public bool horiToggled => horiToggle.toggled;
         public bool vertiToggled => vertiToggle.toggled;
+        public bool selectToggled => selectToggle.toggled;
         private bool opened;
         public override bool Visible => opened;
         public static bool HoldingMirrorMan => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MirrorMan>();
@@ -40,9 +42,10 @@ namespace ITD.Content.UI
         {
             if (opened)
                 return;
-            Vector2 mouse = Main.MouseScreen;
-            horiToggle?.SetProperties(mouse.Y - 32f, mouse.X - 32f, 32f, 32f);
-            vertiToggle?.SetProperties(mouse.Y - 32f, mouse.X, 32f, 32f);
+            Vector2 mouse = Main.MouseWorld.ToScreenPosition();
+            selectToggle?.SetProperties(mouse.Y - 32f, mouse.X - 48f, 32f, 32f);
+            horiToggle?.SetProperties(mouse.Y - 32f, mouse.X - 16f, 32f, 32f);
+            vertiToggle?.SetProperties(mouse.Y - 32f, mouse.X + 16f, 32f, 32f);
             Recalculate();
             opened = true;
         }
@@ -56,8 +59,10 @@ namespace ITD.Content.UI
         {
             horiToggle = new(MirrorMan.MirroringState.MirrorHorizontally);
             vertiToggle = new(MirrorMan.MirroringState.MirrorVertically);
+            selectToggle = new(MirrorMan.MirroringState.MirrorNone);
             Append(horiToggle);
             Append(vertiToggle);
+            Append(selectToggle);
         }
     }
     public class MirrorManButton(MirrorMan.MirroringState mirrorType) : ITDUIElement
@@ -65,24 +70,35 @@ namespace ITD.Content.UI
         private MirrorMan.MirroringState MirrorType = mirrorType;
         public const string buttonTex = "ITD/Content/UI/MirrorManButton";
         public bool hori => MirrorType == MirrorMan.MirroringState.MirrorHorizontally;
+        public bool vert => MirrorType == MirrorMan.MirroringState.MirrorVertically;
+        public bool select => MirrorType == MirrorMan.MirroringState.MirrorNone;
         public bool toggled = false;
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             Texture2D tex = ModContent.Request<Texture2D>(buttonTex).Value;
-            int halfWidth = tex.Width / 2;
-            Rectangle frame = new(hori ? 0 : halfWidth, 0, halfWidth, tex.Height);
+            int halfWidth = tex.Width / 3;
+            Rectangle frame = new(select ? 0 : hori ? halfWidth : halfWidth * 2, 0, halfWidth, tex.Height);
             spriteBatch.Draw(tex, GetDimensions().ToRectangle(), frame, toggled ? Color.White : Color.Gray);
         }
         public override void Update(GameTime gameTime)
         {
             if (IsMouseHovering)
             {
-                UICommon.TooltipMouseText(this.GetLocalization( hori ? "MouseHoverName" : "MouseHoverName1").Value);
+                Main.LocalPlayer.mouseInterface = true;
+                UICommon.TooltipMouseText(this.GetLocalization(select ? "MouseHoverName" : hori ? "MouseHoverName0" : "MouseHoverName1").Value);
             }
         }
         public override void LeftClick(UIMouseEvent evt)
         {
             toggled = !toggled;
+            if ((hori || vert) && toggled)
+                UILoader.GetUIState<MirrorManUI>().selectToggle.toggled = false;
+            if (select && toggled)
+            {
+                MirrorManUI p = UILoader.GetUIState<MirrorManUI>();
+                p.horiToggle.toggled = false;
+                p.vertiToggle.toggled = false;
+            }
         }
     }
 }
