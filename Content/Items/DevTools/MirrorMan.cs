@@ -114,7 +114,6 @@ namespace ITD.Content.Items.DevTools
                             tilesRect[xNormal, yNormal] = new(original);
                         }
                     }
-                    Dust.DrawDebugBox(plr.selectBounds.ToWorldRectangle());
                     plr.selectBounds = Rectangle.Empty;
                     PlayerLog(player, $"Selected area with {tiles.Width * tiles.Height} tiles.");
                     return true;
