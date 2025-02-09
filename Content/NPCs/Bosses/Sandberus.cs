@@ -31,7 +31,7 @@ namespace ITD.Content.NPCs.Bosses
 		private ActionState AI_State;
 		private int StateTimer = 200;
 		private int AttackCycle = 0;
-		private int ShootCycle = 0;
+		//private int ShootCycle = 0;
 		private float JumpX = 0;
 		private float JumpY = 0;
 		private bool ValidTargets = true;
@@ -62,7 +62,7 @@ namespace ITD.Content.NPCs.Bosses
 		
 		public override void OnSpawn(IEntitySource source)
         {
-            if (Main.masterMode && Main.netMode != NetmodeID.MultiplayerClient)
+            if (Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(), ModContent.ProjectileType<SuffocationAura>(), 0, 0, -1, NPC.whoAmI);
 			}
@@ -88,10 +88,10 @@ namespace ITD.Content.NPCs.Bosses
 					NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();
 					NPC.spriteDirection = NPC.direction;
 					NPC.velocity *= 0.9f;
-					if (StateTimer == 12 && ShootCycle == 0 && NPC.life < NPC.lifeMax*0.66f && Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
-						ShootAttack();
-					if (StateTimer == 4 && ShootCycle == 0 && NPC.life < NPC.lifeMax*0.33f && Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
-						ShootAttack();
+					//if (StateTimer == 12 && ShootCycle == 0 && NPC.life < NPC.lifeMax*0.66f && Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
+					//	ShootAttack();
+					//if (StateTimer == 4 && ShootCycle == 0 && NPC.life < NPC.lifeMax*0.33f && Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
+					//	ShootAttack();
                     break;
 				case ActionState.Dashing:
 					if (StateTimer > 30 && (StateTimer < 70 || Main.expertMode))
@@ -128,7 +128,7 @@ namespace ITD.Content.NPCs.Bosses
 						for (int j = 0; j < 10; j++)
 						{
 							Vector2 position = NPC.Center + new Vector2(-NPC.width+(NPC.width*0.2f*j), NPC.height*0.5f);
-							Gore.NewGore(NPC.GetSource_FromThis(), position, new Vector2(0, -Main.rand.NextFloat()), 61 + j % 3);
+							Gore.NewGore(NPC.GetSource_FromThis(), position, new Vector2(0,0), 61 + j % 3);
 						}
 						if (Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
 						{
@@ -166,13 +166,13 @@ namespace ITD.Content.NPCs.Bosses
             {
 				case ActionState.Chasing:
 					AI_State = ActionState.Cooking;
-					StateTimer = 20;
-					if (Main.expertMode)
-						ShootCycle = ++ShootCycle % 2;
-					else
-						ShootCycle = ++ShootCycle % 3;
-					if (ShootCycle == 0 && Main.netMode != NetmodeID.MultiplayerClient)
-						ShootAttack();
+					StateTimer = 25;
+					//if (Main.expertMode)
+					//	ShootCycle = ++ShootCycle % 2;
+					//else
+					//	ShootCycle = ++ShootCycle % 3;
+					//if (ShootCycle == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+					//	ShootAttack();
 					break;
 				case ActionState.Cooking:
 					AttackCycle = ++AttackCycle % 3;
@@ -200,6 +200,12 @@ namespace ITD.Content.NPCs.Bosses
                             distance.Y = distance.Y / StateTimer - 0.18f * StateTimer;
 							JumpX = Math.Clamp(distance.X, -16, 16);
 							JumpY = distance.Y;
+							for (int j = 0; j < 5; j++)
+							{
+								float offset = -NPC.width+(NPC.width*Main.rand.NextFloat(2f));
+								Vector2 position = NPC.Center + new Vector2(offset, NPC.height*0.5f - 20f);
+								Gore.NewGorePerfect(NPC.GetSource_FromThis(), position, new Vector2(offset*0.02f, Main.rand.NextFloat()), 61 + j % 3);
+							}
 							SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
 							break;
 						case 2:
@@ -208,9 +214,9 @@ namespace ITD.Content.NPCs.Bosses
 							NPC.velocity.X = NPC.direction * 12f;
 							if (Main.masterMode && Main.netMode != NetmodeID.MultiplayerClient)
 							{
-								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(4f*NPC.direction, -8f), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
-								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(8f*NPC.direction, -12f), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
-								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(12f*NPC.direction, -14f), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
+								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(6f*NPC.direction*Main.rand.NextFloat(0.8f, 1f), -8f*Main.rand.NextFloat(0.8f, 1f)), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
+								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(8f*NPC.direction*Main.rand.NextFloat(0.8f, 1f), -12f*Main.rand.NextFloat(0.8f, 1f)), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
+								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(12f*NPC.direction*Main.rand.NextFloat(0.8f, 1f), -14f*Main.rand.NextFloat(0.8f, 1f)), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
 							}
 							SoundEngine.PlaySound(SoundID.Item74, NPC.Center);
 							break;
@@ -224,12 +230,12 @@ namespace ITD.Content.NPCs.Bosses
 			}
 		}
 		
-		private void ShootAttack()
-		{
-			Vector2 toPlayer = Main.player[NPC.target].Center - NPC.Center;
-			toPlayer.Normalize();
-			Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, toPlayer * 4f, ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
-		}
+		//private void ShootAttack()
+		//{
+		//	Vector2 toPlayer = Main.player[NPC.target].Center - NPC.Center;
+		//	toPlayer.Normalize();
+		//	Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, toPlayer * 4f, ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
+		//}
 		
 		private void SpikeTrail()
 		{
@@ -243,7 +249,7 @@ namespace ITD.Content.NPCs.Bosses
 			}
 			Vector2 position = new Vector2((float)(point.X * 16 + 8), (float)(bestY * 16 - 8));
 			Vector2 velocity = new Vector2(0f, -1f).RotatedBy((double)((float)(20 * -NPC.direction) * 0.7f * (0.7853982f / 20f)), default(Vector2));
-			Projectile.NewProjectile(NPC.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<SandSpike>(), 15, 0f, -1, 0f, 0.4f + Main.rand.NextFloat() * 0.2f, 0f);
+			Projectile.NewProjectile(NPC.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<SandSpike>(), 15, 0f, -1, 0f, Main.rand.NextFloat(0.4f, 0.6f), 0f);
 		}
 		
 		private void SpikeAttack(int i)
@@ -259,7 +265,7 @@ namespace ITD.Content.NPCs.Bosses
 			}
 			Vector2 position = new Vector2((float)(num * 16 + 8), (float)(bestY * 16 - 8));
 			Vector2 velocity = new Vector2(0f, -1f).RotatedBy((double)((float)(i * NPC.direction) * 0.7f * (0.7853982f / 20f)), default(Vector2));
-			Projectile.NewProjectile(NPC.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<SandSpike>(), 15, 0f, -1, 0f, 0.1f + Main.rand.NextFloat() * 0.1f + (float)i * 1.1f / 20f, 0f);
+			Projectile.NewProjectile(NPC.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<SandSpike>(), 15, 0f, -1, 0f, Main.rand.NextFloat(0.1f, 0.2f) + (float)i * 1.1f / 20f, 0f);
 		}
 		
 		private int SpikeAttackFindBestY(ref Point sourceTileCoords, int x)
@@ -288,19 +294,28 @@ namespace ITD.Content.NPCs.Bosses
 		
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+			Texture2D texture = TextureAssets.Npc[Type].Value;
+            Vector2 drawOrigin = texture.Size() / 2f;
+			
+			SpriteEffects effects = NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+			
             if (AI_State == ActionState.Dashing || AI_State == ActionState.Leaping)
             {
-                Texture2D texture = TextureAssets.Npc[Type].Value;
-                Vector2 drawOrigin = texture.Size() / 2f;
                 for (int k = 0; k < NPC.oldPos.Length; k++)
                 {
-                    Vector2 drawPos = NPC.oldPos[k] - screenPos + new Vector2(NPC.width*0.5f, NPC.height*0.5f) + new Vector2(0f, NPC.gfxOffY-4f);
+                    Vector2 trailPos = NPC.oldPos[k] - screenPos + new Vector2(NPC.width*0.5f, NPC.height*0.5f) + new Vector2(0f, NPC.gfxOffY-4f);
                     Color color = drawColor * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
-					SpriteEffects effects = NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                    spriteBatch.Draw(texture, drawPos, null, color, 0f, drawOrigin, NPC.scale, effects, 0);
+                    spriteBatch.Draw(texture, trailPos, null, color, 0f, drawOrigin, NPC.scale, effects, 0);
                 }
-            }			
-            return true;
+            }
+			else if (AI_State == ActionState.Cooking) {
+				screenPos += new Vector2(Main.rand.NextFloat(-4f, 4f), Main.rand.NextFloat(-8f, 8f));
+			}
+			
+			Vector2 drawPos = NPC.position - screenPos + new Vector2(NPC.width*0.5f, NPC.height*0.5f) + new Vector2(0f, NPC.gfxOffY-4f);
+            spriteBatch.Draw(texture, drawPos, null, drawColor, 0f, drawOrigin, NPC.scale, effects, 0);
+			
+            return false;
         }
 				
         public override void ModifyNPCLoot(NPCLoot npcLoot)
