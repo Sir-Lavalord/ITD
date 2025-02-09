@@ -29,6 +29,7 @@ namespace ITD
         public const string ArmorShadersFolderPath = "Shaders/ArmorShaders/";
         public const string ScreenShadersFolderPath = "Shaders/ScreenShaders/";
         public const string MetaballsShadersFolderPath = "Shaders/MetaballsShaders/";
+        public static Asset<Texture2D> TrueMagicPixel => ModContent.Request<Texture2D>("ITD/Content/TrueMagicPixel");
 
         public static readonly Dictionary<string, ArmorShaderData> ITDArmorShaders = [];
         public static readonly Dictionary<string, MetaballShaderData> ITDMetaBallsShaders = [];

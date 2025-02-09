@@ -3,7 +3,7 @@ using ITD.Utilities;
 
 namespace ITD.Content.Items.DevTools
 {
-    public class Pillarificationizerator : ModItem
+    public class Pillarificationizerator : DevTool
     {
         public Point origin = new();
         public Point end = new();
@@ -22,7 +22,7 @@ namespace ITD.Content.Items.DevTools
             if (player.altFunctionUse == 2)
             {
                 destroyPillars = !destroyPillars;
-                Main.NewText("Mode changed to: " + (destroyPillars ? "Pillar Destroy" : "Pillar Create"), Color.Yellow);
+                PlayerLog(player, "Mode changed to: " + (destroyPillars ? "Pillar Destroy" : "Pillar Create"), Color.Yellow);
                 return true;
             }
             Point p = player.GetITDPlayer().MousePosition.ToTileCoordinates();
@@ -32,10 +32,10 @@ namespace ITD.Content.Items.DevTools
                 if (Framing.GetTileSafely(p).TileType == ModContent.TileType<ReinforcedPegmatitePillar>())
                 {
                     ReinforcedPegmatitePillar.Destroy(p);
-                    Main.NewText($"Destroyed pillar at {p}", Color.LimeGreen);
+                    PlayerLog(player, $"Destroyed pillar at {p}", Color.LimeGreen);
                     return true;
                 }
-                Main.NewText($"No pillar found to destroy at {p}", Color.Red);
+                PlayerLog(player, $"No pillar found to destroy at {p}", Color.Red);
                 return true;
             }
             if (origin == Point.Zero)
@@ -51,13 +51,13 @@ namespace ITD.Content.Items.DevTools
             {
                 origin = Point.Zero;
                 end = Point.Zero;
-                Main.NewText("Couldn't generate pillar at the given coordinates: Pillar height can't be less than two", Color.Red);
+                PlayerLog(player, "Couldn't generate pillar at the given coordinates: Pillar height can't be less than two", Color.Red);
                 return true;
             }
             Dust.DrawDebugBox(dustRect);
             if (ReinforcedPegmatitePillar.Generate(origin.X, origin.Y, height))
             {
-                Main.NewText($"Generated pillar with height {height}", Color.LimeGreen);
+                PlayerLog(player, $"Generated pillar with height {height}", Color.LimeGreen);
             }
             origin = Point.Zero;
             return true;
