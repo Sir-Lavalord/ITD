@@ -188,7 +188,10 @@ namespace ITD.Content.Items.DevTools
         }
         public override void DrawSpecialPreviews(SpriteBatch sb, Player player)
         {
-            Vector2 MousePosition = player.GetITDPlayer().MousePosition;
+            ITDPlayer plr = player.GetITDPlayer();
+            if (Select)
+                return;
+            Vector2 MousePosition = plr.MousePosition;
             MirroringState flags = State;
             if (tilesRect != null)
             {
