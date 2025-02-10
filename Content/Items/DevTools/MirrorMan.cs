@@ -20,6 +20,7 @@ namespace ITD.Content.Items.DevTools
             MirrorVertically = 4,
         }
         public bool Select => UILoader.GetUIState<MirrorManUI>().selectToggled;
+        public bool Cut => UILoader.GetUIState<MirrorManUI>().cutToggle.toggled;
         public MirroringState State
         {
             get
@@ -114,10 +115,45 @@ namespace ITD.Content.Items.DevTools
                             int yNormal = j - tl.Y;
                             Tile original = Framing.GetTileSafely(i, j);
                             tilesRect[xNormal, yNormal] = new(original);
+                            if (Cut)
+                            {
+                                TileDataType remove = 0;
+
+                                SimpleTileDataType f = plr.tileDataSelection;
+
+                                bool removeTile = (f & SimpleTileDataType.Tile) == SimpleTileDataType.Tile;
+                                bool removeWall = (f & SimpleTileDataType.Wall) == SimpleTileDataType.Wall;
+                                bool removeLiquid = (f & SimpleTileDataType.Liquid) == SimpleTileDataType.Liquid;
+                                bool removeWiring = (f & SimpleTileDataType.Wiring) == SimpleTileDataType.Wiring;
+
+                                if (removeTile)
+                                    remove |= TileDataType.Tile | TileDataType.TilePaint | TileDataType.Slope;
+
+                                if (removeWall)
+                                    remove |= TileDataType.Wall | TileDataType.WallPaint;
+
+                                if (removeLiquid)
+                                    remove |= TileDataType.Liquid;
+
+                                if (removeWiring)
+                                    remove |= TileDataType.Wiring;
+
+                                original.Clear(remove);
+
+                                // let's handle actuator data separately. actuators themselves should be wiring, while actuated state should be tile
+
+                                if (removeTile)
+                                    original.IsActuated = false;
+
+                                if (removeWiring)
+                                    original.HasActuator = false;
+                            }
                         }
                     }
-                    plr.selectBounds = Rectangle.Empty;
                     PlayerLog(player, $"Selected area with {tiles.Width * tiles.Height} tiles.");
+                    if (Cut)
+                        TileHelpers.Sync(plr.selectBounds);
+                    plr.selectBounds = Rectangle.Empty;
                     return true;
                 }
             }
@@ -127,8 +163,8 @@ namespace ITD.Content.Items.DevTools
                     return true;
 
                 MirroringState flags = State;
-                bool mirrorX = flags.HasFlag(MirroringState.MirrorHorizontally);
-                bool mirrorY = flags.HasFlag(MirroringState.MirrorVertically);
+                bool mirrorX = (flags & MirroringState.MirrorHorizontally) == MirroringState.MirrorHorizontally;
+                bool mirrorY = (flags & MirroringState.MirrorVertically) == MirroringState.MirrorVertically;
 
                 Point start = Main.MouseWorld.ToTileCoordinates() + offset;
 
@@ -137,6 +173,12 @@ namespace ITD.Content.Items.DevTools
                 undoHistory = new TinyTile[width, height];
                 undoStart = start;
                 UILoader.GetUIState<MirrorManUI>().undo.canBeToggled = true;
+
+                SimpleTileDataType f = plr.tileDataSelection;
+                bool tileData = (f & SimpleTileDataType.Tile) == SimpleTileDataType.Tile;
+                bool wallData = (f & SimpleTileDataType.Wall) == SimpleTileDataType.Wall;
+                bool liquidData = (f & SimpleTileDataType.Liquid) == SimpleTileDataType.Liquid;
+                bool wiringData = (f & SimpleTileDataType.Wiring) == SimpleTileDataType.Wiring;
 
                 for (int i = 0; i < width; i++)
                 {
@@ -148,14 +190,17 @@ namespace ITD.Content.Items.DevTools
                         undoHistory[i, j] = new(t);
                         TinyTile tt = tilesRect[placeI, placeJ];
 
-                        if (tt.HasTile)
+                        if (tileData && tt.HasTile)
                             tt.CopyTileTo(ref t);
 
-                        if (tt.WallType != WallID.None)
+                        if (wallData && tt.WallType != WallID.None)
                             tt.CopyWallTo(ref t);
 
-                        tt.CopyWiringTo(ref t);
-                        tt.CopyLiquidTo(ref t);
+                        if (liquidData)
+                            tt.CopyLiquidTo(ref t);
+
+                        if (wiringData)
+                            tt.CopyWiringTo(ref t);
 
                         if (!tt.HasTile)
                             continue;
@@ -218,50 +263,234 @@ namespace ITD.Content.Items.DevTools
             MirroringState flags = State;
             if (tilesRect != null)
             {
-                bool mirrorX = flags.HasFlag(MirroringState.MirrorHorizontally);
-                bool mirrorY = flags.HasFlag(MirroringState.MirrorVertically);
+                SimpleTileDataType f = plr.tileDataSelection;
+
+                bool tileData = (f & SimpleTileDataType.Tile) == SimpleTileDataType.Tile;
+                bool wallData = (f & SimpleTileDataType.Wall) == SimpleTileDataType.Wall;
+                bool liquidData = (f & SimpleTileDataType.Liquid) == SimpleTileDataType.Liquid;
+                bool wiringData = (f & SimpleTileDataType.Wiring) == SimpleTileDataType.Wiring;
+
+                bool mirrorX = (flags & MirroringState.MirrorHorizontally) == MirroringState.MirrorHorizontally;
+                bool mirrorY = (flags & MirroringState.MirrorVertically) == MirroringState.MirrorVertically;
 
                 int width = tilesRect.GetLength(0);
                 int height = tilesRect.GetLength(1);
 
+                TinyTile GetTileSafely(int i, int j)
+                {
+                    if (i >= 0 && i < width && j >= 0 && j < height)
+                        return tilesRect[i, j];
+                    return new TinyTile(new Tile());
+                }
+
                 Vector2 baseDrawPos = (MousePosition.ToTileCoordinates() + offset).ToWorldCoordinates(0, 0) - Main.screenPosition;
                 Vector2 baseStartPosition = MousePosition.ToTileCoordinates().ToWorldCoordinates(0, 0) - Main.screenPosition;
 
-                for (int i = 0; i < width; i++)
+                if (wallData || liquidData)
                 {
-                    for (int j = 0; j < height; j++)
+                    Color water = Color.Blue;
+                    Color lava = Color.OrangeRed;
+                    Color honey = Color.Orange;
+                    Color shimmer = Color.Pink;
+
+                    for (int i = 0; i < width; i++)
                     {
-                        int drawI = mirrorX ? width - 1 - i : i;
-                        int drawJ = mirrorY ? height - 1 - j : j;
+                        for (int j = 0; j < height; j++)
+                        {
+                            int drawI = mirrorX ? width - 1 - i : i;
+                            int drawJ = mirrorY ? height - 1 - j : j;
 
-                        TinyTile t = tilesRect[drawI, drawJ];
-                        if (t.WallType == WallID.None)
-                            continue;
+                            TinyTile t = tilesRect[drawI, drawJ];
 
-                        Texture2D tex = TextureAssets.Wall[t.WallType].Value;
-                        Vector2 drawOffset = new(i * 16, j * 16);
+                            Vector2 drawOffset = new(i * 16, j * 16);
+                            Vector2 drawPos = baseDrawPos + drawOffset;
 
-                        sb.Draw(tex, baseDrawPos + drawOffset, new Rectangle(t.WallFrameX, t.WallFrameY, 32, 32),
-                                Color.White * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                            if (wallData && t.WallType != WallID.None)
+                            {
+                                Texture2D tex = TextureAssets.Wall[t.WallType].Value;
+
+                                sb.Draw(tex, drawPos, new Rectangle(t.WallFrameX, t.WallFrameY, 32, 32),
+                                        Color.White * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                            }
+                            if (liquidData && t.LiquidAmount > 0)
+                            {
+                                float amount = t.LiquidAmount / 255f;
+                                Rectangle target = new((int)drawPos.X, (int)drawPos.Y + (int)(16f * (1f - amount)), 16, (int)(16f * amount));
+                                Color color = t.LiquidType switch
+                                {
+                                    LiquidID.Water => water,
+                                    LiquidID.Lava => lava,
+                                    LiquidID.Honey => honey,
+                                    LiquidID.Shimmer => shimmer,
+                                    _ => Color.White,
+                                };
+                                sb.Draw(ITD.TrueMagicPixel.Value, target, color * 0.5f);
+                            }
+                        }
                     }
                 }
 
-                for (int i = 0; i < width; i++)
+                if (tileData || wiringData)
                 {
-                    for (int j = 0; j < height; j++)
+                    Texture2D wireTex = TextureAssets.WireNew.Value;
+                    Texture2D actuatorTex = TextureAssets.Actuator.Value;
+                    Rectangle wireTileFrame = new(0, 0, 16, 16);
+
+                    for (int i = 0; i < width; i++)
                     {
-                        int drawI = mirrorX ? width - 1 - i : i;
-                        int drawJ = mirrorY ? height - 1 - j : j;
+                        for (int j = 0; j < height; j++)
+                        {
+                            int drawI = mirrorX ? width - 1 - i : i;
+                            int drawJ = mirrorY ? height - 1 - j : j;
 
-                        TinyTile t = tilesRect[drawI, drawJ];
-                        if (!t.HasTile)
-                            continue;
+                            TinyTile t = tilesRect[drawI, drawJ];
 
-                        Texture2D tex = TextureAssets.Tile[t.TileType].Value;
-                        Vector2 drawOffset = new(i * 16, j * 16);
+                            Vector2 drawOffset = new(i * 16, j * 16);
+                            Vector2 drawPos = baseDrawPos + drawOffset;
 
-                        sb.Draw(tex, baseDrawPos + drawOffset, new Rectangle(t.TileFrameX, t.TileFrameY, 16, 16),
-                                Color.White * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                            if (tileData && t.HasTile)
+                            {
+                                Texture2D tex = TextureAssets.Tile[t.TileType].Value;
+
+                                Color drawColor = t.IsActuated ? Color.LightGray : Color.White;
+                                sb.Draw(tex, drawPos, new Rectangle(t.TileFrameX, t.TileFrameY, 16, 16),
+                                        drawColor * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                            }
+
+                            if (wiringData)
+                            {
+                                // Main.DrawWires is a NIGHTMARE
+
+                                byte frameOffset = 0;
+
+                                if (t.HasTile)
+                                {
+                                    if (t.TileType == TileID.WirePipe)
+                                    {
+                                        switch (t.TileFrameX / 18)
+                                        {
+                                            case 0:
+                                                frameOffset += 72;
+                                                break;
+                                            case 1:
+                                                frameOffset += 144;
+                                                break;
+                                            case 2:
+                                                frameOffset += 216;
+                                                break;
+                                        }
+                                    }
+                                    else if (t.TileType == TileID.PixelBox)
+                                        frameOffset += 72;
+                                }
+
+                                #region Draw Wires
+                                if (t.RedWire)
+                                {
+                                    ushort wireTileFrameX = 0;
+                                    if (GetTileSafely(drawI, drawJ - 1).RedWire)
+                                    {
+                                        wireTileFrameX += 18;
+                                    }
+                                    if (GetTileSafely(drawI + 1, drawJ).RedWire)
+                                    {
+                                        wireTileFrameX += 36;
+                                    }
+                                    if (GetTileSafely(drawI, drawJ + 1).RedWire)
+                                    {
+                                        wireTileFrameX += 72;
+                                    }
+                                    if (GetTileSafely(drawI - 1, drawJ).RedWire)
+                                    {
+                                        wireTileFrameX += 144;
+                                    }
+
+                                    wireTileFrame.Y = frameOffset;
+                                    wireTileFrame.X = wireTileFrameX;
+
+                                    sb.Draw(wireTex, drawPos, wireTileFrame, Color.White * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                                }
+                                if (t.BlueWire)
+                                {
+                                    ushort wireTileFrameX = 0;
+                                    if (GetTileSafely(drawI, drawJ - 1).BlueWire)
+                                    {
+                                        wireTileFrameX += 18;
+                                    }
+                                    if (GetTileSafely(drawI + 1, drawJ).BlueWire)
+                                    {
+                                        wireTileFrameX += 36;
+                                    }
+                                    if (GetTileSafely(drawI, drawJ + 1).BlueWire)
+                                    {
+                                        wireTileFrameX += 72;
+                                    }
+                                    if (GetTileSafely(drawI - 1, drawJ).BlueWire)
+                                    {
+                                        wireTileFrameX += 144;
+                                    }
+
+                                    wireTileFrame.Y = frameOffset + 18;
+                                    wireTileFrame.X = wireTileFrameX;
+
+                                    sb.Draw(wireTex, drawPos, wireTileFrame, Color.White * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                                }
+                                if (t.GreenWire)
+                                {
+                                    ushort wireTileFrameX = 0;
+                                    if (GetTileSafely(drawI, drawJ - 1).GreenWire)
+                                    {
+                                        wireTileFrameX += 18;
+                                    }
+                                    if (GetTileSafely(drawI + 1, drawJ).GreenWire)
+                                    {
+                                        wireTileFrameX += 36;
+                                    }
+                                    if (GetTileSafely(drawI, drawJ + 1).GreenWire)
+                                    {
+                                        wireTileFrameX += 72;
+                                    }
+                                    if (GetTileSafely(drawI - 1, drawJ).GreenWire)
+                                    {
+                                        wireTileFrameX += 144;
+                                    }
+
+                                    wireTileFrame.Y = frameOffset + 36;
+                                    wireTileFrame.X = wireTileFrameX;
+
+                                    sb.Draw(wireTex, drawPos, wireTileFrame, Color.White * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                                }
+                                if (t.YellowWire)
+                                {
+                                    ushort wireTileFrameX = 0;
+                                    if (GetTileSafely(drawI, drawJ - 1).YellowWire)
+                                    {
+                                        wireTileFrameX += 18;
+                                    }
+                                    if (GetTileSafely(drawI + 1, drawJ).YellowWire)
+                                    {
+                                        wireTileFrameX += 36;
+                                    }
+                                    if (GetTileSafely(drawI, drawJ + 1).YellowWire)
+                                    {
+                                        wireTileFrameX += 72;
+                                    }
+                                    if (GetTileSafely(drawI - 1, drawJ).YellowWire)
+                                    {
+                                        wireTileFrameX += 144;
+                                    }
+
+                                    wireTileFrame.Y = frameOffset + 54;
+                                    wireTileFrame.X = wireTileFrameX;
+
+                                    sb.Draw(wireTex, drawPos, wireTileFrame, Color.White * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                                }
+                                #endregion
+
+                                if (t.HasActuator)
+                                    sb.Draw(actuatorTex, drawPos, null, Color.White * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                            }
+                        }
                     }
                 }
 

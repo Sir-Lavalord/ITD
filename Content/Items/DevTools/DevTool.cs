@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 
 namespace ITD.Content.Items.DevTools
 {
+    [Flags]
+    public enum SimpleTileDataType : byte
+    {
+        None = 0,
+        Tile = 1,
+        Wall = 2,
+        Liquid = 4,
+        Wiring = 8,
+    }
     public abstract class DevTool : ModItem
     {
         public virtual void DrawSpecialPreviews(SpriteBatch sb, Player player)

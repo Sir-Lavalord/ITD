@@ -1,7 +1,11 @@
 ﻿using ITD.Content.Items.DevTools;
+using ITD.Players;
+using ITD.Utilities;
 using System.Collections.Generic;
+using Terraria.Chat;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
+using Terraria.UI.Chat;
 
 namespace ITD.Content.UI
 {
@@ -22,6 +26,12 @@ namespace ITD.Content.UI
         public MirrorManButton cutToggle;
         private MirrorManDraggableTab draggableTab;
         private MirrorManButton[] orderedButtons;
+
+        private TileDataButton tileToggle;
+        private TileDataButton wallToggle;
+        private TileDataButton liquidToggle;
+        private TileDataButton wiringToggle;
+        private TileDataButton[] orderedTileButtons;
         public bool horiToggled => horiToggle.toggled;
         public bool vertiToggled => vertiToggle.toggled;
         public bool selectToggled => selectToggle.toggled;
@@ -69,6 +79,13 @@ namespace ITD.Content.UI
                 MirrorManButton button = orderedButtons[i];
                 button?.SetProperties(dragTabY + 16f, (mouseX - totalButtonWidth / 2f) + 32f * i, 32f, 32f);
             }
+
+            float totalTileButtonWidth = 32f * orderedTileButtons.Length;
+            for(int i = 0; i < orderedTileButtons.Length; i++)
+            {
+                TileDataButton button = orderedTileButtons[i];
+                button?.SetProperties(dragTabY + 48f, (mouseX - totalTileButtonWidth / 2f) + 32f * i, 32f, 32f);
+            }
         }
         public void Close()
         {
@@ -91,12 +108,29 @@ namespace ITD.Content.UI
             orderedButtons[3] = undo;
             orderedButtons[4] = cutToggle;
 
+            tileToggle = new(SimpleTileDataType.Tile);
+            wallToggle = new(SimpleTileDataType.Wall);
+            liquidToggle = new(SimpleTileDataType.Liquid);
+            wiringToggle = new(SimpleTileDataType.Wiring);
+            orderedTileButtons = new TileDataButton[4];
+            orderedTileButtons[0] = tileToggle;
+            orderedTileButtons[1] = wallToggle;
+            orderedTileButtons[2] = liquidToggle;
+            orderedTileButtons[3] = wiringToggle;
+
             draggableTab = new();
+
             Append(horiToggle);
             Append(vertiToggle);
             Append(selectToggle);
             Append(undo);
             Append(cutToggle);
+
+            Append(tileToggle);
+            Append(wallToggle);
+            Append(liquidToggle);
+            Append(wiringToggle);
+
             Append(draggableTab);
         }
     }
@@ -214,6 +248,58 @@ namespace ITD.Content.UI
                 MirrorManUI p = UILoader.GetUIState<MirrorManUI>();
                 p.horiToggle.toggled = false;
                 p.vertiToggle.toggled = false;
+            }
+        }
+    }
+    public class TileDataButton(SimpleTileDataType type) : ITDUIElement
+    {
+        private readonly SimpleTileDataType Type = type;
+        public const string buttonTex = "ITD/Content/UI/TileDataButton";
+        public bool On
+        {
+            get
+            {
+                SimpleTileDataType flags = Main.LocalPlayer.GetITDPlayer().tileDataSelection;
+                return (flags & Type) == Type;
+            }
+        }
+        protected override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            Texture2D tex = ModContent.Request<Texture2D>(buttonTex).Value;
+            int halfWidth = tex.Width / 4;
+            int f = Type switch
+            {
+                SimpleTileDataType.Tile => 0,
+                SimpleTileDataType.Wall => 1,
+                SimpleTileDataType.Liquid => 2,
+                SimpleTileDataType.Wiring => 3,
+                _ => -1
+            };
+            Rectangle frame = new(f * halfWidth, 0, halfWidth, tex.Height);
+            spriteBatch.Draw(tex, GetDimensions().ToRectangle(), frame, On ? Color.White : Color.Gray);
+        }
+        public override void Update(GameTime gameTime)
+        {
+            if (IsMouseHovering)
+            {
+                Main.LocalPlayer.mouseInterface = true;
+                UICommon.TooltipMouseText(this.GetLocalization($"MouseHoverName{Type}").Format(On ? this.GetLocalization("On").Value : this.GetLocalization("Off").Value));
+            }
+        }
+        public override void LeftClick(UIMouseEvent evt)
+        {
+            base.LeftClick(evt);
+            ITDPlayer plr = Main.LocalPlayer.GetITDPlayer();
+            // if player has this flag
+            if ((plr.tileDataSelection & Type) == Type)
+            {
+                // remove it
+                plr.tileDataSelection &= ~Type;
+            }
+            else
+            {
+                // otherwise, add it
+                plr.tileDataSelection |= Type;
             }
         }
     }

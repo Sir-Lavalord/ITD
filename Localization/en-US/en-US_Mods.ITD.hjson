@@ -495,9 +495,20 @@ UI: {
 	UnrecruitmentButton.MouseHoverName: Dismiss
 
 	MirrorManButton: {
-		MouseHoverName: Toggle Select Mode
-		MouseHoverName0: Toggle Horizontal Mirror
-		MouseHoverName1: Toggle Vertical Mirror
+		MouseHoverNameSelect: Toggle Select Mode
+		MouseHoverNameToggleMirrorHorizontal: Toggle Horizontal Mirror
+		MouseHoverNameToggleMirrorVertical: Toggle Vertical Mirror
+		MouseHoverNameUndo: Undo Paste
+		MouseHoverNameCut: Toggle Cut Mode
+	}
+
+	TileDataButton: {
+		MouseHoverNameTile: Use Tile Data: {0}
+		MouseHoverNameWall: Use Wall Data: {0}
+		MouseHoverNameLiquid: Use Liquid Data: {0}
+		MouseHoverNameWiring: Use Wiring Data: {0}
+		On: On
+		Off: Off
 	}
 }
 

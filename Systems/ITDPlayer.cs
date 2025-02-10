@@ -88,6 +88,7 @@ namespace ITD.Players
         public Point16 selectTopLeft;
         public Point16 selectBottomRight;
         public Rectangle selectBounds;
+        public SimpleTileDataType tileDataSelection = SimpleTileDataType.None | SimpleTileDataType.Tile | SimpleTileDataType.Wall | SimpleTileDataType.Liquid | SimpleTileDataType.Wiring;
         public override void ResetEffects()
         {
             //shakeDuration

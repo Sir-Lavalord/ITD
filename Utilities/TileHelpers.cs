@@ -123,6 +123,11 @@ namespace ITD.Utilities
                 return;
             NetMessage.SendTileSquare(-1, i, j, width, height);
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Sync(Rectangle rect)
+        {
+            Sync(rect.X, rect.Y, rect.Width, rect.Height);
+        }
         public static void CallFraming(int i, int j, int width = 1, int height = 1)
         {
             for (int i0 = 0; i0 < width; i0++)
