@@ -102,9 +102,15 @@ namespace ITD.Content.NPCs.Bosses
 					}
 					else
 						NPC.velocity.X *= 0.9f;
-					if (Math.Abs(NPC.velocity.X) > 6 && Main.netMode != NetmodeID.MultiplayerClient)
-						SpikeTrail();
 					StepUp();
+					if (NPC.collideX)
+					{
+						StateTimer = 1;
+						Main.player[Main.myPlayer].GetITDPlayer().BetterScreenshake(20, 4, 4, false);
+						SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
+					}
+					else if (Math.Abs(NPC.velocity.X) > 6 && Main.netMode != NetmodeID.MultiplayerClient)
+						SpikeTrail();
 					break;
 				case ActionState.Leaping:
 					if (StateTimer > 10)
