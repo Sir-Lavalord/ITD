@@ -205,6 +205,9 @@ namespace ITD.Content.Items.DevTools
                     source.CopyTo(ref go);
                 }
             }
+            TileHelpers.Sync(undoStart.X, undoStart.Y, width, height);
+            undoStart = Point.Zero;
+            undoHistory = null;
         }
         public override void DrawSpecialPreviews(SpriteBatch sb, Player player)
         {
