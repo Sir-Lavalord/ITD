@@ -26,6 +26,13 @@
         public bool BlueWire = t.BlueWire;
         public bool GreenWire = t.GreenWire;
         public bool YellowWire = t.YellowWire;
+        public readonly void CopyTo(ref Tile t)
+        {
+            CopyWallTo(ref t);
+            CopyTileTo(ref t);
+            CopyLiquidTo(ref t);
+            CopyWiringTo(ref t);
+        }
         public readonly void CopyWallTo(ref Tile t)
         {
             t.WallType = WallType;

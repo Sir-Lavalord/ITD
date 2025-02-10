@@ -36,6 +36,8 @@ namespace ITD.Content.Items.DevTools
         public Point offset;
         public byte inputTimer;
         public TinyTile[,] tilesRect;
+        public TinyTile[,] undoHistory;
+        public Point undoStart;
         public override void SetDefaults()
         {
             Item.width = Item.height = 32;
@@ -132,6 +134,9 @@ namespace ITD.Content.Items.DevTools
 
                 int width = tilesRect.GetLength(0);
                 int height = tilesRect.GetLength(1);
+                undoHistory = new TinyTile[width, height];
+                undoStart = start;
+                UILoader.GetUIState<MirrorManUI>().undo.canBeToggled = true;
 
                 for (int i = 0; i < width; i++)
                 {
@@ -140,6 +145,7 @@ namespace ITD.Content.Items.DevTools
                         int placeI = mirrorX ? width - 1 - i : i;
                         int placeJ = mirrorY ? height - 1 - j : j;
                         Tile t = Framing.GetTileSafely(start.X + i, start.Y + j);
+                        undoHistory[i, j] = new(t);
                         TinyTile tt = tilesRect[placeI, placeJ];
 
                         if (tt.HasTile)
@@ -185,6 +191,20 @@ namespace ITD.Content.Items.DevTools
                 TileHelpers.Sync(start.X, start.Y, width, height);
             }
             return true;
+        }
+        public void DoUndo()
+        {
+            int width = undoHistory.GetLength(0);
+            int height = undoHistory.GetLength(1);
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    TinyTile source = undoHistory[i, j];
+                    Tile go = Framing.GetTileSafely(undoStart.X + i, undoStart.Y + j);
+                    source.CopyTo(ref go);
+                }
+            }
         }
         public override void DrawSpecialPreviews(SpriteBatch sb, Player player)
         {
