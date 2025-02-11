@@ -17,7 +17,7 @@ namespace ITD.Content.Items.Weapons.Ranger
             Item.DamageType = DamageClass.Ranged;
             Item.width = 30;
             Item.height = 64;
-            Item.useTime = 36;
+            Item.useTime = 30;
             Item.useAnimation = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;

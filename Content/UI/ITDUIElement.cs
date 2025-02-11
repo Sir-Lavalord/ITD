@@ -42,32 +42,32 @@ namespace ITD.Content.UI
                 spriteBatch.Draw(tex, position, frame, col, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             }
             // Draw center
-            if (flags is null || !flags.Value.HasFlag(SkipDrawBoxSegment.CenterCenter))
+            if (flags is null || !((flags.Value & SkipDrawBoxSegment.CenterCenter) == SkipDrawBoxSegment.CenterCenter))
             {
                 Rectangle centerFrame = tex.Frame(3, 3, 1, 1);
                 DrawSegment(new Vector2(rect.X + quadSize.X * cornerScaleX, rect.Y + quadSize.Y * cornerScaleY), centerFrame, new Vector2(sideScaleX, sideScaleY));
             }
 
             // Draw sides
-            if (flags is null || !flags.Value.HasFlag(SkipDrawBoxSegment.TopCenter))
+            if (flags is null || !((flags.Value & SkipDrawBoxSegment.TopCenter) == SkipDrawBoxSegment.TopCenter))
             {
                 Rectangle topSideFrame = tex.Frame(3, 3, 1, 0);
                 DrawSegment(new Vector2(rect.X + quadSize.X * cornerScaleX, rect.Y), topSideFrame, new Vector2(sideScaleX, cornerScaleY));
             }
 
-            if (flags is null || !flags.Value.HasFlag(SkipDrawBoxSegment.CenterLeft))
+            if (flags is null || !((flags.Value & SkipDrawBoxSegment.CenterLeft) == SkipDrawBoxSegment.CenterLeft))
             {
                 Rectangle leftSideFrame = tex.Frame(3, 3, 0, 1);
                 DrawSegment(new Vector2(rect.X, rect.Y + quadSize.Y * cornerScaleY), leftSideFrame, new Vector2(cornerScaleX, sideScaleY));
             }
 
-            if (flags is null || !flags.Value.HasFlag(SkipDrawBoxSegment.CenterRight))
+            if (flags is null || !((flags.Value & SkipDrawBoxSegment.CenterRight) == SkipDrawBoxSegment.CenterRight))
             {
                 Rectangle rightSideFrame = tex.Frame(3, 3, 2, 1);
                 DrawSegment(new Vector2(rect.X + rect.Width - quadSize.X * cornerScaleX, rect.Y + quadSize.Y * cornerScaleY), rightSideFrame, new Vector2(cornerScaleX, sideScaleY));
             }
 
-            if (flags is null || !flags.Value.HasFlag(SkipDrawBoxSegment.BottomCenter))
+            if (flags is null || !((flags.Value & SkipDrawBoxSegment.BottomCenter) == SkipDrawBoxSegment.BottomCenter))
             {
                 Rectangle bottomSideFrame = tex.Frame(3, 3, 1, 2);
                 DrawSegment(new Vector2(rect.X + quadSize.X * cornerScaleX, rect.Y + rect.Height - quadSize.Y * cornerScaleY), bottomSideFrame, new Vector2(sideScaleX, cornerScaleY));
@@ -76,25 +76,25 @@ namespace ITD.Content.UI
             // Draw corners
             Vector2 cornerScale = new(cornerScaleX, cornerScaleY);
 
-            if (flags is null || !flags.Value.HasFlag(SkipDrawBoxSegment.TopLeft))
+            if (flags is null || !((flags.Value & SkipDrawBoxSegment.TopLeft) == SkipDrawBoxSegment.TopLeft))
             {
                 Rectangle topLeftCorner = tex.Frame(3, 3, 0, 0);
                 DrawSegment(new Vector2(rect.X, rect.Y), topLeftCorner, cornerScale);
             }
 
-            if (flags is null || !flags.Value.HasFlag(SkipDrawBoxSegment.TopRight))
+            if (flags is null || !((flags.Value & SkipDrawBoxSegment.TopRight) == SkipDrawBoxSegment.TopRight))
             {
                 Rectangle topRightCorner = tex.Frame(3, 3, 2, 0);
                 DrawSegment(new Vector2(rect.X + rect.Width - quadSize.X * cornerScaleX, rect.Y), topRightCorner, cornerScale);
             }
 
-            if (flags is null || !flags.Value.HasFlag(SkipDrawBoxSegment.BottomLeft))
+            if (flags is null || !((flags.Value & SkipDrawBoxSegment.BottomLeft) == SkipDrawBoxSegment.BottomLeft))
             {
                 Rectangle bottomLeftCorner = tex.Frame(3, 3, 0, 2);
                 DrawSegment(new Vector2(rect.X, rect.Y + rect.Height - quadSize.Y * cornerScaleY), bottomLeftCorner, cornerScale);
             }
 
-            if (flags is null || !flags.Value.HasFlag(SkipDrawBoxSegment.BottomRight))
+            if (flags is null || !((flags.Value & SkipDrawBoxSegment.BottomRight) == SkipDrawBoxSegment.BottomRight))
             {
                 Rectangle bottomRightCorner = tex.Frame(3, 3, 2, 2);
                 DrawSegment(new Vector2(rect.X + rect.Width - quadSize.X * cornerScaleX, rect.Y + rect.Height - quadSize.Y * cornerScaleY), bottomRightCorner, cornerScale);

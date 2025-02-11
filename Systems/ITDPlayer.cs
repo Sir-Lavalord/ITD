@@ -21,6 +21,7 @@ using ITD.Content.UI;
 using ITD.Content.Items.DevTools;
 using Terraria.GameContent;
 using ITD.Systems.DataStructures;
+using Microsoft.Xna.Framework.Input;
 
 namespace ITD.Players
 {
@@ -87,6 +88,7 @@ namespace ITD.Players
         public Point16 selectTopLeft;
         public Point16 selectBottomRight;
         public Rectangle selectBounds;
+        public SimpleTileDataType tileDataSelection = SimpleTileDataType.None | SimpleTileDataType.Tile | SimpleTileDataType.Wall | SimpleTileDataType.Liquid | SimpleTileDataType.Wiring;
         public override void ResetEffects()
         {
             //shakeDuration
@@ -267,11 +269,9 @@ namespace ITD.Players
                 if (selectTopLeft == Point16.Zero)
                     selectTopLeft = tileCoords16;
 
-                selectBottomRight = new Point16(tileCoords16.X + 1, tileCoords16.Y + 1);
-
-                //Dust.NewDustPerfect(selectTopLeft.ToWorldCoordinates(), DustID.WhiteTorch);
-                //Dust.NewDustPerfect(selectBottomRight.ToWorldCoordinates(), DustID.BlueTorch);
+                selectBottomRight = tileCoords16;
             }
+            ProcessCustomToolInput();
             // see if player just right clicked on an ITDNPC to call OnRightClick
             if (Main.mouseRight && Main.mouseRightRelease)
             {
@@ -284,71 +284,29 @@ namespace ITD.Players
                 }
             }
         }
+        public void ProcessCustomToolInput()
+        {
+            if (Player.HeldItem.ModItem is DevTool d)
+            {
+                d.ProcessInput(Main.keyState);
+            }
+        }
         public void DrawSelectBox(SpriteBatch sb, Asset<Texture2D> tex)
         {
             if (!selectBox)
                 return;
-            Rectangle rect = MiscHelpers.DynamicRectangle(selectTopLeft.ToPoint(), selectBottomRight.ToPoint(), out _, out _);
-            selectBounds = rect;
-            rect.Width--;
-            rect.Height--;
-            rect = rect.ToWorldRectangle(addBottomRight: 16);
-            rect.Offset((int)-Main.screenPosition.X, (int)-Main.screenPosition.Y);
-            ITDUIElement.DrawAdjustableBox(sb, tex.Value, rect, Player.shirtColor);
+            MiscHelpers.DynamicRectangle(selectTopLeft.ToPoint(), selectBottomRight.ToPoint(), out var slTopLeft, out var slBottomRight);
+            Rectangle rect2 = new(slTopLeft.X, slTopLeft.Y, slBottomRight.X + 1 - slTopLeft.X, slBottomRight.Y + 1 - slTopLeft.Y);
+            selectBounds = rect2;
+            rect2 = rect2.ToWorldRectangle();
+            rect2.Offset((int)-Main.screenPosition.X, (int)-Main.screenPosition.Y);
+            ITDUIElement.DrawAdjustableBox(sb, tex.Value, rect2, Player.shirtColor);
         }
         public void DrawSpecialPreviews(SpriteBatch sb)
         {
-            if (Player.HeldItem.ModItem is MirrorMan m)
+            if (Player.HeldItem.ModItem is DevTool d)
             {
-                MirrorMan.MirroringState flags = m.State;
-                if (m.tilesRect != null)
-                {
-                    bool mirrorX = flags.HasFlag(MirrorMan.MirroringState.MirrorHorizontally);
-                    bool mirrorY = flags.HasFlag(MirrorMan.MirroringState.MirrorVertically);
-
-                    int width = m.tilesRect.GetLength(0);
-                    int height = m.tilesRect.GetLength(1);
-
-                    Vector2 baseDrawPos = MousePosition.ToTileCoordinates().ToWorldCoordinates(0, 0) - Main.screenPosition;
-
-                    for (int i = 0; i < width; i++)
-                    {
-                        for (int j = 0; j < height; j++)
-                        {
-                            int drawI = mirrorX ? width - 1 - i : i;
-                            int drawJ = mirrorY ? height - 1 - j : j;
-
-                            TinyTile t = m.tilesRect[drawI, drawJ];
-                            if (t.WallType == WallID.None)
-                                continue;
-
-                            Texture2D tex = TextureAssets.Wall[t.WallType].Value;
-                            Vector2 drawOffset = new(i * 16, j * 16);
-
-                            sb.Draw(tex, baseDrawPos + drawOffset, new Rectangle(t.WallFrameX, t.WallFrameY, 32, 32),
-                                    Color.White * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                        }
-                    }
-
-                    for (int i = 0; i < width; i++)
-                    {
-                        for (int j = 0; j < height; j++)
-                        {
-                            int drawI = mirrorX ? width - 1 - i : i;
-                            int drawJ = mirrorY ? height - 1 - j : j;
-
-                            TinyTile t = m.tilesRect[drawI, drawJ];
-                            if (!t.HasTile)
-                                continue;
-
-                            Texture2D tex = TextureAssets.Tile[t.TileType].Value;
-                            Vector2 drawOffset = new(i * 16, j * 16);
-
-                            sb.Draw(tex, baseDrawPos + drawOffset, new Rectangle(t.TileFrameX, t.TileFrameY, 16, 16),
-                                    Color.White * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                        }
-                    }
-                }
+                d.DrawSpecialPreviews(sb, Player);
             }
         }
         public void UpdateMouse()

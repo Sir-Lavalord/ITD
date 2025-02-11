@@ -47,10 +47,10 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
         {
             if (Main.rand.NextBool(5))
             {
-                int dust = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.Stone, 0, 0, 0, default, 2f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Stone, 0, 0, 0, default, 2f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 2f;
-                int dust2 = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.Stone, 0, 0, 0, default, 1f);
+                int dust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Stone, 0, 0, 0, default, 1f);
                 Main.dust[dust2].noGravity = false;
                 Main.dust[dust2].velocity *= 1f;
             }
@@ -66,7 +66,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
         {
             for (int i = 0; i < 20; i++)
             {
-                int dust = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, DustID.Stone,0, 0, 0, default, 2f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Stone,0, 0, 0, default, 2f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity *= 2f;
             }

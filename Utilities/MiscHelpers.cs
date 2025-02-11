@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using static log4net.Appender.ColoredConsoleAppender;
 using Terraria.DataStructures;
 using System.Collections.Generic;
+using Terraria.GameContent;
 
 namespace ITD.Utilities
 {
@@ -407,6 +408,32 @@ namespace ITD.Utilities
         public static Vector2D ToRotationVector2D (this double d) => new(Math.Cos(d), Math.Sin(d));
         public static Vector2D ToRotationVector2D (this float f) => ToRotationVector2D(f);
         public static Vector3 ToVector3(this Vector2 v) => new(v.X, v.Y, 0);
+        public static void DrawLine(this SpriteBatch spriteBatch, Vector2 point1, Vector2 point2, Color color, float thickness = 1f)
+        {
+            float length = Vector2.Distance(point1, point2);
+            float angle = (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
+            spriteBatch.DrawLine(point1, length, angle, color, thickness);
+        }
+        public static void DrawLine(this SpriteBatch spriteBatch, Vector2 point, float length, float angle, Color color, float thickness = 1f)
+        {
+            spriteBatch.Draw(origin: new Vector2(0f, 0.5f), scale: new Vector2(length, thickness), texture: ITD.TrueMagicPixel.Value, position: point, sourceRectangle: null, color: color, rotation: angle, effects: SpriteEffects.None, layerDepth: 0f);
+        }
+        public static void DrawDottedLine(this SpriteBatch spriteBatch, Vector2 point1, Vector2 point2, Color color, float gapFrequency, float gapSize, float thickness = 1f)
+        {
+            float totalLength = Vector2.Distance(point1, point2);
+            Vector2 direction = point1.DirectionTo(point2);
+
+            float segmentLength = gapFrequency - gapSize;
+            float t = 0f;
+
+            while (t < totalLength)
+            {
+                float drawLength = Math.Min(segmentLength, totalLength - t);
+                Vector2 start = point1 + direction * t;
+                spriteBatch.DrawLine(start, drawLength, (float)Math.Atan2(direction.Y, direction.X), color, thickness);
+                t += gapFrequency;
+            }
+        }
         public static bool Exists(this NPC n) => n != null && n.active;
         public static bool Exists(this Projectile p) => p != null && p.active;
         public static bool Exists(this Item i) => i != null && i.active && !i.IsAir;

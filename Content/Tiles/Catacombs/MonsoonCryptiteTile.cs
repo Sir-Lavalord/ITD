@@ -29,7 +29,7 @@ namespace ITD.Content.Tiles.Catacombs
         {
             TileHelpers.DrawSlopedGlowMask(i, j, glowmask.Value, Color.White, Vector2.Zero);
             if (Main.rand.NextBool(16) && !Main.gameInactive)
-                Rain.NewRainForced(new Point(i, j).ToWorldCoordinates() + Vector2.UnitY * 16f, new Vector2(8f, 16f));
+                Rain.NewRainForced(new Point(i, j).ToWorldCoordinates() + Vector2.UnitY * 16f, new Vector2(1f, 16f));
         }
     }
 }

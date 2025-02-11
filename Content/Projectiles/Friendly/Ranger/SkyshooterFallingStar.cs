@@ -52,12 +52,6 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             Projectile.rotation += 0.05f;
             Projectile.velocity *= 1.005f;
 
-            Projectile.velocity.Y = Projectile.velocity.Y + 0.4f;
-            if (Projectile.velocity.Y > 16f)
-            {
-                Projectile.velocity.Y = 16f;
-            }
-
             Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<StarDust>(), Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 150, default(Color), 0.7f);
         }
 

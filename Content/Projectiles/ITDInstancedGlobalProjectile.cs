@@ -1,15 +1,16 @@
-﻿using ITD.Content.Projectiles.Other;
-using ITD.Content.Projectiles.Friendly;
-using Terraria.ModLoader;
+﻿using Terraria.ModLoader;
 using Terraria;
 using System;
 using Terraria.DataStructures;
-using ITD.Content.Dusts;
-using ITD.Content.Projectiles.Friendly.Ranger;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.ID;
-using System.Security.Cryptography.X509Certificates;
+using Terraria.Audio;
+
+using ITD.Content.Projectiles.Other;
+using ITD.Content.Projectiles.Friendly;
+using ITD.Content.Dusts;
+using ITD.Content.Projectiles.Friendly.Ranger;
 
 namespace ITD.Content.Projectiles
 {
@@ -72,39 +73,19 @@ namespace ITD.Content.Projectiles
             {
                 if (projectile.owner == Main.myPlayer)
                 {
-                    int spawnOffset;
-                    if (player.direction == 1)
-                    {
-                        spawnOffset = -800;
-                    }
-                    else
-                    {
-                        spawnOffset = 800;
-                    }
-
                     int projectileAmount = Main.rand.Next(-7, 7);
                     int numberProjectiles = 16 + projectileAmount;
+					Vector2 offset = new Vector2(-200f * projectile.direction, -600f);
+					Vector2 toImpact = offset * -1f;
+					toImpact.Normalize();
                     for (int index = 0; index < numberProjectiles; ++index)
                     {
-                        Vector2 vector2_1 = new Vector2((float)((double)projectile.position.X + (double)player.width * 0.5 + (double)(Main.rand.Next(201) * -player.direction) + ((double)Main.mouseX + (double)Main.screenPosition.X - (double)projectile.position.X)) + spawnOffset, (float)((double)projectile.position.Y + (double)player.height * 0.5 - 600.0));   //this defines the projectile width, direction and position
-                        vector2_1.X = (float)(((double)vector2_1.X + (double)projectile.Center.X) / 2.0) + (float)Main.rand.Next(-200, 201);
-                        vector2_1.Y -= (float)(100 * index);
-                        float num12 = (float)projectile.position.X + projectile.position.X - vector2_1.X;
-                        float num13 = (float)projectile.position.Y + projectile.position.Y - vector2_1.Y;
-                        if ((double)num13 < 0.0) num13 *= -1f;
-                        if ((double)num13 < 20.0) num13 = 20f;
-                        float num14 = (float)Math.Sqrt((double)num12 * (double)num12 + (double)num13 * (double)num13);
-                        float num15 = 36 / num14;
-                        float num16 = num12 * num15;
-                        float num17 = num13 * num15;
+                        Vector2 position = projectile.Center + offset + Main.rand.NextVector2Circular(400f, 400f);
 
-                        Vector2 otherVelocity = projectile.velocity * 1.15f;
-                        Vector2 newVelocity = otherVelocity.RotatedByRandom(MathHelper.ToRadians(5));
-                        newVelocity *= 1f - Main.rand.NextFloat(0.1f);
-
-                        Projectile.NewProjectile(projectile.GetSource_FromThis(), vector2_1, newVelocity, ModContent.ProjectileType<SkyshooterFallingStar>(), 15, 0, Main.myPlayer, 0.0f, (float)Main.rand.Next(5));
+                        Projectile.NewProjectile(projectile.GetSource_FromThis(), position, toImpact * Main.rand.NextFloat(12f, 18f), ModContent.ProjectileType<SkyshooterFallingStar>(), 15, 0, Main.myPlayer, 0.0f, (float)Main.rand.Next(5));
                     }
                 }
+				 SoundEngine.PlaySound(SoundID.Item105, projectile.position);
             }
         }
 
@@ -112,12 +93,10 @@ namespace ITD.Content.Projectiles
         {
             if (isFromSkyProjectileBow)
             {
-                Texture2D texture = ModContent.Request<Texture2D>("ITD/Content/Projectiles/ArrowTrail").Value;
+                Texture2D texture = TextureAssets.Extra[91].Value;
                 Rectangle rectangle = texture.Frame(1, 1);
-                Vector2 position = projectile.position - Main.screenPosition;
-                Main.EntitySpriteDraw(texture, position, rectangle, lightColor, projectile.rotation, rectangle.Size() / 2f, 1f, SpriteEffects.None, 0f);
-
-                return false;
+                Vector2 position = projectile.Center - Main.screenPosition;
+                Main.EntitySpriteDraw(texture, position, rectangle, new Color(200, 200, 200, 100), projectile.rotation, new Vector2(rectangle.Size().X / 2f, rectangle.Size().Y / 6f), 1f, SpriteEffects.None, 0f);
             }
 
             return true;

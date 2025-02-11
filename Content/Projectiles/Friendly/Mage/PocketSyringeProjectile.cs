@@ -18,8 +18,6 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 		public VertexStrip TrailStrip = new VertexStrip();
 		public ref float Duration => ref Projectile.localAI[0];
 		public ref float Stuck => ref Projectile.ai[0];
-		public ref float OffsetX => ref Projectile.ai[1];
-		public ref float OffsetY => ref Projectile.ai[2];
 		
 		public override void SetStaticDefaults()
         {
@@ -63,9 +61,9 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 			else
 			{
 				NPC npc = Main.npc[(int)(Stuck)];
+				Projectile.Center = npc.Center;
 				if (!npc.active)
 					Projectile.Kill();
-				Projectile.Center = npc.Center + new Vector2(OffsetX, OffsetY);
 			}
         }
 
@@ -125,8 +123,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             }
 			
 			Stuck = target.whoAmI;
-			OffsetX = Projectile.Center.X - target.Center.X;
-			OffsetY = Projectile.Center.Y - target.Center.Y;
+			Projectile.velocity = new Vector2(Projectile.Center.X - target.Center.X, Projectile.Center.Y - target.Center.Y);
 			Projectile.timeLeft = 120;
         }
 		
