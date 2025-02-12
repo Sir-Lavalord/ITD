@@ -266,6 +266,7 @@ namespace ITD.Content.NPCs.DeepDesert
             if (NPC.life > 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 NPC.ai[3] = Main.rand.Next(1, 3);
+                NPC.netUpdate = true;
                 return;
             }
         }

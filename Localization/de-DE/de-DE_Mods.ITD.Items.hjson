@@ -706,6 +706,8 @@ StrawmanItem: {
 		Spawns a strawman
 		<right> while in inventory to change to next mode
 		<right> while holding Shift in inventory to return previous mode
+
+		'Might not reflect the true performance of weapons, you hear me?'
 		''' */
 
 	DummyType: {

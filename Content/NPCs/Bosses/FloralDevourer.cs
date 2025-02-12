@@ -13,6 +13,7 @@ using Terraria.DataStructures;
 using ITD.Kinematics;
 using ITD.Utilities;
 using Terraria.GameContent.Bestiary;
+using ITD.Content.NPCs.DeepDesert;
 
 namespace ITD.Content.NPCs.Bosses
 {
@@ -23,7 +24,8 @@ namespace ITD.Content.NPCs.Bosses
         // (probably this class needs references to the front legs since i'm drawing the segments here)
         private static readonly Asset<Texture2D> outline = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerSegmentOutline");
         private static readonly Asset<Texture2D> segment = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/FloralDevourerSegment");
-        private int[] floralDevourerSegments;
+        public NPC FollowerNPC => Main.npc[(int)NPC.ai[0]];
+        private static ushort segmentType;
         private float xSpeed = 5f;
         private int dipProgress = 0;
         private int dipProgLimit = 60;
@@ -33,6 +35,7 @@ namespace ITD.Content.NPCs.Bosses
         private bool dipping = false;
         public override void SetStaticDefaults()
         {
+            segmentType = (ushort)ModContent.NPCType<FloralDevourerSegment>();
             NPCID.Sets.MPAllowedEnemies[Type] = true;
 
             NPCID.Sets.BossBestiaryPriority.Add(Type);
@@ -125,24 +128,7 @@ namespace ITD.Content.NPCs.Bosses
 
         public override void PostAI()
         {
-            for (int i = 0; i < floralDevourerSegments.Length; i++)
-            {
-                if (IsSegment(floralDevourerSegments[i], out NPC segment))
-                {
-                    Vector2 targetPosition;
-                    if (i == 0)
-                    {
-                        targetPosition = NPC.Center - NPC.velocity;
-                    }
-                    else
-                    {
-                        targetPosition = Main.npc[floralDevourerSegments[i - 1]].Center;
-                    }
 
-                    segment.ai[1] = targetPosition.X;
-                    segment.ai[2] = targetPosition.Y;
-                }
-            }
         }
         public static bool IsSegment(int whoAmI, out NPC npc)
         {
@@ -155,47 +141,90 @@ namespace ITD.Content.NPCs.Bosses
             npc = null;
             return false;
         }
-        public override void OnSpawn(IEntitySource source)
+        private int SpawnSegment(int latest, int id, bool legs)
         {
-            floralDevourerSegments = new int[6];
-            for (int i = 0; i < 5; i++)
-            {
-                floralDevourerSegments[i] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<FloralDevourerSegment>(), NPC.whoAmI, i, NPC.Center.X, NPC.Center.Y, 1f);
-            }
-            floralDevourerSegments[5] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<FloralDevourerSegment>(), NPC.whoAmI, 5, NPC.Center.X, NPC.Center.Y, 0f);
-        }
+            int oldLatest = latest;
+            latest = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, segmentType, NPC.whoAmI, ai0: 0, ai1: latest, ai2: id, ai3: legs ? 1 : 0);
 
-        public override void OnKill()
+            Main.npc[oldLatest].ai[0] = latest;
+
+            Main.npc[latest].realLife = NPC.whoAmI;
+
+            return latest;
+        }
+        private void SpawnSegments()
         {
-            for (int i = 0; i < floralDevourerSegments.Length; i++)
+            int wormLength = 6;
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                if (IsSegment(floralDevourerSegments[i], out NPC npc))
+                bool hasFollower = NPC.ai[0] > 0;
+                if (!hasFollower)
                 {
-                    npc.StrikeInstantKill();
+                    NPC.realLife = NPC.whoAmI;
+                    int latestNPC = NPC.whoAmI;
+
+                    int distance = wormLength - 2;
+
+                    while (distance > 0)
+                    {
+                        latestNPC = SpawnSegment(latestNPC, distance, true);
+                        distance--;
+                    }
+                    SpawnSegment(latestNPC, 0, false);
+
+                    NPC.netUpdate = true;
+
+                    int count = 0;
+                    foreach (var n in Main.ActiveNPCs)
+                    {
+                        if ((n.type == Type || n.type == segmentType) && n.realLife == NPC.whoAmI)
+                            count++;
+                    }
+                    if (count != wormLength)
+                    {
+                        foreach (var n in Main.ActiveNPCs)
+                        {
+                            if ((n.type == Type || n.type == segmentType) && n.realLife == NPC.whoAmI)
+                            {
+                                n.active = false;
+                                n.netUpdate = true;
+                            }
+                        }
+                    }
+                    NPC.realLife = -1;
+                    NPC.TargetClosest(true);
                 }
             }
         }
-        public void PreDrawSegments(SpriteBatch spriteBatch, Vector2 screenPos)
+        public override void OnSpawn(IEntitySource source)
         {
-            for (int i = 0; i < floralDevourerSegments.Length; i++)
+            SpawnSegments();
+        }
+        public void PreDrawSegments(SpriteBatch spriteBatch, Vector2 screenPos)
+        { 
+            if (FollowerNPC.ModNPC is FloralDevourerSegment seg)
             {
-                if (IsSegment(floralDevourerSegments[i], out NPC npc))
+                FloralDevourerSegment cur = seg;
+                while (cur != null)
                 {
-                    Color color = Lighting.GetColor(npc.Center.ToTileCoordinates());
-                    SpriteEffects direction = npc.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                    spriteBatch.Draw(outline.Value, npc.Center - screenPos, null, color, 0f, outline.Size() / 2f, 1f, direction, 0f);
+                    Color color = Lighting.GetColor(cur.NPC.Center.ToTileCoordinates());
+                    SpriteEffects direction = cur.NPC.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                    spriteBatch.Draw(outline.Value, cur.NPC.Center - screenPos, null, color, 0f, outline.Size() / 2f, 1f, direction, 0f);
+                    cur = cur.FollowerNPC.ModNPC as FloralDevourerSegment;
                 }
             }
         }
         public void PostDrawSegments(SpriteBatch spriteBatch, Vector2 screenPos)
         {
-            for (int i = 0; i < floralDevourerSegments.Length; i++)
+            if (FollowerNPC.ModNPC is FloralDevourerSegment seg)
             {
-                if (IsSegment(floralDevourerSegments[i], out NPC npc) && npc.ModNPC is FloralDevourerSegment seg)
+                FloralDevourerSegment cur = seg;
+                while (cur != null)
                 {
-                    Color color = Lighting.GetColor(npc.Center.ToTileCoordinates());
-                    SpriteEffects direction = npc.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                    spriteBatch.Draw(segment.Value, npc.Center - screenPos, null, color, 0f, segment.Size() / 2f, 1f, direction, 0f);
+                    Color color = Lighting.GetColor(cur.NPC.Center.ToTileCoordinates());
+                    SpriteEffects direction = cur.NPC.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                    spriteBatch.Draw(segment.Value, cur.NPC.Center - screenPos, null, color, 0f, outline.Size() / 2f, 1f, direction, 0f);
+                    cur = cur.FollowerNPC.ModNPC as FloralDevourerSegment;
                 }
             }
         }
@@ -205,14 +234,16 @@ namespace ITD.Content.NPCs.Bosses
             {
                 PreDrawSegments(spriteBatch, screenPos);
                 PostDrawSegments(spriteBatch, screenPos);
-                for (int i = 0; i < floralDevourerSegments.Length; i++)
+                if (FollowerNPC.ModNPC is FloralDevourerSegment seg)
                 {
-                    if (IsSegment(floralDevourerSegments[i], out NPC npc) && npc.ModNPC is FloralDevourerSegment seg)
+                    FloralDevourerSegment cur = seg;
+                    while (cur != null)
                     {
-                        bool isFacingRight = seg.direction.X > 0f;
+                        bool isFacingRight = cur.direction.X > 0f;
                         Texture2D femur = FloralDevourerSegment.femurTexture.Value;
                         Texture2D tibia = FloralDevourerSegment.tibiaTexture.Value;
-                        seg.legFront?.Draw(spriteBatch, screenPos, Color.White, isFacingRight, femur, tibia, femur);
+                        cur.legFront?.Draw(spriteBatch, screenPos, Color.White, isFacingRight, femur, tibia, femur);
+                        cur = cur.FollowerNPC.ModNPC as FloralDevourerSegment;
                     }
                 }
             }
@@ -238,11 +269,9 @@ namespace ITD.Content.NPCs.Bosses
 
         public bool frontStepping = false;
         public bool backStepping = false;
-        public Vector2 pathPosition
-        {
-            get { return new Vector2(NPC.ai[1], NPC.ai[2]); }
-            set { NPC.ai[1] = value.X; NPC.ai[2] = value.Y; } 
-        }
+        public NPC FollowerNPC => Main.npc[(int)NPC.ai[0]];
+        public NPC FollowingNPC => Main.npc[(int)NPC.ai[1]];
+        public NPC HeadNPC => NPC.realLife > -1 ? Main.npc[NPC.realLife] : null;
         public Vector2 direction;
 
         public bool HasLegs
@@ -254,8 +283,8 @@ namespace ITD.Content.NPCs.Bosses
         private KineChain legBack;
         public int ID
         {
-            get => (int)NPC.ai[0];
-            set => NPC.ai[0] = value;
+            get => (int)NPC.ai[2];
+            set => NPC.ai[2] = value;
         }
         public override void SetStaticDefaults()
         {
@@ -282,29 +311,40 @@ namespace ITD.Content.NPCs.Bosses
             NPC.aiStyle = -1;
             Main.npcFrameCount[NPC.type] = 1;
         }
-        public override void OnSpawn(IEntitySource source)
-        {
-            if (HasLegs)
-            {
-                KineLimb[] leg =
-                [
-                    new KineLimb(81f),
-                    new KineLimb(97f),
-                ];
-                legFront = new KineChain(NPC.Center.X, NPC.Center.Y, leg);
-                legBack = new KineChain(NPC.Center.X, NPC.Center.Y, leg);
-            }
-        }
         public override bool? CanBeHitByItem(Player player, Item item) => false;
         public override bool CanBeHitByNPC(NPC attacker) => false;
         public override bool? CanBeHitByProjectile(Projectile projectile) => false;
         public override void AI()
         {
-            NPC.Center = Vector2.Lerp(NPC.Center, pathPosition, 0.06f);
+            if (!Main.dedServ)
+            {
+                if (HasLegs && legBack is null)
+                {
+                    KineLimb[] leg =
+                    [
+                        new KineLimb(81f),
+                        new KineLimb(97f),
+                    ];
+                    legFront = new KineChain(NPC.Center.X, NPC.Center.Y, leg);
+                    legBack = new KineChain(NPC.Center.X, NPC.Center.Y, leg);
+                }
+            }
+
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                if (HeadNPC != null && HeadNPC.life <= 0)
+                {
+                    NPC.HitEffect();
+                    NPC.active = false;
+                    NPC.netUpdate = true;
+                }
+            }
+
+            NPC.Center = Vector2.Lerp(NPC.Center, FollowingNPC.Center, 0.06f);
 
             NPC.position.Y += (float)Math.Sin(ID + Main.GameUpdateCount / 10f) * 2f;
 
-            direction = (pathPosition - NPC.Center).SafeNormalize(Vector2.Zero);
+            direction = (FollowingNPC.Center - NPC.Center).SafeNormalize(Vector2.Zero);
             if (HasLegs)
             {
                 frontRayPosition = Helpers.QuickRaycast(NPC.Center, Vector2.UnitY, maxDistTiles: 24f).End;
