@@ -25,7 +25,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
     public class WhiplatchProjectile : ITDSnaptrap
     {
         private readonly Asset<Texture2D> chainSprite = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Melee/Snaptraps/WhiplatchChain");
-        VerletChain Wire;
         public static LocalizedText OneTimeLatchMessage { get; private set; }
         public override void SetSnaptrapDefaults()
         {
@@ -55,6 +54,83 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         }
         public string toSnaptrapPull = "ITD/Content/Sounds/UltraHookPull";
         private SoundStyle snaptrapPull;
+        public override void OnSnaptrapSpawn()
+        {
+            DoHitPlayer = true;
+            Projectile.netUpdate = true;
+        }
+        public override void AI()
+        {
+            DoHitPlayer = true;
+            base.AI();
+        }
+        public override void PlayerConstantLatchEffect()
+        {
+            Player target = Main.player[PlayerTargetWhoAmI];
+            Tile tile = Framing.GetTileSafely(player.Bottom);
+            Main.NewText("constantlatch", Color.Wheat);
+            if (!manualRetract)
+            {
+                dur++;
+                //NEED BETTER MATH HERE
+                distance = (player.Distance(target.Center) - dur - 30) / (16f * 25);
+                if (distance <= 0)
+                {
+                    distance = 0;
+                }
+                if (distance >= 1)
+                {
+                    distance = 1;
+                }
+                power = 1f - distance;
+            }
+            if (player.Distance(target.Center) >= 30)
+            {
+                if (!target.noKnockback)
+                {
+                    Vector2 direction = player.Center - target.Center;
+                    direction.Normalize();
+                    direction *= float.Lerp(0.05f, 20, 0.5f);
+
+                        if (!Collision.SolidCollision(target.BottomLeft, target.width, 16))
+                        {
+                            if (target.velocity.Y >= 0 && (tile.TileType == TileID.Platforms))
+                            {
+
+                            target.position.Y += 2;
+                            }
+                            if (target.velocity.Y == 0 && (tile.TileType == TileID.Platforms))
+                            {
+
+                            target.position.Y += 6;
+                            }
+                        
+                    }
+                    target.velocity = direction;
+                }
+
+                else
+                {
+                    Vector2 direction = target.Center - player.Center;
+                    direction.Normalize();
+                    direction *= float.Lerp(0.05f, 20, 0.5f);
+                    if (!Collision.SolidCollision(player.BottomLeft, player.width, 16))
+                    {
+                        if (player.velocity.Y >= 0 && (tile.TileType == TileID.Platforms))
+                        {
+
+                            player.position.Y += 2;
+                        }
+                    }
+                    player.armorEffectDrawOutlines = true;
+                    player.velocity = direction;
+                }
+            }
+            else
+            {
+                retracting = true;
+            }
+        }
         public override void ConstantLatchEffect()
         {
             NPC npc = Main.npc[TargetWhoAmI];
@@ -63,7 +139,15 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             {
                 dur++;
                 //NEED BETTER MATH HERE
-                distance = (player.Distance(npc.Center) - 29) / (16f * 25);
+                distance = (player.Distance(npc.Center) - dur - 30) / (16f * 25);
+                if (distance <= 0)
+                {
+                    distance = 0;
+                }
+                if (distance >= 1)
+                {
+                    distance = 1;
+                }
                 power = 1f - distance;
             }
             if (player.Distance(npc.Center) >= 30)
@@ -114,6 +198,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 retracting = true;
             }
         }
+
         float distance;
         float power;
         float dur;

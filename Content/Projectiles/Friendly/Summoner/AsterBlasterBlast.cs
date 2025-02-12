@@ -61,10 +61,10 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             {
                 Projectile other = Main.projectile[i];
 
-                if (i != Projectile.whoAmI && other.aiStyle != -999 &&
-                other.hostile &&
-                
-                other.active
+                if (i != Projectile.whoAmI &&
+                    other.aiStyle != -999 &&
+                    other.hostile &&
+                    other.active
                     && Math.Abs(Projectile.Center.X - other.position.X)
                     + Math.Abs(Projectile.Center.Y - other.position.Y) < CurrentRadius * 2.5f)
                 {

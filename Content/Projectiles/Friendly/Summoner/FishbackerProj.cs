@@ -96,11 +96,11 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
                             other.friendly = true;
                             other.hostile = false;
-                            if (other.damage <= 10000)
+                            if (other.damage <= 3000)
                             {
                                 other.damage *= 2;
                             }
-                            else other.damage = 10000;
+                            else other.damage = 3000;
                             other.netUpdate = true;
                         }
                     }

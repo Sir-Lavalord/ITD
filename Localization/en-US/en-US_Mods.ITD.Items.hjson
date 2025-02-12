@@ -528,7 +528,7 @@ Fishbacker: {
 	Tooltip:
 		'''
 		4 summon tag damage
-		Can reflect projectiles every other swing
+		Can reflect some projectiles
 		Reflected projectiles tag enemy on hit
 		'''
 }
@@ -709,6 +709,8 @@ StrawmanItem: {
 		Spawns a strawman
 		<right> while in inventory to change to next mode
 		<right> while holding Shift in inventory to return previous mode
+
+		'Might not reflect the true performance of weapons, you hear me?'
 		'''
 
 	DummyType: {

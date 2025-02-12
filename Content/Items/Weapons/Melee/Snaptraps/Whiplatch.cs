@@ -108,7 +108,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<WhiplatchProjectile>()] > 0 && player.GetSnaptrapPlayer().GetActiveSnaptrap().retracting)
             {
-                if (player.GetITDPlayer().recoilFront <= 0.6f)
+                if (player.GetITDPlayer().recoilFront <= 0.4f)
                     player.GetITDPlayer().recoilFront += 0.1f;
             }
             SetItemInHand(player, heldItemFrame);
