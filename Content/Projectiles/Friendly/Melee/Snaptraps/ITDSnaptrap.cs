@@ -218,17 +218,16 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         }
         public sealed override void SendExtraAI(BinaryWriter writer)
         {
-            writer.WriteFlags(retracting, hasDoneLatchEffect);
-            writer.WriteFlags(IsStickingToPlayerTarget,DoHitPlayer);
-            writer.Write(PlayerTargetWhoAmI);
+            writer.WriteFlags(retracting, hasDoneLatchEffect, IsStickingToPlayerTarget, DoHitPlayer);
+            writer.Write((byte)PlayerTargetWhoAmI);
 
         }
         public sealed override void ReceiveExtraAI(BinaryReader reader)
         {
-            reader.ReadFlags(out retracting, out hasDoneLatchEffect);
-            IsStickingToPlayerTarget = reader.ReadBoolean();
-            DoHitPlayer = reader.ReadBoolean();
-            PlayerTargetWhoAmI = reader.ReadInt32();
+            reader.ReadFlags(out retracting, out hasDoneLatchEffect, out var isStickingToPlayerTarget, out var doHitPlayer);
+            IsStickingToPlayerTarget = isStickingToPlayerTarget;
+            DoHitPlayer = doHitPlayer;
+            PlayerTargetWhoAmI = reader.ReadByte();
         }
         public sealed override bool? CanHitNPC(NPC target)
         {
