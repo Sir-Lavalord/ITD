@@ -501,7 +501,7 @@ UI: {
 		// MouseHoverNameToggleMirrorHorizontal: Toggle Horizontal Mirror
 		// MouseHoverNameToggleMirrorVertical: Toggle Vertical Mirror
 		// MouseHoverNameUndo: Undo Paste
-		// MouseHoverNameCut: Toggle Cut Mode
+		// MouseHoverNameToggleCut: Toggle Cut Mode
 	}
 
 	TileDataButton: {

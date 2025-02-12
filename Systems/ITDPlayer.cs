@@ -243,7 +243,8 @@ namespace ITD.Players
             ZoneBlueshroomsUnderground = system.bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
             ZoneDeepDesert = system.deepdesertTileCount > 50 && Player.ZoneRockLayerHeight;
 
-            Player.ManageSpecialBiomeVisuals("BlackMold", melomycosis);
+            if (!Main.dedServ)
+                Player.ManageSpecialBiomeVisuals("BlackMold", melomycosis);
 
             /*
             foreach (var pairs in ITDSystem.recruitmentData)
