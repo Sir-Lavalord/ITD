@@ -122,6 +122,21 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             get => (int)Projectile.ai[2];
             set => Projectile.ai[2] = value;
         }
+        public bool IsStickingToPlayerTarget
+        {
+            get => Projectile.localAI[0] == 1f;
+            set => Projectile.localAI[0] = value ? 1f : 0f;
+        }
+        public int PlayerTargetWhoAmI
+        {
+            get => (int)Projectile.localAI[1];
+            set => Projectile.localAI[1] = value;
+        }
+        public bool DoHitPlayer
+        {
+            get => Projectile.localAI[2] == 1f;
+            set => Projectile.localAI[2] = value ? 1f : 0f;
+        }
         public virtual void SetSnaptrapDefaults()
         {
 
@@ -174,6 +189,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public virtual void OnSnaptrapSpawn()
         {
 
+
         }
         private void SetSnaptrapPlayerFlags(SnaptrapPlayer player)
         {
@@ -203,10 +219,16 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public sealed override void SendExtraAI(BinaryWriter writer)
         {
             writer.WriteFlags(retracting, hasDoneLatchEffect);
+            writer.WriteFlags(IsStickingToPlayerTarget,DoHitPlayer);
+            writer.Write(PlayerTargetWhoAmI);
+
         }
         public sealed override void ReceiveExtraAI(BinaryReader reader)
         {
             reader.ReadFlags(out retracting, out hasDoneLatchEffect);
+            IsStickingToPlayerTarget = reader.ReadBoolean();
+            DoHitPlayer = reader.ReadBoolean();
+            PlayerTargetWhoAmI = reader.ReadInt32();
         }
         public sealed override bool? CanHitNPC(NPC target)
         {
@@ -253,11 +275,47 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 PerHitLatchEffect();
             }
         }
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            if (DoHitPlayer)
+            {
+                if (!IsStickingToPlayerTarget)
+                {
+                    staticRotation = Projectile.rotation;
+                    IsStickingToPlayerTarget = true;
+                    PlayerTargetWhoAmI = target.whoAmI;
+                    Projectile.Center = target.Center;
+                    Projectile.velocity = target.velocity;
+                    Projectile.netUpdate = true;
+                }
+                if (!hasDoneLatchEffect && ++currentHitsAmount >= FullPowerHitsAmount)
+                {
+                    PlayerPerHitLatchEffect();
+                    if (PlayerOneTimeLatchEffect())
+                    {
+                        SoundEngine.PlaySound(snaptrapChomp, Projectile.Center);
+                        for (int i = 0; i < 6; ++i)
+                        {
+                            Dust.NewDust(Projectile.Center, 6, 6, ChompDust, 0f, 0f, 0, default, 1);
+                        }
+                    }
+                    hasDoneLatchEffect = true;
+                }
+                else if (hasDoneLatchEffect)
+                {
+                    PlayerPerHitLatchEffect();
+                }
+            }
+        }
         public virtual void ModifyMaxDamage(ref int maxDamage)
         {
 
         }
         public virtual void PerHitLatchEffect()
+        {
+
+        }
+        public virtual void PlayerPerHitLatchEffect()
         {
 
         }
@@ -269,7 +327,15 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         {
             return true;
         }
+        public virtual bool PlayerOneTimeLatchEffect()
+        {
+            return true;
+        }
         public virtual void ConstantLatchEffect()
+        {
+
+        }
+        public virtual void PlayerConstantLatchEffect()
         {
 
         }
@@ -325,6 +391,34 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             {
                 NormalAI(mountedCenter, chainLength);
             }
+            //
+            if (IsStickingToPlayerTarget)
+            {
+                if (++Projectile.frameCounter >= 3 * (Projectile.extraUpdates + 1) && Projectile.frame < Main.projFrames[Type] - 1)
+                {
+                    Projectile.frameCounter = 0;
+                    Projectile.frame++;
+                    if (Projectile.frame == Main.projFrames[Type] - 2)
+                    {
+                        if (OnChomp())
+                        {
+                            SoundEngine.PlaySound(snaptrapChomp, Projectile.Center);
+                            for (int i = 0; i < 6; ++i)
+                            {
+                                Dust.NewDust(Projectile.Center, 6, 6, ChompDust, 0f, 0f, 0, default, 1);
+                            }
+                        }
+                    }
+                }
+                if (!retracting)
+                {
+                    PlayerStickyAI(chainLength);
+                }
+            }
+            else
+            {
+                NormalAI(mountedCenter, chainLength);
+            }
             if (!SoundEngine.TryGetActiveSound(chainUnwindSlot, out var activeSound))
             {
                 var tracker = new ProjectileAudioTracker(Projectile);
@@ -333,6 +427,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             Projectile.timeLeft = 2;
             if (hasDoneLatchEffect && !retracting)
             {
+                if (IsStickingToPlayerTarget)
+                {
+                    PlayerConstantLatchEffect();
+                }
+                else
                 ConstantLatchEffect();
             }
         }
@@ -411,6 +510,48 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             {
                 Projectile.Center = Main.npc[npcTarget].Center;
                 Projectile.gfxOffY = Main.npc[npcTarget].gfxOffY;
+                if (!SoundEngine.TryGetActiveSound(snaptrapWarningSlot, out var activeSound))
+                {
+                    var tracker = new ProjectileAudioTracker(Projectile);
+                    snaptrapWarningSlot = SoundEngine.PlaySound(snaptrapWarning, Owner.Center, soundInstance => BasicSoundUpdateCallback(tracker, soundInstance, 1));
+                }
+            }
+            else
+            {
+                retracting = true;
+            }
+            if (chainLength - ExtraFlexibility >= ShootRange)
+            {
+                WarningTimer += 1;
+                if (WarningTimer > WarningFrames)
+                {
+                    SoundEngine.PlaySound(snaptrapForcedRetract, Projectile.Center);
+                    retracting = true;
+                    WarningTimer = WarningFrames;
+                }
+                shouldBeWarning = true;
+            }
+            else
+            {
+                shouldBeWarning = false;
+                WarningTimer = 0;
+            }
+        }
+        private void PlayerStickyAI(float chainLength)
+        {
+            Projectile.rotation = staticRotation;
+            Projectile.ignoreWater = true;
+            Projectile.tileCollide = false;
+
+            int playerTarget = PlayerTargetWhoAmI;
+            if (playerTarget < 0 || playerTarget >= 200)
+            {
+                retracting = true;
+            }
+            else if (Main.player[playerTarget].active)
+            {
+                Projectile.Center = Main.player[playerTarget].Center;
+                Projectile.gfxOffY = Main.player[playerTarget].gfxOffY;
                 if (!SoundEngine.TryGetActiveSound(snaptrapWarningSlot, out var activeSound))
                 {
                     var tracker = new ProjectileAudioTracker(Projectile);

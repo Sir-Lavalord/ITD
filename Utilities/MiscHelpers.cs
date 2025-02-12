@@ -474,6 +474,7 @@ namespace ITD.Utilities
             if (projectile.aiStyle >=0 &&
                 projectile.hostile &&
                 projectile.active &&
+                projectile.damage <= 5000 &&
                 projectile.velocity != Vector2.Zero)
             {
                 return true;
