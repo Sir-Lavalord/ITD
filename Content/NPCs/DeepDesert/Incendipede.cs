@@ -1,14 +1,9 @@
 ﻿using ITD.Content.Projectiles.Hostile;
 using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
 using System.Linq;
-using Terraria;
 using Terraria.GameContent;
-using Terraria.GameContent.Bestiary;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.NPCs.DeepDesert
 {
@@ -201,6 +196,7 @@ namespace ITD.Content.NPCs.DeepDesert
                     AITimer = 0;
             }
         }
+        public override bool? CanFallThroughPlatforms() => true;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D tex = TextureAssets.Npc[Type].Value;
@@ -235,6 +231,7 @@ namespace ITD.Content.NPCs.DeepDesert
             NPCID.Sets.TrailCacheLength[Type] = 2;
             NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPCTrailing.PosEveryFrame;
         }
+        public bool HasSyncedRealLife = false;
         public override void SetDefaults()
         {
             NPC.width = NPC.height = 16;
@@ -247,6 +244,19 @@ namespace ITD.Content.NPCs.DeepDesert
             NPC.noGravity = true;
             NPC.friendly = false;
             NPC.noTileCollide = true;
+        }
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            if (HasSyncedRealLife)
+                return;
+            writer.Write((byte)NPC.realLife);
+        }
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            if (HasSyncedRealLife)
+                return;
+            NPC.realLife = reader.ReadByte();
+            HasSyncedRealLife = true;
         }
         public override void HitEffect(NPC.HitInfo hit)
         {
@@ -268,11 +278,11 @@ namespace ITD.Content.NPCs.DeepDesert
                 }
                 NPC.ai[3] = 0;
             }
+
             if (HeadNPC.Exists() && HeadNPC.type == ModContent.NPCType<IncendipedeHead>())
             {
                 int wormLength = (int)HeadNPC.ai[2];
                 int spacingIndex = (wormLength - 1 - ID) * IncendipedeHead.SpacingBetween;
-                //Main.NewText($"ID: {ID}, SPID: {spacingIndex}");
 
                 Vector2 possiblePos = HeadNPC.oldPos[spacingIndex];
                 if (possiblePos != Vector2.Zero)
@@ -318,6 +328,7 @@ namespace ITD.Content.NPCs.DeepDesert
             NPCID.Sets.TrailCacheLength[Type] = 2;
             NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPCTrailing.PosEveryFrame;
         }
+        public bool HasSyncedRealLife = false;
         public override void SetDefaults()
         {
             NPC.width = NPC.height = 16;
@@ -330,6 +341,19 @@ namespace ITD.Content.NPCs.DeepDesert
             NPC.noGravity = true;
             NPC.friendly = false;
             NPC.noTileCollide = true;
+        }
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            if (HasSyncedRealLife)
+                return;
+            writer.Write((byte)NPC.realLife);
+        }
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            if (HasSyncedRealLife)
+                return;
+            NPC.realLife = reader.ReadByte();
+            HasSyncedRealLife = true;
         }
         public override void HitEffect(NPC.HitInfo hit)
         {
