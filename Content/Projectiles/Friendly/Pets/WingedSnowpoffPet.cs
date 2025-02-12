@@ -46,6 +46,11 @@ namespace ITD.Content.Projectiles.Friendly.Pets
         }
         public override void AI()
         {
+            if (!Main.dedServ && lanternChain is null)
+            {
+                Vector2 chainStart = Projectile.Center + Vector2.UnitY * Projectile.height / 2;
+                lanternChain = PhysicsMethods.CreateVerletChain(4, 10, chainStart, chainStart + Vector2.One, endLength: 44);
+            }
             Player player = Main.player[Projectile.owner];
             int sign = Math.Sign(player.velocity.X);
             if (sign != 0f)
@@ -88,11 +93,6 @@ namespace ITD.Content.Projectiles.Friendly.Pets
         public override void PostDraw(Color lightColor)
         {
             lanternChain?.Draw(Main.spriteBatch, Main.screenPosition, chainSprite.Value, Color.White, true, null, null, lanternSprite.Value);
-        }
-        public override void OnSpawn(IEntitySource source)
-        {
-            Vector2 chainStart = Projectile.Center + Vector2.UnitY * Projectile.height / 2;
-            lanternChain = PhysicsMethods.CreateVerletChain(4, 10, chainStart, chainStart + Vector2.One, endLength: 44);
         }
         public override void OnKill(int timeLeft)
         {
