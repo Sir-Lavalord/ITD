@@ -14,7 +14,7 @@ namespace ITD.Content.Tiles.Catacombs
         private Asset<Texture2D> glowmask;
         public override void SetStaticDefaults()
         {            
-            glowmask = ModContent.Request<Texture2D>("ITD/Content/Tiles/Catacombs/MonsoonCryptiteTile");
+            glowmask = ModContent.Request<Texture2D>("ITD/Content/Tiles/Catacombs/MonsoonCryptiteTile_Glow");
             Main.tileSolid[Type] = true;
             HitSound = SoundID.Item85;
             DustType = DustID.WaterCandle;

@@ -2,7 +2,7 @@
 
 namespace ITD.Content.Items.Placeable
 {
-    public class Depthrock : ModItem
+    public class Emberstone : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -10,7 +10,7 @@ namespace ITD.Content.Items.Placeable
         }
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<DepthrockTile>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<EmberstoneTile>());
         }
     }
 }
