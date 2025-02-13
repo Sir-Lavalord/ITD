@@ -250,7 +250,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             float currentDamageAfterMeleeScaling = Owner.GetDamage(DamageClass.Melee).ApplyTo(currentBaseDamage);
             float currentDamageAfterDefense =
 
-                target is NPC npc ? npcMods.GetDamage(currentDamageAfterMeleeScaling, true, Main.rand.NextFloat(100f + float.Epsilon) < Owner.GetTotalCritChance(DamageClass.Melee), Owner.luck) :
+                target is NPC npc ? npcMods.GetDamage(currentDamageAfterMeleeScaling, true, Main.rand.NextFloat(100f + float.Epsilon) < Projectile.CritChance, Owner.luck) :
                 target is Player player ? playerMods.GetDamage(currentDamageAfterMeleeScaling, (int)player.statDefense, player.DefenseEffectiveness.Value) :
                 currentDamageAfterMeleeScaling;
 
