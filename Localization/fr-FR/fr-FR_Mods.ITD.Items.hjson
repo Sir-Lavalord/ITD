@@ -1288,3 +1288,23 @@ Emberstone: {
 	// DisplayName: Emberstone
 	// Tooltip: ""
 }
+
+CharbleBlock: {
+	// DisplayName: Charble Block
+	// Tooltip: ""
+}
+
+CharbleWall: {
+	// DisplayName: Charble Wall
+	// Tooltip: ""
+}
+
+SmoothedCharbleBlock: {
+	// DisplayName: Smoothed Charble Block
+	// Tooltip: ""
+}
+
+SmoothedCharbleWall: {
+	// DisplayName: Smoothed Charble Wall
+	// Tooltip: ""
+}
