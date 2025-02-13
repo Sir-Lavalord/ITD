@@ -248,7 +248,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             ModifyMaxDamage(ref maxDamage);
             float currentBaseDamage = Helpers.Remap(currentHitsAmount, 0, FullPowerHitsAmount, MinDamage, maxDamage);
             float currentDamageAfterMeleeScaling = Owner.GetDamage(DamageClass.Melee).ApplyTo(currentBaseDamage);
-            float currentDamageAfterDefense = target is NPC npc ? npcMods.Defense.ApplyTo(currentDamageAfterMeleeScaling) : playerMods.FinalDamage.ApplyTo(currentDamageAfterMeleeScaling);
+            float currentDamageAfterDefense =
+
+                target is NPC npc ? npcMods.GetDamage(currentDamageAfterMeleeScaling, true, Main.rand.NextFloat(100f + float.Epsilon) < Owner.GetTotalCritChance(DamageClass.Melee), Owner.luck) :
+                target is Player player ? playerMods.GetDamage(currentDamageAfterMeleeScaling, (int)player.statDefense, player.DefenseEffectiveness.Value) :
+                currentDamageAfterMeleeScaling;
+
             if (target is Player)
             {
                 playerMods.ModifyHurtInfo += (ref Player.HurtInfo hit) =>

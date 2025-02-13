@@ -1,9 +1,5 @@
 ﻿using ITD.Utilities;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
 using Terraria.Audio;
-using System;
 
 namespace ITD.Content.NPCs.BlueshroomGroves.Critters
 {
@@ -86,24 +82,23 @@ namespace ITD.Content.NPCs.BlueshroomGroves.Critters
         }
         public override void ModifyIncomingHit(ref NPC.HitModifiers modifiers)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                if (modifiers.DamageType == DamageClass.Magic)
-                    return;
-                modifiers.Defense += 9999;
-                modifiers.HideCombatText();
-            }
+            if (modifiers.DamageType.CountsAsClass(DamageClass.Magic))
+                return;
+            modifiers.SetMaxDamage(1);
+            modifiers.HideCombatText();
         }
         public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-                NPC.life += damageDone;
+            NPC.life += damageDone;
+            NPC.netUpdate = true;
         }
         public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-                if (!hit.DamageType.CountsAsClass(DamageClass.Magic))
-                    NPC.life += damageDone;
+            if (!hit.DamageType.CountsAsClass(DamageClass.Magic))
+            {
+                NPC.life += damageDone;
+                NPC.netUpdate = true;
+            }
         }
         public override void FindFrame(int frameHeight) // using this for all relevant visuals
         {
