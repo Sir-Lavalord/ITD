@@ -1,17 +1,13 @@
-﻿using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria;
+﻿using Terraria.Audio;
 using ReLogic.Utilities;
-using Terraria.ID;
 using Terraria.DataStructures;
 using ITD.Content.Items.Weapons.Melee.Snaptraps;
 using ITD.Systems;
 using ITD.Utilities;
 using System.IO;
 using Terraria.ModLoader.IO;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using ReLogic.Peripherals.RGB;
+using System;
+using Terraria.WorldBuilding;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
@@ -34,7 +30,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
     /// <para>- Test MP a lot.</para>
     /// <para>- Add a new hook for modifying chain position offset. Could be cool. (or just add a ref <see cref="Vector2"/> param to ExtraChainEffects.)</para>
     /// </summary>
-    public abstract class ITDSnaptrap : ModProjectile
+    public abstract class ITDSnaptrap : ITDProjectile
     {
         // Post-Implementation overview:
         // Achieved most of the things above.
@@ -127,15 +123,17 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             get => Projectile.localAI[0] == 1f;
             set => Projectile.localAI[0] = value ? 1f : 0f;
         }
-        public int PlayerTargetWhoAmI
-        {
-            get => (int)Projectile.localAI[1];
-            set => Projectile.localAI[1] = value;
-        }
         public bool DoHitPlayer
         {
             get => Projectile.localAI[2] == 1f;
             set => Projectile.localAI[2] = value ? 1f : 0f;
+        }
+        public Entity Target
+        {
+            get
+            {
+                return IsStickingToPlayerTarget ? Main.player[TargetWhoAmI] : IsStickingToTarget ? Main.npc[TargetWhoAmI] : null;
+            }
         }
         public virtual void SetSnaptrapDefaults()
         {
@@ -219,7 +217,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public sealed override void SendExtraAI(BinaryWriter writer)
         {
             writer.WriteFlags(retracting, hasDoneLatchEffect, IsStickingToPlayerTarget, DoHitPlayer);
-            writer.Write((byte)PlayerTargetWhoAmI);
+            writer.Write((byte)TargetWhoAmI);
 
         }
         public sealed override void ReceiveExtraAI(BinaryReader reader)
@@ -227,7 +225,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             reader.ReadFlags(out retracting, out hasDoneLatchEffect, out var isStickingToPlayerTarget, out var doHitPlayer);
             IsStickingToPlayerTarget = isStickingToPlayerTarget;
             DoHitPlayer = doHitPlayer;
-            PlayerTargetWhoAmI = reader.ReadByte();
+            TargetWhoAmI = reader.ReadByte();
         }
         public sealed override bool? CanHitNPC(NPC target)
         {
@@ -235,22 +233,45 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 return false;
             return null;
         }
-        public sealed override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        private void ModifyHit(Entity target, ref Player.HurtModifiers playerMods, ref NPC.HitModifiers npcMods)
         {
             int maxDamage = MaxDamage;
             ModifyMaxDamage(ref maxDamage);
             float currentBaseDamage = Helpers.Remap(currentHitsAmount, 0, FullPowerHitsAmount, MinDamage, maxDamage);
-            modifiers.ModifyHitInfo += (ref NPC.HitInfo hit) =>
+            float currentDamageAfterMeleeScaling = Owner.GetDamage(DamageClass.Melee).ApplyTo(currentBaseDamage);
+            float currentDamageAfterDefense = target is NPC npc ? npcMods.Defense.ApplyTo(currentDamageAfterMeleeScaling) : playerMods.FinalDamage.ApplyTo(currentDamageAfterMeleeScaling);
+            if (target is Player)
             {
-                hit.Damage = (int)Owner.GetDamage(DamageClass.Melee).ApplyTo(currentBaseDamage);
-            };
+                playerMods.ModifyHurtInfo += (ref Player.HurtInfo hit) =>
+                {
+                    hit.Damage = (int)currentDamageAfterDefense;
+                };
+            }
+            else
+            {
+                npcMods.ModifyHitInfo += (ref NPC.HitInfo hit) =>
+                {
+                    hit.Damage = (int)currentDamageAfterDefense;
+                };
+            }
         }
-        public sealed override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
+        {
+            NPC.HitModifiers throwaway = new();
+            ModifyHit(target, ref modifiers, ref throwaway);
+        }
+        public sealed override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            Player.HurtModifiers throwaway = new();
+            ModifyHit(target, ref throwaway, ref modifiers);
+        }
+        private void OnHitTarget(Entity target)
         {
             if (!IsStickingToTarget)
             {
                 staticRotation = Projectile.rotation;
                 IsStickingToTarget = true;
+                IsStickingToPlayerTarget = target is Player;
                 TargetWhoAmI = target.whoAmI;
                 Projectile.Center = target.Center;
                 Projectile.velocity = target.velocity;
@@ -274,47 +295,13 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 PerHitLatchEffect();
             }
         }
-        public override void OnHitPlayer(Player target, Player.HurtInfo info)
-        {
-            if (DoHitPlayer)
-            {
-                if (!IsStickingToPlayerTarget)
-                {
-                    staticRotation = Projectile.rotation;
-                    IsStickingToPlayerTarget = true;
-                    PlayerTargetWhoAmI = target.whoAmI;
-                    Projectile.Center = target.Center;
-                    Projectile.velocity = target.velocity;
-                    Projectile.netUpdate = true;
-                }
-                if (!hasDoneLatchEffect && ++currentHitsAmount >= FullPowerHitsAmount)
-                {
-                    PlayerPerHitLatchEffect();
-                    if (PlayerOneTimeLatchEffect())
-                    {
-                        SoundEngine.PlaySound(snaptrapChomp, Projectile.Center);
-                        for (int i = 0; i < 6; ++i)
-                        {
-                            Dust.NewDust(Projectile.Center, 6, 6, ChompDust, 0f, 0f, 0, default, 1);
-                        }
-                    }
-                    hasDoneLatchEffect = true;
-                }
-                else if (hasDoneLatchEffect)
-                {
-                    PlayerPerHitLatchEffect();
-                }
-            }
-        }
+        public sealed override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => OnHitTarget(target);
+        public override void OnHitPlayer(Player target, Player.HurtInfo info) => OnHitTarget(target);
         public virtual void ModifyMaxDamage(ref int maxDamage)
         {
 
         }
         public virtual void PerHitLatchEffect()
-        {
-
-        }
-        public virtual void PlayerPerHitLatchEffect()
         {
 
         }
@@ -326,15 +313,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         {
             return true;
         }
-        public virtual bool PlayerOneTimeLatchEffect()
-        {
-            return true;
-        }
         public virtual void ConstantLatchEffect()
-        {
-
-        }
-        public virtual void PlayerConstantLatchEffect()
         {
 
         }
@@ -390,34 +369,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             {
                 NormalAI(mountedCenter, chainLength);
             }
-            //
-            if (IsStickingToPlayerTarget)
-            {
-                if (++Projectile.frameCounter >= 3 * (Projectile.extraUpdates + 1) && Projectile.frame < Main.projFrames[Type] - 1)
-                {
-                    Projectile.frameCounter = 0;
-                    Projectile.frame++;
-                    if (Projectile.frame == Main.projFrames[Type] - 2)
-                    {
-                        if (OnChomp())
-                        {
-                            SoundEngine.PlaySound(snaptrapChomp, Projectile.Center);
-                            for (int i = 0; i < 6; ++i)
-                            {
-                                Dust.NewDust(Projectile.Center, 6, 6, ChompDust, 0f, 0f, 0, default, 1);
-                            }
-                        }
-                    }
-                }
-                if (!retracting)
-                {
-                    PlayerStickyAI(chainLength);
-                }
-            }
-            else
-            {
-                NormalAI(mountedCenter, chainLength);
-            }
+
             if (!SoundEngine.TryGetActiveSound(chainUnwindSlot, out var activeSound))
             {
                 var tracker = new ProjectileAudioTracker(Projectile);
@@ -426,11 +378,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             Projectile.timeLeft = 2;
             if (hasDoneLatchEffect && !retracting)
             {
-                if (IsStickingToPlayerTarget)
-                {
-                    PlayerConstantLatchEffect();
-                }
-                else
                 ConstantLatchEffect();
             }
         }
@@ -500,57 +447,15 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
 
-            int npcTarget = TargetWhoAmI;
-            if (npcTarget < 0 || npcTarget >= 200)
+            Entity target = Target;
+            Player player = target as Player;
+            NPC npc = target as NPC;
+            float gfxOffY = target is Player ? player.gfxOffY : target is NPC ? npc.gfxOffY : 0;
+            bool targetCantBeDamaged = target is Player ? false : target is NPC ? npc.dontTakeDamage : false;
+            if (Target.active && !targetCantBeDamaged)
             {
-                retracting = true;
-            }
-            else if (Main.npc[npcTarget].active && !Main.npc[npcTarget].dontTakeDamage)
-            {
-                Projectile.Center = Main.npc[npcTarget].Center;
-                Projectile.gfxOffY = Main.npc[npcTarget].gfxOffY;
-                if (!SoundEngine.TryGetActiveSound(snaptrapWarningSlot, out var activeSound))
-                {
-                    var tracker = new ProjectileAudioTracker(Projectile);
-                    snaptrapWarningSlot = SoundEngine.PlaySound(snaptrapWarning, Owner.Center, soundInstance => BasicSoundUpdateCallback(tracker, soundInstance, 1));
-                }
-            }
-            else
-            {
-                retracting = true;
-            }
-            if (chainLength - ExtraFlexibility >= ShootRange)
-            {
-                WarningTimer += 1;
-                if (WarningTimer > WarningFrames)
-                {
-                    SoundEngine.PlaySound(snaptrapForcedRetract, Projectile.Center);
-                    retracting = true;
-                    WarningTimer = WarningFrames;
-                }
-                shouldBeWarning = true;
-            }
-            else
-            {
-                shouldBeWarning = false;
-                WarningTimer = 0;
-            }
-        }
-        private void PlayerStickyAI(float chainLength)
-        {
-            Projectile.rotation = staticRotation;
-            Projectile.ignoreWater = true;
-            Projectile.tileCollide = false;
-
-            int playerTarget = PlayerTargetWhoAmI;
-            if (playerTarget < 0 || playerTarget >= 200)
-            {
-                retracting = true;
-            }
-            else if (Main.player[playerTarget].active)
-            {
-                Projectile.Center = Main.player[playerTarget].Center;
-                Projectile.gfxOffY = Main.player[playerTarget].gfxOffY;
+                Projectile.Center = target.Center;
+                Projectile.gfxOffY = gfxOffY;
                 if (!SoundEngine.TryGetActiveSound(snaptrapWarningSlot, out var activeSound))
                 {
                     var tracker = new ProjectileAudioTracker(Projectile);

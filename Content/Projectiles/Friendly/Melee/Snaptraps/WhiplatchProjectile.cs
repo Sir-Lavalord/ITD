@@ -64,11 +64,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             DoHitPlayer = true;
             base.AI();
         }
-        public override void PlayerConstantLatchEffect()
+        public override void ConstantLatchEffect()
         {
-            Player target = Main.player[PlayerTargetWhoAmI];
+            Entity target = Target;
+            NPC possibleNPC = target as NPC;
+            Player possiblePlayer = target as Player;
             Tile tile = Framing.GetTileSafely(player.Bottom);
-            Main.NewText("constantlatch", Color.Wheat);
             if (!manualRetract)
             {
                 dur++;
@@ -86,100 +87,50 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             }
             if (player.Distance(target.Center) >= 30)
             {
-                if (!target.noKnockback)
+                bool shouldTargetBePulledTowardsPlayer =
+
+                target is NPC ?
+                !possibleNPC.boss && possibleNPC.BossBar == null && possibleNPC.knockBackResist > 0 :
+
+                target is Player ?
+                !possiblePlayer.noKnockback :
+
+                false;
+
+                bool shouldPlayerInsteadBePulledTowardsTarget =
+
+                target is NPC ?
+                possibleNPC.boss || possibleNPC.knockBackResist <= 0 : true;
+                if (shouldTargetBePulledTowardsPlayer)
                 {
                     Vector2 direction = player.Center - target.Center;
                     direction.Normalize();
                     direction *= float.Lerp(0.05f, 20, 0.5f);
 
+                    bool collidesWithTiles = target is NPC ? !possibleNPC.noTileCollide : true;
+
+                    if (collidesWithTiles)
+                    {
                         if (!Collision.SolidCollision(target.BottomLeft, target.width, 16))
                         {
                             if (target.velocity.Y >= 0 && (tile.TileType == TileID.Platforms))
                             {
 
-                            target.position.Y += 2;
+                                target.position.Y += 2;
                             }
                             if (target.velocity.Y == 0 && (tile.TileType == TileID.Platforms))
                             {
 
-                            target.position.Y += 6;
+                                target.position.Y += 6;
                             }
-                        
+                        }
                     }
                     target.velocity = direction;
                 }
-
-                else
-                {
-                    Vector2 direction = target.Center - player.Center;
-                    direction.Normalize();
-                    direction *= float.Lerp(0.05f, 20, 0.5f);
-                    if (!Collision.SolidCollision(player.BottomLeft, player.width, 16))
-                    {
-                        if (player.velocity.Y >= 0 && (tile.TileType == TileID.Platforms))
-                        {
-
-                            player.position.Y += 2;
-                        }
-                    }
-                    player.armorEffectDrawOutlines = true;
-                    player.velocity = direction;
-                }
-            }
-            else
-            {
-                retracting = true;
-            }
-        }
-        public override void ConstantLatchEffect()
-        {
-            NPC npc = Main.npc[TargetWhoAmI];
-            Tile tile = Framing.GetTileSafely(player.Bottom);
-            if (!manualRetract)
-            {
-                dur++;
-                //NEED BETTER MATH HERE
-                distance = (player.Distance(npc.Center) - dur - 30) / (16f * 25);
-                if (distance <= 0)
-                {
-                    distance = 0;
-                }
-                if (distance >= 1)
-                {
-                    distance = 1;
-                }
-                power = 1f - distance;
-            }
-            if (player.Distance(npc.Center) >= 30)
-            {
-                if (!npc.boss && npc.BossBar == null && npc.knockBackResist > 0)
-                {
-                        Vector2 direction = player.Center - npc.Center;
-                        direction.Normalize();
-                        direction *= float.Lerp(0.05f, 20, 0.5f);
-                        if (!npc.noTileCollide)
-                        {
-                            if (!Collision.SolidCollision(npc.BottomLeft, npc.width, 16))
-                            {
-                                if (npc.velocity.Y >= 0 && (tile.TileType == TileID.Platforms))
-                                {
-
-                                    npc.position.Y += 2;
-                                }
-                                if (npc.velocity.Y == 0 && (tile.TileType == TileID.Platforms))
-                                {
-
-                                    npc.position.Y += 6;
-                                }
-                            }
-                        }
-                        npc.velocity = direction;
-                    }
                 
-                else if (npc.boss || npc.knockBackResist <= 0)
+                else if (shouldPlayerInsteadBePulledTowardsTarget)
                 {
-                    Vector2 direction = npc.Center - player.Center;
-                    direction.Normalize();
+                    Vector2 direction = (target.Center - player.Center).SafeNormalize(Vector2.Zero);
                     direction *= float.Lerp(0.05f, 20, 0.5f);
                     if (!Collision.SolidCollision(player.BottomLeft, player.width, 16))
                     {
@@ -191,8 +142,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                     }
                     player.armorEffectDrawOutlines = true;
                     player.velocity = direction;
-                }
-                }
+                }          
+            }
             else
             {
                 retracting = true;

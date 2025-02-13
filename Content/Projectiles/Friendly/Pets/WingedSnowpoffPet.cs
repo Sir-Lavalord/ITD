@@ -1,13 +1,5 @@
 ﻿using ITD.Content.Buffs.PetBuffs;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
 using ITD.Physics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using rail;
-using Terraria.DataStructures;
 using System;
 
 namespace ITD.Content.Projectiles.Friendly.Pets

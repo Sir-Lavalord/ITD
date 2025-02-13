@@ -22,6 +22,7 @@ using ITD.Content.Items.DevTools;
 using Terraria.GameContent;
 using ITD.Systems.DataStructures;
 using Microsoft.Xna.Framework.Input;
+using ITD.Content.Projectiles;
 
 namespace ITD.Players
 {
@@ -235,6 +236,24 @@ namespace ITD.Players
             shakeDuration = dur;
             shakeIntensityX = powerX; shakeIntensityY = powerX;
             shakeDecay = Decay;
+        }
+        public override void OnHurt(Player.HurtInfo info)
+        {
+            if (info.PvP && info.DamageSource.TryGetCausingEntity(out Entity entity))
+            {
+                if (entity is Projectile projectile && projectile.ModProjectile is ITDProjectile itdprojectile)
+                {
+                    if (projectile.owner == Main.myPlayer)
+                        itdprojectile.OnHitPlayer(Player, info);
+                }
+            }
+        }
+        public override void ModifyHitByProjectile(Projectile proj, ref Player.HurtModifiers modifiers)
+        {
+            if (proj.ModProjectile is ITDProjectile itdprojectile)
+            {
+                itdprojectile.ModifyHitPlayer(Player, ref modifiers);
+            }
         }
         public override void PreUpdate()
         {

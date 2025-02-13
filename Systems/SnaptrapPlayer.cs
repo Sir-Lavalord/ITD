@@ -11,7 +11,14 @@ namespace ITD.Systems
         public StatModifier RetractVelocityModifier;
         public StatModifier FullPowerHitsModifier;
         public StatModifier WarningModifier;
-        public bool CanUseSnaptrap => (GetActiveSnaptrap() is null || GetActiveSnaptrap().IsStickingToTarget);
+        public bool CanUseSnaptrap
+        {
+            get
+            {
+                ITDSnaptrap snaptrap = GetActiveSnaptrap();
+                return snaptrap is null || snaptrap.IsStickingToTarget;
+            }
+        }
         public override void ResetEffects()
         {
             ChainWeightEquipped = false;
@@ -29,6 +36,7 @@ namespace ITD.Systems
             {
                 snaptrap.manualRetract = true;
                 snaptrap.retracting = true;
+                snaptrap.Projectile.netUpdate = true;
             }
             return false;
         }
