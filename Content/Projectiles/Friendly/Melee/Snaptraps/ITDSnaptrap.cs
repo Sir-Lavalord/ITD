@@ -218,6 +218,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         {
             writer.WriteFlags(retracting, hasDoneLatchEffect, IsStickingToPlayerTarget, DoHitPlayer);
             writer.Write((byte)TargetWhoAmI);
+            SendExtraSnaptrapAI(writer);
+        }
+        public virtual void SendExtraSnaptrapAI(BinaryWriter writer)
+        {
 
         }
         public sealed override void ReceiveExtraAI(BinaryReader reader)
@@ -226,6 +230,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             IsStickingToPlayerTarget = isStickingToPlayerTarget;
             DoHitPlayer = doHitPlayer;
             TargetWhoAmI = reader.ReadByte();
+            ReceiveExtraSnaptrapAI(reader);
+        }
+        public virtual void ReceiveExtraSnaptrapAI(BinaryReader reader)
+        {
+
         }
         public sealed override bool? CanHitNPC(NPC target)
         {

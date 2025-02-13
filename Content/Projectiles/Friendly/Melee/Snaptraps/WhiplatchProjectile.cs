@@ -1,24 +1,7 @@
-﻿using ITD.Content.Items.Weapons.Melee.Snaptraps;
-using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
-using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria.Localization;
 using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using ITD.Content.Buffs.PetBuffs;
-using ITD.Physics;
-using Microsoft.Xna.Framework;
-using rail;
-using Terraria.DataStructures;
-using System;
 using ITD.Content.Buffs.GeneralBuffs;
+using ITD.Content.NPCs.Friendly;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
@@ -69,7 +52,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             Entity target = Target;
             NPC possibleNPC = target as NPC;
             Player possiblePlayer = target as Player;
-            Tile tile = Framing.GetTileSafely(player.Bottom);
+            Tile tile = Framing.GetTileSafely(target.Bottom);
             if (!manualRetract)
             {
                 dur++;
@@ -87,10 +70,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             }
             if (player.Distance(target.Center) >= 30)
             {
+                // special check for a demoted strawman dummy for testing below (feel free to remove)
                 bool shouldTargetBePulledTowardsPlayer =
 
                 target is NPC ?
-                !possibleNPC.boss && possibleNPC.BossBar == null && possibleNPC.knockBackResist > 0 :
+                (possibleNPC.ModNPC is StrawmanDummy d && possibleNPC.ai[0] == 6) || !possibleNPC.boss && possibleNPC.BossBar == null && possibleNPC.knockBackResist > 0 :
 
                 target is Player ?
                 !possiblePlayer.noKnockback :
@@ -113,12 +97,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                     {
                         if (!Collision.SolidCollision(target.BottomLeft, target.width, 16))
                         {
-                            if (target.velocity.Y >= 0 && (tile.TileType == TileID.Platforms))
+                            if (target.velocity.Y >= 0 && Main.tileSolidTop[tile.TileType])
                             {
-
                                 target.position.Y += 2;
                             }
-                            if (target.velocity.Y == 0 && (tile.TileType == TileID.Platforms))
+                            if (target.velocity.Y == 0 && Main.tileSolidTop[tile.TileType])
                             {
 
                                 target.position.Y += 6;
