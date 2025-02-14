@@ -1303,3 +1303,18 @@ SmoothedCharbleWall: {
 	// DisplayName: Smoothed Charble Wall
 	// Tooltip: ""
 }
+
+CharbleChest: {
+	// DisplayName: Charble Chest
+	// Tooltip: ""
+}
+
+CharblePlatform: {
+	// DisplayName: Charble Platform
+	// Tooltip: ""
+}
+
+CharbleWorkBench: {
+	// DisplayName: Charble Work Bench
+	// Tooltip: ""
+}

@@ -3,7 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ObjectData;
 
 namespace ITD.Utilities
 {
@@ -37,7 +40,10 @@ namespace ITD.Utilities
     }
     public static class TileHelpers
     {
+        #region Helper Variables
         public const int TileSheetHeight = 270;
+        #endregion
+        #region Common Tile Data Helpers
         public static bool TileType(int i, int j, int t) => Framing.GetTileSafely(i, j).HasTile && Framing.GetTileSafely(i, j).TileType == t;
         public static bool TileType(Tile tile, int t) => tile.HasTile && tile.TileType == t;
         public static bool SolidTile(Point tileCoord) => SolidTile(tileCoord.X, tileCoord.Y);
@@ -60,18 +66,6 @@ namespace ITD.Utilities
         public static bool EdgeTile(Point p) => EdgeTile(p.X, p.Y);
         public static bool TileLiquid(int i, int j, short liquidType) => Framing.GetTileSafely(i, j).LiquidAmount > 0 && Framing.GetTileSafely(i, j).LiquidType == liquidType;
         public static bool TileLiquid(Point p, short liquidType) => TileLiquid(p.X, p.Y, liquidType);
-        public static Vector2 CommonTileOffset => Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
-        public static Vector2 TileExtraPos(int i, int j, Vector2 extraOffset = default) => new Vector2(i, j) * 16 - Main.screenPosition + extraOffset + CommonTileOffset;
-        public static void DrawTileCommon(SpriteBatch spriteBatch, int i , int j, Texture2D tex, Vector2 extraOffset = default, Rectangle? overrideFrame = null)
-        {
-            Tile t = Framing.GetTileSafely(i, j);
-            Rectangle frame;
-            if (overrideFrame is null)
-                frame = new(t.TileFrameX, t.TileFrameY, 16, 16);
-            else
-                frame = (Rectangle)overrideFrame;
-            spriteBatch.Draw(tex, TileExtraPos(i, j, extraOffset), frame, Lighting.GetColor(i, j), 0f, default, 1f, SpriteEffects.None, 0f);
-        }
         public static bool AreaClear(Rectangle area)
         {
             for (int i = area.Left; i < area.Right; i++)
@@ -83,60 +77,6 @@ namespace ITD.Utilities
                 }
             }
             return true;
-        }
-        public static void KillTiles(int i, int j, int width = 1, int height = 1)
-        {
-            for (int k = 0; k < width; k++)
-            {
-                for (int l = 0; l < height; l++)
-                {
-                    WorldGen.KillTile(i + k, j + l);
-                }
-            }
-        }
-        public static void KillTilesForced(int i, int j, int width = 1, int height = 1)
-        {
-            for (int k = 0; k < width; k++)
-            {
-                for (int l = 0; l < height; l++)
-                {
-                    Tile t = Framing.GetTileSafely(i + k, j + l);
-                    t.HasTile = false;
-                    t.TileType = TileID.Dirt;
-                }
-            }
-            Sync(i, j, width, height);
-        }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void FrameToPoint(this Tile t, short x = 0, short y = 0, int xRandom = 1, int yRandom = 1)
-        {
-            int horizontalRandom = Main.rand.Next(xRandom) * 18;
-            int verticalRandom = Main.rand.Next(yRandom) * 18;
-            t.TileFrameX = (short)(x + horizontalRandom);
-            t.TileFrameY = (short)(y + verticalRandom);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Sync(int i, int j, int width = 1, int height = 1)
-        {
-            if (Main.netMode == NetmodeID.SinglePlayer)
-                return;
-            NetMessage.SendTileSquare(-1, i, j, width, height);
-        }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Sync(Rectangle rect)
-        {
-            Sync(rect.X, rect.Y, rect.Width, rect.Height);
-        }
-        public static void CallFraming(int i, int j, int width = 1, int height = 1)
-        {
-            for (int i0 = 0; i0 < width; i0++)
-            {
-                for (int j0 = 0; j0 < height; j0++)
-                {
-                    WorldGen.TileFrame(i + i0, j + j0, false, true);
-                }
-            }
         }
         public static bool AptForTree(Point tileCoord, int height, int? saplingType = null) => AptForTree(tileCoord.X, tileCoord.Y, height, saplingType);
         public static bool AptForTree(int i, int j, int height, int? saplingType = null)
@@ -186,6 +126,20 @@ namespace ITD.Utilities
             {
                 return GetTreeTopPosition(i, j - 1);
             }
+        }
+        #endregion
+        #region Tile Drawing Helpers
+        public static Vector2 CommonTileOffset => Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
+        public static Vector2 TileExtraPos(int i, int j, Vector2 extraOffset = default) => new Vector2(i, j) * 16 - Main.screenPosition + extraOffset + CommonTileOffset;
+        public static void DrawTileCommon(SpriteBatch spriteBatch, int i , int j, Texture2D tex, Vector2 extraOffset = default, Rectangle? overrideFrame = null)
+        {
+            Tile t = Framing.GetTileSafely(i, j);
+            Rectangle frame;
+            if (overrideFrame is null)
+                frame = new(t.TileFrameX, t.TileFrameY, 16, 16);
+            else
+                frame = (Rectangle)overrideFrame;
+            spriteBatch.Draw(tex, TileExtraPos(i, j, extraOffset), frame, Lighting.GetColor(i, j), 0f, default, 1f, SpriteEffects.None, 0f);
         }
         /// <summary>
         /// code from the verdant mod
@@ -274,6 +228,59 @@ namespace ITD.Utilities
                     drawPos = new Vector2(i * 16, j * 16) + offsets;
                     frame = new Rectangle(frameX, frameY, 16, 2);
                     Main.spriteBatch.Draw(texture, drawPos, frame, drawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
+                }
+            }
+        }
+        #endregion
+        #region Tile Actions
+        public static void KillTiles(int i, int j, int width = 1, int height = 1)
+        {
+            for (int k = 0; k < width; k++)
+            {
+                for (int l = 0; l < height; l++)
+                {
+                    WorldGen.KillTile(i + k, j + l);
+                }
+            }
+        }
+        public static void KillTilesForced(int i, int j, int width = 1, int height = 1)
+        {
+            for (int k = 0; k < width; k++)
+            {
+                for (int l = 0; l < height; l++)
+                {
+                    Tile t = Framing.GetTileSafely(i + k, j + l);
+                    t.HasTile = false;
+                    t.TileType = TileID.Dirt;
+                }
+            }
+            Sync(i, j, width, height);
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void FrameToPoint(this Tile t, short x = 0, short y = 0, int xRandom = 1, int yRandom = 1)
+        {
+            int horizontalRandom = Main.rand.Next(xRandom) * 18;
+            int verticalRandom = Main.rand.Next(yRandom) * 18;
+            t.TileFrameX = (short)(x + horizontalRandom);
+            t.TileFrameY = (short)(y + verticalRandom);
+        }
+        public static void Sync(int i, int j, int width = 1, int height = 1)
+        {
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                return;
+            NetMessage.SendTileSquare(-1, i, j, width, height);
+        }
+        public static void Sync(Rectangle rect)
+        {
+            Sync(rect.X, rect.Y, rect.Width, rect.Height);
+        }
+        public static void CallFraming(int i, int j, int width = 1, int height = 1)
+        {
+            for (int i0 = 0; i0 < width; i0++)
+            {
+                for (int j0 = 0; j0 < height; j0++)
+                {
+                    WorldGen.TileFrame(i + i0, j + j0, false, true);
                 }
             }
         }
@@ -781,5 +788,59 @@ namespace ITD.Utilities
                 return;
             }
         }
+        #endregion
+        #region ModTile DefaultTos
+        // No DefaultToChest. Use ITDChest instead
+        // No DefaultToRubble. Use ITDRubble instead
+        public static void DefaultToPlatform(this ModTile m, Color? mapColor = null, bool lavaDeath = true)
+        {
+            ushort t = m.Type;
+            Main.tileLighted[t] = true;
+            Main.tileFrameImportant[t] = true;
+            Main.tileSolidTop[t] = true;
+            Main.tileSolid[t] = true;
+            Main.tileNoAttach[t] = true;
+            Main.tileTable[t] = true;
+            Main.tileLavaDeath[t] = lavaDeath;
+            TileID.Sets.Platforms[t] = true;
+            TileID.Sets.DisableSmartCursor[t] = true;
+
+            m.AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
+            m.AddMapEntry(mapColor ?? new Color(191, 142, 111));
+            m.AdjTiles = [TileID.Platforms];
+
+            TileObjectData.newTile.CoordinateHeights = [16];
+            TileObjectData.newTile.CoordinateWidth = 16;
+            TileObjectData.newTile.CoordinatePadding = 2;
+            TileObjectData.newTile.StyleHorizontal = true;
+            TileObjectData.newTile.StyleMultiplier = 27;
+            TileObjectData.newTile.StyleWrapLimit = 27;
+            TileObjectData.newTile.UsesCustomCanPlace = false;
+            TileObjectData.newTile.LavaDeath = lavaDeath;
+            TileObjectData.newTile.LavaPlacement = lavaDeath ? LiquidPlacement.NotAllowed : LiquidPlacement.Allowed;
+            TileObjectData.addTile(t);
+        }
+        public static void DefaultToWorkbench(this ModTile m, bool lavaDeath = true, bool normalMapEntry = true)
+        {
+            ushort t = m.Type;
+            Main.tileSolidTop[t] = true;
+            Main.tileFrameImportant[t] = true;
+            Main.tileNoAttach[t] = true;
+            Main.tileTable[t] = true;
+            Main.tileLavaDeath[t] = lavaDeath;
+            Main.tileWaterDeath[t] = false;
+            TileID.Sets.DisableSmartCursor[t] = true;
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
+            TileObjectData.newTile.CoordinateHeights = [18];
+            TileObjectData.newTile.LavaDeath = lavaDeath;
+            TileObjectData.newTile.LavaPlacement = lavaDeath ? LiquidPlacement.NotAllowed : LiquidPlacement.Allowed;
+            TileObjectData.addTile(t);
+
+            m.AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
+            if (normalMapEntry)
+                m.AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.WorkBench"));
+            m.AdjTiles = [TileID.WorkBenches];
+        }
+        #endregion
     }
 }

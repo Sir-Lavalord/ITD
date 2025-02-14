@@ -458,6 +458,11 @@ Tiles: {
 	BlueshroomTree.MapEntry: Riesen Blaupilz
 	StarlitOreTile.MapEntry: Sternenglanz Erz
 	Debugger.MapEntry: Debugger
+
+	CharbleChestTile: {
+		// MapEntryUnlocked: Mods.ITD.Tiles.CharbleChestTile.MapEntryUnlocked
+		// MapEntryLocked: Mods.ITD.Tiles.CharbleChestTile.MapEntryLocked
+	}
 }
 
 Biomes: {

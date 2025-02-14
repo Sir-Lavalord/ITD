@@ -458,6 +458,11 @@ Tiles: {
 	// BlueshroomTree.MapEntry: Giant Blueshroom
 	// StarlitOreTile.MapEntry: Starlit Ore
 	// Debugger.MapEntry: Debugger
+
+	CharbleChestTile: {
+		// MapEntryUnlocked: Mods.ITD.Tiles.CharbleChestTile.MapEntryUnlocked
+		// MapEntryLocked: Mods.ITD.Tiles.CharbleChestTile.MapEntryLocked
+	}
 }
 
 Biomes: {

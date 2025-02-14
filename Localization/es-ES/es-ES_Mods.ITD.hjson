@@ -458,6 +458,11 @@ Tiles: {
 	BlueshroomTree.MapEntry: Champizúl gigante
 	StarlitOreTile.MapEntry: Mineral de estralumbre
 	// Debugger.MapEntry: Debugger
+
+	CharbleChestTile: {
+		// MapEntryUnlocked: Mods.ITD.Tiles.CharbleChestTile.MapEntryUnlocked
+		// MapEntryLocked: Mods.ITD.Tiles.CharbleChestTile.MapEntryLocked
+	}
 }
 
 Biomes: {
