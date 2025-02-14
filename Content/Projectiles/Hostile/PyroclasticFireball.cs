@@ -16,15 +16,20 @@ namespace ITD.Content.Projectiles.Hostile
             Projectile.width = Projectile.height = 24;
             Projectile.timeLeft = 120;
             Projectile.tileCollide = false;
-            emitter = ParticleSystem.NewEmitter<PyroclasticParticle>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
-            emitter.additive = true;
         }
         public override void AI()
         {
+            if (!Main.dedServ)
+            {
+                if (emitter is null)
+                {
+                    emitter = ParticleSystem.NewEmitter<PyroclasticParticle>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+                    emitter.additive = true;
+                }
+                emitter.keptAlive = true;
+                emitter?.Emit(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width / 3, Projectile.height / 3), -Projectile.velocity / 32f);
+            }
             Lighting.AddLight(Projectile.Center, Color.Orange.ToVector3());
-            emitter.keptAlive = true;
-            emitter?.Emit(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width / 3, Projectile.height / 3), -Projectile.velocity / 32f);
-            base.AI();
         }
         public override void OnKill(int timeLeft)
         {

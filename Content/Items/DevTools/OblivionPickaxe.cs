@@ -10,6 +10,10 @@ namespace ITD.Content.Items.DevTools
 {
     public class OblivionPickaxe : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.UsesBetterMeleeItemLocation[Type] = true;
+        }
         public override void SetDefaults()
         {
             Item.damage = 1020;
