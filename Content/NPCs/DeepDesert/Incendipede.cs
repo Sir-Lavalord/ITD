@@ -351,12 +351,15 @@ namespace ITD.Content.NPCs.DeepDesert
             if (HasSyncedRealLife)
                 return;
             writer.Write((byte)NPC.realLife);
+            // set this flag on the server
+            HasSyncedRealLife = true;
         }
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             if (HasSyncedRealLife)
                 return;
             NPC.realLife = reader.ReadByte();
+            // set this flag on the client
             HasSyncedRealLife = true;
         }
         public override void HitEffect(NPC.HitInfo hit)
