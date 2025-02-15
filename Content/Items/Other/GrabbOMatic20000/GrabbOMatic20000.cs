@@ -39,14 +39,17 @@ namespace ITD.Content.Items.Other.GrabbOMatic20000
             if (!Active)
                 return;
 
-            KineLimb[] armP =
+            if (arm is null)
+            {
+                KineLimb[] armP =
                 [
                     new KineLimb(42f),
                     new KineLimb(42f),
                     new KineLimb(42f),
                 ];
 
-            arm ??= new KineChain(Player.Center.X, Player.Center.Y, armP);
+                arm = new KineChain(Player.Center.X, Player.Center.Y, armP);
+            }
             arm.basePoint = Player.Center;
             arm.GenUpdate(Player.GetITDPlayer().MousePosition);
             arm.Draw(Main.spriteBatch, Main.screenPosition, Color.White, Player.direction == 1, armMidTex.Value, handTex.Value, armTex.Value);
@@ -63,7 +66,7 @@ namespace ITD.Content.Items.Other.GrabbOMatic20000
                 NPC[] grabbedNPCs = MiscHelpers.EntityQuery<NPC>(predicate: n => n.Exists() && n.Hitbox.Inflated(inflate).Contains(mouse));
                 Projectile[] grabbedProjectiles = MiscHelpers.EntityQuery<Projectile>(predicate: p => p.Exists() && p.Hitbox.Inflated(inflate).Contains(mouse));
                 Player[] grabbedPlayers = MiscHelpers.EntityQuery(ignore: Player, predicate: p => p.Exists() && p.Hitbox.Inflated(inflate).Contains(mouse));
-                Item[] grabbedItems = MiscHelpers.EntityQuery<Item>(predicate: i => i.Exists() && i.Hitbox.Inflated(inflate).Contains(mouse));
+                Item[] grabbedItems = MiscHelpers.EntityQuery<Item>(predicate: i => i.ExistsInWorld() && i.Hitbox.Inflated(inflate).Contains(mouse));
                 Entity[] entities = [.. grabbedNPCs, .. grabbedProjectiles, .. grabbedPlayers, .. grabbedItems];
                 foreach (Entity entity in entities)
                 {

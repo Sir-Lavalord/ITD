@@ -58,6 +58,14 @@ namespace ITD.Systems.DataStructures
         {
             return !(first == second);
         }
+        public static bool operator >(Point8 first, Point8 second)
+        {
+            return (first.X > second.X) && (first.Y > second.Y);
+        }
+        public static bool operator <(Point8 first, Point8 second)
+        {
+            return !(first > second);
+        }
         public override readonly bool Equals([NotNullWhen(true)] object obj)
         {
             return obj is Point8 other && other == this;

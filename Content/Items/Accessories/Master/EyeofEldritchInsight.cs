@@ -81,6 +81,8 @@ namespace ITD.Content.Items.Accessories.Master
         public override bool InstancePerEntity => true;
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            if (Main.myPlayer < 0 || Main.myPlayer > 255)
+                return true;
             if (Main.player[Main.myPlayer].GetModPlayer<InsightedPlayer>().CorporateInsight)
             {
                 Rectangle hitbox = npc.getRect();

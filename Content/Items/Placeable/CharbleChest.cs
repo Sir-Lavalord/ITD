@@ -1,4 +1,4 @@
-﻿using ITD.Content.Tiles.BlueshroomGroves;
+﻿using ITD.Content.Tiles.Furniture.BlueshroomGroves;
 using System;
 using System.Collections.Generic;
 using System.Linq;

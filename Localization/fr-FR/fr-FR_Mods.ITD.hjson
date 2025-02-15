@@ -460,8 +460,13 @@ Tiles: {
 	// Debugger.MapEntry: Debugger
 
 	CharbleChestTile: {
-		// MapEntryUnlocked: Mods.ITD.Tiles.CharbleChestTile.MapEntryUnlocked
-		// MapEntryLocked: Mods.ITD.Tiles.CharbleChestTile.MapEntryLocked
+		// MapEntryUnlocked: Charble Chest
+		// MapEntryLocked: Locked Charble Chest
+	}
+
+	PyracottaChestTile: {
+		// MapEntryUnlocked: Mods.ITD.Tiles.PyracottaChestTile.MapEntryUnlocked
+		// MapEntryLocked: Mods.ITD.Tiles.PyracottaChestTile.MapEntryLocked
 	}
 }
 

@@ -16,6 +16,8 @@ using ITD.Networking.Packets;
 using Microsoft.Xna.Framework.Graphics;
 using ITD.Content.Items.DevTools;
 using ReLogic.Content;
+using Terraria.UI;
+using ITD.Content.Tiles;
 
 namespace ITD.Systems
 {
@@ -195,6 +197,18 @@ namespace ITD.Systems
                     if (Main.dedServ)
                         NetSystem.SendPacket(new SyncRecruitmentPacket());
                 }
+            }
+        }
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+        {
+            int invIndex = layers.FindIndex(l => l.Name == "Vanilla: Inventory");
+            if (invIndex != 1)
+            {
+                layers.Insert(invIndex, new LegacyGameInterfaceLayer("ITD: Custom Chests", delegate
+                {
+                    ITDChest.DrawCustomChests();
+                    return true;
+                }, InterfaceScaleType.UI));
             }
         }
         private static void PreventTownNPCSpawns(On_Main.orig_UpdateTime_SpawnTownNPCs orig)

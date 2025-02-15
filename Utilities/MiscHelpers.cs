@@ -436,7 +436,8 @@ namespace ITD.Utilities
         }
         public static bool Exists(this NPC n) => n != null && n.active;
         public static bool Exists(this Projectile p) => p != null && p.active;
-        public static bool Exists(this Item i) => i != null && i.active && !i.IsAir;
+        public static bool Exists(this Item i) => i != null && !i.IsAir;
+        public static bool ExistsInWorld(this Item i) => Exists(i) && i.active;
         //Make the invul boss part untargetable please
         public static bool IsValidTarget(this Projectile projectile, NPC target)
         {

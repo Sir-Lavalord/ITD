@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Audio;
+using ITD.Systems.DataStructures;
+using Terraria.ModLoader;
+using ITD.Utilities;
+using ITD.Content.TileEntities;
+using ITD.Content.TileEntities.Chests;
+using System.Collections.Generic;
 
 namespace ITD.Content.Tiles
 {
@@ -18,8 +20,25 @@ namespace ITD.Content.Tiles
         /// The ID of the item that this tile will drop. This is necessary because of chest locked styles.
         /// </summary>
         public abstract int ItemType { get; }
-        public abstract int KeyType { get; }
+        /// <summary>
+        /// The default behavior of this property is what you want in most cases.
+        /// </summary>
+        public virtual ModTileEntity TE
+        { 
+            get
+            {
+                return Dimensions switch
+                {
+                    { X: 2, Y: 2 } => ModContent.GetInstance<Chest2x2>(),
+                    { X: 3, Y: 2 } => ModContent.GetInstance<Chest3x2>(),
+                    _ => ModContent.GetInstance<Chest2x2>(),
+                };
+            }
+        }
+        public virtual int KeyType => ItemID.DirtBlock;
         public virtual (Color, Color) UnlockedAndLockedMapColors => (new(191, 142, 111), new(191, 142, 111));
+        public virtual Point8 Dimensions => new(2, 2);
+        public virtual bool LavaDeath => true;
         public sealed override void SetStaticDefaults()
         {
             Main.tileSpelunker[Type] = true;
@@ -30,7 +49,7 @@ namespace ITD.Content.Tiles
             Main.tileNoAttach[Type] = true;
             Main.tileOreFinderPriority[Type] = 500;
             TileID.Sets.HasOutlines[Type] = true;
-            TileID.Sets.BasicChest[Type] = true;
+            // no basicchest
             TileID.Sets.DisableSmartCursor[Type] = true;
             TileID.Sets.AvoidedByNPCs[Type] = true;
             TileID.Sets.InteractibleByNPCs[Type] = true;
@@ -41,13 +60,33 @@ namespace ITD.Content.Tiles
             (Color color0, Color color1) = UnlockedAndLockedMapColors;
             AddMapEntry(color0, this.GetLocalization("MapEntryUnlocked"), MapChestName);
             AddMapEntry(color1, this.GetLocalization("MapEntryLocked"), MapChestName);
+            // chest item if a locked chest is somehow destroyed
             RegisterItemDrop(ItemType, 1);
+            // fallback item if this chest type is removed from the mod
             RegisterItemDrop(ItemID.Chest);
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
-            TileObjectData.newTile.Origin = new Point16(0, 1);
-            TileObjectData.newTile.CoordinateHeights = [16, 18];
-            TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
+
+            //TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
+
+            Point8 dims = Dimensions;
+            TileObjectData.newTile.Width = dims.X;
+            TileObjectData.newTile.Height = dims.Y;
+            TileObjectData.newTile.Origin = new Point16(0, dims.Y - 1);
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.Table | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
+            TileObjectData.newTile.UsesCustomCanPlace = true;
+
+            int[] coordinateHeights = new int[dims.Y];
+            Array.Fill(coordinateHeights, 16);
+            // unlike vanilla chests, we will allow an extra pixel for proper grounding
+            coordinateHeights[^1] = 18;
+
+            TileObjectData.newTile.CoordinateHeights = coordinateHeights;
+
+            TileObjectData.newTile.CoordinateWidth = 16;
+            TileObjectData.newTile.CoordinatePadding = 2;
+            TileObjectData.newTile.LavaDeath = LavaDeath;
+
+            // no hookcheckifcanplace
+            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(TE.Hook_AfterPlacement, -1, 0, false);
             TileObjectData.newTile.AnchorInvalidTiles = [
                 TileID.MagicalIceBlock,
                 TileID.Boulder,
@@ -56,29 +95,60 @@ namespace ITD.Content.Tiles
                 TileID.RollingCactus
             ];
             TileObjectData.newTile.StyleHorizontal = true;
-            TileObjectData.newTile.LavaDeath = false;
-            TileObjectData.newTile.LavaPlacement = LiquidPlacement.Allowed;
-            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
+            TileObjectData.newTile.LavaPlacement = LavaDeath ? LiquidPlacement.NotAllowed : LiquidPlacement.Allowed;
+
+            AnimationFrameHeight = TileObjectData.newTile.CoordinateFullHeight;
+
             TileObjectData.addTile(Type);
+
             SetStaticDefaultsSafe();
         }
         public virtual void SetStaticDefaultsSafe()
         {
 
         }
+        public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
+        {
+            if (type != Type)
+                return;
+            ITDChestTE te = GetTE(i, j);
+            if (te is null)
+                return;
+            int speed = 1;
+            if (TileEntity.ByPosition.TryGetValue(new Point16(i, j), out var t) && t.ID == te.ID)
+            {
+                if (te.OpenedBy > -1 && te.frame < 2)
+                {
+                    if (++te.frameCounter > speed)
+                    {
+                        te.frameCounter = 0;
+                        te.frame++;
+                    }
+                }
+                if (te.OpenedBy < 0 && te.frame > 0)
+                {
+                    if (++te.frameCounter > speed)
+                    {
+                        te.frameCounter = 0;
+                        te.frame--;
+                    }
+                }
+            }
+            frameYOffset = AnimationFrameHeight * te.frame;
+        }
         public override ushort GetMapOption(int i, int j)
         {
-            return (ushort)(Main.tile[i, j].TileFrameX / 36);
+            return (ushort)(Main.tile[i, j].TileFrameX / (18 * Dimensions.X));
         }
 
         public override LocalizedText DefaultContainerName(int frameX, int frameY)
         {
-            int option = frameX / 36;
+            int option = frameX / (18 * Dimensions.X);
             return this.GetLocalization("MapEntry" + (option == 0 ? "Unlocked" : "Locked"));
         }
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
-        public override bool IsLockedChest(int i, int j) => Main.tile[i, j].TileFrameX / 36 == 1;
+        public override bool IsLockedChest(int i, int j) => Main.tile[i, j].TileFrameX / (18 * Dimensions.X) == 1;
         public override bool LockChest(int i, int j, ref short frameXAdjustment, ref bool manual)
         {
             int style = TileObjectData.GetTileStyle(Main.tile[i, j]);
@@ -93,93 +163,52 @@ namespace ITD.Content.Tiles
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
             // We override KillMultiTile to handle additional logic other than the item drop. In this case, unregistering the Chest from the world
-            Chest.DestroyChest(i, j);
+            TE.Kill(i, j);
         }
-
+        public ITDChestTE GetTE(int i, int j)
+        {
+            ITDChestTE te = null;
+            if (TileHelpers.TryGetTileEntityAs(TE.GetType(), i, j, out var entity))
+            {
+                te = entity as ITDChestTE;
+            }
+            return te;
+        }
         public override bool RightClick(int i, int j)
         {
             Player player = Main.LocalPlayer;
-            Tile tile = Main.tile[i, j];
+
+            // Should your tile entity bring up a UI, this line is useful to prevent item slots from misbehaving
             Main.mouseRightRelease = false;
-            int left = i;
-            int top = j;
-            if (tile.TileFrameX % 36 != 0)
-            {
-                left--;
-            }
 
-            if (tile.TileFrameY != 0)
+            // The following four (4) if-blocks are recommended to be used if your multitile opens a UI when right clicked:
+            if (player.sign > -1)
             {
-                top--;
+                SoundEngine.PlaySound(SoundID.MenuClose);
+                player.sign = -1;
+                Main.editSign = false;
+                Main.npcChatText = string.Empty;
             }
-
-            player.CloseSign();
-            player.SetTalkNPC(-1);
-            Main.npcChatCornerItem = 0;
-            Main.npcChatText = "";
             if (Main.editChest)
             {
                 SoundEngine.PlaySound(SoundID.MenuTick);
                 Main.editChest = false;
                 Main.npcChatText = string.Empty;
             }
-
             if (player.editedChestName)
             {
                 NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f);
                 player.editedChestName = false;
             }
-
-            bool isLocked = Chest.IsLocked(left, top);
-            if (Main.netMode == NetmodeID.MultiplayerClient && !isLocked)
+            if (player.talkNPC > -1)
             {
-                if (left == player.chestX && top == player.chestY && player.chest != -1)
-                {
-                    player.chest = -1;
-                    Recipe.FindRecipes();
-                    SoundEngine.PlaySound(SoundID.MenuClose);
-                }
-                else
-                {
-                    NetMessage.SendData(MessageID.RequestChestOpen, -1, -1, null, left, top);
-                    Main.stackSplit = 600;
-                }
+                player.SetTalkNPC(-1);
+                Main.npcChatCornerItem = 0;
+                Main.npcChatText = string.Empty;
             }
-            else
-            {
-                if (isLocked)
-                {
-                    // Make sure to change the code in UnlockChest if you don't want the chest to only unlock at night.
-                    int key = KeyType;
-                    if (player.HasItemInInventoryOrOpenVoidBag(key) && Chest.Unlock(left, top) && player.ConsumeItem(key, includeVoidBag: true))
-                    {
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                        {
-                            NetMessage.SendData(MessageID.LockAndUnlock, -1, -1, null, player.whoAmI, 1f, left, top);
-                        }
-                    }
-                }
-                else
-                {
-                    int chest = Chest.FindChest(left, top);
-                    if (chest != -1)
-                    {
-                        Main.stackSplit = 600;
-                        if (chest == player.chest)
-                        {
-                            player.chest = -1;
-                            SoundEngine.PlaySound(SoundID.MenuClose);
-                        }
-                        else
-                        {
-                            SoundEngine.PlaySound(player.chest < 0 ? SoundID.MenuOpen : SoundID.MenuTick);
-                            player.OpenChest(left, top, chest);
-                        }
 
-                        Recipe.FindRecipes();
-                    }
-                }
-            }
+            ITDChestTE chest = GetTE(i, j);
+            chest?.Toggle(player);
 
             return true;
         }
@@ -188,38 +217,28 @@ namespace ITD.Content.Tiles
         {
             Player player = Main.LocalPlayer;
             Tile tile = Main.tile[i, j];
-            int left = i;
-            int top = j;
-            if (tile.TileFrameX % 36 != 0)
-            {
-                left--;
-            }
+            Point16 topLeft = TileHelpers.GetTopLeftTileInMultitile(i, j);
 
-            if (tile.TileFrameY != 0)
+            ITDChestTE chest = GetTE(i, j);
+            if (chest != null)
             {
-                top--;
-            }
-
-            int chest = Chest.FindChest(left, top);
-            player.cursorItemIconID = -1;
-            if (chest < 0)
-            {
-                player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
-            }
-            else
-            {
+                player.cursorItemIconID = -1;
                 string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY); // This gets the ContainerName text for the currently selected language
-                player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
+                player.cursorItemIconText = chest.StorageName.Length > 0 ? chest.StorageName : defaultName;
                 if (player.cursorItemIconText == defaultName)
                 {
                     player.cursorItemIconID = ItemType;
-                    if (Main.tile[left, top].TileFrameX / 36 == 1)
+                    if (Framing.GetTileSafely(topLeft).TileFrameX / (18 * Dimensions.X) == 1)
                     {
                         player.cursorItemIconID = KeyType;
                     }
 
                     player.cursorItemIconText = "";
                 }
+            }
+            else
+            {
+                player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
             }
 
             player.noThrow = 2;
@@ -238,31 +257,20 @@ namespace ITD.Content.Tiles
         }
         public static string MapChestName(string name, int i, int j)
         {
-            int left = i;
-            int top = j;
             Tile tile = Main.tile[i, j];
-            if (tile.TileFrameX % 36 != 0)
-            {
-                left--;
-            }
+            ITDChest chestTile = TileLoader.GetTile(tile.TileType) as ITDChest;
 
-            if (tile.TileFrameY != 0)
+            if (TileHelpers.TryGetTileEntityAs(chestTile.TE.GetType(), i, j, out var entity) && entity is ITDChestTE chest)
             {
-                top--;
+                if (string.IsNullOrEmpty(chest.StorageName))
+                    return name;
+                return name + ": " + chest.StorageName;
             }
+            return Language.GetTextValue("LegacyChestType.0");
+        }
+        public static void DrawCustomChests()
+        {
 
-            int chest = Chest.FindChest(left, top);
-            if (chest < 0)
-            {
-                return Language.GetTextValue("LegacyChestType.0");
-            }
-
-            if (Main.chest[chest].name == "")
-            {
-                return name;
-            }
-
-            return name + ": " + Main.chest[chest].name;
         }
     }
 }

@@ -1318,3 +1318,8 @@ CharbleWorkBench: {
 	// DisplayName: Charble Work Bench
 	// Tooltip: ""
 }
+
+PyracottaChest: {
+	// DisplayName: Pyracotta Chest
+	// Tooltip: ""
+}

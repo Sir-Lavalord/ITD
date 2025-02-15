@@ -25,7 +25,6 @@ namespace ITD.Content.Events
         public static T GetEvent<T>() where T : ITDEvent => EventsByType[typeof(T)] as T;
         /// <summary>
         /// Starts an event.
-        /// TODO: SYNC THIS IN MP
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public static void BeginEvent(ITDEvent e)
