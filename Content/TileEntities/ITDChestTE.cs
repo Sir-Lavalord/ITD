@@ -3,27 +3,16 @@ using ITD.Networking;
 using ITD.Networking.Packets;
 using ITD.Systems.DataStructures;
 using ITD.Utilities;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.Audio;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.UI;
 using Terraria.UI.Chat;
 using Terraria.GameInput;
-using Terraria.Localization;
-using Terraria.UI.Gamepad;
-using Terraria;
 using System.Runtime.CompilerServices;
-using Terraria.ID;
-using Microsoft.Xna.Framework.Input;
 
 namespace ITD.Content.TileEntities
 {
@@ -239,7 +228,7 @@ namespace ITD.Content.TileEntities
         {
             // replicates chest ui. specifically ChestUI.Draw();
             //spriteBatch.Draw(TextureAssets.InventorySort[0].Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
-            if (OpenedBy > -1)
+            if (OpenedBy > -1 && !Main.recBigList)
             {
                 RecalcTrashOffset();
                 Main.inventoryScale = 0.755f;
@@ -353,139 +342,6 @@ namespace ITD.Content.TileEntities
             for (int i = 0; i < ChestUI.ButtonID.Count; i++)
             {
                 UIAccessors.CallDrawChestButton(null, spriteBatch, i, x, Main.instance.invBottom + 40);
-                //DrawButton(spriteBatch, i, x, Main.instance.invBottom + 40);
-            }
-        }
-        private void DrawButton(SpriteBatch spriteBatch, int i, int X, int Y)
-        {
-            Player player = Main.LocalPlayer;
-            var anchor = player.tileEntityAnchor;
-            TileEntity te = anchor.GetTileEntity();
-            bool validTe = te != null && te is ITDChestTE;
-            if ((i == 6 && !Main.editChest))
-            {
-                ChestUI.UpdateHover(i, hovering: false);
-                return;
-            }
-            int num = i;
-            if (i == 7)
-            {
-                num = 5;
-            }
-            Y += num * 26;
-            float num2 = ChestUI.ButtonScale[i];
-            string text = "";
-            switch (i)
-            {
-                case 0:
-                    text = Lang.inter[29].Value;
-                    break;
-                case 1:
-                    text = Lang.inter[30].Value;
-                    break;
-                case 2:
-                    text = Lang.inter[31].Value;
-                    break;
-                case 3:
-                    text = Lang.inter[82].Value;
-                    break;
-                case 5:
-                    text = Lang.inter[Main.editChest ? 47 : 61].Value;
-                    break;
-                case 6:
-                    text = Lang.inter[63].Value;
-                    break;
-                case 4:
-                    text = Lang.inter[122].Value;
-                    break;
-                case 7:
-                    text = ((!player.IsVoidVaultEnabled) ? Language.GetTextValue("UI.ToggleBank4VacuumIsOff") : Language.GetTextValue("UI.ToggleBank4VacuumIsOn"));
-                    break;
-            }
-            Vector2 vector = FontAssets.MouseText.Value.MeasureString(text);
-            Color color = Color.White * 0.97f * (1f - (255f - (float)(int)Main.mouseTextColor) / 255f * 0.5f);
-            color.A = byte.MaxValue;
-            X += (int)(vector.X * num2 / 2f);
-            bool flag = Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, (float)X - vector.X / 2f, Y - 12, vector.X, 24f);
-            if (ChestUI.ButtonHovered[i])
-            {
-                flag = Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, (float)X - vector.X / 2f - 10f, Y - 12, vector.X + 16f, 24f);
-            }
-            if (flag)
-            {
-                color = Main.OurFavoriteColor;
-            }
-            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, new Vector2(X, Y), color, 0f, vector / 2f, new Vector2(num2), -1f, 1.5f);
-            vector *= num2;
-            switch (ID)
-            {
-                case 0:
-                    UILinkPointNavigator.SetPosition(500, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
-                    break;
-                case 1:
-                    UILinkPointNavigator.SetPosition(501, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
-                    break;
-                case 2:
-                    UILinkPointNavigator.SetPosition(502, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
-                    break;
-                case 5:
-                    UILinkPointNavigator.SetPosition(504, new Vector2(X, Y));
-                    break;
-                case 6:
-                    UILinkPointNavigator.SetPosition(504, new Vector2(X, Y));
-                    break;
-                case 3:
-                    UILinkPointNavigator.SetPosition(503, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
-                    break;
-                case 4:
-                    UILinkPointNavigator.SetPosition(505, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
-                    break;
-                case 7:
-                    UILinkPointNavigator.SetPosition(506, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
-                    break;
-            }
-            if (!flag)
-            {
-                ChestUI.UpdateHover(i, hovering: false);
-                return;
-            }
-            ChestUI.UpdateHover(i, hovering: true);
-            if (PlayerInput.IgnoreMouseInterface)
-            {
-                return;
-            }
-            player.mouseInterface = true;
-            if (Main.mouseLeft && Main.mouseLeftRelease)
-            {
-                switch (i)
-                {
-                    // these methods will need to be rewritten
-                    case 0:
-                        ChestUI.LootAll();
-                        break;
-                    case 1:
-                        ChestUI.DepositAll(ContainerTransferContext.FromUnknown(player));
-                        break;
-                    case 2:
-                        ChestUI.QuickStack(ContainerTransferContext.FromUnknown(player));
-                        break;
-                    case 5:
-                        ChestUI.RenameChest();
-                        break;
-                    case 6:
-                        ChestUI.RenameChestCancel();
-                        break;
-                    case 3:
-                        ChestUI.Restock();
-                        break;
-                    case 4:
-                        ItemSorting.SortChest();
-                        break;
-                    case 7:
-                        Main.LocalPlayer.IsVoidVaultEnabled = !Main.LocalPlayer.IsVoidVaultEnabled;
-                        break;
-                }
-                Recipe.FindRecipes();
             }
         }
     }

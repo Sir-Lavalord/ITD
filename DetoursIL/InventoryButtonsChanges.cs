@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using ITD.Content.TileEntities;
+﻿using ITD.Content.TileEntities;
 using MonoMod.Cil;
 using Terraria.DataStructures;
 using Terraria.UI;
@@ -9,6 +7,9 @@ namespace ITD.DetoursIL
 {
     public class InventoryButtonsChanges : DetourGroup
     {
+        // is this technically inventory buttons
+        public static bool[] myButtonHovered = new bool[ChestUI.ButtonID.Count];
+        public static float[] myButtonScale = new float[ChestUI.ButtonID.Count];
         public override void Load()
         {
             // not entirely sure why these are separate methods when they're basically the same method just with different x. even the IL edits are the exact same
@@ -16,10 +17,21 @@ namespace ITD.DetoursIL
             IL_Main.DrawEmoteBubblesButton += EmotesITDChestAdjust;
 
             // why is this not it's own method!!! it could've just been a detour!!!
-            IL_Main.DrawInventory += ChestButtonsITDChestAdjust;
+            IL_Main.DrawInventory += SortButtonsITDChestAdjust;
+
+            // fix the resetti
+            On_ChestUI.Draw += ButtonValuesITDChestAdjust;
         }
 
-        private static void ChestButtonsITDChestAdjust(ILContext il)
+        private void ButtonValuesITDChestAdjust(On_ChestUI.orig_Draw orig, SpriteBatch spritebatch)
+        {
+            TileEntity possible = Main.LocalPlayer.tileEntityAnchor.GetTileEntity();
+            if (possible != null && possible is ITDChestTE)
+                return;
+            orig(spritebatch);
+        }
+
+        private static void SortButtonsITDChestAdjust(ILContext il)
         {
             try
             {
@@ -28,7 +40,7 @@ namespace ITD.DetoursIL
                 // try to find this call. this is clean as this is only done once in the whole code
                 if (!c.TryGotoNext(MoveType.After, i => i.MatchCallvirt<TileEntity>("OnInventoryDraw")))
                 {
-                    LogError("ChestButtonsITDChestAdjust: OnInventoryDraw call not found");
+                    LogError("SortButtonsITDChestAdjust: OnInventoryDraw call not found");
                     return;
                 }
 
