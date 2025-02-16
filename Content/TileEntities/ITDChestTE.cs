@@ -29,6 +29,8 @@ namespace ITD.Content.TileEntities
 {
     public abstract class ITDChestTE : ModTileEntity
     {
+        public const int FullSlotDim = 42;
+        public int UIOffsetX => StorageDimensions.X - 10;
         public virtual Point8 Dimensions => new(2, 2);
         /// <summary>
         /// For reference, vanilla uses (10, 4).
@@ -231,8 +233,7 @@ namespace ITD.Content.TileEntities
         }
         public void RecalcTrashOffset()
         {
-            int xSlotOffset = StorageDimensions.X - 10;
-            Main.trashSlotOffset = new Point16(5 + (xSlotOffset * 42), 42 * StorageDimensions.Y);
+            Main.trashSlotOffset = new Point16(5 + (UIOffsetX * FullSlotDim), (StorageDimensions.Y * FullSlotDim));
         }
         public override void OnInventoryDraw(Player player, SpriteBatch spriteBatch)
         {
@@ -242,9 +243,9 @@ namespace ITD.Content.TileEntities
             {
                 RecalcTrashOffset();
                 Main.inventoryScale = 0.755f;
-                if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, 73f, Main.instance.invBottom, 560f * Main.inventoryScale, 224f * Main.inventoryScale))
+                if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, 73f, Main.instance.invBottom, StorageDimensions.X * FullSlotDim, StorageDimensions.Y * FullSlotDim))
                 {
-                    Main.player[Main.myPlayer].mouseInterface = true;
+                    player.mouseInterface = true;
                 }
                 DrawName(spriteBatch);
                 DrawButtons(spriteBatch);
@@ -343,14 +344,16 @@ namespace ITD.Content.TileEntities
             lineAmount++;
             for (int i = 0; i < lineAmount; i++)
             {
-                ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, new Vector2(504f, Main.instance.invBottom + i * 26), color, 0f, Vector2.Zero, Vector2.One, -1f, 1.5f);
+                ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, new Vector2(504f + (UIOffsetX * FullSlotDim), Main.instance.invBottom + i * 26), color, 0f, Vector2.Zero, Vector2.One, -1f, 1.5f);
             }
         }
         private void DrawButtons(SpriteBatch spriteBatch)
         {
+            int x = 506 + (UIOffsetX * FullSlotDim);
             for (int i = 0; i < ChestUI.ButtonID.Count; i++)
             {
-                DrawButton(spriteBatch, i, 506, Main.instance.invBottom + 40);
+                UIAccessors.CallDrawChestButton(null, spriteBatch, i, x, Main.instance.invBottom + 40);
+                //DrawButton(spriteBatch, i, x, Main.instance.invBottom + 40);
             }
         }
         private void DrawButton(SpriteBatch spriteBatch, int i, int X, int Y)
@@ -359,20 +362,20 @@ namespace ITD.Content.TileEntities
             var anchor = player.tileEntityAnchor;
             TileEntity te = anchor.GetTileEntity();
             bool validTe = te != null && te is ITDChestTE;
-            if ((ID == 5 && !validTe) || (ID == 6 && !Main.editChest))
+            if ((i == 6 && !Main.editChest))
             {
-                ChestUI.UpdateHover(ID, hovering: false);
+                ChestUI.UpdateHover(i, hovering: false);
                 return;
             }
-            int num = ID;
-            if (ID == 7)
+            int num = i;
+            if (i == 7)
             {
                 num = 5;
             }
             Y += num * 26;
-            float num2 = ChestUI.ButtonScale[ID];
+            float num2 = ChestUI.ButtonScale[i];
             string text = "";
-            switch (ID)
+            switch (i)
             {
                 case 0:
                     text = Lang.inter[29].Value;
@@ -404,7 +407,7 @@ namespace ITD.Content.TileEntities
             color.A = byte.MaxValue;
             X += (int)(vector.X * num2 / 2f);
             bool flag = Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, (float)X - vector.X / 2f, Y - 12, vector.X, 24f);
-            if (ChestUI.ButtonHovered[ID])
+            if (ChestUI.ButtonHovered[i])
             {
                 flag = Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, (float)X - vector.X / 2f - 10f, Y - 12, vector.X + 16f, 24f);
             }
@@ -443,10 +446,10 @@ namespace ITD.Content.TileEntities
             }
             if (!flag)
             {
-                ChestUI.UpdateHover(ID, hovering: false);
+                ChestUI.UpdateHover(i, hovering: false);
                 return;
             }
-            ChestUI.UpdateHover(ID, hovering: true);
+            ChestUI.UpdateHover(i, hovering: true);
             if (PlayerInput.IgnoreMouseInterface)
             {
                 return;
@@ -454,7 +457,7 @@ namespace ITD.Content.TileEntities
             player.mouseInterface = true;
             if (Main.mouseLeft && Main.mouseLeftRelease)
             {
-                switch (ID)
+                switch (i)
                 {
                     // these methods will need to be rewritten
                     case 0:
@@ -486,8 +489,11 @@ namespace ITD.Content.TileEntities
             }
         }
     }
-    public static class ItemSlotAccessors
+    public static class UIAccessors
     {
+        [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "DrawButton")]
+        public static extern void CallDrawChestButton(ChestUI type, SpriteBatch spriteBatch, int ID, int X, int Y);
+
         [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "inventoryGlowHue")]
         public static extern ref float[] GetInventoryGlowHue(ItemSlot type);
 

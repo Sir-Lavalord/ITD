@@ -19,10 +19,10 @@ namespace ITD.DetoursIL
                 maxArrayNewSize = Math.Max(maxArrayNewSize, instance.StorageDimensions.X * instance.StorageDimensions.Y);
             }
             // this is necessary so the game doesn't crash
-            Array.Resize(ref ItemSlotAccessors.GetInventoryGlowTime(null), maxArrayNewSize + 18);
-            Array.Resize(ref ItemSlotAccessors.GetInventoryGlowHue(null), maxArrayNewSize + 18);
-            Array.Resize(ref ItemSlotAccessors.GetInventoryGlowTimeChest(null), maxArrayNewSize + 18);
-            Array.Resize(ref ItemSlotAccessors.GetInventoryGlowHueChest(null), maxArrayNewSize + 18);
+            Array.Resize(ref UIAccessors.GetInventoryGlowTime(null), maxArrayNewSize + 18);
+            Array.Resize(ref UIAccessors.GetInventoryGlowHue(null), maxArrayNewSize + 18);
+            Array.Resize(ref UIAccessors.GetInventoryGlowTimeChest(null), maxArrayNewSize + 18);
+            Array.Resize(ref UIAccessors.GetInventoryGlowHueChest(null), maxArrayNewSize + 18);
 
             IL_ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += SkipGamepadThing;
         }

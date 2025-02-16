@@ -11,6 +11,7 @@ using ITD.Utilities;
 using ITD.Content.TileEntities;
 using ITD.Content.TileEntities.Chests;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ITD.Content.Tiles
 {
@@ -56,6 +57,9 @@ namespace ITD.Content.Tiles
             TileID.Sets.IsAContainer[Type] = true;
             TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
             TileID.Sets.GeneralPlacementTiles[Type] = false;
+
+            TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
+
             AdjTiles = [TileID.Containers];
             (Color color0, Color color1) = UnlockedAndLockedMapColors;
             AddMapEntry(color0, this.GetLocalization("MapEntryUnlocked"), MapChestName);
@@ -159,6 +163,12 @@ namespace ITD.Content.Tiles
                 return true;
             }
             return false;
+        }
+        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+        {
+            ITDChestTE te = GetTE(i, j);
+            if (te != null && te.items.Any(it => it.Exists()))
+                fail = true;
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
