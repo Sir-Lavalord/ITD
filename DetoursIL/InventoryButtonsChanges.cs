@@ -18,19 +18,7 @@ namespace ITD.DetoursIL
 
             // why is this not it's own method!!! it could've just been a detour!!!
             IL_Main.DrawInventory += SortButtonsITDChestAdjust;
-
-            // fix the resetti
-            On_ChestUI.Draw += ButtonValuesITDChestAdjust;
         }
-
-        private void ButtonValuesITDChestAdjust(On_ChestUI.orig_Draw orig, SpriteBatch spritebatch)
-        {
-            TileEntity possible = Main.LocalPlayer.tileEntityAnchor.GetTileEntity();
-            if (possible != null && possible is ITDChestTE)
-                return;
-            orig(spritebatch);
-        }
-
         private static void SortButtonsITDChestAdjust(ILContext il)
         {
             try
@@ -40,7 +28,7 @@ namespace ITD.DetoursIL
                 // try to find this call. this is clean as this is only done once in the whole code
                 if (!c.TryGotoNext(MoveType.After, i => i.MatchCallvirt<TileEntity>("OnInventoryDraw")))
                 {
-                    LogError("SortButtonsITDChestAdjust: OnInventoryDraw call not found");
+                    LogError("OnInventoryDraw call not found");
                     return;
                 }
 
@@ -48,9 +36,7 @@ namespace ITD.DetoursIL
                 // get the bool for whether or not we should return
                 c.EmitDelegate(() =>
                 {
-                    var anchor = Main.LocalPlayer.tileEntityAnchor;
-                    TileEntity possible = anchor.GetTileEntity();
-                    return possible != null && possible is ITDChestTE;
+                    return ITDChestTE.IsActiveForLocalPlayer;
                 });
 
                 // branch and return
@@ -74,7 +60,7 @@ namespace ITD.DetoursIL
                 // find the instructions to load num4 and 4 onto the stack
                 if (!c.TryGotoNext(MoveType.After, i => i.MatchLdloc(out _), i => i.MatchAdd(), i => i.MatchLdcI4(4), i => i.MatchAdd()))
                 {
-                    LogError("EmotesITDChestAdjust: num4 and 4 load instructions not found");
+                    LogError("num4 and 4 load instructions not found");
                     return;
                 }
                 // now let's add our own amount to the thing
@@ -85,7 +71,7 @@ namespace ITD.DetoursIL
                     TileEntity te = anchor.GetTileEntity();
                     if (te != null && te is ITDChestTE chest)
                     {
-                        return chest.StorageDimensions.Y * 36;
+                        return chest.StorageDimensions.Y * ITDChestTE.FullSlotDim;
                     }
                     return 0;
                 });
@@ -106,7 +92,7 @@ namespace ITD.DetoursIL
                 // find the instructions to load num4 and 4 onto the stack
                 if (!c.TryGotoNext(MoveType.After, i => i.MatchLdloc(out _), i => i.MatchAdd(), i => i.MatchLdcI4(4), i => i.MatchAdd()))
                 {
-                    LogError("BestiaryITDChestAdjust: num4 and 4 load instructions not found");
+                    LogError("num4 and 4 load instructions not found");
                     return;
                 }
                 // now let's add our own amount to the thing
@@ -117,7 +103,7 @@ namespace ITD.DetoursIL
                     TileEntity te = anchor.GetTileEntity();
                     if (te != null && te is ITDChestTE chest)
                     {
-                        return chest.StorageDimensions.Y * 36;
+                        return chest.StorageDimensions.Y * ITDChestTE.FullSlotDim;
                     }
                     return 0;
                 });

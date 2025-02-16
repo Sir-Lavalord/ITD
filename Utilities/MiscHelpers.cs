@@ -438,6 +438,20 @@ namespace ITD.Utilities
         public static bool Exists(this Projectile p) => p != null && p.active;
         public static bool Exists(this Item i) => i != null && !i.IsAir;
         public static bool ExistsInWorld(this Item i) => Exists(i) && i.active;
+        /// <summary>
+        /// WHY TF IS THIS INTERNAL IN VANILLA
+        /// </summary>
+        /// <param name="i1"></param>
+        /// <param name="i2"></param>
+        /// <returns></returns>
+        public static bool IsTheSameAs(this Item i1, Item i2)
+        {
+            if (i1.netID == i2.netID)
+            {
+                return i1.type == i2.type;
+            }
+            return false;
+        }
         //Make the invul boss part untargetable please
         public static bool IsValidTarget(this Projectile projectile, NPC target)
         {

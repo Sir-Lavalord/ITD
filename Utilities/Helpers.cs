@@ -6,6 +6,7 @@ using Terraria.DataStructures;
 using Terraria.Audio;
 using static ITD.Utilities.TileHelpers;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ITD.Content.TileEntities;
 
 namespace ITD.Utilities
 {
@@ -58,6 +59,11 @@ namespace ITD.Utilities
                 action(point);
             }
         }
+        /// <summary>
+        /// Only safe to call if <see cref="ITDChestTE.IsActiveForLocalPlayer"/>.
+        /// </summary>
+        /// <returns></returns>
+        public static ITDChestTE GetITDChest() => Main.LocalPlayer.tileEntityAnchor.GetTileEntity() as ITDChestTE;
         /// <summary>
         /// Cast a ray using a DDA algorithm with extra support for half blocks and slopes.
         /// </summary>

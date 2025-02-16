@@ -33,14 +33,14 @@ namespace ITD.DetoursIL
                 // find the instruction that loads this string onto the stack
                 if (!c.TryGotoNext(i => i.MatchLdstr("Generate Ice Biome")))
                 {
-                    LogError("SnowBiomeExtension: Generate Ice Biome string not found");
+                    LogError("Generate Ice Biome string not found");
                     return;
                 }
                 // get the actual delegate pointer of the anonymous GenIceBiome method
                 // this has to be stored in a global variable cuz you can't access an out directly from that far of a scope
                 if (!c.TryGotoNext(i => i.MatchLdftn(out methodReference)))
                 {
-                    LogError("SnowBiomeExtension: Delegate pointer not found");
+                    LogError("Delegate pointer not found");
                 }
                 // store methodbase in the global variable
                 snowBiomeGenMethod = methodReference.ResolveReflection();
@@ -70,12 +70,12 @@ namespace ITD.DetoursIL
                 // get to the maxValue load of 200 for Main.genRand (next is modifying num949)
                 if (!c.TryGotoNext(i => i.MatchLdcI4(200)))
                 {
-                    LogError("SnowBiomeExtension: snowThickness declaration not found");
+                    LogError("snowThickness declaration not found");
                 }
                 // from here we need to modify the number that is used as the lower Y limit in the loop (this is equal to num949 in the source code)
                 if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(GenVars), "lavaLine")))
                 {
-                    LogError("SnowBiomeExtension: Couldn't find lavaLine storage");
+                    LogError("Couldn't find lavaLine storage");
                 }
                 c.Index++; // advance cursor position
 

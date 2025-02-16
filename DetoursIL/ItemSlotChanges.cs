@@ -35,7 +35,7 @@ namespace ITD.DetoursIL
                 // find this sequence of instructions
                 if (!c.TryGotoNext(i => i.MatchLdloc(out _), i => i.MatchLdarg(out _), i => i.MatchLdloc(out _), i => i.MatchLdcR4(0.75f)))
                 {
-                    LogError("SkipGamepadThing: Instructions not found");
+                    LogError("Instructions not found");
                     return;
                 }
                 // define a label for branching
@@ -51,7 +51,7 @@ namespace ITD.DetoursIL
                 // go to ret to mark the label
                 if (!c.TryGotoNext(i => i.MatchRet()))
                 {
-                    LogError("SkipGamepadThing: Couldn't find method end");
+                    LogError("Couldn't find method end");
                     return;
                 }
                 // mark it

@@ -13,11 +13,20 @@ using Terraria.UI;
 using Terraria.UI.Chat;
 using Terraria.GameInput;
 using System.Runtime.CompilerServices;
+using Terraria.ID;
 
 namespace ITD.Content.TileEntities
 {
     public abstract class ITDChestTE : ModTileEntity
     {
+        public static bool IsActiveForLocalPlayer
+        { 
+            get
+            {
+                TileEntity possible = Main.LocalPlayer.tileEntityAnchor.GetTileEntity();
+                return possible != null && possible is ITDChestTE;
+            }
+        }
         public const int FullSlotDim = 42;
         public int UIOffsetX => StorageDimensions.X - 10;
         public virtual Point8 Dimensions => new(2, 2);
@@ -25,9 +34,7 @@ namespace ITD.Content.TileEntities
         /// For reference, vanilla uses (10, 4).
         /// </summary>
         public virtual Point8 StorageDimensions => new(10, 4);
-        /// <summary>
-        /// 2d array (is this the best way of doing this?)
-        /// </summary>
+        public int TotalSlots => StorageDimensions.X * StorageDimensions.Y;
         internal Item[] items;
         public string StorageName = "";
         public short OpenedBy = -1;
@@ -166,6 +173,7 @@ namespace ITD.Content.TileEntities
                 currentHasItem = !currentHasItem;
             }
         }
+        public ref Item this[int i] => ref items[i];
         public sealed override bool IsTileValidForEntity(int x, int y)
         {
             Tile t = Framing.GetTileSafely(x, y);
@@ -343,6 +351,202 @@ namespace ITD.Content.TileEntities
             {
                 UIAccessors.CallDrawChestButton(null, spriteBatch, i, x, Main.instance.invBottom + 40);
             }
+        }
+        public static long MoveCoinsITD(Item[] pInv, Item[] cInv, ContainerTransferContext context)
+        {
+            bool flag = false;
+            int[] array = new int[4];
+            List<int> list = [];
+            List<int> list2 = [];
+            bool flag2 = false;
+            int[] array2 = new int[cInv.Length];
+            bool overFlowing;
+            long num = Utils.CoinsCount(out overFlowing, pInv);
+            for (int i = 0; i < cInv.Length; i++)
+            {
+                array2[i] = -1;
+                if (cInv[i].stack < 1 || cInv[i].type < ItemID.IronPickaxe)
+                {
+                    list2.Add(i);
+                    cInv[i] = new Item();
+                }
+
+                if (cInv[i] != null && cInv[i].stack > 0)
+                {
+                    int num2 = 0;
+                    if (cInv[i].type == ItemID.CopperCoin)
+                        num2 = 1;
+
+                    if (cInv[i].type == ItemID.SilverCoin)
+                        num2 = 2;
+
+                    if (cInv[i].type == ItemID.GoldCoin)
+                        num2 = 3;
+
+                    if (cInv[i].type == ItemID.PlatinumCoin)
+                        num2 = 4;
+
+                    array2[i] = num2 - 1;
+                    if (num2 > 0)
+                    {
+                        array[num2 - 1] += cInv[i].stack;
+                        list2.Add(i);
+                        cInv[i] = new Item();
+                        flag2 = true;
+                    }
+                }
+            }
+
+            if (!flag2)
+                return 0L;
+
+            for (int j = 0; j < pInv.Length; j++)
+            {
+                if (j != 58 && pInv[j] != null && pInv[j].stack > 0 && !pInv[j].favorited)
+                {
+                    int num3 = 0;
+                    if (pInv[j].type == ItemID.CopperCoin)
+                        num3 = 1;
+
+                    if (pInv[j].type == ItemID.SilverCoin)
+                        num3 = 2;
+
+                    if (pInv[j].type == ItemID.GoldCoin)
+                        num3 = 3;
+
+                    if (pInv[j].type == ItemID.PlatinumCoin)
+                        num3 = 4;
+
+                    if (num3 > 0)
+                    {
+                        flag = true;
+                        array[num3 - 1] += pInv[j].stack;
+                        list.Add(j);
+                        pInv[j] = new Item();
+                    }
+                }
+            }
+
+            for (int k = 0; k < 3; k++)
+            {
+                while (array[k] >= 100)
+                {
+                    array[k] -= 100;
+                    array[k + 1]++;
+                }
+            }
+
+            for (int l = 0; l < 40; l++)
+            {
+                if (array2[l] < 0 || cInv[l].type != 0)
+                    continue;
+
+                int num4 = l;
+                int num5 = array2[l];
+                if (array[num5] > 0)
+                {
+                    cInv[num4].SetDefaults(71 + num5);
+                    cInv[num4].stack = array[num5];
+                    if (cInv[num4].stack > cInv[num4].maxStack)
+                        cInv[num4].stack = cInv[num4].maxStack;
+
+                    array[num5] -= cInv[num4].stack;
+                    array2[l] = -1;
+                }
+
+                if (!Main.dedServ && IsActiveForLocalPlayer)
+                    NetSystem.SendPacket(new SyncITDChestItemPacket(Helpers.GetITDChest().ID, num4));
+
+                list2.Remove(num4);
+            }
+
+            for (int m = 0; m < 40; m++)
+            {
+                if (array2[m] < 0 || cInv[m].type != 0)
+                    continue;
+
+                int num6 = m;
+                int num7 = 3;
+                while (num7 >= 0)
+                {
+                    if (array[num7] > 0)
+                    {
+                        cInv[num6].SetDefaults(71 + num7);
+                        cInv[num6].stack = array[num7];
+                        if (cInv[num6].stack > cInv[num6].maxStack)
+                            cInv[num6].stack = cInv[num6].maxStack;
+
+                        array[num7] -= cInv[num6].stack;
+                        array2[m] = -1;
+                        break;
+                    }
+
+                    if (array[num7] == 0)
+                        num7--;
+                }
+
+                if (Main.netMode == 1 && Main.player[Main.myPlayer].chest > -1)
+                    NetMessage.SendData(32, -1, -1, null, Main.player[Main.myPlayer].chest, num6);
+
+                list2.Remove(num6);
+            }
+
+            while (list2.Count > 0)
+            {
+                int num8 = list2[0];
+                int num9 = 3;
+                while (num9 >= 0)
+                {
+                    if (array[num9] > 0)
+                    {
+                        cInv[num8].SetDefaults(71 + num9);
+                        cInv[num8].stack = array[num9];
+                        if (cInv[num8].stack > cInv[num8].maxStack)
+                            cInv[num8].stack = cInv[num8].maxStack;
+
+                        array[num9] -= cInv[num8].stack;
+                        break;
+                    }
+
+                    if (array[num9] == 0)
+                        num9--;
+                }
+
+                if (Main.netMode == 1 && Main.player[Main.myPlayer].chest > -1)
+                    NetMessage.SendData(32, -1, -1, null, Main.player[Main.myPlayer].chest, list2[0]);
+
+                list2.RemoveAt(0);
+            }
+
+            int num10 = 3;
+            while (num10 >= 0 && list.Count > 0)
+            {
+                int num11 = list[0];
+                if (array[num10] > 0)
+                {
+                    pInv[num11].SetDefaults(71 + num10);
+                    pInv[num11].stack = array[num10];
+                    if (pInv[num11].stack > pInv[num11].maxStack)
+                        pInv[num11].stack = pInv[num11].maxStack;
+
+                    array[num10] -= pInv[num11].stack;
+                    flag = false;
+                    list.RemoveAt(0);
+                }
+
+                if (array[num10] == 0)
+                    num10--;
+            }
+
+            if (flag)
+                SoundEngine.PlaySound(SoundID.Grab);
+
+            bool overFlowing2;
+            long num12 = Utils.CoinsCount(out overFlowing2, pInv);
+            if (overFlowing || overFlowing2)
+                return 0L;
+
+            return num - num12;
         }
     }
     public static class UIAccessors
