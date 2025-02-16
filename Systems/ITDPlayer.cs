@@ -23,6 +23,7 @@ using Terraria.GameContent;
 using ITD.Systems.DataStructures;
 using Microsoft.Xna.Framework.Input;
 using ITD.Content.Projectiles;
+using ITD.Content.TileEntities;
 
 namespace ITD.Players
 {
@@ -90,6 +91,22 @@ namespace ITD.Players
         public Point16 selectBottomRight;
         public Rectangle selectBounds;
         public SimpleTileDataType tileDataSelection = SimpleTileDataType.None | SimpleTileDataType.Tile | SimpleTileDataType.Wall | SimpleTileDataType.Liquid | SimpleTileDataType.Wiring;
+        public override void Load()
+        {
+            On_Player.ToggleInv += On_Player_ToggleInv;
+        }
+        private void On_Player_ToggleInv(On_Player.orig_ToggleInv orig, Player self)
+        {
+            if (Main.playerInventory)
+            {
+                var anchor = self.tileEntityAnchor;
+                TileEntity te = anchor.GetTileEntity();
+                if (te != null && te is ITDChestTE chest && chest.OpenedBy == self.whoAmI)
+                    chest.Close(self);
+            }
+            orig(self);
+        }
+
         public override void ResetEffects()
         {
             //shakeDuration

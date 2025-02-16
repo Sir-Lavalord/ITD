@@ -66,6 +66,14 @@ namespace ITD.Systems.DataStructures
         {
             return !(first > second);
         }
+        public static Point8 operator +(Point8 first, Point8 second)
+        {
+            return new(first.X + second.X, first.Y + second.Y);
+        }
+        public static Point8 operator -(Point8 first, Point8 second)
+        {
+            return new(first.X - second.X, first.Y - second.Y);
+        }
         public override readonly bool Equals([NotNullWhen(true)] object obj)
         {
             return obj is Point8 other && other == this;

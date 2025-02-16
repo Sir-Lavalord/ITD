@@ -13,6 +13,17 @@ using Terraria.Audio;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 using Terraria.DataStructures;
+using Terraria.GameContent;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.UI;
+using Terraria.UI.Chat;
+using Terraria.GameInput;
+using Terraria.Localization;
+using Terraria.UI.Gamepad;
+using Terraria;
+using System.Runtime.CompilerServices;
+using Terraria.ID;
+using Microsoft.Xna.Framework.Input;
 
 namespace ITD.Content.TileEntities
 {
@@ -24,10 +35,9 @@ namespace ITD.Content.TileEntities
         /// </summary>
         public virtual Point8 StorageDimensions => new(10, 4);
         /// <summary>
-        /// Not an array. Impossible to initialize well.
-        /// Not a 2D array either, for the same reason, plus we can deduce item positions from the chest's storage dimensions.
+        /// 2d array (is this the best way of doing this?)
         /// </summary>
-        internal Item[,] items;
+        internal Item[] items;
         public string StorageName = "";
         public short OpenedBy = -1;
         public byte frameCounter = 0;
@@ -37,7 +47,7 @@ namespace ITD.Content.TileEntities
         {
             if (OpenedBy > -1)
             {
-                Close();
+                Close(player);
                 return;
             }
             Open(player);
@@ -50,12 +60,15 @@ namespace ITD.Content.TileEntities
         {
             OpenedBy = (short)player.whoAmI;
             SoundEngine.PlaySound(SoundID.MenuOpen);
+            player.tileEntityAnchor.Set(ID, Position.X, Position.Y);
             Main.playerInventory = true;
         }
-        public void Close()
+        public void Close(Player player)
         {
             OpenedBy = -1;
             SoundEngine.PlaySound(SoundID.MenuClose);
+            player.tileEntityAnchor.Clear();
+            Main.trashSlotOffset = Point16.Zero;
         }
         /// <summary>
         /// Only runs on the server
@@ -78,7 +91,7 @@ namespace ITD.Content.TileEntities
 
                 if (!inAnyRange)
                 {
-                    Close();
+                    Close(openedPlayer);
                     return;
                 }
             }
@@ -86,7 +99,7 @@ namespace ITD.Content.TileEntities
         }
         public sealed override void SaveData(TagCompound tag)
         {
-            Item firstItem = items[0, 0];
+            Item firstItem = items[0];
             tag["firstSlotHasItem"] = firstItem.Exists();
             tag["name"] = StorageName;
 
@@ -132,16 +145,14 @@ namespace ITD.Content.TileEntities
             bool currentHasItem = firstSlotHasItem;
             int slotIndex = 0;
 
-            byte vert = (byte)items.GetLength(1);
-
             foreach (byte count in alternationCounts)
             {
                 for (int i = 0; i < count; i++, slotIndex++)
                 {
                     if (currentHasItem)
-                        items[slotIndex / vert, slotIndex % vert] = nonEmptyItems[itemIndex++];
+                        items[slotIndex] = nonEmptyItems[itemIndex++];
                     else
-                        items[slotIndex / vert, slotIndex % vert] = new Item();
+                        items[slotIndex] = new Item();
                 }
                 currentHasItem = !currentHasItem;
             }
@@ -155,13 +166,10 @@ namespace ITD.Content.TileEntities
         {
             if (items is null)
             {
-                items = new Item[StorageDimensions.X, StorageDimensions.Y];
-                for (int i = 0; i < items.GetLength(0); i++)
+                items = new Item[StorageDimensions.X * StorageDimensions.Y];
+                for (int i = 0; i < items.Length; i++)
                 {
-                    for (int j = 0; j < items.GetLength(1); j++)
-                    {
-                        items[i, j] = new Item();
-                    }
+                    items[i] = new Item();
                 }
                 if (Main.dedServ)
                 {
@@ -203,5 +211,278 @@ namespace ITD.Content.TileEntities
                 NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Position.X, number3: Position.Y);
             }
         }
+        public override void OnInventoryDraw(Player player, SpriteBatch spriteBatch)
+        {
+            // replicates chest ui. specifically ChestUI.Draw();
+            if (OpenedBy > -1)
+            {
+                //Main.trashSlotOffset = Point16.Zero;
+                int xSlotOffset = StorageDimensions.X - 10;
+                Main.trashSlotOffset = new Point16(5 + (xSlotOffset * 42), 42 * StorageDimensions.Y);
+                Main.inventoryScale = 0.755f;
+                if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, 73f, Main.instance.invBottom, 560f * Main.inventoryScale, 224f * Main.inventoryScale))
+                {
+                    Main.player[Main.myPlayer].mouseInterface = true;
+                }
+                DrawName(spriteBatch);
+                DrawButtons(spriteBatch);
+                DrawSlots(spriteBatch);
+            }
+            else
+            {
+                for (int i = 0; i < ChestUI.ButtonID.Count; i++)
+                {
+                    ChestUI.ButtonScale[i] = 0.75f;
+                    ChestUI.ButtonHovered[i] = false;
+                }
+            }
+        }
+        private void DrawSlots(SpriteBatch spriteBatch)
+        {
+            Player player = Main.LocalPlayer;
+            int context = 3;
+            Item[] inv = null;
+            var anchor = player.tileEntityAnchor;
+            TileEntity te = anchor.GetTileEntity();
+            bool validTe = te != null && te is ITDChestTE;
+            if (validTe)
+            {
+                inv = items;
+            }
+            Main.inventoryScale = 0.755f;
+            if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, 73f, Main.instance.invBottom, 560f * Main.inventoryScale, 224f * Main.inventoryScale) && !PlayerInput.IgnoreMouseInterface)
+            {
+                player.mouseInterface = true;
+            }
+            for (int i = 0; i < StorageDimensions.X; i++)
+            {
+                for (int j = 0; j < StorageDimensions.Y; j++)
+                {
+                    int num = (int)(73f + (float)(i * 56) * Main.inventoryScale);
+                    int num2 = (int)((float)Main.instance.invBottom + (float)(j * 56) * Main.inventoryScale);
+                    int slot = i + j * StorageDimensions.X;
+                    if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, num, num2, (float)TextureAssets.InventoryBack.Width() * Main.inventoryScale, (float)TextureAssets.InventoryBack.Height() * Main.inventoryScale) && !PlayerInput.IgnoreMouseInterface)
+                    {
+                        player.mouseInterface = true;
+                        ItemSlot.Handle(inv, context, slot);
+                    }
+                    ItemSlot.Draw(spriteBatch, inv, context, slot, new Vector2(num, num2));
+                }
+            }
+        }
+        private void DrawName(SpriteBatch spriteBatch)
+        {
+            Player player = Main.LocalPlayer;
+            var anchor = player.tileEntityAnchor;
+            TileEntity te = anchor.GetTileEntity();
+            bool validTe = te != null && te is ITDChestTE;
+            string text = string.Empty;
+            if (Main.editChest)
+            {
+                text = Main.npcChatText;
+                Main.instance.textBlinkerCount++;
+                if (Main.instance.textBlinkerCount >= 20)
+                {
+                    if (Main.instance.textBlinkerState == 0)
+                    {
+                        Main.instance.textBlinkerState = 1;
+                    }
+                    else
+                    {
+                        Main.instance.textBlinkerState = 0;
+                    }
+                    Main.instance.textBlinkerCount = 0;
+                }
+                if (Main.instance.textBlinkerState == 1)
+                {
+                    text += "|";
+                }
+                Main.instance.DrawWindowsIMEPanel(new Vector2(120f, 518f));
+            }
+            else if (validTe)
+            {
+                ITDChestTE chest = te as ITDChestTE;
+                if (chest.StorageName != "")
+                {
+                    text = chest.StorageName;
+                }
+                else
+                {
+                    Tile chestTile = Framing.GetTileSafely(te.Position);
+                    if (TileLoader.GetTile(chestTile.TileType) is ITDChest)
+                    {
+                        text = TileLoader.DefaultContainerName(chestTile.TileType, chestTile.TileFrameX, chestTile.TileFrameY);
+                    }
+                }
+            }
+            Color color = Color.White * (1f - (255f - (float)(int)Main.mouseTextColor) / 255f * 0.5f);
+            color.A = byte.MaxValue;
+            Utils.WordwrapString(text, FontAssets.MouseText.Value, 200, 1, out var lineAmount);
+            lineAmount++;
+            for (int i = 0; i < lineAmount; i++)
+            {
+                ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, new Vector2(504f, Main.instance.invBottom + i * 26), color, 0f, Vector2.Zero, Vector2.One, -1f, 1.5f);
+            }
+        }
+        private void DrawButtons(SpriteBatch spriteBatch)
+        {
+            for (int i = 0; i < ChestUI.ButtonID.Count; i++)
+            {
+                DrawButton(spriteBatch, i, 506, Main.instance.invBottom + 40);
+            }
+        }
+        private void DrawButton(SpriteBatch spriteBatch, int i, int X, int Y)
+        {
+            Player player = Main.LocalPlayer;
+            var anchor = player.tileEntityAnchor;
+            TileEntity te = anchor.GetTileEntity();
+            bool validTe = te != null && te is ITDChestTE;
+            if ((ID == 5 && !validTe) || (ID == 6 && !Main.editChest))
+            {
+                ChestUI.UpdateHover(ID, hovering: false);
+                return;
+            }
+            int num = ID;
+            if (ID == 7)
+            {
+                num = 5;
+            }
+            Y += num * 26;
+            float num2 = ChestUI.ButtonScale[ID];
+            string text = "";
+            switch (ID)
+            {
+                case 0:
+                    text = Lang.inter[29].Value;
+                    break;
+                case 1:
+                    text = Lang.inter[30].Value;
+                    break;
+                case 2:
+                    text = Lang.inter[31].Value;
+                    break;
+                case 3:
+                    text = Lang.inter[82].Value;
+                    break;
+                case 5:
+                    text = Lang.inter[Main.editChest ? 47 : 61].Value;
+                    break;
+                case 6:
+                    text = Lang.inter[63].Value;
+                    break;
+                case 4:
+                    text = Lang.inter[122].Value;
+                    break;
+                case 7:
+                    text = ((!player.IsVoidVaultEnabled) ? Language.GetTextValue("UI.ToggleBank4VacuumIsOff") : Language.GetTextValue("UI.ToggleBank4VacuumIsOn"));
+                    break;
+            }
+            Vector2 vector = FontAssets.MouseText.Value.MeasureString(text);
+            Color color = Color.White * 0.97f * (1f - (255f - (float)(int)Main.mouseTextColor) / 255f * 0.5f);
+            color.A = byte.MaxValue;
+            X += (int)(vector.X * num2 / 2f);
+            bool flag = Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, (float)X - vector.X / 2f, Y - 12, vector.X, 24f);
+            if (ChestUI.ButtonHovered[ID])
+            {
+                flag = Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, (float)X - vector.X / 2f - 10f, Y - 12, vector.X + 16f, 24f);
+            }
+            if (flag)
+            {
+                color = Main.OurFavoriteColor;
+            }
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, new Vector2(X, Y), color, 0f, vector / 2f, new Vector2(num2), -1f, 1.5f);
+            vector *= num2;
+            switch (ID)
+            {
+                case 0:
+                    UILinkPointNavigator.SetPosition(500, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
+                    break;
+                case 1:
+                    UILinkPointNavigator.SetPosition(501, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
+                    break;
+                case 2:
+                    UILinkPointNavigator.SetPosition(502, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
+                    break;
+                case 5:
+                    UILinkPointNavigator.SetPosition(504, new Vector2(X, Y));
+                    break;
+                case 6:
+                    UILinkPointNavigator.SetPosition(504, new Vector2(X, Y));
+                    break;
+                case 3:
+                    UILinkPointNavigator.SetPosition(503, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
+                    break;
+                case 4:
+                    UILinkPointNavigator.SetPosition(505, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
+                    break;
+                case 7:
+                    UILinkPointNavigator.SetPosition(506, new Vector2((float)X - vector.X * num2 / 2f * 0.8f, Y));
+                    break;
+            }
+            if (!flag)
+            {
+                ChestUI.UpdateHover(ID, hovering: false);
+                return;
+            }
+            ChestUI.UpdateHover(ID, hovering: true);
+            if (PlayerInput.IgnoreMouseInterface)
+            {
+                return;
+            }
+            player.mouseInterface = true;
+            if (Main.mouseLeft && Main.mouseLeftRelease)
+            {
+                switch (ID)
+                {
+                    // these methods will need to be rewritten
+                    case 0:
+                        ChestUI.LootAll();
+                        break;
+                    case 1:
+                        ChestUI.DepositAll(ContainerTransferContext.FromUnknown(player));
+                        break;
+                    case 2:
+                        ChestUI.QuickStack(ContainerTransferContext.FromUnknown(player));
+                        break;
+                    case 5:
+                        ChestUI.RenameChest();
+                        break;
+                    case 6:
+                        ChestUI.RenameChestCancel();
+                        break;
+                    case 3:
+                        ChestUI.Restock();
+                        break;
+                    case 4:
+                        ItemSorting.SortChest();
+                        break;
+                    case 7:
+                        Main.LocalPlayer.IsVoidVaultEnabled = !Main.LocalPlayer.IsVoidVaultEnabled;
+                        break;
+                }
+                Recipe.FindRecipes();
+            }
+        }
+    }
+    public static class ItemSlotAccessors
+    {
+        [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "inventoryGlowHue")]
+        public static extern ref float[] GetInventoryGlowHue(ItemSlot type);
+
+        [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "inventoryGlowTime")]
+        public static extern ref int[] GetInventoryGlowTime(ItemSlot type);
+
+        [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "inventoryGlowHueChest")]
+        public static extern ref float[] GetInventoryGlowHueChest(ItemSlot type);
+
+        [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "inventoryGlowTimeChest")]
+        public static extern ref int[] GetInventoryGlowTimeChest(ItemSlot type);
+
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "DrawSlotTexture")]
+        public static extern void CallDrawSlotTexture(AccessorySlotLoader instance, Texture2D value6, Vector2 position, Rectangle rectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth, int slot, int context);
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "GetBackgroundTexture")]
+        public static extern Texture2D CallGetBackgroundTexture(AccessorySlotLoader instance, int slot, int context);
+        [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "GetGamepadPointForSlot")]
+        public static extern int CallGetGamepadPointForSlot(ItemSlot type, Item[] inv, int context, int slot);
     }
 }

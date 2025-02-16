@@ -268,9 +268,5 @@ namespace ITD.Content.Tiles
             }
             return Language.GetTextValue("LegacyChestType.0");
         }
-        public static void DrawCustomChests()
-        {
-
-        }
     }
 }

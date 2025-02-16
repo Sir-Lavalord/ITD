@@ -93,7 +93,7 @@ namespace ITD.Systems
                     string guidString = key["recdata:".Length..];
                     if (Guid.TryParse(guidString, out Guid guid))
                     {
-                        RecruitData rD = recruitmentData[guid] = tag.Get<RecruitData>(key);
+                        recruitmentData[guid] = tag.Get<RecruitData>(key);
                     }
                 }
             }
@@ -197,18 +197,6 @@ namespace ITD.Systems
                     if (Main.dedServ)
                         NetSystem.SendPacket(new SyncRecruitmentPacket());
                 }
-            }
-        }
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
-            int invIndex = layers.FindIndex(l => l.Name == "Vanilla: Inventory");
-            if (invIndex != 1)
-            {
-                layers.Insert(invIndex, new LegacyGameInterfaceLayer("ITD: Custom Chests", delegate
-                {
-                    ITDChest.DrawCustomChests();
-                    return true;
-                }, InterfaceScaleType.UI));
             }
         }
         private static void PreventTownNPCSpawns(On_Main.orig_UpdateTime_SpawnTownNPCs orig)
