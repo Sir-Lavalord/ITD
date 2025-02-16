@@ -14,6 +14,43 @@ namespace ITD.DetoursIL
             // not entirely sure why these are separate methods when they're basically the same method just with different x. even the IL edits are the exact same
             IL_Main.DrawBestiaryIcon += BestiaryITDChestAdjust;
             IL_Main.DrawEmoteBubblesButton += EmotesITDChestAdjust;
+
+            // why is this not it's own method!!! it could've just been a detour!!!
+            IL_Main.DrawInventory += ChestButtonsITDChestAdjust;
+        }
+
+        private static void ChestButtonsITDChestAdjust(ILContext il)
+        {
+            try
+            {
+                var c = new ILCursor(il);
+
+                // try to find this call. this is clean as this is only done once in the whole code
+                if (!c.TryGotoNext(MoveType.After, i => i.MatchCallvirt<TileEntity>("OnInventoryDraw")))
+                {
+                    LogError("ChestButtonsITDChestAdjust: OnInventoryDraw call not found");
+                    return;
+                }
+
+                var skip = il.DefineLabel();
+                // get the bool for whether or not we should return
+                c.EmitDelegate(() =>
+                {
+                    var anchor = Main.LocalPlayer.tileEntityAnchor;
+                    TileEntity possible = anchor.GetTileEntity();
+                    return possible != null && possible is ITDChestTE;
+                });
+
+                // branch and return
+                c.EmitBrtrue(skip);
+
+                c.MarkLabel(skip);
+                c.EmitRet();
+            }
+            catch
+            {
+                DumpIL(il);
+            }
         }
 
         private static void EmotesITDChestAdjust(ILContext il)

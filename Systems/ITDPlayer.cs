@@ -94,8 +94,22 @@ namespace ITD.Players
         public override void Load()
         {
             On_Player.ToggleInv += On_Player_ToggleInv;
+            On_Player.OpenChest += On_Player_OpenChest;
         }
-        private void On_Player_ToggleInv(On_Player.orig_ToggleInv orig, Player self)
+
+        private static void On_Player_OpenChest(On_Player.orig_OpenChest orig, Player self, int x, int y, int newChest)
+        {
+            if (newChest != -1)
+            {
+                var anchor = self.tileEntityAnchor;
+                TileEntity te = anchor.GetTileEntity();
+                if (te != null && te is ITDChestTE chest && chest.OpenedBy == self.whoAmI)
+                    chest.Close(self, true);
+            }
+            orig(self, x, y, newChest);
+        }
+
+        private static void On_Player_ToggleInv(On_Player.orig_ToggleInv orig, Player self)
         {
             if (Main.playerInventory)
             {

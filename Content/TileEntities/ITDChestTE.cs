@@ -58,17 +58,35 @@ namespace ITD.Content.TileEntities
         /// <param name="player"></param>
         public void Open(Player player)
         {
+            RecalcTrashOffset();
+            bool silent = false;
+            // close vanilla chest if open
+            if (player.chest != -1)
+            {
+                silent = true;
+                player.OpenChest(0, 0, -1);
+            }
+            // close other itdchest if open
+            TileEntity possible = player.tileEntityAnchor.GetTileEntity();
+            if (possible != null && possible is ITDChestTE te)
+            {
+                silent = true;
+                te.Close(player, true);
+            }
             OpenedBy = (short)player.whoAmI;
-            SoundEngine.PlaySound(SoundID.MenuOpen);
+            SoundEngine.PlaySound(silent ? SoundID.MenuTick : SoundID.MenuOpen);
             player.tileEntityAnchor.Set(ID, Position.X, Position.Y);
             Main.playerInventory = true;
         }
-        public void Close(Player player)
+        public void Close(Player player, bool silent = false)
         {
             OpenedBy = -1;
-            SoundEngine.PlaySound(SoundID.MenuClose);
+            if (!silent)
+            {
+                Main.trashSlotOffset = Point16.Zero;
+                SoundEngine.PlaySound(SoundID.MenuClose);
+            }
             player.tileEntityAnchor.Clear();
-            Main.trashSlotOffset = Point16.Zero;
         }
         /// <summary>
         /// Only runs on the server
@@ -211,14 +229,18 @@ namespace ITD.Content.TileEntities
                 NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Position.X, number3: Position.Y);
             }
         }
+        public void RecalcTrashOffset()
+        {
+            int xSlotOffset = StorageDimensions.X - 10;
+            Main.trashSlotOffset = new Point16(5 + (xSlotOffset * 42), 42 * StorageDimensions.Y);
+        }
         public override void OnInventoryDraw(Player player, SpriteBatch spriteBatch)
         {
             // replicates chest ui. specifically ChestUI.Draw();
+            //spriteBatch.Draw(TextureAssets.InventorySort[0].Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
             if (OpenedBy > -1)
             {
-                //Main.trashSlotOffset = Point16.Zero;
-                int xSlotOffset = StorageDimensions.X - 10;
-                Main.trashSlotOffset = new Point16(5 + (xSlotOffset * 42), 42 * StorageDimensions.Y);
+                RecalcTrashOffset();
                 Main.inventoryScale = 0.755f;
                 if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, 73f, Main.instance.invBottom, 560f * Main.inventoryScale, 224f * Main.inventoryScale))
                 {
