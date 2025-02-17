@@ -348,6 +348,19 @@ namespace ITD.Utilities
             item.noUseGraphic = true;
             item.UseSound = useSound ?? SoundID.Item1;
         }
+        public static void DefaultToFurniture(this Item item, int tileDimX, int tileDimY, int createTile)
+        {
+            item.width = 16 * tileDimX;
+            item.height = 16 * tileDimY;
+            item.maxStack = 9999;
+            item.useTurn = true;
+            item.autoReuse = true;
+            item.useAnimation = 15;
+            item.useTime = 10;
+            item.useStyle = ItemUseStyleID.Swing;
+            item.consumable = true;
+            item.createTile = createTile;
+        }
         /// <summary>
         /// If any of the tiles right below this are standable, return true
         /// </summary>

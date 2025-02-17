@@ -468,6 +468,11 @@ Tiles: {
 		MapEntryUnlocked: Mods.ITD.Tiles.PyracottaChestTile.MapEntryUnlocked
 		MapEntryLocked: Mods.ITD.Tiles.PyracottaChestTile.MapEntryLocked
 	}
+
+	CharbleDoubleChestTile: {
+		MapEntryUnlocked: Charble Double Chest
+		MapEntryLocked: Locked Charble Double Chest
+	}
 }
 
 Biomes: {

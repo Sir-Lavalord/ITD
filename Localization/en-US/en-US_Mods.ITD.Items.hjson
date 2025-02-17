@@ -1328,3 +1328,8 @@ PyracottaChest: {
 	DisplayName: Pyracotta Chest
 	Tooltip: ""
 }
+
+CharbleDoubleChest: {
+	DisplayName: Charble Double Chest
+	Tooltip: ""
+}

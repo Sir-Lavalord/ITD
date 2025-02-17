@@ -3,11 +3,11 @@ using ITD.Utilities;
 
 namespace ITD.Content.Items.Placeable
 {
-    public class CharbleChest : ModItem
+    public class CharbleDoubleChest : ModItem
     {
         public override void SetDefaults()
         {
-            Item.DefaultToFurniture(2, 2, ModContent.TileType<CharbleChestTile>());
+            Item.DefaultToFurniture(4, 2, ModContent.TileType<CharbleDoubleChestTile>());
         }
     }
 }
