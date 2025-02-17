@@ -526,7 +526,8 @@ namespace ITD.DetoursIL
                             {
                                 num4 = num5;
                             }
-                            SoundEngine.PlaySound(SoundID.Grab);
+                            if (!canVisualizeTransfers)
+                                SoundEngine.PlaySound(SoundID.Grab);
                             ItemLoader.TryStackItems(item[num3], array[item2.Key], out num4);
                             if (canVisualizeTransfers && num4 > 0)
                             {
