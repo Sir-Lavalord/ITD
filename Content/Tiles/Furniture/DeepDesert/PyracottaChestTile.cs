@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Items.Placeable;
-using ITD.Content.TileEntities.Chests;
 using ITD.Systems.DataStructures;
 
 namespace ITD.Content.Tiles.Furniture.DeepDesert

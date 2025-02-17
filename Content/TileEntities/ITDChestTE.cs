@@ -13,10 +13,12 @@ using Terraria.UI;
 using Terraria.UI.Chat;
 using Terraria.GameInput;
 using System.Runtime.CompilerServices;
+using System.Linq;
+using System;
 
 namespace ITD.Content.TileEntities
 {
-    public abstract class ITDChestTE : ModTileEntity
+    public class ITDChestTE : ModTileEntity
     {
         public static bool IsActiveForLocalPlayer
         { 
@@ -33,11 +35,11 @@ namespace ITD.Content.TileEntities
         public static ITDChestTE GetITDChest() => Main.LocalPlayer.tileEntityAnchor.GetTileEntity() as ITDChestTE;
         public const int FullSlotDim = 42;
         public int UIOffsetX => StorageDimensions.X - 10;
-        public virtual Point8 Dimensions => new(2, 2);
+        public Point8 Dimensions = new(0);
         /// <summary>
         /// For reference, vanilla uses (10, 4).
         /// </summary>
-        public virtual Point8 StorageDimensions => new(10, 4);
+        public Point8 StorageDimensions = new(10, 4);
         public int TotalSlots => StorageDimensions.X * StorageDimensions.Y;
         internal Item[] items;
         public string StorageName = "";
@@ -96,6 +98,11 @@ namespace ITD.Content.TileEntities
         /// </summary>
         public override void Update()
         {
+            if (Dimensions == Point8.Zero)
+            {
+                if (TileLoader.GetTile(Framing.GetTileSafely(Position).TileType) is ITDChest chest)
+                    Dimensions = chest.Dimensions;
+            }
             if (OpenedBy > -1)
             {
                 Player openedPlayer = Main.player[OpenedBy];
@@ -120,62 +127,39 @@ namespace ITD.Content.TileEntities
         }
         public sealed override void SaveData(TagCompound tag)
         {
-            Item firstItem = items[0];
-            tag["firstSlotHasItem"] = firstItem.Exists();
-            tag["name"] = StorageName;
+            if (!string.IsNullOrEmpty(StorageName))
+                tag["name"] = StorageName;
 
-            List<byte> alternationCounts = [];
-            List<Item> nonEmptyItems = [];
+            if (items.Any(i => i.Exists()))
+                tag["items"] = items;
 
-            bool previousExists = firstItem.Exists();
-            byte count = 0;
-
-            foreach (Item item in items)
-            {
-                bool exists = item.Exists();
-
-                if (exists != previousExists)
-                {
-                    alternationCounts.Add(count);
-                    count = 0;
-                    previousExists = exists;
-                }
-
-                count++;
-                if (exists)
-                    nonEmptyItems.Add(item);
-            }
-
-            if (count > 0)
-                alternationCounts.Add(count);
-
-            tag["alternationCounts"] = alternationCounts;
-            tag["items"] = nonEmptyItems;
+            tag["dx"] = (byte)StorageDimensions.X;
+            tag["dy"] = (byte)StorageDimensions.Y;
         }
         public sealed override void LoadData(TagCompound tag)
         {
             EnsureArrayIsInitialized();
 
-            bool firstSlotHasItem = tag.GetBool("firstSlotHasItem");
-            StorageName = tag.GetString("name");
+            if (tag.ContainsKey("name"))
+                StorageName = tag.GetString("name");
 
-            List<byte> alternationCounts = [.. tag.GetList<byte>("alternationCounts")];
-            List<Item> nonEmptyItems = [.. tag.GetList<Item>("items")];
+            if (tag.ContainsKey("items"))
+                items = [..tag.GetList<Item>("items")];
 
-            int itemIndex = 0;
-            bool currentHasItem = firstSlotHasItem;
-            int slotIndex = 0;
+            StorageDimensions = new(tag.GetByte("dx"), tag.GetByte("dy"));
 
-            foreach (byte count in alternationCounts)
+            if (items.Length > StorageDimensions.X * StorageDimensions.Y)
             {
-                for (int i = 0; i < count; i++, slotIndex++)
+                for (int i = StorageDimensions.X * StorageDimensions.Y; i < items.Length; i++)
                 {
-                    if (currentHasItem)
-                        items[slotIndex] = nonEmptyItems[itemIndex++];
-                    else
-                        items[slotIndex] = new Item();
+                    Item item = items[i];
+
+                    Item.NewItem(item.GetSource_DropAsItem(), Position.ToWorldCoordinates(), item, noBroadcast: false);
+
+                    item.TurnToAir();
                 }
-                currentHasItem = !currentHasItem;
+
+                Array.Resize(ref items, StorageDimensions.X * StorageDimensions.Y);
             }
         }
         public ref Item this[int i] => ref items[i];
@@ -203,14 +187,22 @@ namespace ITD.Content.TileEntities
         {
             // chests aren't placed from the top left like most tiles, so we need to account for that here in the placement.
             if (TileLoader.GetTile(Framing.GetTileSafely(i, j).TileType) is ITDChest chest)
-                j -= chest.Dimensions.Y - 1;
+            {
+                Dimensions = chest.Dimensions;
+                j -= Dimensions.Y - 1;
+                StorageDimensions = chest.StorageDimensions;
+            }
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 // Sync the entire multitile's area.  Modify "width" and "height" to the size of your multitile in tiles
-                int width = Dimensions.X;
-                int height = Dimensions.Y;
-                NetMessage.SendTileSquare(Main.myPlayer, i, j, width, height);
+
+                if (TileLoader.GetTile(Framing.GetTileSafely(i, j).TileType) is ITDChest ch)
+                {
+                    Dimensions = ch.Dimensions;
+                }
+
+                NetMessage.SendTileSquare(Main.myPlayer, i, j, Math.Max((byte)Dimensions.X, (byte)1), Math.Max((byte)Dimensions.Y, (byte)1));
 
                 // Sync the placement of the tile entity with other clients
                 // The "type" parameter refers to the tile type which placed the tile entity, so "Type" (the type of the tile entity) needs to be used here instead
@@ -221,8 +213,14 @@ namespace ITD.Content.TileEntities
             // ModTileEntity.Place() handles checking if the entity can be placed, then places it for you
             int placedEntity = Place(i, j);
 
-            if (ByID[placedEntity] is ITDChestTE c)
+            TileEntity placed = ByID[placedEntity];
+
+            if (placed is ITDChestTE c)
+            {
                 c.EnsureArrayIsInitialized();
+                if (TileLoader.GetTile(Framing.GetTileSafely(placed.Position).TileType) is ITDChest ches)
+                    c.StorageDimensions = ches.StorageDimensions;
+            }
 
             return placedEntity;
         }

@@ -10,6 +10,7 @@ using Terraria.UI;
 using MonoMod.Cil;
 using Terraria.Localization;
 using Terraria.GameContent.UI.States;
+using Terraria.ID;
 
 namespace ITD.DetoursIL
 {
@@ -188,7 +189,7 @@ namespace ITD.DetoursIL
                 List<int> list2 = [];
                 for (int num = 57; num >= 0; num--)
                 {
-                    if ((num < 50 || num >= 54) && (inventory[num].type < 71 || inventory[num].type > 74))
+                    if ((num < 50 || num >= 54) && (inventory[num].type < ItemID.CopperCoin || inventory[num].type > ItemID.PlatinumCoin))
                     {
                         if (inventory[num].stack > 0 && inventory[num].maxStack > 1)
                         {

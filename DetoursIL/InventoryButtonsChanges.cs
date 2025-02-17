@@ -109,6 +109,26 @@ namespace ITD.DetoursIL
             {
                 var c = new ILCursor(il);
 
+                // find the instructions to load 534 onto the stack
+                if (!c.TryGotoNext(MoveType.After, i => i.MatchLdcI4(534)))
+                {
+                    LogError("Couldn't find X position loading");
+                }
+                // add our own amount
+                c.EmitDelegate(() =>
+                {
+                    Player player = Main.LocalPlayer;
+                    var anchor = player.tileEntityAnchor;
+                    TileEntity te = anchor.GetTileEntity();
+                    if (te != null && te is ITDChestTE chest)
+                    {
+                        return 5 + chest.UIOffsetX * ITDChestTE.FullSlotDim;
+                    }
+                    return 0;
+                });
+                // add
+                c.EmitAdd();
+
                 // find the instructions to load num4 and 4 onto the stack
                 if (!c.TryGotoNext(MoveType.After, i => i.MatchLdloc(out _), i => i.MatchAdd(), i => i.MatchLdcI4(4), i => i.MatchAdd()))
                 {
@@ -118,13 +138,8 @@ namespace ITD.DetoursIL
                 // now let's add our own amount to the thing
                 c.EmitDelegate(() =>
                 {
-                    Player player = Main.LocalPlayer;
-                    var anchor = player.tileEntityAnchor;
-                    TileEntity te = anchor.GetTileEntity();
-                    if (te != null && te is ITDChestTE chest)
-                    {
-                        return chest.StorageDimensions.Y * ITDChestTE.FullSlotDim;
-                    }
+                    if (ITDChestTE.IsActiveForLocalPlayer)
+                        return 4 * ITDChestTE.FullSlotDim;
                     return 0;
                 });
                 // add the calculated thing
@@ -141,13 +156,12 @@ namespace ITD.DetoursIL
             {
                 var c = new ILCursor(il);
 
-                // find the instructions to load num4 and 4 onto the stack
-                if (!c.TryGotoNext(MoveType.After, i => i.MatchLdloc(out _), i => i.MatchAdd(), i => i.MatchLdcI4(4), i => i.MatchAdd()))
+                // find the instructions to load 498 onto the stack
+                if (!c.TryGotoNext(MoveType.After, i => i.MatchLdcI4(498)))
                 {
-                    LogError("num4 and 4 load instructions not found");
-                    return;
+                    LogError("Couldn't find X position loading");
                 }
-                // now let's add our own amount to the thing
+                // add our own amount
                 c.EmitDelegate(() =>
                 {
                     Player player = Main.LocalPlayer;
@@ -155,8 +169,24 @@ namespace ITD.DetoursIL
                     TileEntity te = anchor.GetTileEntity();
                     if (te != null && te is ITDChestTE chest)
                     {
-                        return chest.StorageDimensions.Y * ITDChestTE.FullSlotDim;
+                        return 5 + chest.UIOffsetX * ITDChestTE.FullSlotDim;
                     }
+                    return 0;
+                });
+                // add
+                c.EmitAdd();
+
+                // find the instructions to load num4 and 4 onto the stack
+                if (!c.TryGotoNext(MoveType.After, i => i.MatchLdloc(out _), i => i.MatchAdd(), i => i.MatchLdcI4(4), i => i.MatchAdd()))
+                {
+                    LogError("Couldn't find Y position loading");
+                    return;
+                }
+                // now let's add our own amount to the thing
+                c.EmitDelegate(() =>
+                {
+                    if (ITDChestTE.IsActiveForLocalPlayer)
+                        return 4 * ITDChestTE.FullSlotDim;
                     return 0;
                 });
                 // add the calculated thing

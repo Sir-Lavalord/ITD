@@ -8,7 +8,6 @@ using Terraria.Audio;
 using ITD.Systems.DataStructures;
 using ITD.Utilities;
 using ITD.Content.TileEntities;
-using ITD.Content.TileEntities.Chests;
 using System.Linq;
 
 namespace ITD.Content.Tiles
@@ -22,21 +21,11 @@ namespace ITD.Content.Tiles
         /// <summary>
         /// The default behavior of this property is what you want in most cases.
         /// </summary>
-        public virtual ModTileEntity TE
-        { 
-            get
-            {
-                return Dimensions switch
-                {
-                    { X: 2, Y: 2 } => ModContent.GetInstance<Chest2x2>(),
-                    { X: 3, Y: 2 } => ModContent.GetInstance<Chest3x2>(),
-                    _ => ModContent.GetInstance<Chest2x2>(),
-                };
-            }
-        }
+        public virtual ITDChestTE TE => ModContent.GetInstance<ITDChestTE>();
         public virtual int KeyType => ItemID.DirtBlock;
         public virtual (Color, Color) UnlockedAndLockedMapColors => (new(191, 142, 111), new(191, 142, 111));
         public virtual Point8 Dimensions => new(2, 2);
+        public virtual Point8 StorageDimensions => new(10, 4);
         public virtual bool LavaDeath => true;
         public sealed override void SetStaticDefaults()
         {
