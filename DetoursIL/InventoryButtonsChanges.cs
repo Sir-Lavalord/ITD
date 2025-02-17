@@ -1,16 +1,14 @@
 ﻿using ITD.Content.TileEntities;
+using ITD.Content.Tiles;
+using ITD.Utilities;
 using MonoMod.Cil;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.UI;
 
 namespace ITD.DetoursIL
 {
     public class InventoryButtonsChanges : DetourGroup
     {
-        // is this technically inventory buttons
-        public static bool[] myButtonHovered = new bool[ChestUI.ButtonID.Count];
-        public static float[] myButtonScale = new float[ChestUI.ButtonID.Count];
         public override void Load()
         {
             // not entirely sure why these are separate methods when they're basically the same method just with different x. even the IL edits are the exact same
@@ -19,18 +17,60 @@ namespace ITD.DetoursIL
 
             // why is this not it's own method!!! it could've just been a detour!!!
             IL_Main.DrawInventory += SortButtonsITDChestAdjust;
+            // hello yes this is mr quickstack
+            On_Player.QuickStackAllChests += PlayerQuickStackITDChest;
 
             // funny colors
             On_ItemSlot.SetGlow += ItemGlowITDChestAdjust;
         }
 
-        private void ItemGlowITDChestAdjust(On_ItemSlot.orig_SetGlow orig, int index, float hue, bool chest)
+        private void PlayerQuickStackITDChest(On_Player.orig_QuickStackAllChests orig, Player self)
+        {
+            orig(self);
+            int num2 = 39;
+            int num3 = (int)(self.Center.X / 16f);
+            int num4 = (int)(self.Center.Y / 16f);
+            for (int j = num3 - num2; j <= num3 + num2; j++)
+            {
+                if (j < 0 || j >= Main.maxTilesX)
+                {
+                    continue;
+                }
+                for (int k = num4 - num2; k <= num4 + num2; k++)
+                {
+                    if (k < 0 || k >= Main.maxTilesY)
+                    {
+                        continue;
+                    }
+                    int num5 = 0;
+                    Tile t = Framing.GetTileSafely(j, k);
+                    if (TileLoader.GetTile(t.TileType) is ITDChest)
+                        num5 = -1;
+                    float range = 600f;
+                    if (num5 < 0 && (new Vector2(j * 16 + 8, k * 16 + 8) - self.Center).LengthSquared() < range * range)
+                    {
+                        ContainerTransferContext context2 = ContainerTransferContext.FromBlockPosition(j, k);
+                        Point16 topLeft = TileHelpers.GetTopLeftTileInMultitile(j, k);
+                        if (TileEntity.ByPosition.TryGetValue(topLeft, out TileEntity te) && te is ITDChestTE chest)
+                        {
+                            self.tileEntityAnchor.Set(chest.ID, topLeft.X, topLeft.Y);
+                            ChestUI.QuickStack(context2);
+                            if (self.useVoidBag())
+                            {
+                                ChestUI.QuickStack(context2, voidStack: true);
+                            }
+                            self.tileEntityAnchor.Clear();
+                        }
+                    }
+                }
+            }
+        }
+        private static void ItemGlowITDChestAdjust(On_ItemSlot.orig_SetGlow orig, int index, float hue, bool chest)
         {
             if (!chest && ITDChestTE.IsActiveForLocalPlayer)
                 chest = true;
             orig(index, hue, chest);
         }
-
         private static void SortButtonsITDChestAdjust(ILContext il)
         {
             try

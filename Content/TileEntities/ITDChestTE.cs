@@ -13,7 +13,6 @@ using Terraria.UI;
 using Terraria.UI.Chat;
 using Terraria.GameInput;
 using System.Runtime.CompilerServices;
-using Terraria.ID;
 
 namespace ITD.Content.TileEntities
 {
@@ -27,6 +26,11 @@ namespace ITD.Content.TileEntities
                 return possible != null && possible is ITDChestTE;
             }
         }
+        /// <summary>
+        /// Only safe to call if <see cref="IsActiveForLocalPlayer"/>.
+        /// </summary>
+        /// <returns></returns>
+        public static ITDChestTE GetITDChest() => Main.LocalPlayer.tileEntityAnchor.GetTileEntity() as ITDChestTE;
         public const int FullSlotDim = 42;
         public int UIOffsetX => StorageDimensions.X - 10;
         public virtual Point8 Dimensions => new(2, 2);
@@ -41,6 +45,7 @@ namespace ITD.Content.TileEntities
         public byte frameCounter = 0;
         public byte frame = 0;
         public bool initialized = false;
+        public bool forcedOpen = false;
         public void Toggle(Player player)
         {
             if (OpenedBy > -1)
@@ -236,6 +241,11 @@ namespace ITD.Content.TileEntities
                 return true;
             }
             return false;
+        }
+        public void OpenToReceiveParticles()
+        {
+            forcedOpen = true;
+            frame = 2;
         }
         public void RecalcTrashOffset()
         {
@@ -464,7 +474,7 @@ namespace ITD.Content.TileEntities
                 }
 
                 if (!Main.dedServ && IsActiveForLocalPlayer)
-                    NetSystem.SendPacket(new SyncITDChestItemPacket(Helpers.GetITDChest().ID, num4));
+                    NetSystem.SendPacket(new SyncITDChestItemPacket(GetITDChest().ID, num4));
 
                 list2.Remove(num4);
             }

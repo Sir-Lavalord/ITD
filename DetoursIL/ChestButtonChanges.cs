@@ -4,16 +4,12 @@ using ITD.Networking.Packets;
 using ITD.Utilities;
 using System;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.UI;
 using MonoMod.Cil;
 using Terraria.Localization;
-using Terraria.GameContent.RGB;
 using Terraria.GameContent.UI.States;
-using rail;
-using System.Linq;
 
 namespace ITD.DetoursIL
 {
@@ -51,7 +47,7 @@ namespace ITD.DetoursIL
             orig(out sync, out chestinv);
             if (ITDChestTE.IsActiveForLocalPlayer)
             {
-                chestinv = Helpers.GetITDChest().items;
+                chestinv = ITDChestTE.GetITDChest().items;
                 sync = true;
             }
         }
@@ -67,7 +63,7 @@ namespace ITD.DetoursIL
                     c.EmitDelegate(() =>
                     {
                         if (ITDChestTE.IsActiveForLocalPlayer)
-                            return Helpers.GetITDChest().TotalSlots - 40;
+                            return ITDChestTE.GetITDChest().TotalSlots - 40;
                         return 0;
                     });
                     c.EmitAdd();
@@ -129,7 +125,7 @@ namespace ITD.DetoursIL
                     c.EmitLdloc(localI);
                     c.EmitDelegate<Action<int>>(item =>
                     {
-                        NetSystem.SendPacket(new SyncITDChestItemPacket(Helpers.GetITDChest().ID, item));
+                        NetSystem.SendPacket(new SyncITDChestItemPacket(ITDChestTE.GetITDChest().ID, item));
                     });
 
                     if (!c.TryGotoNext(i => i.MatchLdloc(out _)))
@@ -150,7 +146,7 @@ namespace ITD.DetoursIL
         {
             if (ITDChestTE.IsActiveForLocalPlayer)
             {
-                ITDChestTE chest = Helpers.GetITDChest();
+                ITDChestTE chest = ITDChestTE.GetITDChest();
 
                 Item[] item = chest.items;
                 Tuple<int, int, int>[] array = new Tuple<int, int, int>[chest.TotalSlots];
@@ -183,7 +179,7 @@ namespace ITD.DetoursIL
         {
             if (ITDChestTE.IsActiveForLocalPlayer)
             {
-                ITDChestTE chest = Helpers.GetITDChest();
+                ITDChestTE chest = ITDChestTE.GetITDChest();
                 Player player = Main.LocalPlayer;
                 Item[] inventory = player.inventory;
                 Item[] item = chest.items;
@@ -465,7 +461,7 @@ namespace ITD.DetoursIL
             if (ITDChestTE.IsActiveForLocalPlayer)
             {
                 Player player = Main.LocalPlayer;
-                ITDChestTE chest = Helpers.GetITDChest();
+                ITDChestTE chest = ITDChestTE.GetITDChest();
                 Item[] array = player.inventory;
                 if (voidStack)
                 {
@@ -534,6 +530,7 @@ namespace ITD.DetoursIL
                             ItemLoader.TryStackItems(item[num3], array[item2.Key], out num4);
                             if (canVisualizeTransfers && num4 > 0)
                             {
+                                chest.OpenToReceiveParticles();
                                 Chest.VisualizeChestTransfer(center, containerWorldPosition, item[num3], num4);
                             }
                             array2[num3] = true;
@@ -574,6 +571,7 @@ namespace ITD.DetoursIL
                             array[item5.Key] = new Item();
                             if (canVisualizeTransfers)
                             {
+                                chest.OpenToReceiveParticles();
                                 Chest.VisualizeChestTransfer(center, containerWorldPosition, item[num6], item[num6].stack);
                             }
                         }
@@ -592,6 +590,7 @@ namespace ITD.DetoursIL
                             ItemLoader.TryStackItems(item[num6], array[item5.Key], out num8);
                             if (canVisualizeTransfers && num8 > 0)
                             {
+                                chest.OpenToReceiveParticles();
                                 Chest.VisualizeChestTransfer(center, containerWorldPosition, item[num6], num8);
                             }
                             if (array[item5.Key].stack == 0)

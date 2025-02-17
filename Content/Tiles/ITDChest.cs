@@ -6,11 +6,9 @@ using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Audio;
 using ITD.Systems.DataStructures;
-using Terraria.ModLoader;
 using ITD.Utilities;
 using ITD.Content.TileEntities;
 using ITD.Content.TileEntities.Chests;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ITD.Content.Tiles
@@ -121,20 +119,47 @@ namespace ITD.Content.Tiles
             int speed = 1;
             if (TileEntity.ByPosition.TryGetValue(new Point16(i, j), out var t) && t.ID == te.ID)
             {
-                if (te.OpenedBy > -1 && te.frame < 2)
+                if (!te.forcedOpen)
                 {
-                    if (++te.frameCounter > speed)
+                    if (te.OpenedBy > -1 && te.frame < 2)
                     {
-                        te.frameCounter = 0;
-                        te.frame++;
+                        if (++te.frameCounter > speed)
+                        {
+                            te.frameCounter = 0;
+                            te.frame++;
+                        }
+                    }
+                    if (te.OpenedBy < 0 && te.frame > 0)
+                    {
+                        if (++te.frameCounter > speed)
+                        {
+                            te.frameCounter = 0;
+                            te.frame--;
+                        }
                     }
                 }
-                if (te.OpenedBy < 0 && te.frame > 0)
+                else
                 {
-                    if (++te.frameCounter > speed)
+                    switch (te.frame)
                     {
-                        te.frameCounter = 0;
-                        te.frame--;
+                        case 2:
+                            if (++te.frameCounter > 10)
+                            {
+                                te.frameCounter = 0;
+                                te.frame--;
+                            }
+                            break;
+                        case 1:
+                            if (++te.frameCounter > 4)
+                            {
+                                te.frameCounter = 0;
+                                te.frame--;
+                            }
+                            break;
+                        case 0:
+                            te.forcedOpen = false;
+                            SoundEngine.PlaySound(SoundID.Grab, te.Position.ToWorldCoordinates(0, 0) + (new Vector2(Dimensions.X * 16f, Dimensions.Y * 16f) * 0.5f));
+                            break;
                     }
                 }
             }
