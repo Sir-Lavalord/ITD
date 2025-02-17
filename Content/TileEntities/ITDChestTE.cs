@@ -17,6 +17,8 @@ using System.Linq;
 using System;
 using Terraria.UI.Gamepad;
 using ITD.Players;
+using System.IO;
+using Terraria.GameContent.Achievements;
 
 namespace ITD.Content.TileEntities
 {
@@ -141,13 +143,13 @@ namespace ITD.Content.TileEntities
         {
             StorageDimensions = new(tag.GetByte("dx"), tag.GetByte("dy"));
 
-            EnsureArrayIsInitialized();
-
             if (tag.ContainsKey("name"))
                 StorageName = tag.GetString("name");
 
             if (tag.ContainsKey("items"))
                 items = [..tag.GetList<Item>("items")];
+            else
+                EnsureArrayIsInitialized();
 
             if (items.Length > StorageDimensions.X * StorageDimensions.Y)
             {
@@ -180,7 +182,7 @@ namespace ITD.Content.TileEntities
                 }
                 if (Main.dedServ)
                 {
-                    NetSystem.SendPacket(new InitializeITDChestPacket(ID));
+                    NetSystem.SendPacket(new InitializeITDChestPacket(ID, StorageDimensions));
                 }
             }
         }
@@ -250,6 +252,34 @@ namespace ITD.Content.TileEntities
         {
             Main.trashSlotOffset = new Point16(5 + (UIOffsetX * FullSlotDim), (StorageDimensions.Y * FullSlotDim));
         }
+        public override void NetSend(BinaryWriter writer)
+        {
+            writer.Write(StorageDimensions.X);
+            writer.Write(StorageDimensions.Y);
+            // urghh
+            writer.Write((byte)items.Count(i => i.Exists()));
+            for (int i = 0; i < items.Length; i++)
+            {
+                Item item = items[i];
+                if (item.Exists())
+                {
+                    writer.Write((byte)i);
+                    ItemIO.Send(item, writer, true);
+                }
+            }
+
+        }
+        public override void NetReceive(BinaryReader reader)
+        {
+            StorageDimensions = new(reader.ReadByte(), reader.ReadByte());
+            EnsureArrayIsInitialized();
+            byte length = reader.ReadByte();
+            for (int i = 0; i < length; i++)
+            {
+                byte slot = reader.ReadByte();
+                items[slot] = ItemIO.Receive(reader, true);
+            }
+        }
         public override void OnInventoryDraw(Player player, SpriteBatch spriteBatch)
         {
             // replicates chest ui. specifically ChestUI.Draw();
@@ -304,12 +334,21 @@ namespace ITD.Content.TileEntities
                         player.mouseInterface = true;
                         ItemSlot.Handle(inv, context, slot);
                     }
-                    //Draw(spriteBatch, inv, context, slot, new Vector2(num, num2));
                     ItemSlot.Draw(spriteBatch, inv, context, slot, new Vector2(num, num2));
                 }
             }
         }
         #region DEBUGGING
+        public static void Handle(Item[] inv, int context = 0, int slot = 0)
+        {
+            ItemSlot.OverrideHover(inv, context, slot);
+            ItemSlot.LeftClick(inv, context, slot);
+            ItemSlot.RightClick(inv, context, slot);
+            if (Main.mouseLeftRelease && Main.mouseLeft)
+                Recipe.FindRecipes();
+
+            ItemSlot.MouseHover(inv, context, slot);
+        }
         public static void Draw(SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor = default(Color))
         {
             Player player = Main.player[Main.myPlayer];

@@ -5,6 +5,7 @@ using ITD.Systems.Recruitment;
 using Terraria.Localization;
 using System;
 using Terraria.DataStructures;
+using ITD.Systems.DataStructures;
 
 namespace ITD.Networking
 {
@@ -26,6 +27,15 @@ namespace ITD.Networking
         public static Guid ReadGuid(this BinaryReader reader)
         {
             return new Guid(reader.ReadBytes(16));
+        }
+        public static void WritePoint8(this BinaryWriter writer, Point8 point)
+        {
+            writer.Write(point.X);
+            writer.Write(point.Y);
+        }
+        public static Point8 ReadPoint8(this BinaryReader reader)
+        {
+            return new Point8(reader.ReadByte(), reader.ReadByte());
         }
         public static void WriteRecruitmentData(this BinaryWriter writer, RecruitData recruitData)
         {

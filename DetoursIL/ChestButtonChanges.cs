@@ -11,6 +11,7 @@ using MonoMod.Cil;
 using Terraria.Localization;
 using Terraria.GameContent.UI.States;
 using Terraria.ID;
+using UtfUnknown.Core.Models.SingleByte.Finnish;
 
 namespace ITD.DetoursIL
 {
@@ -41,6 +42,59 @@ namespace ITD.DetoursIL
             // fix this to allow for larger chests
             IL_ChestUI.TryPlacingInChest += TryPlacingInITDChest;
             On_ChestUI.GetContainerUsageInfo += GetContainerUsageInfoITDChest;
+
+            // there's hardcoded checks for context 3 and chest here that crash the game in multiplayer
+            IL_ItemSlot.LeftClick_ItemArray_int_int += LeftClickITDChest;
+        }
+
+        private static void LeftClickITDChest(ILContext il)
+        {
+            try
+            {
+                var c = new ILCursor(il);
+                
+                // this is the start of the senddata call. now we can skip
+                if (!c.TryGotoNext(i => i.MatchLdcI4(32)))
+                {
+                    LogError("Couldn't find start of NetMessage.SendData variable loading");
+                }
+
+                var skipLabel = il.DefineLabel();
+
+                // decide whether or not to skip
+                c.EmitDelegate(() => ITDChestTE.IsActiveForLocalPlayer);
+
+                c.EmitBrtrue(skipLabel);
+
+                // now let's move after it for actually skipping
+                if (!c.TryGotoNext(MoveType.After, i => i.MatchCall<NetMessage>("SendData")))
+                {
+                    LogError("Couldn't find SendData call");
+                }
+
+                // we will jump here to avoid both calls being calledeleld
+                var endLabel = il.DefineLabel();
+
+                // jamp
+                c.EmitBr(endLabel);
+
+                // we wanna skip to here
+                c.MarkLabel(skipLabel);
+
+                // load the slot onto the stack
+                c.EmitLdarg2();
+                c.EmitDelegate<Action<int>>(slot =>
+                {
+                    NetSystem.SendPacket(new SyncITDChestItemPacket(ITDChestTE.GetITDChest().ID, slot));
+                });
+
+                // end
+                c.MarkLabel(endLabel);
+            }
+            catch
+            {
+                DumpIL(il);
+            }
         }
 
         private static void GetContainerUsageInfoITDChest(On_ChestUI.orig_GetContainerUsageInfo orig, out bool sync, out Item[] chestinv)
