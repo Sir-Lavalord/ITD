@@ -12,6 +12,8 @@ using MonoMod.Cil;
 using Terraria.Localization;
 using Terraria.GameContent.RGB;
 using Terraria.GameContent.UI.States;
+using rail;
+using System.Linq;
 
 namespace ITD.DetoursIL
 {
@@ -30,12 +32,249 @@ namespace ITD.DetoursIL
             On_IngameFancyUI.OpenVirtualKeyboard += HijackOpenVirtualKeyboard;
             IL_IngameFancyUI.OpenVirtualKeyboard += OpenVirtualKeyboardITDChest;
             On_ChestUI.RenameChestSubmit += RenameChestSubmitITDChest;
+            On_ChestUI.Restock += RestockITDChest;
+            On_ItemSorting.SortChest += SortItemsITDChest;
 
             // fix another three resettis
             // who the fuck thought of this???
             IL_Main.DoUpdate_WhilePaused += UpdatePausedITDChest;
             IL_Player.Update += UpdatePlayerITDChest;
             IL_UIVirtualKeyboard.DrawSelf += DrawUIVirtualKeyboardITDChest;
+
+            // fix this to allow for larger chests
+            IL_ChestUI.TryPlacingInChest += TryPlacingInITDChest;
+            On_ChestUI.GetContainerUsageInfo += GetContainerUsageInfoITDChest;
+        }
+
+        private static void GetContainerUsageInfoITDChest(On_ChestUI.orig_GetContainerUsageInfo orig, out bool sync, out Item[] chestinv)
+        {
+            orig(out sync, out chestinv);
+            if (ITDChestTE.IsActiveForLocalPlayer)
+            {
+                chestinv = Helpers.GetITDChest().items;
+                sync = true;
+            }
+        }
+
+        private static void TryPlacingInITDChest(ILContext il)
+        {
+            try
+            {
+                var c = new ILCursor(il);
+                // we can do this in a couple passes. getting rid of all of these magic numbers is the easiest part.
+                while (c.TryGotoNext(MoveType.After, i => i.MatchLdcI4(40)))
+                {
+                    c.EmitDelegate(() =>
+                    {
+                        if (ITDChestTE.IsActiveForLocalPlayer)
+                            return Helpers.GetITDChest().TotalSlots - 40;
+                        return 0;
+                    });
+                    c.EmitAdd();
+                }
+                // now that that's done, let's go back and hijack the senddata calls
+                c.Index = 0;
+
+                for (int i = 0; i < 2; i++)
+                {
+                    // find the beginning of when the variables start to load for the SendData call
+                    if (!c.TryGotoNext(i => i.MatchLdcI4(32)))
+                    {
+                        LogError("Couldn't find NetMessage.SendData loading start");
+                    }
+
+                    // first label
+                    var skipLabel0 = il.DefineLabel();
+
+                    // get this bool
+                    c.EmitDelegate(() =>
+                    {
+                        return ITDChestTE.IsActiveForLocalPlayer;
+                    });
+
+                    // if ITDChestTE.IsActiveForLocalPlayer, then skip the SendData call.
+                    c.EmitBrtrue(skipLabel0);
+
+                    if (!c.TryGotoNext(MoveType.After, i => i.MatchLdloc2()))
+                    {
+                        LogError("Couldn't find local variable 2 loading");
+                    }
+
+                    int localI = 0;
+
+                    if (!c.TryGotoNext(i => i.MatchLdloc(out localI)))
+                    {
+                        LogError("Couldn't find for loop variable i loading");
+                    }
+
+                    if (!c.TryGotoNext(MoveType.After, i => i.MatchCall<NetMessage>("SendData")))
+                    {
+                        LogError("Couldn't find SendData call");
+                    }
+
+                    c.MarkLabel(skipLabel0);
+
+                    // here's a problem. if our bool is false, then the original code will run, but so will our code. so let's branch once more
+
+                    var skipLabel01 = il.DefineLabel();
+
+                    // not exactly the most graceful way of doing this, we could've introduced a new local instead, but this works
+                    c.EmitDelegate(() =>
+                    {
+                        return ITDChestTE.IsActiveForLocalPlayer;
+                    });
+
+                    c.EmitBrfalse(skipLabel01);
+
+                    c.EmitLdloc(localI);
+                    c.EmitDelegate<Action<int>>(item =>
+                    {
+                        NetSystem.SendPacket(new SyncITDChestItemPacket(Helpers.GetITDChest().ID, item));
+                    });
+
+                    if (!c.TryGotoNext(i => i.MatchLdloc(out _)))
+                    {
+                        LogError("Couldn't find branch to loop condition");
+                    }
+
+                    c.MarkLabel(skipLabel01);
+                }
+            }
+            catch
+            {
+                DumpIL(il);
+            }
+        }
+
+        private static void SortItemsITDChest(On_ItemSorting.orig_SortChest orig)
+        {
+            if (ITDChestTE.IsActiveForLocalPlayer)
+            {
+                ITDChestTE chest = Helpers.GetITDChest();
+
+                Item[] item = chest.items;
+                Tuple<int, int, int>[] array = new Tuple<int, int, int>[chest.TotalSlots];
+                for (int i = 0; i < chest.TotalSlots; i++)
+                {
+                    array[i] = Tuple.Create(item[i].netID, item[i].stack, item[i].prefix);
+                }
+                UIAccessors.CallSort(null, item);
+                Tuple<int, int, int>[] array2 = new Tuple<int, int, int>[chest.TotalSlots];
+                for (int j = 0; j < chest.TotalSlots; j++)
+                {
+                    array2[j] = Tuple.Create(item[j].netID, item[j].stack, item[j].prefix);
+                }
+                if (!Main.dedServ)
+                {
+                    for (int k = 0; k < chest.TotalSlots; k++)
+                    {
+                        if (array2[k] != array[k])
+                        {
+                            NetSystem.SendPacket(new SyncITDChestItemPacket(chest.ID, k));
+                        }
+                    }
+                }
+                return;
+            }
+            orig();
+        }
+
+        private static void RestockITDChest(On_ChestUI.orig_Restock orig)
+        {
+            if (ITDChestTE.IsActiveForLocalPlayer)
+            {
+                ITDChestTE chest = Helpers.GetITDChest();
+                Player player = Main.LocalPlayer;
+                Item[] inventory = player.inventory;
+                Item[] item = chest.items;
+                HashSet<int> hashSet = [];
+                List<int> list = [];
+                List<int> list2 = [];
+                for (int num = 57; num >= 0; num--)
+                {
+                    if ((num < 50 || num >= 54) && (inventory[num].type < 71 || inventory[num].type > 74))
+                    {
+                        if (inventory[num].stack > 0 && inventory[num].maxStack > 1)
+                        {
+                            hashSet.Add(inventory[num].netID);
+                            if (inventory[num].stack < inventory[num].maxStack)
+                            {
+                                list.Add(num);
+                            }
+                        }
+                        else if (inventory[num].stack == 0 || inventory[num].netID == 0 || inventory[num].type == 0)
+                        {
+                            list2.Add(num);
+                        }
+                    }
+                }
+                bool flag = false;
+                for (int i = 0; i < item.Length; i++)
+                {
+                    if (item[i].stack < 1 || !hashSet.Contains(item[i].netID))
+                    {
+                        continue;
+                    }
+                    bool flag2 = false;
+                    for (int j = 0; j < list.Count; j++)
+                    {
+                        int num2 = list[j];
+                        int context = 0;
+                        if (num2 >= 50)
+                        {
+                            context = 2;
+                        }
+                        if (inventory[num2].netID != item[i].netID || ItemSlot.PickItemMovementAction(inventory, context, num2, item[i]) == -1 || !ItemLoader.TryStackItems(inventory[num2], item[i], out var _))
+                        {
+                            continue;
+                        }
+                        flag = true;
+                        if (inventory[num2].stack == inventory[num2].maxStack)
+                        {
+                            if (!Main.dedServ)
+                                NetSystem.SendPacket(new SyncITDChestItemPacket(chest.ID, i));
+                            list.RemoveAt(j);
+                            j--;
+                        }
+                        if (item[i].stack == 0)
+                        {
+                            item[i] = new Item();
+                            flag2 = true;
+                            if (!Main.dedServ)
+                                NetSystem.SendPacket(new SyncITDChestItemPacket(chest.ID, i));
+                            break;
+                        }
+                    }
+                    if (flag2 || list2.Count <= 0 || item[i].ammo == 0)
+                    {
+                        continue;
+                    }
+                    for (int k = 0; k < list2.Count; k++)
+                    {
+                        int context2 = 0;
+                        if (list2[k] >= 50)
+                        {
+                            context2 = 2;
+                        }
+                        if (ItemSlot.PickItemMovementAction(inventory, context2, list2[k], item[i]) != -1)
+                        {
+                            Utils.Swap(ref inventory[list2[k]], ref item[i]);
+                            if (!Main.dedServ)
+                                NetSystem.SendPacket(new SyncITDChestItemPacket(chest.ID, i));
+                            list.Add(list2[k]);
+                            list2.RemoveAt(k);
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+                if (flag)
+                {
+                    SoundEngine.PlaySound(SoundID.Grab);
+                }
+                return;
+            }
+            orig();
         }
 
         private static void DrawUIVirtualKeyboardITDChest(ILContext il)

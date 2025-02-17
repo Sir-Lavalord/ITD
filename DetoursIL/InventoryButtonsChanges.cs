@@ -1,6 +1,7 @@
 ﻿using ITD.Content.TileEntities;
 using MonoMod.Cil;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.UI;
 
 namespace ITD.DetoursIL
@@ -18,7 +19,18 @@ namespace ITD.DetoursIL
 
             // why is this not it's own method!!! it could've just been a detour!!!
             IL_Main.DrawInventory += SortButtonsITDChestAdjust;
+
+            // funny colors
+            On_ItemSlot.SetGlow += ItemGlowITDChestAdjust;
         }
+
+        private void ItemGlowITDChestAdjust(On_ItemSlot.orig_SetGlow orig, int index, float hue, bool chest)
+        {
+            if (!chest && ITDChestTE.IsActiveForLocalPlayer)
+                chest = true;
+            orig(index, hue, chest);
+        }
+
         private static void SortButtonsITDChestAdjust(ILContext il)
         {
             try

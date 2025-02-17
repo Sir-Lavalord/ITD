@@ -228,6 +228,15 @@ namespace ITD.Content.TileEntities
                 NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Position.X, number3: Position.Y);
             }
         }
+        public override bool OverrideItemSlotHover(Item[] inv, int context = 0, int slot = 0)
+        {
+            if (context >= ItemSlot.Context.InventoryItem && context <= ItemSlot.Context.InventoryAmmo && inv[slot].Exists())
+            {
+                Main.cursorOverride = 9;
+                return true;
+            }
+            return false;
+        }
         public void RecalcTrashOffset()
         {
             Main.trashSlotOffset = new Point16(5 + (UIOffsetX * FullSlotDim), (StorageDimensions.Y * FullSlotDim));
@@ -551,6 +560,8 @@ namespace ITD.Content.TileEntities
     }
     public static class UIAccessors
     {
+        [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "Sort")]
+        public static extern void CallSort(ItemSorting type, Item[] inv, params int[] ignoreSlots);
         [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "DrawButton")]
         public static extern void CallDrawChestButton(ChestUI type, SpriteBatch spriteBatch, int ID, int X, int Y);
 
