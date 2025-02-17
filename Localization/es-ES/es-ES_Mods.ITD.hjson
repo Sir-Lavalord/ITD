@@ -470,8 +470,8 @@ Tiles: {
 	}
 
 	CharbleDoubleChestTile: {
-		// MapEntryUnlocked: Mods.ITD.Tiles.CharbleDoubleChestTile.MapEntryUnlocked
-		// MapEntryLocked: Mods.ITD.Tiles.CharbleDoubleChestTile.MapEntryLocked
+		// MapEntryUnlocked: Charble Double Chest
+		// MapEntryLocked: Locked Charble Double Chest
 	}
 }
 

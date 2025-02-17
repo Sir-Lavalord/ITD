@@ -1,9 +1,11 @@
-﻿using ITD.Players;
+﻿using ITD.Content.TileEntities;
+using ITD.Players;
 using ITD.Systems.Recruitment;
 using ITD.Utilities;
 using System.IO;
 using System.Linq;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 
 namespace ITD.Networking.Packets
@@ -24,13 +26,15 @@ namespace ITD.Networking.Packets
                 return;
             }
             modPlayer.guid = reader.ReadGuid();
+
+            // send data from server to clients (selectively, single clients)
             if (Main.dedServ)
             {
                 NetSystem.SendPacket(new PlayerJoinedPacket(player), ignoreClient: sender);
                 foreach (var npc in Main.npc.Where(n => n.ModNPC is RecruitedNPC))
                 {
                     RecruitedNPC rNPC = npc.ModNPC as RecruitedNPC;
-                    NetSystem.SendPacket(new SingleNPCRecruitmentPacket((byte)npc.whoAmI, rNPC.Recruiter, rNPC.recruitmentData));
+                    NetSystem.SendPacket(new SingleNPCRecruitmentPacket((byte)npc.whoAmI, rNPC.Recruiter, rNPC.recruitmentData), toClient: player.whoAmI);
                 }
             }
         }

@@ -14,7 +14,10 @@ namespace ITD.Networking.Packets
         {
             int id = reader.ReadInt32();
             if (TileEntity.ByID[id] is ITDChestTE chest)
+            {
                 chest.EnsureArrayIsInitialized();
+                Main.NewText($"my name is clients and i ahve received the message that the tile entity {id} has a total slot size of {chest.TotalSlots}");
+            }
         }
     }
 }

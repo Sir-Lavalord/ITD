@@ -42,7 +42,7 @@ namespace ITD.Networking
 
         public static T GetPacket<T>() where T : ITDPacket
             => ModContent.GetInstance<T>();
-        public static void SendPacket<T>(T packet, int ignoreClient = -1) where T : ITDPacket
+        public static void SendPacket<T>(T packet, int ignoreClient = -1, int toClient = -1) where T : ITDPacket
         {
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
@@ -61,7 +61,7 @@ namespace ITD.Networking
             else if (Main.netMode == NetmodeID.Server)
             {
                 // Send to all clients except ignoreClient
-                packetToSend.Send(ignoreClient: ignoreClient);
+                packetToSend.Send(ignoreClient: ignoreClient, toClient: toClient);
             }
         }
         internal static void HandlePacket(BinaryReader reader, int sender)
