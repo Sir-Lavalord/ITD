@@ -230,7 +230,7 @@ namespace ITD.Content.TileEntities
         }
         public override bool OverrideItemSlotHover(Item[] inv, int context = 0, int slot = 0)
         {
-            if (context >= ItemSlot.Context.InventoryItem && context <= ItemSlot.Context.InventoryAmmo && inv[slot].Exists())
+            if (context >= ItemSlot.Context.InventoryItem && context <= ItemSlot.Context.InventoryAmmo && inv[slot].Exists() && ChestUI.TryPlacingInChest(inv[slot], true, context))
             {
                 Main.cursorOverride = 9;
                 return true;
