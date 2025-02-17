@@ -4,6 +4,7 @@ using System.Linq;
 using MonoMod.Cil;
 using Terraria.UI;
 using Terraria.DataStructures;
+using ITD.Content.Tiles;
 
 namespace ITD.DetoursIL
 {
@@ -12,9 +13,9 @@ namespace ITD.DetoursIL
         private static int maxArrayNewSize = 40;
         public override void Load()
         {
-            foreach (var type in ITD.Instance.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ITDChestTE))))
+            foreach (var type in ITD.Instance.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ITDChest))))
             {
-                ITDChestTE instance = (ITDChestTE)Activator.CreateInstance(type);
+                ITDChest instance = (ITDChest)Activator.CreateInstance(type);
                 maxArrayNewSize = Math.Max(maxArrayNewSize, instance.StorageDimensions.X * instance.StorageDimensions.Y);
             }
             // this is necessary so the game doesn't crash

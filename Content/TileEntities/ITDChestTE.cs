@@ -15,6 +15,7 @@ using Terraria.GameInput;
 using System.Runtime.CompilerServices;
 using System.Linq;
 using System;
+using Terraria.UI.Gamepad;
 
 namespace ITD.Content.TileEntities
 {
@@ -217,9 +218,9 @@ namespace ITD.Content.TileEntities
 
             if (placed is ITDChestTE c)
             {
-                c.EnsureArrayIsInitialized();
                 if (TileLoader.GetTile(Framing.GetTileSafely(placed.Position).TileType) is ITDChest ches)
                     c.StorageDimensions = ches.StorageDimensions;
+                c.EnsureArrayIsInitialized();
             }
 
             return placedEntity;
