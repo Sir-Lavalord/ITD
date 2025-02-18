@@ -16,9 +16,7 @@ using System.Runtime.CompilerServices;
 using System.Linq;
 using System;
 using Terraria.UI.Gamepad;
-using ITD.Players;
 using System.IO;
-using Terraria.GameContent.Achievements;
 
 namespace ITD.Content.TileEntities
 {

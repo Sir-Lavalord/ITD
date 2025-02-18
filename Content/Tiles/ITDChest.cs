@@ -32,7 +32,9 @@ namespace ITD.Content.Tiles
         public sealed override void SetStaticDefaults()
         {
             Main.tileSpelunker[Type] = true;
-            Main.tileContainer[Type] = true;
+            // i found this really funny, but check Player.PickTile. if the tile is in this set then it calls WorldGen.KillTile with fail set to true for some reason.
+            // i'm guessing this is a bug.
+            //Main.tileContainer[Type] = true;
             Main.tileShine2[Type] = true;
             Main.tileShine[Type] = 1200;
             Main.tileFrameImportant[Type] = true;
