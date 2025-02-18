@@ -45,6 +45,58 @@ namespace ITD.DetoursIL
 
             // there's hardcoded checks for context 3 and chest here that crash the game in multiplayer
             IL_ItemSlot.LeftClick_ItemArray_int_int += LeftClickITDChest;
+            IL_ItemSlot.PickupItemIntoMouse += PickupItemITDChest; // it's funny but this il edit is literally copy pasted from above and it works cuz of the similarity
+        }
+
+        private static void PickupItemITDChest(ILContext il)
+        {
+            try
+            {
+                var c = new ILCursor(il);
+
+                // this is the start of the senddata call. now we can skip
+                if (!c.TryGotoNext(i => i.MatchLdcI4(32)))
+                {
+                    LogError("Couldn't find start of NetMessage.SendData variable loading");
+                }
+
+                var skipLabel = il.DefineLabel();
+
+                // decide whether or not to skip
+                c.EmitDelegate(() => ITDChestTE.IsActiveForLocalPlayer);
+
+                c.EmitBrtrue(skipLabel);
+
+                // now let's move after it for actually skipping
+                if (!c.TryGotoNext(MoveType.After, i => i.MatchCall<NetMessage>("SendData")))
+                {
+                    LogError("Couldn't find SendData call");
+                }
+
+                // we will jump here to avoid both calls being calledeleld
+                var endLabel = il.DefineLabel();
+
+                // jamp
+                c.EmitBr(endLabel);
+
+                // we wanna skip to here
+                c.MarkLabel(skipLabel);
+
+                // load the slot onto the stack
+                c.EmitLdarg2();
+                c.EmitDelegate<Action<int>>(slot =>
+                {
+                    NetSystem.SendPacket(new SyncITDChestItemPacket(ITDChestTE.GetITDChest().ID, slot));
+                });
+
+                // end
+                c.MarkLabel(endLabel);
+
+            }
+            catch
+            {
+                DumpIL(il);
+            }
         }
 
         private static void LeftClickITDChest(ILContext il)
@@ -540,7 +592,7 @@ namespace ITD.DetoursIL
                         list2.Add(i);
                         list.Add(item[i].netID);
                     }
-                    if (item[i].type == 0 || item[i].stack <= 0)
+                    if (item[i].type == ItemID.None || item[i].stack <= 0)
                     {
                         list3.Add(i);
                     }
@@ -587,6 +639,7 @@ namespace ITD.DetoursIL
                             if (canVisualizeTransfers && num4 > 0)
                             {
                                 chest.OpenToReceiveParticles();
+                                NetSystem.SendPacket(new ITDChestTransferAnimPacket((ushort)chest.ID));
                                 Chest.VisualizeChestTransfer(center, containerWorldPosition, item[num3], num4);
                             }
                             array2[num3] = true;
@@ -628,6 +681,7 @@ namespace ITD.DetoursIL
                             if (canVisualizeTransfers)
                             {
                                 chest.OpenToReceiveParticles();
+                                NetSystem.SendPacket(new ITDChestTransferAnimPacket((ushort)chest.ID));
                                 Chest.VisualizeChestTransfer(center, containerWorldPosition, item[num6], item[num6].stack);
                             }
                         }
@@ -647,6 +701,7 @@ namespace ITD.DetoursIL
                             if (canVisualizeTransfers && num8 > 0)
                             {
                                 chest.OpenToReceiveParticles();
+                                NetSystem.SendPacket(new ITDChestTransferAnimPacket((ushort)chest.ID));
                                 Chest.VisualizeChestTransfer(center, containerWorldPosition, item[num6], num8);
                             }
                             if (array[item5.Key].stack == 0)

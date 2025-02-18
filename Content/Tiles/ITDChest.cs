@@ -203,41 +203,48 @@ namespace ITD.Content.Tiles
             }
             return te;
         }
-        public override bool RightClick(int i, int j)
+        public sealed override bool RightClick(int i, int j)
         {
             Player player = Main.LocalPlayer;
 
             // Should your tile entity bring up a UI, this line is useful to prevent item slots from misbehaving
             Main.mouseRightRelease = false;
 
-            // The following four (4) if-blocks are recommended to be used if your multitile opens a UI when right clicked:
-            if (player.sign > -1)
+            ITDChestTE chest = GetTE(i, j);
+
+            bool canToggle = chest != null && (chest.OpenedBy == player.whoAmI || chest.OpenedBy < 0);
+
+            if (canToggle && chest.OpenedBy < 0)
             {
-                SoundEngine.PlaySound(SoundID.MenuClose);
-                player.sign = -1;
-                Main.editSign = false;
-                Main.npcChatText = string.Empty;
-            }
-            if (Main.editChest)
-            {
-                SoundEngine.PlaySound(SoundID.MenuTick);
-                Main.editChest = false;
-                Main.npcChatText = string.Empty;
-            }
-            if (player.editedChestName)
-            {
-                NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f);
-                player.editedChestName = false;
-            }
-            if (player.talkNPC > -1)
-            {
-                player.SetTalkNPC(-1);
-                Main.npcChatCornerItem = 0;
-                Main.npcChatText = string.Empty;
+                // The following four (4) if-blocks are recommended to be used if your multitile opens a UI when right clicked:
+                if (player.sign > -1)
+                {
+                    SoundEngine.PlaySound(SoundID.MenuClose);
+                    player.sign = -1;
+                    Main.editSign = false;
+                    Main.npcChatText = string.Empty;
+                }
+                if (Main.editChest)
+                {
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+                    Main.editChest = false;
+                    Main.npcChatText = string.Empty;
+                }
+                if (player.editedChestName)
+                {
+                    NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f);
+                    player.editedChestName = false;
+                }
+                if (player.talkNPC > -1)
+                {
+                    player.SetTalkNPC(-1);
+                    Main.npcChatCornerItem = 0;
+                    Main.npcChatText = string.Empty;
+                }
             }
 
-            ITDChestTE chest = GetTE(i, j);
-            chest?.Toggle(player);
+            if (canToggle)
+                chest.Toggle(player);
 
             return true;
         }

@@ -83,6 +83,8 @@ namespace ITD.Content.TileEntities
             SoundEngine.PlaySound(silent ? SoundID.MenuTick : SoundID.MenuOpen);
             player.tileEntityAnchor.Set(ID, Position.X, Position.Y);
             Main.playerInventory = true;
+
+            NetSystem.SendPacket(new ITDChestOpenedStatePacket((ushort)ID, (byte)player.whoAmI));
         }
         public void Close(Player player, bool silent = false)
         {
@@ -93,6 +95,8 @@ namespace ITD.Content.TileEntities
                 SoundEngine.PlaySound(SoundID.MenuClose);
             }
             player.tileEntityAnchor.Clear();
+
+            NetSystem.SendPacket(new ITDChestOpenedStatePacket((ushort)ID, 255));
         }
         /// <summary>
         /// Only runs on the server
