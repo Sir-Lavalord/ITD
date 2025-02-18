@@ -126,7 +126,6 @@ namespace ITD.Content.TileEntities
                     return;
                 }
             }
-            EnsureArrayIsInitialized();
         }
         public sealed override void SaveData(TagCompound tag)
         {
@@ -185,30 +184,33 @@ namespace ITD.Content.TileEntities
                 }
                 if (Main.dedServ)
                 {
-                    NetSystem.SendPacket(new InitializeITDChestPacket(ID, StorageDimensions));
+                    //NetSystem.SendPacket(new InitializeITDChestPacket(ID, StorageDimensions));
                 }
             }
         }
         public sealed override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
         {
+            Point8 dims = new();
+            Point8 storageDims = new();
+
             // chests aren't placed from the top left like most tiles, so we need to account for that here in the placement.
             if (TileLoader.GetTile(Framing.GetTileSafely(i, j).TileType) is ITDChest chest)
             {
-                Dimensions = chest.Dimensions;
-                j -= Dimensions.Y - 1;
-                StorageDimensions = chest.StorageDimensions;
+                dims = chest.Dimensions;
+                j -= dims.Y - 1;
+                storageDims = chest.StorageDimensions;
+            }
+
+            if (Main.dedServ)
+            {
+
             }
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 // Sync the entire multitile's area.  Modify "width" and "height" to the size of your multitile in tiles
 
-                if (TileLoader.GetTile(Framing.GetTileSafely(i, j).TileType) is ITDChest ch)
-                {
-                    Dimensions = ch.Dimensions;
-                }
-
-                NetMessage.SendTileSquare(Main.myPlayer, i, j, Math.Max((byte)Dimensions.X, (byte)1), Math.Max((byte)Dimensions.Y, (byte)1));
+                NetMessage.SendTileSquare(Main.myPlayer, i, j, Math.Max((byte)dims.X, (byte)1), Math.Max((byte)dims.Y, (byte)1));
 
                 // Sync the placement of the tile entity with other clients
                 // The "type" parameter refers to the tile type which placed the tile entity, so "Type" (the type of the tile entity) needs to be used here instead
@@ -217,14 +219,17 @@ namespace ITD.Content.TileEntities
             }
 
             // ModTileEntity.Place() handles checking if the entity can be placed, then places it for you
+
+            // runs on server
+
             int placedEntity = Place(i, j);
 
             TileEntity placed = ByID[placedEntity];
 
             if (placed is ITDChestTE c)
             {
-                if (TileLoader.GetTile(Framing.GetTileSafely(placed.Position).TileType) is ITDChest ches)
-                    c.StorageDimensions = ches.StorageDimensions;
+                c.Dimensions = dims;
+                c.StorageDimensions = storageDims;
                 c.EnsureArrayIsInitialized();
             }
 
@@ -234,6 +239,11 @@ namespace ITD.Content.TileEntities
         {
             if (Main.netMode == NetmodeID.Server)
             {
+                if (TileLoader.GetTile(Framing.GetTileSafely(Position).TileType) is ITDChest chest)
+                {
+                    StorageDimensions = chest.StorageDimensions;
+                }
+                EnsureArrayIsInitialized();
                 NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Position.X, number3: Position.Y);
             }
         }
@@ -282,6 +292,7 @@ namespace ITD.Content.TileEntities
                 byte slot = reader.ReadByte();
                 items[slot] = ItemIO.Receive(reader, true);
             }
+            Main.NewText(StorageDimensions);
         }
         public override void OnInventoryDraw(Player player, SpriteBatch spriteBatch)
         {

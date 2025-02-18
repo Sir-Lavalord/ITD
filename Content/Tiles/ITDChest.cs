@@ -180,7 +180,17 @@ namespace ITD.Content.Tiles
         }
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
+            //fail = false;
+
             ITDChestTE te = GetTE(i, j);
+            //bool nul = te is null;
+
+            /*
+            Debugging.Message(nul, nul);
+            if (!nul)
+                Debugging.Message(te.items.Count(it => it.Exists()), te.items.Count(it => it.Exists()));
+            */
+
             if (te != null && te.items.Any(it => it.Exists()))
                 fail = true;
         }
