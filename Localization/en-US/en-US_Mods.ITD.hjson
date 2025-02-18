@@ -465,13 +465,18 @@ Tiles: {
 	}
 
 	PyracottaChestTile: {
-		MapEntryUnlocked: Mods.ITD.Tiles.PyracottaChestTile.MapEntryUnlocked
-		MapEntryLocked: Mods.ITD.Tiles.PyracottaChestTile.MapEntryLocked
+		MapEntryUnlocked: Pyracotta Chest
+		MapEntryLocked: Locked Pyracotta Chest
 	}
 
 	CharbleDoubleChestTile: {
 		MapEntryUnlocked: Charble Double Chest
 		MapEntryLocked: Locked Charble Double Chest
+	}
+
+	PyracottaDoubleChestTile: {
+		MapEntryUnlocked: Pyracotta Double Chest
+		MapEntryLocked: Locked Pyracotta Double Chest
 	}
 }
 
@@ -542,6 +547,11 @@ Configs: {
 		ResizeDesertForDeepDesert: {
 			Label: Resize Desert For Deep Desert
 			Tooltip: Turn on for the vanilla Desert to generate smaller to make space for Deep Desert generation. On by default.
+		}
+
+		AutoMergeChestsIntoDoubleChest: {
+			Label: Auto Merge Chests Into Double Chest
+			Tooltip: ""
 		}
 	}
 

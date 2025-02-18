@@ -1330,3 +1330,8 @@ CharbleDoubleChest: {
 	// DisplayName: Charble Double Chest
 	// Tooltip: ""
 }
+
+PyracottaDoubleChest: {
+	// DisplayName: Pyracotta Double Chest
+	// Tooltip: ""
+}

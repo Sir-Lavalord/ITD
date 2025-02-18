@@ -3,11 +3,11 @@ using ITD.Utilities;
 
 namespace ITD.Content.Items.Placeable
 {
-    public class PyracottaChest : ModItem
+    public class PyracottaDoubleChest : ModItem
     {
         public override void SetDefaults()
         {
-            Item.DefaultToFurniture(2, 2, ModContent.TileType<PyracottaChestTile>());
+            Item.DefaultToFurniture(4, 2, ModContent.TileType<PyracottaDoubleChestTile>());
         }
     }
 }

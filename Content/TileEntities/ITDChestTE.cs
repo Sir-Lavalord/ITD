@@ -151,9 +151,12 @@ namespace ITD.Content.TileEntities
             else
                 EnsureArrayIsInitialized();
 
-            if (items.Length > StorageDimensions.X * StorageDimensions.Y)
+            int max = StorageDimensions.X * StorageDimensions.Y;
+
+            // if the read items array is for some reason larger than the storage dimensions, drop all the overflow items onto the ground nearby
+            if (items.Length > max)
             {
-                for (int i = StorageDimensions.X * StorageDimensions.Y; i < items.Length; i++)
+                for (int i = max; i < items.Length; i++)
                 {
                     Item item = items[i];
 
@@ -162,7 +165,7 @@ namespace ITD.Content.TileEntities
                     item.TurnToAir();
                 }
 
-                Array.Resize(ref items, StorageDimensions.X * StorageDimensions.Y);
+                Array.Resize(ref items, max);
             }
         }
         public ref Item this[int i] => ref items[i];

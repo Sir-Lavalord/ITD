@@ -11,6 +11,9 @@ namespace ITD.Content.Tiles
 {
     public class ITDGlobalTile : GlobalTile
     {
-
+        public override void PlaceInWorld(int i, int j, int type, Item item)
+        {
+            //Main.NewText($"{i},{j}");
+        }
     }
 }
