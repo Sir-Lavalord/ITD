@@ -37,6 +37,7 @@ namespace ITD.Players
 		public float recoilBack = 0f;
 
         public Vector2 MousePosition { get; set; }
+        private Vector2 mousePosPrev;
 		
         bool prevTime = false;
         bool curTime = false;
@@ -364,8 +365,9 @@ namespace ITD.Players
         {
             if (Player.IsLocalPlayer())
             {
+                mousePosPrev = MousePosition;
                 MousePosition = Main.MouseWorld;
-                if (Main.netMode == NetmodeID.MultiplayerClient)
+                if (Main.netMode == NetmodeID.MultiplayerClient && mousePosPrev != MousePosition)
                 {
                     NetSystem.SendPacket(new MousePositionPacket(Player));
                 }
