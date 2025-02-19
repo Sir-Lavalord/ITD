@@ -7,7 +7,7 @@ namespace ITD.Content.Tiles.Furniture.DeepDesert
     {
         public override void SetStaticDefaultsSafe()
         {
-            ITDSets.CanDoubleUpInto[Type] = ModContent.TileType<PyracottaDoubleChestTile>();
+            ITDSets.ITDChestMergeTo[Type] = ModContent.TileType<PyracottaDoubleChestTile>();
         }
         public override int ItemType => ModContent.ItemType<PyracottaChest>();
     }

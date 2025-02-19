@@ -8,6 +8,7 @@ namespace ITD.Content.Tiles.Furniture.BlueshroomGroves
         public override void SetStaticDefaultsSafe()
         {
             DustType = DustID.Marble;
+            ITDSets.ITDChestMergeTo[Type] = ModContent.TileType<CharbleDoubleChestTile>();
         }
     }
 }

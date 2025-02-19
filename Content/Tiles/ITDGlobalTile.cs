@@ -14,7 +14,7 @@ namespace ITD.Content.Tiles
 
             // i, j is bottom left for chests here
 
-            int possible = ITDSets.CanDoubleUpInto[type];
+            int possible = ITDSets.ITDChestMergeTo[type];
             if (possible > -1)
             {
                 // now we can get the dimensions of this chest with tileloader

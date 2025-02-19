@@ -9,6 +9,7 @@ using Terraria.ObjectData;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
+using ITD.Utilities;
 
 namespace ITD.Content.Tiles
 {
@@ -58,22 +59,7 @@ namespace ITD.Content.Tiles
         }
         public override void HitWire(int i, int j)
         {
-            Tile tile = Framing.GetTileSafely(i, j);
-            int topY = j - tile.TileFrameY / 18 % 3;
-            short frameAdjustment = (short)(tile.TileFrameX > 0 ? -18 : 18);
-
-            Framing.GetTileSafely(i, topY).TileFrameX += frameAdjustment;
-            Framing.GetTileSafely(i, topY + 1).TileFrameX += frameAdjustment;
-            Framing.GetTileSafely(i, topY + 2).TileFrameX += frameAdjustment;
-
-            Wiring.SkipWire(i, topY);
-            Wiring.SkipWire(i, topY + 1);
-            Wiring.SkipWire(i, topY + 2);
-
-            if (Main.netMode != NetmodeID.SinglePlayer)
-            {
-                NetMessage.SendTileSquare(-1, i, topY + 1, 3, TileChangeType.None);
-            }
+            TileHelpers.CommonWiringLight(Type, i, j);
         }
         public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects)
         {
@@ -120,9 +106,7 @@ namespace ITD.Content.Tiles
 
             if (frameY / 18 % 3 == 0)
             {
-                int dustChoice = -1;
-
-                dustChoice = EmitDust[style];
+                int dustChoice = EmitDust[style];
 
                 if (dustChoice != -1)
                 {

@@ -231,6 +231,46 @@ namespace ITD.Utilities
         #endregion
         #region Tile Actions
         /// <summary>
+        /// Helper method for toggling a light source tile on and off with wires.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="tileX"></param>
+        /// <param name="tileY"></param>
+        public static void CommonWiringLight(int type, int i, int j)
+        {
+            Point16 topLeft = GetTopLeftTileInMultitile(i, j);
+
+            TileObjectData tod = TileObjectData.GetTileData(Framing.GetTileSafely(i, j));
+
+            int tileX = tod.Width;
+            int tileY = tod.Height;
+            int spriteStyleWidth = tod.CoordinateFullWidth;
+
+            short tilePxHalfWidth = (short)spriteStyleWidth;
+
+            for (int l = topLeft.X; l < topLeft.X + tileX; l++)
+            {
+                for (int m = topLeft.Y; m < topLeft.Y + tileY; m++)
+                {
+                    Tile t = Framing.GetTileSafely(l, m);
+                    if (t.HasTile && t.TileType == type)
+                    {
+                        if (t.TileFrameX < tilePxHalfWidth)
+                            t.TileFrameX += tilePxHalfWidth;
+                        else
+                            t.TileFrameX -= tilePxHalfWidth;
+                    }
+
+                    if (Wiring.running)
+                        Wiring.SkipWire(l, m);
+                }
+            }
+
+            Sync(topLeft, tileX, tileY);
+        }
+        /// <summary>
 		/// Atttempts to find the top-left corner of a multitile at location (<paramref name="x"/>, <paramref name="y"/>)
 		/// </summary>
 		/// <param name="x">The tile X-coordinate</param>
@@ -294,12 +334,9 @@ namespace ITD.Utilities
             t.TileFrameX = (short)(x + horizontalRandom);
             t.TileFrameY = (short)(y + verticalRandom);
         }
-        public static void Sync(int i, int j, int width = 1, int height = 1)
-        {
-            if (Main.netMode == NetmodeID.SinglePlayer)
-                return;
-            NetMessage.SendTileSquare(-1, i, j, width, height);
-        }
+        public static void Sync(int i, int j, int width = 1, int height = 1) => NetMessage.SendTileSquare(-1, i, j, width, height);
+        public static void Sync(Point p, int width = 1, int height = 1) => Sync(p.X, p.Y, width, height);
+        public static void Sync(Point16 p, int width = 1, int height = 1) => Sync(p.X, p.Y, width, height);
         public static void Sync(Rectangle rect)
         {
             Sync(rect.X, rect.Y, rect.Width, rect.Height);

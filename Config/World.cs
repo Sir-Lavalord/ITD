@@ -10,7 +10,6 @@ namespace ITD.Config
         [DefaultValue(true)]
         public bool ResizeDesertForDeepDesert;
 
-        // doesn't do anything for now
         [DefaultValue(false)]
         public bool AutoMergeChestsIntoDoubleChest;
     }

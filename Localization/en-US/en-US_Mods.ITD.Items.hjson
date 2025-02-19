@@ -1338,3 +1338,8 @@ PyracottaDoubleChest: {
 	DisplayName: Pyracotta Double Chest
 	Tooltip: ""
 }
+
+PyracottaCandle: {
+	DisplayName: Pyracotta Candle
+	Tooltip: ""
+}
