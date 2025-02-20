@@ -20,7 +20,7 @@ namespace ITD.Content.Tiles
         /// Determines whether when placed, every other lamp in the X axis will alternate its draw direction.
         /// </summary>
         public bool AlternateDirection { get; set; }
-        public virtual Texture2D FlameTexture => TextureAssets.Flames[1].Value;
+        public virtual Asset<Texture2D> FlameTexture => TextureAssets.Flames[1];
         public Vector3[] LightColor { get; set; }
         public int[] EmitDust {  get; set; }
         /// <summary>
@@ -155,7 +155,7 @@ namespace ITD.Content.Tiles
                 float shakeX = Terraria.Utils.RandomInt(ref randSeed, -10, 11) * 0.15f;
                 float shakeY = Terraria.Utils.RandomInt(ref randSeed, -10, 1) * 0.35f;
                 Vector2 position = new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero;
-                spriteBatch.Draw(FlameTexture, position, new Rectangle(frameX, frameY, width, height), Color.White, 0f, default, 1f, effects, 0f);
+                spriteBatch.Draw(FlameTexture.Value, position, new Rectangle(frameX, frameY, width, height), Color.White, 0f, default, 1f, effects, 0f);
             }
         }
     }
