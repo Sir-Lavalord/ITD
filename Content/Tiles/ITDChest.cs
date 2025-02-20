@@ -186,7 +186,7 @@ namespace ITD.Content.Tiles
         public override bool CanExplode(int i, int j)
         {
             ITDChestTE te = GetTE(i, j);
-            return te != null && te.items.Any(it => it.Exists());
+            return te is null || !te.items.Any(it => it.Exists());
         }
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
