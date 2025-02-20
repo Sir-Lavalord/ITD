@@ -348,10 +348,10 @@ namespace ITD.Utilities
             item.noUseGraphic = true;
             item.UseSound = useSound ?? SoundID.Item1;
         }
-        public static void DefaultToFurniture(this Item item, int tileDimX, int tileDimY, int createTile)
+        public static void DefaultToFurniture(this Item item, int createTile, int width, int height)
         {
-            item.width = 16 * tileDimX;
-            item.height = 16 * tileDimY;
+            item.width = width;
+            item.height = height;
             item.maxStack = 9999;
             item.useTurn = true;
             item.autoReuse = true;

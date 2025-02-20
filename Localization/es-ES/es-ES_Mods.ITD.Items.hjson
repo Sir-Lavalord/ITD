@@ -1348,3 +1348,18 @@ PyracottaChair: {
 	// DisplayName: Pyracotta Chair
 	// Tooltip: ""
 }
+
+PyracottaDoor: {
+	// DisplayName: Pyracotta Door
+	// Tooltip: ""
+}
+
+PyracottaBookcase: {
+	// DisplayName: Pyracotta Bookcase
+	// Tooltip: ""
+}
+
+PyracottaDresser: {
+	// DisplayName: Pyracotta Dresser
+	// Tooltip: ""
+}

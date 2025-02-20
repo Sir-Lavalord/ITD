@@ -908,6 +908,33 @@ namespace ITD.Utilities
                 m.AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.WorkBench"));
             m.AdjTiles = [TileID.WorkBenches];
         }
+        public static void DefaultToBookcase(this ModTile m, Color? mapColor = null, bool extraBottomPixel = false, bool lavaDeath = true)
+        {
+            ushort t = m.Type;
+            Main.tileSolidTop[t] = true;
+            Main.tileFrameImportant[t] = true;
+            Main.tileNoAttach[t] = true;
+            Main.tileLavaDeath[t] = true;
+            TileID.Sets.DisableSmartCursor[t] = true;
+
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
+            TileObjectData.newTile.Height = 4;
+            TileObjectData.newTile.Width = 3;
+            TileObjectData.newTile.CoordinateHeights =
+            [
+                16,
+                16,
+                16,
+                extraBottomPixel ? 18 : 16,
+            ];
+            TileObjectData.addTile(t);
+
+            m.AddMapEntry(new Color(179, 146, 107), Language.GetText("ItemName.Bookcase"));
+            m.AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
+
+            m.DustType = -1;
+            m.AdjTiles = [TileID.Bookcases];
+        }
         #endregion
         #region Tile Entity Helpers
         /// <summary>

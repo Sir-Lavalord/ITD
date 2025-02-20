@@ -7,7 +7,7 @@ namespace ITD.Content.Items.Placeable.Furniture.BlueshroomGroves
     {
         public override void SetDefaults()
         {
-            Item.DefaultToFurniture(4, 2, ModContent.TileType<CharbleDoubleChestTile>());
+            Item.DefaultToFurniture(ModContent.TileType<CharbleDoubleChestTile>(), 64, 32);
         }
     }
 }
