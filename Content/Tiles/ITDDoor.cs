@@ -162,6 +162,7 @@ namespace ITD.Content.Tiles
         private static ushort Style(int i, int j) => (ushort)TileObjectData.GetTileStyle(Framing.GetTileSafely(i, j));
         private readonly Color?[] mapColors = parent.MapColors;
         private readonly int[] dustTypes = parent.DustTypes;
+        private readonly int[] dropItems = parent.DropItems;
         public override void SetStaticDefaults()
         {
             // Properties
@@ -212,7 +213,7 @@ namespace ITD.Content.Tiles
             Player player = Main.LocalPlayer;
             player.noThrow = 2;
             player.cursorItemIconEnabled = true;
-            player.cursorItemIconID = GetItemDrops(i, j).ElementAt(Style(i, j)).type;
+            player.cursorItemIconID = dropItems[Style(i, j)];
         }
     }
 }
