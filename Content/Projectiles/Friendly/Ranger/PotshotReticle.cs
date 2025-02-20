@@ -1,14 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.IO;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
+﻿using System.IO;
 using ITD.Utilities;
-using Terraria.DataStructures;
-using ITD.Content.Items.Weapons.Summoner;
 using ITD.Content.Items.Weapons.Ranger;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger

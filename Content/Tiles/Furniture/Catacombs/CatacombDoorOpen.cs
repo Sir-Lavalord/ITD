@@ -1,5 +1,4 @@
-﻿using ITD.Content.Items.Placeable;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
 using Terraria;
@@ -10,10 +9,11 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.Enums;
 using Terraria.DataStructures;
+using ITD.Content.Items.Placeable.Furniture.Catacombs;
 
 namespace ITD.Content.Tiles.Furniture.Catacombs
 {
-	public class CatacombDoorOpen : ModTile
+    public class CatacombDoorOpen : ModTile
 	{		
 		public override void SetStaticDefaults() {
 			// Properties

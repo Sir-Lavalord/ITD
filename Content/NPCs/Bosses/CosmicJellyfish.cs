@@ -21,7 +21,9 @@ using ITD.Content.Items.Accessories.Movement.Boots;
 using ITD.Content.Projectiles.Hostile.CosjelTest;
 using ITD.PrimitiveDrawing;
 using Terraria.Graphics.Shaders;
- 
+using ITD.Content.Items.Placeable.Furniture.Relics;
+using ITD.Content.Items.Placeable.Furniture.Trophies;
+
 
 namespace ITD.Content.NPCs.Bosses
 

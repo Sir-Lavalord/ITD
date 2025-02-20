@@ -5,7 +5,7 @@ using Terraria.GameContent.Creative;
 using ITD.Content.Tiles;
 using ITD.Content.Buffs.GeneralBuffs;
 using ITD.Content.Tiles.Misc;
-using ITD.Content.Items.Placeable;
+using ITD.Content.Items.Placeable.Biomes.Minibiomes.BlackMoldBm;
 
 namespace ITD.Content.Items.Consumables
 {

@@ -13,10 +13,10 @@ using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 using ITD.Content.Items.Materials;
 using System.Collections.Generic;
-using ITD.Content.Items.Placeable;
 using System.Linq;
 using ITD.Systems;
 using Terraria.GameContent;
+using ITD.Content.Items.Placeable.Biomes.BlueshroomGroves;
 
 namespace ITD.Content.Tiles.BlueshroomGroves
 {
