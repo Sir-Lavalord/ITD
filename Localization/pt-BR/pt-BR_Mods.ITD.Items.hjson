@@ -1348,3 +1348,8 @@ ARCTrap: {
 	// DisplayName: A R C Trap
 	// Tooltip: ""
 }
+
+PyracottaChair: {
+	// DisplayName: Pyracotta Chair
+	// Tooltip: ""
+}

@@ -1,11 +1,7 @@
 ﻿using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
-using Microsoft.Xna.Framework;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.GameContent;
 
@@ -28,7 +24,7 @@ namespace ITD.Content.Tiles
             MapColor = Color.White;
             ChairItem = [ItemID.WoodenChair];
         }
-        public override void SetStaticDefaults()
+        public sealed override void SetStaticDefaults()
         {
             SetStaticChairDefaults();
             Main.tileFrameImportant[Type] = true;

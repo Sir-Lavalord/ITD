@@ -7,7 +7,7 @@ namespace ITD.Content.Items.Placeable.Furniture.Catacombs
     {
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<CatacombDoorClosed>());
+            Item.DefaultToPlaceableTile(ModContent.GetInstance<CatacombDoor>().ClosedType);
             Item.width = 14;
             Item.height = 28;
         }
@@ -16,7 +16,7 @@ namespace ITD.Content.Items.Placeable.Furniture.Catacombs
     {
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<CatacombDoorClosed>(), 1);
+            Item.DefaultToPlaceableTile(ModContent.GetInstance<CatacombDoor>().ClosedType, 1);
             Item.width = 14;
             Item.height = 28;
         }
@@ -25,7 +25,7 @@ namespace ITD.Content.Items.Placeable.Furniture.Catacombs
     {
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<CatacombDoorClosed>(), 2);
+            Item.DefaultToPlaceableTile(ModContent.GetInstance<CatacombDoor>().ClosedType, 2);
             Item.width = 14;
             Item.height = 28;
         }
