@@ -12,7 +12,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
         private int DelayTimer = 0;
         public override void SetStaticDefaults()
         {
-            // Total count animation frames
             Main.projFrames[Projectile.type] = 2;
         }
         public override void SetDefaults()
