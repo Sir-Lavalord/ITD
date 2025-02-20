@@ -50,6 +50,7 @@ namespace ITD.Content.Tiles
             TileID.Sets.GeneralPlacementTiles[Type] = false;
 
             TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
+            TileID.Sets.PreventsSandfall[Type] = true;
 
             AdjTiles = [TileID.Containers];
             (Color color0, Color color1) = UnlockedAndLockedMapColors;
@@ -181,6 +182,11 @@ namespace ITD.Content.Tiles
                 return true;
             }
             return false;
+        }
+        public override bool CanExplode(int i, int j)
+        {
+            ITDChestTE te = GetTE(i, j);
+            return te is null || !te.items.Any(it => it.Exists());
         }
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {

@@ -1,5 +1,4 @@
-﻿using ITD.Content.Items.Placeable;
-using ITD.Content.Items.PetSummons;
+﻿using ITD.Content.Items.PetSummons;
 using ITD.Content.Items.BossSummons;
 using ITD.Content.NPCs.Bosses;
 using System;
@@ -15,6 +14,8 @@ using ITD.Systems.Recruitment;
 using System.Linq;
 using Terraria.Localization;
 using ITD.Content.UI;
+using ITD.Content.Items.Placeable.Furniture.Relics;
+using ITD.Content.Items.Placeable.Furniture.Trophies;
 
 namespace ITD
 {

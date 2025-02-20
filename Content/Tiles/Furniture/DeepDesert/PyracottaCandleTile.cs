@@ -1,4 +1,4 @@
-﻿using ITD.Content.Items.Placeable;
+﻿using ITD.Content.Items.Placeable.Furniture.DeepDesert;
 
 namespace ITD.Content.Tiles.Furniture.DeepDesert
 {

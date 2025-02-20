@@ -1340,3 +1340,8 @@ PyracottaCandle: {
 	// DisplayName: Pyracotta Candle
 	// Tooltip: ""
 }
+
+ARCTrap: {
+	// DisplayName: A R C Trap
+	// Tooltip: ""
+}

@@ -6,12 +6,12 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using System;
-using ITD.Content.Items.Placeable;
 using ITD.Systems;
 using ITD.Content.NPCs.BlueshroomGroves.Critters;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent;
+using ITD.Content.Items.Placeable.Biomes.BlueshroomGroves;
 
 namespace ITD.Content.Tiles.BlueshroomGroves
 {

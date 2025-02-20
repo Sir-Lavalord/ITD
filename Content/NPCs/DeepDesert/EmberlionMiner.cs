@@ -5,10 +5,10 @@ using Terraria;
 using System;
 using Terraria.DataStructures;
 using Terraria.Audio;
-using ITD.Content.Items.Placeable;
 using ITD.Content.Items.Materials;
 using Terraria.GameContent.ItemDropRules;
 using ITD.Utilities;
+using ITD.Content.Items.Placeable.Biomes.DeepDesert;
 
 namespace ITD.Content.NPCs.DeepDesert
 {

@@ -17,6 +17,7 @@ using System.Linq;
 using System;
 using Terraria.UI.Gamepad;
 using System.IO;
+using Terraria.ID;
 
 namespace ITD.Content.TileEntities
 {
@@ -365,7 +366,7 @@ namespace ITD.Content.TileEntities
 
             ItemSlot.MouseHover(inv, context, slot);
         }
-        public static void Draw(SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor = default(Color))
+        public static void Draw(SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor = default)
         {
             Player player = Main.player[Main.myPlayer];
             Item item = inv[slot];
@@ -395,20 +396,20 @@ namespace ITD.Content.TileEntities
             Color color2 = Main.inventoryBack;
             bool flag2 = false;
             bool highlightThingsForMouse = PlayerInput.SettingsForUI.HighlightThingsForMouse;
-            if (item.type > 0 && item.stack > 0 && item.favorited && context != 13 && context != 21 && context != 22 && context != 14)
+            if (item.type > ItemID.None && item.stack > 0 && item.favorited && context != 13 && context != 21 && context != 22 && context != 14)
             {
                 value = TextureAssets.InventoryBack10.Value;
                 if (context == 32)
                     value = TextureAssets.InventoryBack19.Value;
             }
-            else if (item.type > 0 && item.stack > 0 && ItemSlot.Options.HighlightNewItems && item.newAndShiny && context != 13 && context != 21 && context != 14 && context != 22)
+            else if (item.type > ItemID.None && item.stack > 0 && ItemSlot.Options.HighlightNewItems && item.newAndShiny && context != 13 && context != 21 && context != 14 && context != 22)
             {
                 value = TextureAssets.InventoryBack15.Value;
                 float num2 = (float)(int)Main.mouseTextColor / 255f;
                 num2 = num2 * 0.2f + 0.8f;
                 color2 = color2.MultiplyRGBA(new Color(num2, num2, num2));
             }
-            else if (!highlightThingsForMouse && item.type > 0 && item.stack > 0 && num != 0 && context != 13 && context != 21 && context != 22)
+            else if (!highlightThingsForMouse && item.type > ItemID.None && item.stack > 0 && num != 0 && context != 13 && context != 21 && context != 22)
             {
                 value = TextureAssets.InventoryBack15.Value;
                 float num3 = (float)(int)Main.mouseTextColor / 255f;
@@ -557,7 +558,7 @@ namespace ITD.Content.TileEntities
             }
 
             if (!flag2)
-                spriteBatch.Draw(value, position, null, color2, 0f, default(Vector2), inventoryScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(value, position, null, color2, 0f, default, inventoryScale, SpriteEffects.None, 0f);
 
             int num9 = -1;
             switch (context)
@@ -622,7 +623,7 @@ namespace ITD.Content.TileEntities
                     break;
             }
 
-            if ((item.type <= 0 || item.stack <= 0) && num9 != -1)
+            if ((item.type <= ItemID.None || item.stack <= 0) && num9 != -1)
             {
                 Texture2D value6 = TextureAssets.Extra[54].Value;
                 Rectangle rectangle = value6.Frame(3, 6, num9 % 3, num9 / 3);
@@ -693,7 +694,7 @@ namespace ITD.Content.TileEntities
                     {
                         for (int i = 0; i < 58; i++)
                         {
-                            if (inv[i].type == 3822)
+                            if (inv[i].type == ItemID.DD2EnergyCrystal)
                                 num10 += inv[i].stack;
                         }
 
@@ -703,13 +704,9 @@ namespace ITD.Content.TileEntities
 
                     if (item.useAmmo > 0)
                     {
-                        int useAmmo = item.useAmmo;
                         num10 = 0;
                         for (int j = 0; j < 58; j++)
                         {
-                            /*
-                            if (inv[j].ammo == useAmmo)
-                            */
                             if (inv[j].stack > 0 && ItemLoader.CanChooseAmmo(item, inv[j], player))
                                 num10 += inv[j].stack;
                         }
@@ -736,12 +733,12 @@ namespace ITD.Content.TileEntities
                         }
                     }
 
-                    if (item.type == 509 || item.type == 851 || item.type == 850 || item.type == 3612 || item.type == 3625 || item.type == 3611)
+                    if (item.type == ItemID.Wrench || item.type == ItemID.GreenWrench || item.type == ItemID.BlueWrench || item.type == ItemID.YellowWrench || item.type == ItemID.MulticolorWrench || item.type == ItemID.WireKite)
                     {
                         num10 = 0;
                         for (int m = 0; m < 58; m++)
                         {
-                            if (inv[m].type == 530)
+                            if (inv[m].type == ItemID.Wire)
                                 num10 += inv[m].stack;
                         }
                     }
@@ -763,7 +760,7 @@ namespace ITD.Content.TileEntities
                 {
                     Vector2 position2 = position + value.Size() * inventoryScale / 2f - TextureAssets.Cd.Value.Size() * inventoryScale / 2f;
                     Color color3 = item.GetAlpha(color) * ((float)player.potionDelay / (float)player.potionDelayTime);
-                    spriteBatch.Draw(TextureAssets.Cd.Value, position2, null, color3, 0f, default(Vector2), scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(TextureAssets.Cd.Value, position2, null, color3, 0f, default, scale, SpriteEffects.None, 0f);
 
                     // Extra context.
                 }
@@ -773,7 +770,7 @@ namespace ITD.Content.TileEntities
                 {
                     Vector2 position3 = position + value.Size() * inventoryScale / 2f - TextureAssets.Cd.Value.Size() * inventoryScale / 2f;
                     Color white = Color.White;
-                    spriteBatch.Draw(TextureAssets.Cd.Value, position3, null, white, 0f, default(Vector2), scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(TextureAssets.Cd.Value, position3, null, white, 0f, default, scale, SpriteEffects.None, 0f);
                 }
 
                 // Extra context.
@@ -782,7 +779,7 @@ namespace ITD.Content.TileEntities
             {
                 Texture2D value11 = TextureAssets.Trash.Value;
                 Vector2 position4 = position + value.Size() * inventoryScale / 2f - value11.Size() * inventoryScale / 2f;
-                spriteBatch.Draw(value11, position4, null, new Color(100, 100, 100, 100), 0f, default(Vector2), inventoryScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(value11, position4, null, new Color(100, 100, 100, 100), 0f, default, inventoryScale, SpriteEffects.None, 0f);
             }
 
             if (context == 0 && slot < 10)
@@ -799,7 +796,6 @@ namespace ITD.Content.TileEntities
                     baseColor = Color.White;
                     baseColor.A = 200;
                     num12 -= 2;
-                    num11 *= 1.4f;
                 }
 
                 ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.ItemStack.Value, text2, position + new Vector2(6f, 4 + num12) * inventoryScale, baseColor, 0f, Vector2.Zero, new Vector2(inventoryScale), -1f, inventoryScale);
@@ -881,8 +877,7 @@ namespace ITD.Content.TileEntities
             List<int> list2 = [];
             bool flag2 = false;
             int[] array2 = new int[cInv.Length];
-            bool overFlowing;
-            long num = Utils.CoinsCount(out overFlowing, pInv);
+            long num = Utils.CoinsCount(out bool overFlowing, pInv);
             for (int i = 0; i < cInv.Length; i++)
             {
                 array2[i] = -1;
@@ -959,7 +954,7 @@ namespace ITD.Content.TileEntities
 
             for (int l = 0; l < 40; l++)
             {
-                if (array2[l] < 0 || cInv[l].type != 0)
+                if (array2[l] < 0 || cInv[l].type != ItemID.None)
                     continue;
 
                 int num4 = l;
@@ -1006,8 +1001,8 @@ namespace ITD.Content.TileEntities
                         num7--;
                 }
 
-                if (Main.netMode == 1 && Main.player[Main.myPlayer].chest > -1)
-                    NetMessage.SendData(32, -1, -1, null, Main.player[Main.myPlayer].chest, num6);
+                if (!Main.dedServ && IsActiveForLocalPlayer)
+                    NetSystem.SendPacket(new SyncITDChestItemPacket(GetITDChest().ID, num6));
 
                 list2.Remove(num6);
             }
@@ -1033,8 +1028,8 @@ namespace ITD.Content.TileEntities
                         num9--;
                 }
 
-                if (Main.netMode == 1 && Main.player[Main.myPlayer].chest > -1)
-                    NetMessage.SendData(32, -1, -1, null, Main.player[Main.myPlayer].chest, list2[0]);
+                if (!Main.dedServ && IsActiveForLocalPlayer)
+                    NetSystem.SendPacket(new SyncITDChestItemPacket(GetITDChest().ID, list2[0]));
 
                 list2.RemoveAt(0);
             }
@@ -1062,8 +1057,7 @@ namespace ITD.Content.TileEntities
             if (flag)
                 SoundEngine.PlaySound(SoundID.Grab);
 
-            bool overFlowing2;
-            long num12 = Utils.CoinsCount(out overFlowing2, pInv);
+            long num12 = Utils.CoinsCount(out bool overFlowing2, pInv);
             if (overFlowing || overFlowing2)
                 return 0L;
 

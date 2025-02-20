@@ -1,6 +1,6 @@
-﻿using ITD.Content.Items.Placeable;
-using Terraria.GameContent;
+﻿using Terraria.GameContent;
 using ITD.Systems.DataStructures;
+using ITD.Content.Items.Placeable.Biomes.DeepDesert;
 
 namespace ITD.Content.Tiles.DeepDesert.Rubbles
 {
