@@ -47,7 +47,6 @@ namespace ITD.Content.NPCs.Bosses
         {
             writer.Write(bOkuu);
             writer.Write(goodtransition);
-            writer.Write(NPC.ai[0]);
             writer.Write(NPC.localAI[1]);
             writer.Write(NPC.localAI[2]);
             writer.Write(AIRand);
@@ -57,6 +56,7 @@ namespace ITD.Content.NPCs.Bosses
         public ref float AITimer2 => ref NPC.ai[2];
         public ref float AttackID => ref NPC.ai[3];
         public ref float AttackCount => ref NPC.ai[0];
+        public ref float AttackTotal => ref NPC.localAI[0];
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
@@ -64,6 +64,7 @@ namespace ITD.Content.NPCs.Bosses
 
             goodtransition = reader.ReadInt32();
             AttackCount = reader.ReadSingle();
+            NPC.localAI[0] = reader.ReadSingle();
             NPC.localAI[1] = reader.ReadSingle();
             NPC.localAI[2] = reader.ReadSingle();
             AIRand = reader.ReadSingle();
@@ -72,6 +73,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             FollowingRegular,
             FollowingSlow,
+            Leap,
             Ram,
             Suffocate,
             Explode,
@@ -152,6 +154,8 @@ namespace ITD.Content.NPCs.Bosses
             {
                 CheckSecondStage();
             }
+            Main.NewText(AI_State.ToString(), Color.Violet);
+
             if (!SkyManager.Instance["ITD:CosjelOkuuSky"].IsActive() && bOkuu)
             {
                 SkyManager.Instance.Activate("ITD:CosjelOkuuSky");
@@ -230,49 +234,26 @@ namespace ITD.Content.NPCs.Bosses
                         AI_State = MovementState.FollowingRegular;
                         AttackID = Main.rand.Next(1, 4);//randomized, but not reveal new attack now
                         AITimer1 = 0;
-                        AttackCount = 0;
                         NPC.dontTakeDamage = false;
                     }
                     break;
                 case 0://Free
                     distanceAbove = 700;
-                    if (AITimer1++ >= 120)//take time to get to the player
+                    if (AITimer1++ == 120)
                     {
-                        RaycastData data = Helpers.QuickRaycast(NPC.Center, NPC.velocity, (point) => { return (player.Center.Y >= point.ToWorldCoordinates().Y + 20); }, 600);
-                        if (NPC.Center.Distance(data.End) >= 20)
-                        {
-                            AI_State = MovementState.Slamdown;
-                            NPC.velocity.Y += 0.5f;
-                        }
-                        else
-                        {
-                            AI_State = MovementState.Slamdown;
-                            NPC.velocity *= 0;
-                            if (AITimer2++ > 50)
-                            {
-                                AttackID++;
-                                AITimer1 = 0;
-                                AITimer2 = 0;
-                                AttackCount = 0;
-                            }
-                            if (AITimer2 == 1)
-                            {
-                                player.GetITDPlayer().BetterScreenshake(60, 20, 40, true);//Very shaky, might need some tweaking to the decay
-                            }
-                        }
+                        AI_State = MovementState.Slamdown;
+                    }
+                    if (AttackCount > 0)
+                    {
+                        Main.NewText(AttackCount);
+                        AI_State = MovementState.FollowingRegular;
+                        AttackID = 2;
+                        AITimer1 = 0;
+                        AITimer2 = 0;
+                        AttackCount = 0;
                     }
                     break;
                 case 1: //Slop rain
-                    distanceAbove = 400;
-                    if (AITimer2 == 120)
-                    {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-
-                            Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY,
-                             ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI,1);
-                        }
-                    }
                     if (AITimer2++ > 120)
                     {
                         AI_State = MovementState.FollowingSlow;
@@ -291,43 +272,40 @@ namespace ITD.Content.NPCs.Bosses
                             }
                         }
                     }
-                        if (AITimer1++ >= 1200 + Main.rand.Next(-100, 150))
-                        {
+                    if (AITimer1++ >= 1200 + Main.rand.Next(-100, 150))
+                    {
                         AI_State = MovementState.FollowingRegular;
                         distanceAbove = 250;
                         AITimer1 = 0;
                         AITimer2 = 0;
                         AttackID++;
-                        }
-                        break;
-                case 2: //zingers
-                    if (AITimer2++ >= 260 || expertMode && AITimer2++ >= 220 || masterMode && AITimer2++ >= 180)
+                    }
+                    break;
+                case 2: //Leaperbomb reference???
+                    AITimer1++;
+                    if (AITimer1 <= 30)
+                    {
+                        Dash(new Vector2(NPC.Center.X, NPC.Center.Y - distanceAbove), 5, 20, 50, 120, 3);
+                    }
+                    else if (AITimer1 > 30 && AITimer1 < 120)
+                    {
+                        AI_State = MovementState.FollowingRegular;
+
+                    }
+                    else if (AITimer1 == 120)
                     {
                         AITimer2 = 0;
-                        SoundEngine.PlaySound(SoundID.Item20, NPC.Center);
-                        //P2 stat garbage here
-                        int projectileAmount = Main.rand.Next(20, 24);
-                        float radius = 6.5f;
-                        float sector = (float)(MathHelper.TwoPi);
-                        float sectorOfSector = sector / projectileAmount;
-                        float towardsAngle = toPlayer.ToRotation();
-                        float startAngle = towardsAngle - sectorOfSector * (projectileAmount - 1) / 2;
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            for (int i = 0; i < projectileAmount; i++)
-                            {
-                                float angle = startAngle + sectorOfSector * i;
-                                Vector2 projectileVelo = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * radius;
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo * 0.01f, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1, 0, 2);
-
-                            }
-                        }
+                        AI_State = MovementState.Slamdown;
                     }
-                    if (AITimer1++ >= 400 + Main.rand.Next(-100, 150))
+
+                    if (AttackCount > 2)
                     {
+                        AI_State = MovementState.FollowingRegular;
+                        AttackID = Main.rand.Next(1, 4);
                         AITimer1 = 0;
                         AITimer2 = 0;
-                        AttackID++;
+                        AttackCount = 0;
+                        AttackTotal++;
                     }
                     break;
                 case 3://shit enemy spawn
@@ -366,7 +344,6 @@ namespace ITD.Content.NPCs.Bosses
                         }
                         else if (AITimer1 >= 100)
                         {
-                            AttackCount = 0;
                             AttackID++;
                             AITimer1 = 0;
                             HandControl(-1, 1, 2, false);
@@ -394,7 +371,6 @@ namespace ITD.Content.NPCs.Bosses
                             NetSync();
                             AITimer1 = 0;
                             AttackID++;
-                            AttackCount = 0;
                             NetSync();
 
                         }
@@ -414,22 +390,12 @@ namespace ITD.Content.NPCs.Bosses
 
                         break;
                 case 5://dash
-                    Main.NewText("555", Color.Violet);
                     if (AITimer1++ == 60)
                     {
                         AITimer2 = 0;
                         SoundEngine.PlaySound(SoundID.Zombie101, NPC.Center);
                         if (AI_State != MovementState.Suffocate)
                             AI_State = MovementState.Ram;
-                    }
-                    if (AttackCount++ >= 900)
-                    {
-                        //can't believe i have to do this, since the checking doesn't even fucking work
-                        AttackID++;
-                        AITimer1 = 0;
-                        AITimer2 = 0;
-                        AttackCount = 0;
-
                     }
                     break;
                 case 6:
@@ -453,7 +419,6 @@ namespace ITD.Content.NPCs.Bosses
                         AITimer1 = 0;
                         AITimer2 = 0;
                         AttackID++;
-                        AttackCount = 0;
 
                         NetSync();
                         //ForceKill returns
@@ -494,7 +459,6 @@ namespace ITD.Content.NPCs.Bosses
                             AttackID = 0;
                             AITimer1 = 0;
                             AITimer2 = 0;
-                            AttackCount = 0;
                             NetSync();
                         }
                         if (AITimer1 >= 100)
@@ -527,7 +491,6 @@ namespace ITD.Content.NPCs.Bosses
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                AttackCount++;
                                 AIRand = Main.rand.Next(600, 800);
                                 NetSync();
                                 int saferange = (int)AIRand;
@@ -546,15 +509,28 @@ namespace ITD.Content.NPCs.Bosses
             }
         }
         float distanceAbove = 250f;//True melee
-
-        private void Movement(Player player)//___________________________________________________________________________________________________________________________________________________
+        private void ShardSlam()
+        {
+            float XVeloDifference = 2;
+            float startXVelo = -((float)(6) / 2) * (float)XVeloDifference;
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -5f);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 30, 0, -1, NPC.whoAmI);
+                }
+            }
+        }
+            private void Movement(Player player)//___________________________________________________________________________________________________________________________________________________
         {
             Vector2 toPlayer = player.Center - NPC.Center;
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
             Vector2 abovePlayer = toPlayer + new Vector2(0f, -distanceAbove);
             Vector2 aboveNormalized = Vector2.Normalize(abovePlayer);
-            Vector2 dashvel;
             float speed = abovePlayer.Length() / 1.2f;//True melee
+            float maxRotation = MathHelper.Pi / 6;
+            float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);
             switch (AI_State)
             {
                 case MovementState.FollowingRegular:
@@ -571,7 +547,9 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         NPC.velocity = Vector2.Zero;
                     }
-                    
+                    rotation = rotationFactor * maxRotation;
+                    NPC.rotation = rotation;
+
                     break;
                 case MovementState.FollowingSlow:
                     if (speed > 1.1f)
@@ -586,8 +564,11 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         NPC.velocity = Vector2.Zero;
                     }
+                    NPC.rotation = 0;
+
                     break;
                 case MovementState.Ram:
+
                     AITimer2++;
                     if (AITimer2 < 10)
                     {
@@ -597,7 +578,6 @@ namespace ITD.Content.NPCs.Bosses
                             NetSync();
                         }
                     }
-                    //very hard coded
                     if (AITimer2 == 10)//set where to dash
                     {
                         int projectileAmount = 16;
@@ -616,38 +596,11 @@ namespace ITD.Content.NPCs.Bosses
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo * 0.01f, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1, 0, 2);
 
                             }
-                            
-                            dashvel = Vector2.Normalize(new Vector2(player.Center.X, player.Center.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
-                            NPC.velocity = dashvel;
-                            NetSync();
                         }
                     }
-
-                    if (AITimer2 > 10 && AITimer2 < 30)//xcel
-                    {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            NPC.velocity *= 1.18f;
-
-                            NetSync();
-                        }
-                    }
-                    if (AITimer2 > 50) //Decelerate 
-                    {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            NPC.velocity *= 0.96f;
-                            NetSync();
-                        }
-                    }
-                    if (AITimer2 >= 120) 
-                    {
-                        AITimer1 = 0;
-                        AITimer2 = 0;
-                        AttackCount++;
-                        NetSync();
-                        AI_State = MovementState.FollowingRegular;
-                    }
+                    NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
+                    Dash(player.Center, 10, 30, 50, 120, 3);
+                    NetSync();
                     break;
                 case MovementState.Suffocate:
                     var suffer = player.GetModPlayer<ITDPlayer>();
@@ -667,25 +620,67 @@ namespace ITD.Content.NPCs.Bosses
                 case MovementState.Explode:
                     NPC.velocity *= 0.9f;
                     break;
+                case MovementState.Slamdown:
+                    RaycastData data = Helpers.QuickRaycast(NPC.Center, NPC.velocity, (point) => { return (player.Center.Y >= point.ToWorldCoordinates().Y + 20); }, 1000);
+                    if (NPC.Center.Distance(data.End) >= 20)
+                    {
+                        NPC.velocity.Y += 0.5f;
+                    }
+                    else
+                    {
+                        NPC.velocity *= 0;
+                        if (AITimer2++ > 50)
+                        {
+                            AttackCount++;
+                            AITimer1 = 0;
+                            AITimer2 = 0;
+                        }
+                        if (AITimer2 == 1)
+                        {
+                            ShardSlam();
+                            player.GetITDPlayer().BetterScreenshake(30, 10, 20, true);//Very shaky, might need some tweaking to the decay
+                        }
+                    }
+                    NPC.rotation = 0;
 
+                    break;
             }
-            float maxRotation = MathHelper.Pi / 6;
-            float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);
-            if (AI_State == MovementState.Ram)
+        }
+        bool IsDashing;
+        Vector2 dashvel;
+        public void Dash(Vector2 pos, int time1, int time2, int time3, int reset, int attackID)
+        {
+            Player player = Main.player[NPC.target];
+                dashvel = Vector2.Normalize(new Vector2(pos.X, pos.Y) - new Vector2(NPC.Center.X, NPC.Center.Y)) * 20f;
+                NPC.velocity = dashvel;
+                NPC.netUpdate = true;
+            AITimer2++;
+
+            if (AITimer2 > time1 && AITimer2 < time2)
             {
-                NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation() + MathHelper.PiOver2,0.2f);
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    NPC.velocity *= 1.18f;
+                    NPC.netUpdate = true;
+                }
+            }
+            if (AITimer2 > time3)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    NPC.velocity *= 0.96f;
+                    NPC.netUpdate = true;
+
+                }
+            }
+            if (AITimer2 >= reset)
+            {
+                AITimer1 = 0;
+                AITimer2 = 0;
+                NetSync();
                 
+            }
 
-            }
-            else if (AI_State == MovementState.FollowingRegular)
-            {
-                rotation = rotationFactor * maxRotation;
-                NPC.rotation = rotation;
-            }
-            else if (AI_State == MovementState.FollowingSlow || AI_State == MovementState.Slamdown)
-            {
-                NPC.rotation = 0;
-            }
         }
         private void CheckSecondStage()
         {
@@ -713,7 +708,6 @@ namespace ITD.Content.NPCs.Bosses
                 }
                 AITimer1 = 0;
                 AITimer2 = 0;
-                AttackCount = 0;
                 NPC.localAI[2] = 1;
                 HandControl(1, 6, 3, true);
                 HandControl(-1, 6, 3, true);

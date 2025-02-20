@@ -117,7 +117,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                     direction *= float.Lerp(0.05f, 20, 0.5f);
                     if (!Collision.SolidCollision(player.BottomLeft, player.width, 16))
                     {
-                        if (player.velocity.Y >= 0 && (tile.TileType == TileID.Platforms))
+                        if (player.velocity.Y >= 0 && Main.tileSolidTop[tile.TileType])
                         {
 
                             player.position.Y += 2;

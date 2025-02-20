@@ -53,29 +53,6 @@ namespace ITD.Content.Projectiles.Hostile
         }
 
         bool isStuck = false;
-/*        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            if (Projectile.ai[1] != 0)
-            {
-                return true;
-            }
-            Projectile.velocity = Vector2.Zero;
-            isStuck = true;
-            return false;
-        }
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
-        {
-            NPC CosJel = Main.npc[(int)Projectile.ai[0]];
-            if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
-            {
-                Player player = Main.player[CosJel.target];
-                width = 15;
-                height = 15;
-                fallThrough = player.Center.Y >= Projectile.Bottom.Y + 20;
-            }
-            return true;
-                
-        }*/
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = effect.Value;
@@ -89,38 +66,15 @@ namespace ITD.Content.Projectiles.Hostile
 
             return true;
         }
-        public int pulseSpeed;
-        public int pulseTime;
-        float Distance;
         bool expertMode = Main.expertMode;
         bool masterMode = Main.masterMode;
         public override void AI()
         {
-/*                if (expertMode || masterMode)
-                {
-                NPC CosJel = Main.npc[(int)Projectile.ai[0]];
-                if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
-                {
-                    Player player = Main.player[CosJel.target];
-                    if (player.Distance(Projectile.Center) < 60)
-                    {
-                        if (pulseTime++ >= 5)
-                        {
-                            pulseTime = 0;
-                            pulseSpeed++;
-                        }
-                    }
-                    if (pulseSpeed >= 8)
-                    {
-                        Projectile.Kill();
-                    }
-                }
-            }*/
-            if (isStuck == false)
+            if (Projectile.ai[1]++ >= 30)
             {
-                Projectile.velocity.Y += 0.035f;
+                Projectile.velocity.Y += 0.25f;
             }
-            if (++Projectile.frameCounter >= 10 - pulseSpeed)
+            if (++Projectile.frameCounter >= 10)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
@@ -134,14 +88,6 @@ namespace ITD.Content.Projectiles.Hostile
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, Color.Purple, 2f);
                 dust.velocity *= 1.4f;
             }
-/*            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                Projectile explosion = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
-                ModContent.ProjectileType<CosmicLightningBlast>(), (int)(Projectile.damage), Projectile.knockBack);
-                explosion.ai[1] = 100f;
-                explosion.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
-                explosion.netUpdate = true;
-            }*/
             for (int i = 0; i < 10; i++)
             {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.ShimmerTorch, 0f, 0f, 100, default, 3f);
