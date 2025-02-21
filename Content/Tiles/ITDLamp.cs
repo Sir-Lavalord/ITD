@@ -20,6 +20,7 @@ namespace ITD.Content.Tiles
         /// Determines whether when placed, every other lamp in the X axis will alternate its draw direction.
         /// </summary>
         public bool AlternateDirection { get; set; }
+        public virtual bool ExtraBottomPixel => false;
         public virtual Asset<Texture2D> FlameTexture => TextureAssets.Flames[1];
         public Vector3[] LightColor { get; set; }
         public int[] EmitDust {  get; set; }
@@ -53,6 +54,10 @@ namespace ITD.Content.Tiles
             TileObjectData.newTile.WaterDeath = true;
             TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
             TileObjectData.newTile.LavaPlacement = LiquidPlacement.NotAllowed;
+
+            if (ExtraBottomPixel)
+                TileObjectData.newTile.CoordinateHeights[^1] = 18;
+
             TileObjectData.addTile(Type);
 
             AddMapEntry(MapColor, Language.GetText("MapObject.FloorLamp"));

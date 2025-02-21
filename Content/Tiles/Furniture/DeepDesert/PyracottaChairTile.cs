@@ -8,7 +8,7 @@ namespace ITD.Content.Tiles.Furniture.DeepDesert
         public override void SetStaticChairDefaults()
         {
             DustType = ModContent.DustType<PyracottaDust>();
-            MapColor = new(11, 67, 67);
+            MapColor = new(171, 77, 57);
             ChairItem = [ModContent.ItemType<PyracottaChair>()];
         }
     }

@@ -6,6 +6,6 @@ namespace ITD.Content.Tiles.Furniture.DeepDesert
     {
         public override int[] DropItems => [ModContent.ItemType<Items.Placeable.Furniture.DeepDesert.PyracottaDoor>()];
         public override int[] DustTypes => [ModContent.DustType<PyracottaDust>()];
-        public override Color?[] MapColors => [new Color(11, 67, 67)];
+        public override Color?[] MapColors => [new(171, 77, 57)];
     }
 }

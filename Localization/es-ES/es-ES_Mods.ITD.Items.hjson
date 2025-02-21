@@ -1363,3 +1363,13 @@ PyracottaDresser: {
 	// DisplayName: Pyracotta Dresser
 	// Tooltip: ""
 }
+
+PyracottaLamp: {
+	// DisplayName: Pyracotta Lamp
+	// Tooltip: ""
+}
+
+PyracottaTable: {
+	// DisplayName: Pyracotta Table
+	// Tooltip: ""
+}
