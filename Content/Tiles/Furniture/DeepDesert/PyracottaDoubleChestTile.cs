@@ -1,4 +1,5 @@
-﻿using ITD.Content.Items.Placeable.Furniture.DeepDesert;
+﻿using ITD.Content.Dusts;
+using ITD.Content.Items.Placeable.Furniture.DeepDesert;
 using ITD.Systems.DataStructures;
 
 namespace ITD.Content.Tiles.Furniture.DeepDesert
@@ -7,6 +8,10 @@ namespace ITD.Content.Tiles.Furniture.DeepDesert
     {
         public override int ItemType => ModContent.ItemType<PyracottaChest>();
         public override Point8 Dimensions => new(4, 2);
-        public override Point8 StorageDimensions => new(10, 8);
+        public override Point8 StorageDimensions => new(11, 8);
+        public override void SetStaticDefaultsSafe()
+        {
+            DustType = ModContent.DustType<PyracottaDust>();
+        }
     }
 }

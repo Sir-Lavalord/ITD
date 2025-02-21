@@ -485,6 +485,8 @@ Tiles: {
 		// MapEntryUnlocked: Pyracotta Double Chest
 		// MapEntryLocked: Locked Pyracotta Double Chest
 	}
+
+	// PyracottaDresserTile.MapEntry: Pyracotta Dresser Tile
 }
 
 Biomes: {

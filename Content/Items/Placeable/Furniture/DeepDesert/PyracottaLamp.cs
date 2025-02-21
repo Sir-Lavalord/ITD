@@ -1,13 +1,14 @@
 ﻿using ITD.Content.Tiles.Furniture.DeepDesert;
-using ITD.Utilities;
 
 namespace ITD.Content.Items.Placeable.Furniture.DeepDesert
 {
-    public class PyracottaCandle : ModItem
+    public class PyracottaLamp : ModItem
     {
         public override void SetDefaults()
         {
-            Item.DefaultToFurniture(ModContent.TileType<PyracottaCandleTile>(), 16, 16);
+            Item.DefaultToPlaceableTile(ModContent.TileType<PyracottaLampTile>());
+            Item.width = 12;
+            Item.height = 30;
         }
     }
 }

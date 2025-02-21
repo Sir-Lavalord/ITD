@@ -908,6 +908,63 @@ namespace ITD.Utilities
                 m.AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.WorkBench"));
             m.AdjTiles = [TileID.WorkBenches];
         }
+        public static void DefaultToBookcase(this ModTile m, Color? mapColor = null, bool extraBottomPixel = false, bool lavaDeath = true)
+        {
+            ushort t = m.Type;
+            Main.tileSolidTop[t] = true;
+            Main.tileFrameImportant[t] = true;
+            Main.tileNoAttach[t] = true;
+            Main.tileLavaDeath[t] = lavaDeath;
+            TileID.Sets.DisableSmartCursor[t] = true;
+
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
+            TileObjectData.newTile.Height = 4;
+            TileObjectData.newTile.Width = 3;
+            TileObjectData.newTile.CoordinateHeights =
+            [
+                16,
+                16,
+                16,
+                extraBottomPixel ? 18 : 16,
+            ];
+            TileObjectData.newTile.LavaDeath = lavaDeath;
+            TileObjectData.newTile.LavaPlacement = lavaDeath ? LiquidPlacement.NotAllowed : LiquidPlacement.Allowed;
+            TileObjectData.addTile(t);
+
+            m.AddMapEntry(mapColor ?? new Color(191, 142, 111), Language.GetText("ItemName.Bookcase"));
+            m.AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
+
+            m.DustType = -1;
+            m.AdjTiles = [TileID.Bookcases];
+        }
+        public static void DefaultToTable(this ModTile m, Color? mapColor = null, bool extraBottomPixel = false, bool lavaDeath = true)
+        {
+            ushort t = m.Type;
+            Main.tileTable[t] = true;
+            Main.tileSolidTop[t] = true;
+            Main.tileNoAttach[t] = true;
+            Main.tileLavaDeath[t] = lavaDeath;
+            Main.tileFrameImportant[t] = true;
+            TileID.Sets.DisableSmartCursor[t] = true;
+            TileID.Sets.IgnoredByNpcStepUp[t] = true; // This line makes NPCs not try to step up this tile during their movement. Only use this for furniture with solid tops.
+
+            m.AdjTiles = [TileID.Tables];
+
+            // Placement
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
+            TileObjectData.newTile.StyleWrapLimit = 9;
+            TileObjectData.newTile.StyleMultiplier = 1;
+            TileObjectData.newTile.StyleHorizontal = true;
+            TileObjectData.newTile.CoordinateHeights = [16, extraBottomPixel ? 18 : 16];
+            TileObjectData.newTile.LavaDeath = lavaDeath;
+            TileObjectData.newTile.LavaPlacement = lavaDeath ? LiquidPlacement.NotAllowed : LiquidPlacement.Allowed;
+            TileObjectData.addTile(t);
+
+            m.AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
+
+            // Etc
+            m.AddMapEntry(mapColor ?? new Color(191, 142, 111), Language.GetText("MapObject.Table"));
+        }
         #endregion
         #region Tile Entity Helpers
         /// <summary>

@@ -1,14 +1,13 @@
-﻿using Terraria.ID;
-using Microsoft.Xna.Framework;
+﻿using ITD.Utilities;
 
 namespace ITD.Content.Tiles.Furniture.Catacombs
 {
-    public class CatacombTableTile : ITDTable
+    public class CatacombTableTile : ModTile
     {
-        public override void SetStaticTableDefaults()
+        public override void SetStaticDefaults()
         {
+            this.DefaultToTable(new Color(30, 63, 96), false, true);
             DustType = DustID.Shadowflame;
-            MapColor = new Color(30, 63, 96);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace ITD.Content.Items.Placeable.Furniture.DeepDesert
     {
         public override void SetDefaults()
         {
-            Item.DefaultToFurniture(4, 2, ModContent.TileType<PyracottaDoubleChestTile>());
+            Item.DefaultToFurniture(ModContent.TileType<PyracottaDoubleChestTile>(), 64, 32);
         }
     }
 }

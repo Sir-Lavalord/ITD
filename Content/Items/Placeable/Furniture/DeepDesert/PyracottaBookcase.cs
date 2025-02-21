@@ -3,11 +3,11 @@ using ITD.Utilities;
 
 namespace ITD.Content.Items.Placeable.Furniture.DeepDesert
 {
-    public class PyracottaCandle : ModItem
+    public class PyracottaBookcase : ModItem
     {
         public override void SetDefaults()
         {
-            Item.DefaultToFurniture(ModContent.TileType<PyracottaCandleTile>(), 16, 16);
+            Item.DefaultToFurniture(ModContent.TileType<PyracottaBookcaseTile>(), 48, 64);
         }
     }
 }

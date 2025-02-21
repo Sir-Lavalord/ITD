@@ -25,7 +25,7 @@ namespace ITD.Content.Tiles
         /// </summary>
         public virtual ITDChestTE TE => ModContent.GetInstance<ITDChestTE>();
         public virtual int KeyType => ItemID.DirtBlock;
-        public virtual (Color, Color) UnlockedAndLockedMapColors => (new(191, 142, 111), new(191, 142, 111));
+        public virtual (Color, Color) UnlockedAndLockedMapColors => (new(174, 129, 92), new(174, 129, 92));
         public virtual Point8 Dimensions => new(2, 2);
         public virtual Point8 StorageDimensions => new(10, 4);
         public virtual bool LavaDeath => true;
