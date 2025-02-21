@@ -934,7 +934,6 @@ namespace ITD.Utilities
             m.AddMapEntry(mapColor ?? new Color(191, 142, 111), Language.GetText("ItemName.Bookcase"));
             m.AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
 
-            m.DustType = -1;
             m.AdjTiles = [TileID.Bookcases];
         }
         public static void DefaultToTable(this ModTile m, Color? mapColor = null, bool extraBottomPixel = false, bool lavaDeath = true)

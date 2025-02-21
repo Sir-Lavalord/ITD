@@ -25,6 +25,8 @@ namespace ITD.Content.Tiles
             TileObjectData.addTile(Type);
 
             AddMapEntry(MapColor, Language.GetText("MapObject.Candle"));
+
+            SetStaticDefaultsSafe();
         }
         public virtual void SetStaticDefaultsSafe()
         {
