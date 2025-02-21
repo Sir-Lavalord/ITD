@@ -128,7 +128,7 @@ namespace ITD.Utilities
         #region Tile Drawing Helpers
         public static Vector2 CommonTileOffset => Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
         public static Vector2 TileExtraPos(int i, int j, Vector2 extraOffset = default) => new Vector2(i, j) * 16 - Main.screenPosition + extraOffset + CommonTileOffset;
-        public static void DrawTileCommon(SpriteBatch spriteBatch, int i , int j, Texture2D tex, Vector2 extraOffset = default, Rectangle? overrideFrame = null)
+        public static void DrawTileCommon(SpriteBatch spriteBatch, int i , int j, Texture2D tex, Vector2 extraOffset = default, Rectangle? overrideFrame = null, Color? overrideColor = null)
         {
             Tile t = Framing.GetTileSafely(i, j);
             Rectangle frame;
@@ -136,7 +136,7 @@ namespace ITD.Utilities
                 frame = new(t.TileFrameX, t.TileFrameY, 16, 16);
             else
                 frame = (Rectangle)overrideFrame;
-            spriteBatch.Draw(tex, TileExtraPos(i, j, extraOffset), frame, Lighting.GetColor(i, j), 0f, default, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(tex, TileExtraPos(i, j, extraOffset), overrideFrame ?? new(t.TileFrameX, t.TileFrameY, 16, 16), overrideColor ?? Lighting.GetColor(i, j), 0f, default, 1f, SpriteEffects.None, 0f);
         }
         /// <summary>
         /// code from the verdant mod

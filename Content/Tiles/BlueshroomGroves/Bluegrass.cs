@@ -8,7 +8,7 @@ namespace ITD.Content.Tiles.BlueshroomGroves
         private Asset<Texture2D> glowmask;
         public override void SetStaticDefaults()
         {
-            glowmask = ModContent.Request<Texture2D>("ITD/Content/Tiles/BlueshroomGroves/Bluegrass_Glow");
+            glowmask = ModContent.Request<Texture2D>(Texture + "_Glow");
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileMerge[Type][TileID.SnowBlock] = true;

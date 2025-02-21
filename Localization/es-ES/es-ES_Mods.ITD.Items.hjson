@@ -1383,3 +1383,8 @@ PyracottaLantern: {
 	// DisplayName: Pyracotta Lantern
 	// Tooltip: ""
 }
+
+BaldsnapStatue: {
+	// DisplayName: Baldsnap Statue
+	// Tooltip: ""
+}
