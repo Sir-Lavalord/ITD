@@ -48,6 +48,8 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
         {
             SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraHookThrow"), player.Center);
             player.GetITDPlayer().recoilFront = 0.15f;
+            //failsafe!
+            int index = player.FindItemInInventoryOrOpenVoidBag(Type, out _);
             return base.Shoot(player,source,position,velocity,type,damage,knockback);
         }
         public override void HoldItem(Player player)
@@ -106,7 +108,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
         }
         public override void HoldStyle(Player player, Rectangle heldItemFrame)
         {
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<WhiplatchProjectile>()] > 0 && player.GetSnaptrapPlayer().GetActiveSnaptrap().retracting)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<WhiplatchProjectile>()] > 0)
             {
                 if (player.GetITDPlayer().recoilFront <= 0.4f)
                     player.GetITDPlayer().recoilFront += 0.1f;
