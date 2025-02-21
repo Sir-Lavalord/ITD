@@ -55,6 +55,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             Tile tile = Framing.GetTileSafely(target.Bottom);
             if (!manualRetract)
             {
+                if (dur <= 300)
                 dur++;
                 //NEED BETTER MATH HERE
                 distance = (player.Distance(target.Center) - dur - 30) / (16f * 25);
