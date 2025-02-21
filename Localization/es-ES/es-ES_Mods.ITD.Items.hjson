@@ -1373,3 +1373,13 @@ PyracottaTable: {
 	// DisplayName: Pyracotta Table
 	// Tooltip: ""
 }
+
+PyracottaChandelier: {
+	// DisplayName: Pyracotta Chandelier
+	// Tooltip: ""
+}
+
+PyracottaLantern: {
+	// DisplayName: Pyracotta Lantern
+	// Tooltip: ""
+}
