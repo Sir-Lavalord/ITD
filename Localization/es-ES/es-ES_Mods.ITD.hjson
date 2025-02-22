@@ -296,6 +296,8 @@ NPCs: {
 		// Bestiary: Mods.ITD.NPCs.Magmaripper.Bestiary
 		// DisplayName: Magmaripper
 	}
+
+	// BlackMoldStrand.DisplayName: Black Mold Strand
 }
 
 Buffs: {
