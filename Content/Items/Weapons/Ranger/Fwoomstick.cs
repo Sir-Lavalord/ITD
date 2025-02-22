@@ -8,7 +8,7 @@ using Terraria.GameContent;
 using ITD.Systems;
 using ITD.Players;
 using ITD.Utilities;
-using ITD.Content.Projectiles.Friendly.Ranger.Ammo;
+using ITD.Content.Projectiles;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -83,12 +83,11 @@ namespace ITD.Content.Items.Weapons.Ranger
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-			if (type == 14)
-				type = ModContent.ProjectileType<IncendiaryShot>();
             for (int i = 0; i < 4; i++) {
-				Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(30));
+				Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(20));
 				newVelocity *= 1f - Main.rand.NextFloat(0.3f);
-				Projectile.NewProjectileDirect(source, position, newVelocity, type, damage, knockback, player.whoAmI);
+				Projectile proj = Projectile.NewProjectileDirect(source, position, newVelocity, type, damage, knockback, player.whoAmI);
+				proj.GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromFwoomstick = true;
 			}
 			ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
 			modPlayer.recoilFront = 0.2f;

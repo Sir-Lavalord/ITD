@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Projectiles.Friendly.Ranger.Ammo
+namespace ITD.Content.Projectiles.Friendly.Ranger
 {
     public class FwoomstickSpark : ModProjectile
     {

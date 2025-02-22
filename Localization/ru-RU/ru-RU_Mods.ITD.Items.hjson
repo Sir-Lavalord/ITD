@@ -1228,7 +1228,7 @@ EyeofEldritchInsight: {
 
 Fwoomstick: {
 	// DisplayName: Fwoomstick
-	// Tooltip: Converts musket balls into incendiary shots
+	// Tooltip: Fired bullets combust into damaging flames
 }
 
 Stabtrap: {
