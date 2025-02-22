@@ -204,6 +204,7 @@ Projectiles: {
 	}
 
 	ARCTrapElectrifiedChain.DisplayName: A R C Trap Electrified Chain
+	IncendiaryShot.DisplayName: Incendiary Shot
 }
 
 NPCs: {

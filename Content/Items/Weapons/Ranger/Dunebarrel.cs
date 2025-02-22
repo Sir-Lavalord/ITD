@@ -39,7 +39,7 @@ namespace ITD.Content.Items.Weapons.Ranger
             Item.value = Item.buyPrice(gold: 12, silver: 60);
             Item.rare = ItemRarityID.LightRed;
             Item.UseSound = SoundID.Item40;
-            Item.shoot = ProjectileID.PurificationPowder;
+            Item.shoot = 1;
             Item.shootSpeed = 12f;
             Item.noMelee = true;
             Item.noUseGraphic = true;
