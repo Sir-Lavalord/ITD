@@ -247,7 +247,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             int maxDamage = MaxDamage;
             ModifyMaxDamage(ref maxDamage);
             float currentBaseDamage = Helpers.Remap(currentHitsAmount, 0, FullPowerHitsAmount, MinDamage, maxDamage);
-            float currentDamageAfterMeleeScaling = Owner.GetDamage(DamageClass.Melee).ApplyTo(currentBaseDamage);
+            float currentDamageAfterMeleeScaling = Owner.GetTotalDamage(DamageClass.Melee).ApplyTo(currentBaseDamage);
             bool crit = Main.rand.NextFloat(100f + float.Epsilon) < Projectile.CritChance;
             float currentDamageAfterDefense =
 
