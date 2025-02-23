@@ -4,6 +4,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
 using System.Linq;
 using ITD.Utilities;
 using Terraria.DataStructures;
@@ -18,6 +20,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
             Item.rare = ItemRarityID.LightRed;
             Item.value = Item.sellPrice(0, 0, 25);
         }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             float pulseAmount = Main.mouseTextColor / 255f;

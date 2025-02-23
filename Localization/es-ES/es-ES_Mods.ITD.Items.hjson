@@ -1339,11 +1339,6 @@ PyracottaCandle: {
 	// Tooltip: ""
 }
 
-ARCTrap: {
-	// DisplayName: A R C Trap
-	// Tooltip: ""
-}
-
 PyracottaChair: {
 	// DisplayName: Pyracotta Chair
 	// Tooltip: ""
@@ -1387,4 +1382,9 @@ PyracottaLantern: {
 BaldsnapStatue: {
 	// DisplayName: Baldsnap Statue
 	// Tooltip: ""
+}
+
+ARCTrap: {
+	// DisplayName: ARCTrap
+	// Tooltip: "[c/{0}:Latch Effect:] Electrifies enemies touching the chain"
 }

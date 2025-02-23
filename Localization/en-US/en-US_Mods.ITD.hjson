@@ -197,14 +197,12 @@ Projectiles: {
 	ReachingHand.DisplayName: Reaching Hand
 	SpawnProj.DisplayName: Spawn Proj
 	StrawmanSpawner.DisplayName: Strawman Spawner
+	IncendiaryShot.DisplayName: Incendiary Shot
 
 	ARCTrapProjectile: {
-		OneTimeLatchMessage: Mods.ITD.Projectiles.ARCTrapProjectile.OneTimeLatchMessage
+		OneTimeLatchMessage: Shocking!
 		DisplayName: A R C Trap Projectile
 	}
-
-	ARCTrapElectrifiedChain.DisplayName: A R C Trap Electrified Chain
-	IncendiaryShot.DisplayName: Incendiary Shot
 }
 
 NPCs: {

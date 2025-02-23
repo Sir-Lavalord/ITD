@@ -93,7 +93,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public bool retracting = false; //
         public bool manualRetract = false; //
         private bool shouldBeWarning = false; //
-        private bool hasDoneLatchEffect = false;
+        protected bool hasDoneLatchEffect = false;
         private float gravity = 0f;
         private byte currentHitsAmount = 0;
         private float baseAccel = 0f;

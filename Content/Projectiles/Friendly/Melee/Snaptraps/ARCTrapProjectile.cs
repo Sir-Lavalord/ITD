@@ -1,10 +1,12 @@
-﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
+﻿using ITD.Content.Items.Accessories.Combat.Melee.Snaptraps;
+using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 using ITD.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
@@ -50,13 +52,39 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 Electrocute();
             }
         }
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            if (projHitbox.Intersects(targetHitbox))
+            {
+                return true;
+            }
+            float num1 = 0f;
+            if (hasDoneLatchEffect)
+            {
+                if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
+                    Projectile.Center, Main.player[Projectile.owner].Center,
+                    22f * Projectile.scale, ref num1))
+                {
+
+                    return true;
+                }
+            }
+            return false;
+        }
         private void Electrocute()
         {
             if (Main.myPlayer == Projectile.owner)
             {
                 Player player = Main.player[Projectile.owner];
                 Vector2 magVec = Projectile.Center - player.MountedCenter;
-                magVec.Along(Owner.MountedCenter, 10, v => { Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X, Projectile.position.Y, 0f, 0f, ModContent.ProjectileType<ARCTrapElectrifiedChain>(), Projectile.damage, 0f); });
+                magVec.Along(Owner.MountedCenter, 10, v =>
+                {
+                    for (int i = 0; i <= 2; i++)
+                    {
+                        Dust dust = Dust.NewDustDirect(new Vector2(v.X, v.Y), 0, 0, DustID.Electric);
+                        dust.noGravity = true;
+                    }
+                });
             }
         }
     }
