@@ -19,10 +19,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public override void SetSnaptrapDefaults()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(ARCTrapProjectile)}.OneTimeLatchMessage"));
-            ShootRange = 16f * 10f;
+            ShootRange = 16f * 12f;
             RetractAccel = 1.5f;
             ExtraFlexibility = 16f * 2f;
-            MinDamage = 5;
+            MinDamage = 22;
             FullPowerHitsAmount = 10;
             WarningFrames = 60;
             ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/ARCTrapChain";

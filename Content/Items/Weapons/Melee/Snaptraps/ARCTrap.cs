@@ -16,7 +16,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
     {
         public override void SetDefaults()
         {
-            Item.DefaultToSnaptrap(30, 10, ModContent.ProjectileType<ARCTrapProjectile>(), 12f, 22, 50);
+            Item.DefaultToSnaptrap(30, 10, ModContent.ProjectileType<ARCTrapProjectile>(), 12f, 22, 66);
             Item.rare = ItemRarityID.LightRed;
             Item.value = Item.sellPrice(0, 0, 25);
         }
@@ -25,7 +25,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
         {
             float pulseAmount = Main.mouseTextColor / 255f;
             Color textColor = Color.LightPink * pulseAmount;
-            var line = tooltips.First(x => x.Name == "Tooltip1");
+            var line = tooltips.First(x => x.Name == "Tooltip0");
             string coloredText = string.Format(line.Text, textColor.Hex3());
             line.Text = coloredText;
         }
