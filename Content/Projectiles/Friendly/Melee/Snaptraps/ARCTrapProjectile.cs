@@ -19,7 +19,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public override void SetSnaptrapDefaults()
         {
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(ARCTrapProjectile)}.OneTimeLatchMessage"));
-            ShootRange = 16f * 12f;
+            ShootRange = 16f * 20f;
             RetractAccel = 1.5f;
             ExtraFlexibility = 16f * 2f;
             MinDamage = 22;
