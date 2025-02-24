@@ -214,6 +214,25 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             Projectile.netUpdate = true;
             return false;
         }
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            if (projHitbox.Intersects(targetHitbox))
+            {
+                return true;
+            }
+            float num1 = 0f;
+            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
+                Projectile.Center, Projectile.Center + Projectile.velocity * 20,
+                Projectile.width * Projectile.scale, ref num1))
+            {
+                if (!IsStickingToTarget && !retracting)
+                {
+/*                    Main.NewText("clank clank clank, get trapped!");
+*/                    Projectile.frame = 1;
+                }
+            }
+            return false;
+        }
         public sealed override void SendExtraAI(BinaryWriter writer)
         {
             writer.WriteFlags(retracting, hasDoneLatchEffect, IsStickingToPlayerTarget, DoHitPlayer);
