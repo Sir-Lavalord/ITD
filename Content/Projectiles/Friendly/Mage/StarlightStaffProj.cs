@@ -44,7 +44,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             Projectile.ignoreWater = true;
             Projectile.light = 1f;
             Projectile.tileCollide = true;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 300;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
@@ -63,9 +63,9 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                 Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2 * 2;
             else
                 Projectile.rotation = Projectile.velocity.ToRotation();
-            float maxDetectRadius = 300f;
+            float maxDetectRadius = 450f;
 
-            if (Projectile.timeLeft > 36)
+            if (Projectile.timeLeft > 30)
             {
                 HomingTarget ??= Projectile.FindClosestNPC(maxDetectRadius);
 
@@ -75,7 +75,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 
                 float length = Projectile.velocity.Length();
                 float targetAngle = Projectile.AngleTo(HomingTarget.Center);
-                Projectile.velocity = Projectile.velocity.ToRotation().AngleTowards(targetAngle, MathHelper.ToRadians(6)).ToRotationVector2() * length;
+                Projectile.velocity = Projectile.velocity.ToRotation().AngleTowards(targetAngle, MathHelper.ToRadians(4)).ToRotationVector2() * length;
                 Projectile.Center += Main.rand.NextVector2Circular(1, 1);
             }
             else
@@ -96,7 +96,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         }
         public override bool? CanDamage()
         {
-            if (Projectile.timeLeft <= 10 || Projectile.timeLeft > 36)
+            if (Projectile.timeLeft <= 10 || Projectile.timeLeft > 30)
             {
                 return true;
             }
@@ -108,9 +108,9 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (Projectile.timeLeft > 36)
+            if (Projectile.timeLeft > 30)
             {
-                Projectile.timeLeft = 36;
+                Projectile.timeLeft = 30;
             }
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -118,9 +118,9 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 			if (Projectile.oldPos[0] != new Vector2())
 				Projectile.position = Projectile.oldPos[0];
 			
-            if (Projectile.timeLeft > 36)
+            if (Projectile.timeLeft > 30)
             {
-                Projectile.timeLeft = 36;
+                Projectile.timeLeft = 30;
             }
             return false;
         }
@@ -135,21 +135,21 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             if (Main.rand.NextBool(2))
             {
                 Shader.UseImage0("Images/Extra_" + 191);
-                col = new Color(255, 242, 191);
-                colTrail = new Color(255, 247, 0);
-                colExplode1 = new Color(35, 36, 12);
-                colExplode2 = new Color(133, 127, 50);
-                colExplode3 = new Color(255, 253, 191);
+                col = new Color(255, 242, 191, 30);
+                colTrail = new Color(255, 247, 0, 30);
+                colExplode1 = new Color(35, 36, 12, 30);
+                colExplode2 = new Color(133, 127, 50, 30);
+                colExplode3 = new Color(255, 253, 191, 30);
 
             }
             else
             {
                 Shader.UseImage0("Images/Extra_" + 192);
-                col = new Color(168, 241, 255);
-                colTrail = new Color(0, 153, 255);
-                colExplode1 = new Color(12, 25, 36);
-                colExplode2 = new Color(50, 78, 133);
-                colExplode3 = new Color(191, 247, 255);
+                col = new Color(168, 241, 255, 30);
+                colTrail = new Color(0, 153, 255, 30);
+                colExplode1 = new Color(12, 25, 36, 30);
+                colExplode2 = new Color(50, 78, 133, 30);
+                colExplode3 = new Color(191, 247, 255, 30);
             }
         }
         public override Color? GetAlpha(Color lightColor)
@@ -178,7 +178,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             Player player = Main.player[Projectile.owner];
             lightColor = Lighting.GetColor((int)player.Center.X / 16, (int)player.Center.Y / 16);
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
-            if (Projectile.timeLeft > 36)
+            if (Projectile.timeLeft > 30)
 			{
                 Shader.Apply(null);
                 TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
@@ -188,12 +188,12 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 
                 Main.EntitySpriteDraw(effectTexture, drawPosition, null, col, 0, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY), SpriteEffects.None, 0);
             }
-            else if (Projectile.timeLeft > 10 && Projectile.timeLeft <= 36)
+            else if (Projectile.timeLeft > 10 && Projectile.timeLeft <= 30)
             {
-                float scaleMultipler = (40 - Projectile.timeLeft) * 0.05f;
-                float colorMultiplier = Math.Min(1, Projectile.timeLeft * 0.2f);
-                Main.EntitySpriteDraw(effectTexture, drawPosition, null, col * colorMultiplier, 0 - MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * scaleMultipler * 1f, SpriteEffects.None, 0);
-                Main.EntitySpriteDraw(effectTexture, drawPosition, null, col * colorMultiplier, 0, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * scaleMultipler *1f, SpriteEffects.None, 0);
+                float scaleMultipler = (40 - Projectile.timeLeft) * 0.075f;
+                float colorMultiplier = Math.Min(1, Projectile.timeLeft * 0.3f);
+                Main.EntitySpriteDraw(effectTexture, drawPosition, null, col * colorMultiplier, scaleMultipler * 2f - MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * scaleMultipler * 1f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(effectTexture, drawPosition, null, col * colorMultiplier, scaleMultipler * 2.1f, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * scaleMultipler *1f, SpriteEffects.None, 0);
             }
             else if (Projectile.timeLeft <= 10)
             {
@@ -203,7 +203,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                 Vector2 origin = sourceRectangle.Size() / 2f;
 
                 float scaleMultipler = (20f - Projectile.timeLeft) * 0.1f;
-                float colorMultiplier = Math.Min(1, Projectile.timeLeft * 0.2f);
+                float colorMultiplier = Math.Min(1, Projectile.timeLeft * 0.1f);
 
                 Main.EntitySpriteDraw(texture2, position, sourceRectangle, colExplode1 * colorMultiplier, scaleMultipler * 2f, origin, scaleMultipler * 2f, SpriteEffects.None, 0f);
                 Main.EntitySpriteDraw(texture2, position, sourceRectangle, colExplode2 * colorMultiplier, scaleMultipler * 1.5f, origin, scaleMultipler * 1.5f, SpriteEffects.None, 0f);

@@ -55,7 +55,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             Tile tile = Framing.GetTileSafely(target.Bottom);
             if (!manualRetract)
             {
-                if (dur <= 300)
+                if (dur <= 120)
                 dur++;
                 //NEED BETTER MATH HERE
                 distance = (player.Distance(target.Center) - dur - 30) / (16f * 25);
@@ -98,11 +98,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                     {
                         if (!Collision.SolidCollision(target.BottomLeft, target.width, 16))
                         {
-                            if (target.velocity.Y >= 0 && Main.tileSolidTop[tile.TileType])
+                            if (target.velocity.Y >= 0 && (tile.TileType == TileID.Platforms))
                             {
                                 target.position.Y += 2;
                             }
-                            if (target.velocity.Y == 0 && Main.tileSolidTop[tile.TileType])
+                            if (target.velocity.Y == 0 && (tile.TileType == TileID.Platforms))
                             {
 
                                 target.position.Y += 6;
@@ -118,7 +118,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                     direction *= float.Lerp(0.05f, 20, 0.5f);
                     if (!Collision.SolidCollision(player.BottomLeft, player.width, 16))
                     {
-                        if (player.velocity.Y >= 0 && Main.tileSolidTop[tile.TileType])
+                        if (player.velocity.Y >= 0 && (tile.TileType == TileID.Platforms))
                         {
 
                             player.position.Y += 2;
@@ -141,8 +141,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         {
             if (manualRetract)
             {
-                if (power >0 || dur >= 30)
+                if (power > 0 || dur >= 30)
                 {
+                    if (player.HasBuff(ModContent.BuffType<WhiplatchBuff>()))
+                        player.ClearBuff(ModContent.BuffType<WhiplatchBuff>());
                     player.AddBuff(ModContent.BuffType<WhiplatchBuff>(), (int)(dur * 30));
                     player.GetModPlayer<WhiplatchBuffPlayer>().power = power;
                 }
