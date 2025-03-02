@@ -90,7 +90,10 @@ namespace ITD.Content.Items.Weapons.Ranger
         float miss;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            SoundEngine.PlaySound(SoundID.Item36, position);
+            SoundEngine.PlaySound(Main.rand.NextBool(2) == true?
+                new SoundStyle("ITD/Content/Sounds/PotshotFire1"):
+                new SoundStyle("ITD/Content/Sounds/PotshotFire2")
+                , position);
             Vector2 FakeMountedCenter = player.MountedCenter;
             FakeMountedCenter.Y -= 5;
             Vector2 vector2 = player.RotatedRelativePoint(FakeMountedCenter, true);

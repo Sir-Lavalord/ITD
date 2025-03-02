@@ -19,7 +19,8 @@ namespace ITD.Content.Projectiles
         public override bool InstancePerEntity => true;
 
         public bool isFromPotshot;
-		public bool isFromFwoomstick;
+        public bool isFromTheEpicenter;//I don't want to do this
+        public bool isFromFwoomstick;
         public bool isFromSkyProjectileBow;
 
         private int ExplodeTimer = 0;

@@ -93,7 +93,10 @@ namespace ITD.Content.NPCs.Bosses
             NPC.damage = 15;
             NPC.defense = 5;
             NPC.lifeMax = 3500;
-            NPC.HitSound = SoundID.NPCHit25;
+            NPC.HitSound = new SoundStyle("ITD/Content/Sounds/NPCSounds/Bosses/CosjelOuch")
+            {
+                PitchVariance = 0.75f
+            }; 
             NPC.DeathSound = SoundID.DD2_DefeatScene;
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
@@ -252,7 +255,7 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         Main.NewText(AttackCount);
                         AI_State = MovementState.FollowingRegular;
-                        AttackID = 1;
+                        AttackID = 3;
                         AITimer1 = 0;
                         AITimer2 = 0;
                         AttackCount = 0;
@@ -262,12 +265,11 @@ namespace ITD.Content.NPCs.Bosses
                 case 1: //Dashstard
                     if (AITimer1++ == 80)
                     {
-                        SoundEngine.PlaySound(SoundID.Zombie101, NPC.Center);
                         dashPos = player.Center;
                         if (AI_State != MovementState.Suffocate)
                             AI_State = MovementState.Dashing;
                     }
-                    if (AttackCount > 4)
+                    if (AttackCount > 1)
                     {
                         AI_State = MovementState.FollowingRegular;
                         distanceAbove = 250;
@@ -284,9 +286,13 @@ namespace ITD.Content.NPCs.Bosses
                     if (AI_State != MovementState.Slamdown)
                     {
                         AITimer1++;
+                        if (AITimer1 == 1)
+                            SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/NPCSounds/Bosses/CosjelDash"), NPC.Center);
                         if (AITimer1 <= 30)
                         {
-                            Dash(dashPos, 1, 20, 50, 100, 2);
+                            dashVel = Vector2.Normalize(new Vector2(NPC.Center.X, NPC.Center.Y - distanceAbove) - new Vector2(NPC.Center.X, NPC.Center.Y)) * 10;
+                            NPC.velocity = dashVel;
+                            NPC.netUpdate = true;
                         }
                         else if (AITimer1 > 30 && AITimer1 < 120)
                         {
@@ -299,7 +305,7 @@ namespace ITD.Content.NPCs.Bosses
                             AI_State = MovementState.Slamdown;
                         }
                     }
-                    if (AttackCount > 4)
+                    if (AttackCount > 1)
                     {
                         AI_State = MovementState.FollowingRegular;
                         AttackID = Main.rand.Next(1, 4);
@@ -312,23 +318,36 @@ namespace ITD.Content.NPCs.Bosses
 
                     }
                     break;
-                case 3://shit enemy spawn
-                    if (AITimer2++ == 200)
+                case 3://catch deez hands
+                    AITimer1++;
+
+                    if (AITimer1 == 100)
                     {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)//Fix later, this will do for now
-                        {
-                            for (int i = 0; i <= 1; i++)
-                            {
-                                Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(player.Center.X + 500, player.Center.Y + 400 * Main.rand.Next(-1, 2)), Vector2.Zero, ModContent.ProjectileType<CosmicWarning>(), NPC.damage, 0f, -1, NPC.whoAmI);
-                            }
-                            AITimer2 = 0;
-                        }
+
+                            HandControl(1, 1, 2, false);
+
+                            HandControl(-1, 1, 2, false);
+
                     }
-                    else if (AITimer1++ >= 100)
+                    if (AITimer1 >= 600)
                     {
+                        HandControl(1, 6, 3, true);
+                        HandControl(-1, 6, 3, true);
+                        NetSync();
                         AITimer1 = 0;
                         AttackID++;
                         NetSync();
+
+                    }
+                    if (AITimer1 == 20)
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            if (!HandExist(1))
+                                NPCHelpers.NewNPCEasy(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<CosmicJellyfishHand>(), NPC.whoAmI, 0, 0, NPC.whoAmI, 1);
+                            if (!HandExist(-1))
+                                NPCHelpers.NewNPCEasy(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<CosmicJellyfishHand>(), NPC.whoAmI, 0, 0, NPC.whoAmI, -1);
+                        }
                     }
                     break;
                 case 4://slap
@@ -609,7 +628,7 @@ namespace ITD.Content.NPCs.Bosses
                     NPC.velocity *= 0.9f;
                     break;
                 case MovementState.Slamdown:
-                    RaycastData data = Helpers.QuickRaycast(NPC.Center, NPC.velocity, (point) => { return (player.Center.Y >= point.ToWorldCoordinates().Y + 20); }, 1000);
+                    RaycastData data = Helpers.QuickRaycast(NPC.Center, NPC.velocity, (point) => { return (player.Bottom.Y >= point.ToWorldCoordinates().Y + 20); }, 2000);
                     if (NPC.Center.Distance(data.End) >= 20)
                     {
                         if (AITimer1++ >= 5)
@@ -624,6 +643,7 @@ namespace ITD.Content.NPCs.Bosses
                         NPC.velocity *= 0;
                         if (AITimer2++ == 1)
                         {
+                            SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/NPCSounds/Bosses/CosjelSlam"), NPC.Center);
                             ShardSlam();
                             player.GetITDPlayer().BetterScreenshake(30, 10, 20, true);//Very shaky, might need some tweaking to the decay
                         }
@@ -651,6 +671,7 @@ namespace ITD.Content.NPCs.Bosses
             Player player = Main.player[NPC.target];
             if (DashTimer == time1)
             {
+                SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/NPCSounds/Bosses/CosjelDash"), NPC.Center);
                 dashVel = Vector2.Normalize(new Vector2(pos.X, pos.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
                 NPC.velocity = dashVel;
                 NPC.netUpdate = true;
