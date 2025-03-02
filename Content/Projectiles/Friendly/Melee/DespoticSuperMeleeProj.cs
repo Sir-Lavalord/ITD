@@ -51,17 +51,15 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			Shader.UseSaturation(-2.8f);
 			Shader.UseOpacity(2f);
         }
-        public override void OnSpawn(IEntitySource source)
+        public override void AI()
         {
-            if (special == 1f)
+			if (special == 1f && Projectile.timeLeft == maxTime)
 			{
 				maxTime = 60;
 				Projectile.timeLeft = 60;
 				Projectile.extraUpdates = 1;
 			}
-		}
-        public override void AI()
-        {
+			
 			if (Projectile.timeLeft < 5)
 				Projectile.Opacity -= 0.2f;
 			else if (Projectile.Opacity < 1f)
