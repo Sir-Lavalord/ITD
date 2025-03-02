@@ -14,7 +14,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             WarningFrames = 60;
             ChompDust = DustID.Iron;
             ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/SniptrapChain";
-            toSnaptrapChomp = "ITD/Content/Sounds/SniptrapClose";
+            toSnaptrapChain = "ITD/Content/Sounds/SniptrapClose";
         }
     }
 }

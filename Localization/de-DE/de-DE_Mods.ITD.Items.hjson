@@ -1242,7 +1242,7 @@ Stabtrap: {
 }
 
 DepthrockBow: {
-	// Tooltip: ""
+	// Tooltip: Encases arrows in a layer depthrock, which when shattered, fires the encased arrow at the closest target
 	// DisplayName: Depthrock Bow
 }
 
@@ -1393,5 +1393,14 @@ ARCTrap: {
 
 TheEpicenter: {
 	// DisplayName: The {0} Epicenter
+	/* Tooltip:
+		'''
+		<right> to unleash a blackhole, which stores bullets fired from the gun (Up to 100)
+		The blackhole shoots powerful star at the closest target
+		''' */
+}
+
+Bleedbreaker: {
+	// DisplayName: Bleedbreaker
 	// Tooltip: ""
 }

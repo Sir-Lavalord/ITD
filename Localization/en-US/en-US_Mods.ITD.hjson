@@ -206,6 +206,7 @@ Projectiles: {
 
 	TheEpicenterSpark.DisplayName: The Epicenter Spark
 	TheEpicenterBlackhole.DisplayName: The Epicenter Blackhole
+	BleedbreakerProj.DisplayName: Bleedbreaker Proj
 }
 
 NPCs: {
