@@ -14,7 +14,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
     {
         public override void SetDefaults()
         {
-            Item.DefaultToSnaptrap(30, 10, ModContent.ProjectileType<CalciumProjectile>(), 12f, 22, 27);
+            Item.DefaultToSnaptrap(30, 10, ModContent.ProjectileType<StickyHandProjectile>(), 12f, 22, 27);
             Item.rare = ItemRarityID.LightRed;
             Item.value = Item.sellPrice(0, 25, 0);
         }
