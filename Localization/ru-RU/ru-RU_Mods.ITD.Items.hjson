@@ -1399,3 +1399,8 @@ Bleedbreaker: {
 	// DisplayName: Bleedbreaker
 	// Tooltip: ""
 }
+
+StickyHand: {
+	// DisplayName: Sticky Hand
+	// Tooltip: Harder to unlatch than most snaptraps
+}

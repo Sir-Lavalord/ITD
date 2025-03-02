@@ -207,6 +207,11 @@ Projectiles: {
 	TheEpicenterSpark.DisplayName: The Epicenter Spark
 	TheEpicenterBlackhole.DisplayName: The Epicenter Blackhole
 	BleedbreakerProj.DisplayName: Bleedbreaker Proj
+
+	StickyHandProjectile: {
+		OneTimeLatchMessage: None!
+		DisplayName: Sticky Hand Projectile
+	}
 }
 
 NPCs: {

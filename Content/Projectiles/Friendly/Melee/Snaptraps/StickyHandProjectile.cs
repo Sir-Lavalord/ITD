@@ -15,7 +15,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             ShootRange = 12f * 12f;
             RetractAccel = 1.5f;
             ExtraFlexibility = 24f * 2f;
-            MinDamage = 14;
+            MinDamage = 9;
             FullPowerHitsAmount = 10;
             WarningFrames = 120;
             ChompDust = DustID.SlimeBunny;
