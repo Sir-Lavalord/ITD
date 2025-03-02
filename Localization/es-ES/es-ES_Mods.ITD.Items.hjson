@@ -1388,3 +1388,8 @@ ARCTrap: {
 	// DisplayName: ARCTrap
 	// Tooltip: "[c/{0}:Latch Effect:] Electrifies enemies touching the chain"
 }
+
+TheEpicenter: {
+	// DisplayName: The {0} Epicenter
+	// Tooltip: ""
+}

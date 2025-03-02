@@ -203,6 +203,9 @@ Projectiles: {
 		// OneTimeLatchMessage: Shocking!
 		// DisplayName: A R C Trap Projectile
 	}
+
+	// TheEpicenterSpark.DisplayName: The Epicenter Spark
+	// TheEpicenterBlackhole.DisplayName: The Epicenter Blackhole
 }
 
 NPCs: {
