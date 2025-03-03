@@ -13,6 +13,7 @@ using ReLogic.Content;
 using rail;
 using Terraria.DataStructures;
 using System;
+using Terraria.Map;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
 {
@@ -26,10 +27,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             }
             private ActionState AIState { get { return (ActionState)Projectile.ai[0]; } set { Projectile.ai[0] = (float)value; } }
         public ref float AITimer => ref Projectile.ai[1];
-
+        public float SpawnTimer = 60;
 
         private readonly Asset<Texture2D> chainSprite = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Melee/Snaptraps/Extra/StabtrapStingerChain");
-        private readonly Asset<Texture2D> stingerSprite = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Melee/Snaptraps/Extra/StabtrapStingerProjectile");
 
         VerletChain TailChain;
         public Player player => Main.player[Projectile.owner];
@@ -52,12 +52,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             Projectile.localNPCHitCooldown = 30;
         }
         Projectile proj;
-        public override bool? CanDamage()
-        {
-            return base.CanDamage();
-        }
+
         public override void AI()
         {
+            
             int byIdentity = MiscHelpers.GetProjectileByIdentity(Projectile.owner, (int)Projectile.localAI[0], ModContent.ProjectileType<StabtrapProjectile>());
             if (byIdentity == -1)
             {
@@ -75,16 +73,22 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
                 {
 
                     TailChain.Update(chainStart, proj.Center);
-
                 }
                 else
                 {
                     TailChain = PhysicsMethods.CreateVerletChain(22, 10, chainStart, proj.Center, endLength: 0);
                 }
+                if (SpawnTimer-- == 60)
+                    TailChain = PhysicsMethods.CreateVerletChain(22, 10, chainStart, proj.Center, endLength: 0);
+
             }
             if (!player.dead && player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapProjectile>()] > 0)
             {
                 Projectile.timeLeft = 2;
+            }
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapProjectile>()] > 0)
+            {
+                Projectile.Kill();
             }
             NPC HomingTarget = Main.npc[(int)proj.ai[1]];
 
@@ -158,25 +162,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
         {
             TailChain?.Draw(Main.spriteBatch, Main.screenPosition, chainSprite.Value, Color.White, true, null, null, chainSprite.Value);
         }
-        public override void OnSpawn(IEntitySource source)
-        {
-            int byIdentity = MiscHelpers.GetProjectileByIdentity(Projectile.owner, (int)Projectile.localAI[0], ModContent.ProjectileType<StabtrapProjectile>());
-            if (byIdentity == -1)
-            {
-                if (Projectile.owner == Main.myPlayer && Projectile.rotation > 0)
-                {
-                    Projectile.Kill();
-                    return;
-                }
-            }
-            else
-            {
-                proj = Main.projectile[byIdentity];
-                Vector2 chainStart = Projectile.Center;
-                TailChain = PhysicsMethods.CreateVerletChain(22, 10, chainStart, proj.Center, endLength: 0);
-            } 
-
-        }
         public override void OnKill(int timeLeft)
         {
             TailChain?.Kill();
@@ -185,6 +170,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             NPC HomingTarget = Main.npc[(int)proj.ai[1]];
+            if (HomingTarget == null)
+            {
+                return;
+            }
             if (target == HomingTarget)
             {
                 if (AIState == ActionState.Stabbing)
