@@ -11,20 +11,21 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         public static LocalizedText OneTimeLatchMessage { get; private set; }
         public override void SetSnaptrapDefaults()
         {
+            Main.projFrames[Projectile.type] = 1;
             OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(StickyHandProjectile)}.OneTimeLatchMessage"));
             ShootRange = 12f * 12f;
             RetractAccel = 1.5f;
-            ExtraFlexibility = 24f * 2f;
+            ExtraFlexibility = 28f * 2f;
             MinDamage = 9;
-            FullPowerHitsAmount = 10;
-            WarningFrames = 120;
-            ChompDust = DustID.SlimeBunny;
+            FullPowerHitsAmount = 1;
+            WarningFrames = 0;//Looks ugly so no
+            ChompDust = DustID.t_Slime;
             DrawOffsetX = -16;
 
             ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/StickyHandChain";
-            toSnaptrapChomp = "ITD/Content/Sounds/StickHandSplat";
-            toSnaptrapForcedRetract = "ITD/Content/StickyHandUnlatch";
-            toSnaptrapChain = "ITD/Content/StickyHandUnlatch";
+            toSnaptrapChomp = "ITD/Content/Sounds/StickyHandSplat";
+            toSnaptrapForcedRetract = "ITD/Content/Sounds/StickyHandUnlatch";
+            toSnaptrapChain = "ITD/Content/Sounds/StickyHandUnlatch";
         }
     }
 }

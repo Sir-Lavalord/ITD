@@ -45,6 +45,22 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
             }
             return true;
         }
+        public override void ConstantLatchEffect()
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                ExtraFlexibility = 16f * 40f;
+                if (player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapStingerProjectile>()] <= 0)
+                {
+                    Projectile stinger = MiscHelpers.NewProjectileDirectSafe(Projectile.GetSource_FromThis(), player.Center, Vector2.Zero,
+        ModContent.ProjectileType<StabtrapStingerProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    if (stinger != null)
+                    {
+                        stinger.localAI[0] = Projectile.identity;
+                    }
+                }
+            }
+            }
         public override bool PreDraw(ref Color lightColor)
         {
             Asset<Texture2D> chainTexture = ModContent.Request<Texture2D>(ToChainTexture);

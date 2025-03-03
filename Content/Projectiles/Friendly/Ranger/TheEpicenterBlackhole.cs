@@ -132,14 +132,16 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             Projectile.rotation += 0.05f;
             if (!Retracting)
             {
+
                 Projectile.Center = Vector2.Lerp(Projectile.Center, spawnMousePos, 0.2f);
             }
             else
             {
-                if (Projectile.Distance(player.Center) <= 30)
+                if (Projectile.Distance(player.Center) <= 50)
                 {
                     Projectile.Kill();
                 }
+                Projectile.velocity = Projectile.DirectionTo(player.Center).SafeNormalize(Vector2.Zero);
                 Projectile.Center = Vector2.Lerp(Projectile.Center, player.Center, 0.2f);
             }
 
