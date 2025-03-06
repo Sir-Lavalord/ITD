@@ -71,7 +71,7 @@ namespace ITD.Content.Items.Weapons.Ranger
             }
             else
             {
-                modPlayer.BetterScreenshake(10, 5, 5, true);
+                modPlayer.BetterScreenshake(20, 8, 8, true);
                 modPlayer.recoilFront = 0.6f;
                 modPlayer.recoilBack = 0.6f;
                 Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<TheEpicenterBlackhole>(), damage, knockback);

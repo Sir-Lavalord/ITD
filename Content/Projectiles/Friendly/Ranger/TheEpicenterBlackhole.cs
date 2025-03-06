@@ -71,6 +71,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
         readonly int MaxBulletCount = 100;
         readonly int Time = 60;
         int TimeBeforeRetract;
+        int TimeWithoutWeapon;
         bool Retracting;
         public override void OnSpawn(IEntitySource source)
         {
@@ -96,11 +97,19 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
         public override void AI()
         {
             Projectile.spriteDirection = (Projectile.velocity.X < 0).ToDirectionInt();
-            if (Projectile.spriteDirection == 1)
-                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2 * 2;
+
+            if (!Retracting)
+            {
+               Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2 * 2;
+            }
             else
-                Projectile.rotation = Projectile.velocity.ToRotation();
+            {
+                Projectile.rotation = Projectile.DirectionTo(player.Center).SafeNormalize(Vector2.Zero).ToRotation();
+
+            }
+
             Projectile.timeLeft = 5;
+
             if (CurrentBulletCount < 100)
             {
                 for (int i = 0; i < Main.maxProjectiles; i++)
@@ -108,7 +117,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                     Projectile other = Main.projectile[i];
                     if (i != Projectile.whoAmI &&
                         other.active &&
-                        other.GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromTheEpicenter == true
+                        other.aiStyle == 1
                         &&
                         other.owner == player.whoAmI
                         && Math.Abs(Projectile.Center.X - other.position.X)
@@ -120,8 +129,10 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                         }, Projectile.whoAmI);
                         other.active = false;
                         other.netUpdate = true;
-                        Projectile.localAI[1] += 10f;
+                        Projectile.localAI[1] += 20f;
                         CurrentBulletCount++;
+                        totalDamage += (int)(other.damage * (other.GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromTheEpicenter ? 1.25f:1f));
+
                     }
                 }
             }
@@ -141,22 +152,30 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 {
                     Projectile.Kill();
                 }
-                Projectile.velocity = Projectile.DirectionTo(player.Center).SafeNormalize(Vector2.Zero);
-                Projectile.Center = Vector2.Lerp(Projectile.Center, player.Center, 0.2f);
+/*                Projectile.rotation = Projectile.DirectionTo(player.Center).SafeNormalize(Vector2.Zero).ToRotation() + MathHelper.PiOver2;
+*/                Projectile.Center = Vector2.Lerp(Projectile.Center, player.Center, 0.2f);
             }
-
+            if (totalDamage <= 0)
+            {
+                totalDamage = 0;
+            }
             if (Projectile.Distance(spawnMousePos) >= 40)
             {
             }
             else
             {
+                if (player.HeldItem.ModItem is not TheEpicenter)
+                {
+                    TimeWithoutWeapon++;
+                }
+                else TimeWithoutWeapon = 0;
                 if (TimeBeforeRetract++ >= 120)
                 {
                     if (Main.myPlayer == Projectile.owner)
                     {
                         if (Main.mouseRight ||
-                            player.HeldItem.ModItem is not TheEpicenter && TimeBeforeRetract >= 600 ||
-                            TimeBeforeRetract >= 2000
+/*                            TimeWithoutWeapon >= 600 ||
+*/                            TimeBeforeRetract >= 2500 && (HomingTarget == null || CurrentBulletCount == 0)
                             )
                         {
                             Retracting = true;
@@ -164,7 +183,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                     }
                 }
                 Projectile.velocity *= 0.95f;
-                HomingTarget ??= Projectile.FindClosestNPC(1000);
+                HomingTarget ??= Projectile.FindClosestNPC(1500);
 
                 if (HomingTarget == null)
                     return;
@@ -172,15 +191,19 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 {
                     if (Projectile.localAI[0]++ % 12 == 0)
                     {
+                        float dmg = player.GetTotalDamage(DamageClass.Ranged).ApplyTo((float)(totalDamage / CurrentBulletCount + 1));
+                        totalDamage -= (int)(totalDamage / CurrentBulletCount + 1);
+
                         CurrentBulletCount--;
                         if (Main.myPlayer == Projectile.owner)
                         {
                             Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center,
-                                (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(MathHelper.ToRadians(4)) * 20f,
-                                ModContent.ProjectileType<TheEpicenterSpark>(), (int)(Projectile.damage * 1.25f), Projectile.knockBack, Projectile.owner, 1);
+                                (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(MathHelper.ToRadians(3)) * 22f,
+                                ModContent.ProjectileType<TheEpicenterSpark>(), (int)(dmg * 1.25f), Projectile.knockBack, Projectile.owner, 1);
                             proj.tileCollide = false;
+                            proj.CritChance = (int)player.GetTotalCritChance<RangedDamageClass>();
                         }
-                        Projectile.localAI[1] += 10f;
+                        Projectile.localAI[1] += 25f;
                         for (int i = 0; i < 10; i++)
                         {
                             int dust = Dust.NewDust(Projectile.Center, 1, 1, ModContent.DustType<StarlitDust>(), 0f, 0f, 0, default, 1.5f);
@@ -216,13 +239,13 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             Player player = Main.player[Projectile.owner];
             lightColor = Lighting.GetColor((int)player.Center.X / 16, (int)player.Center.Y / 16);
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
-            if (Projectile.Distance(spawnMousePos) >=40)
+            if (Projectile.Distance(spawnMousePos) >=40 || Retracting)
             {
                 Shader.Apply(null);
                 TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
                 TrailStrip.DrawTrail();
                 Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-                Main.EntitySpriteDraw(effectTexture, drawPosition, null, Color.White, Projectile.velocity.ToRotation() + MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY), SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(effectTexture, drawPosition, null, Color.White, Projectile.rotation + MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY), SpriteEffects.None, 0);
             }
             else
             {
