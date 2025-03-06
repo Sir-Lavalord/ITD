@@ -212,7 +212,11 @@ namespace ITD.Systems
                     continue;
                 int originalType = rNPC.recruitmentData.OriginalType;
                 if (originalType > -1)
+                {
                     Main.townNPCCanSpawn[originalType] = false;
+                    if (WorldGen.prioritizedTownNPCType == originalType)
+                        WorldGen.prioritizedTownNPCType = 0;
+                }
             }
         }
     }
