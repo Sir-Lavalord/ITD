@@ -86,10 +86,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             {
                 Projectile.timeLeft = 2;
             }
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapProjectile>()] > 0)
-            {
-                Projectile.Kill();
-            }
             NPC HomingTarget = Main.npc[(int)proj.ai[1]];
 
             if (HomingTarget == null)
