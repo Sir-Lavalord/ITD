@@ -89,7 +89,7 @@ namespace ITD.Content.Projectiles
                     {
                         Vector2 position = projectile.Center + offset + Main.rand.NextVector2Circular(400f, 400f);
 
-                        Projectile.NewProjectile(projectile.GetSource_FromThis(), position, toImpact * Main.rand.NextFloat(12f, 18f), ModContent.ProjectileType<SkyshooterFallingStar>(), 15, 0, Main.myPlayer, 0.0f, (float)Main.rand.Next(5));
+                        Projectile.NewProjectile(projectile.GetSource_FromThis(), position, new Vector2(), ModContent.ProjectileType<SkyshooterFallingStar>(), 15, 0, Main.myPlayer, Main.rand.NextFloat(0.5f, 1f), toImpact.X, toImpact.Y);
                     }
                 }
 				 SoundEngine.PlaySound(SoundID.Item105, projectile.position);

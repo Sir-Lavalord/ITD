@@ -9,7 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 
-namespace ITD.Content.Projectiles.Hostile
+namespace ITD.Content.Projectiles.Hostile.Sandberus
 {
     public class SuffocationAura : ModProjectile
     {

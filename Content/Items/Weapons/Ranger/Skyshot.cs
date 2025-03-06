@@ -35,10 +35,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         {
 			if (Main.rand.NextBool(4))
             {
-                Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(8));
-
-                newVelocity *= 1f - Main.rand.NextFloat(0.3f);
-                int proj = Projectile.NewProjectile(source, position, newVelocity, type, damage, knockback, player.whoAmI);
+                int proj = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
                 Main.projectile[proj].GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromSkyProjectileBow = true;
                 return false;
             } 

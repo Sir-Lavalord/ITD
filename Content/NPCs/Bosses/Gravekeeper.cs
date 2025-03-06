@@ -14,7 +14,7 @@ using Terraria.UI;
 using ITD.Utilities;
 using ITD.ItemDropRules.Conditions;
 using ITD.Content.Buffs.Debuffs;
-using ITD.Content.Projectiles.Hostile;
+using ITD.Content.Projectiles.Hostile.Gravekeeper;
 using ITD.Content.Items.Other;
 using ITD.Content.Items.Weapons.Mage;
 using ITD.Content.Items.Weapons.Melee;

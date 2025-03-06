@@ -7,7 +7,7 @@ using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Projectiles.Hostile
+namespace ITD.Content.Projectiles.Hostile.Sandberus
 {
     public class SandberusSkull : ModProjectile
     {

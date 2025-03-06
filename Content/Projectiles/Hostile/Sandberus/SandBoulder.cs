@@ -7,7 +7,7 @@ using Terraria.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 
-namespace ITD.Content.Projectiles.Hostile
+namespace ITD.Content.Projectiles.Hostile.Sandberus
 {
     public class SandBoulder : ModProjectile
     {

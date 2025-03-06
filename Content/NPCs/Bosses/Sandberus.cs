@@ -11,7 +11,7 @@ using Terraria.GameContent.ItemDropRules;
 
 using ITD.Content.Items.Weapons.Ranger;
 using ITD.Content.Items.Other;
-using ITD.Content.Projectiles.Hostile;
+using ITD.Content.Projectiles.Hostile.Sandberus;
 using ITD.Utilities;
 using ITD.Content.Items.Accessories.Defensive.Defense;
 

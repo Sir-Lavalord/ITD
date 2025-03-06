@@ -9,7 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using ITD.Content.Buffs.Debuffs;
 
-namespace ITD.Content.Projectiles.Hostile
+namespace ITD.Content.Projectiles.Hostile.Gravekeeper
 {
 	public class SoulLeak : ModProjectile
 	{		
