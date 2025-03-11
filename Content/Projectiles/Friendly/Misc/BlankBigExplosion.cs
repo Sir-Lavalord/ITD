@@ -14,7 +14,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
     {
         public ref float CurrentRadius => ref Projectile.ai[0];
         public ref float MaxRadius => ref Projectile.ai[1];
-        public virtual float Fadeout(float completion) => (1f - (float)Math.Sqrt(completion)) * 0.7f;
+        public virtual float Fadeout(float completion) => (1f - (float)Math.Sqrt(completion)) * 0.8f;
         public abstract int Lifetime { get; }
         public abstract Color GetCurrentExplosionColor(float pulseCompletionRatio);
         public override string Texture => ITD.BlankTexture;

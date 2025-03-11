@@ -16,6 +16,7 @@ using ITD.Content.Projectiles.Hostile;
 using Terraria.Audio;
 using Terraria.GameContent.Drawing;
 using Terraria.DataStructures;
+using ITD.Content.Projectiles.Hostile.CosJel;
 namespace ITD.Content.NPCs.Bosses
 {
     public class CosmicJellyfishHand : ModNPC
@@ -191,6 +192,11 @@ namespace ITD.Content.NPCs.Bosses
                         AIState = UpcomingAttack;
                         chargePos = player.Center + (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 120f;
                     }
+                    /*                    if (UpcomingAttack == ActionState.Clapping)
+                    */
+                    handTarget = player.Center;
+/*                    else
+                        handTarget = player.Center;*/
                     NPC.Center = Vector2.Lerp(normalCenter, chargedPosition, (float)Math.Sin(handCharge * Math.PI));
                     break;
                 case ActionState.Clapping:
@@ -206,8 +212,42 @@ namespace ITD.Content.NPCs.Bosses
                         {
                             if (Math.Abs(NPC.position.X - Main.npc[i].position.X) + Math.Abs(NPC.position.Y - Main.npc[i].position.Y) < NPC.width)
                             {
-                                NPC.velocity *= 0f;
-                                Main.NewText("Clapd.", Color.Violet);
+                                if (NPC.velocity != Vector2.Zero)
+                                {
+                                    NPC.velocity *= 0f;
+                                    NetSync();
+                                }
+                                if (Timer++ >= 60)
+                                {
+                                    AIState = ActionState.ForceKill;
+                                    NetSync();
+                                    if (NPC.ai[3] == 1)
+                                    {
+                                        body.ai[1] = 0;
+                                        body.ai[0]++;
+                                        body.netUpdate = true;
+                                    }
+                                }
+                                if (Timer == 1)
+                                {
+                                    if (NPC.ai[3] == 1)
+                                    {
+                                        player.GetITDPlayer().BetterScreenshake(20, 10, 20, true);//Very shaky, might need some tweaking to the decay
+
+                                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                                        {
+                                            Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X + 20, NPC.Center.Y), Vector2.Zero,
+                                            ModContent.ProjectileType<CosmicJellyfishBlast>(), (int)(NPC.damage), 2f, player.whoAmI);
+                                            Blast.damage = 0;
+                                            Blast.ai[1] = 180f;
+                                            Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+                                            Blast.netUpdate = true;
+
+                                        }
+                                        NetSync();
+                                    }
+                                }
+                                NPC.rotation = 0;
                             }
                             else
                             {
@@ -378,11 +418,11 @@ namespace ITD.Content.NPCs.Bosses
                     }
                 }
             }
-            else if (AIState == ActionState.Charging)
+            else if (AIState == ActionState.Charging || AIState == ActionState.Clapping)
             {
                 NPC.frame.Y = (5) * frameHeight;
             }
-            else if (AIState == ActionState.Slinging || (AIState == ActionState.MeteorStrike))
+            else if (AIState == ActionState.Slinging || (AIState == ActionState.MeteorStrike) || AIState == ActionState.Clapping)
             {
                 NPC.frame.Y = (6) * frameHeight;
             }

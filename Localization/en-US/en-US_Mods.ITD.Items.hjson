@@ -646,11 +646,6 @@ PetPigSummon: {
 	Tooltip: Summons a balloon pig with a penchant for loot
 }
 
-EoCInsight: {
-	DisplayName: Eye of Eldritch Insight
-	Tooltip: Show love to see what should not be seen
-}
-
 BarOfSoap: {
 	DisplayName: Bar Of Soap
 	Tooltip:
@@ -1231,7 +1226,7 @@ Flyswatter: {
 
 EyeofEldritchInsight: {
 	DisplayName: Eye of Eldritch Insight
-	Tooltip: All hitboxes become visible
+	Tooltip: Predicts if a projectile/NPC is going to hit the player
 }
 
 Fwoomstick: {
@@ -1398,8 +1393,8 @@ TheEpicenter: {
 	DisplayName: The {0} Epicenter
 	Tooltip:
 		'''
-		<right> to unleash a blackhole, which stores bullets fired from the gun (Up to 100)
-		The blackhole shoots powerful star at the closest target
+		<right> to unleash a blackhole, which stores bullets/arrows
+		The blackhole shoots powerful stars at the closest target
 		'''
 }
 

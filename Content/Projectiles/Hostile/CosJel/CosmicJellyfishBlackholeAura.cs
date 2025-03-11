@@ -12,7 +12,7 @@ using ITD.Utilities.Placeholders;
 using ITD.PrimitiveDrawing;
 using Terraria.Graphics.Shaders;
 
-namespace ITD.Content.Projectiles.Hostile
+namespace ITD.Content.Projectiles.Hostile.CosJel
 {
     public class CosmicJellyfishBlackholeAura : ModProjectile
     {
@@ -34,7 +34,7 @@ namespace ITD.Content.Projectiles.Hostile
 
         public override void AI()
         {
-            NPC npc = Main.npc[(int)(Projectile.ai[0])];
+            NPC npc = Main.npc[(int)Projectile.ai[0]];
             if (!npc.active)
                 Projectile.Kill();
 
@@ -61,7 +61,7 @@ namespace ITD.Content.Projectiles.Hostile
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, new Color(235, 186, 123, 0) * 0.5f, Main.GlobalTimeWrappedHourly, texture.Size() / 2,4f, SpriteEffects.None);
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, new Color(235, 186, 123, 0) * 0.5f, Main.GlobalTimeWrappedHourly, texture.Size() / 2, 4f, SpriteEffects.None);
 
 
             return false;

@@ -7,7 +7,7 @@ using Terraria.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 
-namespace ITD.Content.Projectiles.Hostile
+namespace ITD.Content.Projectiles.Hostile.CosJel
 {
     public class CosmicVoidShard : ModProjectile
     {
@@ -50,7 +50,7 @@ namespace ITD.Content.Projectiles.Hostile
                     Projectile.velocity *= 1.02f;
                 }
             }
-                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -59,7 +59,7 @@ namespace ITD.Content.Projectiles.Hostile
             Vector2 effectOrigin = effectTexture.Size() / 2f;
             lightColor = Lighting.GetColor((int)player.Center.X / 16, (int)player.Center.Y / 16);
 
-            Main.EntitySpriteDraw(effectTexture, Projectile.Center, new Rectangle?(Projectile.Hitbox), new Color(120, 184, 255, 50) * 0.05f * Projectile.timeLeft, Projectile.rotation, effectOrigin,Projectile.scale, SpriteEffects.None, 0f);
+            Main.EntitySpriteDraw(effectTexture, Projectile.Center, new Rectangle?(Projectile.Hitbox), new Color(120, 184, 255, 50) * 0.05f * Projectile.timeLeft, Projectile.rotation, effectOrigin, Projectile.scale, SpriteEffects.None, 0f);
             return true;
         }
     }

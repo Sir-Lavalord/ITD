@@ -5,61 +5,68 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 
-using Terraria.DataStructures;
-namespace ITD.Content.Projectiles.Hostile.CosjelTest
+namespace ITD.Content.Projectiles.Hostile.CosJel
 {
-    public class CosmicSwarm : ModProjectile
+    public class CosmicSlop : ModProjectile
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 5;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
 
         public override void SetDefaults()
         {
-            Projectile.width = 76;
-            Projectile.height = 54;
+            Projectile.width = 14;
+            Projectile.height = 14;
             Projectile.aiStyle = -1;
-            Projectile.tileCollide = false;
+            Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
             Projectile.hostile = true;
             CooldownSlot = 1;
             Projectile.scale = 1.25f;
             Projectile.alpha = 50;
+
             Projectile.extraUpdates = 0;
-            Projectile.timeLeft = 1200 * (Projectile.extraUpdates + 1);
+            Projectile.timeLeft = 90 * (Projectile.extraUpdates + 1);
         }
         bool isStuck = false;
+                public override bool OnTileCollide(Vector2 oldVelocity)
+                {
+                    if (Projectile.ai[1] != 0)
+                    {
+                        return true;
+                    }
+                    Projectile.velocity = Vector2.Zero;
+                    isStuck = true;
+                    return false;
+                }
+                public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+                {
+                    NPC CosJel = Main.npc[(int)Projectile.ai[0]];
+                    if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+                    {
+                        Player player = Main.player[CosJel.target];
+                        width = 15;
+                        height = 15;
+                        fallThrough = player.Center.Y >= Projectile.Bottom.Y + 20;
+                    }
+                    return true;
+
+                }
         public override void AI()
         {
-            if (Projectile.localAI[0]++ >= 120)
+            if (isStuck)
             {
-                Projectile.velocity *= 0.9f;
+                if (Projectile.alpha++ >= 180)
+                {
+                    Projectile.Kill();
+                }
             }
-            if (++Projectile.frameCounter >= 10)
-            {
-                Projectile.frameCounter = 0;
-                Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
-            }
-            Projectile.rotation = Projectile.velocity.ToRotation();
-            
+            Projectile.rotation = Projectile.velocity.ToRotation() - (float)Math.PI / 2;  
         }
-        public override void OnSpawn(IEntitySource source)
-        {
-            for (int i = 0; i < 12; i++)
-            {
-                Dust dust = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, DustID.ShimmerTorch, 0, 0f, 40, default, Main.rand.NextFloat(2f, 3f));
-                dust.velocity *= 2f;
-                Dust dust2 = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, DustID.ShimmerTorch, 0, 0f, 40, default, Main.rand.NextFloat(2f, 3f));
-                dust2.velocity *= 1f;
-                dust2.noGravity = true;
-            }
-            Projectile.scale += Main.rand.NextFloat(0.5f, 1f);
-        }
+
         public override void OnKill(int timeleft)
         {
             for (int i = 0; i < 20; i++)
