@@ -18,11 +18,11 @@ using ITD.Content.Dusts;
 using ITD.Content.Items.Armor.Vanity.Masks;
 using Terraria.Graphics.Effects;
 using ITD.Content.Items.Accessories.Movement.Boots;
-using ITD.Content.Projectiles.Hostile.CosjelTest;
 using ITD.PrimitiveDrawing;
 using Terraria.Graphics.Shaders;
 using ITD.Content.Items.Placeable.Furniture.Relics;
 using ITD.Content.Items.Placeable.Furniture.Trophies;
+using ITD.Content.Projectiles.Hostile.CosJel;
 
 
 namespace ITD.Content.NPCs.Bosses
@@ -218,7 +218,7 @@ namespace ITD.Content.NPCs.Bosses
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
-                            ModContent.ProjectileType<CosmicLightningBlast>(), (int)(NPC.damage), 2f, player.whoAmI);
+                            ModContent.ProjectileType<CosmicJellyfishBlast>(), (int)(NPC.damage), 2f, player.whoAmI);
                             Blast.damage = 0;
                             Blast.localAI[1] = 1000f;
                             Blast.ai[1] = Main.rand.NextFloat(0.18f, 0.3f);
@@ -253,7 +253,6 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     if (AttackCount > 0)
                     {
-                        Main.NewText(AttackCount);
                         AI_State = MovementState.FollowingRegular;
                         AttackID = 3;
                         AITimer1 = 0;
@@ -319,28 +318,22 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 3://catch deez hands
+/*                    Main.NewText(AttackCount);
+*/
                     AITimer1++;
-
-                    if (AITimer1 == 100)
+                    if (AITimer1 < 100)
                     {
-
-                            HandControl(1, 1, 2, false);
-
-                            HandControl(-1, 1, 2, false);
-
-                    }
-                    if (AITimer1 >= 600)
-                    {
-                        HandControl(1, 6, 3, true);
-                        HandControl(-1, 6, 3, true);
+                        AI_State = MovementState.FollowingRegular;
                         NetSync();
-                        AITimer1 = 0;
-                        AttackID++;
-                        NetSync();
-
                     }
-                    if (AITimer1 == 20)
+                    if (AITimer1 == 1)
                     {
+                        distanceAbove = 250;
+                        NetSync();
+                    }
+                    if (AITimer1 == 30)
+                    {
+                        distanceAbove = 350;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             if (!HandExist(1))
@@ -348,7 +341,31 @@ namespace ITD.Content.NPCs.Bosses
                             if (!HandExist(-1))
                                 NPCHelpers.NewNPCEasy(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<CosmicJellyfishHand>(), NPC.whoAmI, 0, 0, NPC.whoAmI, -1);
                         }
+                        NetSync();
                     }
+                    if (AITimer1 == 100)
+                    {
+                        AI_State = MovementState.Explode;
+                        HandControl(1, 1, 2, false);
+                        HandControl(-1, 1, 2, false);
+                        NetSync();
+                    }
+
+                    if (AttackCount > 1)
+                    {
+                        HandControl(1, 7, 3, true);
+                        HandControl(-1, 7, 3, true);
+                        AI_State = MovementState.FollowingRegular;
+                        AttackID = Main.rand.Next(1, 4);
+                        AITimer1 = 0;
+                        AITimer2 = 0;
+                        AttackCount = 0;
+                        DashTimer = 0;
+                        AttackTotal++;
+                        distanceAbove = 250;
+
+                    }
+            
                     break;
                 case 4://slap
                     AITimer1++;
@@ -389,8 +406,8 @@ namespace ITD.Content.NPCs.Bosses
                         }
                         if (AITimer1 >= 600)
                         {
-                            HandControl(1, 6, 3, true);
-                            HandControl(-1, 6, 3, true);
+                            HandControl(1, 7, 3, true);
+                            HandControl(-1, 7, 3, true);
                             NetSync();
                             AITimer1 = 0;
                             AttackID++;
@@ -445,8 +462,8 @@ namespace ITD.Content.NPCs.Bosses
 
                         NetSync();
                         //ForceKill returns
-                        HandControl(1, 6, 3, true);
-                        HandControl(-1, 6, 3, true);
+                        HandControl(1, 7, 3, true);
+                        HandControl(-1, 7, 3, true);
 
                     }
                     if (AITimer1 == 20)
@@ -540,7 +557,7 @@ namespace ITD.Content.NPCs.Bosses
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -5f);
+                    Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -6f);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 30, 0, -1, NPC.whoAmI);
                 }
             }
@@ -751,8 +768,8 @@ namespace ITD.Content.NPCs.Bosses
                 AITimer1 = 0;
                 AITimer2 = 0;
                 NPC.localAI[2] = 1;
-                HandControl(1, 6, 3, true);
-                HandControl(-1, 6, 3, true);
+                        HandControl(1, 7, 3, true);
+                        HandControl(-1, 7, 3, true);
                 AttackID = -1;
                 AI_State = MovementState.Explode;
                 NetSync();
@@ -770,8 +787,8 @@ namespace ITD.Content.NPCs.Bosses
                 AttackCount = 0;
                 NPC.life = NPC.lifeMax;
                 NPC.dontTakeDamage = true;
-                HandControl(1, 6, 3, true);
-                HandControl(-1, 6, 3, true);
+                        HandControl(1, 7, 3, true);
+                        HandControl(-1, 7, 3, true);
                 NetSync();
                 bOkuu = true;
                 if (Main.netMode != NetmodeID.MultiplayerClient)

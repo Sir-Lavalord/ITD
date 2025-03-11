@@ -7,7 +7,7 @@ using ITD.Utilities;
 using ITD.Content.NPCs.Bosses;
 using Terraria.ID;
 
-namespace ITD.Content.Projectiles.Hostile.CosjelTest
+namespace ITD.Content.Projectiles.Hostile.CosJel
 {
     public class CosmicWarning : ModProjectile
     {

@@ -7,7 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 
-namespace ITD.Content.Projectiles.Hostile.CosjelTest
+namespace ITD.Content.Projectiles.Hostile.CosJel
 {
 
     public class CosmicSlopWave : ModProjectile

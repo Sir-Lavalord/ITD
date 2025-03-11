@@ -86,6 +86,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             {
                 Projectile.timeLeft = 2;
             }
+            if (player.dead || !player.active || player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapProjectile>()] <= 0)
+            {
+                Projectile.Kill();
+            }
             NPC HomingTarget = Main.npc[(int)proj.ai[1]];
 
             if (HomingTarget == null)
@@ -131,6 +135,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
                     }
                     break;
 
+            }
+            if (HomingTarget == null)
+            {
+                return;
             }
             Vector2 vectorToTrap= proj.Center - Projectile.Center;
             float distanceToTrap = vectorToTrap.Length();

@@ -10,7 +10,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 
-namespace ITD.Content.Projectiles.Hostile
+namespace ITD.Content.Projectiles.Hostile.CosJel
 {
     public class CosmicGoo : ModProjectile
     {
@@ -36,14 +36,14 @@ namespace ITD.Content.Projectiles.Hostile
         public override bool PreDraw(ref Color lightColor)
         {
 
-            
- 
+
+
             return false;
         }
 
 
 
 
-      
+
     }
 }

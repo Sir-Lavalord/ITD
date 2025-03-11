@@ -11,11 +11,11 @@ using ITD.Content.NPCs.Bosses;
 using SteelSeries.GameSense;
 using Microsoft.Build.Evaluation;
 
-namespace ITD.Content.Projectiles.Hostile
+namespace ITD.Content.Projectiles.Hostile.CosJel
 {
     public class CosmicSludgeBomb : ModProjectile
     {
-        private readonly Asset<Texture2D> effect = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Hostile/CosmicSludgeBomb_Effect");
+        private readonly Asset<Texture2D> effect = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Hostile/CosJel/CosmicSludgeBomb_Effect");
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
@@ -41,11 +41,7 @@ namespace ITD.Content.Projectiles.Hostile
         }
         public override Color? GetAlpha(Color lightColor)
         {
-            return Color.White * (1f-(Projectile.alpha/255f));
-        }
-        public override bool? CanDamage()
-        {
-            return false;
+            return Color.White * (1f - Projectile.alpha / 255f);
         }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {

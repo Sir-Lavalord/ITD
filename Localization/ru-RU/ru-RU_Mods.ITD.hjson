@@ -212,6 +212,8 @@ Projectiles: {
 		// OneTimeLatchMessage: None!
 		// DisplayName: Sticky Hand Projectile
 	}
+
+	// CosmicJellyfishBlast.DisplayName: Cosmic Jellyfish Blast
 }
 
 NPCs: {
