@@ -131,11 +131,6 @@ namespace ITD.Utilities
         public static void DrawTileCommon(SpriteBatch spriteBatch, int i , int j, Texture2D tex, Vector2 extraOffset = default, Rectangle? overrideFrame = null, Color? overrideColor = null)
         {
             Tile t = Framing.GetTileSafely(i, j);
-            Rectangle frame;
-            if (overrideFrame is null)
-                frame = new(t.TileFrameX, t.TileFrameY, 16, 16);
-            else
-                frame = (Rectangle)overrideFrame;
             spriteBatch.Draw(tex, TileExtraPos(i, j, extraOffset), overrideFrame ?? new(t.TileFrameX, t.TileFrameY, 16, 16), overrideColor ?? Lighting.GetColor(i, j), 0f, default, 1f, SpriteEffects.None, 0f);
         }
         /// <summary>
