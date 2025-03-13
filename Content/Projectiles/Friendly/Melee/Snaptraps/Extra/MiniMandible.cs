@@ -57,12 +57,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
                 HomingTarget ??= Projectile.FindClosestNPC(maxDetectRadius);
 
                 if (HomingTarget == null)
-                {
                     return;
-                }
-                else
+                if (!HomingTarget.active || HomingTarget.life <= 0 || !HomingTarget.CanBeChasedBy())
                 {
-                    //Projectile.alpha = 0;
+                    HomingTarget = null;
+                    return;
                 }
 
                 Vector2 directionToTarget = HomingTarget.Center - Projectile.Center;

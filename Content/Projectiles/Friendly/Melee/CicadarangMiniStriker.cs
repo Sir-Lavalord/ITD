@@ -76,11 +76,11 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                     Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
                     return;
                 }
-                else
+                if (!HomingTarget.active || HomingTarget.life <= 0 || !HomingTarget.CanBeChasedBy())
                 {
-    
+                    HomingTarget = null;
+                    return;
                 }
-
                 Vector2 directionToTarget = HomingTarget.Center - Projectile.Center;
                 directionToTarget.Normalize();
 

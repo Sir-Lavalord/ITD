@@ -476,7 +476,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             }
         }
-        private void StickyAI(float chainLength)
+        public virtual void StickyAI(float chainLength)
         {
             Projectile.rotation = staticRotation;
             Projectile.ignoreWater = true;
