@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
@@ -28,9 +29,15 @@ namespace ITD.Content.Projectiles.Hostile.Gravekeeper
 			Projectile.ignoreWater = true;
         }
 		
+		public override bool? CanHitNPC(NPC target)
+		{
+			return Projectile.ai[0] > 30f;
+		}
+		
 		public override Color? GetAlpha(Color drawColor)
         {
-            return Color.White;
+			Color color = new Color(255, 255, 255, 200);
+            return color;
         }
 		
 		public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
@@ -40,26 +47,12 @@ namespace ITD.Content.Projectiles.Hostile.Gravekeeper
 		
 		public override void AI()
         {
-			int target = (int)Player.FindClosest(Projectile.Center, 1, 1);
-			Projectile.ai[1] += 1f;
-			if (Projectile.ai[1] < 110f)
-			{
-				float scaleFactor = Projectile.velocity.Length();
-				Vector2 distance = Main.player[target].Center - Projectile.Center;
-				distance.Normalize();
-				distance *= scaleFactor;
-				Projectile.velocity = (Projectile.velocity * 19f + distance) / 20f;
-				Projectile.velocity.Normalize();
-				Projectile.velocity *= scaleFactor;
-			}
-			if (Projectile.velocity.Length() < 18f)
-			{
-				Projectile.velocity *= 1.02f;
-			}
+			Projectile.ai[0] += 1f;
+			
 			if (Projectile.localAI[0] == 0f)
 			{
 				Projectile.localAI[0] = 1f;
-				SoundEngine.PlaySound(SoundID.Item20, Projectile.position);
+				SoundEngine.PlaySound(SoundID.Item8, Projectile.position);
 				for (int i = 0; i < 10; i++)
 				{
 					int spawnDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.DungeonSpirit, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 2f);
@@ -67,7 +60,37 @@ namespace ITD.Content.Projectiles.Hostile.Gravekeeper
 					Main.dust[spawnDust].velocity = Projectile.Center - Main.dust[spawnDust].position;
 					Main.dust[spawnDust].velocity.Normalize();
 					Main.dust[spawnDust].velocity *= -5f;
-					Main.dust[spawnDust].velocity += Projectile.velocity / 2f;
+				}
+			}
+			
+			if (Projectile.ai[0] > 30f)
+			{
+				if (Projectile.localAI[0] == 1f)
+				{
+					Projectile.localAI[0] = 2f;
+					Projectile.velocity *= 8f;
+					
+					SoundEngine.PlaySound(SoundID.Item20, Projectile.position);
+					for (int i = 0; i < 10; i++)
+					{
+						int spawnDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.DungeonSpirit, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 2f);
+						Main.dust[spawnDust].noGravity = true;
+						Main.dust[spawnDust].velocity = Projectile.Center - Main.dust[spawnDust].position;
+						Main.dust[spawnDust].velocity.Normalize();
+						Main.dust[spawnDust].velocity *= -5f;
+					}
+				}
+				
+				if (Projectile.ai[0] < 110f)
+				{
+					int target = (int)Player.FindClosest(Projectile.Center, 1, 1);
+					float scaleFactor = Projectile.velocity.Length();
+					Vector2 distance = Main.player[target].Center - Projectile.Center;
+					distance.Normalize();
+					distance *= scaleFactor;
+					Projectile.velocity = (Projectile.velocity * 19f + distance) / 20f;
+					Projectile.velocity.Normalize();
+					Projectile.velocity *= scaleFactor;
 				}
 			}
 			

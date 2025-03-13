@@ -18,11 +18,14 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 {
     public class DespoticSuperMeleeProj : ModProjectile
     {
-        public ref float special => ref Projectile.ai[0];
-		public ref float direction => ref Projectile.ai[1];
-		public int maxTime = 30;
         public override string Texture => "ITD/Content/Items/Weapons/Melee/DespoticSuperMeleeSword";
         public const float visualLength = 90f;
+		
+		public ref float special => ref Projectile.ai[0];
+		public ref float direction => ref Projectile.ai[1];
+		
+		public int maxTime = 30;
+		public float speed;
 		
 		public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
 		public static VertexStrip vertexStrip = new VertexStrip();
@@ -53,22 +56,27 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         }
         public override void AI()
         {
-			if (special == 1f && Projectile.timeLeft == maxTime)
+			Player player = Main.player[Projectile.owner];
+			
+			if (Projectile.timeLeft == maxTime)
 			{
-				maxTime = 60;
-				Projectile.timeLeft = 60;
-				Projectile.extraUpdates = 1;
+				maxTime = player.itemAnimationMax;
+				speed = 30f / (float)(maxTime);
+				if (special == 1f)
+				{
+					maxTime *= 2;
+					Projectile.extraUpdates = 1;
+				}
+				Projectile.timeLeft = maxTime;
 			}
 			
 			if (Projectile.timeLeft < 5)
 				Projectile.Opacity -= 0.2f;
 			else if (Projectile.Opacity < 1f)
                 Projectile.Opacity += 0.2f;
-            Player player = Main.player[Projectile.owner];
+            
             Projectile.Center = player.MountedCenter;
-			
-			Projectile.velocity = Projectile.velocity.RotatedBy(0.3f * Projectile.timeLeft/maxTime * direction);
-			
+			Projectile.velocity = Projectile.velocity.RotatedBy(0.3f * Projectile.timeLeft/maxTime * direction * speed);
 			Projectile.rotation = Projectile.velocity.ToRotation();
 			
 			for (int i = Projectile.oldPos.Length - 1; i > 0; i--) // custom trailing

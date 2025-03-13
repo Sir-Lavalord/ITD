@@ -178,9 +178,9 @@ namespace ITD.Content.NPCs.Bosses
 								type = ModContent.ProjectileType<SoulSkull>();
 								damage = 40;
 							}
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -4f), type, damage, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -2f), type, damage, 0, -1);
 							if (Main.expertMode)
-								Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -4f), type, damage, 0, -1);
+								Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -2f), type, damage, 0, -1);
 						}
 						
 						int dustType = DustID.GiantCursedSkullBolt;

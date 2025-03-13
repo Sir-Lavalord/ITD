@@ -26,7 +26,7 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.useTime = Item.useAnimation = 30;
 			Item.UseSound = SoundID.Item71;
             Item.shoot = ModContent.ProjectileType<DespoticSuperMeleeProj>();
-			Item.shootSpeed = 32;
+			Item.shootSpeed = 1;
         }
         public override bool MeleePrefix() => true;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -40,8 +40,10 @@ namespace ITD.Content.Items.Weapons.Melee
 			if (specialCycle == 0)
 				special = 1;
 			
+			velocity.Normalize();
+			
             float adjustedItemScale = player.GetAdjustedItemScale(player.inventory[player.selectedItem]);
-            Projectile.NewProjectile(source, position, velocity.RotatedBy(-2 * direction) * adjustedItemScale, type, damage, knockback, player.whoAmI, special, direction);
+            Projectile.NewProjectile(source, position, velocity.RotatedBy(-2 * direction) * adjustedItemScale * 32f, type, damage, knockback, player.whoAmI, special, direction);
             return false;
         }
     }
