@@ -57,7 +57,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 mousePos = buffer;
             }
         }
-        int ShieldHealth = 10;
+        int ShieldHealth = 20;
         int Shattered;
         public override void AI()
         {
@@ -121,73 +121,83 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 Projectile.frame = (int)MathF.Round(ChargeTally) + Shattered;
             if (player.channel)
             {
-                //Draw arrow
-                if (Main.mouseRight)
+                if (player.ChooseAmmo(player.inventory[player.selectedItem]) != null)
                 {
-                    Shift = Math.Clamp(Shift - 0.05f, 0f, 1f);
-                    if (Shift <= 0)
+                    //Draw arrow
+                    if (Main.mouseRight)
                     {
-                        HaveArrow = true;
-                        Shift = 0;
-                        ChargeTally = Math.Clamp(ChargeTally + 0.05f, 0f, 3f);
-                        Projectile.Center += Main.rand.NextVector2Circular((ChargeTally / 2) * 1.1f, (ChargeTally / 2) * 1.1f);
-                    }
-                }
-                else
-                {
-                    Shift = Math.Clamp(Shift + 0.25f, 0f, 1f);
-                    if (HaveArrow)
-                    {
-                        //ParticleSystem.NewParticle<RingMuzzleFlash>(Projectile.Center + Projectile.rotation.ToRotationVector2() * 5f, Vector2.Zero, Projectile.rotation);
 
-                        //RoundDown
-                        Shift = 1;
-                        SoundEngine.PlaySound(SoundID.DD2_BallistaTowerShot, Projectile.Center);
-                        HaveArrow = false;
-                        Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 40 * (1 + ChargeTally * 0.5f),
-        ModContent.ProjectileType<HunterrGreatarrow>(), Projectile.damage, Projectile.knockBack, Projectile.owner,MathF.Round(ChargeTally));
-                        ChargeTally = 0;
-
-
+                        Shift = Math.Clamp(Shift - 0.05f, 0f, 1f);
+                        if (Shift <= 0)
+                        {
+                            HaveArrow = true;
+                            Shift = 0;
+                            ChargeTally = Math.Clamp(ChargeTally + 0.05f, 0f, 3f);
+                            Projectile.Center += Main.rand.NextVector2Circular((ChargeTally / 2) * 1.1f, (ChargeTally / 2) * 1.1f);
+                        }
                     }
                     else
                     {
-                        for (int i = 0; i < Main.maxProjectiles; i++)
+                        Shift = Math.Clamp(Shift + 0.25f, 0f, 1f);
+                        if (HaveArrow)
                         {
-                            Projectile other = Main.projectile[i];
+                            //ParticleSystem.NewParticle<RingMuzzleFlash>(Projectile.Center + Projectile.rotation.ToRotationVector2() * 5f, Vector2.Zero, Projectile.rotation);
 
-                            if (i != Projectile.whoAmI && other.Reflectable()
-                                && (Math.Abs(Projectile.Center.X - other.position.X)
-                                 + Math.Abs(Projectile.Center.Y - other.position.Y) < 60))
+                            //RoundDown
+                            Shift = 1;
+                            SoundEngine.PlaySound(SoundID.DD2_BallistaTowerShot, Projectile.Center);
+                            HaveArrow = false;
+                            Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 40 * (1 + ChargeTally * 0.5f),
+            ModContent.ProjectileType<HunterrGreatarrow>(), Projectile.damage, Projectile.knockBack, Projectile.owner, MathF.Round(ChargeTally));
+                            ChargeTally = 0;
+                            player.PickAmmo(player.inventory[player.selectedItem], out int _, out float _, out int _, out float _, out int _);
+
+
+                        }
+                    }
+                }
+                if (player.ChooseAmmo(player.inventory[player.selectedItem]) == null
+                    || player.ChooseAmmo(player.inventory[player.selectedItem]) != null && !Main.mouseRight)
+                {
+                    for (int i = 0; i < Main.maxProjectiles; i++)
+                    {
+                        Projectile other = Main.projectile[i];
+
+                        if (i != Projectile.whoAmI &&
+                            other.aiStyle != -999 &&
+                            other.hostile &&
+                            other.active &&
+                            (Math.Abs(Projectile.Center.X - other.position.X)
+                             + Math.Abs(Projectile.Center.Y - other.position.Y) < 60))
+                        {
+                            if (!Main.dedServ)
                             {
-                                if (!Main.dedServ)
+                                Projectile.ai[2]++;
+                                for (int d = 0; d < 4; d++)
                                 {
-                                    Projectile.ai[2]++;
-                                    for (int d = 0; d < 4; d++)
-                                    {
-                                        Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width / 4, Projectile.height / 4, DustID.GoldCoin, 0, 0, 60, default, Main.rand.NextFloat(1f, 1.2f));
-                                        dust.noGravity = true;
-                                        dust.velocity *= 4f;
-                                        Dust.NewDustDirect(Projectile.position, Projectile.width / 4, Projectile.height / 4, DustID.t_Granite, 0, 0, 60, default, Main.rand.NextFloat(1f, 1.2f));
-                                    }
-                                    if (Projectile.ai[2] >= ShieldHealth)
-                                    {
-                                        if (Main.netMode != NetmodeID.Server)
-                                        {
-                                            Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, other.velocity, Mod.Find<ModGore>("HunterrGreatbowGore0").Type);
-                                            Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, other.velocity, Mod.Find<ModGore>("HunterrGreatbowGore1").Type);
-                                            Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, other.velocity, Mod.Find<ModGore>("HunterrGreatbowGore2").Type);
-                                        }
-                                    }
-                                    SoundEngine.PlaySound(SoundID.NPCHit42, Projectile.Center);
-                                    Projectile.velocity = other.velocity / 1.5f;
-/*                                    CombatText.NewText(Projectile.Hitbox, Color.Orange, "BLOCKED", true);
-*/                                    other.owner = Main.myPlayer;
-                                    other.Kill();
-                                    other.friendly = true;
-                                    other.hostile = false;
-                                    other.netUpdate = true;
+                                    Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width / 4, Projectile.height / 4, DustID.GoldCoin, 0, 0, 60, default, Main.rand.NextFloat(1f, 1.2f));
+                                    dust.noGravity = true;
+                                    dust.velocity *= 4f;
+                                    Dust.NewDustDirect(Projectile.position, Projectile.width / 4, Projectile.height / 4, DustID.t_Granite, 0, 0, 60, default, Main.rand.NextFloat(1f, 1.2f));
                                 }
+                                if (Projectile.ai[2] >= ShieldHealth)
+                                {
+                                    if (Main.netMode != NetmodeID.Server)
+                                    {
+                                        Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, other.velocity, Mod.Find<ModGore>("HunterrGreatbowGore0").Type);
+                                        Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, other.velocity, Mod.Find<ModGore>("HunterrGreatbowGore1").Type);
+                                        Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, other.velocity, Mod.Find<ModGore>("HunterrGreatbowGore2").Type);
+                                    }
+                                }
+                                SoundEngine.PlaySound(SoundID.NPCHit42, Projectile.Center);
+                                Projectile.velocity = other.velocity / 1.5f;
+                                /*                                    CombatText.NewText(Projectile.Hitbox, Color.Orange, "BLOCKED", true);
+                                */
+                                other.owner = Main.myPlayer;
+                                other.Kill();
+                                other.friendly = true;
+                                other.hostile = false;
+                                other.netUpdate = true;
                             }
                         }
                     }
@@ -200,13 +210,13 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                     Shift = 1;
                     SoundEngine.PlaySound(SoundID.DD2_BallistaTowerShot, Projectile.Center);
                     HaveArrow = false;
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 40 * (1 +ChargeTally * 0.5f),
+                    Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 40 * (1 + ChargeTally * 0.5f),
     ModContent.ProjectileType<HunterrGreatarrow>(), Projectile.damage, Projectile.knockBack, Projectile.owner, MathF.Floor(ChargeTally));
+                    player.PickAmmo(player.inventory[player.selectedItem], out int _, out float _, out int _, out float _, out int _);
                     ChargeTally = 0;
                 }
                 Projectile.Kill();
             }
-
         }
 
         

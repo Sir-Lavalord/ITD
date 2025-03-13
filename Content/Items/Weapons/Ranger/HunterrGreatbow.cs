@@ -33,6 +33,10 @@ namespace ITD.Content.Items.Weapons.Ranger
         }
 
         public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
+        public override bool NeedsAmmo(Player player)
+        {
+            return false;
+        }
 
         public override bool CanConsumeAmmo(Item ammo, Player player) => player.ownedProjectileCounts[Item.shoot] > 0;
 
