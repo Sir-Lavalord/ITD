@@ -29,6 +29,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
         }
         public override void ExtraChainEffects(ref Vector2 chainDrawPosition, int chaincount)
         {
+            float factor = WarningTimer / (float)WarningFrames * 2.25f;
+            Projectile.Center += Main.rand.NextVector2Circular(factor, factor);
         }
     }
 }

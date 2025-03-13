@@ -100,7 +100,32 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 
             if (!Retracting)
             {
-               Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2 * 2;
+                int dustRings = 2;
+                for (int h = 0; h < dustRings; h++)
+                {
+                    float distanceDivisor = h + 1.5f;
+                    float dustDistance = 300 / distanceDivisor;
+                    int numDust = (int)(0.1f * MathHelper.TwoPi * dustDistance);
+                    float angleIncrement = MathHelper.TwoPi / numDust;
+                    Vector2 dustOffset = new Vector2(dustDistance, 0f);
+                    dustOffset = dustOffset.RotatedByRandom(MathHelper.TwoPi);
+
+                    int var = (int)(dustDistance);
+                    float dustVelocity = 20f / distanceDivisor;
+                    for (int i = 0; i < numDust; i++)
+                    {
+                        if (Main.rand.NextBool(var))
+                        {
+                            dustOffset = dustOffset.RotatedBy(angleIncrement);
+                            int dust = Dust.NewDust(Projectile.Center, 1, 1, ModContent.DustType<CosJelDust>());
+                            Main.dust[dust].position = Projectile.Center + dustOffset;
+                            Main.dust[dust].fadeIn = 1f;
+                            Main.dust[dust].velocity = Vector2.Normalize(Projectile.Center - Main.dust[dust].position) * dustVelocity;
+                            Main.dust[dust].scale = 1.5f - h;
+                        }
+                    }
+                }
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2 * 2;
             }
             else
             {
@@ -121,7 +146,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                         &&
                         other.owner == player.whoAmI
                         && Math.Abs(Projectile.Center.X - other.position.X)
-                        + Math.Abs(Projectile.Center.Y - other.position.Y) < 90)
+                        + Math.Abs(Projectile.Center.Y - other.position.Y) < 120)
                     {
                         ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
                         {
@@ -138,6 +163,8 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             }
             if (Projectile.localAI[1] > 0f)
                 Projectile.localAI[1] -= 5f;
+            if (Projectile.localAI[1] < 0f)
+                Projectile.localAI[1] += 5f;
             if (Projectile.localAI[1] > 100f)
                 Projectile.localAI[1] = 100f;
             Projectile.rotation += 0.05f;
@@ -164,6 +191,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             }
             else
             {
+
                 if (player.HeldItem.ModItem is not TheEpicenter)
                 {
                     TimeWithoutWeapon++;
@@ -173,7 +201,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 {
                     if (Main.myPlayer == Projectile.owner)
                     {
-                        if (Main.mouseRight ||
+                        if (Main.mouseRight && player.HeldItem.ModItem is  TheEpicenter ||
 /*                            TimeWithoutWeapon >= 600 ||
 */                            TimeBeforeRetract >= 2500 && (HomingTarget == null || CurrentBulletCount == 0)
                             )
@@ -186,12 +214,33 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 HomingTarget ??= Projectile.FindClosestNPC(1500);
 
                 if (HomingTarget == null)
+                {
+                    if (CurrentBulletCount > 0)
+                    {
+                        if (Projectile.localAI[2]++ % 180 == 0)
+                        {
+                            for (int i = 0; i < 8; i++)
+                            {
+                                int dust = Dust.NewDust(Projectile.Center, 1, 1, ModContent.DustType<StarlitDust>(), 0f, 0f, 0, default, 1.5f);
+                                Main.dust[dust].noGravity = true;
+                                Main.dust[dust].velocity *= 2f;
+                            }
+                            CurrentBulletCount--;
+                            Projectile.localAI[1] -= 30f;
+                        }
+                    }
+                        return;
+                }
+                if (!HomingTarget.active || HomingTarget.life <= 0 || !HomingTarget.CanBeChasedBy())
+                {
+                    HomingTarget = null;
                     return;
+                }
                 if (CurrentBulletCount > 0)
                 {
                     if (Projectile.localAI[0]++ % 12 == 0)
                     {
-                        float dmg = player.GetTotalDamage(DamageClass.Ranged).ApplyTo((float)(totalDamage / CurrentBulletCount + 1));
+                        float dmg = (totalDamage / CurrentBulletCount + 1);
                         totalDamage -= (int)(totalDamage / CurrentBulletCount + 1);
 
                         CurrentBulletCount--;
@@ -199,7 +248,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                         {
                             Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center,
                                 (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(MathHelper.ToRadians(3)) * 22f,
-                                ModContent.ProjectileType<TheEpicenterSpark>(), (int)(dmg * 1.25f), Projectile.knockBack, Projectile.owner, 1);
+                                ModContent.ProjectileType<TheEpicenterSpark>(), (int)(dmg * 1.1f), Projectile.knockBack, Projectile.owner, 1);
                             proj.tileCollide = false;
                             proj.CritChance = (int)player.GetTotalCritChance<RangedDamageClass>();
                         }

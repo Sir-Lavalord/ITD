@@ -71,7 +71,11 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 
                 if (HomingTarget == null)
                     return;
-
+                if (!HomingTarget.active || HomingTarget.life <= 0 || !HomingTarget.CanBeChasedBy())
+                {
+                    HomingTarget = null;
+                    return;
+                }
 
                 float length = Projectile.velocity.Length();
                 float targetAngle = Projectile.AngleTo(HomingTarget.Center);

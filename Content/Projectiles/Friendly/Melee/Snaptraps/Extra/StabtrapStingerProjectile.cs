@@ -93,7 +93,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             NPC HomingTarget = Main.npc[(int)proj.ai[1]];
 
             if (HomingTarget == null)
+                return;
+            if (!HomingTarget.active || HomingTarget.life <= 0 || !HomingTarget.CanBeChasedBy())
             {
+                HomingTarget = null;
                 return;
             }
             switch (AIState)
@@ -142,7 +145,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
             }
             Vector2 vectorToTrap= proj.Center - Projectile.Center;
             float distanceToTrap = vectorToTrap.Length();
-            if (distanceToTrap > 150f || player.GetSnaptrapPlayer().GetActiveSnaptrap().retracting && distanceToTrap > 30f)
+            if (distanceToTrap > 150f || !player.GetSnaptrapPlayer().CanUseSnaptrap && player.GetSnaptrapPlayer().GetActiveSnaptrap().retracting && distanceToTrap > 30f)
             {
                 int where = Projectile.Center.X < proj.Center.X ? 1 : -1;
                 int where2 = Projectile.Center.Y < proj.Center.Y ? 1 : -1;
