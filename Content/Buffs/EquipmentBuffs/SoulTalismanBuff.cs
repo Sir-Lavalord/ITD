@@ -50,7 +50,14 @@ namespace ITD.Content.Buffs.EquipmentBuffs
             }
             if (player.buffTime[buffIndex] <= 1200)
             {
-                player.buffTime[buffIndex] += time;
+                if (player.buffTime[buffIndex] + time >= 1200)
+                    player.buffTime[buffIndex] = 1200;
+                else
+                player.buffTime[buffIndex] +=  time;
+            }
+            if (player.buffTime[buffIndex] >= 1200)
+            {
+                player.buffTime[buffIndex] = 1200;
             }
             return false;
         }

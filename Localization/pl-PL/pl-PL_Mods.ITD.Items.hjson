@@ -1088,7 +1088,7 @@ SoulTalisman: {
 	/* Tooltip:
 		'''
 		Striking or defeating enemies provides Soul Charges
-		Soul Charges stacks up to 5 times
+		Soul Charges stack up to 5 times
 		All Soul Charges are released on hit
 		''' */
 }
@@ -1406,4 +1406,9 @@ Bleedbreaker: {
 StickyHand: {
 	// DisplayName: Sticky Hand
 	// Tooltip: Harder to unlatch than most snaptraps
+}
+
+ChainedGun: {
+	// DisplayName: Chained Gun
+	// Tooltip: ""
 }
