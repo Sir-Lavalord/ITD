@@ -214,6 +214,7 @@ Projectiles: {
 	}
 
 	CosmicJellyfishBlast.DisplayName: Cosmic Jellyfish Blast
+	ChainedGunProj.DisplayName: Chained Gun Proj
 }
 
 NPCs: {
