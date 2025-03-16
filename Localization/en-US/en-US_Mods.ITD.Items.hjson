@@ -1412,3 +1412,8 @@ ChainedGun: {
 	DisplayName: Chained Gun
 	Tooltip: ""
 }
+
+SherbetFlail: {
+	Tooltip: ""
+	DisplayName: Sherbet Flail
+}

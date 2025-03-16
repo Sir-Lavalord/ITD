@@ -215,6 +215,7 @@ Projectiles: {
 
 	// CosmicJellyfishBlast.DisplayName: Cosmic Jellyfish Blast
 	// ChainedGunProj.DisplayName: Chained Gun Proj
+	// SherbetFlailProjectile.DisplayName: Sherbet Flail Projectile
 }
 
 NPCs: {

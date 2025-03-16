@@ -22,17 +22,11 @@ namespace ITD.Content.Projectiles.Hostile.Gravekeeper
             Projectile.width = 48;
             Projectile.height = 48;
             Projectile.penetrate = -1;
-            Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.timeLeft = 300;
 			Projectile.tileCollide = false;
 			Projectile.ignoreWater = true;
         }
-		
-		public override bool? CanHitNPC(NPC target)
-		{
-			return Projectile.ai[0] > 30f;
-		}
 		
 		public override Color? GetAlpha(Color drawColor)
         {
