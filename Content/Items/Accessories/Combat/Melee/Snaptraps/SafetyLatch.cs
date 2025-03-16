@@ -9,6 +9,10 @@ namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps
 {
     public class SafetyLatch : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Terraria.GameContent.Creative.CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 58;

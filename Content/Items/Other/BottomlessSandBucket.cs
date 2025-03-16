@@ -10,6 +10,10 @@ namespace ITD.Content.Items.Other
 {
     public class BottomlessSandBucket : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.useStyle = ItemUseStyleID.Swing;

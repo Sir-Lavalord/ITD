@@ -20,6 +20,10 @@ namespace ITD.Content.Items.Favors.Hardmode
 
         private int lifeConsumed;
 		private int lifeTimer;
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetFavorDefaults()
         {
             Item.width = Item.height = 32;

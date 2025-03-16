@@ -13,7 +13,7 @@ namespace ITD.Content.Items.Weapons.Mage
     {
         public override void SetStaticDefaults()
         {
-            Terraria.GameContent.Creative.CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            Item.ResearchUnlockCount = 1;
             Item.staff[Type] = true;
         }
         public override void SetDefaults()

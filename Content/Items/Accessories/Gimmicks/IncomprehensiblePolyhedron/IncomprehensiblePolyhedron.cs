@@ -12,6 +12,10 @@ namespace ITD.Content.Items.Accessories.Gimmicks.IncomprehensiblePolyhedron
     {
         public const string AssetPath = "ITD/Content/Items/Accessories/Gimmicks/IncomprehensiblePolyhedron/";
         public override string Texture => Placeholder.PHBigGun;
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.DefaultToAccessory();

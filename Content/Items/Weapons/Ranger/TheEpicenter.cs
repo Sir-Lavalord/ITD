@@ -26,6 +26,7 @@ namespace ITD.Content.Items.Weapons.Ranger
     {
         public override void SetStaticDefaults()
         {
+            Item.ResearchUnlockCount = 1;
             FrontGunLayer.RegisterData(Item.type);
         }
         public override void SetDefaults()

@@ -7,6 +7,10 @@ namespace ITD.Content.Items.Weapons.Melee
 {
     public class Spidermeal : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.damage = 30;

@@ -12,6 +12,10 @@ namespace ITD.Content.Items.Accessories.Misc
 {
     public class PortableLab : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override string Texture => Placeholder.PHAxe;
         public override void Load()
         {

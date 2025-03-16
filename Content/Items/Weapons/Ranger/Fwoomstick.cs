@@ -26,7 +26,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         public override void SetStaticDefaults()
         {
             FrontGunLayer.RegisterData(Item.type);
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

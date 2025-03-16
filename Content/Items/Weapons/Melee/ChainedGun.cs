@@ -15,18 +15,19 @@ namespace ITD.Content.Items.Weapons.Melee
         //examplemod slop
         public override void SetStaticDefaults()
         {
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()
         {
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.useAnimation = 45;
-            Item.useTime = 45;
-            Item.knockBack = 6.75f;
+            Item.useAnimation = 40;
+            Item.useTime = 40;
+            Item.knockBack = 2f;
             Item.width = 30;
             Item.height = 10;
             Item.damage = 32;
-            Item.crit = 7;
+            Item.crit = 4;
             Item.scale = 1f;
             Item.noUseGraphic = true;
             Item.shootSpeed = 12f;
@@ -36,7 +37,7 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.DamageType = DamageClass.MeleeNoSpeed;
             Item.channel = true;
             Item.noMelee = true;
-            Item.shootSpeed = 12f;
+            Item.shootSpeed = 10f;
             Item.useAmmo = AmmoID.Bullet;
             Item.shoot = 1;
         }

@@ -13,7 +13,8 @@ namespace ITD.Content.Items.Weapons.Melee
 	{
 		public override void SetStaticDefaults()
 		{
-			ItemID.Sets.SkipsInitialUseSound[Item.type] = true;
+            Item.ResearchUnlockCount = 1;
+            ItemID.Sets.SkipsInitialUseSound[Item.type] = true;
 			ItemID.Sets.Spears[Item.type] = true; 
 		}
 

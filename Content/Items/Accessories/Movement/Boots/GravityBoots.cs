@@ -14,6 +14,10 @@ namespace ITD.Content.Items.Accessories.Movement.Boots
     [AutoloadEquip(EquipType.Shoes)]
     public class GravityBoots : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 24;

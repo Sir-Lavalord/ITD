@@ -21,7 +21,8 @@ namespace ITD.Content.Items.Weapons.Ranger
 		public int attackCycle = 0;
 		public override void SetStaticDefaults()
         {
-            FrontGunLayer.RegisterData(Item.type);
+            Item.ResearchUnlockCount = 1;
+			FrontGunLayer.RegisterData(Item.type);
 			BackGunLayer.RegisterData(Item.type);
         }
         public override void SetDefaults()

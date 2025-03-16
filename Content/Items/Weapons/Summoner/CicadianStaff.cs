@@ -14,8 +14,12 @@ using ITD.Utilities;
 namespace ITD.Content.Items.Weapons.Summoner
 {
 	public class CicadianStaff : ModItem
-	{		
-		public override void SetDefaults()
+    {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
+        public override void SetDefaults()
 		{
 			Item.damage = 100;
 			Item.DamageType = DamageClass.Summon;

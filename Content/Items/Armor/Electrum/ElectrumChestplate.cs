@@ -8,6 +8,10 @@ namespace ITD.Content.Items.Armor.Electrum
     [AutoloadEquip(EquipType.Body)]
     public class ElectrumChestplate : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 30;

@@ -8,6 +8,10 @@ namespace ITD.Content.Items.PetSummons
 {
     public class CosmicJam : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.ZephyrFish);

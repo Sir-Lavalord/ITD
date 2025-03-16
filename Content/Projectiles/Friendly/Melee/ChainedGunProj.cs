@@ -31,7 +31,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             ForcedRetracting,
             Ricochet,
             Barrage,
-            Dropping
         }
         private AIState CurrentAIState
         {
@@ -41,16 +40,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         public ref float StateTimer => ref Projectile.ai[1];
         public ref float CurrentBullet => ref Projectile.ai[2];
 
-        public float CollisionCounter;
+        public ref float CollisionCounter => ref Projectile.localAI[1];
         public ref float SpinningStateTimer => ref Projectile.localAI[1];
-        private NPC HomingTarget
-        {
-            get => Projectile.localAI[0] == 0 ? null : Main.npc[(int)Projectile.localAI[0] - 1];
-            set
-            {
-                Projectile.localAI[0] = value == null ? 0 : value.whoAmI + 1;
-            }
-        }
         public override void Load()
         {
             chainTexture = ModContent.Request<Texture2D>(ChainTexturePath);
@@ -94,8 +85,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             bool doFastThrowDust = false;
             bool shouldOwnerHitCheck = false;
             int launchTimeLimit = 15;
-            float launchSpeed = 14f;
-            float maxLaunchLength = 800f;
+            float launchSpeed = 12f;
+            float maxLaunchLength = 1400f;
             float retractAcceleration = 3f;
             float maxRetractSpeed = 10f;
             float forcedRetractAcceleration = 6f;
@@ -103,7 +94,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             int defaultHitCooldown = 10;
             int spinHitCooldown = 20;
             int movingHitCooldown = 10;
-            int ricochetTimeLimit = launchTimeLimit + 5;
+            int ricochetTimeLimit = launchTimeLimit + 10;
             float meleeSpeedMultiplier = player.GetTotalAttackSpeed(DamageClass.Melee);
             launchSpeed *= meleeSpeedMultiplier;
             retractAcceleration *= meleeSpeedMultiplier;
@@ -111,10 +102,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             forcedRetractAcceleration *= meleeSpeedMultiplier;
             maxForcedRetractSpeed *= meleeSpeedMultiplier;
             float launchRange = launchSpeed * launchTimeLimit;
-            float maxDroppedRange = launchRange + 160f;
             Projectile.localNPCHitCooldown = defaultHitCooldown;
-            float rotatard = 0;
-
             switch (CurrentAIState)
             {
                 case AIState.Spinning:
@@ -126,25 +114,25 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                         {
                             offsetFromPlayer.Y *= 0.5f;
                         }
+                        Vector2 shootDirection = Vector2.UnitX.RotatedBy(SpinningStateTimer / 20f);
                         Projectile.Center = mountedCenter + offsetFromPlayer * 30f + new Vector2(0, player.gfxOffY);
-                        rotatard += 0.25f;
                         if (Projectile.owner == Main.myPlayer)
                         {
-                            if (Projectile.localAI[2]++ % 3 == 0)
+                            if (Projectile.localAI[2]++ % 6 == 0)
                             {
-                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.UnitX.RotatedBy(Projectile.rotation) * 10,(int)Projectile.ai[2], Projectile.damage, Projectile.knockBack, Projectile.owner);
+                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootDirection * 10,(int)Projectile.ai[2], (int)(Projectile.damage /2), Projectile.knockBack, Projectile.owner);
 
                                 for (int i = 0; i < 6; i++)
                                 {
                                     int dust = Dust.NewDust(mountedCenter + offsetFromPlayer * 30f + new Vector2(0, player.gfxOffY), 1, 1, DustID.Smoke, 0f, 0f, 0, default, 1.1f);
                                     Main.dust[dust].noGravity = true;
-                                    Main.dust[dust].velocity = Vector2.UnitX.RotatedBy(Projectile.rotation) * 20;
+                                    Main.dust[dust].velocity = shootDirection * 20;
                                     int dust1 = Dust.NewDust(mountedCenter + offsetFromPlayer * 30f + new Vector2(0, player.gfxOffY), 1, 1, DustID.Torch, 0f, 0f, 0, default, 1.1f);
                                     Main.dust[dust1].noGravity = true;
-                                    Main.dust[dust1].velocity = Vector2.UnitX.RotatedBy(Projectile.rotation) * 20;
+                                    Main.dust[dust1].velocity = shootDirection * 20;
                                 }
                                 SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                                if (Main.rand.NextBool(3))
+                                if (Main.rand.NextBool(8))
                                     player.PickAmmo(player.inventory[player.selectedItem], out int _, out float _, out int _, out float _, out int _);
 
                             }
@@ -175,9 +163,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                         shouldSwitchToBarrage |= Projectile.Distance(mountedCenter) >= maxLaunchLength;
                         if (Projectile.owner == Main.myPlayer)
                         {
-                            if (Projectile.localAI[2]++ % 6 == 0)
+                            if (Projectile.localAI[2]++ % 10 == 0)
                             {
-                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.UnitX.RotatedBy(Projectile.rotation) * 10,(int)Projectile.ai[2], Projectile.damage, Projectile.knockBack, Projectile.owner);
+                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.UnitX.RotatedBy(Projectile.rotation) * 10,(int)Projectile.ai[2], (int)(Projectile.damage /2), Projectile.knockBack, Projectile.owner);
 
                                 for (int i = 0; i < 6; i++)
                                 {
@@ -189,17 +177,17 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                                     Main.dust[dust1].velocity = Vector2.UnitX.RotatedBy(Projectile.rotation) * 20;
                                 }
                                 SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                                if (Main.rand.NextBool(3))
+                                if (Main.rand.NextBool(8))
                                     player.PickAmmo(player.inventory[player.selectedItem], out int _, out float _, out int _, out float _, out int _);
                             }
                         }
                         if (player.controlUseItem)
                         {
                             Projectile.localAI[2] = 0;
-                            CurrentAIState = AIState.Dropping;
+                            CurrentAIState = AIState.Barrage;
                             StateTimer = 0f;
                             Projectile.netUpdate = true;
-                            Projectile.velocity *= 0.2f;
+                            Projectile.velocity *= 0.1f;
                             break;
                         }
                         if (shouldSwitchToBarrage)
@@ -217,12 +205,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 case AIState.Barrage:
                     {
                         bool shouldSwitchToRetract = StateTimer++ >= launchTimeLimit + 30;
-                        Projectile.velocity *= 0.9f;
+                        Projectile.velocity *= 0.6f;
                         if (Projectile.owner == Main.myPlayer)
                         {
                             if (Projectile.localAI[2]++ % 3 == 0)
                             {
-                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.UnitX.RotatedBy(Projectile.rotation) * 10,(int)Projectile.ai[2], Projectile.damage, Projectile.knockBack, Projectile.owner);
+                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.UnitX.RotatedBy(Projectile.rotation) * 10,(int)Projectile.ai[2], (int)(Projectile.damage), Projectile.knockBack, Projectile.owner);
 
                                 for (int i = 0; i < 6; i++)
                                 {
@@ -234,7 +222,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                                     Main.dust[dust1].velocity = Vector2.UnitX.RotatedBy(Projectile.rotation) * 20;
                                 }
                                 SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                                if (Main.rand.NextBool(3))
+                                if (Main.rand.NextBool(12))
                                     player.PickAmmo(player.inventory[player.selectedItem], out int _, out float _, out int _, out float _, out int _);
                             }
                         }
@@ -256,19 +244,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                             Projectile.Kill();
                             return;
                         }
-                        if (player.controlUseItem)
-                        {
-                            CurrentAIState = AIState.Dropping;
-                            StateTimer = 0f;
-                            Projectile.netUpdate = true;
-                            Projectile.velocity *= 0.2f;
-                        }
-                        else
-                        {
+
                             Projectile.velocity *= 0.98f;
                             Projectile.velocity = Projectile.velocity.MoveTowards(unitVectorTowardsPlayer * maxRetractSpeed, retractAcceleration);
                             player.ChangeDir((player.Center.X < Projectile.Center.X).ToDirectionInt());
-                        }
                         break;
                     }
                 case AIState.ForcedRetracting:
@@ -307,59 +286,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                         player.ChangeDir((player.Center.X < Projectile.Center.X).ToDirectionInt());
                     }
                     break;
-                case AIState.Dropping:
-                    if (!player.controlUseItem || Projectile.Distance(mountedCenter) > maxDroppedRange)
-                    {
-                        CurrentAIState = AIState.ForcedRetracting;
-                        StateTimer = 0f;
-                        Projectile.netUpdate = true;
-                    }
-                    else
-                    {
-                        Projectile.velocity.Y += 0.8f;
-                        Projectile.velocity.X *= 0.95f;
-                        /*HomingTarget ??= Projectile.FindClosestNPC(600);
-                        if (HomingTarget == null)
-                        {
-                            if (Projectile.velocity.Length() > 1f)
-                                Projectile.rotation = Projectile.velocity.ToRotation() + Projectile.velocity.X * 0.1f; // skid
-                            else
-                                Projectile.rotation += Projectile.velocity.X * 0.1f; // roll
-                            return;
-                        }
-                        if (!HomingTarget.active || HomingTarget.life <= 0 || !HomingTarget.CanBeChasedBy())
-                        {
-                            HomingTarget = null;
-                            return;
-                        }
-                        if (Main.myPlayer == Projectile.owner)
-                        {
-                            Projectile.rotation = (HomingTarget.Center - Projectile.Center).ToRotation() - MathHelper.PiOver2;
-
-                            if (Projectile.localAI[2]++ % 10 == 0)
-                            {
-                                Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center,
-                                (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(MathHelper.ToRadians(3)) * 22f,
-                                (int)Projectile.ai[2], Projectile.damage, Projectile.knockBack, Projectile.owner, 1);
-                                proj.CritChance = (int)player.GetTotalCritChance<RangedDamageClass>();
-                                player.ChangeDir((player.Center.X < Projectile.Center.X).ToDirectionInt());
-                                for (int i = 0; i < 6; i++)
-                                {
-                                    int dust = Dust.NewDust(Projectile.Center + new Vector2(0, player.gfxOffY), 1, 1, DustID.Smoke, 0f, 0f, 0, default, 1.1f);
-                                    Main.dust[dust].noGravity = true;
-                                    Main.dust[dust].velocity = Vector2.UnitX.RotatedBy(Projectile.rotation) * 20;
-                                    int dust1 = Dust.NewDust(Projectile.Center + new Vector2(0, player.gfxOffY), 1, 1, DustID.Torch, 0f, 0f, 0, default, 1.1f);
-                                    Main.dust[dust1].noGravity = true;
-                                    Main.dust[dust1].velocity = Vector2.UnitX.RotatedBy(Projectile.rotation) * 20;
-                                }
-                                SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                                if (Main.rand.NextBool(3))
-                                    player.PickAmmo(player.inventory[player.selectedItem], out int _, out float _, out int _, out float _, out int _);
-                            }
-                        }
-                        }*/
-                    }
-                        break;
             }
 
             Projectile.direction = (Projectile.velocity.X > 0f).ToDirectionInt();
@@ -372,7 +298,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             }
             else if (CurrentAIState == AIState.LaunchingForward || CurrentAIState == AIState.Barrage)
             {
-                Vector2 vectorTowardsPlayer = Projectile.DirectionTo(mountedCenter).SafeNormalize(Vector2.Zero);
                 Projectile.rotation += 0.25f;
             }
 
@@ -398,14 +323,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             float bounceFactor = 0.2f;
             if (CurrentAIState == AIState.LaunchingForward || CurrentAIState == AIState.Ricochet)
             {
-                bounceFactor = 0.4f;
+                bounceFactor = 1f;
             }
-
-            if (CurrentAIState == AIState.Dropping)
-            {
-                bounceFactor = 0f;
-            }
-
             if (oldVelocity.X != Projectile.velocity.X)
             {
                 if (Math.Abs(oldVelocity.X) > 4f)
@@ -435,7 +354,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 Projectile.netUpdate = true;
                 Point scanAreaStart = Projectile.TopLeft.ToTileCoordinates();
                 Point scanAreaEnd = Projectile.BottomRight.ToTileCoordinates();
-                impactIntensity = 2;
+                impactIntensity = 3;
                 Projectile.CreateImpactExplosion(2, Projectile.Center, ref scanAreaStart, ref scanAreaEnd, Projectile.width, out bool causedShockwaves);
                 Projectile.CreateImpactExplosion2_FlailTileCollision(Projectile.Center, causedShockwaves, velocity);
                 Projectile.position -= velocity;
@@ -451,7 +370,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 
                 SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
             }
-            if (CurrentAIState != AIState.Spinning && CurrentAIState != AIState.Ricochet && CurrentAIState != AIState.Dropping && CurrentAIState != AIState.Barrage && CollisionCounter >= 10f)
+            if (CurrentAIState != AIState.Spinning && CurrentAIState != AIState.Ricochet && CurrentAIState != AIState.Barrage && CollisionCounter >= 10f)
             {
                 CurrentAIState = AIState.ForcedRetracting;
                 Projectile.netUpdate = true;
@@ -485,20 +404,16 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         {
             if (CurrentAIState == AIState.Spinning)
             {
-                modifiers.SourceDamage *= 1.2f;
+                modifiers.SourceDamage *= 1.5f;
             }
             else if (CurrentAIState == AIState.LaunchingForward || CurrentAIState == AIState.Retracting)
             {
-                modifiers.SourceDamage *= 2f;
+                modifiers.SourceDamage *= 3f;
             }
             modifiers.HitDirectionOverride = (Main.player[Projectile.owner].Center.X < target.Center.X).ToDirectionInt();
             if (CurrentAIState == AIState.Spinning)
             {
                 modifiers.Knockback *= 0.25f;
-            }
-            else if (CurrentAIState == AIState.Dropping)
-            {
-                modifiers.Knockback *= 0.5f;
             }
         }
         public override bool PreDraw(ref Color lightColor)
@@ -514,7 +429,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             float chainSegmentLength = (chainSourceRectangle.HasValue ? chainSourceRectangle.Value.Height : chainTexture.Height()) + chainHeightAdjustment;
             if (chainSegmentLength == 0)
             {
-                chainSegmentLength = 10;
+                chainSegmentLength = 16;
             }
             float chainRotation = unitVectorFromProjectileToPlayerArms.ToRotation() + MathHelper.PiOver2;
             int chainCount = 0;
@@ -523,26 +438,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             {
                 Color chainDrawColor = Lighting.GetColor((int)chainDrawPosition.X / 16, (int)(chainDrawPosition.Y / 16f));
                 var chainTextureToDraw = chainTexture;
-                if (chainCount >= 4)
-                {
-                }
-                else if (chainCount >= 2)
-                {
-                    chainTextureToDraw = chainTextureExtra;
-                    byte minValue = 140;
-                    if (chainDrawColor.R < minValue)
-                        chainDrawColor.R = minValue;
-
-                    if (chainDrawColor.G < minValue)
-                        chainDrawColor.G = minValue;
-
-                    if (chainDrawColor.B < minValue)
-                        chainDrawColor.B = minValue;
-                }
-                else
-                {
-                    chainTextureToDraw = chainTextureExtra;
-                }
                 Main.spriteBatch.Draw(chainTextureToDraw.Value, chainDrawPosition - Main.screenPosition, chainSourceRectangle, chainDrawColor, chainRotation, chainOrigin, 1f, SpriteEffects.None, 0f);
                 chainDrawPosition += unitVectorFromProjectileToPlayerArms * chainSegmentLength;
                 chainCount++;

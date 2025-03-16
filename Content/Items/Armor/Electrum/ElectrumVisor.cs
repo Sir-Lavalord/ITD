@@ -16,6 +16,7 @@ namespace ITD.Content.Items.Armor.Electrum
         public static LocalizedText SetBonusText { get; private set; }
         public override void SetStaticDefaults()
         {
+            Item.ResearchUnlockCount = 1;
             SetBonusText = this.GetLocalization("SetBonus");
         }
         public override void SetDefaults()

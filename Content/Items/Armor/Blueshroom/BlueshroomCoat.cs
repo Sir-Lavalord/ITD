@@ -7,6 +7,10 @@ namespace ITD.Content.Items.Armor.Blueshroom
     [AutoloadEquip(EquipType.Body)]
     public class BlueshroomCoat : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 22;

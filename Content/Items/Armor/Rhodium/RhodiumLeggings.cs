@@ -8,6 +8,10 @@ namespace ITD.Content.Items.Armor.Rhodium
     [AutoloadEquip(EquipType.Legs)]
     public class RhodiumLeggings : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 22;

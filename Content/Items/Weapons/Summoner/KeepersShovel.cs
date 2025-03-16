@@ -13,6 +13,10 @@ namespace ITD.Content.Items.Weapons.Summoner
     public class KeepersShovel : ModItem
     {
 		public int attackCycle = 0;
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.damage = 20;

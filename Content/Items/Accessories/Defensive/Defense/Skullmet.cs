@@ -9,6 +9,10 @@ namespace ITD.Content.Items.Accessories.Defensive.Defense
 {
     public class Skullmet : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.DefaultToAccessory(30, 20);

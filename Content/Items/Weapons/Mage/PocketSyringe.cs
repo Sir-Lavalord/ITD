@@ -14,7 +14,11 @@ using ITD.Utilities;
 namespace ITD.Content.Items.Weapons.Mage
 {
     public class PocketSyringe : ModItem
-    {		
+    {
+        public override void SetStaticDefaults()
+        {
+            Terraria.GameContent.Creative.CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
+        }
         public override void SetDefaults()
         {
             Item.width = 36;
@@ -56,9 +60,9 @@ namespace ITD.Content.Items.Weapons.Mage
 
         public override void AddRecipes()
         {
-            CreateRecipe(4)
-                .AddIngredient(ModContent.ItemType<TemperedGlassItem>(), 4)
-                .AddTile(TileID.WorkBenches)
+            CreateRecipe(10)
+                .AddIngredient(ModContent.ItemType<TemperedGlassItem>(), 1)
+                .AddTile(TileID.Furnaces)//there is the glass klin but who's gonna use that
                 .Register();
         }
     }

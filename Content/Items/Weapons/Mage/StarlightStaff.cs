@@ -22,7 +22,7 @@ namespace ITD.Content.Items.Weapons.Mage
                 Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),
                 Color = () => Color.White * 0.7f
             });
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+Item.ResearchUnlockCount = 1;
 
             Item.staff[Type] = true;
         }

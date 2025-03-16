@@ -15,9 +15,10 @@ namespace ITD.Content.Items.Weapons.Ranger
     public class Ghostbuster : ModItem
     {
 		public override void SetStaticDefaults()
-        {
-            FrontGunLayer.RegisterData(Item.type);
-        }
+		{
+			FrontGunLayer.RegisterData(Item.type);
+			Item.ResearchUnlockCount = 1;
+		}
         public override void SetDefaults()
         {
             Item.damage = 14;

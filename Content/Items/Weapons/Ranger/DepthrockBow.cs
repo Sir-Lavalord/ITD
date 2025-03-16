@@ -13,7 +13,10 @@ namespace ITD.Content.Items.Weapons.Ranger
 {
     public class DepthrockBow : ModItem
     {
-
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.damage = 30;
