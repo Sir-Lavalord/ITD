@@ -12,7 +12,8 @@ namespace ITD.Content.Items.Weapons.Melee
 			// This line will make the damage shown in the tooltip twice the actual Item.damage. This multiplier is used to adjust for the dynamic damage capabilities of the projectile.
 			// When thrown directly at enemies, the flail projectile will deal double Item.damage, matching the tooltip, but deals normal damage in other modes.
 			ItemID.Sets.ToolTipDamageMultiplier[Type] = 2f;
-		}
+            Item.ResearchUnlockCount = 1;
+    }
 
 		public override void SetDefaults() {
 			Item.useStyle = ItemUseStyleID.Shoot; // How you use the item (swinging, holding out, etc.)

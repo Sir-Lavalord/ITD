@@ -7,6 +7,10 @@ namespace ITD.Content.Items.Accessories.Defensive.Buffs
 {
     public class SwimshieldWipers : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.DefaultToAccessory(26, 20);

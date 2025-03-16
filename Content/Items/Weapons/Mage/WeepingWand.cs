@@ -27,6 +27,10 @@ namespace ITD.Content.Items.Weapons.Mage
 {
     public class WeepingWand : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.damage = 9;

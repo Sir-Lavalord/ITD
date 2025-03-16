@@ -15,6 +15,7 @@ namespace ITD.Content.Items.Weapons.Melee
 	{
 		public override void SetStaticDefaults()
         {
+            Item.ResearchUnlockCount = 1;
             HeldItemLayer.RegisterData(Item.type, new DrawLayerData()
             {
                 Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),

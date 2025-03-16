@@ -15,7 +15,7 @@ namespace ITD.Content.Items.Accessories.Master
         {
             ItemID.Sets.AnimatesAsSoul[Item.type] = true;
             Main.RegisterItemAnimation(Type, new DrawAnimationVertical(8, 5));
-            Terraria.GameContent.Creative.CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            Item.ResearchUnlockCount = 1;
 
         }
 

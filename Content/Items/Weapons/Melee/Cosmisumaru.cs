@@ -26,6 +26,10 @@ namespace ITD.Content.Items.Weapons.Melee
         public int attackCycle = 0;
         public float damageDealt;
         public Vector2 dustPosition;
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.mana = 0;

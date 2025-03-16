@@ -7,7 +7,10 @@ namespace ITD.Content.Items.Accessories.Defensive.Buffs
 {
     public class CupOJoe : ModItem
     {
-
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 32;

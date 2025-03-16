@@ -26,7 +26,7 @@ namespace ITD.Content.Items.Weapons.Summoner
                 Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),
                 Color = () => new Color(255, 255, 255, 50) * 0.7f
             });
-            Terraria.GameContent.Creative.CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            Item.ResearchUnlockCount = 1;
         }
         public override void SetDefaults()
         {

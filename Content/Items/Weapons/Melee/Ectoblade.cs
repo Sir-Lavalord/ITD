@@ -22,8 +22,9 @@ namespace ITD.Content.Items.Weapons.Melee
                 Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),
                 Color = () => Color.White
             });
+            Item.ResearchUnlockCount = 1;
         }
-		public override void SetDefaults()
+        public override void SetDefaults()
 		{
 			Item.damage = 28;
 			Item.DamageType = DamageClass.Melee;

@@ -10,6 +10,10 @@ namespace ITD.Content.Items.Armor.Vanity.Masks
     [AutoloadEquip(EquipType.Head)]
     internal class CosmicJellyfishMask : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 26;

@@ -16,6 +16,10 @@ namespace ITD.Content.Items.Weapons.Summoner
 {
     public class NightmareManuscript : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.damage = 34;

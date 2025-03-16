@@ -17,6 +17,10 @@ namespace ITD.Content.Items.Accessories.Combat.All
     public class RazedWine : ModItem
     {
         public static readonly int cooldownMax = 120;
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.DefaultToAccessory(28, 38);

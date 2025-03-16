@@ -10,6 +10,10 @@ namespace ITD.Content.Items.Weapons.Mage
 {
     public class TomeOfReach : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.DamageType = DamageClass.Magic;

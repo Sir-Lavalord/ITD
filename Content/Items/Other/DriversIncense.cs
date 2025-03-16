@@ -12,6 +12,7 @@ namespace ITD.Content.Items.Other
         public static LocalizedText MunchiesExplanation { get; private set; }
         public override void SetStaticDefaults()
         {
+            Item.ResearchUnlockCount = 1;
             ItemID.Sets.ShimmerTransformToItem[ItemID.CosmicCarKey] = Type;
             MunchiesExplanation = this.GetLocalization("MunchiesExplanation");
         }

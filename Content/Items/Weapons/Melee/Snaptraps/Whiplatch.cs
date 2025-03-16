@@ -23,7 +23,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
         //help
         public override void SetStaticDefaults()
         {
-            Terraria.GameContent.Creative.CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            Item.ResearchUnlockCount = 1;
 
         }
         public override void SetDefaults()

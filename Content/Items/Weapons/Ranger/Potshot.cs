@@ -18,15 +18,14 @@ namespace ITD.Content.Items.Weapons.Ranger
 {
     public class Potshot : ModItem
     {
-
         public override void SetStaticDefaults()
         {
+            Item.ResearchUnlockCount = 1;
             HeldItemLayer.RegisterData(Item.type, new DrawLayerData()
             {
                 Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),
                 Color = () => Color.White * 0.7f
             });
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
             FrontGunLayer.RegisterData(Item.type);
         }
         public override void SetDefaults()

@@ -10,6 +10,10 @@ namespace ITD.Content.Items.Accessories.Defensive
 {
     public class DreadShell : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 34;

@@ -26,6 +26,10 @@ namespace ITD.Content.Items.Favors
     }
     public abstract class Favor : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public float Charge { get; set; } = 0f;
         private float prevCharge = 0f;
         private float chargeScale;

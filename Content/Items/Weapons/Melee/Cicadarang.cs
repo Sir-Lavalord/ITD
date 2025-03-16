@@ -11,6 +11,10 @@ namespace ITD.Content.Items.Weapons.Melee
 {
 	public class Cicadarang : ModItem
 	{
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.damage = 74;

@@ -8,6 +8,10 @@ namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps
 {
     public class ChainWeight : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 24;

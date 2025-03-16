@@ -11,7 +11,11 @@ namespace ITD.Content.Items.Weapons.Mage
 {
 	public class Necromatome : ModItem
 	{
-		public override void SetDefaults() {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
+        public override void SetDefaults() {
             Item.DamageType = DamageClass.Magic;
             Item.damage = 18;
             Item.mana = 8;

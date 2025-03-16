@@ -13,8 +13,8 @@ namespace ITD.Content.Items.Accessories.Master
     {
         public override void SetStaticDefaults()
         {
+            Item.ResearchUnlockCount = 1;
         }
-
         public override void SetDefaults()
         {
             Item.Size = new Vector2(30);

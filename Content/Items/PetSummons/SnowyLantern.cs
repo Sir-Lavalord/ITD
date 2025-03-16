@@ -9,6 +9,10 @@ namespace ITD.Content.Items.PetSummons
 {
     public class SnowyLantern : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.damage = 0;

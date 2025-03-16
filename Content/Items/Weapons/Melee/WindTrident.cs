@@ -14,7 +14,8 @@ namespace ITD.Content.Items.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            ItemID.Sets.Spears[Item.type] = true;
+        Item.ResearchUnlockCount = 1;
+        ItemID.Sets.Spears[Item.type] = true;
         }
         public override void SetDefaults()
         {

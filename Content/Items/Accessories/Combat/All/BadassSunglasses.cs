@@ -15,6 +15,10 @@ namespace ITD.Content.Items.Accessories.Combat.All
     [AutoloadEquip(EquipType.Face)]
     public class BadassSunglasses : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 24;
