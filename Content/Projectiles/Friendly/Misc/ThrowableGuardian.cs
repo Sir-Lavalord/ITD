@@ -15,11 +15,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
     public class ThrowableGuardian : ModProjectile
     {
 		public override string Texture => "Terraria/Images/NPC_68";
-		public override void SetStaticDefaults() {
-			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
-			ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
-		}
-		
         public override void SetDefaults()
         {
             Projectile.width = Projectile.height = 40;
@@ -47,19 +42,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			modifiers.SourceDamage.Base += target.lifeMax/20;
-		}
-		
-		public override bool PreDraw(ref Color lightColor) {
-			Texture2D projectileTexture = ModContent.Request<Texture2D>(Texture).Value;
-			Vector2 drawOrigin = new Vector2(projectileTexture.Width * 0.5f, projectileTexture.Height * 0.5f);
-			for (int k = 0; k < Projectile.oldPos.Length; k++) {
-				Vector2 trailPos = Projectile.oldPos[k] - Main.screenPosition + (Projectile.Size * 0.5f) + new Vector2(0f, Projectile.gfxOffY);
-				Color color = lightColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length) * 0.5f;
-				Main.spriteBatch.Draw(projectileTexture, trailPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length / 3, SpriteEffects.None, 0f);
-			}
-			Vector2 drawPos = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
-			Main.spriteBatch.Draw(projectileTexture, drawPos, null, lightColor, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
-			return false;
 		}
     }
 }
