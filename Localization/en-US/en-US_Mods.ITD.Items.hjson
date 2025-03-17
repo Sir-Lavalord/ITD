@@ -1417,3 +1417,12 @@ SherbetFlail: {
 	Tooltip: ""
 	DisplayName: Sherbet Flail
 }
+
+Cornucopia: {
+	DisplayName: Cornucopia
+	Tooltip:
+		'''
+		Converts all enemy projectiles into mana stars, hearts, and more projectiles
+		Press {0} to use when at full charge
+		'''
+}

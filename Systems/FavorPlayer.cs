@@ -1,13 +1,16 @@
-﻿using ITD.Content.Items.Favors;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using ITD.Utilities;
-using ITD.Content.Buffs.Debuffs;
 using System.Linq;
 using Terraria.GameInput;
+
+using ITD.Utilities;
+using ITD.Content.Buffs.Debuffs;
+using ITD.Content.Items.Favors;
+using ITD.Networking;
+using ITD.Networking.Packets;
 
 namespace ITD.Systems
 {
@@ -42,6 +45,7 @@ namespace ITD.Systems
         {
             if (FavorItem.ModItem is Favor favorItem)
             {
+				NetSystem.SendPacket(new FavorActivatedPacket(Player, FavorItem));
                 if (favorItem.UseFavor(Player))
                 {
                     if (!favorItem.IsCursedFavor)
