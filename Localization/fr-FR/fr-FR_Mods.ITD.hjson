@@ -456,6 +456,11 @@ Buffs: {
 		// DisplayName: PPPLACEHOLDER
 		// Description: SSSHITSTORM
 	}
+
+	Trailblazing: {
+		// DisplayName: Trailblazing
+		// Description: Decaying speed boost
+	}
 }
 
 DeathMessage: {

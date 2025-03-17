@@ -1414,3 +1414,14 @@ SherbetFlail: {
 	// Tooltip: ""
 	// DisplayName: Sherbet Flail
 }
+
+Trailblazer: {
+	/* Tooltip:
+		'''
+		Launches you forwards
+		Grants a decaying speed boost
+		Charge increases while moving
+		Press {0} to use when at full charge
+		''' */
+	// DisplayName: Trailblazer
+}
