@@ -22,7 +22,7 @@ namespace ITD.Content.Items.Weapons.Mage
             Item.width = 56;
             Item.height = 56;
             Item.useTime = 36;
-            Item.useAnimation = 20;
+            Item.useAnimation = 36;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 4f;

@@ -12,13 +12,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 {
     public class CyaniteBoomerangProjectile : ModProjectile
     {
-		public override void SetStaticDefaults()
-        {
-            Main.projFrames[Projectile.type] = 5;
-			ProjectileID.Sets.TrailCacheLength [Type] = 5;
-			ProjectileID.Sets.TrailingMode [Type] = 0;
-        }
-		
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.Melee;
@@ -33,7 +26,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 		
 		public override void ModifyDamageHitbox(ref Rectangle hitbox)
         {
-            hitbox.Inflate(16, 16);
+            hitbox.Inflate(32, 32);
         }
 		
 		public override bool OnTileCollide(Vector2 oldVelocity) {
@@ -86,17 +79,16 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			
 			Vector2 position = Projectile.Center - Main.screenPosition;
 			
-			float rotation = Projectile.rotation + Main.GlobalTimeWrappedHourly * 15f * Projectile.direction;
+			float rotation = Projectile.rotation + Main.GlobalTimeWrappedHourly * 15f;
 			
-			Main.EntitySpriteDraw(texture2, position, new Rectangle?(rectangle2), new Color(120, 184, 255, 50), rotation*2f, rectangle2.Size() / 2f, Projectile.scale*0.3f, SpriteEffects.None, 0f);
-			Main.EntitySpriteDraw(texture2, position, new Rectangle?(rectangle2), new Color(120, 184, 255, 50), rotation*1.5f+MathHelper.PiOver2, rectangle2.Size() / 2f, Projectile.scale*0.4f, SpriteEffects.None, 0f);
+			Main.EntitySpriteDraw(texture2, position, new Rectangle?(rectangle2), new Color(120, 184, 255, 50), rotation*2f+0.1f, rectangle2.Size() / 2f, Projectile.scale*0.4f, SpriteEffects.None, 0f);
+			Main.EntitySpriteDraw(texture2, position, new Rectangle?(rectangle2), new Color(120, 184, 255, 50), rotation*2f, rectangle2.Size() / 2f, Projectile.scale*0.4f, SpriteEffects.None, 0f);
 			
-			for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Projectile.type]; i++)
-			{
-				Vector2 oldPos = Projectile.oldPos[i];
-				Main.EntitySpriteDraw(texture2, oldPos + Projectile.Size * 0.5f - Main.screenPosition, new Rectangle?(rectangle2), new Color(120, 184, 255, 50) * (1f -(Projectile.scale*0.2f*i)), rotation + i, rectangle2.Size() / 2f, Projectile.scale*0.4f-(Projectile.scale*0.05f*i), SpriteEffects.None, 0f);
-			}
-			
+			Player player = Main.player[Projectile.owner];
+			float distanceMult = Math.Min(player.Distance(Projectile.Center)*0.005f-0.2f, 1f);
+			Main.EntitySpriteDraw(texture2, position, new Rectangle?(rectangle2), new Color(120, 184, 255, 100) * distanceMult, rotation+0.1f, rectangle2.Size() / 2f, Projectile.scale*0.8f, SpriteEffects.None, 0f);
+			Main.EntitySpriteDraw(texture2, position, new Rectangle?(rectangle2), new Color(120, 184, 255, 100) * distanceMult, rotation, rectangle2.Size() / 2f, Projectile.scale*0.8f, SpriteEffects.None, 0f);
+						
 			Main.EntitySpriteDraw(texture, position, new Rectangle?(rectangle), lightColor, rotation, rectangle.Size() / 2f, Projectile.scale, SpriteEffects.None, 0f);
 
 			return false;

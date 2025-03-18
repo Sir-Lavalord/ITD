@@ -8,8 +8,6 @@ using Terraria.ID;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
 using Terraria.DataStructures;
-using ITD.Content.Tiles.Misc;
-using ITD.Content.Dusts;
 using Terraria.GameContent.Drawing;
 using Terraria.Audio;
 using Mono.Cecil;
@@ -18,10 +16,12 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 {
     public class ReachingHand : ModProjectile
     {
+		private const int duration = 50;
+		public bool clasp;
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
+			ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
 
         public override void SetDefaults()
@@ -35,7 +35,6 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             Projectile.ignoreWater = true;
             Projectile.light = 1f;
             Projectile.tileCollide = false;
-            Projectile.timeLeft = 600;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
@@ -43,50 +42,38 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 
         public override void AI()
         {
-            Projectile.velocity *= 0.98f;
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             Projectile.spriteDirection = Projectile.direction;
-            Projectile.alpha += 5;
-
-            if (Projectile.alpha > 254)
-            {
+            Projectile.Opacity -= Projectile.ai[0]*0.001f;
+			
+			Projectile.ai[0]++;
+            if (Projectile.ai[0] > duration)
                 Projectile.Kill();
-            }
+        }
 
-            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.BlueFairy, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 150, default(Color), 0.7f);
-            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 150, default(Color), 0.7f);
-            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.WhiteTorch, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 150, default(Color), 0.7f);
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+			if (!clasp) {
+				clasp = true;
+				Projectile.velocity *= 0.25f;
+				SoundEngine.PlaySound(SoundID.NPCHit54, Projectile.Center);
+			}
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Player player = Main.player[Projectile.owner];
-            if (player.direction == -1)
-            {
-                Texture2D texture = TextureAssets.Projectile[Type].Value;
-                Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
-                for (int k = Projectile.oldPos.Length - 1; k > 0; k--)
-                {
-                    Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                    Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.velocity.ToRotation() + MathHelper.PiOver2, drawOrigin, Projectile.scale, SpriteEffects.FlipHorizontally, 0);
-                }
-
-                return true;
-            }
-            else
-            {
-                Texture2D texture = TextureAssets.Projectile[Type].Value;
-                Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
-                for (int k = Projectile.oldPos.Length - 1; k > 0; k--)
-                {
-                    Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                    Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.velocity.ToRotation() + MathHelper.PiOver2, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
-                }
-
-                return true;
-            }
+            Texture2D projectileTexture = ModContent.Request<Texture2D>(Texture).Value;
+			Vector2 drawOrigin = new Vector2(projectileTexture.Width * 0.5f, projectileTexture.Height * 0.5f);
+			SpriteEffects effects = Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+			lightColor *= Projectile.Opacity;
+			for (int k = 0; k < Projectile.oldPos.Length; k++) {
+				Vector2 trailPos = Projectile.oldPos[k] - Main.screenPosition + (Projectile.Size * 0.5f) + new Vector2(0f, Projectile.gfxOffY);
+				Color color = lightColor * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+				Main.spriteBatch.Draw(projectileTexture, trailPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length / 2, effects, 0f);
+			}
+			Vector2 drawPos = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
+			Main.spriteBatch.Draw(projectileTexture, drawPos, null, lightColor, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0f);
+			return false;
         }
     }
 }

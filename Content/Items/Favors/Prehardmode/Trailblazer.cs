@@ -37,7 +37,9 @@ namespace ITD.Content.Items.Favors.Prehardmode
         }
         public override bool UseFavor(Player player)
         {
-			if (player.direction == 1) {
+			if (player.velocity.X == 0f)
+				return false;
+			if (player.velocity.X > 0) {
 				if (player.velocity.X < 16f)
 					player.velocity.X = 16f;
 			}
