@@ -152,6 +152,16 @@ namespace ITD.Content.NPCs.Bosses
 				case ActionState.Clawing:
 					if (StateTimer < 18 && Main.netMode != NetmodeID.MultiplayerClient)
 						SpikeAttack(20-StateTimer);
+						if (Main.masterMode && Main.netMode != NetmodeID.MultiplayerClient)
+						{
+							if (StateTimer == 16)
+								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(6f*NPC.direction*Main.rand.NextFloat(0.8f, 1f), -8f*Main.rand.NextFloat(0.8f, 1f)), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
+							if (StateTimer == 10)
+								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(8f*NPC.direction*Main.rand.NextFloat(0.8f, 1f), -12f*Main.rand.NextFloat(0.8f, 1f)), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
+							if (StateTimer == 4)
+								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(12f*NPC.direction*Main.rand.NextFloat(0.8f, 1f), -14f*Main.rand.NextFloat(0.8f, 1f)), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
+						}
+
 					NPC.velocity *= 0.9f;
 					break;
 			}
@@ -218,12 +228,6 @@ namespace ITD.Content.NPCs.Bosses
 							AI_State = ActionState.Clawing;
 							StateTimer = 20;
 							NPC.velocity.X = NPC.direction * 12f;
-							if (Main.masterMode && Main.netMode != NetmodeID.MultiplayerClient)
-							{
-								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(6f*NPC.direction*Main.rand.NextFloat(0.8f, 1f), -8f*Main.rand.NextFloat(0.8f, 1f)), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
-								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(8f*NPC.direction*Main.rand.NextFloat(0.8f, 1f), -12f*Main.rand.NextFloat(0.8f, 1f)), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
-								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(NPC.width*NPC.direction, NPC.height*0.5f), new Vector2(12f*NPC.direction*Main.rand.NextFloat(0.8f, 1f), -14f*Main.rand.NextFloat(0.8f, 1f)), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
-							}
 							SoundEngine.PlaySound(SoundID.Item74, NPC.Center);
 							break;
 

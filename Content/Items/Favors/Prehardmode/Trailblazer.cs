@@ -29,7 +29,7 @@ namespace ITD.Content.Items.Favors.Prehardmode
         }
         public override string GetBarStyle()
         {
-            return "DefaultBarStyle";
+            return "FireBarStyle";
         }
         public override string GetChargeSound()
         {
@@ -54,6 +54,7 @@ namespace ITD.Content.Items.Favors.Prehardmode
                 int dust = Dust.NewDust(player.Center, 1, 1, DustID.Torch, 0f, 0f, 0, default, 4f);
 				Main.dust[dust].noGravity = true;
 				Main.dust[dust].velocity *= 5f;
+				Main.dust[dust].velocity -= player.velocity * Main.rand.NextFloat();
             }
 			SoundEngine.PlaySound(SoundID.Item45, player.Center);
             return true;
