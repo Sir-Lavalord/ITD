@@ -6,6 +6,9 @@ using Terraria.Localization;
 using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
 using ITD.Utilities;
+using ITD.Content.Items.Placeable.LayersRework;
+using System.Security.Cryptography;
+using ITD.Content.Tiles.Furniture.Stations;
 
 namespace ITD.Systems
 {
@@ -25,6 +28,30 @@ namespace ITD.Systems
                 }
             }
         }
+
+        public override void AddRecipes()
+        {
+            Recipe recipe = Recipe.Create(ModContent.ItemType<Shale>());
+            recipe.AddIngredient(ItemID.StoneBlock);
+            recipe.AddTile(ModContent.TileType<StonepresserTile>());
+            recipe.Register();
+
+            recipe = Recipe.Create(ModContent.ItemType<Depthrock>());
+            recipe.AddIngredient(ModContent.ItemType<Shale>());
+            recipe.AddTile(ModContent.TileType<StonepresserTile>());
+            recipe.Register();
+
+            /*      recipe = Recipe.Create(ModContent.ItemType<Blackstone>());
+                  recipe.AddIngredient(ModContent.ItemType<Depthrock>());
+                  recipe.AddTile(ModContent.TileType<StonepresserTile>());
+                  recipe.Register();*/
+
+           /* recipe = Recipe.Create(ItemID.StoneBlock);
+            recipe.AddIngredient(ModContent.ItemType<Blackstone>());
+            recipe.AddTile(ModContent.TileType<StonepresserTile>());
+            recipe.Register();*/
+        }
+
         public override void AddRecipeGroups()
         {
             RecipeGroup group = new(() => Language.GetTextValue("LegacyMisc.37") + " Iron Ore",

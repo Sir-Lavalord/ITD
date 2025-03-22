@@ -5,6 +5,8 @@ using ITD.Players;
 using ITD.Content.Projectiles;
 using ITD.Content.Items.Weapons.Melee.Snaptraps;
 using ITD.Common.Prefixes;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace ITD.Content.Items
 {
