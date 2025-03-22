@@ -132,8 +132,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                                     Main.dust[dust1].velocity = shootDirection * 20;
                                 }
                                 SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                                if (Main.rand.NextBool(8))
-                                    player.PickAmmo(player.inventory[player.selectedItem], out int _, out float _, out int _, out float _, out int _);
+                                
 
                             }
                             Vector2 unitVectorTowardsMouse = mountedCenter.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.UnitX * player.direction);
@@ -177,8 +176,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                                     Main.dust[dust1].velocity = Vector2.UnitX.RotatedBy(Projectile.rotation) * 20;
                                 }
                                 SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                                if (Main.rand.NextBool(8))
-                                    player.PickAmmo(player.inventory[player.selectedItem], out int _, out float _, out int _, out float _, out int _);
+                               
                             }
                         }
                         if (player.controlUseItem)
@@ -222,8 +220,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                                     Main.dust[dust1].velocity = Vector2.UnitX.RotatedBy(Projectile.rotation) * 20;
                                 }
                                 SoundEngine.PlaySound(SoundID.Item11, Projectile.position);
-                                if (Main.rand.NextBool(12))
-                                    player.PickAmmo(player.inventory[player.selectedItem], out int _, out float _, out int _, out float _, out int _);
+                                
                             }
                         }
                         if (shouldSwitchToRetract)
