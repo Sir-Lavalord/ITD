@@ -1425,3 +1425,8 @@ Trailblazer: {
 		''' */
 	// DisplayName: Trailblazer
 }
+
+Moulder: {
+	// Tooltip: ""
+	// DisplayName: Moulder
+}
