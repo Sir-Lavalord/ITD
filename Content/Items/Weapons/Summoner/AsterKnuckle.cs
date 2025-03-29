@@ -89,33 +89,36 @@ namespace ITD.Content.Items.Weapons.Summoner
 
         public void SetItemInHand(Player player, Rectangle heldItemFrame)
         {
-            float animProgress = 1 - player.itemTime / (float)player.itemTimeMax;
+            if (player.whoAmI == Main.myPlayer)
+            {
 
-            ITDPlayer modPlayer = player.GetITDPlayer();
-            Vector2 mouse = modPlayer.MousePosition;
+                float animProgress = 1 - player.itemTime / (float)player.itemTimeMax;
 
-            if (mouse.X < player.Center.X)
-                player.direction = -1;
-            else
-                player.direction = 1;
+                ITDPlayer modPlayer = player.GetITDPlayer();
+                Vector2 mouse = modPlayer.MousePosition;
 
-            //Default
-            Vector2 itemPosition = player.MountedCenter + new Vector2(-2f * player.direction, -1f * player.gravDir);
-            float itemRotation = (mouse - itemPosition).ToRotation();
-            itemRotation = itemRotation * player.gravDir - modPlayer.recoilFront * player.direction;
+                if (mouse.X < player.Center.X)
+                    player.direction = -1;
+                else
+                    player.direction = 1;
 
-            //Adjust for animation
+                //Default
+                Vector2 itemPosition = player.MountedCenter + new Vector2(-2f * player.direction, -1f * player.gravDir);
+                float itemRotation = (mouse - itemPosition).ToRotation();
+                itemRotation = itemRotation * player.gravDir - modPlayer.recoilFront * player.direction;
 
-            if (animProgress < 0.7f)
-                itemPosition -= itemRotation.ToRotationVector2() * (1 - (float)Math.Pow(1 - (0.7f - animProgress) / 0.7f, 4)) * 4f;
+                //Adjust for animation
 
-            if (animProgress < 0.4f)
-                itemRotation += -0.45f * (float)Math.Pow((0.4f - animProgress) / 0.4f, 2) * player.direction * player.gravDir;
+                if (animProgress < 0.7f)
+                    itemPosition -= itemRotation.ToRotationVector2() * (1 - (float)Math.Pow(1 - (0.7f - animProgress) / 0.7f, 4)) * 4f;
 
-            Vector2 itemSize = new Vector2(30, 20);
-            Vector2 itemOrigin = new Vector2(-8, 0);
-            PlayerHelpers.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin, true);
+                if (animProgress < 0.4f)
+                    itemRotation += -0.45f * (float)Math.Pow((0.4f - animProgress) / 0.4f, 2) * player.direction * player.gravDir;
 
+                Vector2 itemSize = new Vector2(30, 20);
+                Vector2 itemOrigin = new Vector2(-8, 0);
+                PlayerHelpers.CleanHoldStyle(player, itemRotation, itemPosition, itemSize, itemOrigin, true);
+            }
         }
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {

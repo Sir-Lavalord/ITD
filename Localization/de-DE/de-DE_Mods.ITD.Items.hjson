@@ -1430,3 +1430,13 @@ Moulder: {
 	// Tooltip: ""
 	// DisplayName: Moulder
 }
+
+Stonepresser: {
+	// Tooltip: ""
+	// DisplayName: Stonepresser
+}
+
+MangledSheerthorn: {
+	// Tooltip: ""
+	// DisplayName: Mangled Sheerthorn
+}
