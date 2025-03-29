@@ -32,7 +32,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.penetrate = 5;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = -1;
+            Projectile.localNPCHitCooldown = 30;
             Projectile.timeLeft = 300;
         }
         public override void AI()
@@ -54,13 +54,22 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         }
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
+            float power = 6 * Utils.GetLerpValue(800f, 0f, Projectile.Distance(Main.LocalPlayer.Center), true);
+            Main.LocalPlayer.GetITDPlayer().BetterScreenshake(4, power, power, false);
             target.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 300);
             base.OnHitPlayer(target, info);
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            float power = 6 * Utils.GetLerpValue(800f, 0f, Projectile.Distance(Main.LocalPlayer.Center), true);
+            Main.LocalPlayer.GetITDPlayer().BetterScreenshake(4, power, power, false);
             target.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 300);
             base.OnHitNPC(target, hit, damageDone);
+        }
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.SourceDamage *= 1.5f;
+            modifiers.HitDirectionOverride = (Main.player[Projectile.owner].Center.X < target.Center.X).ToDirectionInt();
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {

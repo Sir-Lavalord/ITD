@@ -33,7 +33,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         }
         public ref float StateTimer => ref Projectile.ai[1];
         public ref float ChargeLevel => ref Projectile.ai[2];
-        public bool Unlatched => Projectile.localAI[1] != 0;
+        public bool Unlatched => Projectile.localAI[0] != 0;
 
         public ref float SpinningStateTimer => ref Projectile.localAI[1];
 
@@ -157,7 +157,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                             {
                                 if (Main.myPlayer == Projectile.owner)
                                 {
-                                    Projectile.localAI[1]++;
+                                    Projectile.localAI[0]++;
                                     Projectile.netUpdate = true;
                                     SoundEngine.PlaySound(SoundID.Item72, player.Center);
                                     for (int i = 0; i < 3; i++)
@@ -235,7 +235,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                     {
                         if (Main.myPlayer == Projectile.owner)
                         {
-                            Projectile.localAI[1]++;
+                            Projectile.localAI[0]++;
                             Projectile.netUpdate = true;
                             SoundEngine.PlaySound(SoundID.Item72, player.Center);
                             for (int i = 0; i < 3; i++)
@@ -315,7 +315,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                     dust.velocity *= 2f;
                 }
 
-                modifiers.SourceDamage *= 2f;
+                modifiers.SourceDamage *= 1 + (0.5f * ChargeLevel);
                 modifiers.Knockback *= 1+ ChargeLevel;
             }
 
