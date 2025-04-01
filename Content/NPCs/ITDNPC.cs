@@ -1,16 +1,34 @@
-﻿using System;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Utilities;
+﻿using ITD.Utilities;
 using Terraria.Localization;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.Graphics;
+using System;
 
 namespace ITD.Content.NPCs
 {
     public abstract class ITDNPC : ModNPC
     {
+        /// <summary>
+        /// Override to do some custom drawing for this boss in Boss Checklist!
+        /// </summary>
+        public virtual Action<SpriteBatch, Rectangle, Color> DrawBossChecklistPortrait => null;
+        /// <summary>
+        /// Override and provide a <see cref="LocalizedText"/> that tells the player how to summon this boss. This can, indeed, have logic and be dynamic.
+        /// </summary>
+        public virtual LocalizedText HowToSummon => null;
+        /// <summary>
+        /// Override and return a bool that tells us if this boss has been downed.
+        /// </summary>
+        public virtual Func<bool> DownedMe => null;
+        /// <summary>
+        /// Override to define this boss's collectibles for BossChecklist! If you call the base impl of <see cref="ModNPC.ModifyNPCLoot(NPCLoot)"/>, these will additionally be automatically registered for the loot.
+        /// </summary>
+        public virtual IItemDropRule[] CollectibleRules => null;
+        /// <summary>
+        /// The placement of this boss in Boss Checklist. Leave as less than 0f and this NPC will not be registered. You NEED to also override <see cref="DownedMe"/> if you override this.
+        /// </summary>
+        public virtual float BossWeight => -1f;
         /// <summary>
         /// The (hypothetical) localization key for this ITDNPC's Bestiary entry.
         /// This will NOT be null if this NPC is <see cref="HiddenFromBestiary"/>.
@@ -56,6 +74,16 @@ namespace ITD.Content.NPCs
         public virtual void SetBestiarySafe(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
 
+        }
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            var rules = CollectibleRules;
+            if (CollectibleRules is null)
+                return;
+            foreach (IItemDropRule rule in rules)
+            {
+                npcLoot.Add(rule);
+            }
         }
         /// <summary>
         /// Allows you to do stuff when this NPC is right clicked.

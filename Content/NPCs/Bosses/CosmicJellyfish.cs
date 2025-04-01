@@ -4,15 +4,11 @@ using ITD.Content.Items.Placeable;
 using ITD.Content.Projectiles.Hostile;
 using ITD.Players;
 using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
 using System;
-using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ItemDropRules;
-using Terraria.ID;
-using Terraria.ModLoader;
 using System.IO;
 using ITD.Content.Dusts;
 using ITD.Content.Items.Armor.Vanity.Masks;
@@ -29,14 +25,22 @@ namespace ITD.Content.NPCs.Bosses
 
 {
     [AutoloadBossHead]
-    public class CosmicJellyfish : ModNPC
+    public class CosmicJellyfish : ITDNPC
     {
         
         public float rotation = 0f;
         public float AIRand = 0f;
         public bool bOkuu;
         int goodtransition;//Add to current frame for clean tentacles
-        public override void SetStaticDefaults()
+        public override Func<bool> DownedMe => () => DownedBossSystem.downedCosJel;
+        public override float BossWeight => 3.9f;
+        public override IItemDropRule[] CollectibleRules =>
+        [
+            ItemDropRule.Common(ModContent.ItemType<CosmicJellyfishTrophy>(), 10),
+            ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<CosmicJellyfishRelic>()),
+            ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<CosmicJam>(), 4)
+        ];
+        public override void SetStaticDefaultsSafe()
         {
             NPCID.Sets.MPAllowedEnemies[Type] = true;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
@@ -115,9 +119,7 @@ namespace ITD.Content.NPCs.Bosses
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<CosmicJellyfishBag>()));
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CosmicJellyfishTrophy>(), 10));
-            npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<CosmicJellyfishRelic>()));
-            npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<CosmicJam>(), 4));
+            base.ModifyNPCLoot(npcLoot); // keep this
 
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
             notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<GravityBoots>(), 10));

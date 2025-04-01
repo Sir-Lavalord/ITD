@@ -1431,7 +1431,7 @@ Trailblazer: {
 
 Moulder: {
 	DisplayName: Moulder
-		Tooltip:""
+	Tooltip: ""
 }
 
 Stonepresser: {
@@ -1441,8 +1441,5 @@ Stonepresser: {
 
 MangledSheerthorn: {
 	DisplayName: Mangled Sheerthorn
-		Tooltip:
-		'''
-		Sword breaks into lingering shrapnels which stick on surfaces every third ground slam
-		'''
+	Tooltip: Sword breaks into lingering shrapnels which stick on surfaces every third ground slam
 }

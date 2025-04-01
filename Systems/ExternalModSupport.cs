@@ -1,36 +1,21 @@
-﻿using ITD.Content.Items.PetSummons;
-using ITD.Content.Items.BossSummons;
+﻿using ITD.Content.Items.BossSummons;
 using ITD.Content.NPCs.Bosses;
 using System;
 using System.Collections.Generic;
-using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
-using static ITD.Downed;
 using Terraria.Achievements;
 using ITD.Content.Items.Other;
-using Terraria;
-using Terraria.ID;
 using ITD.Systems.Recruitment;
 using System.Linq;
 using Terraria.Localization;
 using ITD.Content.UI;
-using ITD.Content.Items.Placeable.Furniture.Relics;
-using ITD.Content.Items.Placeable.Furniture.Trophies;
+using ITD.Content.NPCs;
+using Terraria.GameContent.ItemDropRules;
 
 namespace ITD
 {
-    internal class Downed
-    {
-        public static readonly Func<bool> DownedCosmicJellyfish = () => DownedBossSystem.downedCosJel;
-    }
     internal class ExternalModSupport
     {
-
-        private static readonly Dictionary<string, float> BossChecklistProgressionValues = new()
-        {
-            { "CosmicJellyfish", 3.9f },
-        };
-
         public static void Init()
         {
             BossChecklistSupport();
@@ -66,22 +51,77 @@ namespace ITD
         }
         private static void AddBosses(Mod bossChecklist, Mod ITDMod)
         {
+
+            foreach (var boss in ITDMod.GetContent<ModNPC>().Where(m => m is ITDNPC itdNPC && itdNPC.BossWeight >= 0f))
             {
-                string name = "CosmicJellyfish";
-                BossChecklistProgressionValues.TryGetValue(name, out float prog);
-                int type = NPCType<CosmicJellyfish>();
-                List<int> collectibles =
-                [
-                    ItemType<CosmicJellyfishRelic>(),
-                    ItemType<CosmicJam>(),
-                    ItemType<CosmicJellyfishTrophy>(),
-                ];
-                int spawnItem = ItemType<SpacePrawn>();
-                AddBoss(bossChecklist, ITDMod, name, prog, DownedCosmicJellyfish, type, new Dictionary<string, object>()
+                ITDNPC iNPC = (ITDNPC)boss;
+
+                var downed = iNPC.DownedMe;
+                if (downed is null)
+                    throw new Exception("Override the DownedMe hook in ITDNPC and provide a valid value.");
+
+                string name = boss.Name;
+                float prog = iNPC.BossWeight;
+                int type = boss.Type;
+
+                IItemDropRule[] collectibles = iNPC.CollectibleRules;
+                List<int> finalCollectibles = null;
+
+                if (collectibles != null)
                 {
-                    ["spawnItems"] = spawnItem,
-                    ["collectibles"] = collectibles,
-                });
+                    finalCollectibles = [];
+                    for (int i = 0; i < collectibles.Length; i++)
+                    {
+                        IItemDropRule possibleCollectible = collectibles[i];
+                        if (possibleCollectible is CommonDrop drop0)
+                        {
+                            finalCollectibles.Add(drop0.itemId);
+                        }
+                        else if (possibleCollectible is DropBasedOnExpertMode dropExpert)
+                        {
+                            if (dropExpert.ruleForExpertMode is CommonDrop drop1)
+                            {
+                                finalCollectibles.Add(drop1.itemId);
+                            }
+                        }
+                        else if (possibleCollectible is DropBasedOnMasterMode dropMaster)
+                        {
+                            if (dropMaster.ruleForMasterMode is CommonDrop drop2)
+                            {
+                                finalCollectibles.Add(drop2.itemId);
+                            }
+                        }
+                    }
+                }
+
+                int spawnItem = -1;
+
+                foreach (var summoner in ITDMod.GetContent<ModItem>().Where(i => i is BossSummoner))
+                {
+                    if (((BossSummoner)summoner).NPCType == type)
+                        spawnItem = summoner.Type;
+                }
+
+                Dictionary<string, object> specialInfo = [];
+
+                if (iNPC.HowToSummon != null)
+                {
+                    Func<LocalizedText> dynamicText = () => iNPC.HowToSummon;
+                    specialInfo["spawnInfo"] = dynamicText;
+                }
+
+                if (spawnItem > -1)
+                    specialInfo["spawnItems"] = spawnItem;
+
+                if (finalCollectibles != null)
+                    specialInfo["collectibles"] = finalCollectibles;
+
+                var portraitAction = iNPC.DrawBossChecklistPortrait;
+                if (portraitAction != null)
+                    specialInfo["customPortrait"] = portraitAction;
+
+                AddBoss(bossChecklist, ITDMod, name, prog, downed, type, specialInfo);
+
             }
         }
         private static void MunchiesSupport()

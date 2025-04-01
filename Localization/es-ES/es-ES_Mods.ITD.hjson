@@ -225,6 +225,7 @@ NPCs: {
 	CosmicJellyfish: {
 		DisplayName: Medusa Cósmica
 		SpawnWarning: Esta va a ser una noche ondulante...
+		// Bestiary: Mods.ITD.NPCs.CosmicJellyfish.Bestiary
 	}
 
 	FloralDevourer.DisplayName: Devorador Floral

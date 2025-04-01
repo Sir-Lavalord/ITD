@@ -1,13 +1,10 @@
 ﻿using ITD.Content.NPCs.Bosses;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.BossSummons
 {
-    public class SpacePrawn : ModItem
+    public class SpacePrawn : BossSummoner
     {
+        public override int NPCType => ModContent.NPCType<CosmicJellyfish>();
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 3;
@@ -29,27 +26,7 @@ namespace ITD.Content.Items.BossSummons
 
         public override bool CanUseItem(Player player)
         {
-            return !NPC.AnyNPCs(ModContent.NPCType<CosmicJellyfish>()) && !Main.dayTime;
-        }
-
-        public override bool? UseItem(Player player)
-        {
-            if (player.whoAmI == Main.myPlayer)
-            {
-                SoundEngine.PlaySound(SoundID.Roar, player.position);
-
-                int type = ModContent.NPCType<CosmicJellyfish>();
-
-                if (Main.netMode != NetmodeID.MultiplayerClient)
-                {
-                    NPC.SpawnOnPlayer(player.whoAmI, type);
-                }
-                else
-                {
-                    NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, number: player.whoAmI, number2: type);
-                }
-            }
-            return true;
+            return !NPC.AnyNPCs(NPCType) && !Main.dayTime;
         }
     }
 }

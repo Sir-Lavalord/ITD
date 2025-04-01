@@ -225,6 +225,7 @@ NPCs: {
 	CosmicJellyfish: {
 		DisplayName: Космическая Медуза
 		SpawnWarning: It's going to be a wiggly night...
+		// Bestiary: Mods.ITD.NPCs.CosmicJellyfish.Bestiary
 	}
 
 	FloralDevourer.DisplayName: Садовый Поедатель
