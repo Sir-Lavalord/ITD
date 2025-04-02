@@ -1,13 +1,13 @@
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace ITD.Content.Walls
+namespace ITD.Content.Walls.Catacombs
 {
-    public class GreenCatacombBrickWallSafe : ModWall
+    public class BlueCatacombBrickWallSafe : ModWall
     {
         public override void SetStaticDefaults()
         {
-            AddMapEntry(new Color(42, 32, 42));
+            AddMapEntry(new Color(17, 31, 42));
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {

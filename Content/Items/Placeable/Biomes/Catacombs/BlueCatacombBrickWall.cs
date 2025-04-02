@@ -1,4 +1,4 @@
-﻿using ITD.Content.Walls;
+﻿using ITD.Content.Walls.Catacombs;
 
 namespace ITD.Content.Items.Placeable.Biomes.Catacombs
 {

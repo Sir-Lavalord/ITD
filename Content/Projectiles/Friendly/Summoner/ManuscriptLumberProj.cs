@@ -30,30 +30,21 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         }
         private ActionState AI_State;
         private Point treePos;
-        private const int detectRadius = 40;
-        private int ChopCD = 30;
-        private float JumpX = 0;
-        private float JumpY = 0;
+        private const int detectRadius = 20;
+        private int ChopCD = 60;
+        private int finderCD = 120;
         private float lastDir;
-        private float jumpBoost;
-        private float jumpCD;
-        private float seekCD;
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 11;
-            Main.projPet[Type] = true;
-            ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Projectile.type], 6)
-                .WithOffset(-10, -20f)
-                .WithSpriteDirection(-1)
-                .WithCode(DelegateMethods.CharacterPreview.Float);
+            Main.projFrames[Projectile.type] = 6;
         }
         public override void SetDefaults()
         {
             Projectile.height = 80;
             Projectile.width = 50;
             Projectile.friendly = true;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.netImportant = true;
             Projectile.timeLeft = 2;
@@ -78,33 +69,36 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         {
             Player player = Main.player[Projectile.owner];
             RegisterRightClick(player);
+            if (Projectile.Distance(player.Center) > 1000)
+            {
+                treePos = Point.Zero;
+                AI_State = ActionState.Idle;
+                Projectile.Center = player.Center;
+                Projectile.netUpdate = true;
+            }
+            Projectile.spriteDirection = (Projectile.velocity.X < 0).ToDirectionInt();
             switch (AI_State)
             {
                 case ActionState.Spawn:
                     SpawnBehavior();
                     break;
                 case ActionState.Idle:
-                    Projectile.frame = 5;
+                    Projectile.rotation = Projectile.velocity.X / 25;
+                    Projectile.frame = 0;
+                    if (finderCD--<= 0)
+                    treePos = FindTree(Projectile.Center.ToTileCoordinates(), detectRadius, Projectile);
                     IdleBehavior();
                     break;
                 case ActionState.TreeFound:
-                    Projectile.frame = 5;
+                    Projectile.frame = 0;
                     TreeFoundBehavior();
+                    Projectile.rotation = Projectile.velocity.X / 25;
                     break;
                 case ActionState.Chopping:
                     ChoppingBehavior();
                     break;
             }
-            //always scan, sorry pc
-            treePos = FindTree(Projectile.Center.ToTileCoordinates(), detectRadius, Projectile);
-
-            if (Projectile.velocity.X > 0.25f)
-                Projectile.spriteDirection = 1;
-            else if (Projectile.velocity.X < -0.25f)
-                Projectile.spriteDirection = -1;
             CheckActive(player);
-            Main.NewText(Projectile.velocity.Y.ToString(), Color.Red);
-                Projectile.velocity.Y += 0.3f;
         }
         private void SpawnBehavior()//Not onspawn
         {
@@ -112,7 +106,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
             if (Projectile.frameCounter > 10)
             {
-                if (Projectile.frame < 10)
+                if (Projectile.frame < 5)
                 {
                     Projectile.frame++;
                 }
@@ -123,28 +117,49 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Projectile.frameCounter = 0;
             }
         }
-            private void IdleBehavior()
+        Vector2 randomWander;
+        int wanderTimer;
+        private void IdleBehavior()//only overlap when no tree is found
         {
             if (treePos == Point.Zero)
             {
-                Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY, 1, false, 0);
-                if (Projectile.velocity.Y == 0 && (HasObstacle() || (Projectile.Distance(player.Center) > 205f && Projectile.position.X == Projectile.oldPosition.X)))
+                Vector2 targetPoint = player.Center + new Vector2(lastDir * 128f, -64f);
+                Vector2 toPlayer = targetPoint - Projectile.Center;
+                Vector2 toPlayerNormalized = toPlayer.SafeNormalize(Vector2.Zero);
+                float speed = toPlayer.Length();
+                Projectile.direction = Projectile.spriteDirection = Math.Sign(lastDir);
+                wanderTimer++;
+                if (wanderTimer > 60)
                 {
-                    Projectile.velocity.Y = -10f;
+                    randomWander = Main.rand.NextVector2Circular(2f, 4f);
+                    wanderTimer = 0;
                 }
-                if (Math.Abs(player.Center.X - Projectile.Center.X + 40f * Projectile.minionPos) > 160f)
+                Projectile.velocity = toPlayerNormalized * (speed / 8) + randomWander;
+                float overlapVelocity = 0.1f;
+                for (int i = 0; i < Main.maxProjectiles; i++)
                 {
-                    Projectile.velocity.X += Main.rand.NextFloat(0.11f, 0.16f) * (player.Center.X - Projectile.Center.X + 40f * Projectile.minionPos > 0f).ToDirectionInt();
-                    Projectile.velocity.X = MathHelper.Clamp(Projectile.velocity.X, -13f, 13f);
-                }
-                else
-                {
-                    Projectile.velocity.X *= 0.95f;
-                }
-                if (Projectile.Distance(player.Center) > 1600f)
-                {
-                    Projectile.Center = player.Center;
-                    Projectile.netUpdate = true;
+                    Projectile other = Main.projectile[i];
+
+                    if (i != Projectile.whoAmI && other.active && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width)
+                    {
+                        if (Projectile.position.X < other.position.X)
+                        {
+                            Projectile.velocity.X -= overlapVelocity;
+                        }
+                        else
+                        {
+                            Projectile.velocity.X += overlapVelocity;
+                        }
+
+                        if (Projectile.position.Y < other.position.Y)
+                        {
+                            Projectile.velocity.Y -= overlapVelocity;
+                        }
+                        else
+                        {
+                            Projectile.velocity.Y += overlapVelocity;
+                        }
+                    }
                 }
             }
             else
@@ -157,21 +172,18 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             if (treePos == Point.Zero)
             {
                 AI_State = ActionState.Idle;
+                return;
             }
             else
             {
                 Vector2 tree = new Point(treePos.X, treePos.Y).ToWorldCoordinates();
-                Vector2 targetPoint = tree + new Vector2(lastDir * 64f, -64f);
+                Vector2 targetPoint = tree;
                 Vector2 toPlayer = targetPoint - Projectile.Center;
                 Vector2 toPlayerNormalized = toPlayer.SafeNormalize(Vector2.Zero);
-                float speed = 16f;
-                Projectile.velocity.X = toPlayerNormalized.X * (speed);
+                float speed = 8f;
+                Projectile.velocity = toPlayerNormalized * (speed);
 
-                Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY, 1, false, 0);
-                if (Projectile.velocity.Y == 0 && (HasObstacle() || (Projectile.Distance(tree) > 205f && Projectile.position.X == Projectile.oldPosition.X)))
-                {
-                    Projectile.velocity.Y = -10f;
-                }
+               
                 Point tileCoords = Projectile.position.ToTileCoordinates();
                 Point tileSize = (Projectile.Size / 16).ToPoint();
                 Rectangle rect = new Rectangle(tileCoords.X, tileCoords.Y, tileSize.X, tileSize.Y);
@@ -192,7 +204,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                         }
                     }
                 }
-                if (Projectile.Distance(tree) > 600f)
+                if (Projectile.Distance(tree) > 400f)
                 {
                     treePos = Point.Zero;
                 }
@@ -201,14 +213,16 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         public void ChoppingBehavior()
         {
             Vector2 tree = new Point(treePos.X, treePos.Y).ToWorldCoordinates();
-            Vector2 targetPoint = tree + new Vector2(lastDir * 64f, -64f);
+            Vector2 targetPoint = tree;
             Vector2 toPlayer = targetPoint - Projectile.Center;
             Vector2 toPlayerNormalized = toPlayer.SafeNormalize(Vector2.Zero);
-            float speed = 16f;
-            Projectile.velocity.X = toPlayerNormalized.X * (speed);
+            float speed = 4f;
+            Projectile.velocity = toPlayerNormalized * (speed);
 
+            
             if (treePos != Point.Zero)
             {
+                bool treeExists = false;
                 Point tileCoords = Projectile.position.ToTileCoordinates();
                 Point tileSize = (Projectile.Size / 16).ToPoint();
                 Rectangle rect = new Rectangle(tileCoords.X, tileCoords.Y, tileSize.X, tileSize.Y);
@@ -219,49 +233,38 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                         Tile t = Framing.GetTileSafely(i, j);
                         if (t == null)
                         {
-                            Projectile.frame = 5;
+                            Projectile.frame = 0;
                             continue;
                         }
                         if (Main.tileAxe[t.TileType] && TileHelpers.SolidTile(i, j + 1))
                         {
+                            treeExists = true;
                             if (++Projectile.frameCounter >= 8)
                             {
-                                    if (Projectile.frame < 10)
-                                    {
-                                        Projectile.frame++;
-                                    }
-                                    else
-                                    {
-                                        Projectile.frame = 5;
-                                    }
-                                    Projectile.frameCounter = 0;
-                                
+                                if (Projectile.frame < 5)
+                                {
+                                    Projectile.frame++;
+                                }
+                                else
+                                {
+                                    Projectile.frame =0;
+                                }
+                                Projectile.frameCounter = 0;
+                            
                             }
                             if (FindAxe(player) != null)
                             {
                                 if (ChopCD-- <= 0)
                                 {
-                                    if (FindAxe(player).useTime < 60)
-                                    {
-                                        ChopCD = FindAxe(player).useTime;
-                                    }
-                                    else
-                                    {
-                                        ChopCD = 60;
-                                    }
-                                    if (FindAxe(player).axe > 30)
-                                    {
-                                        player.PickTile(i, j, FindAxe(player).axe);
-                                    }
-                                    else
-                                        player.PickTile(i, j, 30);
+                                    ChopCD = Math.Min(FindAxe(player).useTime + 5,60);
+                                    player.PickTile(i, j, Math.Max(FindAxe(player).axe,30));
                                 }
                             }
                             else
                             {
                                 if (ChopCD-- <= 0)
                                 {
-                                    ChopCD = 90;
+                                    ChopCD = 60;
                                     player.PickTile(i, j, 30);
 
                                 }
@@ -269,40 +272,18 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                         }
                     }
                 }
-                if (Projectile.Distance(tree) > 600f)//how?
+                if (Projectile.Distance(tree) > 60f || !treeExists)//how?
                 {
                     treePos = Point.Zero;
                 }
             }
             else
             {
-                
+                finderCD = 120;
                 AI_State = ActionState.Idle;
             }
         }
-        
-            public bool HasObstacle()
-        {
-            int tileWidth = 2;
-            int tileX = (int)(Projectile.Center.X / 16f) - tileWidth;
-            if (Projectile.velocity.X > 0)
-            {
-                tileX += tileWidth;
-            }
-            int tileY = (int)((Projectile.position.Y + Projectile.height) / 16f);
-            for (int y = tileY; y < tileY + 2; y++)
-            {
-                for (int x = tileX; x < tileX + tileWidth; x++)
-                {
-                    if (Main.tile[x, y].HasTile)
-                    {
-                        return false;
-                    }
-                }
-
-            }
-            return true;
-        }
+       
         public Item FindAxe(Player player)
         {
             Item item = null;

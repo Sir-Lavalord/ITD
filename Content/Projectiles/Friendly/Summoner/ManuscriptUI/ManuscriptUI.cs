@@ -91,8 +91,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
             DrawSneakIcon(spriteBatch);
             DrawLumberIcon(spriteBatch);
             DrawDuelistIcon(spriteBatch);
-/*          DrawMinerIcon(spriteBatch); i hate miners
-*/        }
+            DrawMinerIcon(spriteBatch);
+        }
         public static Rectangle MouseRectangle => new((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, 2, 2);
         public void DrawMinerIcon(SpriteBatch spriteBatch)
         {
@@ -130,7 +130,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
             Texture2D DuelistIcon = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Summoner/ManuscriptUI/ManuscriptDuelist").Value;
             Texture2D HoveredIcon = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Summoner/ManuscriptUI/ManuscriptMinerHover").Value;
             Texture2D textureToDraw = DuelistIcon;
-            Vector2 iconOffset = new(0, -100f);
+            Vector2 iconOffset = new(-100, -100f);
             Vector2 drawPosition = Projectile.Center + iconOffset;
             Rectangle iconFrame = Utils.CenteredRectangle(drawPosition, textureToDraw.Size());
                 if (MouseRectangle.Intersects(iconFrame))
