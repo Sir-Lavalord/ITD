@@ -32,14 +32,14 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.width = 22; Projectile.height = 22;
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.penetrate = 6;
-            Projectile.timeLeft = 600;
+            Projectile.penetrate = 8;
+            Projectile.timeLeft = 1200;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = true;
             Projectile.alpha = 80;
             DrawOffsetX = -16;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 60;
+            Projectile.localNPCHitCooldown = 30;
         }
 
         public override void OnSpawn(IEntitySource source)

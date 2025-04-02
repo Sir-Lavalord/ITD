@@ -62,7 +62,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
                 {
                     case 1:
                         player.CheckMana(50, true);
-                        player.AddBuff(ModContent.BuffType<ManuscriptLumberBuff>(), 10);
+                        player.AddBuff(ModContent.BuffType<ManuscriptMinerBuff>(), 10);
                         type = ModContent.ProjectileType<ManuscriptMinerProj>();
                         break;
                     case 2:

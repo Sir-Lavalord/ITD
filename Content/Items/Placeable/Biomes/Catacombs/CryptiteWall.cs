@@ -1,8 +1,9 @@
 ﻿using ITD.Content.Walls.Catacombs;
+using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable.Biomes.Catacombs
 {
-    public class GreenCatacombBrickWall : ModItem
+    public class CryptiteWall : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -11,7 +12,7 @@ namespace ITD.Content.Items.Placeable.Biomes.Catacombs
 
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableWall(ModContent.WallType<GreenCatacombBrickWallSafe>());
+            Item.DefaultToPlaceableWall(ModContent.WallType<CryptiteWallSafe>());
         }
     }
 }

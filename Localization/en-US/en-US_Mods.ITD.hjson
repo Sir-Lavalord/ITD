@@ -161,9 +161,9 @@ Projectiles: {
 	CicadarangProjectile.DisplayName: Cicadarang Projectile
 	CicadarangMiniStriker.DisplayName: Cicadarang Mini Striker
 	DespoticSuperSpecialProj.DisplayName: Despotic Super Special Proj
-	ManuscriptCursor.DisplayName: Manuscript Cursor
+	ManuscriptCursor.DisplayName: Shadow Servant
 	ManuscriptSneakProj.DisplayName: Manuscript Sneak Proj
-	ManuscriptLumberProj.DisplayName: Manuscript Lumber Proj
+	ManuscriptLumberProj.DisplayName: Shadow Servant
 	ManuscriptUIProj.DisplayName: Manuscript U I Proj
 	NightmareManuscriptProj.DisplayName: Nightmare Manuscript Proj
 	WeepWandWisp.DisplayName: Weep Wand Wisp
@@ -452,8 +452,8 @@ Buffs: {
 	}
 
 	ManuscriptLumberBuff: {
-		Description: Mods.ITD.Buffs.ManuscriptLumberBuff.Description
-		DisplayName: Manuscript Lumber Buff
+		Description: QTastic
+		DisplayName: Qaxegel
 	}
 
 	WhiplatchBuff: {

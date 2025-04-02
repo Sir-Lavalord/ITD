@@ -21,37 +21,30 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 {
     public class ManuscriptMinerProj : ModProjectile
     {
-        //reverted kys 
         private enum ActionState
         {
             Spawn,
             Idle,
-            TreeFound,
-            Chopping
+            OreFound,
+            Digging
         }
         private ActionState AI_State;
-        private Point treePos;
-        private const int detectRadius = 40;
-        private int ChopCD = 30;
-        private float JumpX = 0;
-        private float JumpY = 0;
+        private Point orePos;
+        private const int detectRadius = 14;
+        private int ChopCD = 60;
+        private int finderCD = 120;
         private float lastDir;
-
+        public bool hasLeftover;
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 13;
-            Main.projPet[Type] = true;
-            ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, Main.projFrames[Projectile.type], 6)
-                .WithOffset(-10, -20f)
-                .WithSpriteDirection(-1)
-                .WithCode(DelegateMethods.CharacterPreview.Float);
+            Main.projFrames[Projectile.type] = 8;
         }
         public override void SetDefaults()
         {
             Projectile.height = 80;
-            Projectile.width = 80;
+            Projectile.width = 50;
             Projectile.friendly = true;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.netImportant = true;
             Projectile.timeLeft = 2;
@@ -77,40 +70,45 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         {
             Player player = Main.player[Projectile.owner];
             RegisterRightClick(player);
+            if (Projectile.Distance(player.Center) > 1000)
+            {
+                orePos = Point.Zero;
+                AI_State = ActionState.Idle;
+                Projectile.Center = player.Center;
+                Projectile.netUpdate = true;
+            }
+            Projectile.spriteDirection = (Projectile.velocity.X < 0).ToDirectionInt();
             switch (AI_State)
             {
                 case ActionState.Spawn:
                     SpawnBehavior();
                     break;
                 case ActionState.Idle:
-                    Projectile.frame = 5;
+                    if (finderCD-- <= 0)
+                        orePos = FindOre(Projectile.Center.ToTileCoordinates(), detectRadius, Projectile, player,false);
+                    Projectile.frame = 0;
                     IdleBehavior();
+                    Projectile.rotation = Projectile.velocity.X / 25;
                     break;
-                case ActionState.TreeFound:
-                    Projectile.frame = 5;
-                    TreeFoundBehavior();
+                case ActionState.OreFound:
+                    Projectile.frame = 0;
+                    OreFoundBehavior();
+                    Projectile.rotation = Projectile.velocity.X / 25;
                     break;
-                case ActionState.Chopping:
-                    ChoppingBehavior();
+                case ActionState.Digging:
+                    DiggingBehavior();
                     break;
             }
-            //always scan, sorry pc
-            treePos = FindTree(Projectile.Center.ToTileCoordinates(), detectRadius, Projectile);
 
-            if (Projectile.velocity.X > 0.25f)
-                Projectile.spriteDirection = 1;
-            else if (Projectile.velocity.X < -0.25f)
-                Projectile.spriteDirection = -1;
             CheckActive(player);
-            Projectile.velocity.Y += 0.6f;
         }
-        private void SpawnBehavior()//Not onspawn
+        private void SpawnBehavior()
         {
             Projectile.frameCounter++;
 
-            if (Projectile.frameCounter > 8)
+            if (Projectile.frameCounter > 10)
             {
-                if (Projectile.frame < Main.projFrames[Projectile.type] - 1)
+                if (Projectile.frame < 7)
                 {
                     Projectile.frame++;
                 }
@@ -121,63 +119,73 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Projectile.frameCounter = 0;
             }
         }
+        Vector2 randomWander;
+        int wanderTimer;
         private void IdleBehavior()
         {
-            if (treePos == Point.Zero)
+            if (orePos == Point.Zero)
             {
-                Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY, 1, false, 0);
-                if (Projectile.velocity.Y == 0 && (HasObstacle() || (Projectile.Distance(player.Center) > 205f && Projectile.position.X == Projectile.oldPosition.X)))
-                {
-                    Projectile.velocity.Y = -10f;
-                }
-                if (Projectile.velocity.Y > -16f)
-                {
-                    Projectile.velocity.Y += 0.3f;
-                }
-                if (Math.Abs(player.Center.X - Projectile.Center.X + 40f * Projectile.minionPos) > 160f)
-                {
-                    Projectile.velocity.X += Main.rand.NextFloat(0.11f, 0.16f) * (player.Center.X - Projectile.Center.X + 40f * Projectile.minionPos > 0f).ToDirectionInt();
-                    Projectile.velocity.X = MathHelper.Clamp(Projectile.velocity.X, -13f, 13f);
-                }
-                else
-                {
-                    Projectile.velocity.X *= 0.95f;
-                }
-                if (Projectile.Distance(player.Center) > 1600f)
-                {
-                    Projectile.Center = player.Center;
-                    Projectile.netUpdate = true;
-                }
-            }
-            else
-            {
-                AI_State = ActionState.TreeFound;
-            }
-        }
-        private void TreeFoundBehavior()
-        {
-            if (treePos == Point.Zero)
-            {
-                AI_State = ActionState.Idle;
-            }
-            else
-            {
-                Vector2 tree = new Point(treePos.X, treePos.Y).ToWorldCoordinates();
-                Vector2 targetPoint = tree + new Vector2(lastDir * 64f, -64f);
+                Vector2 targetPoint = player.Center + new Vector2(lastDir * 128f, -64f);
                 Vector2 toPlayer = targetPoint - Projectile.Center;
                 Vector2 toPlayerNormalized = toPlayer.SafeNormalize(Vector2.Zero);
-                float speed = 16f;
-                Projectile.velocity.X = toPlayerNormalized.X * (speed);
+                float speed = toPlayer.Length();
+                Projectile.direction = Projectile.spriteDirection = Math.Sign(lastDir);
+                wanderTimer++;
+                if (wanderTimer > 60)
+                {
+                    randomWander = Main.rand.NextVector2Circular(2f, 4f);
+                    wanderTimer = 0;
+                }
+                Projectile.velocity = toPlayerNormalized * (speed / 8) + randomWander;
+                float overlapVelocity = 0.1f;
+                for (int i = 0; i < Main.maxProjectiles; i++)
+                {
+                    Projectile other = Main.projectile[i];
 
-                Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY, 1, false, 0);
-                if (Projectile.velocity.Y == 0 && (HasObstacle() || (Projectile.Distance(tree) > 205f && Projectile.position.X == Projectile.oldPosition.X)))
-                {
-                    Projectile.velocity.Y = -10f;
+                    if (i != Projectile.whoAmI && other.active && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width)
+                    {
+                        if (Projectile.position.X < other.position.X)
+                        {
+                            Projectile.velocity.X -= overlapVelocity;
+                        }
+                        else
+                        {
+                            Projectile.velocity.X += overlapVelocity;
+                        }
+
+                        if (Projectile.position.Y < other.position.Y)
+                        {
+                            Projectile.velocity.Y -= overlapVelocity;
+                        }
+                        else
+                        {
+                            Projectile.velocity.Y += overlapVelocity;
+                        }
+                    }
                 }
-                if (Projectile.velocity.Y > -16f)
-                {
-                    Projectile.velocity.Y += 0.3f;
-                }
+            }
+            else
+            {
+                AI_State = ActionState.OreFound;
+            }
+        }
+        private void OreFoundBehavior()
+        {
+            if (orePos == Point.Zero)
+            {
+                AI_State = ActionState.Idle;
+                return;
+            }
+            else
+            {
+                Vector2 ore = new Point(orePos.X, orePos.Y).ToWorldCoordinates();
+                Vector2 targetPoint = ore;
+                Vector2 toPlayer = targetPoint - Projectile.Center;
+                Vector2 toPlayerNormalized = toPlayer.SafeNormalize(Vector2.Zero);
+                float speed = 8f;
+                Projectile.velocity = toPlayerNormalized * (speed);
+
+
                 Point tileCoords = Projectile.position.ToTileCoordinates();
                 Point tileSize = (Projectile.Size / 16).ToPoint();
                 Rectangle rect = new Rectangle(tileCoords.X, tileCoords.Y, tileSize.X, tileSize.Y);
@@ -191,30 +199,32 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                             Projectile.frame = 0;
                             continue;
                         }
-                        if (TileID.Sets.IsATreeTrunk[t.TileType] && TileHelpers.SolidTile(i, j + 1))
+                        if (TileID.Sets.Ore[t.TileType])
                         {
-                            AI_State = ActionState.Chopping;
+                            AI_State = ActionState.Digging;
 
                         }
                     }
                 }
-                if (Projectile.Distance(tree) > 600f)
+                if (Projectile.Distance(ore) > 400f)
                 {
-                    treePos = Point.Zero;
+                    orePos = Point.Zero;
                 }
             }
         }
-        public void ChoppingBehavior()
+        public void DiggingBehavior()
         {
-            Vector2 tree = new Point(treePos.X, treePos.Y).ToWorldCoordinates();
-            Vector2 targetPoint = tree + new Vector2(lastDir * 64f, -64f);
+            Vector2 ore = new Point(orePos.X, orePos.Y).ToWorldCoordinates();
+            Vector2 targetPoint = ore;
             Vector2 toPlayer = targetPoint - Projectile.Center;
             Vector2 toPlayerNormalized = toPlayer.SafeNormalize(Vector2.Zero);
-            float speed = 16f;
-            Projectile.velocity.X = toPlayerNormalized.X * (speed);
+            float speed = 4f;
+            Projectile.velocity = toPlayerNormalized * (speed);
 
-            if (treePos != Point.Zero)
+
+            if (orePos != Point.Zero)
             {
+                bool oreExists = false;
                 Point tileCoords = Projectile.position.ToTileCoordinates();
                 Point tileSize = (Projectile.Size / 16).ToPoint();
                 Rectangle rect = new Rectangle(tileCoords.X, tileCoords.Y, tileSize.X, tileSize.Y);
@@ -225,133 +235,137 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                         Tile t = Framing.GetTileSafely(i, j);
                         if (t == null)
                         {
-                            Projectile.frame = 5;
+                            Projectile.frame = 0;
                             continue;
                         }
-                        if (TileID.Sets.IsATreeTrunk[t.TileType] && TileHelpers.SolidTile(i, j + 1))
+                        if (TileID.Sets.Ore[t.TileType])
                         {
+                            oreExists = true;
                             if (++Projectile.frameCounter >= 8)
                             {
-                                if (Projectile.frame < Main.projFrames[Projectile.type] - 1)
+                                if (Projectile.frame < 7)
                                 {
-                                    Projectile.frame++;
+                                    Projectile.frame++; 
                                 }
                                 else
                                 {
-                                    Projectile.frame = 8;
+                                    Projectile.frame = 1;
                                 }
                                 Projectile.frameCounter = 0;
 
                             }
-                            if (ChopCD-- <= 0)
+                            if (FindPickaxe(player) != null)
                             {
-                                if (FindAxe(player).useTime < 60)
+                                if (ChopCD-- <= 0)
                                 {
-                                    ChopCD = FindAxe(player).useTime;
+                                    ChopCD = Math.Min(FindPickaxe(player).useTime + 10, 60);
+                                    player.PickTile(i, j, Math.Max(FindPickaxe(player).pick, 35));
                                 }
-                                else
+                            }
+                            else
+                            {
+                                if (ChopCD-- <= 0)
                                 {
                                     ChopCD = 60;
-                                }
-                                    if (FindAxe(player).axe > 30)
-                                {
-                                    player.PickTile(i, j, FindAxe(player).axe);
-                                }
-                                else
                                     player.PickTile(i, j, 30);
+
+                                }
                             }
                         }
                     }
                 }
-                if (Projectile.Distance(tree) > 600f)//how?
+                if (!oreExists)
                 {
-                    treePos = Point.Zero;
+                    FindOre(Projectile.Center.ToTileCoordinates(), 5, Projectile, player, true);
+                    if (!hasLeftover)
+                    {
+                        orePos = Point.Zero;
+                    }
+                }
+                else if (hasLeftover)
+                    orePos = FindOre(Projectile.Center.ToTileCoordinates(), 5, Projectile, player, true);
+
+                if (Projectile.Distance(ore) > 60f)//how?
+                {
+                    orePos = Point.Zero;
                 }
             }
             else
             {
+                finderCD = 120;
                 AI_State = ActionState.Idle;
             }
         }
-
-        public bool HasObstacle()
-        {
-            int tileWidth = 2;
-            int tileX = (int)(Projectile.Center.X / 16f) - tileWidth;
-            if (Projectile.velocity.X > 0)
-            {
-                tileX += tileWidth;
-            }
-            int tileY = (int)((Projectile.position.Y + Projectile.height) / 16f);
-            for (int y = tileY; y < tileY + 2; y++)
-            {
-                for (int x = tileX; x < tileX + tileWidth; x++)
-                {
-                    if (Main.tile[x, y].HasTile)
-                    {
-                        return false;
-                    }
-                }
-
-            }
-            return true;
-        }
-        public Item FindAxe(Player player)
+        public Item FindPickaxe(Player player)
         {
             Item item = null;
             for (int i = 0; i < 50; i++)
             {
-                if (player.inventory[i].stack > 0 && player.inventory[i].axe > 0 && (item == null || player.inventory[i].axe > item.axe))
+                if (player.inventory[i].stack > 0 && player.inventory[i].pick > 0 && (item == null || player.inventory[i].pick > item.pick))
                     item = player.inventory[i];
             }
             return item;
         }
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        private Point FindOre(Point tile, int radius, Projectile projectile, Player player,bool findLeftover)
         {
-            fallThrough = AI_State != ActionState.Spawn ? Projectile.Bottom.Y < Main.player[Projectile.owner].Top.Y - 120f : false;
-            return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
-        }
-        private static Point FindTree(Point tile, int radius, Projectile projectile)
-        {
-            List<Point> detectedPoints = new List<Point>();
+            Item heldOre = player.inventory[9];
+            if (heldOre == null)
+            {
+                return Point.Zero;
+            }
+            int ore = heldOre.createTile;
+            if (!TileID.Sets.Ore[ore])
+            {
+                return Point.Zero;
+            }
 
-            Rectangle rect = new(tile.X - radius, tile.Y - radius, radius + radius, radius + radius);
+            List<Point> detectedOres = new List<Point>();
+
+            Rectangle rect = new(tile.X - radius, tile.Y - radius, radius * 2, radius * 2);
+
             for (int i = rect.Left; i < rect.Right; i++)
             {
                 for (int j = rect.Top; j < rect.Bottom; j++)
                 {
                     Tile t = Framing.GetTileSafely(i, j);
-                    if (t == null)
+                    if (t == null || !t.HasTile || t.TileType != ore)
                     {
                         continue;
                     }
-                    if (TileID.Sets.IsATreeTrunk[t.TileType] && TileHelpers.SolidTile(i, j + 1))
-                    {
-                        detectedPoints.Add(new Point(i, j));
-                    }
+                    if (t.TileType == ore)
+                    detectedOres.Add(new Point(i, j));
+                }
+            }
+            if (detectedOres.Count <= 0)
+            {
+                if (findLeftover)
+                {
+                    hasLeftover = false;
+                }
+                return Point.Zero;
+            }
+            else
+            {
+                if (findLeftover)
+                {
+                    hasLeftover = true;
                 }
             }
 
-            if (detectedPoints.Count == 0)
-            {
-                return Point.Zero;
-            }
-
-            Point closestPoint = detectedPoints
-                            .OrderBy(p => Vector2.Distance(projectile.Center, p.ToWorldCoordinates()))
-                            .FirstOrDefault();
-            return closestPoint;
+            return detectedOres
+                .OrderBy(p => Vector2.Distance(projectile.Center, p.ToWorldCoordinates()))
+                .FirstOrDefault();
         }
         private bool CheckActive(Player player)
         {
             if (player.dead || !player.active)
             {
-                player.ClearBuff(ModContent.BuffType<ManuscriptLumberBuff>());
+                player.ClearBuff(ModContent.BuffType<ManuscriptMinerBuff>());
 
                 return false;
             }
 
-            if (player.HasBuff(ModContent.BuffType<ManuscriptLumberBuff>()))
+            if (player.HasBuff(ModContent.BuffType<ManuscriptMinerBuff>()))
             {
                 Projectile.timeLeft = 2;
             }
