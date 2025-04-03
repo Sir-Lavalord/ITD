@@ -465,6 +465,11 @@ Buffs: {
 		DisplayName: Trailblazing
 		Description: Decaying speed boost
 	}
+
+	ManuscriptMinerBuff: {
+		Description: Mods.ITD.Buffs.ManuscriptMinerBuff.Description
+		DisplayName: Manuscript Miner Buff
+	}
 }
 
 DeathMessage: {

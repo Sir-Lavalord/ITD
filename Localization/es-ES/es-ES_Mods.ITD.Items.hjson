@@ -1438,3 +1438,8 @@ MangledSheerthorn: {
 	// DisplayName: Mangled Sheerthorn
 	// Tooltip: Sword breaks into lingering shrapnels which stick on surfaces every third ground slam
 }
+
+CryptiteWall: {
+	// Tooltip: ""
+	// DisplayName: Cryptite Wall
+}
