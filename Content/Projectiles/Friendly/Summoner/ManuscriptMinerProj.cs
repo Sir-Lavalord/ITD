@@ -16,6 +16,8 @@ using ITD.Utilities;
 using ITD.Content.Items.Weapons.Summoner;
 using ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI;
 using ITD.Content.Buffs.MinionBuffs;
+using static AssGen.Assets;
+using System.Runtime.CompilerServices;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner
 {
@@ -70,14 +72,18 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         {
             Player player = Main.player[Projectile.owner];
             RegisterRightClick(player);
-            if (Projectile.Distance(player.Center) > 1000)
+            if (Projectile.Distance(player.Center) > 1000 || !HasOre(player))
             {
                 orePos = Point.Zero;
                 AI_State = ActionState.Idle;
                 Projectile.Center = player.Center;
                 Projectile.netUpdate = true;
             }
-            Projectile.spriteDirection = (Projectile.velocity.X < 0).ToDirectionInt();
+            if (!HasOre(player))
+            {
+                orePos = Point.Zero;
+                AI_State = ActionState.Idle;
+            }
             switch (AI_State)
             {
                 case ActionState.Spawn:
@@ -85,21 +91,31 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                     break;
                 case ActionState.Idle:
                     if (finderCD-- <= 0)
-                        orePos = FindOre(Projectile.Center.ToTileCoordinates(), detectRadius, Projectile, player,false);
+                    {
+                        finderCD = 0;
+                        if (HasOre(player))
+                            orePos = FindOre(Projectile.Center.ToTileCoordinates(), detectRadius, Projectile, player, false);
+                    }
+                    Projectile.spriteDirection = (Projectile.velocity.X > 0).ToDirectionInt();
+                    hasLeftover = false;
+                    ChopCD = 0;
                     Projectile.frame = 0;
                     IdleBehavior();
-                    Projectile.rotation = Projectile.velocity.X / 25;
+
+                    Projectile.rotation = Projectile.velocity.X / 5;
                     break;
                 case ActionState.OreFound:
+                    finderCD = 0;
                     Projectile.frame = 0;
                     OreFoundBehavior();
-                    Projectile.rotation = Projectile.velocity.X / 25;
+                    Projectile.rotation = Projectile.velocity.X / 5;
+                    Projectile.spriteDirection = (Projectile.velocity.X > 0).ToDirectionInt();
                     break;
                 case ActionState.Digging:
                     DiggingBehavior();
                     break;
             }
-
+            
             CheckActive(player);
         }
         private void SpawnBehavior()
@@ -115,6 +131,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 else
                 {
                     AI_State = ActionState.Idle;
+                    Projectile.netUpdate = true;
                 }
                 Projectile.frameCounter = 0;
             }
@@ -129,7 +146,6 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Vector2 toPlayer = targetPoint - Projectile.Center;
                 Vector2 toPlayerNormalized = toPlayer.SafeNormalize(Vector2.Zero);
                 float speed = toPlayer.Length();
-                Projectile.direction = Projectile.spriteDirection = Math.Sign(lastDir);
                 wanderTimer++;
                 if (wanderTimer > 60)
                 {
@@ -167,6 +183,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             else
             {
                 AI_State = ActionState.OreFound;
+                Projectile.netUpdate = true;
             }
         }
         private void OreFoundBehavior()
@@ -174,6 +191,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             if (orePos == Point.Zero)
             {
                 AI_State = ActionState.Idle;
+                Projectile.netUpdate = true;
                 return;
             }
             else
@@ -199,9 +217,10 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                             Projectile.frame = 0;
                             continue;
                         }
-                        if (TileID.Sets.Ore[t.TileType])
+                        if (TileID.Sets.Ore[t.TileType] && TileHelpers.SolidTile(i, j) && t.HasTile)
                         {
                             AI_State = ActionState.Digging;
+                            Projectile.netUpdate = true;
 
                         }
                     }
@@ -209,6 +228,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 if (Projectile.Distance(ore) > 400f)
                 {
                     orePos = Point.Zero;
+                    Projectile.netUpdate = true;
                 }
             }
         }
@@ -238,14 +258,15 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                             Projectile.frame = 0;
                             continue;
                         }
-                        if (TileID.Sets.Ore[t.TileType])
+                        if (TileID.Sets.Ore[t.TileType] && TileHelpers.SolidTile(i, j))
                         {
                             oreExists = true;
+                            Main.NewText((t.HasTile, TileHelpers.SolidTile(i, j)));
                             if (++Projectile.frameCounter >= 8)
                             {
-                                if (Projectile.frame < 7)
+                                if (Projectile.frame <= 6)
                                 {
-                                    Projectile.frame++; 
+                                    Projectile.frame++;
                                 }
                                 else
                                 {
@@ -261,12 +282,13 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                                     ChopCD = Math.Min(FindPickaxe(player).useTime + 10, 60);
                                     player.PickTile(i, j, Math.Max(FindPickaxe(player).pick, 35));
                                 }
+
                             }
                             else
                             {
                                 if (ChopCD-- <= 0)
                                 {
-                                    ChopCD = 60;
+                                    ChopCD = 90;
                                     player.PickTile(i, j, 30);
 
                                 }
@@ -276,24 +298,30 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 }
                 if (!oreExists)
                 {
-                    FindOre(Projectile.Center.ToTileCoordinates(), 5, Projectile, player, true);
+                    FindOre(Projectile.Center.ToTileCoordinates(), 6, Projectile, player, true);
                     if (!hasLeftover)
                     {
                         orePos = Point.Zero;
+                        Projectile.netUpdate = true;
                     }
                 }
                 else if (hasLeftover)
-                    orePos = FindOre(Projectile.Center.ToTileCoordinates(), 5, Projectile, player, true);
-
-                if (Projectile.Distance(ore) > 60f)//how?
+                {
+                    orePos = FindOre(Projectile.Center.ToTileCoordinates(), 6, Projectile, player, false);
+                    Projectile.netUpdate = true;
+                }
+                if (Projectile.Distance(ore) > 80f || !HasOre(player))//how?
                 {
                     orePos = Point.Zero;
+                    Projectile.netUpdate = true;
+                    return;
                 }
             }
             else
             {
                 finderCD = 120;
                 AI_State = ActionState.Idle;
+                Projectile.netUpdate = true;
             }
         }
         public Item FindPickaxe(Player player)
@@ -306,7 +334,21 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             }
             return item;
         }
-        private Point FindOre(Point tile, int radius, Projectile projectile, Player player,bool findLeftover)
+        public bool HasOre(Player player)
+        {
+            Item heldOre = null;
+            if (player.inventory[9].stack > 0 && (heldOre == null))
+                heldOre = player.inventory[9];
+            if (heldOre != null)
+            {
+                if (TileID.Sets.Ore[heldOre.createTile])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+            private Point FindOre(Point tile, int radius, Projectile projectile, Player player,bool findLeftover)
         {
             Item heldOre = player.inventory[9];
             if (heldOre == null)
@@ -336,23 +378,19 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                     detectedOres.Add(new Point(i, j));
                 }
             }
+            if (findLeftover)
+            {
+                if (detectedOres.Count <= 0)
+                    hasLeftover = false;
+                else
+                    hasLeftover = true;
+            }
             if (detectedOres.Count <= 0)
             {
-                if (findLeftover)
-                {
-                    hasLeftover = false;
-                }
                 return Point.Zero;
             }
-            else
-            {
-                if (findLeftover)
-                {
-                    hasLeftover = true;
-                }
-            }
 
-            return detectedOres
+                return detectedOres
                 .OrderBy(p => Vector2.Distance(projectile.Center, p.ToWorldCoordinates()))
                 .FirstOrDefault();
         }

@@ -76,23 +76,24 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Projectile.Center = player.Center;
                 Projectile.netUpdate = true;
             }
-            Projectile.spriteDirection = (Projectile.velocity.X < 0).ToDirectionInt();
             switch (AI_State)
             {
                 case ActionState.Spawn:
                     SpawnBehavior();
                     break;
                 case ActionState.Idle:
-                    Projectile.rotation = Projectile.velocity.X / 25;
+                    Projectile.rotation = Projectile.velocity.X / 5;
                     Projectile.frame = 0;
                     if (finderCD--<= 0)
                     treePos = FindTree(Projectile.Center.ToTileCoordinates(), detectRadius, Projectile);
                     IdleBehavior();
+                    Projectile.spriteDirection = (Projectile.velocity.X > 0).ToDirectionInt();
                     break;
                 case ActionState.TreeFound:
                     Projectile.frame = 0;
                     TreeFoundBehavior();
-                    Projectile.rotation = Projectile.velocity.X / 25;
+                    Projectile.rotation = Projectile.velocity.X / 5;
+                    Projectile.spriteDirection = (Projectile.velocity.X > 0).ToDirectionInt();
                     break;
                 case ActionState.Chopping:
                     ChoppingBehavior();
@@ -127,7 +128,6 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Vector2 toPlayer = targetPoint - Projectile.Center;
                 Vector2 toPlayerNormalized = toPlayer.SafeNormalize(Vector2.Zero);
                 float speed = toPlayer.Length();
-                Projectile.direction = Projectile.spriteDirection = Math.Sign(lastDir);
                 wanderTimer++;
                 if (wanderTimer > 60)
                 {
