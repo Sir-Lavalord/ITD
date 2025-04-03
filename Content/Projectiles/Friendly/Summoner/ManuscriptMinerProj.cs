@@ -1,23 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using System;
-using ITD.Physics;
-using Terraria.DataStructures;
-using ITD.Content.Buffs.PetBuffs;
-using Terraria.UI;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using ITD.Utilities;
 using ITD.Content.Items.Weapons.Summoner;
-using ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI;
 using ITD.Content.Buffs.MinionBuffs;
-using static AssGen.Assets;
-using System.Runtime.CompilerServices;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner
 {
@@ -30,7 +16,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             OreFound,
             Digging
         }
-        private ActionState AI_State;
+        private ActionState AI_State { get { return (ActionState)Projectile.ai[0]; } set { Projectile.ai[0] = (float)value; } }
         private Point orePos;
         private const int detectRadius = 14;
         private int ChopCD = 60;
@@ -72,14 +58,14 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         {
             Player player = Main.player[Projectile.owner];
             RegisterRightClick(player);
-            if (Projectile.Distance(player.Center) > 1000 || !HasOre(player))
+            if (Projectile.Distance(player.Center) > 1000 || !HasOre(player, out _))
             {
                 orePos = Point.Zero;
                 AI_State = ActionState.Idle;
                 Projectile.Center = player.Center;
                 Projectile.netUpdate = true;
             }
-            if (!HasOre(player))
+            if (!HasOre(player, out _))
             {
                 orePos = Point.Zero;
                 AI_State = ActionState.Idle;
@@ -93,7 +79,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                     if (finderCD-- <= 0)
                     {
                         finderCD = 0;
-                        if (HasOre(player))
+                        if (HasOre(player, out _))
                             orePos = FindOre(Projectile.Center.ToTileCoordinates(), detectRadius, Projectile, player, false);
                     }
                     Projectile.spriteDirection = (Projectile.velocity.X > 0).ToDirectionInt();
@@ -203,10 +189,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 float speed = 8f;
                 Projectile.velocity = toPlayerNormalized * (speed);
 
+                Rectangle rect = Projectile.TileRectangle();
 
-                Point tileCoords = Projectile.position.ToTileCoordinates();
-                Point tileSize = (Projectile.Size / 16).ToPoint();
-                Rectangle rect = new Rectangle(tileCoords.X, tileCoords.Y, tileSize.X, tileSize.Y);
                 for (int i = rect.Left; i < rect.Right; i++)
                 {
                     for (int j = rect.Top; j < rect.Bottom; j++)
@@ -245,20 +229,14 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             if (orePos != Point.Zero)
             {
                 bool oreExists = false;
-                Point tileCoords = Projectile.position.ToTileCoordinates();
-                Point tileSize = (Projectile.Size / 16).ToPoint();
-                Rectangle rect = new Rectangle(tileCoords.X, tileCoords.Y, tileSize.X, tileSize.Y);
+                Rectangle rect = Projectile.TileRectangle();
+
                 for (int i = rect.Left; i < rect.Right; i++)
                 {
                     for (int j = rect.Top; j < rect.Bottom; j++)
                     {
                         Tile t = Framing.GetTileSafely(i, j);
-                        if (t == null)
-                        {
-                            Projectile.frame = 0;
-                            continue;
-                        }
-                        if (TileID.Sets.Ore[t.TileType] && TileHelpers.SolidTile(i, j))
+                        if (t.HasTile && TileID.Sets.Ore[t.TileType])
                         {
                             oreExists = true;
                             Main.NewText((t.HasTile, TileHelpers.SolidTile(i, j)));
@@ -275,12 +253,13 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                                 Projectile.frameCounter = 0;
 
                             }
-                            if (FindPickaxe(player) != null)
+                            Item pick = player.GetBestPickaxe();
+                            if (pick != null)
                             {
                                 if (ChopCD-- <= 0)
                                 {
-                                    ChopCD = Math.Min(FindPickaxe(player).useTime + 10, 60);
-                                    player.PickTile(i, j, Math.Max(FindPickaxe(player).pick, 35));
+                                    ChopCD = Math.Min(pick.useTime + 10, 60);
+                                    player.PickTile(i, j, Math.Max(pick.pick, 35));
                                 }
 
                             }
@@ -293,6 +272,10 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
                                 }
                             }
+                        }
+                        else
+                        {
+                            Projectile.frame = 0;
                         }
                     }
                 }
@@ -310,7 +293,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                     orePos = FindOre(Projectile.Center.ToTileCoordinates(), 6, Projectile, player, false);
                     Projectile.netUpdate = true;
                 }
-                if (Projectile.Distance(ore) > 80f || !HasOre(player))//how?
+                if (Projectile.Distance(ore) > 80f || !HasOre(player, out _))//how?
                 {
                     orePos = Point.Zero;
                     Projectile.netUpdate = true;
@@ -324,44 +307,18 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Projectile.netUpdate = true;
             }
         }
-        public Item FindPickaxe(Player player)
+        public static bool HasOre(Player player, out int ore)
         {
-            Item item = null;
-            for (int i = 0; i < 50; i++)
-            {
-                if (player.inventory[i].stack > 0 && player.inventory[i].pick > 0 && (item == null || player.inventory[i].pick > item.pick))
-                    item = player.inventory[i];
-            }
-            return item;
+            ore = player.inventory[9].createTile;
+            return ore >= 0 && TileID.Sets.Ore[ore];
         }
-        public bool HasOre(Player player)
-        {
-            Item heldOre = null;
-            if (player.inventory[9].stack > 0 && (heldOre == null))
-                heldOre = player.inventory[9];
-            if (heldOre != null)
-            {
-                if (TileID.Sets.Ore[heldOre.createTile])
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-            private Point FindOre(Point tile, int radius, Projectile projectile, Player player,bool findLeftover)
-        {
-            Item heldOre = player.inventory[9];
-            if (heldOre == null)
-            {
-                return Point.Zero;
-            }
-            int ore = heldOre.createTile;
-            if (!TileID.Sets.Ore[ore])
-            {
-                return Point.Zero;
-            }
 
-            List<Point> detectedOres = new List<Point>();
+        private Point FindOre(Point tile, int radius, Projectile projectile, Player player, bool findLeftover)
+        {
+            if (!HasOre(player, out int ore))
+                return Point.Zero;
+
+            List<Point> detectedOres = [];
 
             Rectangle rect = new(tile.X - radius, tile.Y - radius, radius * 2, radius * 2);
 
@@ -370,11 +327,10 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 for (int j = rect.Top; j < rect.Bottom; j++)
                 {
                     Tile t = Framing.GetTileSafely(i, j);
-                    if (t == null || !t.HasTile || t.TileType != ore)
+                    if (!t.HasTile || t.TileType != ore)
                     {
                         continue;
                     }
-                    if (t.TileType == ore)
                     detectedOres.Add(new Point(i, j));
                 }
             }
@@ -390,7 +346,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 return Point.Zero;
             }
 
-                return detectedOres
+            return detectedOres
                 .OrderBy(p => Vector2.Distance(projectile.Center, p.ToWorldCoordinates()))
                 .FirstOrDefault();
         }
