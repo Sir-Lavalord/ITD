@@ -70,10 +70,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         {
             bFirstHit = true;
         }
-        public override bool? CanDamage()
-        {
-                return true;
-        }
         public override void AI()
         {
 			Player player = Main.player[Projectile.owner];

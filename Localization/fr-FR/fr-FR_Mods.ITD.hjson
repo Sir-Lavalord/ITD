@@ -219,6 +219,7 @@ Projectiles: {
 	// MoulderProj.DisplayName: Moulder Proj
 	// MoulderBoulderProj.DisplayName: Moulder Boulder Proj
 	// MangledSheerthornProj.DisplayName: Mangled Sheerthorn Proj
+	// WRipperDash.DisplayName: W Ripper Dash
 }
 
 NPCs: {

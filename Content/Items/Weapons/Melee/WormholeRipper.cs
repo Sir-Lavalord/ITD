@@ -10,6 +10,8 @@ using System.Linq;
 using ITD.Utilities;
 using Terraria.Audio;
 using ITD.Content.Items.Materials;
+using ITD.Particles.CosJel;
+using ITD.Particles;
 
 namespace ITD.Content.Items.Weapons.Melee
 {
@@ -50,23 +52,15 @@ namespace ITD.Content.Items.Weapons.Melee
         {
             if (player.altFunctionUse == 2)
             { //wormhole dash
-				player.GetITDPlayer().itemVar[0] = 0;
+				ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
+				modPlayer.itemVar[0] = 0;
+				modPlayer.dashTime = 16;
+				modPlayer.dashVelocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 16f;
+				
                 Item.useStyle = ItemUseStyleID.Shoot;
-                Item.shoot = ModContent.ProjectileType<WRipperRift>();
-				player.armorEffectDrawShadow = true;
-				player.jump = 0;
-                player.immune = true;//probably op
-                player.immuneTime = 30;
-                player.velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 14f;
-				player.fallStart = (int)(player.position.Y / 16f);
+                Item.shoot = ModContent.ProjectileType<WRipperDash>();
                 SoundStyle wRipperRip = new SoundStyle("ITD/Content/Sounds/WRipperRip");
                 SoundEngine.PlaySound(wRipperRip, player.Center);
-                for (int index1 = 0; index1 < 12; ++index1)
-				{
-					int index2 = Dust.NewDust(player.position, player.width, player.height, DustID.TreasureSparkle, 0.0f, 0.0f, 100, new Color(), 1f);
-					Main.dust[index2].velocity = player.velocity*Main.rand.Next(10)*0.1f;
-					Main.dust[index2].scale *= 1f + Main.rand.Next(40) * 0.01f;
-				}
 				
                 return true;
             }
@@ -80,15 +74,15 @@ namespace ITD.Content.Items.Weapons.Melee
 		
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-			if (Item.shoot == ModContent.ProjectileType<WRipperRift>())
+			if (Item.shoot == ModContent.ProjectileType<WRipperDash>())
 			{
-				velocity *=0;
 				knockback *= 0.5f;
+				Projectile.NewProjectileDirect(source, player.Center, new Vector2(), ModContent.ProjectileType<WRipperRift>(), damage, knockback * 0.5f, player.whoAmI);
 			}
-			Vector2 randomSpread = velocity.RotatedByRandom(MathHelper.ToRadians(10));
-            Projectile proj = Projectile.NewProjectileDirect(source, position, randomSpread, Item.shoot, damage, knockback, player.whoAmI);
+			else
+				velocity = velocity.RotatedByRandom(MathHelper.ToRadians(10));
+            Projectile proj = Projectile.NewProjectileDirect(source, player.Center, velocity, Item.shoot, damage, knockback, player.whoAmI);
 			proj.spriteDirection = player.direction;
-            proj.CritChance = Item.crit;
             return false;
         }
         public override void AddRecipes()

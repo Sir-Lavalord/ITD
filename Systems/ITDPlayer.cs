@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input;
 
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Localization;
+using Terraria.GameInput;
+using Terraria.GameContent;
+using Terraria.ModLoader.IO;
 
 using ITD.Systems;
 using ITD.Content.NPCs;
@@ -14,14 +18,10 @@ using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Utilities;
 using ITD.Networking;
 using ITD.Networking.Packets;
-using Terraria.GameInput;
 using ITD.Content.Buffs.EquipmentBuffs;
-using Terraria.ModLoader.IO;
 using ITD.Content.UI;
 using ITD.Content.Items.DevTools;
-using Terraria.GameContent;
 using ITD.Systems.DataStructures;
-using Microsoft.Xna.Framework.Input;
 using ITD.Content.Projectiles;
 using ITD.Content.TileEntities;
 
@@ -38,6 +38,9 @@ namespace ITD.Players
 
         public Vector2 MousePosition { get; set; }
         private Vector2 mousePosPrev;
+		
+		public int dashTime = 0;
+		public Vector2 dashVelocity;
 		
         bool prevTime = false;
         bool curTime = false;
@@ -230,8 +233,47 @@ namespace ITD.Players
                 Player.lifeRegen -= 5 + defenseCalc;
             }
 		}
+		
+		public override void SetControls()
+        {
+			if (dashTime > 0)
+            {				
+                Player.controlLeft = false;
+                Player.controlRight = false;
+                Player.controlJump = false;
+                Player.controlDown = false;
+                Player.controlUseItem = false;
+                Player.controlUseTile = false;
+                Player.controlHook = false;
+                Player.controlMount = false;
+            }
+		}
+		
         public override void PostUpdateEquips()
         {
+			if (dashTime > 0)
+			{
+				dashTime--;
+				if (dashVelocity != Collision.TileCollision(Player.position, dashVelocity, Player.width, Player.height, true, true, (int)Player.gravDir))
+					dashTime = 0;
+				
+				Player.velocity = dashVelocity;
+				if (dashVelocity.Y > Player.maxFallSpeed)
+					Player.maxFallSpeed = dashVelocity.Y;
+				
+                Player.immune = true;
+                Player.itemAnimation = 0;
+                Player.itemTime = 0;
+				Player.GoingDownWithGrapple = true; // go through platforms
+				
+				//dash over
+                if (dashTime == 0)
+                {
+                    Player.velocity *= 0.5f;
+					Player.fallStart = (int)(Player.position.Y / 16f);
+                }
+			}
+			
             if (setAlloy)
             {
                 Player.endurance += 0.02f;
@@ -288,7 +330,7 @@ namespace ITD.Players
             }
         }
         public override void PreUpdate()
-        {
+        {			
             ITDSystem system = ModContent.GetInstance<ITDSystem>();
             ZoneBlueshroomsSurface = system.bluegrassCount > 50 && Player.ZoneOverworldHeight;
             ZoneBlueshroomsUnderground = system.bluegrassCount > 50 && (Player.ZoneDirtLayerHeight || Player.ZoneRockLayerHeight);
