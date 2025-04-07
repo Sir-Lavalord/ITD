@@ -239,7 +239,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                         if (t.HasTile && TileID.Sets.Ore[t.TileType])
                         {
                             oreExists = true;
-                            Main.NewText((t.HasTile, TileHelpers.SolidTile(i, j)));
+                            //Main.NewText((t.HasTile, TileHelpers.SolidTile(i, j)));
                             if (++Projectile.frameCounter >= 8)
                             {
                                 if (Projectile.frame <= 6)
@@ -273,11 +273,14 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                                 }
                             }
                         }
-                        else
-                        {
-                            Projectile.frame = 0;
-                        }
                     }
+                }
+                Tile t0 = Framing.GetTileSafely(orePos);
+                if (!t0.HasTile || !TileID.Sets.Ore[t0.TileType]) // target ore has been mined, so find new ore or whatever
+                {
+                    Projectile.frame = 0;
+                    orePos = Point.Zero;
+                    oreExists = false;
                 }
                 if (!oreExists)
                 {
