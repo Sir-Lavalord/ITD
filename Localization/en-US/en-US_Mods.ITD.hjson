@@ -220,6 +220,7 @@ Projectiles: {
 	MoulderBoulderProj.DisplayName: Moulder Boulder Proj
 	MangledSheerthornProj.DisplayName: Mangled Sheerthorn Proj
 	WRipperDash.DisplayName: W Ripper Dash
+	ManuscriptDuelistProj.DisplayName: Manuscript Duelist Proj
 }
 
 NPCs: {
@@ -470,6 +471,11 @@ Buffs: {
 	ManuscriptMinerBuff: {
 		Description: Mods.ITD.Buffs.ManuscriptMinerBuff.Description
 		DisplayName: Manuscript Miner Buff
+	}
+
+	ManuscriptDuelistBuff: {
+		Description: Mods.ITD.Buffs.ManuscriptDuelistBuff.Description
+		DisplayName: Manuscript Duelist Buff
 	}
 }
 

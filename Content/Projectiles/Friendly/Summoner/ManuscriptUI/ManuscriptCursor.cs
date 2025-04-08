@@ -54,6 +54,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
 
         }
         int type;
+        int damage = 0;
         public void RegisterLeftClick(Player player)
         {
             if (Main.mouseLeft && player.GetModPlayer<WaxwellPlayer>().codexClickCD <= 0f && !isOverlapping)
@@ -66,8 +67,10 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
                         type = ModContent.ProjectileType<ManuscriptMinerProj>();
                         break;
                     case 2:
-                        Main.NewText("WIP", Color.Violet);
-                        type = ModContent.ProjectileType<ManuscriptLumberProj>();
+                        player.CheckMana(50, true);
+                        player.AddBuff(ModContent.BuffType<ManuscriptDuelistBuff>(), 10);
+                        type = ModContent.ProjectileType<ManuscriptDuelistProj>();
+                        damage = 34;
                         break;
                     case 3:
                         player.CheckMana(50, true);
@@ -84,7 +87,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
                          Main.MouseWorld,
                          Vector2.Zero,
                          type,
-                         0,
+                         damage,
                          0f,
                          player.whoAmI);
                 Projectile.Kill();
