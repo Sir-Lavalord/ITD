@@ -58,8 +58,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         {
             if (Main.mouseRight && player.GetModPlayer<WaxwellPlayer>().codexClickCD <= 0f)
             {
-/*                Projectile.Kill();
-*/          }
+            }
         }
         public override Color? GetAlpha(Color lightColor)
         {
@@ -84,8 +83,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 case ActionState.Idle:
                     Projectile.rotation = Projectile.velocity.X / 5;
                     Projectile.frame = 0;
-                    if (finderCD--<= 0)
-                    treePos = FindTree(Projectile.Center.ToTileCoordinates(), detectRadius, Projectile);
+                    if (finderCD-- <= 0)
+                        treePos = FindTree(Projectile.Center.ToTileCoordinates(), detectRadius, Projectile);
                     IdleBehavior();
                     Projectile.spriteDirection = (Projectile.velocity.X > 0).ToDirectionInt();
                     break;
@@ -183,7 +182,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 float speed = 8f;
                 Projectile.velocity = toPlayerNormalized * (speed);
 
-               
+
                 Point tileCoords = Projectile.position.ToTileCoordinates();
                 Point tileSize = (Projectile.Size / 16).ToPoint();
                 Rectangle rect = new Rectangle(tileCoords.X, tileCoords.Y, tileSize.X, tileSize.Y);
@@ -219,71 +218,66 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             float speed = 4f;
             Projectile.velocity = toPlayerNormalized * (speed);
 
-            
-            if (treePos != Point.Zero)
+            bool treeExists = false;
+            Point tileCoords = Projectile.position.ToTileCoordinates();
+            Point tileSize = (Projectile.Size / 16).ToPoint();
+            Rectangle rect = new Rectangle(tileCoords.X, tileCoords.Y, tileSize.X, tileSize.Y);
+            for (int i = rect.Left; i < rect.Right; i++)
             {
-                bool treeExists = false;
-                Point tileCoords = Projectile.position.ToTileCoordinates();
-                Point tileSize = (Projectile.Size / 16).ToPoint();
-                Rectangle rect = new Rectangle(tileCoords.X, tileCoords.Y, tileSize.X, tileSize.Y);
-                for (int i = rect.Left; i < rect.Right; i++)
+                for (int j = rect.Top; j < rect.Bottom; j++)
                 {
-                    for (int j = rect.Top; j < rect.Bottom; j++)
+                    Tile t = Framing.GetTileSafely(i, j);
+
+                    if (Main.tileAxe[t.TileType] && TileHelpers.SolidTile(i, j + 1))
                     {
-                        Tile t = Framing.GetTileSafely(i, j);
-                        if (t == null)
+                        treeExists = true;
+                        if (++Projectile.frameCounter >= 8)
                         {
-                            Projectile.frame = 0;
-                            continue;
-                        }
-                        if (Main.tileAxe[t.TileType] && TileHelpers.SolidTile(i, j + 1))
-                        {
-                            treeExists = true;
-                            if (++Projectile.frameCounter >= 8)
+                            if (Projectile.frame < 5)
                             {
-                                if (Projectile.frame < 5)
-                                {
-                                    Projectile.frame++;
-                                }
-                                else
-                                {
-                                    Projectile.frame =0;
-                                }
-                                Projectile.frameCounter = 0;
-                            
-                            }
-                            if (FindAxe(player) != null)
-                            {
-                                if (ChopCD-- <= 0)
-                                {
-                                    ChopCD = Math.Min(FindAxe(player).useTime + 5,60);
-                                    player.PickTile(i, j, Math.Max(FindAxe(player).axe,30));
-                                }
+                                Projectile.frame++;
                             }
                             else
                             {
-                                if (ChopCD-- <= 0)
-                                {
-                                    ChopCD = 60;
-                                    player.PickTile(i, j, 30);
+                                Projectile.frame = 0;
+                            }
+                            Projectile.frameCounter = 0;
 
-                                }
+                        }
+                        if (FindAxe(player) != null)
+                        {
+                            if (ChopCD-- <= 0)
+                            {
+                                ChopCD = Math.Min(FindAxe(player).useTime + 5, 60);
+                                player.PickTile(i, j, Math.Max(FindAxe(player).axe, 30));
+                            }
+                        }
+                        else
+                        {
+                            if (ChopCD-- <= 0)
+                            {
+                                ChopCD = 60;
+                                player.PickTile(i, j, 30);
+
                             }
                         }
                     }
                 }
-                if (Projectile.Distance(tree) > 60f || !treeExists)//how?
-                {
-                    treePos = Point.Zero;
-                }
             }
-            else
+            Tile t0 = Framing.GetTileSafely(tree);
+            if (!t0.HasTile || !Main.tileAxe[t0.TileType])//no tree
             {
-                finderCD = 120;
                 AI_State = ActionState.Idle;
+                treePos = Point.Zero;
+                treeExists = false;
+            }
+            if (Projectile.Distance(tree) > 60f || !treeExists)//how?
+            {
+                AI_State = ActionState.Idle;
+                treePos = Point.Zero;
             }
         }
-       
+
         public Item FindAxe(Player player)
         {
             Item item = null;

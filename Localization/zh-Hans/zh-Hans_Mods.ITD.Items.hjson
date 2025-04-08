@@ -1448,3 +1448,8 @@ CryptiteWall: {
 	// Tooltip: ""
 	// DisplayName: Cryptite Wall
 }
+
+EternalBubbleWand: {
+	// DisplayName: Eternal Bubble Wand
+	// Tooltip: ""
+}

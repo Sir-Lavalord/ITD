@@ -34,7 +34,7 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.knockBack = 5;
             Item.value = Item.sellPrice(copper: 60);
             Item.rare = ItemRarityID.Blue;
-            Item.UseSound = SoundID.Item15;
+            Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.shootSpeed = 20;
         }
@@ -124,7 +124,7 @@ namespace ITD.Content.Items.Weapons.Melee
                             for (int i = 0; i < 3; i++)
                             {
                                 int rand = Main.rand.Next(0, 5);
-                                Projectile.NewProjectileDirect(player.GetSource_FromThis(), position - new Vector2(0f, 34f), new Vector2((Main.rand.NextFloat(-0.5f,1.5f) * 2f + 1f) * player.direction, -4f + 1f * Main.rand.NextFloat()),
+                                Projectile.NewProjectileDirect(player.GetSource_FromThis(), position - new Vector2(0f, 34f), new Vector2((Main.rand.NextFloat(0,1.5f) * 2f + 1f) * player.direction, -4f + 1f * Main.rand.NextFloat()),
                             ModContent.ProjectileType<MangledSheerthornProj>(), 20, 5f, player.whoAmI,rand);
                                 SoundEngine.PlaySound(SoundID.Item72, player.Center);
                             }

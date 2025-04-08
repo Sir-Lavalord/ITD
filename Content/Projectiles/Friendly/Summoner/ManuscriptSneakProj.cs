@@ -67,8 +67,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                         dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.TintableDustLighted, 0f, 0f, 100, Color.HotPink, 3f);
                         dust.velocity *= 1.5f;
                     }
-                    Projectile.frame = Main.projFrames[Projectile.type];
-                    Projectile.Opacity = 0;
+                    Projectile.frame = Main.projFrames[Projectile.type] -1;
+                    Projectile.alpha = 255;
 
                     Projectile.timeLeft = 10;
                 }
@@ -86,7 +86,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
                 if (Projectile.frameCounter > 6)
                 {
-                    if (Projectile.frame < Main.projFrames[Projectile.type] - 1)
+                    if (Projectile.frame <= Main.projFrames[Projectile.type] - 1)
                     {
                         Projectile.frame++;
                         if (!startExplode)
@@ -96,6 +96,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                                 Projectile.frame = 8;
                             }
                         }
+
                     }
                     Projectile.frameCounter = 0;
                 }

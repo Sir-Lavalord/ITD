@@ -356,15 +356,15 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             {
                 var chainTextureToDraw = chainTexture;
 
-                if (chainCount >= 10)
+                if (chainCount >= 6)
                 {
                     chainTextureToDraw = chainTextureC;
                 }
-                else if (chainCount >= 4)
+                else if (chainCount >= 3)
                 {
                     chainTextureToDraw = chainTextureB;
                 }
-                else
+                else if (chainCount < 3)
                 {
                     chainTextureToDraw = chainTexture;
                 }
