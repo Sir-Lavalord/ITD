@@ -57,7 +57,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
         int damage = 0;
         public void RegisterLeftClick(Player player)
         {
-            if (Main.mouseLeft && player.GetModPlayer<WaxwellPlayer>().codexClickCD <= 0f && !isOverlapping)
+            if (Main.mouseLeft && player.GetModPlayer<WaxwellPlayer>().codexClickCD <= 0f && !isOverlapping && player.statMana >= 50)
             {
                 switch (player.GetModPlayer<WaxwellPlayer>().codexMode)
                 {

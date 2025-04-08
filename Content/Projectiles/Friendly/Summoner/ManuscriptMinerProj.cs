@@ -37,6 +37,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             Projectile.netImportant = true;
             Projectile.timeLeft = 2;
             Projectile.minion = true;
+            Projectile.minionSlots = 2f;
         }
         public override void OnKill(int timeLeft)
         {
@@ -58,7 +59,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         {
             Player player = Main.player[Projectile.owner];
             RegisterRightClick(player);
-            if (Projectile.Distance(player.Center) > 1000 || !HasOre(player, out _))
+            if (Projectile.Distance(player.Center) > 1000)
             {
                 orePos = Point.Zero;
                 AI_State = ActionState.Idle;

@@ -38,7 +38,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Projectile.ai[1] = value == null ? 0 : value.whoAmI + 1;
             }
         }
-        public int ShadowTier;
+        public int ShadowTier = 0;
         public int TimeDash = 3;
         private ActionState AI_State { get { return (ActionState)Projectile.ai[0]; } set { Projectile.ai[0] = (float)value; } }
         private float lastDir;
@@ -46,7 +46,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 1;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 4;
         }
         public override void SetDefaults()
@@ -79,7 +79,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             Player player = Main.player[Projectile.owner];
             RegisterRightClick(player);
             HomingTarget ??= Projectile.FindClosestNPC(600);
-            if (Projectile.Distance(player.Center) > 1000)
+/*            Main.NewText(ScanInventory(player));
+*/            if (Projectile.Distance(player.Center) > 1200)
             {
                 HomingTarget = null;
                 AI_State = ActionState.Idle;
@@ -185,13 +186,21 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             {
                 Projectile.velocity *= 0.96f;
             }
-
+            Vector2 vectorToTarget = HomingTarget.Center - Projectile.Center;
+            float distanceToTarget = vectorToTarget.Length();
+            if (distanceToTarget > 250f)
+            {
+                int where = Projectile.Center.X < HomingTarget.Center.X ? 1 : -1;
+                int where2 = Projectile.Center.Y < HomingTarget.Center.Y ? 1 : -1;
+                Projectile.velocity.Y += 0.9f * where2;
+                Projectile.velocity.X += 0.9f * where;
+            }
 
         }
         public void DashBehavior()
         {
             Projectile.rotation++;
-            if (Projectile.localAI[1]++ >= 20)
+            if (Projectile.localAI[1]++ >= 40)
             {
                 if (HomingTarget == null)
                 {
@@ -205,21 +214,20 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                     return;
                 }
                 Vector2 safeZone = HomingTarget.Center;
-                const float safeRange = 180;
-                Vector2 spawnPos = HomingTarget.Center + Main.rand.NextVector2Circular(200, 200);
+                const float safeRange = 140;
+                Vector2 spawnPos = HomingTarget.Center + Main.rand.NextVector2Circular(160, 160);
                 if (Vector2.Distance(safeZone, spawnPos) < safeRange)
                 {
                     Vector2 directionOut = spawnPos - safeZone;
                     directionOut.Normalize();
-                    spawnPos = safeZone + directionOut * Main.rand.NextFloat(safeRange, 200);
+                    spawnPos = safeZone + directionOut * Main.rand.NextFloat(safeRange, 160);
                 }
-                
-                if (Projectile.localAI[2] >= TimeDash)
+                if (Projectile.localAI[2] >= TimeDash + ShadowTier)
                 {
                     Projectile.localAI[1] = 0;
                     Projectile.localAI[2] = 0;
                 }
-                else
+                else if (Projectile.localAI[2] < TimeDash + ShadowTier || Vector2.Distance(Projectile.Center, HomingTarget.Center) >= 160)
                 {
                     for (int i = 0; i < 30; i++)
                     {
@@ -240,7 +248,145 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 AI_State = ActionState.TargetFound;
             }
         }
-        
+        private int ScanInventory(Player player)
+        {
+            ShadowTier = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                int tier = GetEquippedShadowTier(player.armor[i]);
+                if (tier > ShadowTier)
+                {
+                    ShadowTier = tier;
+                    if (ShadowTier >= 5) return 5;
+                }
+            }
+
+            for (int i = 3; i < 10; i++)
+            {
+                if (i >= player.armor.Length) continue;
+                int tier = GetEquippedShadowTier(player.armor[i]);
+                if (tier > ShadowTier)
+                {
+                    ShadowTier = tier;
+                    if (ShadowTier >= 5) return 5;
+                }
+            }
+            for (int i = 10; i < 50; i++)
+            {
+                int tier = GetInventoryShadowTier(player.inventory[i]);
+                if (tier > ShadowTier)
+                {
+                    ShadowTier = tier;
+                    if (ShadowTier >= 5) return 5;
+                }
+            }
+
+            for (int i = 0; i < player.miscEquips.Length; i++)
+            {
+                int tier = GetEquippedShadowTier(player.miscEquips[i]);
+                if (tier > ShadowTier)
+                {
+                    ShadowTier = tier;
+                    if (ShadowTier >= 5) return 5;
+                }
+            }
+
+            int heldTier = GetOnheldShadowTier(player.HeldItem);
+                if (heldTier > ShadowTier)
+                {
+                    ShadowTier = heldTier;
+                    if (ShadowTier >= 5) return 5;
+                }
+
+            return ShadowTier;
+        }
+
+        private int GetInventoryShadowTier(Item item)
+        {
+            if (item == null || item.IsAir) return 0;
+            switch (item.type)
+            {
+                //tier 3
+                case ItemID.LucyTheAxe:
+                    return 3;
+                //tier 2
+                case ItemID.AbigailsFlower:
+                case ItemID.MonsterLasagna:
+                case ItemID.ChesterPetItem:
+                case ItemID.FroggleBunwich:
+                    return 2;
+
+                //tier 1
+                case ItemID.BerniePetItem:
+                case ItemID.PigPetItem:
+                case ItemID.GlommerPetItem:
+                    return 1;
+                default: return 0;
+            }
+
+        }
+        private int GetEquippedShadowTier(Item item)
+        {
+            if (item == null || item.IsAir) return 0;
+            switch (item.type)
+            {
+                //tier 5 must be equipped to get anything
+                case ItemID.DontStarveShaderItem:
+                case ItemID.Eyebrella:
+                case ItemID.DeerclopsMask:
+                    return 5;
+                //tier 4
+                case ItemID.BoneHelm:
+                    return 4;
+                //tier 3
+                case ItemID.Magiluminescence:
+                case ItemID.DeerclopsPetItem:
+                    return 3;
+                //tier 2
+                case ItemID.ChesterPetItem:
+                case ItemID.GarlandHat:
+                    return 2;
+
+                //tier 1
+                case ItemID.BerniePetItem:
+                case ItemID.PigPetItem:
+                case ItemID.GlommerPetItem:
+                    return 1;
+                default: return 0;
+            }
+
+        }
+        //Must held on hand to get anything
+        private int GetOnheldShadowTier(Item item)
+        {
+            if (item == null || item.IsAir) return 0;
+            if (item.type == ModContent.ItemType<NightmareManuscript>()) return 4;
+            switch (item.type)
+            {
+                //tier 4
+                case ItemID.HoundiusShootius:
+                    return 4;
+                //tier 3
+                case ItemID.PewMaticHorn:
+                    return 3;
+                //tier 1
+                case ItemID.HamBat:
+                case ItemID.TentacleSpike:
+                case ItemID.BatBat:
+                    return 1;
+                default: return 0;
+            }
+        }
+        private const float MinDistance = 40f;
+        private const float MaxDistance = 300f;
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            float distance = Vector2.Distance(Projectile.Center, target.Center);
+            distance = MathHelper.Clamp(distance, MinDistance, MaxDistance);
+            float distanceFactor = 2f - (distance - MinDistance) / (MaxDistance - MinDistance);
+            float tierBonus = 1f + (0.025f * ShadowTier);
+            modifiers.FinalDamage *= distanceFactor * tierBonus;
+        }
         private bool CheckActive(Player player)
         {
             if (player.dead || !player.active)

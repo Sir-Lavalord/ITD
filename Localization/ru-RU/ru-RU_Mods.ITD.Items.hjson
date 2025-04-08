@@ -1183,7 +1183,12 @@ Cicadarang: {
 }
 
 NightmareManuscript: {
-	// Tooltip: ""
+	/* Tooltip:
+		'''
+		Summons a/an Duelist/Axe/Pickaxe/Snare to fight for you
+		Equipping/Holding/Having items from another world empowers combat minion
+		'The show must go on.'
+		''' */
 	// DisplayName: Nightmare Manuscript
 }
 
