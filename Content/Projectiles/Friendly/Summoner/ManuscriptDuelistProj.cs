@@ -109,20 +109,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         }
         private void SpawnBehavior()//Not onspawn
         {
-            Projectile.frameCounter++;
+            AI_State = ActionState.Idle;
 
-            if (Projectile.frameCounter > 10)
-            {
-                if (Projectile.frame < 5)
-                {
-                    Projectile.frame++;
-                }
-                else
-                {
-                    AI_State = ActionState.Idle;
-                }
-                Projectile.frameCounter = 0;
-            }
         }
         Vector2 randomWander;
         int wanderTimer;
