@@ -106,7 +106,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
             {
                 textureToDraw = HoveredIcon;
                 Main.blockMouse = true;
-                if (Main.mouseLeft && player.GetModPlayer<WaxwellPlayer>().codexClickCD <= 0f)
+                if (Main.mouseLeft && player.GetModPlayer<WaxwellPlayer>().codexClickCD <= 0f && (player.maxMinions - player.slotsMinions) >= 2)
                 {
                     Projectile.Kill();
 
@@ -137,7 +137,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
                 {
                 textureToDraw = HoveredIcon;
                     Main.blockMouse = true;
-                    if (Main.mouseLeft && player.GetModPlayer<WaxwellPlayer>().codexClickCD <= 0f)
+                    if (Main.mouseLeft && player.GetModPlayer<WaxwellPlayer>().codexClickCD <= 0f && (player.maxMinions - player.slotsMinions) >= 1)
                     {
                     Projectile.Kill();
 
@@ -169,7 +169,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI
             {
                 textureToDraw = HoveredIcon;
                 Main.blockMouse = true;
-                if (Main.mouseLeft && player.GetModPlayer<WaxwellPlayer>().codexClickCD <= 0f)
+                if (Main.mouseLeft && player.GetModPlayer<WaxwellPlayer>().codexClickCD <= 0f && (player.maxMinions - player.slotsMinions) >= 2)
                 {
                     Projectile.Kill();
 

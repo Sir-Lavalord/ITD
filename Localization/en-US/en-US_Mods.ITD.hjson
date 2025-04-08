@@ -162,13 +162,13 @@ Projectiles: {
 	CicadarangMiniStriker.DisplayName: Cicadarang Mini Striker
 	DespoticSuperSpecialProj.DisplayName: Despotic Super Special Proj
 	ManuscriptCursor.DisplayName: Shadow Servant
-	ManuscriptSneakProj.DisplayName: Manuscript Sneak Proj
+	ManuscriptSneakProj.DisplayName: Shadow Sneak
 	ManuscriptLumberProj.DisplayName: Shadow Servant
-	ManuscriptUIProj.DisplayName: Manuscript U I Proj
+	ManuscriptUIProj.DisplayName: Manuscript UI
 	NightmareManuscriptProj.DisplayName: Nightmare Manuscript Proj
 	WeepWandWisp.DisplayName: Weep Wand Wisp
 	CosmicSlop.DisplayName: Cosmic Slop
-	ManuscriptMinerProj.DisplayName: Manuscript Miner Proj
+	ManuscriptMinerProj.DisplayName: Q-no-pun-available
 	PotshotReticle.DisplayName: Potshot Reticle
 	FlyswatterHeldProjectile.DisplayName: Flyswatter Held Projectile
 	CosmicGoo.DisplayName: Cosmic Goo
@@ -220,7 +220,7 @@ Projectiles: {
 	MoulderBoulderProj.DisplayName: Moulder Boulder Proj
 	MangledSheerthornProj.DisplayName: Mangled Sheerthorn Proj
 	WRipperDash.DisplayName: W Ripper Dash
-	ManuscriptDuelistProj.DisplayName: Manuscript Duelist Proj
+	ManuscriptDuelistProj.DisplayName: dogshit minion
 }
 
 NPCs: {
@@ -455,7 +455,7 @@ Buffs: {
 
 	ManuscriptLumberBuff: {
 		Description: QTastic
-		DisplayName: Qaxegel
+		DisplayName: Manuscript Axe
 	}
 
 	WhiplatchBuff: {
@@ -469,13 +469,13 @@ Buffs: {
 	}
 
 	ManuscriptMinerBuff: {
-		Description: Mods.ITD.Buffs.ManuscriptMinerBuff.Description
-		DisplayName: Manuscript Miner Buff
+		Description: Mines ore detected in the 9th inventory slot.
+		DisplayName: Manuscript Pickaxe
 	}
 
 	ManuscriptDuelistBuff: {
-		Description: Mods.ITD.Buffs.ManuscriptDuelistBuff.Description
-		DisplayName: Manuscript Duelist Buff
+		Description: Empowered by items from another world.
+		DisplayName: Manuscript Duelist
 	}
 }
 

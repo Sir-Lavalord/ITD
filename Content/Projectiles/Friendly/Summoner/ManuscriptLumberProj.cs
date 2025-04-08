@@ -49,6 +49,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             Projectile.netImportant = true;
             Projectile.timeLeft = 2;
             Projectile.minion = true;
+            Projectile.minionSlots = 2f;
         }
         public override void OnKill(int timeLeft)
         {
