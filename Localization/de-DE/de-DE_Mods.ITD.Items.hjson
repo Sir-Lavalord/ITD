@@ -1191,7 +1191,8 @@ NightmareManuscript: {
 	/* Tooltip:
 		'''
 		Summons a/an Duelist/Axe/Pickaxe/Snare to fight for you
-		Equipping/Holding/Having items from another world empowers combat minion
+		The Axe/Pickaxe takes two minion slots each.
+		Equipping/Holding/Having items from another world empowers all Duelists
 		'The show must go on.'
 		''' */
 	// DisplayName: Nightmare Manuscript

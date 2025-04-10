@@ -19,6 +19,8 @@ using ITD.Content.Items.Other;
 using ITD.Content.Items.Weapons.Mage;
 using ITD.Content.Items.Weapons.Melee;
 using ITD.Content.Items.Weapons.Summoner;
+using ITD.Particles.Misc;
+using ITD.Particles;
 
 namespace ITD.Content.NPCs.Bosses
 {
@@ -69,7 +71,7 @@ namespace ITD.Content.NPCs.Bosses
             NPC.aiStyle = -1;
 			NPC.boss = true;
             NPC.npcSlots = 10f;
-						
+			
 			if (!Main.dedServ)
             {
                 Music = ITD.Instance.GetMusic("Gravekeeper") ?? MusicID.Boss1;
@@ -126,12 +128,29 @@ namespace ITD.Content.NPCs.Bosses
 					NPC.velocity *= 0.9f;
                     break;
 				case ActionState.ShovelSlam:
-					NPC.velocity.Y += 0.5f;
 					if (StateTimer < 10)
 					{
+						NPC.velocity.Y += 0.5f;
 						StateTimer = 10;
 						if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
 							StateSwitch();
+					}
+					else
+					{
+						Vector2 offset = new Vector2();
+						double angle = Main.rand.NextDouble() * 2d * Math.PI;
+						offset.X += (float)(Math.Sin(angle) * 100);
+						offset.Y += (float)(Math.Cos(angle) * 100);
+						Vector2 spawnPos = NPC.Center + offset - new Vector2(4, 0);
+						int dustType = DustID.GiantCursedSkullBolt;
+						if (Form == 1)
+							dustType = DustID.DungeonSpirit;
+						Dust dust = Main.dust[Dust.NewDust(
+							spawnPos, 0, 0,
+							dustType, 0, 0, 0, default, 2f
+							)];
+						dust.velocity = -offset * 0.08f + NPC.velocity;
+						dust.noGravity = true;
 					}
 					break;
 				case ActionState.DarkFountain:
@@ -141,7 +160,7 @@ namespace ITD.Content.NPCs.Bosses
 						if (Main.expertMode)
 							range = 2f;
 						if (Main.masterMode)
-							range = 4f;
+							range = 3f;
 						int type = ModContent.ProjectileType<GasLeak>();
 						int damage = 20;
 						if (Form == 1)
@@ -151,8 +170,8 @@ namespace ITD.Content.NPCs.Bosses
 						}
 						for (int i = 0; i < range; i++)
 						{
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(4f+Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), type, damage, 0, -1);
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(-4f-Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), type, damage, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(6f+Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), type, damage, 0, -1);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(-6f-Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), type, damage, 0, -1);
 						}
 					}
 					for (int i = 0; i < 4; i++)
@@ -249,8 +268,9 @@ namespace ITD.Content.NPCs.Bosses
 					{
 						case 0:
 							AI_State = ActionState.ShovelSlam;
-							StateTimer = 30;
-							NPC.velocity = new Vector2(0, -10f);
+							StateTimer = 40;
+							NPC.velocity = new Vector2(0, -3f);
+							SoundEngine.PlaySound(SoundID.Zombie54, NPC.Center);
 							break;
 						case 1:
 							AI_State = ActionState.Chasing;
