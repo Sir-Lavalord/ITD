@@ -10,7 +10,7 @@ using Terraria.GameContent;
 
 using ITD.Utilities;
 
-namespace ITD.Particles.Misc
+namespace ITD.Particles.Projectile
 {
     public class CyaniteFlash : ParticleEmitter
     {

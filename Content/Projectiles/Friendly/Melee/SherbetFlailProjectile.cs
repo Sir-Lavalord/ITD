@@ -9,7 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 using ITD.Utilities;
-using ITD.Particles.Misc;
+using ITD.Particles.Projectile;
 using ITD.Particles;
 
 namespace ITD.Content.Projectiles.Friendly.Melee

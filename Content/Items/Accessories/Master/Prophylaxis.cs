@@ -5,7 +5,10 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using System;
-using ITD.Content.Buffs.Debuffs;
+
+using ITD.Content.Buffs.EquipmentBuffs;
+using ITD.Particles.Misc;
+using ITD.Particles;
 
 namespace ITD.Content.Items.Accessories.Master
 {
@@ -30,29 +33,19 @@ namespace ITD.Content.Items.Accessories.Master
 	
 	internal class ProphylaxisPlayer : ModPlayer
     {
+		public ParticleEmitter emitter;
+		
         public bool hasProphylaxis;
 		public bool bloodletting;
-		public int lifeDegen;
+		public bool justHealed;
 		public int bloodShield;
 
         public override void ResetEffects()
         {
             hasProphylaxis = false;
 			bloodletting = false;
+			justHealed = false;
         }
-
-		public override void UpdateBadLifeRegen()
-        {
-			if (bloodletting)
-			{
-				if (Player.lifeRegen > 0)
-                    Player.lifeRegen = 0;
-				
-				Player.lifeRegenTime = 0;
-				 
-				Player.lifeRegen -= lifeDegen;
-			}
-		}
 		
 		public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
@@ -64,24 +57,39 @@ namespace ITD.Content.Items.Accessories.Master
         {
 			if (bloodletting)
 			{
+				if (emitter != null)
+				{
+					emitter.keptAlive = true;
+					emitter.Emit(Player.Center + Main.rand.NextVector2Circular(16f, 16f), Player.velocity * 0.5f, 0f, 20);
+				}
+				
 				g *= 0.25f;
 				b *= 0.25f;
-				Main.dust[Dust.NewDust(drawInfo.Position, Player.width, Player.height, DustID.Blood)].velocity *= 0.2f;
 			}
 		}
     }
 	
 	internal class ProphylaxisHealItem : GlobalItem
     {
-		public override void UseAnimation(Item item, Player player)
+		public override bool? UseItem(Item item, Player player)
         {
 			ProphylaxisPlayer modPlayer = player.GetModPlayer<ProphylaxisPlayer>();
-            if (item.healLife > 0 && modPlayer.hasProphylaxis)
+            if (item.healLife > 0 && modPlayer.hasProphylaxis && !modPlayer.justHealed)
             {
-				modPlayer.lifeDegen = (int)(Math.Min(player.GetHealLife(item), player.statLifeMax2-player.statLife)*0.2f);
+				player.statLife -= player.GetHealLife(item);
 				modPlayer.bloodShield = player.GetHealLife(item);
-				player.AddBuff(ModContent.BuffType<BloodlettingBuff>(), 600, false);
+				modPlayer.justHealed = true; // hack fix for potions being weird
+				
+				player.AddBuff(ModContent.BuffType<BloodlettingBuff>(), 480, false);
+				
+				SoundEngine.PlaySound(SoundID.NPCDeath23, player.Center);
+				modPlayer.emitter = ParticleSystem.NewEmitter<BloodParticle>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+				modPlayer.emitter.tag = player;
+				modPlayer.emitter.keptAlive = true;
+				for (int i = 0; i < 15; ++i)
+					modPlayer.emitter.Emit(player.Center, Main.rand.NextVector2Circular(8f, 8f), 0f, 20);
             }
+			return null;
         }
 	}
 }

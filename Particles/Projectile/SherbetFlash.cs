@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ITD.Particles.Misc
+namespace ITD.Particles.Projectile
 {
     public class SherbetFlash : ParticleEmitter
     {

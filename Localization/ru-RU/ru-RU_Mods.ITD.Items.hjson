@@ -607,11 +607,7 @@ EatersTail: {
 
 Prophylaxis: {
 	DisplayName: Профилактика
-	Tooltip:
-		'''
-		Using a healing item causes you to bleed out
-		Losing life gained and reducing damage taken
-		'''
+	Tooltip: Предметы востанавливающие здоровье временно защищают от урона вместо лечения
 }
 
 BottomlessSandBucket: {

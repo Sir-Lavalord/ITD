@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace ITD.Content.Buffs.Debuffs
+namespace ITD.Content.Buffs.EquipmentBuffs
 {
     public class BloodlettingBuff : ModBuff
     {		
         public override void SetStaticDefaults()
         {
             Main.buffNoSave[Type] = true;
-            Main.debuff[Type] = true;
         }
 		
         public override void Update(Player player, ref int buffIndex)

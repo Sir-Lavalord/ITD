@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 
-using ITD.Particles.Misc;
+using ITD.Particles.Projectile;
 using ITD.Particles;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger.Ammo

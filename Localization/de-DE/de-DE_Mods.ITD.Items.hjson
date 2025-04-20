@@ -604,11 +604,7 @@ EatersTail: {
 
 Prophylaxis: {
 	DisplayName: Prophylaxe
-	/* Tooltip:
-		'''
-		Using a healing item causes you to bleed out
-		Losing life gained and reducing damage taken
-		''' */
+	// Tooltip: Healing items temporarily shield you from damage instead of restoring health
 }
 
 BottomlessSandBucket: {

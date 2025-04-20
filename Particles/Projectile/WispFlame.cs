@@ -2,7 +2,7 @@
 using Terraria;
 using Terraria.ID;
 
-namespace ITD.Particles.Misc
+namespace ITD.Particles.Projectile
 {
     public class WispFlame : ParticleEmitter
     {
