@@ -57,7 +57,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                 mousePos = buffer;
             }
         }
-        int ShieldHealth = 20;
+        int ShieldHealth = 1000;
         int Shattered;
         public override void AI()
         {
@@ -164,15 +164,13 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                         Projectile other = Main.projectile[i];
 
                         if (i != Projectile.whoAmI &&
-                            other.aiStyle != -999 &&
-                            other.hostile &&
-                            other.active &&
+                            other.Reflectable() &&
                             (Math.Abs(Projectile.Center.X - other.position.X)
                              + Math.Abs(Projectile.Center.Y - other.position.Y) < 60))
                         {
                             if (!Main.dedServ)
                             {
-                                Projectile.ai[2]++;
+                                Projectile.ai[2] += other.damage;
                                 for (int d = 0; d < 4; d++)
                                 {
                                     Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width / 4, Projectile.height / 4, DustID.GoldCoin, 0, 0, 60, default, Main.rand.NextFloat(1f, 1.2f));
@@ -191,8 +189,6 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                                 }
                                 SoundEngine.PlaySound(SoundID.NPCHit42, Projectile.Center);
                                 Projectile.velocity = other.velocity / 1.5f;
-                                /*                                    CombatText.NewText(Projectile.Hitbox, Color.Orange, "BLOCKED", true);
-                                */
                                 other.owner = Main.myPlayer;
                                 other.Kill();
                                 other.friendly = true;

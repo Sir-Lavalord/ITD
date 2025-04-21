@@ -810,7 +810,6 @@ HunterrGreatbow: {
 	Tooltip:
 		'''
 		Hold <right> to charge up an arrow
-		Fully-charged arrow can topple enemies
 		While not charging, the bow can block projectiles
 		'''
 }
