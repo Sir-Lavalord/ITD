@@ -31,8 +31,8 @@ namespace ITD.Content.Items.Accessories.Master
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-/*            player.GetModPlayer<InsightedPlayer>().CorporateInsight = true;
-*/        }
+            player.GetModPlayer<InsightedPlayer>().CorporateInsight = true;
+        }
         public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;

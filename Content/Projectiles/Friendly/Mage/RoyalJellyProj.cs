@@ -12,6 +12,9 @@ using Microsoft.Build.Evaluation;
 using ITD.Content.Buffs.Debuffs;
 using ITD.Content.Buffs.GeneralBuffs;
 using ITD.Content.Projectiles.Friendly.Misc;
+using ITD.Particles;
+using ITD.Particles.Misc;
+using ITD.Particles.Projectile;
 
 namespace ITD.Content.Projectiles.Friendly.Mage
 {
@@ -32,10 +35,12 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             get => Projectile.localAI[0];
             set => Projectile.localAI[0] = value;
         }
-
+        public ParticleEmitter emitter;
+        public int chosenFrame;
+        int fakeTimer; //why
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 3;
+            Main.projFrames[Projectile.type] = 7;
 
             ProjectileID.Sets.DontAttachHideToAlpha[Type] = true;
         }
@@ -50,11 +55,11 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             Projectile.DamageType = DamageClass.Melee;
             Projectile.penetrate = 3;
             Projectile.timeLeft = 900;
-            Projectile.alpha = 255;
             Projectile.light = 0.2f;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = true;
-            Projectile.hide = true;
+            emitter = ParticleSystem.NewEmitter<HoneyParticle>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+            emitter.tag = Projectile;
         }
         bool grounded;
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -64,18 +69,21 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             Projectile.velocity *= 0f;
             if (!grounded)
             {
-                Projectile.frame = Main.rand.Next(1, 3);
-                Projectile.timeLeft = 300;
+                if (Main.rand.NextBool(2))
+                {
+                    chosenFrame = 4;
+                }
+                else chosenFrame = 0;
+                Projectile.frame += chosenFrame;
                 grounded = true;
+                Projectile.timeLeft = 300;
 
                 SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
             }
-            for (int i = 0; i < 5; i++)
+            
+            for (int i = 0; i < 16; i++)
             {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width / 4, Projectile.height / 4, DustID.Honey, 0, 0, 60, default, Main.rand.NextFloat(1f, 1.7f));
-                dust.noGravity = true;
-                dust.velocity *= 4f;
-                Dust.NewDustDirect(Projectile.position, Projectile.width / 4, Projectile.height / 4, DustID.Honey, 0, 0, 60, default, Main.rand.NextFloat(1f, 1.7f));
+                emitter?.Emit(Projectile.Center, (Projectile.velocity / 3).RotatedByRandom(3f));
             }
             return false;
         }
@@ -92,8 +100,9 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         //Example mod looking ass
         public override void AI()
         {
+            if (emitter != null)
+                emitter.keptAlive = true;
 
-            UpdateAlpha();
             if (IsStickingToTarget)
             {
                 StickyAI();
@@ -104,8 +113,25 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             }
             if (grounded || IsStickingToTarget)
             {
-                
-                float maxDetectRadius = 30;
+                if (Projectile.frameCounter++ >= 2)
+                {
+                    Projectile.frameCounter = 0;
+                    if (chosenFrame == 0)
+                    {
+                        if (Projectile.frame < Main.projFrames[Projectile.type] - 4)
+                        {
+                            Projectile.frame++;
+                        }
+                    }
+                    else
+                    {
+                        if (Projectile.frame < Main.projFrames[Projectile.type] - 1)
+                        {
+                            Projectile.frame++;
+                        }
+                    }
+                    }
+                    float maxDetectRadius = 30;
                 Player closestPlayer = FindClosestPlayer(maxDetectRadius);
                 if (closestPlayer == null)
                     return;
@@ -140,6 +166,12 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                     }
                 }
             }
+            if (Main.rand.NextBool(3))
+            {
+                Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
+                Vector2 veloDelta = Projectile.velocity;
+                emitter?.Emit(Projectile.Center + new Vector2(0f, Projectile.height / 2 - 14), ((velo * 1.25f) + veloDelta).RotatedByRandom(0.1f));
+            }
         }
 
         private void NormalAI()
@@ -147,12 +179,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             if (!grounded)
             {
                 Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
-                for (int i = 0; i < 6; i++)
-                {
-                    Dust dust = Dust.NewDustDirect(Projectile.Center, Projectile.width / 4, Projectile.height / 4, DustID.Honey, 0, 0, 60, default, Main.rand.NextFloat(0.4f, 1.2f));
-                    dust.noGravity = false;
-                    dust.velocity *= 1f;
-                }
+
             }
         }
 
@@ -188,12 +215,9 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         {
             SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 10; i++)
             {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Honey, 0, 0, 60, default, Main.rand.NextFloat(1f, 1.7f));
-                dust.noGravity = true;
-                dust.velocity *= 10f;
-                Dust.NewDustDirect(Projectile.position, Projectile.width / 2, Projectile.height / 2, DustID.Honey2, 0, 0, 60, default, Main.rand.NextFloat(1f, 1.7f));
+                emitter?.Emit(Projectile.Center, (Projectile.velocity/3).RotatedByRandom(3f));
             }
 
         }
@@ -211,20 +235,24 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         private readonly Point[] stickingJavelins = new Point[MaxStickingJavelin];
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 16; i++)
             {
-                Dust dust = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, DustID.Honey, 0, 0, 80, default, Main.rand.NextFloat(1, 1.8f));
-                dust.noGravity = true;
-                dust.velocity *= 4f;
+                emitter?.Emit(Projectile.Center, (Projectile.velocity/3).RotatedByRandom(3f));
             }
             target.AddBuff(ModContent.BuffType<RoyalJellyDebuff>(), 600);
             SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
             if (!IsStickingToTarget)
             {
-                Projectile.frame = Main.rand.Next(1, 3);
+                if (Main.rand.NextBool(2))
+                {
+                    chosenFrame = 4;
+                }
+                else chosenFrame = 0;
+                Projectile.frame += chosenFrame;
 
+                SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
                 IsStickingToTarget = true;
+
             }
             TargetWhoAmI = target.whoAmI;
             Projectile.velocity = (target.Center - Projectile.Center) * 0.9f;
@@ -268,32 +296,27 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             }
             return projHitbox.Intersects(targetHitbox);
         }
-        private const int AlphaFadeInSpeed = 25;
-
-        private void UpdateAlpha()
-        {
-            if (Projectile.alpha > 0)
-            {
-                Projectile.alpha -= AlphaFadeInSpeed;
-            }
-            if (Projectile.alpha < 0)
-            {
-                Projectile.alpha = 0;
-            }
-        }
         public override bool PreDraw(ref Color lightColor)
         {
-            Main.instance.LoadProjectile(Projectile.type);
-            Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
-            Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
+            SpriteBatch sb = Main.spriteBatch;
+            Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
-                Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                Vector2 center = Projectile.Size / 2f;
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + center;
                 Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+                Vector2 origin = new(outline.Width * 0.5f, (outline.Height / Main.projFrames[Type]) * 0.5f);
+                sb.Draw(outline, drawPos, frame, color, Projectile.oldRot[k], origin, Projectile.scale, SpriteEffects.None, 0f);
             }
-
-            return true;
+            void DrawAtProj(Texture2D tex)
+            {
+                sb.Draw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f), Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+            }
+            emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => DrawAtProj(outline));
+            emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterPreDrawAll, () => DrawAtProj(texture));
+            return false;
         }
         public Player FindClosestPlayer(float maxDetectDistance)
         {

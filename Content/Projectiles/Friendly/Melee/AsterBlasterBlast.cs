@@ -15,13 +15,14 @@ using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Microsoft.CodeAnalysis;
+using ITD.Content.Projectiles.Friendly.Summoner;
 
-namespace ITD.Content.Projectiles.Friendly.Summoner
+namespace ITD.Content.Projectiles.Friendly.Melee
 {
     public class AsterBlasterBlast : BigBlankExplosion
-    {   
-        public override int Lifetime => 30;
-        public override Vector2 ScaleRatio => new Vector2(1.5f,1f);
+    {
+        public override int Lifetime => 26;
+        public override Vector2 ScaleRatio => new Vector2(1.5f, 1f);
 
         public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.Turquoise * 1.6f, Color.DarkViolet, MathHelper.Clamp(pulseCompletionRatio * 2.2f, 0f, 1f));
 
@@ -62,9 +63,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Projectile other = Main.projectile[i];
 
                 if (i != Projectile.whoAmI &&
-                    other.aiStyle != -999 &&
-                    other.hostile &&
-                    other.active
+                    other.Reflectable()
                     && Math.Abs(Projectile.Center.X - other.position.X)
                     + Math.Abs(Projectile.Center.Y - other.position.Y) < CurrentRadius * 2.5f)
                 {
@@ -82,7 +81,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
                         other.friendly = true;
                         other.hostile = false;
-                        other.damage *= 5;//NERFED'D
+                        other.damage *= 10;
                         other.netUpdate = true;
                     }
                 }
