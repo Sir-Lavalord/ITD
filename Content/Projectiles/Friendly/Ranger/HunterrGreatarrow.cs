@@ -40,7 +40,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
         Vector2 spawnvel;
         public override void OnSpawn(IEntitySource source)
         {
-            Projectile.extraUpdates += (int)Projectile.ai[0];
+
             switch (Projectile.ai[0])
             {
                 case 0:
