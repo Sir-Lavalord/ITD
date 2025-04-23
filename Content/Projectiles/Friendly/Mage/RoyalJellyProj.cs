@@ -81,9 +81,9 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                 SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
             }
             
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 12; i++)
             {
-                emitter?.Emit(Projectile.Center, (Projectile.velocity / 3).RotatedByRandom(3f));
+                emitter?.Emit(Projectile.Center, (Projectile.velocity / 3).RotatedByRandom(3f) * Main.rand.NextFloat(0.9f, 1.1f));
             }
             return false;
         }
@@ -113,7 +113,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             }
             if (grounded || IsStickingToTarget)
             {
-                if (Projectile.frameCounter++ >= 2)
+                if (Projectile.frameCounter++ >= 1)
                 {
                     Projectile.frameCounter = 0;
                     if (chosenFrame == 0)
@@ -131,6 +131,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                         }
                     }
                     }
+                //do everything above this line
                     float maxDetectRadius = 30;
                 Player closestPlayer = FindClosestPlayer(maxDetectRadius);
                 if (closestPlayer == null)
@@ -166,18 +167,18 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                     }
                 }
             }
-            if (Main.rand.NextBool(3))
-            {
-                Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
-                Vector2 veloDelta = Projectile.velocity;
-                emitter?.Emit(Projectile.Center + new Vector2(0f, Projectile.height / 2 - 14), ((velo * 1.25f) + veloDelta).RotatedByRandom(0.1f));
-            }
         }
 
         private void NormalAI()
         {
             if (!grounded)
             {
+                if (Main.rand.NextBool(2))
+                {
+                    Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
+                    Vector2 veloDelta = Projectile.velocity;
+                    emitter?.Emit(Projectile.Center + new Vector2(0f, Projectile.height / 2 - 14), ((velo * 1.25f) + veloDelta).RotatedByRandom(0.1f));
+                }
                 Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + 1.57f;
 
             }
@@ -217,7 +218,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 
             for (int i = 0; i < 10; i++)
             {
-                emitter?.Emit(Projectile.Center, (Projectile.velocity/3).RotatedByRandom(3f));
+                emitter?.Emit(Projectile.Center, (Projectile.velocity/3).RotatedByRandom(3f) * Main.rand.NextFloat(0.9f,1.1f));
             }
 
         }
@@ -235,9 +236,9 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         private readonly Point[] stickingJavelins = new Point[MaxStickingJavelin];
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 12; i++)
             {
-                emitter?.Emit(Projectile.Center, (Projectile.velocity/3).RotatedByRandom(3f));
+                emitter?.Emit(Projectile.Center, (Projectile.velocity/3).RotatedByRandom(3f) * Main.rand.NextFloat(0.9f,1.1f));
             }
             target.AddBuff(ModContent.BuffType<RoyalJellyDebuff>(), 600);
             SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);

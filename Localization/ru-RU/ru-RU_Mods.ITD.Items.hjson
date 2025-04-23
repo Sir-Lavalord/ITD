@@ -1447,3 +1447,8 @@ EternalBubbleWand: {
 	// DisplayName: Eternal Bubble Wand
 	// Tooltip: ""
 }
+
+FungalRod: {
+	// Tooltip: ""
+	// DisplayName: Fungal Rod
+}

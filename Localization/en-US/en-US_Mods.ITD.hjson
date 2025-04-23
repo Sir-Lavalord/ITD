@@ -221,6 +221,7 @@ Projectiles: {
 	MangledSheerthornProj.DisplayName: Mangled Sheerthorn Proj
 	WRipperDash.DisplayName: W Ripper Dash
 	ManuscriptDuelistProj.DisplayName: dogshit minion
+	FungalRodProj.DisplayName: Fungal Rod Proj
 }
 
 NPCs: {
