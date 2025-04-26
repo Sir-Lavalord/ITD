@@ -17,6 +17,7 @@ using Terraria.Audio;
 using Terraria.GameContent.Drawing;
 using Terraria.DataStructures;
 using ITD.Content.Projectiles.Hostile.CosJel;
+using System.Threading;
 namespace ITD.Content.NPCs.Bosses
 {
     public class CosmicJellyfishHand : ModNPC
@@ -31,7 +32,9 @@ namespace ITD.Content.NPCs.Bosses
             DownToSize,
             MeteorStrike,
             TemperTantrum,
-            ForceKill//it's not just downtosize trust me
+            ForceKill,//it's not just downtosize trust me
+            SetBigHand,
+            SetScepter
         }
         private ActionState AIState { get { return (ActionState)NPC.ai[0]; } set { NPC.ai[0] = (float)value; } }
         public bool IsLeftHand => (int)NPC.ai[3] == 1;
@@ -203,7 +206,7 @@ namespace ITD.Content.NPCs.Bosses
                     handCharge = 0f;
                     if (handSling < 1f)
                     {
-                        handSling += 0.03f;
+                        handSling += 0.01f;
                         targetRotation -= handSling;
                     }
                     for (int i = 0; i < Main.maxNPCs; i++) 
@@ -239,7 +242,7 @@ namespace ITD.Content.NPCs.Bosses
                                             Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X + 20, NPC.Center.Y), Vector2.Zero,
                                             ModContent.ProjectileType<CosmicJellyfishBlast>(), (int)(NPC.damage), 2f, player.whoAmI);
                                             Blast.damage = 0;
-                                            Blast.ai[1] = 180f;
+                                            Blast.ai[1] = 320f;
                                             Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
                                             Blast.netUpdate = true;
 
@@ -323,7 +326,23 @@ namespace ITD.Content.NPCs.Bosses
                         NPC.checkDead();
                         NPC.active = false;
                     break;
-
+                case ActionState.SetBigHand:
+                    Timer++;
+                    NPC.Center = Vector2.Lerp(NPC.Center, normalCenter, 0.3f);
+                    if (Timer % 30 == 0 && Timer <= 70)
+                    {
+                        NPC.scale += 0.25f;
+                    }
+                    if (Timer == 70)
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, vel,
+                             ModContent.ProjectileType<CosmicSetHandWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI);
+                        }
+                    }
+                    break;
 
             }
             for (int i = 0; i < Main.maxProjectiles; i++)
@@ -355,7 +374,7 @@ namespace ITD.Content.NPCs.Bosses
                 }
 
             }
-            NPC.rotation = MathHelper.Lerp(NPC.rotation, targetRotation, 0.05f);
+            NPC.rotation = MathHelper.Lerp(NPC.rotation, targetRotation, 0.01f);
             if (emitter != null)
                 emitter.keptAlive = true;
             if (Main.rand.NextBool(3))
@@ -399,6 +418,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             return false;
         }
+        int HandAction = 0;
         public override void FindFrame(int frameHeight)
         {
             int startFrame = 0;
@@ -418,11 +438,11 @@ namespace ITD.Content.NPCs.Bosses
                     }
                 }
             }
-            else if (AIState == ActionState.Charging || AIState == ActionState.Clapping)
+            else if (AIState == ActionState.Charging || AIState == ActionState.Clapping || AIState == ActionState.SetBigHand)
             {
                 NPC.frame.Y = (5) * frameHeight;
             }
-            else if (AIState == ActionState.Slinging || (AIState == ActionState.MeteorStrike) || AIState == ActionState.Clapping)
+            else if (AIState == ActionState.Slinging || (AIState == ActionState.MeteorStrike) || AIState == ActionState.Clapping || AIState == ActionState.SetBigHand)
             {
                 NPC.frame.Y = (6) * frameHeight;
             }

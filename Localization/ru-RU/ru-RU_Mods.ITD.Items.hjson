@@ -1435,7 +1435,7 @@ Stonepresser: {
 
 MangledSheerthorn: {
 	// DisplayName: Mangled Sheerthorn
-	// Tooltip: Sword breaks into lingering shrapnels which stick on surfaces every third ground slam
+	// Tooltip: Every third ground strike, shoots out shrapnels which stick on surfaces
 }
 
 CryptiteWall: {

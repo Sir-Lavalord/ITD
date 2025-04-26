@@ -142,6 +142,7 @@ namespace ITD.Content.NPCs.Bosses
         bool expertMode = Main.expertMode;
         bool masterMode = Main.masterMode;
         public bool bSecondStage => NPC.localAI[2] != 0;//ai 2 for cosjel p2
+        int currentHand = 1;
 
         public override void AI()
         {
@@ -256,7 +257,7 @@ namespace ITD.Content.NPCs.Bosses
                     if (AttackCount > 0)
                     {
                         AI_State = MovementState.FollowingRegular;
-                        AttackID = 3;
+                        AttackID = 4;
                         AITimer1 = 0;
                         AITimer2 = 0;
                         AttackCount = 0;
@@ -309,7 +310,7 @@ namespace ITD.Content.NPCs.Bosses
                     if (AttackCount > 1)
                     {
                         AI_State = MovementState.FollowingRegular;
-                        AttackID = Main.rand.Next(1, 4);
+                        AttackID = Main.rand.Next(1, 5);
                         AITimer1 = 0;
                         AITimer2 = 0;
                         AttackCount = 0;
@@ -358,7 +359,7 @@ namespace ITD.Content.NPCs.Bosses
                         HandControl(1, 7, 3, true);
                         HandControl(-1, 7, 3, true);
                         AI_State = MovementState.FollowingRegular;
-                        AttackID = Main.rand.Next(1, 4);
+                        AttackID = Main.rand.Next(1, 5);
                         AITimer1 = 0;
                         AITimer2 = 0;
                         AttackCount = 0;
@@ -369,68 +370,39 @@ namespace ITD.Content.NPCs.Bosses
                     }
             
                     break;
-                case 4://slap
+                case 4://set non-spell plagiarism
+                    distanceAbove = 350;
                     AITimer1++;
-                    if (!bSecondStage)
+                    if (AITimer1 == 150)
                     {
-                        if (AITimer1 == 20)
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                if (Main.rand.NextBool(2))
-                                {
-                                    NPCHelpers.NewNPCEasy(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<CosmicJellyfishHand>(), NPC.whoAmI, 0, 0, NPC.whoAmI, 1);
-                                }
-                                else NPCHelpers.NewNPCEasy(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<CosmicJellyfishHand>(), NPC.whoAmI, 0, 0, NPC.whoAmI, -1);
-                            }
+                            if (!HandExist(currentHand))
+                                NPCHelpers.NewNPCEasy(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<CosmicJellyfishHand>(), NPC.whoAmI, 0, 0, NPC.whoAmI, currentHand);
+                            HandControl(currentHand, 8, 8, false);
                         }
-                        else if (AITimer1 >= 100)
-                        {
-                            AttackID++;
-                            AITimer1 = 0;
-                            HandControl(-1, 1, 2, false);
-                            HandControl(1, 1, 2, false);
-                        }
+                        NetSync();
                     }
-                    else
+                    else if (AITimer1 == 300)
                     {
-
-                        if (AITimer1 == 100)
-                        {
-                            if (NPC.Center.X < player.Center.X)
-                            {
-                                HandControl(-1, 1, 2, false);
-                            }
-                            else
-                            {
-                                HandControl(1, 1, 2, false);
-                            }
-                        }
-                        if (AITimer1 >= 600)
-                        {
-                            HandControl(1, 7, 3, true);
-                            HandControl(-1, 7, 3, true);
-                            NetSync();
-                            AITimer1 = 0;
-                            AttackID++;
-                            NetSync();
-
-                        }
-                        if (AITimer1 == 20)
-                        {
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                if (!HandExist(1))
-                                    NPCHelpers.NewNPCEasy(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<CosmicJellyfishHand>(), NPC.whoAmI, 0, 0, NPC.whoAmI, 1);
-                                if (!HandExist(-1))
-                                    NPCHelpers.NewNPCEasy(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<CosmicJellyfishHand>(), NPC.whoAmI, 0, 0, NPC.whoAmI, -1);
-                            }
-                        }
+                        currentHand *= -1;
+                        AITimer1 = 0;
+                        AttackCount++;
+                    }
+                    if (AttackCount > 2 && !HandExist(1) && !HandExist(-1))
+                    {
+                        HandControl(1, 7, 3, true);
+                        HandControl(-1, 7, 3, true);
+                        AI_State = MovementState.FollowingRegular;
+                        AttackID = Main.rand.Next(1, 5);
+                        AITimer1 = 0;
+                        AITimer2 = 0;
+                        AttackCount = 0;
+                        DashTimer = 0;
+                        distanceAbove = 250;
                     }
 
-
-
-                        break;
+                     break;
                 case 5://dash
                     if (AITimer1++ == 60)
                     {
