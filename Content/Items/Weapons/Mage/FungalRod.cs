@@ -3,6 +3,7 @@ using ITD.Systems;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -19,7 +20,7 @@ namespace ITD.Content.Items.Weapons.Mage
         {
             Item.DamageType = DamageClass.Magic;
             Item.damage = 16;
-            Item.mana = 4;
+            Item.mana = 6;
             Item.width = 56;
             Item.height = 56;
             Item.useTime = 30;
@@ -29,7 +30,7 @@ namespace ITD.Content.Items.Weapons.Mage
             Item.knockBack = 1f;
             Item.value = Item.buyPrice(silver: 10);
             Item.rare = ItemRarityID.Blue;
-            Item.UseSound = SoundID.Item43;
+            Item.UseSound = new SoundStyle("ITD/Content/Sounds/FungalRodShoot");
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<FungalRodProj>();
             Item.shootSpeed = 2.5f;
