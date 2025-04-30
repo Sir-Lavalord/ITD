@@ -1459,3 +1459,8 @@ FungalRod: {
 	Tooltip: ""
 	DisplayName: Fungal Rod
 }
+
+ResonanceCrossbow: {
+	Tooltip: Shoots a rebar that interacts with other rebars
+	DisplayName: Resonance Crossbow
+}

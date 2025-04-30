@@ -224,6 +224,8 @@ Projectiles: {
 	// FungalRodProj.DisplayName: Fungal Rod Proj
 	// CosmicSetHandWarn.DisplayName: Cosmic Set Hand Warn
 	// CosmicJellyfish_SetHand.DisplayName: Cosmic Jellyfish_ Set Hand
+	// ResonanceBar.DisplayName: Resonance Bar
+	// ResonanceBlast.DisplayName: Resonance Blast
 }
 
 NPCs: {
