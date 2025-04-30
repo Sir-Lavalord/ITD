@@ -195,11 +195,7 @@ namespace ITD.Content.NPCs.Bosses
                         AIState = UpcomingAttack;
                         chargePos = player.Center + (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 120f;
                     }
-                    /*                    if (UpcomingAttack == ActionState.Clapping)
-                    */
                     handTarget = player.Center;
-/*                    else
-                        handTarget = player.Center;*/
                     NPC.Center = Vector2.Lerp(normalCenter, chargedPosition, (float)Math.Sin(handCharge * Math.PI));
                     break;
                 case ActionState.Clapping:
@@ -213,7 +209,7 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         if (Main.npc[i].active && Main.npc[i].type == NPC.type && i != NPC.whoAmI)
                         {
-                            if (Math.Abs(NPC.position.X - Main.npc[i].position.X) + Math.Abs(NPC.position.Y - Main.npc[i].position.Y) < NPC.width)
+                            if (Math.Abs(NPC.position.X - Main.npc[i].position.X) + Math.Abs(NPC.position.Y - Main.npc[i].position.Y) < NPC.width/2)
                             {
                                 if (NPC.velocity != Vector2.Zero)
                                 {

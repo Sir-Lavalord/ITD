@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using ITD.Content.Items.Materials;
 using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Content.Dusts;
+using ITD.Systems;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {
@@ -14,7 +15,19 @@ namespace ITD.Content.Items.Weapons.Ranger
     {
         public override void SetStaticDefaults()
         {
+            HeldItemLayer.RegisterData(Item.type, new DrawLayerData()
+            {
+                Texture = ModContent.Request<Texture2D>(Texture + "_Glow"),
+                Color = () => Color.White
+            });
             Item.ResearchUnlockCount = 1;
+        }
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+
+            spriteBatch.Draw(texture, new Vector2(Item.position.X - Main.screenPosition.X + Item.width * 0.5f, Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height * 0.5f),
+                new Rectangle(0, 0, texture.Width, texture.Height), Color.White, rotation, texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
         }
         public override void SetDefaults()
         {

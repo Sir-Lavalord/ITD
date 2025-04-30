@@ -21,7 +21,7 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
 {
     public class CosmicJellyfishBlast : BigBlankExplosion
     {
-        public override int Lifetime => 200;
+        public override int Lifetime => 250;
         public override Vector2 ScaleRatio => new Vector2(1.5f, 1f);
 
         public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.Gray * 1.6f, Color.Purple, MathHelper.Clamp(pulseCompletionRatio * 2.2f, 0f, 1f));
@@ -63,7 +63,6 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
             float radius = 10f;
             float sector = (float)(MathHelper.TwoPi);
             float sectorOfSector = sector / projectileAmount;
-            float towardsAngle = 0;
             float startAngle = 0;
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
@@ -76,7 +75,7 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
                             ModContent.ProjectileType<CosmicVoidShard>(), 20, 0f, Main.myPlayer);
                     }
             }
-                base.OnKill(timeLeft);
+            base.OnKill(timeLeft);
         }
         public override void PostAI() => Lighting.AddLight(Projectile.Center, 0.2f, 0.1f, 0f);
     }
