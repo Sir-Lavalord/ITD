@@ -18,11 +18,11 @@ namespace ITD.Content.Items.Weapons.Ranger
         }
         public override void SetDefaults()
         {
-            Item.damage = 60;
+            Item.damage = 65;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 86;
             Item.height = 30;
-            Item.reuseDelay = 20;
+            Item.reuseDelay = 15;
             Item.useTime = 40;
             Item.useAnimation = 40;
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -46,6 +46,12 @@ namespace ITD.Content.Items.Weapons.Ranger
             Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
             return false;
         }
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
 
+            spriteBatch.Draw(texture, new Vector2(Item.position.X - Main.screenPosition.X + Item.width * 0.5f, Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height * 0.5f),
+                new Rectangle(0, 0, texture.Width, texture.Height), Color.White, rotation, texture.Size() * 0.5f, scale, SpriteEffects.None, 0f);
+        }
     }
 }

@@ -55,7 +55,7 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
                 Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
                 Vector2 veloDelta = Projectile.velocity;
                 emitter?.Emit(Projectile.Center + new Vector2(0f, Projectile.height / 2 - 14), ((velo * 1.25f) + veloDelta).RotatedByRandom(0.1f));
-                Projectile proj1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, -((velo * 2f) + veloDelta).RotatedByRandom(0.6f), ModContent.ProjectileType<CosmicVoidShard>(), (Projectile.damage), 0, Main.myPlayer);
+                Projectile proj1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, -((velo * 2f) + veloDelta).RotatedByRandom(0.3f), ModContent.ProjectileType<CosmicVoidShard>(), (Projectile.damage), 0, Main.myPlayer);
                 proj1.tileCollide = false;
                 emitter?.Emit(Projectile.Center + new Vector2(0f, Projectile.height / 2 - 14), ((velo * 2f) + veloDelta).RotatedByRandom(0.3f));
             }

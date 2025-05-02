@@ -19,6 +19,8 @@ using ITD.Particles.Misc;
 using ITD.Particles;
 using ITD.Particles.Projectile;
 using ITD.Content.Projectiles.Friendly.Melee;
+using System.Collections;
+using ITD.Particles.CosJel;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger
 {
@@ -35,8 +37,8 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 
         public override void SetDefaults()
         {
-            Projectile.width = 60;
-            Projectile.height = 20;
+            Projectile.width = 56;
+            Projectile.height = 16;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.DamageType = DamageClass.Ranged;
@@ -52,7 +54,6 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 
         private bool isStuck = false;
         private bool doCollsion = false;
-        private int collisionTimer = 0;
         public int DamageTime = 0;
         private List<int> connectedProjectiles = new List<int>();
         public override bool? CanDamage()
@@ -76,7 +77,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 
         }
         private Vector2 offset = Vector2.Zero;
-
+        public bool isFalling;
         private void NormalAI()
         {
             if (!IsStickingToTarget)
@@ -91,12 +92,14 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 
                 if (other.active && other.type == Projectile.type && other.whoAmI != Projectile.whoAmI)
                 {
-                    if (Vector2.DistanceSquared(Projectile.Center, other.Center) < 10000f)
+                    if (Vector2.Distance(Projectile.Center, other.Center) < 1000f)
                     {
                         if (RotatedRectangleCollision(Projectile, other))
                         {
                             if (other.ai[0] != 0)
                             {
+                                Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.Center, -Projectile.velocity/2, Mod.Find<ModGore>("ResonanceBarGore").Type);
+                    
                                 Player player = Main.player[Main.myPlayer];
                                 float power = 6 * Utils.GetLerpValue(800f, 0f, Projectile.Distance(Main.LocalPlayer.Center), true);
                                 player.GetITDPlayer().BetterScreenshake(6, power, power, false);
@@ -123,6 +126,18 @@ ModContent.ProjectileType<ResonanceBlast>(), Projectile.damage * 2, Projectile.k
                     }
                 }
             }
+            if (isStickingToGround) return;
+
+            if (Projectile.velocity != Vector2.Zero)
+            {
+            }
+            else
+            {
+                if (!HasGroundConnectionInStructure())
+                {
+                    MakeStructureFall();
+                }
+            }
         }
         private void StickyAI()
         {
@@ -139,15 +154,62 @@ ModContent.ProjectileType<ResonanceBlast>(), Projectile.damage * 2, Projectile.k
                 Projectile.Kill();
             }
         }
+        public bool isStickingToGround;
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
+            if (!isFalling)
+            {
+                isStickingToGround = true;
+            }
+            else
+            {
+                Gore gore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.Center + new Vector2(0, -20), new Vector2 (0,-20), Mod.Find<ModGore>("ResonanceBarGore1").Type);
+
+                gore.timeLeft = 180;
+                Projectile.Kill();
+            }
+        
             isStuck = true;
             Projectile.velocity = Vector2.Zero;
             connectedProjectiles.Clear();
             FindConnectedBars(Projectile);
+
             return false;
         }
+        private void OnCollision(Projectile other)
+        {
+            if (other.ai[0] != 0)
+            {
+                other.Kill();
+                Projectile.Kill();
+                return;
+            }
+            connectedProjectiles.Clear();
+            FindConnectedBars(Projectile);
+            Projectile.velocity *= 0;
+            foreach (int projIndex in connectedProjectiles)
+            {
+                Projectile bar = Main.projectile[projIndex];
 
+                if (bar.ModProjectile is ResonanceBar barProj)
+                {
+                    barProj.DamageTime = 10;
+                    ParticleEmitter part = ParticleSystem.NewSingleParticle<ResonanceParticle>(bar.Center, Vector2.Zero, barProj.spawnrotation, lifetime: 40);
+                    part.additive = true;
+                    part.tag = bar;
+                    isStuck = true;
+
+
+                    if (!barProj.isStuck)
+                    {
+                        barProj.isStuck = true;
+                        bar.velocity = Vector2.Zero;
+                        bar.tileCollide = false;
+                    }
+                }
+            }
+        }
+        
         private bool RotatedRectangleCollision(Projectile proj1, Projectile proj2)
         {
             Vector2[] corners1 = GetRotatedCorners(proj1);
@@ -189,55 +251,54 @@ ModContent.ProjectileType<ResonanceBlast>(), Projectile.damage * 2, Projectile.k
             float halfWidth = proj.width * 0.5f;
             float halfHeight = proj.height * 0.5f;
 
-            corners[0] = new Vector2(-halfWidth, -halfHeight);
-            corners[1] = new Vector2(halfWidth, -halfHeight);
-            corners[2] = new Vector2(halfWidth, halfHeight);
-            corners[3] = new Vector2(-halfWidth, halfHeight);
-
-            for (int i = 0; i < 4; i++)
+            if (proj.ModProjectile is ResonanceBar barProj)
             {
-                corners[i] = corners[i].RotatedBy(proj.rotation);
-                corners[i] += proj.Center;
+
+                corners[0] = new Vector2(-halfWidth, -halfHeight);
+                corners[1] = new Vector2(halfWidth, -halfHeight);
+                corners[2] = new Vector2(halfWidth, halfHeight);
+                corners[3] = new Vector2(-halfWidth, halfHeight);
+
+                for (int i = 0; i < 4; i++)
+                {
+                    corners[i] = corners[i].RotatedBy(barProj.spawnrotation);
+                    corners[i] += proj.Center;
+                }
             }
 
-            return corners;
+
+                return corners;
+        }
+        private bool HasGroundConnectionInStructure()
+        {
+            connectedProjectiles.Clear();
+            FindConnectedBars(Projectile);
+
+            foreach (int projIndex in connectedProjectiles)
+            {
+                if (Main.projectile[projIndex].ModProjectile is ResonanceBar bar && bar.isStickingToGround)
+                    return true;
+            }
+            return false;
         }
 
-        private void OnCollision(Projectile other)
+        private void MakeStructureFall()
         {
-            if (other.ai[0] != 0)
-            {
-                other.Kill();
-                Projectile.Kill();
-                return;
-            }
-                connectedProjectiles.Clear();
+            connectedProjectiles.Clear();
             FindConnectedBars(Projectile);
-            Projectile.velocity *= 0;
+
             foreach (int projIndex in connectedProjectiles)
             {
                 Projectile bar = Main.projectile[projIndex];
-
-                if (bar.ModProjectile is ResonanceBar barProj)
+                if (bar.active && bar.ModProjectile is ResonanceBar barProj)
                 {
-                    bar.timeLeft = 1200;
-                    barProj.DamageTime = 10;
-                    ParticleEmitter part = ParticleSystem.NewSingleParticle<ResonanceParticle>(bar.Center, Vector2.Zero, barProj.spawnrotation, lifetime: 40);
-                    part.additive = true;
-                    part.tag = bar;
-                    isStuck = true;
-
-
-                    if (!barProj.isStuck)
-                    {
-                        barProj.isStuck = true;
-                        bar.velocity = Vector2.Zero;
-                        bar.tileCollide = false;
-                    }
+                    bar.tileCollide = true;
+                    barProj.isStickingToGround = false;
+                    barProj.isFalling = true;
+                    bar.velocity.Y += 10f;
                 }
             }
         }
-
         private void FindConnectedBars(Projectile start)
         {
             Stack<Projectile> toProcess = new Stack<Projectile>();
@@ -261,7 +322,7 @@ ModContent.ProjectileType<ResonanceBlast>(), Projectile.damage * 2, Projectile.k
                         continue;
                     }
 
-                    if (Vector2.DistanceSquared(current.Center, other.Center) < 10000f)
+                    if (Vector2.Distance(current.Center, other.Center) < 1000f)
                     {
                         if (RotatedRectangleCollision(current, other))
                         {
@@ -309,7 +370,13 @@ ModContent.ProjectileType<ResonanceBlast>(), Projectile.damage * 2, Projectile.k
                 Projectile.netUpdate = true;
         }
 
-
+        public override void OnKill(int timeLeft)
+        {
+            if (Main.myPlayer == Projectile.owner)
+            {
+                SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/MetalPipeFalling"), Projectile.Center);
+            }
+        }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             if (IsStickingToTarget)
