@@ -446,7 +446,7 @@ PinkCatacombDoor: {
 
 Ectoblade: {
 	// DisplayName: Ectoblade
-	// Tooltip: ""
+	// Tooltip: Consumes all mana on hit to add half that much magic damage
 }
 
 Houndboom: {
