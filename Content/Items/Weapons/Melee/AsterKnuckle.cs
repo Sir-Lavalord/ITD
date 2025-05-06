@@ -33,7 +33,7 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.DamageType = DamageClass.Melee;
             Item.useTime = 60;
             Item.useAnimation = 60;
-            Item.reuseDelay = 60;
+            Item.reuseDelay = 30;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 5;

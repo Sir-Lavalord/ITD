@@ -1457,3 +1457,8 @@ ResonanceCrossbow: {
 	// Tooltip: Shoots a rebar that interacts with other rebars
 	// DisplayName: Resonance Crossbow
 }
+
+CrowdController: {
+	// Tooltip: ""
+	// DisplayName: Crowd Controller
+}
