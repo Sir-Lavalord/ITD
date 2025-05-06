@@ -163,7 +163,7 @@ ModContent.ProjectileType<ResonanceBlast>(), Projectile.damage * 2, Projectile.k
             }
             else
             {
-                Gore gore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.Center + new Vector2(0, -20), new Vector2 (0,-20), Mod.Find<ModGore>("ResonanceBarGore1").Type);
+                Gore gore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.Center + new Vector2(0, -20), new Vector2 (0,-10), Mod.Find<ModGore>("ResonanceBarGore1").Type);
 
                 gore.timeLeft = 180;
                 Projectile.Kill();

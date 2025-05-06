@@ -226,6 +226,8 @@ Projectiles: {
 	// CosmicJellyfish_SetHand.DisplayName: Cosmic Jellyfish_ Set Hand
 	// ResonanceBar.DisplayName: Resonance Bar
 	// ResonanceBlast.DisplayName: Resonance Blast
+	// CrowdControlProj.DisplayName: Crowd Control Proj
+	// CrowdControllerProj.DisplayName: Crowd Controller Proj
 }
 
 NPCs: {
