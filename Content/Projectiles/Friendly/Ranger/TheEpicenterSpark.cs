@@ -10,7 +10,7 @@ using Terraria.Graphics;
 using Terraria.GameContent;
 using Terraria.DataStructures;
 using ITD.Particles;
-using ITD.Particles.Misc;
+using ITD.Particles.Projectile;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger
 {

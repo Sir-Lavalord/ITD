@@ -483,7 +483,19 @@ namespace ITD.Utilities
                 dust.fadeIn = 1f;
             }
         }
-        //Reflectable
+        //Can do gimmick crap, take kb 
+        public static bool Gimmickable(this NPC npc)
+        {
+            if (!npc.boss &&
+                npc.knockBackResist > 0 &&
+                !npc.friendly &&
+                npc.CanBeChasedBy())
+            {
+                return true;
+            }
+            else
+                return false;
+        }
         public static bool Reflectable(this Projectile projectile)
         {
             if (projectile.aiStyle >=0 &&

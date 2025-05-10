@@ -228,6 +228,8 @@ Projectiles: {
 	ResonanceBlast.DisplayName: Resonance Blast
 	CrowdControlProj.DisplayName: Crowd Control Proj
 	CrowdControllerProj.DisplayName: Crowd Controller Proj
+	BleedbreakerSwing.DisplayName: Bleedbreaker Swing
+	BleedbreakerKnockbackBomb.DisplayName: Bleedbreaker Knockback Bomb
 }
 
 NPCs: {

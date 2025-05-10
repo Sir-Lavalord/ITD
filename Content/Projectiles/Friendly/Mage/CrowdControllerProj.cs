@@ -49,8 +49,8 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                     Projectile.frame = 0;
                     if (Projectile.ai[0] == 0)
                     {
-
-                        Vector2 vel = new(20, 0);
+                        Projectile.rotation = 0;
+                        Vector2 vel = new(18, 0);
                         Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, vel,
                             ModContent.ProjectileType<CrowdControllerProj>(), (int)(Projectile.damage), Projectile.knockBack, Projectile.owner);
                         proj.scale = 0.75f;
@@ -72,7 +72,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                 }
                     Projectile.penetrate = -1;
 
-                Projectile.Resize((int)(70 * Projectile.scale), (int)(70 * Projectile.scale));
+                Projectile.Resize((int)(100 * Projectile.scale), (int)(100 * Projectile.scale));
                 Projectile.timeLeft = 2;
                 if (Projectile.frameCounter++ >= 3)
                 {
@@ -130,8 +130,8 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                 Projectile.velocity *= 0;
                 startAnim = true;
             }
-            else
-                Projectile.damage =(int)(Projectile.damage * 0.9f);
+/*            else
+                Projectile.damage =(int)(Projectile.damage * 0.9f);*/
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {

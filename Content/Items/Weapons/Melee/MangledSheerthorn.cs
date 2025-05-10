@@ -114,8 +114,8 @@ namespace ITD.Content.Items.Weapons.Melee
                 if (WorldGen.ActiveAndWalkableTile(point.X, point.Y - 1) && !WorldGen.SolidTile(point.X, point.Y - 2, false))
                 {
                     position = new Vector2((float)(point.X * 16 + 5), (float)(point.Y * 16 - 5));
-                    float power = 2 * Utils.GetLerpValue(600f, 0f, point.ToWorldCoordinates().Distance(Main.LocalPlayer.Center), true);
-                    player.GetITDPlayer().BetterScreenshake(4, power, power, false);
+                    float power = 1 * Utils.GetLerpValue(600f, 0f, point.ToWorldCoordinates().Distance(Main.LocalPlayer.Center), true);
+                    player.GetITDPlayer().BetterScreenshake(2, power, power, false);
                     attackCycle = ++attackCycle % 3;
                     if (attackCycle == 0)
                     {
