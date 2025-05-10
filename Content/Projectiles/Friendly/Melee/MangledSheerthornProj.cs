@@ -38,8 +38,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.tileCollide = true;
             Projectile.alpha = 80;
             DrawOffsetX = -16;
-/*            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 30;*/
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 120;
         }
 
         public override void OnSpawn(IEntitySource source)

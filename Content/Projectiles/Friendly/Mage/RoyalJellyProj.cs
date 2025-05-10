@@ -83,7 +83,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             
             for (int i = 0; i < 12; i++)
             {
-                emitter?.Emit(Projectile.Center, (Projectile.velocity / 3).RotatedByRandom(3f) * Main.rand.NextFloat(0.9f, 1.1f));
+                emitter?.Emit(Projectile.Center, (Projectile.velocity / 3).RotatedByRandom(4f) * Main.rand.NextFloat(0.9f, 1.1f));
             }
             return false;
         }
@@ -218,7 +218,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 
             for (int i = 0; i < 10; i++)
             {
-                emitter?.Emit(Projectile.Center, (Projectile.velocity/3).RotatedByRandom(3f) * Main.rand.NextFloat(0.9f,1.1f));
+                emitter?.Emit(Projectile.Center, (Projectile.velocity/3).RotatedByRandom(4f) * Main.rand.NextFloat(0.9f,1.1f));
             }
 
         }
@@ -238,7 +238,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         {
             for (int i = 0; i < 12; i++)
             {
-                emitter?.Emit(Projectile.Center, (Projectile.velocity/3).RotatedByRandom(3f) * Main.rand.NextFloat(0.9f,1.1f));
+                emitter?.Emit(Projectile.Center, (Projectile.velocity/3).RotatedByRandom(4f) * Main.rand.NextFloat(0.9f,1.1f));
             }
             target.AddBuff(ModContent.BuffType<RoyalJellyDebuff>(), 600);
             SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
