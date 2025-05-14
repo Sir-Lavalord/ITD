@@ -486,6 +486,11 @@ Buffs: {
 		// Description: Empowered by items from another world.
 		// DisplayName: Manuscript Duelist
 	}
+
+	OrionsRingBuff: {
+		// DisplayName: Orions Ring Buff
+		// Description: Mods.ITD.Buffs.OrionsRingBuff.Description
+	}
 }
 
 DeathMessage: {
@@ -495,6 +500,7 @@ DeathMessage: {
 	BloodPact: se quedó sin sangre.
 	KSGlandAftershock: sufrió un aplanamiento por el aftershock.
 	// MudkarpEvil: meddled with eldritch terrors.
+	// OrionsRingTimeOut: is bad at the game testing 123.
 }
 
 WorldGen: {

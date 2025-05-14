@@ -67,6 +67,9 @@ namespace ITD.Players
         public int soulTalismanStack = 0;
         public int soulTalismanTally = 0;
 
+        public bool orionsRingEffect = false;
+        public int orionsRingStack = 0;
+
         public bool setAlloy_Melee = false;
         public bool setAlloy_Ranged = false;
         public bool setAlloy_Magic = false;
@@ -303,6 +306,10 @@ namespace ITD.Players
                 Player.GetDamage<GenericDamageClass>() += 0.04f * (1 + soulTalismanStack);
                 Player.GetAttackSpeed<GenericDamageClass>() += 0.03f * (1 + soulTalismanStack);
                 Player.endurance += 0.01f * (1 + soulTalismanStack);
+            }
+            if (orionsRingEffect)
+            {
+                Player.GetDamage<GenericDamageClass>() += 0.15f * (1 + orionsRingStack);
             }
         }
         public void BetterScreenshake(int dur, float powerX, float powerY, bool Decay)
