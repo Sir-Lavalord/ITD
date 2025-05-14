@@ -24,6 +24,12 @@ using ITD.Content.Items.DevTools;
 using ITD.Systems.DataStructures;
 using ITD.Content.Projectiles;
 using ITD.Content.TileEntities;
+using ITD.Content.Projectiles.Friendly.Mage;
+using ITD.Content.Projectiles.Friendly.Summoner;
+using ITD.Content.Projectiles.Friendly.Ranger;
+using ITD.Content.Projectiles.Friendly.Melee;
+using Terraria;
+using MonoMod.Logs;
 
 namespace ITD.Players
 {
@@ -67,12 +73,19 @@ namespace ITD.Players
         public int soulTalismanStack = 0;
         public int soulTalismanTally = 0;
 
-        public bool orionsRingEffect = false;
-        public int orionsRingStack = 0;
+        public bool wickedHeartVisual = false;
+        public bool wickedHeart = false;
+        public bool wickedHeartEffect = false;
+        public int wickedHeartStack = 0;
+        public int wickedHeartStorage = 0;
+        public int wickedHeartCooling = 0;
 
         public bool setAlloy_Melee = false;
         public bool setAlloy_Ranged = false;
         public bool setAlloy_Magic = false;
+
+        public bool orionsRingEffect = false;
+        public int orionsRingStack = 0;
         public bool setAlloy { get { return setAlloy_Melee ||  setAlloy_Ranged || setAlloy_Magic; } }
 
         public int DebuffCount;
@@ -186,6 +199,19 @@ namespace ITD.Players
                 Player.ClearBuff(ModContent.BuffType<SoulTalismanBuff>());
                 soulTalismanStack = 0;
             }
+            if (!wickedHeart)
+            {
+                Player.ClearBuff(ModContent.BuffType<WickedHeartBuff>());
+                wickedHeartStack = 0;
+                wickedHeartStorage = 0;
+            }
+            if (!wickedHeart)
+            {
+                Player.ClearBuff(ModContent.BuffType<WickedHeartBuff>());
+                wickedHeartStack = 0;
+            }
+            wickedHeartEffect = false;
+            wickedHeart = false;
             soulTalismanEffect = false;
             soulTalisman = false;
             portableLab = false;
@@ -251,32 +277,32 @@ namespace ITD.Players
                 Player.controlMount = false;
             }
 		}
-		
+
         public override void PostUpdateEquips()
         {
-			if (dashTime > 0)
-			{
-				dashTime--;
-				if (dashVelocity != Collision.TileCollision(Player.position, dashVelocity, Player.width, Player.height, true, true, (int)Player.gravDir))
-					dashTime = 0;
-				
-				Player.velocity = dashVelocity;
-				if (dashVelocity.Y > Player.maxFallSpeed)
-					Player.maxFallSpeed = dashVelocity.Y;
-				
+            if (dashTime > 0)
+            {
+                dashTime--;
+                if (dashVelocity != Collision.TileCollision(Player.position, dashVelocity, Player.width, Player.height, true, true, (int)Player.gravDir))
+                    dashTime = 0;
+
+                Player.velocity = dashVelocity;
+                if (dashVelocity.Y > Player.maxFallSpeed)
+                    Player.maxFallSpeed = dashVelocity.Y;
+
                 Player.immune = true;
                 Player.itemAnimation = 0;
                 Player.itemTime = 0;
-				Player.GoingDownWithGrapple = true; // go through platforms
-				
-				//dash over
+                Player.GoingDownWithGrapple = true; // go through platforms
+
+                //dash over
                 if (dashTime == 0)
                 {
                     Player.velocity *= 0.5f;
-					Player.fallStart = (int)(Player.position.Y / 16f);
+                    Player.fallStart = (int)(Player.position.Y / 16f);
                 }
-			}
-			
+            }
+
             if (setAlloy)
             {
                 Player.endurance += 0.02f;
@@ -311,13 +337,20 @@ namespace ITD.Players
             {
                 Player.GetDamage<GenericDamageClass>() += 0.15f * (1 + orionsRingStack);
             }
+
+            if (wickedHeartEffect)
+            {
+                Player.GetDamage<GenericDamageClass>() += 0.05f * (1 + wickedHeartStack);
+            }
         }
+        
         public void BetterScreenshake(int dur, float powerX, float powerY, bool Decay)
         {
             shakeDuration = dur;
             shakeIntensityX = powerX; shakeIntensityY = powerX;
             shakeDecay = Decay;
         }
+
         public override void OnHurt(Player.HurtInfo info)
         {
             if (info.PvP && info.DamageSource.TryGetCausingEntity(out Entity entity))
@@ -439,6 +472,7 @@ namespace ITD.Players
                 }
             }
         }
+
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (soulTalisman)
@@ -449,6 +483,115 @@ namespace ITD.Players
                     soulTalismanTally = 0;
                     soulTalismanEffect = true;
                     Player.AddBuff(ModContent.BuffType<SoulTalismanBuff>(), 600);
+                }
+            }
+
+            if (wickedHeart && wickedHeartEffect == false)
+            {
+                wickedHeartStorage += damageDone;
+                if (wickedHeartStorage >= 100)
+                {
+                    wickedHeartStack += 1;
+                    wickedHeartStorage = 0;
+                    CombatText.NewText(Player.getRect(), new Color(145, 145, 145), (wickedHeartStack + "/5"), true, false);
+                }
+
+                if (wickedHeartStack >= 5)
+                {
+                    wickedHeartStack = 0;
+                    wickedHeartEffect = true;
+                    Player.AddBuff(ModContent.BuffType<WickedHeartBuff>(), 1200);
+                }
+            }
+        }
+
+        public override void PostUpdate()
+        {
+            if (wickedHeartEffect && wickedHeartCooling >= 1)
+            {
+                wickedHeartCooling -= 1;
+                if (wickedHeartCooling <= 0)
+                {
+                    wickedHeartCooling = 0;
+                }
+            }
+        }
+
+        public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            if (wickedHeart)
+            {
+                if (Player.HeldItem.DamageType == DamageClass.Ranged && wickedHeartEffect && wickedHeartCooling< 1)
+                {
+                    Projectile rangedAttack = Projectile.NewProjectileDirect(source, position, velocity,
+                    ModContent.ProjectileType<WickedHeartR>(), (int)(damage * 2.5), knockback, Player.whoAmI);
+
+                    wickedHeartCooling = 30;
+
+                    return false;
+                }
+                else
+                {
+                    wickedHeartCooling -= 1;
+                    if (wickedHeartCooling <= 0)
+                    {
+                        wickedHeartCooling = 0;
+                    }
+
+                    return true;
+                }
+            }
+
+            return true;
+        }
+
+        public override void MeleeEffects(Item item, Rectangle hitbox)
+        {
+            if (wickedHeart)
+            {
+                if (Player.HeldItem.DamageType == DamageClass.Melee && wickedHeartEffect && wickedHeartCooling < 1)
+                {
+                    Vector2 mousePosition = Main.MouseWorld;
+                    Vector2 direction = mousePosition - Player.position;
+                    direction.Normalize();
+                    float speed = 6f;
+
+                    Vector2 shootTowardsMouse = direction * speed;
+                    Projectile meleeAttack = Projectile.NewProjectileDirect(Player.GetSource_FromThis(), Player.position, shootTowardsMouse,
+                    ModContent.ProjectileType<WickedHeartMelee>(), (int)(Player.HeldItem.damage * 0.75), 3f, Player.whoAmI);
+
+                    wickedHeartCooling = 66;
+                }
+            }
+        }
+
+        public override void OnConsumeMana(Item item, int manaConsumed)
+        {
+            if (Player.HeldItem.DamageType == DamageClass.Magic && wickedHeartEffect && wickedHeartCooling < 1)
+            {
+                Vector2 mousePosition = Main.MouseWorld;
+                Vector2 direction = mousePosition - Player.position;
+                direction.Normalize();
+                float speed = 6f;
+                Vector2 shootTowardsMouse = direction * speed;
+
+                Projectile magicAttack = Projectile.NewProjectileDirect(Player.GetSource_FromThis(), Player.Center, shootTowardsMouse,
+                ModContent.ProjectileType<WickedHeartM>(), (int)(Player.HeldItem.damage * 0.33), 0f, Player.whoAmI);
+
+                wickedHeartCooling = 90;
+            }
+        }
+
+        public override void OnHitAnything(float x, float y, Entity victim)
+        {
+            if (wickedHeart)
+            {
+                if (Player.HeldItem.DamageType == DamageClass.Summon && wickedHeartCooling < 1)
+                {
+                    Projectile summonAttack = Projectile.NewProjectileDirect(Player.GetSource_FromThis(), victim.Center, Vector2.Zero,
+                    ModContent.ProjectileType<WickedHeartS>(), (int)(Player.HeldItem.damage * 0.5), 0f, Player.whoAmI);
+
+                    wickedHeartCooling = 90;
                 }
             }
         }
@@ -616,6 +759,6 @@ namespace ITD.Players
 				g = 0.7f;
 				b = 0.9f;
 			}
-		}
+        }
     }
 }
