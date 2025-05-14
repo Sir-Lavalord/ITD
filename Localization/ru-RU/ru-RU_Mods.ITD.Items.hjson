@@ -1462,3 +1462,27 @@ CrowdController: {
 	// Tooltip: ""
 	// DisplayName: Crowd Controller
 }
+
+SheeringBane: {
+	// Tooltip: Attacks inflict On Fire!
+	// DisplayName: Sheering Bane
+}
+
+PoisonFang: {
+	// Tooltip: Attacks inflict Poison
+	// DisplayName: Poison Fang
+}
+
+OrionsRing: {
+	// DisplayName: Orion's Ring
+	/* Tooltip:
+		'''
+		Applies buff for each currently active boss
+		If no boss is defeated within 5 minutes, the player dies
+		''' */
+}
+
+FlamingRazor: {
+	// Tooltip: Attacks inflict On Fire! and Poison
+	// DisplayName: Flaming Razor
+}

@@ -11,6 +11,7 @@ using ITD.Content.Projectiles.Other;
 using ITD.Content.Projectiles.Friendly;
 using ITD.Content.Dusts;
 using ITD.Content.Projectiles.Friendly.Ranger;
+using ITD.Content.Items.Accessories.Combat.All;
 
 namespace ITD.Content.Projectiles
 {
@@ -27,7 +28,14 @@ namespace ITD.Content.Projectiles
 
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {
-
+            Player player = Main.player[projectile.owner];
+            if (projectile.penetrate > 1)
+            {
+                if (player.GetModPlayer<OrionsRingPlayer>().orionsRingA)
+                {
+                    projectile.penetrate += player.GetModPlayer<OrionsRingPlayer>().activeBosses.Count;
+                }
+            }
         }
 
         public override void PostAI(Projectile projectile)
