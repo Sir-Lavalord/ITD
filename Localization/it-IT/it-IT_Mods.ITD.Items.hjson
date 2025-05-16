@@ -1471,12 +1471,12 @@ CrowdController: {
 }
 
 SheeringBane: {
-	// Tooltip: Attacks inflict On Fire!
+	// Tooltip: All attacks inflict On Fire!
 	// DisplayName: Sheering Bane
 }
 
 PoisonFang: {
-	// Tooltip: Attacks inflict Poison
+	// Tooltip: All attacks inflict Poison
 	// DisplayName: Poison Fang
 }
 
@@ -1490,6 +1490,11 @@ OrionsRing: {
 }
 
 FlamingRazor: {
-	// Tooltip: Attacks inflict On Fire! and Poison
+	// Tooltip: All attacks inflict On Fire! and Poison
 	// DisplayName: Flaming Razor
+}
+
+WickedHeart: {
+	// DisplayName: Wicked Heart
+	// Tooltip: ""
 }

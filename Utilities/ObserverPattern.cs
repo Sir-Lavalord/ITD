@@ -58,6 +58,7 @@ namespace ITD.Utilities.ObserverPatterns
     }
 }
 
+#if false
 /// <summary>
 /// Below are mostly example code for its usage.
 /// </summary>
@@ -77,3 +78,4 @@ private class Test
         TestEvent.RemoveListener(TestFunction);
     }
 }
+#endif

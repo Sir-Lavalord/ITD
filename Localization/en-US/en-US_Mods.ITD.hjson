@@ -230,6 +230,10 @@ Projectiles: {
 	CrowdControllerProj.DisplayName: Crowd Controller Proj
 	BleedbreakerSwing.DisplayName: Bleedbreaker Swing
 	BleedbreakerKnockbackBomb.DisplayName: Bleedbreaker Knockback Bomb
+	WickedHeartM.DisplayName: Wicked Heart M
+	WickedHeartMelee.DisplayName: Wicked Heart Melee
+	WickedHeartR.DisplayName: Wicked Heart R
+	WickedHeartS.DisplayName: Wicked Heart S
 }
 
 NPCs: {
@@ -490,6 +494,11 @@ Buffs: {
 	OrionsRingBuff: {
 		DisplayName: Orions Ring Buff
 		Description: Mods.ITD.Buffs.OrionsRingBuff.Description
+	}
+
+	WickedHeartBuff: {
+		DisplayName: Wicked Heart Buff
+		Description: Mods.ITD.Buffs.WickedHeartBuff.Description
 	}
 }
 

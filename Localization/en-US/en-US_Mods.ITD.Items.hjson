@@ -1493,3 +1493,8 @@ FlamingRazor: {
 	Tooltip: All attacks inflict On Fire! and Poison
 	DisplayName: Flaming Razor
 }
+
+WickedHeart: {
+	DisplayName: Wicked Heart
+	Tooltip: ""
+}

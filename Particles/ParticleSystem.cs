@@ -18,26 +18,19 @@ namespace ITD.Particles
         public List<ParticleEmitter> emitters = [];
         //public static ParticlesRT particlesRT;
         public static ParticleSystem Instance => DetourManager.GetInstance<ParticleSystem>();
-        public static ParticleEmitter NewEmitter<T>(ParticleEmitterDrawCanvas canvas = ParticleEmitterDrawCanvas.WorldOverProjectiles) where T : ParticleEmitter
+        public static T NewEmitter<T>(ParticleEmitterDrawCanvas canvas = ParticleEmitterDrawCanvas.WorldOverProjectiles) where T : ParticleEmitter, new()
         {
             Type particleType = typeof(T);
-            if (emittersByType.TryGetValue(particleType, out ParticleEmitter value))
+            T newInstance = new()
             {
-                var newInstance = Activator.CreateInstance<T>();
-
-                newInstance.type = value.type;
-                newInstance.canvas = canvas;
-                if (!Main.dedServ)
-                {
-                    newInstance.ExpectedTexturePath = $"ITD/Particles/Textures/{particleType.Name}";
-                }
-                newInstance.Initialize();
-                DetourManager.GetInstance<ParticleSystem>().emitters.Add(newInstance);
-                return newInstance;
-            }
-            return null;
+                canvas = canvas,
+                type = emittersByType[particleType].type,
+                ExpectedTexturePath = Main.dedServ ? null : $"ITD/Particles/Textures/{particleType.Name}"
+            };
+            Instance.emitters.Add(newInstance);
+            return newInstance;
         }
-        public static ParticleEmitter NewSingleParticle<T>(Vector2 position, Vector2 velocity, float rotation = 0f, short lifetime = 30, ParticleEmitterDrawCanvas canvas = ParticleEmitterDrawCanvas.WorldOverProjectiles) where T : ParticleEmitter
+        public static ParticleEmitter NewSingleParticle<T>(Vector2 position, Vector2 velocity, float rotation = 0f, short lifetime = 30, ParticleEmitterDrawCanvas canvas = ParticleEmitterDrawCanvas.WorldOverProjectiles) where T : ParticleEmitter, new()
         {
             var emitter = NewEmitter<T>(canvas);
             emitter.Emit(position, velocity, rotation, lifetime);
