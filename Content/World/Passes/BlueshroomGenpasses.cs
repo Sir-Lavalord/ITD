@@ -1,24 +1,18 @@
 ﻿using ITD.Content.Tiles.BlueshroomGroves;
 using ITD.Content.World.WorldGenUtils;
-using Terraria.ID;
-using Terraria.IO;
-using Terraria.ModLoader;
 using Terraria.WorldBuilding;
-using Terraria;
 using ITD.Content.Tiles;
 using ITD.Utilities;
+using Terraria.DataStructures;
 
-namespace ITD.Content.World
+namespace ITD.Content.World.Passes
 {
-    public class BlueshroomGrovesGenPass(string name, float loadWeight) : GenPass(name, loadWeight)
+    public sealed class BluesoilPass : ITDGenpass
     {
-        protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
-        {
-            Point p = GetGenStartPoint();
-            GenFloor(p.X, p.Y, WorldGen._genRandSeed);
-        }
-
-        private static Point GetGenStartPoint()
+        public override string Name => "[ITD] Blueshroom Groves";
+        public override double Weight => 100.0;
+        public override GenpassOrder Order => new(GenpassOrderType.After, "Lakes");
+        public override Point16 SelectOrigin()
         {
             // you would think GenVars.snowMinX[0] and GenVars.snowMaxX[0] would provide the correct values but they only do that if the snow biome is perfectly symmetrical for some reason
             int xTileCandidateLeft = 0;
@@ -49,13 +43,14 @@ namespace ITD.Content.World
                     }
                 }
             }
-            Point topLeftSnowBiome = new(xTileCandidateLeft, GenVars.snowTop);
-            Point topRightSnowBiome = new(xTileCandidateRight, GenVars.snowTop);
-            return topLeftSnowBiome.Lerp(topRightSnowBiome, 0.5f);
-        }
 
-        private static void GenFloor(int x, int y, int seed)
+            return new((int)MathHelper.Lerp(xTileCandidateLeft, xTileCandidateRight, 0.5f), GenVars.snowTop);
+        }
+        public override void Generate(Point16 selectedOrigin)
         {
+            int x = selectedOrigin.X;
+            int y = selectedOrigin.Y;
+            int seed = WorldGen._genRandSeed;
             int width = (GenVars.snowMaxX[0] - GenVars.snowMinX[0]) / 2;
             int height = Main.maxTilesY / 4;
             ITDShapes.Ellipse ellipse = new(x, y, width, height);
@@ -91,7 +86,7 @@ namespace ITD.Content.World
                 FractalGain = 0.2f,
                 FractalLacunarity = 4f
             };
-            ellipse.LoopThroughPoints(p => 
+            ellipse.LoopThroughPoints(p =>
             {
                 if (p.Y > GenVars.snowTop)
                 {

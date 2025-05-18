@@ -3,11 +3,22 @@ using ITD.Systems;
 using System;
 using System.Linq;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.Localization;
 
 namespace ITD.Utilities
 {
     public static class PlayerHelpers
     {
+        public static void KillMeCustom(this Player p, string key, double dmg = 10.0, int hitDirection = 0, bool pvp = false)
+        {
+            p.KillMe(p.DeathByLocalization(key), dmg, hitDirection, pvp);
+        }
+        public static PlayerDeathReason DeathByLocalization(this Player p, string key)
+        {
+            NetworkText death = Language.GetText($"Mods.ITD.DeathMessage.{key}").WithFormatArgs(p.name).ToNetworkText();
+            return PlayerDeathReason.ByCustomReason(death);
+        }
         public static Player FromGuid(Guid guid) => Main.player.FirstOrDefault(p => p.active && p.GetITDPlayer().guid == guid);
         public static ITDPlayer GetITDPlayer(this Player player) => player.GetModPlayer<ITDPlayer>();
         public static SnaptrapPlayer GetSnaptrapPlayer(this Player player) => player.GetModPlayer<SnaptrapPlayer>();

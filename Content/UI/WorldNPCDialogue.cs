@@ -531,7 +531,7 @@ namespace ITD.Content.UI
                     break;
 
                 case DialogueAction.KillPlayerInstantly:
-                    Main.LocalPlayer.GetITDPlayer().KillByLocalization("MudkarpEvil");
+                    Main.LocalPlayer.KillMeCustom("MudkarpEvil");
                     goto case DialogueAction.CloseDialogueBox;
 
                 case DialogueAction.OpenMudkarpShop:

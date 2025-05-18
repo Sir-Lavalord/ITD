@@ -83,8 +83,7 @@ namespace ITD.Content.Items.Accessories.Combat.All
 
             if (timeSinceLastBossDeath >= killTime)
             {
-                string death = Language.GetTextValue($"Mods.ITD.DeathMessage.OrionsRingTimeOut");
-                Player.KillMe(PlayerDeathReason.ByCustomReason($"{Player.name} {death}"),9999, 0);
+                Player.KillMeCustom("OrionsRingTimeOut", 9999);
                 timeSinceLastBossDeath = 0;
             }
 

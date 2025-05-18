@@ -1,51 +1,54 @@
-﻿using System.Collections.Generic;
+﻿using ITD.Content.Items.Placeable.Biomes.DeepDesert;
+using ITD.Content.Tiles.DeepDesert;
+using ITD.Content.Walls.DeepDesert;
+using ITD.Utilities;
+using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
-using Microsoft.Xna.Framework;
-using System;
-using ITD.Content.Tiles.DeepDesert;
-using ITD.Utilities;
-using static Terraria.WorldGen;
 using static ITD.Utilities.WorldGenHelpers.Procedural;
-using System.Linq;
-using ITD.Content.Walls.DeepDesert;
+using static Terraria.WorldGen;
 
-namespace ITD.Content.World
+namespace ITD.Content.World.Passes
 {
-    public class DeepDesertGenPass(string name, float loadWeight) : GenPass(name, loadWeight)
+    public sealed class DeepDesertPass : ITDGenpass
     {
         private static ushort darkPyracotta;
         private static ushort lightPyracotta;
         private static ushort pegmatite;
         private static ushort pegmatiteWall;
-        protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+        public override string Name => "[ITD] Deep Desert";
+        public override double Weight => 100.0;
+        public override GenpassOrder Order => new(GenpassOrderType.After, "Granite");
+        public override Point16 SelectOrigin()
         {
             darkPyracotta = (ushort)ModContent.TileType<DioriteTile>();
             lightPyracotta = (ushort)ModContent.TileType<LightPyracottaTile>();
             pegmatite = (ushort)ModContent.TileType<PegmatiteTile>();
             pegmatiteWall = (ushort)ModContent.WallType<PegmatiteWallUnsafe>();
-            Point p = GetGenStartPoint();
-            GenDeepDesert(p.X, p.Y, _genRandSeed);
-        }
 
-        private static Point GetGenStartPoint()
-        {
-            return GenVars.UndergroundDesertLocation.Bottom().ToPoint();
+            Rectangle desert = GenVars.UndergroundDesertLocation;
+            return new(desert.X + desert.Width / 2, desert.Bottom);
         }
-
-        private static void GenDeepDesert(int x, int y, int seed)
+        public override void Generate(Point16 selectedOrigin)
         {
             Rectangle desert = GenVars.UndergroundDesertLocation;
+
+            int x = selectedOrigin.X;
+
             int width = desert.Width;
             int height = desert.Height;
 
             int innerEllipseYRadius = height / 2;
             int ellipseCenter = desert.Center.Y;
 
-            int distanceFromDesertBottomToHellTop = Main.UnderworldLayer - desert.Bottom; 
+            int distanceFromDesertBottomToHellTop = Main.UnderworldLayer - desert.Bottom;
 
             int outerEllipseYRadius = innerEllipseYRadius + (int)(distanceFromDesertBottomToHellTop / 1.5f);
             ITDShapes.Ellipse outerEllipse = new(x, ellipseCenter, width / 2, outerEllipseYRadius);
@@ -94,7 +97,7 @@ namespace ITD.Content.World
                     // if this tile is in a tunnel, dont try to create another tunnel
                     int xSize = genRand.Next(150, 250) * (innerEllipse.X > p.X ? 1 : -1);
                     int tunWidth = genRand.Next(5, 9);
-                    int segments = Math.Abs(xSize)/10;
+                    int segments = Math.Abs(xSize) / 10;
 
                     Rectangle expectedRect = new(
                     p.X + Math.Min(0, xSize), // leftmost point of tunnel
@@ -179,7 +182,7 @@ namespace ITD.Content.World
                 float outerDistance = outerEllipse.GetDistanceToEdge(p);
                 float ditherDistance = ditherEllipse.GetDistanceToEdge(p);
 
-                float factor = (ditherDistance - outerDistance) / (ditherDistance);
+                float factor = (ditherDistance - outerDistance) / ditherDistance;
 
                 if (genRand.NextFloat() < factor && t.HasTile)
                 {
@@ -198,7 +201,7 @@ namespace ITD.Content.World
             Rectangle rect = outerEllipse.Container;
             for (int i = 0; i < linesAmount; i++)
             {
-                Point origin = new(rect.Left, rect.Top + outerEllipse.YRadius + (spacing * i));
+                Point origin = new(rect.Left, rect.Top + outerEllipse.YRadius + spacing * i);
                 Point end = origin + new Point(rect.Width, genRand.Next(-20, 21));
                 DigQuadTunnel(origin, end, 2, 18, 1, p =>
                 {

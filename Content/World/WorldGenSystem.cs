@@ -1,25 +1,7 @@
 ﻿using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using Microsoft.Xna.Framework.Input;
 using Terraria.Localization;
-using Terraria.ID;
-using Microsoft.Xna.Framework;
-using ITD.Physics;
-using ITD.Particles;
-using ITD.Content.Tiles.Misc;
-using ITD.Utilities;
-using Terraria.ObjectData;
-using ITD.Particles.CosJel;
-using ITD.Content.Tiles.DeepDesert;
-using ITD.Content.Walls.DeepDesert;
-using System;
-using ITD.Content.UI;
-using ITD.Content.Events;
-using ITD.Particles.Misc;
-using ITD.Particles.Ambience;
-using ITD.Content.Projectiles.Hostile;
 
 namespace ITD.Content.World
 {
@@ -30,28 +12,54 @@ namespace ITD.Content.World
         public static LocalizedText WorldNPCsPassMessage { get; private set; }
 
         public static List<Point> testPoints = [];
+        internal static List<ITDGenpass> genpassesTemp = []; // is populated automagically in ITDGenpass.Load()
+        public static ITDGenpass[] Genpasses { get; private set; }
+        public override void Load()
+        {
+            
+        }
         public override void SetStaticDefaults()
         {
-            BluesoilPassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{nameof(BluesoilPassMessage)}"));
-            DeepDesertPassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{nameof(DeepDesertPassMessage)}"));
-            WorldNPCsPassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{nameof(WorldNPCsPassMessage)}"));
+            // flatten
+            Genpasses = [.. genpassesTemp];
+
+            // dispose
+            genpassesTemp.Clear();
+            genpassesTemp = null;
+
+            for (int i = 0; i < Genpasses.Length; i++)
+            {
+                ITDGenpass pass = Genpasses[i];
+                pass.PassMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"WorldGen.{pass.GetType().Name}Message")); // pass.Name isn't used because it has spaces
+            }
         }
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {
-            int blueshroomIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Lakes"));
-            int deepdesertIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Granite"));
-            int worldNPCsIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Guide"));
-            if (blueshroomIndex != -1)
+            for (int i = 0; i < Genpasses.Length; i++)
             {
-                tasks.Insert(blueshroomIndex + 1, new BlueshroomGrovesGenPass("Blueshroom Groves", 100f));
+                ITDGenpass pass = Genpasses[i];
+                GenpassOrder orderer = pass.Order;
+
+                SmartGenpass genpass = new(pass);
+
+                int indexOffset = 0;
+                switch (orderer.Type)
+                {
+                    case GenpassOrderType.Before:
+                        int taskIndex = tasks.FindIndex(g => g.Name == orderer.Find);
+                        tasks.Insert(taskIndex + indexOffset, genpass);
+                        break;
+                    case GenpassOrderType.After:
+                        indexOffset = 1;
+                        goto case GenpassOrderType.Before;
+                    case GenpassOrderType.BeforeEverything:
+                        tasks.Insert(0, genpass);
+                        break;
+                    case GenpassOrderType.AfterEverything:
+                        tasks.Add(genpass);
+                        break;
+                }
             }
-            if (deepdesertIndex != -1)
-            {
-                tasks.Insert(deepdesertIndex + 1, new DeepDesertGenPass("Deep Desert", 100f));
-            }
-            if (worldNPCsIndex == -1)
-                worldNPCsIndex = tasks.Count - 1;
-            tasks.Insert(worldNPCsIndex + 1, new SpawnWorldNPCsGenpass("World NPCs", 0.016f));
         }
         public static bool JustPressed(Keys key)
         {

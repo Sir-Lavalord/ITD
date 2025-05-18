@@ -9,6 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using System.Linq;
 using Terraria.Localization;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Favors.Prehardmode
 {
@@ -47,8 +48,7 @@ namespace ITD.Content.Items.Favors.Prehardmode
 			
 			if (player.statLife <= 0 && player.whoAmI == Main.myPlayer)
 			{
-				string death = Language.GetTextValue($"Mods.ITD.DeathMessage.IncrediblySharpKnife");
-				player.KillMe(PlayerDeathReason.ByCustomReason($"{player.name} {death}"), 10.0, 0, false);
+                player.KillMeCustom("IncrediblySharpKnife");
 			}
 			
             return true;

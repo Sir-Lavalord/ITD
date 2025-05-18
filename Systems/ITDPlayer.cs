@@ -647,25 +647,16 @@ namespace ITD.Players
                 soulTalismanEffect = false;
             }
 		}
-        public void KillByLocalization(string key)
-        {
-            Player.KillMe(DeathByLocalization(key), 10.0, 0);
-        }
-		public PlayerDeathReason DeathByLocalization(string key)
-        {
-            string death = Language.GetTextValue($"Mods.ITD.DeathMessage.{key}");
-            return PlayerDeathReason.ByCustomReason($"{Player.name} {death}");
-        }
 		public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
 			if (damage == 10.0 && hitDirection == 0 && damageSource.SourceOtherIndex == 8)
             {
                 if (necrosis)
-                    damageSource = DeathByLocalization("Necrosis");
+                    damageSource = Player.DeathByLocalization("Necrosis");
 				if (soulRot)
-                    damageSource = DeathByLocalization("SoulRot");
+                    damageSource = Player.DeathByLocalization("SoulRot");
                 if (melomycosis)
-                    damageSource = DeathByLocalization("Melomycosis");
+                    damageSource = Player.DeathByLocalization("Melomycosis");
             }
 			return true;
 		}

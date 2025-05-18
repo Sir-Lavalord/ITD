@@ -10,6 +10,7 @@ using Terraria.Localization;
 using Terraria.DataStructures;
 using Terraria.ID;
 using ITD.Content.Projectiles.Friendly.Misc;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Favors.Hardmode
 {
@@ -82,8 +83,7 @@ namespace ITD.Content.Items.Favors.Hardmode
             
 			if (player.statLife <= 0 && player.whoAmI == Main.myPlayer)
 			{
-				string death = Language.GetTextValue($"Mods.ITD.DeathMessage.BloodPact");
-				player.KillMe(PlayerDeathReason.ByCustomReason($"{player.name} {death}"), 10.0, 0, false);
+                player.KillMeCustom("BloodPact");
 			}
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
