@@ -22,11 +22,14 @@ float2 uZoom;
 
 float4 BlackMold(float2 coords : TEXCOORD0) : COLOR0
 {
-    float waveFrequency = 10.0;
-    float waveAmplitude = 0.02;
+    float waveFrequency = 20.0;
+    float waveAmplitude = 0.08;
     float waveSpeedMult = 2.0;
     
-    coords.y += sin(coords.x * waveFrequency + uTime * waveSpeedMult) * waveAmplitude * uOpacity;
+	float2 middle = {0.5f, 0.5f};
+	float toMiddle = distance(coords, middle);
+	
+    coords.y += sin(toMiddle * waveFrequency + uTime * waveSpeedMult) * toMiddle * waveAmplitude * uOpacity;
 
     float4 color = tex2D(uImage0, coords);
 

@@ -350,6 +350,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 					Color color = Projectile.GetAlpha(lightColor) * ((float)(Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 					Main.spriteBatch.Draw(projectileTexture, trailPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length / 3, SpriteEffects.None, 0f);
 				}
+				Texture2D texture = TextureAssets.Extra[91].Value;
+                Rectangle rectangle = texture.Frame(1, 1);
+				Vector2 effectDrawOrigin = new Vector2(rectangle.Size().X / 2f, rectangle.Size().Y / 6f);
+                Vector2 position = Projectile.Center - Main.screenPosition;
+                Main.EntitySpriteDraw(texture, position, rectangle, new Color(100, 100, 100, 50), Projectile.velocity.ToRotation() + MathHelper.PiOver2, effectDrawOrigin, 1.5f, SpriteEffects.None, 0f);
+				Main.EntitySpriteDraw(texture, position, rectangle, new Color(150, 150, 150, 50), Projectile.velocity.ToRotation() + MathHelper.PiOver2, effectDrawOrigin, 1.2f, SpriteEffects.None, 0f);
 			}
 			Vector2 drawPos = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
 			Main.spriteBatch.Draw(projectileTexture, drawPos, null, lightColor, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
