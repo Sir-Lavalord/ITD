@@ -234,6 +234,7 @@ Projectiles: {
 	// WickedHeartMelee.DisplayName: Wicked Heart Melee
 	// WickedHeartR.DisplayName: Wicked Heart R
 	// WickedHeartS.DisplayName: Wicked Heart S
+	// TwilightDemiseProj.DisplayName: Twilight Demise Proj
 }
 
 NPCs: {

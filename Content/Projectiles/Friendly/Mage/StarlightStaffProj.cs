@@ -169,7 +169,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         }
         private float StripWidth(float progressOnStrip)
         {
-            return MathHelper.Lerp(40f, 40f, Utils.GetLerpValue(0f, 0.6f, progressOnStrip, true)) * Utils.GetLerpValue(0f, 0.1f, progressOnStrip, true);
+            return MathHelper.Lerp(30f, 40f, Utils.GetLerpValue(0f, 0.6f, progressOnStrip, true)) * Utils.GetLerpValue(0f, 0.1f, progressOnStrip, true);
         }
         public override bool PreDraw(ref Color lightColor)
         {

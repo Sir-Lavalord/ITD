@@ -32,7 +32,7 @@ namespace ITD.Content.NPCs.Bosses
 
         public float rotation = 0f;
         public float AIRand = 0f;
-        public bool bOkuu;
+        public bool bFinalAttack;
         int goodtransition;//Add to current frame for clean tentacles
         public override void SetStaticDefaults()
         {
@@ -45,7 +45,7 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override void SendExtraAI(BinaryWriter writer)
         {
-            writer.Write(bOkuu);
+            writer.Write(bFinalAttack);
             writer.Write(goodtransition);
             writer.Write(NPC.ai[0]);
             writer.Write(NPC.localAI[1]);
@@ -60,7 +60,7 @@ namespace ITD.Content.NPCs.Bosses
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
-            bOkuu = reader.ReadBoolean();
+            bFinalAttack = reader.ReadBoolean();
 
             goodtransition = reader.ReadInt32();
             AttackCount = reader.ReadSingle();
@@ -148,11 +148,11 @@ namespace ITD.Content.NPCs.Bosses
                 NPC.EncourageDespawn(10);
                 return;
             }
-            if (!bOkuu)
+            if (!bFinalAttack)
             {
                 CheckSecondStage();
             }
-            if (!SkyManager.Instance["ITD:CosjelOkuuSky"].IsActive() && bOkuu)
+            if (!SkyManager.Instance["ITD:CosjelOkuuSky"].IsActive() && bFinalAttack)
             {
                 SkyManager.Instance.Activate("ITD:CosjelOkuuSky");
             }
@@ -718,7 +718,7 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override bool CheckDead()
         {
-            if (!bOkuu)//Subterranean Sun
+            if (!bFinalAttack)//Subterranean Sun
             {
                 AttackID = -2;
                 AITimer1 = 0;
@@ -729,7 +729,7 @@ namespace ITD.Content.NPCs.Bosses
                 HandControl(1, 6, 3, true);
                 HandControl(-1, 6, 3, true);
                 NetSync();
-                bOkuu = true;
+                bFinalAttack = true;
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(), ModContent.ProjectileType<CosmicJellyfishBlackholeAura>(), 0, 0, -1, NPC.whoAmI);
@@ -787,7 +787,7 @@ namespace ITD.Content.NPCs.Bosses
             {
                 goodtransition = 5;
             }
-            if (!bOkuu)
+            if (!bFinalAttack)
             {
                 int frameSpeed = 5;
                 NPC.frameCounter += 1f;
@@ -813,7 +813,7 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override bool PreAI()
         {
-            if (!bOkuu)
+            if (!bFinalAttack)
             {
                 if (!bSecondStage)
                 {
@@ -860,7 +860,7 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override void DrawBehind(int index)
         {
-            if (bOkuu && AttackID != -2)
+            if (bFinalAttack && AttackID != -2)
             {
                 Main.instance.DrawCacheNPCsOverPlayers.Add(index);
             }

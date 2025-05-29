@@ -26,6 +26,7 @@ using ITD.Content.Items.Accessories.Combat.All;
 using ITD.Content.Buffs.EquipmentBuffs;
 using ITD.Content.Items.Weapons.Mage;
 using ITD.Content.Events;
+using ITD.Content.Projectiles.Friendly.Mage;
 
 
 namespace ITD.Content.NPCs
@@ -116,6 +117,27 @@ namespace ITD.Content.NPCs
                 }
             }
         }
+        public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
+        {
+            if (projectile.type == ModContent.ProjectileType<TwilightDemiseProj>())
+            {
+                Player player = Main.player[npc.lastInteraction];//the man behind the slaughter
+                if (npc.life <= 0)
+                {
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        if (projectile.owner == Main.myPlayer)
+                        {
+                            for (int i = 0; i < 4; i++)
+                            {
+                                Vector2 velocity = (MathHelper.TwoPi * i / 4f).ToRotationVector2() * 3f;
+                                Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, velocity, ModContent.ProjectileType<TwilightDemiseProj>(), projectile.damage, projectile.knockBack, projectile.owner);
+                            }
+                        }
+                    }
+                }
+                }
+            }
         public override void OnKill(NPC npc)
         {
             if (npc.AnyInteractions())
@@ -142,6 +164,7 @@ namespace ITD.Content.NPCs
             }
             EventsSystem.OnKill(npc);
         }
+        
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
             if (necrosis)
