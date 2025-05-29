@@ -1498,3 +1498,8 @@ WickedHeart: {
 	DisplayName: Wicked Heart
 	Tooltip: ""
 }
+
+TwilightDemise: {
+	Tooltip: ""
+	DisplayName: Twilight Demise
+}

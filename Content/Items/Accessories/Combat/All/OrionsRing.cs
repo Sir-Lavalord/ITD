@@ -45,7 +45,7 @@ namespace ITD.Content.Items.Accessories.Combat.All
     public class OrionsRingPlayer : ModPlayer
     {
         public bool orionsRingA = false;
-
+        public bool eaterOfWorldsFound = false;
         public int timeSinceLastBossDeath = 0;
         public static float killTime = 300 * 60;
         public HashSet<int> activeBosses = new HashSet<int>();
@@ -55,19 +55,31 @@ namespace ITD.Content.Items.Accessories.Combat.All
         {
             orionsRingA = false;
             activeBosses.Clear();
+            eaterOfWorldsFound = false;
         }
         public override void UpdateEquips()
         {
             if (!orionsRingA) return;
-            
+
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC npc = Main.npc[i];
                 if (npc.active && NPCID.Sets.BossHeadTextures[npc.type] > -1)
                 {
-                    activeBosses.Add(npc.whoAmI);
+                    if (npc.type == NPCID.EaterofWorldsHead ||
+                        npc.type == NPCID.EaterofWorldsBody ||
+                        npc.type == NPCID.EaterofWorldsTail)
+                    {
+                        if (!eaterOfWorldsFound)
+                        {
+                            activeBosses.Add(npc.whoAmI);
+                            eaterOfWorldsFound = true;
+                        }
+                    }
+                    else activeBosses.Add(npc.whoAmI);
                 }
-                Main.NewText((npc.type, npc.GetBossHeadTextureIndex()));
+
+
             }
 
             timerActive = activeBosses.Count > 1 && Player.active && Player.statLife > 0;
@@ -83,7 +95,8 @@ namespace ITD.Content.Items.Accessories.Combat.All
 
             if (timeSinceLastBossDeath >= killTime)
             {
-                Player.KillMeCustom("OrionsRingTimeOut", 9999);
+                string death = Language.GetTextValue($"Mods.ITD.DeathMessage.OrionsRingTimeOut");
+                Player.KillMe(PlayerDeathReason.ByCustomReason($"{Player.name} {death}"), 9999, 0);
                 timeSinceLastBossDeath = 0;
             }
 
@@ -93,6 +106,8 @@ namespace ITD.Content.Items.Accessories.Combat.All
 
 
         }
+
+    
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {

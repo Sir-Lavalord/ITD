@@ -59,7 +59,7 @@ namespace ITD.Content.NPCs.Friendly
         public override void OnSpawn(IEntitySource source)
         {
             if (NPC.ai[0] == 4)
-                NPC.life = 20000;
+                NPC.life = 400;
 
         }
         public override void AI()
