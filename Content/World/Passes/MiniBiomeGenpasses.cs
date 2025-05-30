@@ -1,12 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ITD.Content.Tiles.Misc;
+using ITD.Utilities;
+using Terraria.DataStructures;
+using Terraria.GameContent.Biomes;
+using Terraria.WorldBuilding;
 
 namespace ITD.Content.World.Passes
 {
-    internal class MiniBiomeGenpasses
+    [Autoload(false)]
+    public sealed class BlackMoldPass : ITDGenpass
     {
+        public override string Name => "Black Mold";
+        public override double Weight => 1.0;
+        public override GenpassOrder Order => new(GenpassOrderType.After, "Gem Caves");
+        public override void Generate(Point16 selectedOrigin)
+        {
+            int every = 750;
+            int amt = Main.maxTilesX / every;
+            int dist = Main.maxTilesX / (amt + 2);
+            int size = 70;
+
+            int currentXOrigin = dist;
+
+            for (int i = 0; i < amt; i++)
+            {
+                int y = (int)Main.rockLayer;
+
+                ITDShapes.Ellipse ellipse = new(currentXOrigin, y, size, size);
+                ellipse.LoopThroughPoints(p =>
+                {
+                    Tile t = Main.tile[p];
+                    if (t.TileType == TileID.Stone)
+                        t.HasTile = false;
+                    if (TileHelpers.EdgeTile(p) && t.TileType == TileID.Stone)
+                    {
+                        t.TileType = (ushort)ModContent.TileType<BlackMold>();
+                    }
+                });
+
+                currentXOrigin += dist;
+            }
+        }
     }
 }

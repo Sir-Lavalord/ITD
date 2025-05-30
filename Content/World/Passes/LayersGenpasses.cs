@@ -2,16 +2,13 @@
 
 namespace ITD.Content.World.Passes
 {
-    public class WorldNPCsPass : ITDGenpass
+    [Autoload(false)]
+    public sealed class LayersPass : ITDGenpass
     {
-        public override string Name => "World NPCs";
-        public override double Weight => 0.016;
+        public override string Name => "World Layers";
+        public override double Weight => 200.0;
         public override GenpassOrder Order => new(GenpassOrderType.AfterEverything);
         public override void Generate(Point16 selectedOrigin)
-        {
-            SpawnMudkarp();
-        }
-        private static void SpawnMudkarp()
         {
 
         }

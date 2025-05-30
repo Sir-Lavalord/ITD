@@ -51,6 +51,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
+            /*
             var line = tooltips.First(x => x.Name == "ItemName");
             string[] parts = line.Text.Split(' ');
             if (parts.Length > 1)
@@ -59,6 +60,7 @@ namespace ITD.Content.Items.Weapons.Ranger
                 string prefix = parts[0];
                 line.Text = string.Format(itemName, prefix);
             }
+            */
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
@@ -96,7 +98,7 @@ namespace ITD.Content.Items.Weapons.Ranger
                 type = ModContent.ProjectileType<TheEpicenterSpark>();
                 ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
                 {
-                    PositionInWorld = Item.Center,
+                    PositionInWorld = position,
                 }, player.whoAmI);
             }
             velocity = velocity.RotatedByRandom(MathHelper.ToRadians(4));

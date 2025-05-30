@@ -34,7 +34,7 @@ namespace ITD.Content.World
             
         }
     }
-    public sealed class SmartGenpass(ITDGenpass passTemplate) : GenPass(passTemplate.Name, passTemplate.Weight)
+    public sealed class SmartGenpass(ITDGenpass passTemplate) : GenPass($"[ITD] {passTemplate.Name}", passTemplate.Weight)
     {
         protected sealed override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {

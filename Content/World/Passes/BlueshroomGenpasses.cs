@@ -9,7 +9,7 @@ namespace ITD.Content.World.Passes
 {
     public sealed class BluesoilPass : ITDGenpass
     {
-        public override string Name => "[ITD] Blueshroom Groves";
+        public override string Name => "Blueshroom Groves";
         public override double Weight => 100.0;
         public override GenpassOrder Order => new(GenpassOrderType.After, "Lakes");
         public override Point16 SelectOrigin()

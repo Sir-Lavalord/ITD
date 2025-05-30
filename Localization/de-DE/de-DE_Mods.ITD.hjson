@@ -508,15 +508,16 @@ DeathMessage: {
 	SoulRot: wurde die Seele aus dem Körper gerissen.
 	IncrediblySharpKnife: hat mit dem Küchenmesser gespielt.
 	BloodPact: hatte zu wenig Blut.
-	// KSGlandAftershock: was crushed by the aftershock.
+	// KSGlandAftershock: "{0} was crushed by the aftershock."
 	MudkarpEvil: mischte sich in unheimlich schreckliche Dinge ein.
-	// OrionsRingTimeOut: is bad at the game testing 123.
+	// OrionsRingTimeOut: "{0} is bad at the game testing 123."
 }
 
 WorldGen: {
 	BluesoilPassMessage: Blauifiziere das tiefe Eis...
 	DeepDesertPassMessage: Wüsten müssen verdichtet werden...
 	// WorldNPCsPassMessage: Mods.ITD.WorldGen.WorldNPCsPassMessage
+	// BlackMoldPassMessage: Mods.ITD.WorldGen.BlackMoldPassMessage
 }
 
 Tiles: {

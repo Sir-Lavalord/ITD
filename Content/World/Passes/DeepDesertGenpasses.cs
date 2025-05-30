@@ -23,7 +23,7 @@ namespace ITD.Content.World.Passes
         private static ushort lightPyracotta;
         private static ushort pegmatite;
         private static ushort pegmatiteWall;
-        public override string Name => "[ITD] Deep Desert";
+        public override string Name => "Deep Desert";
         public override double Weight => 100.0;
         public override GenpassOrder Order => new(GenpassOrderType.After, "Granite");
         public override Point16 SelectOrigin()

@@ -509,14 +509,15 @@ DeathMessage: {
 	IncrediblySharpKnife: cortó demasiado profundo.
 	BloodPact: se quedó sin sangre.
 	KSGlandAftershock: sufrió un aplanamiento por el aftershock.
-	// MudkarpEvil: meddled with eldritch terrors.
-	// OrionsRingTimeOut: is bad at the game testing 123.
+	// MudkarpEvil: "{0} meddled with eldritch terrors."
+	// OrionsRingTimeOut: "{0} is bad at the game testing 123."
 }
 
 WorldGen: {
 	BluesoilPassMessage: Azulificando la Tundra Subterranea...
 	DeepDesertPassMessage: Comprimiendo el Desierto...
 	// WorldNPCsPassMessage: Mods.ITD.WorldGen.WorldNPCsPassMessage
+	// BlackMoldPassMessage: Mods.ITD.WorldGen.BlackMoldPassMessage
 }
 
 Tiles: {

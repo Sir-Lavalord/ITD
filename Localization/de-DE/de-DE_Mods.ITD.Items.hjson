@@ -1388,7 +1388,7 @@ ARCTrap: {
 }
 
 TheEpicenter: {
-	// DisplayName: The {0} Epicenter
+	// DisplayName: The {Prefix} Epicenter
 	/* Tooltip:
 		'''
 		<right> to unleash a blackhole, which stores bullets/arrows

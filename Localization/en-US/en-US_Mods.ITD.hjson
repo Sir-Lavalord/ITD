@@ -504,19 +504,20 @@ Buffs: {
 }
 
 DeathMessage: {
-	Necrosis: succumbed to necrosis.
-	SoulRot: became a soulless husk.
-	IncrediblySharpKnife: cut a little too deep.
-	BloodPact: ran out of blood.
-	KSGlandAftershock: was crushed by the aftershock.
-	MudkarpEvil: meddled with eldritch terrors.
-	OrionsRingTimeOut: is bad at the game testing 123.
+	Necrosis: "{0} succumbed to necrosis."
+	SoulRot: "{0} became a soulless husk."
+	IncrediblySharpKnife: "{0} cut a little too deep."
+	BloodPact: "{0} ran out of blood."
+	KSGlandAftershock: "{0} was crushed by the aftershock."
+	MudkarpEvil: "{0} meddled with eldritch terrors."
+	OrionsRingTimeOut: "{0} is bad at the game testing 123."
 }
 
 WorldGen: {
 	BluesoilPassMessage: Blueifying the Underground Tundra...
 	DeepDesertPassMessage: Compressing the Desert...
 	WorldNPCsPassMessage: Mods.ITD.WorldGen.WorldNPCsPassMessage
+	BlackMoldPassMessage: Mods.ITD.WorldGen.BlackMoldPassMessage
 }
 
 Tiles: {
