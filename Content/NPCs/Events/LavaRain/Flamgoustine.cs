@@ -29,7 +29,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
         public override void SetStaticDefaultsSafe()
         {
             NPCID.Sets.TrailCacheLength[Type] = 12;
-            NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPCTrailing.PosEveryFrame;
+            NPCID.Sets.TrailingMode[Type] = NPCTrailingID.PosEveryFrame;
             Main.npcFrameCount[Type] = 8;
             ITDSets.LavaRainEnemy[Type] = true;
         }
@@ -54,77 +54,91 @@ namespace ITD.Content.NPCs.Events.LavaRain
                 AIState++;
                 AITimer = 0;
             }
-            switch (AIState)
+            // thank you taco
+            AIState = AIState switch
             {
-                case ActionState.Idle:
-                    if (NPC.rotation != 0f)
-                        NPC.rotation *= 0.9f;
-                    if (NPC.collideY)
-                        NPC.velocity.X *= 0.75f;
-                    if (InvalidTarget)
-                    {
-                        NPC.TargetClosest(true);
-                    }
-                    NPC.direction = Math.Sign(Main.player[NPC.target].position.X - NPC.position.X);
-                    AIDir = NPC.direction;
-                    break;
-                case ActionState.ChargingSpin:
-                    NPC.velocity.X = 0f;
-                    if (!Main.dedServ)
-                    {
-                        if (NPC.frame.Y / NPC.frame.Height >= 6) 
-                        {
-                            NPC.rotation = MathHelper.WrapAngle(NPC.rotation + AIDir / 4f);
-                            if (Main.rand.NextBool(6))
-                            {
-                                Vector2 spawnPosition = NPC.position + new Vector2(-AIDir * 12f, 12f);
-                                Gore.NewGore(NPC.GetSource_FromThis(), spawnPosition, -Vector2.UnitX * AIDir, Main.rand.Next(61, 64), 0.5f);
-                            }
-                        }
-                    }
-                    break;
-                case ActionState.Spinning:
-                    if (TrailFadeIn < 1f)
-                        TrailFadeIn += 0.1f;
-                    NPC.rotation = MathHelper.WrapAngle(NPC.rotation + AIDir / 2.5f);
-                    NPC.velocity.X = AIDir * 6f;
-                    int dustTimes = 2;
-                    for (int i = 0; i < dustTimes; i++)
-                    {
-                        Dust d = Dust.NewDustPerfect(NPC.Center + (Vector2.UnitX.RotatedBy(MathF.Tau / dustTimes * i).RotatedBy(NPC.rotation) * 14f), DustID.Torch, NPC.velocity, Scale: 1.2f);
-                        d.noGravity = true;
-                    }
-                    StepUp();
-                    if (NPC.collideX)
-                    {
-                        // if despite stepup, the shrimp has collided, that means we actually got in contact with a wall, so force the next state and knock it back a bit
-                        Collision.HitTiles(NPC.position, NPC.velocity, NPC.width, NPC.height - 1);
-                        SoundEngine.PlaySound(NPC.HitSound, NPC.Center);
-                        SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
-                        AIState++;
-                        NPC.velocity.Y = -6f;
-                        NPC.velocity.X -= AIDir * 8f;
-                        AITimer = 0;
-                    }
-                    break;
-                case ActionState.StoppingSpin:
-                    if (TrailFadeIn > 0f)
-                        TrailFadeIn -= 0.1f;
-                    NPC.rotation *= 0.9f;
-                    if (NPC.collideY)
-                    {
-                        if (Main.rand.NextFloat() < Math.Abs(NPC.velocity.X) && Main.rand.NextBool(4))
-                            Collision.HitTiles(NPC.Center, NPC.velocity, 1, NPC.height);
-                        NPC.velocity.X *= 0.96f;
-                        if (NPC.velocity.X == 0f)
-                        {
-                            AIState = ActionState.Idle;
-                            AIRand = Main.rand.Next(120, 160);
-                            NPC.netUpdate = true;
-                        }
-                    }
-                    break;
+                ActionState.Idle => Idle(),
+                ActionState.ChargingSpin => ChargingSpin(),
+                ActionState.Spinning => Spinning(),
+                ActionState.StoppingSpin => StoppingSpin(),
+                _ => AIState
+            };
+        }
+        private ActionState Idle()
+        {
+            if (NPC.rotation != 0f)
+                NPC.rotation *= 0.9f;
+            if (NPC.collideY)
+                NPC.velocity.X *= 0.75f;
+            if (InvalidTarget)
+            {
+                NPC.TargetClosest(true);
             }
+            NPC.direction = Math.Sign(Main.player[NPC.target].position.X - NPC.position.X);
+            AIDir = NPC.direction;
+            return ActionState.Idle;
+        }
+        private ActionState ChargingSpin()
+        {
+            NPC.velocity.X = 0f;
+            if (!Main.dedServ)
+            {
+                if (NPC.frame.Y / NPC.frame.Height >= 6)
+                {
+                    NPC.rotation = MathHelper.WrapAngle(NPC.rotation + AIDir / 4f);
+                    if (Main.rand.NextBool(6))
+                    {
+                        Vector2 spawnPosition = NPC.position + new Vector2(-AIDir * 12f, 12f);
+                        Gore.NewGore(NPC.GetSource_FromThis(), spawnPosition, -Vector2.UnitX * AIDir, Main.rand.Next(61, 64), 0.5f);
+                    }
+                }
+            }
+            return ActionState.ChargingSpin;
+        }
+        private ActionState Spinning()
+        {
+            if (TrailFadeIn < 1f)
+                TrailFadeIn += 0.1f;
+            NPC.rotation = MathHelper.WrapAngle(NPC.rotation + AIDir / 2.5f);
+            NPC.velocity.X = AIDir * 6f;
+            int dustTimes = 2;
+            for (int i = 0; i < dustTimes; i++)
+            {
+                Dust d = Dust.NewDustPerfect(NPC.Center + (Vector2.UnitX.RotatedBy(MathF.Tau / dustTimes * i).RotatedBy(NPC.rotation) * 14f), DustID.Torch, NPC.velocity, Scale: 1.2f);
+                d.noGravity = true;
+            }
+            StepUp();
+            if (NPC.collideX)
+            {
+                // if despite stepup, the shrimp has collided, that means we actually got in contact with a wall, so force the next state and knock it back a bit
+                Collision.HitTiles(NPC.position, NPC.velocity, NPC.width, NPC.height - 1);
+                SoundEngine.PlaySound(NPC.HitSound, NPC.Center);
+                SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
+                NPC.velocity.Y = -6f;
+                NPC.velocity.X -= AIDir * 8f;
+                AITimer = 0;
+                return ActionState.StoppingSpin;
+            }
+            return ActionState.Spinning;
+        }
+        private ActionState StoppingSpin()
+        {
+            if (TrailFadeIn > 0f)
+                TrailFadeIn -= 0.1f;
+            NPC.rotation *= 0.9f;
+            if (NPC.collideY)
+            {
+                if (Main.rand.NextFloat() < Math.Abs(NPC.velocity.X) && Main.rand.NextBool(4))
+                    Collision.HitTiles(NPC.Center, NPC.velocity, 1, NPC.height);
+                NPC.velocity.X *= 0.96f;
+                if (NPC.velocity.X == 0f)
+                {
+                    AIRand = Main.rand.Next(120, 160);
+                    NPC.netUpdate = true;
+                    return ActionState.Idle;
+                }
+            }
+            return ActionState.StoppingSpin;
         }
         public override bool? CanFallThroughPlatforms()
         {

@@ -6,7 +6,6 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using static ITD.Utilities.TrailingModeID;
 
 namespace ITD.Content.NPCs.BlueshroomGroves
 {

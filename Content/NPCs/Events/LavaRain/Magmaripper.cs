@@ -23,14 +23,27 @@ namespace ITD.Content.NPCs.Events.LavaRain
         }
         public ref float AITimer => ref NPC.ai[0];
         public ActionState AIState { get { return (ActionState)NPC.ai[1]; } set { NPC.ai[1] = (float)value; } }
-        public float AIRand { get { return NPC.ai[2]; } set { NPC.ai[2] = value; NPC.netUpdate = true; } }
+        public float AIRand
+        {
+            get
+            { 
+                return NPC.ai[2]; 
+            } 
+            set 
+            { 
+                if (Main.netMode == NetmodeID.MultiplayerClient) 
+                    return; 
+                NPC.ai[2] = value; 
+                NPC.netUpdate = true; 
+            } 
+        }
         public ref float AIDir => ref NPC.ai[3];
         public ref float AfterImageFadeIn => ref NPC.localAI[0];
         public override void SetStaticDefaultsSafe()
         {
             Main.npcFrameCount[Type] = 5;
             NPCID.Sets.TrailCacheLength[Type] = 8;
-            NPCID.Sets.TrailingMode[Type] = TrailingModeID.NPCTrailing.PosRotEveryFrame;
+            NPCID.Sets.TrailingMode[Type] = NPCTrailingID.PosRotEveryFrame;
             ITDSets.LavaRainEnemy[Type] = true;
         }
         public override void SetDefaults()
@@ -43,6 +56,7 @@ namespace ITD.Content.NPCs.Events.LavaRain
             NPC.HitSound = SoundID.NPCHit6;
             NPC.DeathSound = SoundID.NPCDeath18;
             NPC.lavaImmune = true;
+            NPC.behindTiles = true;
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -65,154 +79,166 @@ namespace ITD.Content.NPCs.Events.LavaRain
             AIRand = 100;
             AIDir = 0;
         }
+        private static float grav = 0.2f;
         public override void AI()
         {
-            bool lava = Collision.LavaCollision(NPC.position, NPC.width, NPC.height);// NPC.lavaWet;
             AITimer++;
+
             if (InvalidTarget)
                 NPC.TargetClosest(false);
+
+            bool lava = Collision.LavaCollision(NPC.position, NPC.width, NPC.height);
             NPC.spriteDirection = NPC.direction = NPC.velocity.X > 0f ? 1 : -1;
             Player target = Main.player[NPC.target];
             Vector2 toTarget = target.Center - NPC.Center;
             Vector2 toTargetNormalized = toTarget.SafeNormalize(Vector2.Zero);
+
             if (AIState != ActionState.AirTime)
             {
                 NPC.noTileCollide = false;
                 if (AfterImageFadeIn > 0f)
                     AfterImageFadeIn -= 0.1f;
             }
-            float grav = 0.2f;
-            switch (AIState)
-            {
-                case ActionState.LavaSwim:
-                    if (!lava && AIRand > 100)
-                    {
-                        AIState = ActionState.Flopping;
-                        AIRand = 2f;
-                        AITimer = 0;
-                        NPC.noGravity = false;
-                        break;
-                    }
-                    if (lava)
-                        AIRand = 0;
-                    if (target.lavaWet)
-                    {
-                        AIState = ActionState.SwimToPlayer;
-                        break;
-                    }
-                    AIRand++;
-                    if (!NPC.noGravity)
-                        NPC.noGravity = true;
-                    int toDir = Math.Sign(toTargetNormalized.X);
-                    if (AIDir == 0 || (AITimer > 300 && AIDir != toDir))
-                    {
-                        AITimer = 0;
-                        AIDir = toDir;
-                    }
-                    if (AITimer < 30)
-                        NPC.velocity.Y += Math.Abs(NPC.velocity.X) / 7f;
-                    NPC.velocity.X = AIDir * 9f;
-                    if (AITimer > 30)
-                    {
-                        NPC.velocity.Y -= 0.3f;
-                        if (!lava)
-                        {
-                            float stickOut = 16f * 38f;
-                            Point tileQuery = new Vector2(NPC.position.X + AIDir * stickOut, NPC.position.Y).ToTileCoordinates();
-                            Point finalQueryPos = Point.Zero;
-                            Vector2 lavaPos = Vector2.Zero;
 
-                            for (int j = 0; j < 32; j++)
-                            {
-                                Point realQuery = tileQuery + new Point(0, j);
-                                Tile t = Framing.GetTileSafely(realQuery);
-                                int amt = 2;
-                                Rectangle checkClear = new(realQuery.X, realQuery.Y - amt, amt, amt);
-                                if (TileHelpers.TileLiquid(realQuery, LiquidID.Lava) && TileHelpers.AreaClear(checkClear))
-                                {
-                                    lavaPos = realQuery.ToWorldCoordinates();
-                                    finalQueryPos = realQuery;
-                                    break;
-                                }
-                                Dust.NewDustPerfect(realQuery.ToWorldCoordinates(), DustID.WhiteTorch);
-                            }
-                            if (lavaPos != Vector2.Zero)
-                            {
-                                Vector2 lavaPoolCenter = MiscHelpers.ComputeLiquidPool(finalQueryPos, LiquidID.Lava).CenterAverage;
-                                if (lavaPoolCenter != Vector2.Zero)
-                                {
-                                    float jumpHeight = 130f;
-                                    float maxJumpHeight = 160f;
-                                    NPC.velocity = MiscHelpers.GetArcVel(NPC.Center, lavaPoolCenter, grav, jumpHeight, maxJumpHeight, 13f);
-                                    SoundEngine.PlaySound(NPC.HitSound, NPC.Center);
-                                    AIState = ActionState.AirTime;
-                                    AITimer = 0;
-                                    AIRand = 0;
-                                }
-                                else
-                                {
-                                    AITimer = 0;
-                                    AIDir *= -1f;
-                                }
-                            }
-                            else
-                            {
-                                AITimer = 0;
-                                AIDir *= -1f;
-                            }
-                        }
-                    }
-                    NPC.rotation = (NPC.velocity * NPC.spriteDirection).ToRotation();
-                    break;
-                case ActionState.AirTime:
-                    NPC.noTileCollide = true;
-                    if (NPC.collideY && NPC.velocity.Y > 0f)
+            AIState = AIState switch
+            {
+                ActionState.LavaSwim => LavaSwim(target, toTargetNormalized, lava),
+                ActionState.AirTime => AirTime(lava),
+                ActionState.Flopping => Flopping(toTargetNormalized, lava),
+                ActionState.SwimToPlayer => SwimToPlayer(toTargetNormalized, lava),
+                _ => AIState
+            };
+        }
+        private ActionState LavaSwim(Player target, Vector2 toTargetNormalized, bool lava)
+        {
+            if (!lava && AIRand > 100)
+            {
+                AIRand = 2f;
+                AITimer = 0;
+                NPC.noGravity = false;
+                return ActionState.Flopping;
+            }
+            if (lava)
+                AIRand = 0;
+            if (target.lavaWet)
+            {
+                return ActionState.SwimToPlayer;
+            }
+            AIRand++;
+            if (!NPC.noGravity)
+                NPC.noGravity = true;
+            int toDir = Math.Sign(toTargetNormalized.X);
+            if (AIDir == 0 || (AITimer > 300 && AIDir != toDir))
+            {
+                AITimer = 0;
+                AIDir = toDir;
+            }
+            if (AITimer < 30)
+                NPC.velocity.Y += Math.Abs(NPC.velocity.X) / 7f;
+            NPC.velocity.X = AIDir * 9f;
+            if (AITimer > 30)
+            {
+                NPC.velocity.Y -= 0.3f;
+                if (!lava)
+                {
+                    float stickOut = 16f * 38f;
+                    Point tileQuery = new Vector2(NPC.position.X + AIDir * stickOut, NPC.position.Y).ToTileCoordinates();
+                    Point finalQueryPos = Point.Zero;
+                    Vector2 lavaPos = Vector2.Zero;
+
+                    for (int j = 0; j < 32; j++)
                     {
-                        AIState = ActionState.Flopping;
-                        AITimer = 0;
-                        NPC.noGravity = false;
-                        break;
-                    }
-                    if (AITimer > -1)
-                    {
-                        NPC.velocity.Y += grav;
-                        if (lava)
+                        Point realQuery = tileQuery + new Point(0, j);
+                        Tile t = Framing.GetTileSafely(realQuery);
+                        int amt = 2;
+                        Rectangle checkClear = new(realQuery.X, realQuery.Y - amt, amt, amt);
+                        if (TileHelpers.TileLiquid(realQuery, LiquidID.Lava) && TileHelpers.AreaClear(checkClear))
                         {
-                            AIState = ActionState.LavaSwim;
-                            AITimer = 300;
+                            lavaPos = realQuery.ToWorldCoordinates();
+                            finalQueryPos = realQuery;
                             break;
                         }
+                        Dust.NewDustPerfect(realQuery.ToWorldCoordinates(), DustID.WhiteTorch);
                     }
-                    NPC.rotation = (NPC.velocity * NPC.spriteDirection).ToRotation();
-                    if (AfterImageFadeIn < 1f)
-                        AfterImageFadeIn += 0.1f;
-                    break;
-                case ActionState.Flopping:
-                    if (lava)
+                    if (lavaPos != Vector2.Zero)
                     {
-                        AIState = ActionState.LavaSwim;
-                        AITimer = 300;
-                        break;
+                        Vector2 lavaPoolCenter = MiscHelpers.ComputeLiquidPool(finalQueryPos, LiquidID.Lava).CenterAverage;
+                        if (lavaPoolCenter != Vector2.Zero)
+                        {
+                            float jumpHeight = 130f;
+                            float maxJumpHeight = 160f;
+                            NPC.velocity = MiscHelpers.GetArcVel(NPC.Center, lavaPoolCenter, grav, jumpHeight, maxJumpHeight, 13f);
+                            SoundEngine.PlaySound(NPC.HitSound, NPC.Center);
+                            AITimer = 0;
+                            AIRand = 0;
+                            return ActionState.AirTime;
+                        }
+                        else
+                        {
+                            AITimer = 0;
+                            AIDir *= -1f;
+                        }
                     }
-                    if (NPC.collideY && AITimer > 10)
+                    else
                     {
-                        NPC.velocity.X = MathHelper.SmoothStep(NPC.velocity.X, toTargetNormalized.X * 2f, 0.5f);
-                        NPC.velocity.Y -= AIRand;
-                        AIRand = Main.rand.NextFloat(3f, 5f);
                         AITimer = 0;
+                        AIDir *= -1f;
                     }
-                    NPC.rotation = NPC.velocity.Y / 32f;
-                    break;
-                case ActionState.SwimToPlayer:
-                    if (!lava)
-                        goto case ActionState.LavaSwim;
-                    if (!NPC.noGravity)
-                        NPC.noGravity = true;
-                    float swimSpeed = 8f;
-                    NPC.velocity = toTargetNormalized * swimSpeed;
-                    NPC.rotation = (NPC.velocity * NPC.spriteDirection).ToRotation();
-                    break;
+                }
             }
+            NPC.rotation = (NPC.velocity * NPC.spriteDirection).ToRotation();
+            return ActionState.LavaSwim;
+        }
+        private ActionState AirTime(bool lava)
+        {
+            NPC.noTileCollide = true;
+            if (NPC.collideY && NPC.velocity.Y > 0f)
+            {
+                AITimer = 0;
+                NPC.noGravity = false;
+                return ActionState.Flopping;
+            }
+            if (AITimer > -1)
+            {
+                NPC.velocity.Y += grav;
+                if (lava)
+                {
+                    AITimer = 300;
+                    return ActionState.LavaSwim;
+                }
+            }
+            NPC.rotation = (NPC.velocity * NPC.spriteDirection).ToRotation();
+            if (AfterImageFadeIn < 1f)
+                AfterImageFadeIn += 0.1f;
+            return ActionState.AirTime;
+        }
+        private ActionState Flopping(Vector2 toTargetNormalized, bool lava)
+        {
+            if (lava)
+            {
+                AITimer = 300;
+                return ActionState.LavaSwim;
+            }
+            if (NPC.collideY && AITimer > 10)
+            {
+                NPC.velocity.X = MathHelper.SmoothStep(NPC.velocity.X, toTargetNormalized.X * 2f, 0.5f);
+                NPC.velocity.Y -= AIRand;
+                AIRand = Main.rand.NextFloat(3f, 5f);
+                AITimer = 0;
+            }
+            NPC.rotation = NPC.velocity.Y / 32f;
+            return ActionState.Flopping;
+        }
+        private ActionState SwimToPlayer(Vector2 toTargetNormalized, bool lava)
+        {
+            if (!lava)
+                return ActionState.LavaSwim;
+            if (!NPC.noGravity)
+                NPC.noGravity = true;
+            float swimSpeed = 8f;
+            NPC.velocity = toTargetNormalized * swimSpeed;
+            NPC.rotation = (NPC.velocity * NPC.spriteDirection).ToRotation();
+            return ActionState.SwimToPlayer;
         }
         public override bool? CanFallThroughPlatforms() => true;
         public override void FindFrame(int frameHeight)

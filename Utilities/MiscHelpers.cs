@@ -676,13 +676,10 @@ namespace ITD.Utilities
             } 
         }
     }
-    public static class TrailingModeID
+    public static class NPCTrailingID
     {
-        public static class NPCTrailing
-        {
-            public const int PosEveryThreeFrames = 0;
-            public const int PosEveryFrame = 1;
-            public const int PosRotEveryFrame = 3;
-        }
+        public const int PosEveryThreeFrames = 0;
+        public const int PosEveryFrame = 1;
+        public const int PosRotEveryFrame = 3;
     }
 }

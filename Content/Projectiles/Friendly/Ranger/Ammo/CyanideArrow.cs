@@ -36,7 +36,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger.Ammo
                 emitter.keptAlive = true;
         }
 
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
         {
 			Projectile.penetrate = -1;
 			Projectile.Resize(100, 100);

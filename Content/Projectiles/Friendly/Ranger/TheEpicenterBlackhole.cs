@@ -20,7 +20,6 @@ using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 using Terraria.Graphics;
 using ITD.Particles;
 using ITD.Particles.Misc;
-using System;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
