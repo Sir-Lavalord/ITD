@@ -40,19 +40,20 @@ namespace ITD.Content.NPCs.Bosses
 			Cooking,
             ShovelSlam,
 			DarkFountain,
-			Skullraiser,
+			Skullduggery,
 			Goodbye
         }
 		private ActionState AI_State;
 		private int AttackCycle = 0;
 		private int StateTimer = 100;
+		private int StateExtra = 0;
 		private Vector2 Teleposition;
-		private int Form = 0;
+		//private int Form = 0;
 		
         public override void SetStaticDefaults()
         {
             NPCID.Sets.BossBestiaryPriority.Add(Type);
-			Main.npcFrameCount[Type] = 14;
+			Main.npcFrameCount[Type] = 7;
         }
         public override void SetDefaults()
         {
@@ -61,7 +62,7 @@ namespace ITD.Content.NPCs.Bosses
             NPC.height = 80;
             NPC.damage = 40;
             NPC.defense = 5;
-            NPC.lifeMax = 4800;
+            NPC.lifeMax = 2400;
 			NPC.dontTakeDamage = true;
 			NPC.knockBackResist = 0f;
             NPC.HitSound = SoundID.NPCHit54;
@@ -77,7 +78,7 @@ namespace ITD.Content.NPCs.Bosses
                 Music = ITD.Instance.GetMusic("Gravekeeper") ?? MusicID.Boss1;
             }
         }
-		public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
+		/*public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {
 			if (NPC.downedPlantBoss)
 			{
@@ -88,13 +89,13 @@ namespace ITD.Content.NPCs.Bosses
 				NPC.defense *= 2;
 				NPC.frame.Y = (int)(NPC.frame.Size().Y)*Main.npcFrameCount[Type];
 			}
-        }
+        }*/
 		
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
-			if (Form == 1)
-				target.AddBuff(ModContent.BuffType<SoulRotBuff>(), 60 * 8);
-			else
+			//if (Form == 1)
+			//	target.AddBuff(ModContent.BuffType<SoulRotBuff>(), 60 * 8);
+			//else
 				target.AddBuff(ModContent.BuffType<NecrosisBuff>(), 60 * 8);
         }
 		
@@ -143,8 +144,8 @@ namespace ITD.Content.NPCs.Bosses
 						offset.Y += (float)(Math.Cos(angle) * 100);
 						Vector2 spawnPos = NPC.Center + offset - new Vector2(4, 0);
 						int dustType = DustID.GiantCursedSkullBolt;
-						if (Form == 1)
-							dustType = DustID.DungeonSpirit;
+						//if (Form == 1)
+						//	dustType = DustID.DungeonSpirit;
 						Dust dust = Main.dust[Dust.NewDust(
 							spawnPos, 0, 0,
 							dustType, 0, 0, 0, default, 2f
@@ -163,11 +164,11 @@ namespace ITD.Content.NPCs.Bosses
 							range = 3f;
 						int type = ModContent.ProjectileType<GasLeak>();
 						int damage = 20;
-						if (Form == 1)
-						{
-							type = ModContent.ProjectileType<SoulLeak>();
-							damage = 40;
-						}
+						//if (Form == 1)
+						//{
+						//	type = ModContent.ProjectileType<SoulLeak>();
+						//	damage = 40;
+						//}
 						for (int i = 0; i < range; i++)
 						{
 							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(6f+Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), type, damage, 0, -1);
@@ -178,40 +179,62 @@ namespace ITD.Content.NPCs.Bosses
 					{
 						Vector2 dustOffset = new Vector2(0f, 60f).RotatedBy(MathHelper.ToRadians(90*i+45));
 						int dustType = DustID.GiantCursedSkullBolt;
-						if (Form == 1)
-							dustType = DustID.DungeonSpirit;
+						//if (Form == 1)
+						//	dustType = DustID.DungeonSpirit;
 						Dust dust = Main.dust[Dust.NewDust(Teleposition, 0, 0, dustType, 0, 0, 100, default, 1.5f)];
 						dust.noGravity = true;
 						dust.velocity = dustOffset*0.05f;
 					}
 					break;
-				case ActionState.Skullraiser:
-					if (StateTimer % 10 == 0)
+				case ActionState.Skullduggery:
+					if (StateTimer < 10)
 					{
-						if (Main.netMode != NetmodeID.MultiplayerClient)
+						if (StateExtra < 3)
 						{
-							int type = ModContent.ProjectileType<NecroSkull>();
-							int damage = 20;
-							if (Form == 1)
+							NPC.velocity.Y += 1f;
+							StateTimer = 10;
+							if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
 							{
-								type = ModContent.ProjectileType<SoulSkull>();
-								damage = 40;
+								StateExtra++;
+								NPC.velocity.Y = -8f;
+								StateTimer = 35;
+								
+								if (Main.netMode != NetmodeID.MultiplayerClient)
+								{
+									int type = ModContent.ProjectileType<NecroSkull>();
+									int damage = 20;
+									//if (Form == 1)
+									//{
+									//	type = ModContent.ProjectileType<SoulSkull>();
+									//	damage = 40;
+									//}
+									int skullCount = 3;
+									if (Main.expertMode)
+										skullCount += 1;
+									for (int l = 0; l < skullCount; l++)
+									{
+										float offset = Main.rand.NextFloat(-200f, 200f);
+										Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(offset, 0f), new Vector2(offset*0.01f, -2f), type, damage, 0, -1);
+									}
+									
+								}
+								SoundEngine.PlaySound(SoundID.Item70, NPC.Center);
+								int dustType = DustID.GiantCursedSkullBolt;
+								//if (Form == 1)
+								//	dustType = DustID.DungeonSpirit;
+								for (int l = 0; l < 8; l++)
+								{
+									int spawnDust = Dust.NewDust(NPC.Center, 0, 0, dustType, 0, 0, 0, default, 2f);
+									Main.dust[spawnDust].noGravity = true;
+									Main.dust[spawnDust].velocity *= 3f;
+								}
 							}
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -2f), type, damage, 0, -1);
-							if (Main.expertMode)
-								Projectile.NewProjectile(NPC.GetSource_FromThis(), Main.player[NPC.target].Center + new Vector2(200f-Main.rand.NextFloat(400f), 400f), new Vector2(0, -2f), type, damage, 0, -1);
 						}
-						
-						int dustType = DustID.GiantCursedSkullBolt;
-						if (Form == 1)
-							dustType = DustID.DungeonSpirit;
-						for (int l = 0; l < 8; l++)
-						{
-							int spawnDust = Dust.NewDust(NPC.Center, 0, 0, dustType, 0, 0, 0, default, 2f);
-							Main.dust[spawnDust].noGravity = true;
-							Main.dust[spawnDust].velocity *= 3f;
-						}
+						else
+							StateSwitch();
 					}
+					else
+						NPC.velocity *= 0.9f;
 					break;
 			}
 			
@@ -240,22 +263,22 @@ namespace ITD.Content.NPCs.Bosses
 		
 		public override void FindFrame(int frameHeight)
         {
-			int offset = (int)(frameHeight * Main.npcFrameCount[Type] * Form / 2);
             NPC.frameCounter += 1f;
             if (NPC.frameCounter > 5f)
             {
                 NPC.frameCounter = 0;
                 NPC.frame.Y += frameHeight;
 
-                if (NPC.frame.Y > (frameHeight * Main.npcFrameCount[Type] / 2) - 1 + offset)
+                if (NPC.frame.Y > frameHeight * (Main.npcFrameCount[Type] - 1))
                 {
-                    NPC.frame.Y = frameHeight + offset;
+                    NPC.frame.Y = frameHeight;
                 }
             }
         }
 		
 		private void StateSwitch()
 		{
+			StateExtra = 0;
 			switch (AI_State)
             {
 				case ActionState.Chasing:
@@ -279,8 +302,8 @@ namespace ITD.Content.NPCs.Bosses
 							break;
 						case 2:
 							NPC.TargetClosest(false);
-							AI_State = ActionState.Skullraiser;
-							StateTimer = 60;
+							AI_State = ActionState.Skullduggery;
+							StateTimer = 10;
 							break;
 					}
 					break;
@@ -317,7 +340,7 @@ namespace ITD.Content.NPCs.Bosses
 					StateTimer = 120;
 					Teleport();
 					break;
-				case ActionState.Skullraiser:
+				case ActionState.Skullduggery:
 					AI_State = ActionState.Chasing;
 					StateTimer = 160;
 					break;
@@ -330,8 +353,8 @@ namespace ITD.Content.NPCs.Bosses
 		private void Teleport()
 		{
 			int dustType = DustID.GiantCursedSkullBolt;
-			if (Form == 1)
-				dustType = DustID.DungeonSpirit;
+			//if (Form == 1)
+			//	dustType = DustID.DungeonSpirit;
 			for (int i = 0; i < 60; i++)
 			{
 				Vector2 dustOffset = new Vector2(0f, 60f).RotatedBy(MathHelper.ToRadians(6*i));
@@ -365,6 +388,18 @@ namespace ITD.Content.NPCs.Bosses
 		
 		private void Necromancy()
 		{
+			SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
+			int dustType = DustID.GiantCursedSkullBolt;
+			//if (Form == 1)
+			//	dustType = DustID.DungeonSpirit;
+			for (int l = 0; l < 20; l++)
+			{
+				int spawnDust = Dust.NewDust(NPC.Center, 0, 0, dustType, 0, 0, 0, default, 2f);
+				Main.dust[spawnDust].noGravity = true;
+				Main.dust[spawnDust].velocity *= 3f;
+			}
+			if (Main.netMode == NetmodeID.MultiplayerClient)
+				return;
 			int tombstones = 0;
 			foreach (var target in Main.ActiveNPCs)
             {
@@ -372,6 +407,12 @@ namespace ITD.Content.NPCs.Bosses
 				{
 					tombstones++;
 					target.ai[0] = -1;
+					NetMessage.SendData(23, -1, -1, null, target.whoAmI, 0f, 0f, 0f, 0, 0, 0);
+					NetMessage.SendStrikeNPC(target, new NPC.HitInfo // horrible evil networking so the client can see the tombstone dying
+						{
+							HideCombatText = true,
+							InstantKill = true,
+						});
 				}
             }
 			byte numPlayers = 0;
@@ -405,36 +446,23 @@ namespace ITD.Content.NPCs.Bosses
 				position = new Vector2((float)(point.X * 16 + 8), (float)(point.Y * 16 - 8));
 				if (WorldGen.ActiveAndWalkableTile(point.X, point.Y) && !WorldGen.SolidTile(point.X, point.Y-1, false))
 				{
-					if (Main.netMode != NetmodeID.MultiplayerClient)
-					{
-						int type = ModContent.NPCType<HauntedTombstone>();
-						if (Form == 1)
-							type = ModContent.NPCType<GhastlyTombstone>();
-						NPC.NewNPC(NPC.GetSource_FromThis(), (int)(position.X), (int)(position.Y), type, 0, NPC.whoAmI);
-					}
+					int type = ModContent.NPCType<HauntedTombstone>();
+					//if (Form == 1)
+					//	type = ModContent.NPCType<GhastlyTombstone>();
+					NPC.NewNPC(NPC.GetSource_FromThis(), (int)(position.X), (int)(position.Y), type, 0, NPC.whoAmI);
 				}
-			}
-			
-			SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
-			int dustType = DustID.GiantCursedSkullBolt;
-			if (Form == 1)
-				dustType = DustID.DungeonSpirit;
-			for (int l = 0; l < 20; l++)
-			{
-				int spawnDust = Dust.NewDust(NPC.Center, 0, 0, dustType, 0, 0, 0, default, 2f);
-				Main.dust[spawnDust].noGravity = true;
-				Main.dust[spawnDust].velocity *= 3f;
 			}
 		}
 		
 		public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-			LeadingConditionRule downedPlanteraRule = new LeadingConditionRule(new DownedPlanteraButBetter()); // woe is me right now
+			/*LeadingConditionRule downedPlanteraRule = new LeadingConditionRule(new DownedPlanteraButBetter()); // woe is me right now
             downedPlanteraRule.OnSuccess(ItemDropRule.BossBag(ModContent.ItemType<HardmodeGravekeeperBag>()));
 			npcLoot.Add(downedPlanteraRule);
 			LeadingConditionRule downedPlanteraNotRule = new LeadingConditionRule(new DownedPlanteraNot());
 			downedPlanteraNotRule.OnSuccess(ItemDropRule.BossBag(ModContent.ItemType<GravekeeperBag>()));
-			npcLoot.Add(downedPlanteraNotRule);
+			npcLoot.Add(downedPlanteraNotRule);*/
+			npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<GravekeeperBag>()));
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
             notExpertRule.OnSuccess(ItemDropRule.OneFromOptionsNotScalingWithLuck(1, oneFromOptionsDrops));
 			notExpertRule.OnSuccess(ItemDropRule.ByCondition(new DownedPlanteraButBetter(), ItemID.Ectoplasm, 1, 5, 10));
