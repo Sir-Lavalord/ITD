@@ -278,7 +278,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 				modifiers.Knockback *= 0.25f;
 			}			
 			
-			if (CurrentAIState == AIState.LaunchingForward)
+			if (CurrentAIState == AIState.LaunchingForward && target.lifeMax > 1)
 			{
 				Impact();
 			}
@@ -352,7 +352,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 				}
 				Texture2D texture = TextureAssets.Extra[91].Value;
                 Rectangle rectangle = texture.Frame(1, 1);
-				Vector2 effectDrawOrigin = new Vector2(rectangle.Size().X / 2f, rectangle.Size().Y / 6f);
+				Vector2 effectDrawOrigin = new Vector2(rectangle.Size().X / 2f, rectangle.Size().Y / 5f);
                 Vector2 position = Projectile.Center - Main.screenPosition;
                 Main.EntitySpriteDraw(texture, position, rectangle, new Color(100, 100, 100, 50), Projectile.velocity.ToRotation() + MathHelper.PiOver2, effectDrawOrigin, 1.5f, SpriteEffects.None, 0f);
 				Main.EntitySpriteDraw(texture, position, rectangle, new Color(150, 150, 150, 50), Projectile.velocity.ToRotation() + MathHelper.PiOver2, effectDrawOrigin, 1.2f, SpriteEffects.None, 0f);

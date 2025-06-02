@@ -330,6 +330,8 @@ NPCs: {
 	}
 
 	// BlackMoldStrand.DisplayName: Black Mold Strand
+	// SlimeMold.DisplayName: Slime Mold
+	// MoldSpore.DisplayName: Mold Spore
 }
 
 Buffs: {
