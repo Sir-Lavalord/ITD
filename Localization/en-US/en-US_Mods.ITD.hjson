@@ -235,6 +235,7 @@ Projectiles: {
 	WickedHeartR.DisplayName: Wicked Heart R
 	WickedHeartS.DisplayName: Wicked Heart S
 	TwilightDemiseProj.DisplayName: Twilight Demise Proj
+	MoldExplosion.DisplayName: Mold Explosion
 }
 
 NPCs: {
@@ -330,7 +331,12 @@ NPCs: {
 	}
 
 	BlackMoldStrand.DisplayName: Black Mold Strand
-	SlimeMold.DisplayName: Slime Mold
+
+	SlimeMold: {
+		DisplayName: Slime Mold
+		Bestiary: Mods.ITD.NPCs.SlimeMold.Bestiary
+	}
+
 	MoldSpore.DisplayName: Mold Spore
 }
 

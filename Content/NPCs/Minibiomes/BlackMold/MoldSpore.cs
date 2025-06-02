@@ -69,11 +69,35 @@ namespace ITD.Content.NPCs.Minibiomes.BlackMold
 		
 		public override void HitEffect(NPC.HitInfo hit)
         {
-			for (int j = 0; j < 15; ++j)
+			for (int j = 0; j < 10; ++j)
 			{
 				Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Ambient_DarkBrown, 0f, 0f, 0, default, 1f);
 			}
-        }
+			if (NPC.HasBuff(BuffID.OnFire) || NPC.HasBuff(BuffID.OnFire3))
+			{
+				SoundEngine.PlaySound(SoundID.Item14, NPC.Center);
+				for (int i = 0; i < 5; i++)
+				{
+					int num898 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 31, 0f, 0f, 100, default(Color), 1.5f);
+					Dust dust2 = Main.dust[num898];
+					dust2.velocity *= 1.4f;
+				}
+				for (int i = 0; i < 3; i++)
+				{
+					int num900 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 6, 0f, 0f, 100, default(Color), 3.5f);
+					Main.dust[num900].noGravity = true;
+					Dust dust2 = Main.dust[num900];
+					dust2.velocity *= 7f;
+					num900 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, 6, 0f, 0f, 100, default(Color), 1.5f);
+					dust2 = Main.dust[num900];
+					dust2.velocity *= 3f;
+				}
+				Gore gore = Main.gore[Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y), default(Vector2), Main.rand.Next(61, 64), 1f)];
+				gore.velocity *= 0.4f;
+				gore.velocity.X = gore.velocity.X + 1f;
+				gore.velocity.Y = gore.velocity.Y + 1f;
+			}
+		}
 		
         //public override float SpawnChance(NPCSpawnInfo spawnInfo)
         //{

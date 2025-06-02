@@ -13,7 +13,7 @@ using ITD.Content.Buffs.Debuffs;
 
 namespace ITD.Content.NPCs.Minibiomes.BlackMold
 {
-    public class SlimeMold : ModNPC
+    public class SlimeMold : MoldNpc
     {
 		public bool canTriggerLanding = false;
 		public ref float AITimer => ref NPC.ai[0];
@@ -23,7 +23,7 @@ namespace ITD.Content.NPCs.Minibiomes.BlackMold
 		public Vector2 stretchScale = Vector2.One;
 		public int wobbleTimer;
 		
-		public override void SetStaticDefaults()
+		public override void SetStaticDefaultsSafe()
         {
 			NPCID.Sets.SpecificDebuffImmunity[Type][ModContent.BuffType<MelomycosisBuff>()] = true;
             Main.npcFrameCount[NPC.type] = 3;
@@ -43,7 +43,7 @@ namespace ITD.Content.NPCs.Minibiomes.BlackMold
         }
 		
 		public override void AI()
-		{
+		{				
 			bool aggro = false;
 			if (!Main.dayTime || NPC.life != NPC.lifeMax || (double)NPC.position.Y > Main.worldSurface * 16.0 || Main.slimeRain) // this part makes the slime chase you
 			{
@@ -216,7 +216,7 @@ namespace ITD.Content.NPCs.Minibiomes.BlackMold
 					npc.velocity = new Vector2(Main.rand.NextFloat(-12f, 12f), Main.rand.NextFloat(-6f, -2f));
 				}
 			}
-			return true;
+			return base.CheckDead();
 		}
 		
 		public override void HitEffect(NPC.HitInfo hit)
