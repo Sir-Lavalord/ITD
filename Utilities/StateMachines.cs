@@ -37,10 +37,11 @@ namespace ITD.Utilities.StateMachines
 
         public bool SwitchState(int TargetStateIndex)
         {
-            if (StateList.count < TargetStateIndex) return false;
+            if (TargetStateIndex < 0 || TargetStateIndex >= StateList.Count) return false;
 
             CurrentActiveState?.OnStateExit?.Invoke();
             CurrentActiveState = StateList[TargetStateIndex];
+            CurrentActiveStateIndex = TargetStateIndex;
             CurrentActiveState.OnStateEnter?.Invoke();
 
             return true;
@@ -50,17 +51,13 @@ namespace ITD.Utilities.StateMachines
         {
             CurrentActiveState?.OnStateExit?.Invoke();
             CurrentActiveState = null;
+            CurrentActiveStateIndex = -1;
         }
 
         public IReadOnlyList<SwitchingState> GetAllStates() => StateList.AsReadOnly();
 
         public class SwitchingState
         {
-            public SwitchingState(SwitchingStateMachine machine)
-            {
-                OwningStateMachine = machine;
-            }
-
             public SwitchingStateMachine OwningStateMachine { get; private set; }
 
             public ITDListenerEvent OnStateEnter = new ITDListenerEvent();
