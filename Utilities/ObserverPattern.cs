@@ -32,6 +32,30 @@ namespace ITD.Utilities.ObserverPatterns
         }
     }
 
+    public class ITDListenerEvent
+    {
+        private event Action listeners;
+        public void AddListener(Action listener)
+        {
+            listeners += listener;
+        }
+
+        public void RemoveListener(Action listener)
+        {
+            listeners -= listener;
+        }
+
+        public void Invoke()
+        {
+            listeners?.Invoke();
+        }
+
+        public void RemoveAllListeners()
+        {
+            listeners = null;
+        }
+    }
+
     public class ITDListenerEvent<T>
     {
         private event Action<T> listeners;
