@@ -15,6 +15,7 @@ namespace ITD.Utilities.StateMachines
     {
         private List<SwitchingState> StateList = new List<SwitchingState>();
         public SwitchingState CurrentActiveState { get; private set; }
+        public int CurrentActiveStateIndex { get; private set; }
 
         public void AddState(SwitchingState state)
         {
@@ -34,13 +35,15 @@ namespace ITD.Utilities.StateMachines
             StateList.Remove(state);
         }
 
-        public void SwitchState(SwitchingState newState)
+        public bool SwitchState(int TargetStateIndex)
         {
-            if (newState == null || !StateList.Contains(newState)) return;
+            if (StateList.count < TargetStateIndex) return false;
 
             CurrentActiveState?.OnStateExit?.Invoke();
-            CurrentActiveState = newState;
+            CurrentActiveState = StateList[TargetStateIndex];
             CurrentActiveState.OnStateEnter?.Invoke();
+
+            return true;
         }
 
         public void Reset()
