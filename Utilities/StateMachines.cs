@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using ITD.Utilities.ObserverPatterns;
-using static ITD.Utilities.StateMachines.LayeredStateMachine<T>;
 
 ///Should note that I've included 2 types of state machine. Use the one that fits the use case. You would be surprised by how often they could be used in places. But each one will have extra overhead.
 namespace ITD.Utilities.StateMachines
@@ -62,6 +61,7 @@ namespace ITD.Utilities.StateMachines
 
             public ITDListenerEvent OnStateEnter = new ITDListenerEvent();
             public ITDListenerEvent OnStateExit = new ITDListenerEvent();
+            public void SetOwningStateMachine(SwitchingStateMachine owningStateMachine) => OwningStateMachine = owningStateMachine;
         }
     }
 
@@ -72,15 +72,15 @@ namespace ITD.Utilities.StateMachines
     /// <typeparam name="T"></typeparam>
     public class LayeredStateMachine<T>
     {
-        private List<LayeredState<T>> StateList = new List<LayeredState<T>>();
+        private List<LayeredState> StateList = [];
 
-        public void AddState(LayeredState<T> state)
+        public void AddState(LayeredState state)
         {
             if (state == null || StateList.Contains(state)) return;
             StateList.Add(state);
         }
 
-        public void RemoveState(LayeredState<T> state)
+        public void RemoveState(LayeredState state)
         {
             StateList.Remove(state);
         }
@@ -90,7 +90,7 @@ namespace ITD.Utilities.StateMachines
             StateList.Clear();
         }
 
-        public IReadOnlyList<LayeredState<T>> GetAllStates() => StateList.AsReadOnly();
+        public IReadOnlyList<LayeredState> GetAllStates() => StateList.AsReadOnly();
 
         public T GetCompletedPass(T InitialVariable)
         {
@@ -102,7 +102,7 @@ namespace ITD.Utilities.StateMachines
             return result;
         }
 
-        public class LayeredState<T>
+        public class LayeredState
         {
             /// Note that an abstract can be used here, but that would require creating checks on implimentation point.
             protected internal virtual T LayerPass(T LastLayerValue)
@@ -135,10 +135,10 @@ namespace ITD.Utilities.StateMachines
     }
     namespace LayeredStates
     {
-        public class LayeredStateAddition : LayeredState<float>
+        public class LayeredStateAddition : LayeredStateMachine<float>.LayeredState
         {
             public float Addition;
-            protected override float LayerPass(float LastLayerValue)
+            protected internal override float LayerPass(float LastLayerValue)
             {
                 return LastLayerValue + Addition;
             }
