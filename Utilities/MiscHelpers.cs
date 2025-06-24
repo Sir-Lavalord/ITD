@@ -2,7 +2,6 @@
 using System.Linq;
 using Terraria.ID;
 using Terraria;
-using ITD.Content.NPCs;
 using ReLogic.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
@@ -11,6 +10,8 @@ using static log4net.Appender.ColoredConsoleAppender;
 using Terraria.DataStructures;
 using System.Collections.Generic;
 using Terraria.GameContent;
+
+using ITD.Content.NPCs;
 
 namespace ITD.Utilities
 {
@@ -461,28 +462,6 @@ namespace ITD.Utilities
         {
             return projectile.ModProjectile as T;
         }
-        public static void CreateLightningEffects(Vector2 start, Vector2 end)
-        {
-            Vector2 direction = Vector2.Normalize(end - start);
-            float divisions = 8f;
-            int length = (int)((end - start).Length() / divisions);
-
-            for (int j = 0; j < length; j++)
-            {
-                Vector2 dustPos = start + direction * j * divisions + Main.rand.NextVector2Circular(16f, 16f);
-
-                Dust dust = Dust.NewDustPerfect(
-                    dustPos,
-                    DustID.Electric,
-                    Vector2.Zero,
-                    0,
-                    Color.White,
-                    Main.rand.NextFloat(1.5f, 2f)
-                );
-                dust.noGravity = true;
-                dust.fadeIn = 1f;
-            }
-        }
         //Can do gimmick crap, take kb 
         public static bool Gimmickable(this NPC npc)
         {
@@ -536,54 +515,6 @@ namespace ITD.Utilities
         public static void ExpandHitboxBy(this Projectile projectile, int newSize) => projectile.ExpandHitboxBy(newSize, newSize);
         public static void ExpandHitboxBy(this Projectile projectile, Vector2 newSize) => projectile.ExpandHitboxBy((int)newSize.X, (int)newSize.Y);
         public static void ExpandHitboxBy(this Projectile projectile, float expandRatio) => projectile.ExpandHitboxBy((int)(projectile.width * expandRatio), (int)(projectile.height * expandRatio));
-
-        public static void Zap(Vector2 origin, Player player, int damage, int critChance, int chain)
-        {
-			NPC target = null;
-			float reach = 300;
-			
-			foreach (var npc in Main.ActiveNPCs)
-            {
-                if (!npc.friendly && npc.CanBeChasedBy())
-                {
-                    float distance = Vector2.Distance(npc.Center, origin);
-					if (distance < reach && !npc.GetGlobalNPC<ITDGlobalNPC>().zapped)
-					{
-						reach = distance;
-						target = npc;
-					}
-                }
-            }
-			if (target != null)
-			{
-				bool crit = false;
-				if (Main.rand.Next(1, 101) <= critChance)
-				{
-					crit = true;
-					damage *= 2;
-				}
-				damage = Main.DamageVar(damage, player.luck);
-				
-				target.StrikeNPC(new NPC.HitInfo
-				{
-					Damage = damage,
-					Knockback = 1f,
-					HitDirection = target.Center.X < origin.X ? -1 : 1,
-					Crit = crit
-				});
-
-				target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
-
-				CreateLightningEffects(origin, target.Center);
-				if (chain > 0)
-				{
-					origin = target.Center;
-					damage = (int)(damage*0.75f);
-					chain--;
-					Zap(origin, player, damage, critChance, chain);
-				}
-			}
-        }
 		
 		public static void GetPointOnSwungItemPath(Player player, float spriteWidth, float spriteHeight, float normalizedPointOnPath, float itemScale, out Vector2 location, out Vector2 outwardDirection)
 		{

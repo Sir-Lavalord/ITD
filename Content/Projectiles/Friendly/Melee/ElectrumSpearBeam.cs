@@ -4,8 +4,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
-using ITD.Content.NPCs;
-using ITD.Utilities;
+
+using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {
@@ -24,8 +24,29 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
-			MiscHelpers.Zap(target.Center, Main.player[Projectile.owner], (int)(Projectile.damage * 0.75f), Projectile.CritChance, 0);
+			if (Main.myPlayer == Projectile.owner)
+			{
+				NPC newTarget = null;
+				float reach = 600;
+				
+				foreach (var npc in Main.ActiveNPCs)
+				{
+					if (!npc.friendly && npc.CanBeChasedBy() && npc != target)
+					{
+						float distance = Vector2.Distance(npc.Center, target.Center);
+						if (distance < reach)
+						{
+							reach = distance;
+							newTarget = npc;
+						}
+					}
+				}
+				if (newTarget != null)
+				{
+					Projectile newZap = Main.projectile[Projectile.NewProjectile(Projectile.GetSource_FromThis(), newTarget.Center, new Vector2(), ModContent.ProjectileType<Zap>(), (int)(Projectile.damage * 0.75f), 0, Projectile.owner, newTarget.whoAmI, target.Center.X, target.Center.Y)];
+					newZap.localNPCImmunity[target.whoAmI] = -1;
+				}
+			}
 		}
 		
         public override void AI()

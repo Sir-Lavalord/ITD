@@ -35,7 +35,6 @@ namespace ITD.Content.NPCs
     {
         public override bool InstancePerEntity => true;
 
-        public bool zapped;
         public bool necrosis;
         public bool soulRot;
         public bool toasted;
@@ -67,7 +66,6 @@ namespace ITD.Content.NPCs
             ];
         public override void ResetEffects(NPC npc)
         {
-            zapped = false;
             chilled = false;
             melomycosis = false;
             necrosis = false;

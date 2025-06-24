@@ -236,6 +236,7 @@ Projectiles: {
 	WickedHeartS.DisplayName: Wicked Heart S
 	TwilightDemiseProj.DisplayName: Twilight Demise Proj
 	MoldExplosion.DisplayName: Mold Explosion
+	Zap.DisplayName: Zap
 }
 
 NPCs: {

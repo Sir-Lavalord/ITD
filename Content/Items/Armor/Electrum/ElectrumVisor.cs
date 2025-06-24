@@ -7,6 +7,7 @@ using Terraria.Audio;
 using ITD.Utilities;
 using ITD.Content.Items.Materials;
 using ITD.Content.NPCs;
+using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Items.Armor.Electrum
 {
@@ -66,10 +67,32 @@ namespace ITD.Content.Items.Armor.Electrum
 		{
 			if (setBonus)
 			{
-				target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
-				int crit = (int)(Player.GetCritChance(DamageClass.Generic))+(int)(Player.GetCritChance(item.DamageType))+item.crit;
-				float damage = Player.GetDamage(DamageClass.Generic).ApplyTo(Player.GetDamage(item.DamageType).ApplyTo(item.damage));
-				MiscHelpers.Zap(target.Center, Player, (int)(damage * 0.75f), crit, 1);
+				if (Main.myPlayer == Player.whoAmI)
+				{
+					float damage = Player.GetDamage(DamageClass.Generic).ApplyTo(Player.GetDamage(item.DamageType).ApplyTo(item.damage));
+					
+					NPC newTarget = null;
+					float reach = 600;
+					
+					foreach (var npc in Main.ActiveNPCs)
+					{
+						if (!npc.friendly && npc.CanBeChasedBy() && npc != target)
+						{
+							float distance = Vector2.Distance(npc.Center, target.Center);
+							if (distance < reach)
+							{
+								reach = distance;
+								newTarget = npc;
+							}
+						}
+					}
+					if (newTarget != null)
+					{
+						Projectile newZap = Main.projectile[Projectile.NewProjectile(Player.GetSource_FromThis(), newTarget.Center, new Vector2(), ModContent.ProjectileType<Zap>(), (int)(damage * 0.75f), 0, Player.whoAmI, newTarget.whoAmI, target.Center.X, target.Center.Y)];
+						newZap.localAI[1] = 1;
+						newZap.localNPCImmunity[target.whoAmI] = -1;
+					}
+				}
 				
 				SoundEngine.PlaySound(SoundID.Item94, target.position);
 				for (int i = 0; i < 3; i++)
@@ -83,10 +106,32 @@ namespace ITD.Content.Items.Armor.Electrum
 		
 		public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
 		{
-			if (setBonus)
-			{
-				target.GetGlobalNPC<ITDGlobalNPC>().zapped = true;
-				MiscHelpers.Zap(target.Center, Player, (int)(proj.damage * 0.75f), proj.CritChance, 1);
+			if (setBonus && proj.type != ModContent.ProjectileType<Zap>())
+			{				
+				if (Main.myPlayer == Player.whoAmI)
+				{
+					NPC newTarget = null;
+					float reach = 600;
+					
+					foreach (var npc in Main.ActiveNPCs)
+					{
+						if (!npc.friendly && npc.CanBeChasedBy() && npc != target)
+						{
+							float distance = Vector2.Distance(npc.Center, target.Center);
+							if (distance < reach)
+							{
+								reach = distance;
+								newTarget = npc;
+							}
+						}
+					}
+					if (newTarget != null)
+					{
+						Projectile newZap = Main.projectile[Projectile.NewProjectile(Player.GetSource_FromThis(), newTarget.Center, new Vector2(), ModContent.ProjectileType<Zap>(), (int)(proj.damage * 0.75f), 0, Player.whoAmI, newTarget.whoAmI, target.Center.X, target.Center.Y)];
+						newZap.localAI[1] = 1;
+						newZap.localNPCImmunity[target.whoAmI] = -1;
+					}
+				}
 				
 				SoundEngine.PlaySound(SoundID.Item94, target.position);
 				for (int i = 0; i < 3; i++)

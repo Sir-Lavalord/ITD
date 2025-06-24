@@ -4,7 +4,8 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Terraria.Audio;
 using System;
-using ITD.Utilities;
+
+using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Items.Accessories.Movement.Jumps
 {
@@ -111,7 +112,7 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
                 tornadoTimer--;
                 Tornado();
 
-                if (--lightningTimer <= 0)
+                if (Main.myPlayer == Player.whoAmI && --lightningTimer <= 0)
                 {
                     Lightning();
                     lightningTimer = LightningInterval;
@@ -190,7 +191,26 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
             float progress = (float)tornadoTimer / TornadoDuration;
             Vector2 lightningStart = CalculateLightningStart(progress);
 
-            MiscHelpers.Zap(lightningStart, Player, 300, 0, 0);
+			NPC newTarget = null;
+			float reach = 600;
+			
+			foreach (var npc in Main.ActiveNPCs)
+			{
+				if (!npc.friendly && npc.CanBeChasedBy())
+				{
+					float distance = Vector2.Distance(npc.Center, lightningStart);
+					if (distance < reach)
+					{
+						reach = distance;
+						newTarget = npc;
+					}
+				}
+			}
+			if (newTarget != null)
+			{
+				Projectile newZap = Main.projectile[Projectile.NewProjectile(Player.GetSource_FromThis(), newTarget.Center, new Vector2(), ModContent.ProjectileType<Zap>(), 300, 0, Player.whoAmI, newTarget.whoAmI, lightningStart.X, lightningStart.Y)];
+				newZap.scale = 1.33f;
+			}
         }
 
         private Vector2 CalculateLightningStart(float progress)
