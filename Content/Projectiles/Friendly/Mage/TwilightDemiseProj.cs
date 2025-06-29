@@ -127,7 +127,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         }
         private Color StripColors(float progressOnStrip)
         {
-            Color result = Color.Lerp(Color.DeepSkyBlue, Color.Purple, Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
+            Color result = Color.Lerp(Color.Black, Color.Purple, Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
             result.A /= 2;
             return result * Projectile.Opacity;
         }

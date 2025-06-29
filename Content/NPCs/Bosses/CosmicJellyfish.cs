@@ -176,6 +176,8 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override void AI()
         {
+/*            Main.NewText((AI_State,AITimer1,AITimer2));*/
+
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
                 NPC.TargetClosest();
@@ -226,7 +228,7 @@ namespace ITD.Content.NPCs.Bosses
                     if (AttackCount > 0)//doesn't loop
                     {
                         AI_State = MovementState.FollowingRegular;
-                        AttackID = 4;//set next attack to 4(hand)
+                        AttackID = 2;//set next attack to 4(hand)
                         AITimer1 = 0;
                         AITimer2 = 0;
                         AttackCount = 0;
@@ -244,53 +246,42 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         AI_State = MovementState.FollowingRegular;
                         distanceAbove = 250;
-                        AITimer1 = 0;
-                        AITimer2 = 0;
-                        AttackCount = 0;
-                        DashTimer = 0;
-                        AttackTotal++;
+                        ResetStats();
                         AttackID++;
                     }
                     break;
                 case 2: //leap up and slam down attack
-                    distanceAbove = 700;
+                    distanceAbove = 500;
                     if (AI_State != MovementState.Slamdown)
                     {
                         AITimer1++;
-                        if (AITimer1 == 1)
-                            SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/NPCSounds/Bosses/CosjelDash"), NPC.Center);
-                        if (AITimer1 <= 30)
+                        if (AITimer1 > 40 && AITimer1 < 60)
                         {
-                            dashVel = Vector2.Normalize(new Vector2(NPC.Center.X, NPC.Center.Y - distanceAbove) - new Vector2(NPC.Center.X, NPC.Center.Y)) * 10;
-                            NPC.velocity = dashVel;
-                            NPC.netUpdate = true;
-                        }
-                        else if (AITimer1 > 30 && AITimer1 < 120)
-                        {
-                            AI_State = MovementState.FollowingRegular;
+                            AI_State = MovementState.FollowingSlow;//slow so it doesn't outpace the player
+                            DashTimer = 0;
 
                         }
-                        else if (AITimer1 == 120)
+                        else if (AITimer1 >= 60)
                         {
                             AITimer1 = 0;
                             AI_State = MovementState.Slamdown;
                         }
                     }
-                    if (AttackCount > 1)
+                    if (AttackCount > 3)
                     {
                         AI_State = MovementState.FollowingRegular;
                         AttackID = Main.rand.Next(1, 5);
-                        AITimer1 = 0;
-                        AITimer2 = 0;
-                        AttackCount = 0;
-                        DashTimer = 0;
-                        AttackTotal++;
+                        ResetStats();
                         distanceAbove = 250;
 
                     }
                     break;
-                case 3://clap attack, clapping makes hand spawn a save ring to stand inside
-                       //when reaches max size, explodes into shard outside of ring border
+                case 3:
+                    //clap attack, clapping makes hand spawn a save ring to stand inside
+                    //when reaches max size, explodes into shard outside of ring border
+
+                    //CLAP HAND MIGHT BE CHANGED INTO PROJECTILES INSTEAD,
+                    //fist bump around cosjel instead, so the dodge is easier
                     AITimer1++;
                     if (AITimer1 < 100)
                     {
@@ -324,15 +315,10 @@ namespace ITD.Content.NPCs.Bosses
 
                     if (AttackCount > 1)
                     {
-                        HandControl(1, 7, 3, true);
-                        HandControl(-1, 7, 3, true);
+
                         AI_State = MovementState.FollowingRegular;
                         AttackID = Main.rand.Next(1, 5);
-                        AITimer1 = 0;
-                        AITimer2 = 0;
-                        AttackCount = 0;
-                        DashTimer = 0;
-                        AttackTotal++;
+                        ResetStats(true);
                         distanceAbove = 250;
 
                     }
@@ -501,9 +487,9 @@ namespace ITD.Content.NPCs.Bosses
             float startXVelo = -((float)(6) / 2) * (float)XVeloDifference;
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 10; i++)
                 {
-                    Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -6f);
+                    Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -5f);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 30, 0, -1, NPC.whoAmI);
                 }
             }
@@ -592,49 +578,71 @@ namespace ITD.Content.NPCs.Bosses
                     NPC.velocity *= 0.9f;
                     break;
                 case MovementState.Slamdown:
+                    //This scan for floor, then do collision, inconsistent sometimes
                     RaycastData data = Helpers.QuickRaycast(NPC.Center, NPC.velocity, (point) => { return (player.Bottom.Y >= point.ToWorldCoordinates().Y + 20); }, 2000);
-                    if (NPC.Center.Distance(data.End) >= 20)
+                    if (AITimer2 <= 0)
                     {
-                        if (AITimer1++ >= 5)
-                        NPC.velocity.Y += 0.5f;
+                        if (NPC.Center.Distance(data.End) >= 20)
+                        {
+                            if (AITimer1++ >= 5)
+                                NPC.velocity.Y += 0.5f;
+                            else
+                            {
+                                NPC.velocity.X *= 0.95f;
+                            }
+                        }
                         else
                         {
-                            NPC.velocity.X *= 0.95f;
+                            NPC.velocity *= 0;
+                            AITimer2++;
                         }
                     }
                     else
                     {
-                        NPC.velocity *= 0;
-                        if (AITimer2++ == 1)
+                        if (AITimer2++ == 2)
                         {
+                            //could have been a dash() except this needs a big velo boost from the start
+                            dashVel = Vector2.Normalize(new Vector2(NPC.Center.X, NPC.Center.Y - 750) - new Vector2(NPC.Center.X, NPC.Center.Y)) * 18;
+                            NPC.velocity = dashVel;
+                            AttackCount++;
                             SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/NPCSounds/Bosses/CosjelSlam"), NPC.Center);
                             ShardSlam();
                             player.GetITDPlayer().BetterScreenshake(30, 10, 20, true);//Very shaky, might need some tweaking to the decay
                         }
-                        if (AITimer2 >= 50)
+                        else if (AITimer2 >= 20 && AITimer2 <= 60)
                         {
-                            dashVel = Vector2.Normalize(new Vector2(NPC.Center.X, NPC.Center.Y - 750) - new Vector2(NPC.Center.X, NPC.Center.Y)) * 20;
-                            NPC.velocity = dashVel;
-                            AttackCount++;
-                            AITimer1 = 0;
-                            AITimer2 = 0;
-                            AI_State = MovementState.Inbetween;
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                NPC.velocity *= 0.95f;
+                                NPC.netUpdate = true;
+
+                            }
+                        }
+                        else if (AITimer2 > 60)
+                        {
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                AITimer2 = 0;
+                                AITimer1 = 0;
+                                AI_State = MovementState.Inbetween;
+                                NetSync();
+                            }
                         }
                     }
                     NPC.rotation = 0;
-
                     break;
             }
         }
-        
-        //pos: set dash to where
-        //time1: when to start dashing, start gaining velocity
-        //time2: stop gaining velocity
-        //time3: start slowing down
-        //reset: time to reset attack
-        //attackID: the same as attackID above, use this to add special effects to a specific attack
+
+            //pos: set dash to where
+            //time1: when to start dashing, start gaining velocity
+            //time2: stop gaining velocity
+            //time3: start slowing down
+            //reset: time to reset attack
+            //attackID: the same as attackID above, use this to add special effects to a specific attack 
         public void Dash(Vector2 pos, int time1, int time2, int time3, int reset, int attackID)
         {
+/*            Main.NewText(("Dash Timer" + DashTimer));*/
             Player player = Main.player[NPC.target];
             if (DashTimer == time1)
             {
@@ -677,16 +685,23 @@ namespace ITD.Content.NPCs.Bosses
             }
             if (DashTimer >= reset)
             {
-                AITimer1 = 0;
-                if (attackID != 2)
-                {
-                    AITimer2 = 0;
-                }
                 DashTimer = 0;
-                if (attackID == 1)
+                switch (AttackID)
                 {
-                    AttackCount++;
+                    case 0:
+                        AITimer2 = 0;
+                        AttackCount++;
+                        break;
+                    case 1:
+                        AITimer2 = 0;
+                        AttackCount++;
+                        break;
+                    case 2:
+                        AITimer2 = 0;
+                        AI_State = MovementState.Inbetween;
+                        break;
                 }
+
                 NetSync();
             }
 
@@ -728,19 +743,30 @@ namespace ITD.Content.NPCs.Bosses
             }
             return;
         }
+        //Just do reset stat
+        public void ResetStats(bool doKillHand = false)
+        {
+            AITimer1 = 0;
+            AITimer2 = 0;
+            AttackCount = 0;
+            DashTimer = 0;
+            AttackTotal++;
+            //also kill hand if called
+            if (doKillHand)
+            {
+                HandControl(1, 7, 3, true);
+                HandControl(-1, 7, 3, true);
+            }
+        }
         //check if cosjel is dead, if hasn't done final attack, don't kill cosjel
         public override bool CheckDead()
         {
             if (!bFinalAttack)//Subterranean Sun
             {
                 AttackID = -2;
-                AITimer1 = 0;
-                AITimer2 = 0;
-                AttackCount = 0;
                 NPC.life = NPC.lifeMax;
                 NPC.dontTakeDamage = true;
-                HandControl(1, 7, 3, true);
-                HandControl(-1, 7, 3, true);
+                ResetStats(true);
                 NetSync();
                 bFinalAttack = true;
                 if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -786,7 +812,7 @@ namespace ITD.Content.NPCs.Bosses
         //whichHand: which hand to find
         //1 is left hand
         //-1 is right hand
-        private bool HandExist(int whichHand)
+        private static bool HandExist(int whichHand)
         {
             for (int i = 0; i < Main.maxNPCs; i++) //find hands, update
             {
@@ -800,9 +826,12 @@ namespace ITD.Content.NPCs.Bosses
         }
 
         //sync hand
-        private void NetSync()
+        private void NetSync(bool forceAll = false)
         {
-            //Will find and update hand here
+            if (Main.netMode == NetmodeID.Server || forceAll)
+            {
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, NPC.whoAmI);
+            }
             NPC.netUpdate = true;
         }
         //animate cosjel
@@ -901,8 +930,20 @@ namespace ITD.Content.NPCs.Bosses
         {
             Vector2 stretch = new Vector2(1f, 1f);
 
-            if(AI_State == MovementState.Dashing)
+            if (DashTimer > 0 && AI_State != MovementState.FollowingRegular)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    Dust d = Dust.NewDustPerfect(
+                        NPC.Center + Main.rand.NextVector2Circular(50, 50),
+                        DustID.PurpleTorch,
+                        NPC.velocity * 0.5f,
+                        0, Color.White, 2f
+                    );
+                    d.noGravity = true;
+                }
                 stretch = new Vector2(1f, 1f + NPC.velocity.Length() * 0.025f);
+            }
 
             if (AI_State == MovementState.Slamdown)
             {
