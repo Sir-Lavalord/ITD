@@ -14,6 +14,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 {
     public class TwilightDemiseProj : ModProjectile
     {
+
         public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
 
         public VertexStrip TrailStrip = new VertexStrip();
@@ -133,7 +134,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         }
         private float StripWidth(float progressOnStrip)
         {
-            return MathHelper.Lerp(60f, 50f, Utils.GetLerpValue(0f, 0.6f, progressOnStrip, true)) * Utils.GetLerpValue(0f, 0.1f, progressOnStrip, true) * 1.2f;
+            return 30f;
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -153,13 +154,13 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                 TrailStrip.DrawTrail();
 
                 Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-                Main.EntitySpriteDraw(effectTexture, drawPosition, null, new Color(0, 0, 0, 0), 0 - MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * 0.75f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(effectTexture, drawPosition, null, new Color(200, 50, 50, 0), 0 - MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * 0.75f, SpriteEffects.None, 0);
             }
             else if (Projectile.timeLeft <= 20)
             {
                 float scaleMultipler = (30 - Projectile.timeLeft) * 0.075f;
                 float colorMultiplier = Math.Min(1, Projectile.timeLeft * 0.3f);
-                Main.EntitySpriteDraw(effectTexture, drawPosition, null, new Color(0,0,0, 0) * colorMultiplier, scaleMultipler * 2f - MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * scaleMultipler * 0.75f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(effectTexture, drawPosition, null, new Color(200, 50, 50, 0) * colorMultiplier, scaleMultipler * 2f - MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * scaleMultipler * 0.75f, SpriteEffects.None, 0);
             }
             return false;
         }
