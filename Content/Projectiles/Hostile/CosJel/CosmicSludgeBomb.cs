@@ -24,7 +24,6 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
         }
 
         int defaultWidthHeight = 8;
-        int explosionWidthHeight = 200;
         public override void SetDefaults()
         {
             Projectile.width = defaultWidthHeight; Projectile.height = defaultWidthHeight;
@@ -48,7 +47,6 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
             behindNPCsAndTiles.Add(index);
         }
 
-        bool isStuck = false;
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = effect.Value;
@@ -74,35 +72,6 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
-            }
-        }
-
-        public override void OnKill(int timeLeft)
-        {
-            for (int i = 0; i < 8; i++)
-            {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, Color.Purple, 2f);
-                dust.velocity *= 1.4f;
-            }
-            for (int i = 0; i < 10; i++)
-            {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.ShimmerTorch, 0f, 0f, 100, default, 3f);
-                dust.noGravity = true;
-                dust.velocity *= 5f;
-                dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.ShimmerSpark, 0f, 0f, 100, default, 2f);
-                dust.velocity *= 3f;
-            }
-            for (int g = 0; g < 2; g++)
-            {
-                var goreSpawnPosition = new Vector2(Projectile.position.X + Projectile.width / 2 - 24f, Projectile.position.Y + Projectile.height / 2 - 24f);
-                Gore gore = Gore.NewGoreDirect(Projectile.GetSource_FromThis(), goreSpawnPosition, default, Main.rand.Next(61, 64), 1f);
-                gore.scale = 1.5f;
-                gore.velocity.X += 1.5f;
-                gore.velocity.Y += 1.5f;
-                gore = Gore.NewGoreDirect(Projectile.GetSource_FromThis(), goreSpawnPosition, default, Main.rand.Next(61, 64), 1f);
-                gore.scale = 1.5f;
-                gore.velocity.X -= 1.5f;
-                gore.velocity.Y += 1.5f;
             }
         }
     }

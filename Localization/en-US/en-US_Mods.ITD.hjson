@@ -237,6 +237,7 @@ Projectiles: {
 	TwilightDemiseProj.DisplayName: Twilight Demise Proj
 	MoldExplosion.DisplayName: Mold Explosion
 	Zap.DisplayName: Zap
+	CosmicWave.DisplayName: Cosmic Wave
 }
 
 NPCs: {

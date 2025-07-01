@@ -19,8 +19,12 @@ using Terraria.Graphics.Shaders;
 using ITD.Content.Items.Placeable.Furniture.Relics;
 using ITD.Content.Items.Placeable.Furniture.Trophies;
 using ITD.Content.Projectiles.Hostile.CosJel;
+using Terraria.Graphics;
+using ITD.Systems.DataStructures;
+using ITD.Systems.Extensions;
 
-
+using ITD.Particles.CosJel;
+using ITD.Particles;
 namespace ITD.Content.NPCs.Bosses
 
 {
@@ -41,7 +45,7 @@ namespace ITD.Content.NPCs.Bosses
             NPCID.Sets.BossBestiaryPriority.Add(Type);
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
             Main.npcFrameCount[NPC.type] = 10;
-            NPCID.Sets.TrailCacheLength[Type] = 6;
+            NPCID.Sets.TrailCacheLength[Type] = 10;
             NPCID.Sets.TrailingMode[Type] = 3;
         }
         public override void SendExtraAI(BinaryWriter writer)
@@ -147,6 +151,16 @@ namespace ITD.Content.NPCs.Bosses
             {
                 Music = ITD.Instance.GetMusic("CosmicJellyfish") ?? MusicID.Boss1;
             }
+
+            //dash shader
+            Shader.UseImage0("Images/Extra_" + 201);
+            Shader.UseImage1("Images/Extra_" + 193);
+            Shader.UseImage2("Images/Extra_" + 252);
+            Shader.UseSaturation(-2.8f);
+            Shader.UseOpacity(2f);
+            //balls
+            emitter = ParticleSystem.NewEmitter<SpaceMist>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
+            emitter.tag = NPC;
         }
         //loot
         public override void ModifyNPCLoot(NPCLoot npcLoot)
@@ -174,6 +188,8 @@ namespace ITD.Content.NPCs.Bosses
         {
             DownedBossSystem.downedCosJel = true;
         }
+        private Vector2[] dashOldPositions = new Vector2[40];
+        private float[] dashOldRotations = new float[40];
         public override void AI()
         {
 /*            Main.NewText((AI_State,AITimer1,AITimer2));*/
@@ -202,6 +218,15 @@ namespace ITD.Content.NPCs.Bosses
             {
                 SkyManager.Instance.Activate("ITD:CosjelOkuuSky");
             }
+            for (int i = dashOldPositions.Length - 1; i > 0; i--)
+            {
+                dashOldPositions[i] = dashOldPositions[i - 1];
+                dashOldRotations[i] = dashOldRotations[i - 1];
+                dashOldRotations[i] = NPC.rotation + MathHelper.PiOver2;
+
+            }
+            dashOldPositions[0] = NPC.position;
+            dashOldRotations[0] = NPC.rotation;
             switch ((int)AttackID)
             {
                 case -2://final attack should be here
@@ -228,7 +253,7 @@ namespace ITD.Content.NPCs.Bosses
                     if (AttackCount > 0)//doesn't loop
                     {
                         AI_State = MovementState.FollowingRegular;
-                        AttackID = 2;//set next attack to 4(hand)
+                        AttackID = 1;//set next attack to 4(hand)
                         AITimer1 = 0;
                         AITimer2 = 0;
                         AttackCount = 0;
@@ -242,7 +267,7 @@ namespace ITD.Content.NPCs.Bosses
                         if (AI_State != MovementState.Suffocate)//won't do suffocate here
                             AI_State = MovementState.Dashing;
                     }
-                    if (AttackCount > 1)//loop once
+                    if (AttackCount > 2)//loop twice
                     {
                         AI_State = MovementState.FollowingRegular;
                         distanceAbove = 250;
@@ -484,7 +509,7 @@ namespace ITD.Content.NPCs.Bosses
         private void ShardSlam()//slam attack, call once hit the ground
         {
             float XVeloDifference = 2;
-            float startXVelo = -((float)(6) / 2) * (float)XVeloDifference;
+            float startXVelo = -((float)(10) / 2) * (float)XVeloDifference;
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 for (int i = 0; i < 10; i++)
@@ -642,11 +667,21 @@ namespace ITD.Content.NPCs.Bosses
             //attackID: the same as attackID above, use this to add special effects to a specific attack 
         public void Dash(Vector2 pos, int time1, int time2, int time3, int reset, int attackID)
         {
-/*            Main.NewText(("Dash Timer" + DashTimer));*/
+            /*            Main.NewText(("Dash Timer" + DashTimer));*/
+            if (Main.rand.NextBool(4))
+            {
+                Dust dust = Dust.NewDustDirect(NPC.Center + new Vector2(Main.rand.Next(NPC.width) - NPC.width / 2, 0), 1, 1, ModContent.DustType<StarlitDust>(), 0f, 0f, 0, default, 1f);
+                dust.noGravity = true;
+                dust.fadeIn = 0.2f;
+                Dust dust2 = Dust.NewDustDirect(NPC.Center + new Vector2(Main.rand.Next(NPC.width) - NPC.width / 2, 0), 1, 1, ModContent.DustType<StarlitDust>(), 0f, 0f, 0, Color.Purple, 1f);
+                dust2.noGravity = true;
+                dust2.fadeIn = 0.1f;
+            }
             Player player = Main.player[NPC.target];
             if (DashTimer == time1)
             {
                 SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/NPCSounds/Bosses/CosjelDash"), NPC.Center);
+                SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/WRipperRip"), NPC.Center);
                 dashVel = Vector2.Normalize(new Vector2(pos.X, pos.Y) - new Vector2(NPC.Center.X, NPC.Center.Y));
                 NPC.velocity = dashVel;
                 NPC.netUpdate = true;
@@ -658,8 +693,8 @@ namespace ITD.Content.NPCs.Bosses
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile proj1 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Normalize(NPC.velocity).RotatedBy(Math.PI / 2) * 4, ModContent.ProjectileType<CosmicVoidShard>(), (NPC.defDamage), 0, Main.myPlayer);
-                        Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Normalize(NPC.velocity).RotatedBy(-Math.PI / 2) * 4, ModContent.ProjectileType<CosmicVoidShard>(), (NPC.defDamage), 0, Main.myPlayer);
+                        Projectile proj1 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Normalize(NPC.velocity).RotatedBy(Math.PI / 2), ModContent.ProjectileType<CosmicWave>(), (NPC.defDamage), 0, Main.myPlayer);
+                        Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Normalize(NPC.velocity).RotatedBy(-Math.PI / 2), ModContent.ProjectileType<CosmicWave>(), (NPC.defDamage), 0, Main.myPlayer);
                         proj1.tileCollide = false;
                         proj2.tileCollide = false;
 
@@ -926,10 +961,31 @@ namespace ITD.Content.NPCs.Bosses
             }
 
         }
+        //john vertexstrip o
+        public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
+
+        public VertexStrip TrailStrip = new VertexStrip();
+
+        public ParticleEmitter emitter;
+
+        private Color StripColors(float progressOnStrip)
+        {
+            Color result = Color.Lerp(new Color(36, 12, 34), new Color(84, 73, 255), Utils.GetLerpValue(0f, 0.8f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
+            result.A /= 2;
+            return result * NPC.Opacity;
+        }
+        private float StripWidth(float progressOnStrip)
+        {
+            return 80f;
+        }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Vector2 stretch = new Vector2(1f, 1f);
-
+            Texture2D tex = TextureAssets.Npc[NPC.type].Value;
+            int vertSize = tex.Height / Main.npcFrameCount[NPC.type];
+            Vector2 origin = new Vector2(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);
+            Rectangle frameRect = new Rectangle(0, NPC.frame.Y, tex.Width, vertSize);
+            Vector2 center = NPC.Size / 2f;
             if (DashTimer > 0 && AI_State != MovementState.FollowingRegular)
             {
                 for (int i = 0; i < 3; i++)
@@ -944,7 +1000,15 @@ namespace ITD.Content.NPCs.Bosses
                 }
                 stretch = new Vector2(1f, 1f + NPC.velocity.Length() * 0.025f);
             }
+            if (AI_State == MovementState.Dashing)
+            {
+                Shader.Apply(null);
+                TrailStrip.PrepareStrip(dashOldPositions, dashOldRotations, StripColors, StripWidth, NPC.Size * 0.5f - Main.screenPosition, dashOldPositions.Length, true);
+                TrailStrip.DrawTrail();
+                Main.spriteBatch.End(out SpriteBatchData spriteBatchData); // unapply shaders
+                Main.spriteBatch.Begin(spriteBatchData);
 
+            }
             if (AI_State == MovementState.Slamdown)
             {
                 if (NPC.velocity.Y != 0)
@@ -957,22 +1021,54 @@ namespace ITD.Content.NPCs.Bosses
                 }
             }
 
-            if (AttackID == 5 || AI_State == MovementState.Slamdown)
+            if (AttackID == 5 || AI_State == MovementState.Slamdown || AI_State == MovementState.Dashing && DashTimer > 0)
             {
-                Texture2D tex = TextureAssets.Npc[NPC.type].Value;
-                int vertSize = tex.Height / Main.npcFrameCount[NPC.type];
-                Vector2 origin = new Vector2(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);
-                Rectangle frameRect = new Rectangle(0, NPC.frame.Y, tex.Width, vertSize);
                 for (int k = 0; k < NPC.oldPos.Length; k++)
                 {
-                    Vector2 center = NPC.Size / 2f;
                     Vector2 drawPos = NPC.oldPos[k] - Main.screenPosition + center;
-                    Color color = NPC.GetAlpha(drawColor) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
+                    Color color = NPC.GetAlpha(drawColor) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length) * 0.4f;
                     spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, 1f, SpriteEffects.None, 0f);
                 }
+                if (emitter != null)
+                    emitter.keptAlive = true;
+
+                for (int j = 0; j < 3; j++)
+                {
+                    emitter?.Emit(NPC.Center + Main.rand.NextVector2Square(-60, 60), NPC.velocity * 0.25f, 0f, 20);
+                }
+
+            }
+            Vector2 miragePos = NPC.position - Main.screenPosition + center;
+
+            //old treasure bag draw code, augh
+            float time = Main.GlobalTimeWrappedHourly;
+            float timer = (float)Main.time / 240f + time * 0.04f;
+
+            time %= 4f;
+            time /= 2f;
+
+            if (time >= 1f)
+            {
+                time = 2f - time;
             }
 
-            if(AttackID == -2)
+            time = time * 0.5f + 0.75f;
+
+            for (float i = 0f; i < 1f; i += 0.25f)
+            {
+                float radians = (i + timer) * MathHelper.TwoPi;
+
+                spriteBatch.Draw(tex, miragePos + new Vector2(0f, 8f).RotatedBy(radians) * time, frameRect, new Color(90, 70, 255, 50), NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+            }
+
+            for (float i = 0f; i < 1f; i += 0.34f)
+            {
+                float radians = (i + timer) * MathHelper.TwoPi;
+
+                spriteBatch.Draw(tex, miragePos + new Vector2(0f, 12f).RotatedBy(radians) * time, frameRect, new Color(90, 70, 255, 50), NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+            }
+
+            if (AttackID == -2)
             {
                 default(BlackholeVertex).Draw(NPC.Center - Main.screenPosition, 1024);
 
@@ -982,6 +1078,7 @@ namespace ITD.Content.NPCs.Bosses
         }
     }
     //shader rip
+
     public struct BlackholeVertex
     {
 
@@ -989,7 +1086,7 @@ namespace ITD.Content.NPCs.Bosses
 
         public void Draw(Vector2 position, float size)
         {
-            GameShaders.Misc["Blackhole"].UseImage0(TextureAssets.Extra[193]);
+            GameShaders.Misc["Blackhole"].UseImage0(TextureAssets.Extra[196]);
             GameShaders.Misc["Blackhole"].UseColor(new Color(192, 59, 166));
             GameShaders.Misc["Blackhole"].UseSecondaryColor(Color.Beige);
             GameShaders.Misc["Blackhole"].Apply();
@@ -1008,7 +1105,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             GameShaders.Misc["Telegraph"].UseColor(new Color(192, 59, 166));
             GameShaders.Misc["Telegraph"].UseSecondaryColor(Color.Beige);
-            GameShaders.Misc["Telegraph"].UseImage0(TextureAssets.Extra[193]);
+            GameShaders.Misc["Telegraph"].UseImage0(TextureAssets.Extra[196]);
             GameShaders.Misc["Telegraph"].UseShaderSpecificData(new Vector4(300,0,position.X,position.Y));
 
             GameShaders.Misc["Telegraph"].Apply();
