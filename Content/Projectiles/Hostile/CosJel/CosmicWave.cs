@@ -68,7 +68,7 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
             {
                 Projectile.velocity *= 0.98f;
                 Projectile.netUpdate = true;
-                if (++Projectile.frameCounter >= 8)
+                if (++Projectile.frameCounter >= 4)
                 {
                     Projectile.frameCounter = 0;
                     if (Projectile.frame < 4)
@@ -111,6 +111,12 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
             Rectangle frame = tex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
             Vector2 center = Projectile.Size / 2f;
             stretch = new Vector2(1f, 1f + Projectile.velocity.Length() * 0.05f);
+            for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
+            {
+                Projectile.oldRot[i] = Projectile.oldRot[i - 1];
+                Projectile.oldRot[i] = Projectile.rotation + MathHelper.PiOver2;
+
+            }
             Vector2 miragePos = Projectile.position - Main.screenPosition + center;
             Vector2 origin = new(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f);
 

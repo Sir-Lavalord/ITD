@@ -25,6 +25,8 @@ using ITD.Systems.Extensions;
 
 using ITD.Particles.CosJel;
 using ITD.Particles;
+using static System.Net.Mime.MediaTypeNames;
+using ITD.Content.Projectiles.Unused;
 namespace ITD.Content.NPCs.Bosses
 
 {
@@ -82,7 +84,7 @@ namespace ITD.Content.NPCs.Bosses
         Vector2 dashVel;
 
         //store where to dash
-        private Vector2 dashPos = Vector2.Zero;
+        public Vector2 dashPos;
 
         //store cosjel rotation
         public float rotation = 0f;
@@ -183,6 +185,11 @@ namespace ITD.Content.NPCs.Bosses
 
             NPC.damage = (int)(NPC.damage * 0.7f);
         }
+        //testing this: boss doesn't hit in these movement mode to avoid unfair hit
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            return AI_State != MovementState.FollowingRegular && AI_State != MovementState.FollowingSlow;
+        }
         //kill flag
         public override void OnKill()
         {
@@ -260,12 +267,12 @@ namespace ITD.Content.NPCs.Bosses
                         distanceAbove = 250;
                     }
                     break;
-                case 1: //Dash attack, spawns sideway shard
-                    if (AITimer1++ == 80)
+                case 1: //Dash attack, spawns sideway wave
+                    distanceAbove = 350;
+                    if (AITimer1++ >= 180 && AttackCount <= 0)
                     {
-                        dashPos = player.Center;
-                        if (AI_State != MovementState.Suffocate)//won't do suffocate here
-                            AI_State = MovementState.Dashing;
+                        AITimer1 = 0;
+                        AI_State = MovementState.Dashing;
                     }
                     if (AttackCount > 2)//loop twice
                     {
@@ -550,11 +557,11 @@ namespace ITD.Content.NPCs.Bosses
 
                     break;
                 case MovementState.FollowingSlow:
-                    if (speed > 1.1f)
+                    if (speed > 1.05f)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            NPC.velocity = aboveNormalized * (speed) / 24;
+                            NPC.velocity = aboveNormalized * (speed) / 28;
                             NetSync();
                         }
                     }
@@ -566,16 +573,16 @@ namespace ITD.Content.NPCs.Bosses
 
                     break;
                 case MovementState.Dashing:
-
+                    Main.NewText(dashPos);
                     AITimer1++;
-                    if (AITimer1 < 10)
+                    if (AITimer1 <= 10)
                     {
+                        dashPos = player.Center;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             NPC.velocity *= 0.9f;
                             NetSync();
                         }
-                        dashPos = player.Center;
                     }
                     else
                     {
@@ -610,10 +617,13 @@ namespace ITD.Content.NPCs.Bosses
                         if (NPC.Center.Distance(data.End) >= 20)
                         {
                             if (AITimer1++ >= 5)
+                            {
+                                NPC.velocity.X *= 0.99f;
                                 NPC.velocity.Y += 0.5f;
+                            }
                             else
                             {
-                                NPC.velocity.X *= 0.95f;
+                                NPC.velocity.X *= 0.96f;
                             }
                         }
                         else
@@ -728,6 +738,7 @@ namespace ITD.Content.NPCs.Bosses
                         AttackCount++;
                         break;
                     case 1:
+                        AITimer1 = 0;
                         AITimer2 = 0;
                         AttackCount++;
                         break;
@@ -1053,19 +1064,21 @@ namespace ITD.Content.NPCs.Bosses
             }
 
             time = time * 0.5f + 0.75f;
-
-            for (float i = 0f; i < 1f; i += 0.25f)
+            if (AI_State != MovementState.FollowingRegular && AI_State != MovementState.FollowingSlow)
             {
-                float radians = (i + timer) * MathHelper.TwoPi;
+                for (float i = 0f; i < 1f; i += 0.25f)
+                {
+                    float radians = (i + timer) * MathHelper.TwoPi;
 
-                spriteBatch.Draw(tex, miragePos + new Vector2(0f, 8f).RotatedBy(radians) * time, frameRect, new Color(90, 70, 255, 50), NPC.rotation, origin, stretch, SpriteEffects.None, 0);
-            }
+                    spriteBatch.Draw(tex, miragePos + new Vector2(0f, 8f).RotatedBy(radians) * time, frameRect, new Color(90, 70, 255, 50), NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+                }
 
-            for (float i = 0f; i < 1f; i += 0.34f)
-            {
-                float radians = (i + timer) * MathHelper.TwoPi;
+                for (float i = 0f; i < 1f; i += 0.34f)
+                {
+                    float radians = (i + timer) * MathHelper.TwoPi;
 
-                spriteBatch.Draw(tex, miragePos + new Vector2(0f, 12f).RotatedBy(radians) * time, frameRect, new Color(90, 70, 255, 50), NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+                    spriteBatch.Draw(tex, miragePos + new Vector2(0f, 12f).RotatedBy(radians) * time, frameRect, new Color(90, 70, 255, 50), NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+                }
             }
 
             if (AttackID == -2)

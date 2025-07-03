@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Terraria;
 using Terraria.Localization;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
+using ITD.Utilities;
 
 namespace ITD.Systems
 {
@@ -42,18 +43,22 @@ namespace ITD.Systems
                     cosJelCounter = false;
                     SoundEngine.PlaySound(SoundID.Roar, player.position);
 
+                    //stop cosjel from spawning while another one is alive
                     int type = ModContent.NPCType<CosmicJellyfish>();
-
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    if (MiscHelpers.NPCExists(type) == null)
                     {
-                        NPC.SpawnOnPlayer(player.whoAmI, type);
-                    }
-                    else
-                    {
-                        NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, number: player.whoAmI, number2: type);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            NPC.SpawnOnPlayer(player.whoAmI, type);
+                        }
+                        else
+                        {
+                            NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, number: player.whoAmI, number2: type);
+                        }
                     }
                 }
             }
+
         }
         public static void LeaveWorld()
         {

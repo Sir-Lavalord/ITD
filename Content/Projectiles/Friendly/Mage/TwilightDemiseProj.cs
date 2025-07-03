@@ -9,21 +9,23 @@ using Terraria.Graphics.Shaders;
 using Terraria.Graphics;
 using Terraria.GameContent;
 using Terraria.DataStructures;
-
+using ITD.Content.Items.Dyes;
+using ITD.Systems.DataStructures;
+using ITD.Systems.Extensions;
 namespace ITD.Content.Projectiles.Friendly.Mage
 {
-    public class TwilightDemiseProj : ModProjectile
+    public class TwilightDemiseProj : ITDProjectile
     {
 
         public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
 
         public VertexStrip TrailStrip = new VertexStrip();
-        public override string Texture => ITD.BlankTexture;
 
         public int HomingTime;
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
+
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         }
@@ -107,25 +109,6 @@ namespace ITD.Content.Projectiles.Friendly.Mage
                 Projectile.timeLeft = 20;
             }
         }
-        Color col;
-        Color colTrail;
-        Color colExplode1;
-        Color colExplode2;
-        Color colExplode3;
-
-        public override void OnSpawn(IEntitySource source)
-        {
-
-                Shader.UseImage0("Images/Extra_" + 195);
-                Shader.UseColor(Color.Red);
-                col = new Color(255, 242, 191, 30);
-                colTrail = new Color(255, 247, 0, 30);
-                colExplode1 = new Color(35, 36, 12, 30);
-                colExplode2 = new Color(133, 127, 50, 30);
-                colExplode3 = new Color(255, 253, 191, 30);
-
-            
-        }
         private Color StripColors(float progressOnStrip)
         {
             Color result = Color.Lerp(Color.Black, Color.Purple, Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
@@ -134,35 +117,11 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         }
         private float StripWidth(float progressOnStrip)
         {
-            return 30f;
+            return 14f;
         }
-        public override bool PreDraw(ref Color lightColor)
+        public override int ProjectileShader(int originalShader)
         {
-            Texture2D effectTexture = TextureAssets.Extra[59].Value;
-            Vector2 effectOrigin = effectTexture.Size() / 2f;
-            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-            float scaleX = 0.75f;
-            float scaleY = 1f;
-            Rectangle rectangle = texture.Frame(1, 1);
-            Player player = Main.player[Projectile.owner];
-            lightColor = Lighting.GetColor((int)player.Center.X / 16, (int)player.Center.Y / 16);
-            Vector2 drawPosition = Projectile.Center - Main.screenPosition;
-            if (Projectile.timeLeft > 20)
-            {
-                GameShaders.Misc["LightDisc"].Apply(null);
-                TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth , Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
-                TrailStrip.DrawTrail();
-
-                Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-                Main.EntitySpriteDraw(effectTexture, drawPosition, null, new Color(200, 50, 50, 0), 0 - MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * 0.75f, SpriteEffects.None, 0);
-            }
-            else if (Projectile.timeLeft <= 20)
-            {
-                float scaleMultipler = (30 - Projectile.timeLeft) * 0.075f;
-                float colorMultiplier = Math.Min(1, Projectile.timeLeft * 0.3f);
-                Main.EntitySpriteDraw(effectTexture, drawPosition, null, new Color(200, 50, 50, 0) * colorMultiplier, scaleMultipler * 2f - MathHelper.PiOver2, effectTexture.Size() / 2f, new Vector2(scaleX, scaleY) * scaleMultipler * 0.75f, SpriteEffects.None, 0);
-            }
-            return false;
+            return GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<CosmicDye>());
         }
     }
 }
