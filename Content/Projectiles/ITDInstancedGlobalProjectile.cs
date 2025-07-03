@@ -20,11 +20,23 @@ namespace ITD.Content.Projectiles
         public override bool InstancePerEntity => true;
 
         public bool isFromPotshot;
-        public bool isFromTheEpicenter;//I don't want to do this
+        public bool isFromTheEpicenter;//I don't want to do this // you could make this a single int/enum instead, which is probably mroe mememory efficient too
         public bool isFromFwoomstick;
         public bool isFromSkyProjectileBow;
 
         private int ExplodeTimer = 0;
+        public override void Load()
+        {
+            On_Main.GetProjectileDesiredShader += ITDProjectileShaderHook;
+        }
+
+        private static int ITDProjectileShaderHook(On_Main.orig_GetProjectileDesiredShader orig, Projectile proj)
+        {
+            int originalShader = orig(proj);
+            if (proj.ModProjectile is ITDProjectile modProjectile)
+                return modProjectile.ProjectileShader(originalShader);
+            return originalShader;
+        }
 
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {

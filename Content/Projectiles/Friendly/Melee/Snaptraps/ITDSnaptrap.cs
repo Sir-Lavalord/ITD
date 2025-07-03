@@ -570,7 +570,8 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 ExtraChainEffects(ref chainDrawPosition, chainCount);
                 Color chainDrawColor = GetChainColor(chainDrawPosition, chainCount);
                 var chainTextureToDraw = GetChainTexture(chainTexture, chainDrawPosition, chainCount);
-                Main.spriteBatch.Draw(chainTextureToDraw.Value, chainDrawPosition - Main.screenPosition, chainSourceRectangle, chainDrawColor, chainRotation, chainOrigin, 1f, SpriteEffects.None, 0f);
+                // draw using the shader. important for ITDProjectiles with ProjectileShader overridden or that could be potentially overridden
+                Main.EntitySpriteDraw(chainTextureToDraw.Value, chainDrawPosition - Main.screenPosition, chainSourceRectangle, chainDrawColor, chainRotation, chainOrigin, 1f, SpriteEffects.None);
 
                 chainDrawPosition += unitVectorFromProjectileToPlayerArms * chainSegmentLength;
                 chainCount++;
