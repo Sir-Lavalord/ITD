@@ -9,119 +9,47 @@ using Terraria.Graphics.Shaders;
 using Terraria.Graphics;
 using Terraria.GameContent;
 using Terraria.DataStructures;
-using ITD.Content.Items.Dyes;
-using ITD.Systems.DataStructures;
-using ITD.Systems.Extensions;
 namespace ITD.Content.Projectiles.Friendly.Mage
 {
     public class TwilightDemiseProj : ITDProjectile
     {
-
-        public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
-
-        public VertexStrip TrailStrip = new VertexStrip();
-
-        public int HomingTime;
         public override void SetStaticDefaults()
         {
+            Main.projFrames[Projectile.type] = 1;
+            ProjectileID.Sets.DontAttachHideToAlpha[Type] = true;
+        }
 
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
-            ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
-        }
-        private NPC HomingTarget
-        {
-            get => Projectile.ai[0] == 0 ? null : Main.npc[(int)Projectile.ai[0] - 1];
-            set
-            {
-                Projectile.ai[0] = value == null ? 0 : value.whoAmI + 1;
-            }
-        }
         public override void SetDefaults()
         {
-            Projectile.width = 40;
-            Projectile.height = 40;
-            Projectile.aiStyle = 0;
-            Projectile.DamageType = DamageClass.Magic;
+            Projectile.width = 30;
+            Projectile.height = 30;
             Projectile.friendly = true;
             Projectile.hostile = false;
+            Projectile.DamageType = DamageClass.Melee;
+            Projectile.penetrate = 3;
+            Projectile.timeLeft = 900;
+            Projectile.light = 0.2f;
             Projectile.ignoreWater = true;
-            Projectile.light = 1f;
-            Projectile.tileCollide = false;
-            Projectile.timeLeft = 300;
-            Projectile.penetrate = -1;
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 5;
-            Projectile.alpha = 0;
-            Projectile.Opacity = 1;
-
+            Projectile.tileCollide = true;
         }
-        public override void AI()
-        {
-            Projectile.spriteDirection = (Projectile.velocity.X < 0).ToDirectionInt();
-            if (Projectile.spriteDirection == 1)
-                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2 * 2;
-            else
-                Projectile.rotation = Projectile.velocity.ToRotation();
-            float maxDetectRadius = 20000;
-            if (HomingTime++ >= 2)
-            {
-                if (Projectile.timeLeft >= 20)
-                {
-
-
-                    HomingTarget ??= Projectile.FindClosestNPC(maxDetectRadius);
-
-                    if (HomingTarget == null)
-                        return;
-                    if (!HomingTarget.active || HomingTarget.life <= 0 || !HomingTarget.CanBeChasedBy())
-                    {
-                        HomingTarget = null;
-                        return;
-                    }
-                    int inertia = 20;
-                    int vel = 14;
-                    float length = Projectile.velocity.Length();
-                    float targetAngle = Projectile.AngleTo(HomingTarget.Center);
-                    Vector2 homeDirection = (HomingTarget.Center - Projectile.Center).SafeNormalize(Vector2.UnitY);
-                    Projectile.velocity = (Projectile.velocity * inertia + homeDirection * vel) / (inertia + 1f);
-                }
-                }
-            }
-        public override bool? CanDamage()
-        {
-            if (Projectile.timeLeft > 20 && HomingTime >= 2)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            Projectile.velocity *= 0f;
-
-            if (Projectile.timeLeft > 20)
-            {
-                Projectile.timeLeft = 20;
-            }
-        }
-        private Color StripColors(float progressOnStrip)
-        {
-            Color result = Color.Lerp(Color.Black, Color.Purple, Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
-            result.A /= 2;
-            return result * Projectile.Opacity;
-        }
-        private float StripWidth(float progressOnStrip)
-        {
-            return 14f;
-        }
+        //equip a dye in pet slot to see bug
         public override int ProjectileShader(int originalShader)
         {
-            return GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<CosmicDye>());
+            return GameShaders.Armor.GetShaderIdFromItemId(ItemID.TwilightDye);
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            SpriteBatch sb = Main.spriteBatch;
+            Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
+            Texture2D texture = TextureAssets.Projectile[Type].Value;
+            Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+            void DrawAtProj(Texture2D tex)
+            {
+                sb.Draw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f), Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+            }
+            DrawAtProj(outline);
+            DrawAtProj(texture);
+            return false;
         }
     }
 }
