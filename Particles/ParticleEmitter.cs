@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader;
 using Terraria;
+using System.Runtime.InteropServices;
 
 namespace ITD.Particles
 {
@@ -36,7 +37,7 @@ namespace ITD.Particles
         public bool keptAlive;
         public bool additive = false;
         public ParticleEmitterDrawCanvas canvas;
-        private readonly List<ParticleEmitterDrawAction> drawActions = [];
+        private readonly List<ParticleEmitterDrawAction> drawActions = new(2);
         public List<ITDParticle> particles = [];
         public object tag;
         protected sealed override void Register()
@@ -157,12 +158,9 @@ namespace ITD.Particles
         public virtual void DrawAllParticles()
         {
             SpriteBatch sb = Main.spriteBatch;
-            for (int i = 0; i < particles.Count; i++)
-            {
+            foreach (ITDParticle p in CollectionsMarshal.AsSpan(particles))
                 // since we don't do actual operations here, we don't have to reassign the value.
-                ITDParticle p = particles[i];
-                p.DrawCommon(sb, Texture, CanvasOffset);
-            }
+                p.DrawCommon(in sb, Texture, CanvasOffset);
         }
         public void DrawFully()
         {
@@ -176,6 +174,7 @@ namespace ITD.Particles
         }
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
             tag = null;
             drawActions.Clear();
             particles.Clear();

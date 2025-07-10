@@ -680,112 +680,219 @@ Events.LavaRainEvent.EventProgressTitle: Lava Rain
 
 InflectionData: {
 	Items: {
-		TopazNecklace: /
-		BadassSunglasses: /
-		FlamingRazor: /
-		OrionsRing: /
-		PoisonFang: /
-		RazedWine: /
-		SheeringBane: /
-		SoulTalisman: /
-		WickedHeart: /
-		ChainWeight: /
-		MagicPolish: /
-		SafetyLatch: /
-		UnyieldingChain: /
-		Winch: /
-		CupOJoe: /
-		SwimshieldWipers: /
-		Skullmet: /
-		DreadShell: /
-		CharmOfTheAccursed: /
-		GalacticJellyBean: /
-		WindCape: /
-		IncomprehensiblePolyhedron: /
-		EatersTail: /
-		EyeofEldritchInsight: /
-		Prophylaxis: /
-		SlimeSecretionGland: /
-		CorruptAntidote: /
-		CrimsonAntidote: /
-		PortableLab: /
-		RooksBrew: /
-		GravityBoots: /
-		DashingFeather: /
-		DisasterInABottle: /
-		FirestormInABottle: /
-		ImpulseShackles: /
-		JumpingBean: /
-		StormInABottle: /
-		TwisterInABottle: /
-		OblivionPickaxe: /
-		CyaniteHammer: /
-		CyanitePickaxe: /
-		CrowdController: /
-		EternalBubbleWand: /
-		FungalRod: /
-		Necromatome: /
-		RoyalJellyScepter: /
-		StarlightStaff: /
-		ThunderStaff: /
-		TomeOfReach: /
-		TwilightDemise: /
-		WeepingWand: /
-		AlloySword: /
-		AsterKnuckle: /
-		Bleedbreaker: /
-		ChainedGun: /
-		Cicadarang: /
-		Cosmisumaru: /
-		CyaniteBoomerang: /
-		CyaniteSpear: /
-		DespoticSuperMeleeSword: /
-		Ectoblade: /
-		ElectrumSpear: /
-		EmberSlasher: /
-		Flyswatter: /
-		Mandinata: /
-		MangledSheerthorn: /
-		Moulder: /
-		RhodiumBroadsword: /
-		SherbetFlail: /
-		ARCTrap: /
-		Calcium: /
-		Chainwhip: /
-		CopperMandibles: /
-		Crimeratrap: /
-		DespoticSnaptrap: /
-		Frostgrip: /
-		MrSnapkins: /
-		Snaptrap: /
-		Sniptrap: /
-		Soulsnapper: /
-		Stabtrap: /
-		StickyHand: /
-		TheScorpion: /
-		VenusSnaptrap: /
-		VocalZero: /
-		Whiplatch: /
-		Spidermeal: /
-		WindTrident: /
-		WormholeRipper: /
-		BlackCacophony: /
-		DepthrockBow: /
-		Dunebarrel: /
-		ElectrumBow: /
-		Fwoomstick: /
-		Ghostbuster: /
-		Houndboom: /
-		HunterrGreatbow: /
-		Potshot: /
-		Quasar: /
-		ResonanceCrossbow: /
-		Skyshot: /
-		TheEpicenter: /
-		CicadianStaff: /
-		Fishbacker: /
-		KeepersShovel: /
-		NightmareManuscript: /
+		# DisplayName: Topaz Necklace
+		TopazNecklace: "/"
+		# DisplayName: Bad@$$ Sunglasses
+		BadassSunglasses: "/"
+		# DisplayName: Flaming Razor
+		FlamingRazor: "/"
+		# DisplayName: Orion's Ring
+		OrionsRing: "/"
+		# DisplayName: Poison Fang
+		PoisonFang: "/"
+		# DisplayName: Razed Wine
+		RazedWine: "/"
+		# DisplayName: Sheering Bane
+		SheeringBane: "/"
+		# DisplayName: Soul Talisman
+		SoulTalisman: "/"
+		# DisplayName: Wicked Heart
+		WickedHeart: "/"
+		# DisplayName: Chain Weight
+		ChainWeight: "/"
+		# DisplayName: Magic Polish
+		MagicPolish: "/"
+		# DisplayName: Safety Latch
+		SafetyLatch: "/"
+		# DisplayName: Unyielding Chain
+		UnyieldingChain: "/"
+		# DisplayName: Winch
+		Winch: "/"
+		# DisplayName: Cup O' Joe
+		CupOJoe: "/"
+		# DisplayName: Swimshield Wipers
+		SwimshieldWipers: "/"
+		# DisplayName: Skullmet
+		Skullmet: "/"
+		# DisplayName: Dread Shell
+		DreadShell: "/"
+		# DisplayName: Charm of the Accursed
+		CharmOfTheAccursed: "/"
+		# DisplayName: Galactic Jelly Bean
+		GalacticJellyBean: "/"
+		# DisplayName: Windstrumican Cape
+		WindCape: "/"
+		# DisplayName: Incomprehensible Polyhedron
+		IncomprehensiblePolyhedron: "/"
+		# DisplayName: Tail of the Eater
+		EatersTail: "/"
+		# DisplayName: Eye of Eldritch Insight
+		EyeofEldritchInsight: "/"
+		# DisplayName: Prophylaxis
+		Prophylaxis: "/"
+		# DisplayName: Slime Secretion Gland
+		SlimeSecretionGland: "/"
+		# DisplayName: Corrupt Antidote
+		CorruptAntidote: "/"
+		# DisplayName: Crimson Antidote
+		CrimsonAntidote: "/"
+		# DisplayName: Portable Lab
+		PortableLab: "/"
+		# DisplayName: Rooks Brew
+		RooksBrew: "/"
+		# DisplayName: Zero Gravity Dancers
+		GravityBoots: "/"
+		# DisplayName: Dashing Feather
+		DashingFeather: "/"
+		# DisplayName: Disaster In A Bottle
+		DisasterInABottle: "/"
+		# DisplayName: Firestorm In A Bottle
+		FirestormInABottle: "/"
+		# DisplayName: Impulse Shackles
+		ImpulseShackles: "/"
+		# DisplayName: Jumping Bean
+		JumpingBean: "/"
+		# DisplayName: Storm In A Bottle
+		StormInABottle: "/"
+		# DisplayName: Twister In A Bottle
+		TwisterInABottle: "/"
+		# DisplayName: Oblivion Pickaxe
+		OblivionPickaxe: "/"
+		# DisplayName: Cyanite Hammer
+		CyaniteHammer: "/"
+		# DisplayName: Cyanite Pickaxe
+		CyanitePickaxe: "/"
+		# DisplayName: Crowd Controller
+		CrowdController: "/"
+		# DisplayName: Eternal Bubble Wand
+		EternalBubbleWand: "/"
+		# DisplayName: Fungal Rod
+		FungalRod: "/"
+		# DisplayName: Necromatome
+		Necromatome: "/"
+		# DisplayName: Royal Jelly Scepter
+		RoyalJellyScepter: "/"
+		# DisplayName: Starlight Staff
+		StarlightStaff: "/"
+		# DisplayName: Thunder Staff
+		ThunderStaff: "/"
+		# DisplayName: Tome Of Reach
+		TomeOfReach: "/"
+		# DisplayName: Twilight Demise
+		TwilightDemise: "/"
+		# DisplayName: Weeping Wand
+		WeepingWand: "/"
+		# DisplayName: Alloy Sword
+		AlloySword: "/"
+		# DisplayName: Aster-Knuckle
+		AsterKnuckle: "/"
+		# DisplayName: Bleedbreaker
+		Bleedbreaker: "/"
+		# DisplayName: Chained Gun
+		ChainedGun: "/"
+		# DisplayName: Cicadarang
+		Cicadarang: "/"
+		# DisplayName: Cosmisumaru
+		Cosmisumaru: "/"
+		# DisplayName: Cyanite Boomerang
+		CyaniteBoomerang: "/"
+		# DisplayName: Cyanite Spear
+		CyaniteSpear: "/"
+		# DisplayName: Undying Chaos
+		DespoticSuperMeleeSword: "/"
+		# DisplayName: Ectoblade
+		Ectoblade: "/"
+		# DisplayName: Electrum Spear
+		ElectrumSpear: "/"
+		# DisplayName: Ember Slasher
+		EmberSlasher: "/"
+		# DisplayName: Flyswatter
+		Flyswatter: "/"
+		# DisplayName: Mandinata
+		Mandinata: "/"
+		# DisplayName: Mangled Sheerthorn
+		MangledSheerthorn: "/"
+		# DisplayName: Moulder
+		Moulder: "/"
+		# DisplayName: Rhodium Broadsword
+		RhodiumBroadsword: "/"
+		# DisplayName: Sherbet Flail
+		SherbetFlail: "/"
+		# DisplayName: ARCTrap
+		ARCTrap: "/"
+		# DisplayName: Calcium
+		Calcium: "/"
+		# DisplayName: Chainwhip
+		Chainwhip: "/"
+		# DisplayName: Copper Mandibles
+		CopperMandibles: "/"
+		# DisplayName: Crimeratrap
+		Crimeratrap: "/"
+		# DisplayName: Maw of The Deep
+		DespoticSnaptrap: "/"
+		# DisplayName: Frostgrip
+		Frostgrip: "/"
+		# DisplayName: Mr. Snapkins
+		MrSnapkins: "/"
+		# DisplayName: Snaptrap
+		Snaptrap: "/"
+		# DisplayName: Sniptrap
+		Sniptrap: "/"
+		# DisplayName: Soulsnapper
+		Soulsnapper: "/"
+		# DisplayName: Stabtrap
+		Stabtrap: "/"
+		# DisplayName: Sticky Hand
+		StickyHand: "/"
+		# DisplayName: The Scorpion
+		TheScorpion: "/"
+		# DisplayName: Venus Snaptrap
+		VenusSnaptrap: "/"
+		# DisplayName: Vocal Zero
+		VocalZero: "/"
+		# DisplayName: Whiplatch
+		Whiplatch: "/"
+		# DisplayName: Spidermeal
+		Spidermeal: "/"
+		# DisplayName: Wind Trident
+		WindTrident: "/"
+		# DisplayName: Wormhole Ripper
+		WormholeRipper: "/"
+		# DisplayName: Black Cacophony
+		BlackCacophony: "/"
+		# DisplayName: Depthrock Bow
+		DepthrockBow: "/"
+		# DisplayName: Dunebarrels
+		Dunebarrel: "/"
+		# DisplayName: Electrum Bow
+		ElectrumBow: "/"
+		# DisplayName: Fwoomstick
+		Fwoomstick: "/"
+		# DisplayName: Ghostbuster
+		Ghostbuster: "/"
+		# DisplayName: Houndboom
+		Houndboom: "/"
+		# DisplayName: Hun-Terr Greatbow
+		HunterrGreatbow: "/"
+		# DisplayName: Potshot
+		Potshot: "/"
+		# DisplayName: Quasar
+		Quasar: "/"
+		# DisplayName: Resonance Crossbow
+		ResonanceCrossbow: "/"
+		# DisplayName: Skyshot
+		Skyshot: "/"
+		# DisplayName: The {Prefix} Epicenter
+		TheEpicenter: "/"
+		# DisplayName: Cicadian Staff
+		CicadianStaff: "/"
+		# DisplayName: Fishbacker
+		Fishbacker: "/"
+		# DisplayName: Gravekeeper's Shovel
+		KeepersShovel: "/"
+		# DisplayName: Nightmare Manuscript
+		NightmareManuscript: "/"
+		# DisplayName: Rite Of Immolation
 		RiteOfImmolation: /
 	}
 }

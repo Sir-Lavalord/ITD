@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using ITD.DetoursIL;
+using System.Runtime.InteropServices;
 
 namespace ITD.Particles
 {
@@ -103,6 +104,12 @@ namespace ITD.Particles
 
         public void DrawParticles(ParticleEmitterDrawCanvas canvas)
         {
+            foreach (ParticleEmitter p in CollectionsMarshal.AsSpan(emitters))
+            {
+                if (p.canvas == canvas)
+                    p.DrawFully();
+            }
+            /*
             for (int i = 0; i < emitters.Count; i++)
             {
                 ParticleEmitter p = emitters[i];
@@ -119,8 +126,9 @@ namespace ITD.Particles
                 particlesRT.Request();
                 if (particlesRT.IsReady)
                     Main.spriteBatch.Draw(particlesRT.GetTarget(), Vector2.Zero, Color.White);
-                */
+                //
             }
+            */
         }
         
         public void DrawParticlesUnderProjectiles(On_Main.orig_DrawSuperSpecialProjectiles orig, Main self, List<int> projCache, bool startSpriteBatch)

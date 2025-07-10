@@ -788,4 +788,102 @@ InflectionData: {
 		// NightmareManuscript: /
 		// RiteOfImmolation: /
 	}
+
+	Prefixes: {
+		Abhorrent: {
+			// Masculine: Abhorrent
+			// Feminine: Abhorrent
+			// Neuter: Abhorrent
+		}
+
+		Acute: {
+			// Masculine: Acute
+			// Feminine: Acute
+			// Neuter: Acute
+		}
+
+		Ample: {
+			// Masculine: Ample
+			// Feminine: Ample
+			// Neuter: Ample
+		}
+
+		Barbed: {
+			// Masculine: Barbed
+			// Feminine: Barbed
+			// Neuter: Barbed
+		}
+
+		Dwarf: {
+			// Masculine: Dwarf
+			// Feminine: Dwarf
+			// Neuter: Dwarf
+		}
+
+		Extensive: {
+			// Masculine: Extensive
+			// Feminine: Extensive
+			// Neuter: Extensive
+		}
+
+		Feral: {
+			// Masculine: Feral
+			// Feminine: Feral
+			// Neuter: Feral
+		}
+
+		Heroic: {
+			// Masculine: Heroic
+			// Feminine: Heroic
+			// Neuter: Heroic
+		}
+
+		Immense: {
+			// Masculine: Immense
+			// Feminine: Immense
+			// Neuter: Immense
+		}
+
+		Lengthy: {
+			// Masculine: Lengthy
+			// Feminine: Lengthy
+			// Neuter: Lengthy
+		}
+
+		Miniscule: {
+			// Masculine: Miniscule
+			// Feminine: Miniscule
+			// Neuter: Miniscule
+		}
+
+		Scourned: {
+			// Masculine: Scourned
+			// Feminine: Scourned
+			// Neuter: Scourned
+		}
+
+		Sleek: {
+			// Masculine: Sleek
+			// Feminine: Sleek
+			// Neuter: Sleek
+		}
+
+		Smoothed: {
+			// Masculine: Smoothed
+			// Feminine: Smoothed
+			// Neuter: Smoothed
+		}
+
+		Tapered: {
+			// Masculine: Tapered
+			// Feminine: Tapered
+			// Neuter: Tapered
+		}
+
+		Wretched: {
+			// Masculine: Wretched
+			// Feminine: Wretched
+			// Neuter: Wretched
+		}
+	}
 }

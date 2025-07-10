@@ -24,7 +24,7 @@ namespace ITD.Particles
         {
             ParticleFramingData framingData = parent.GetFramingData(this);
 
-            Color drawColor = color == null ? parent.GetAlpha(this) : color.Value;
+            Color drawColor = color ?? parent.GetAlpha(this);
             if (parent.additive)
                 drawColor.A = 0;
 
