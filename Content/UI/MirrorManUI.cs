@@ -283,7 +283,7 @@ namespace ITD.Content.UI
             if (IsMouseHovering)
             {
                 Main.LocalPlayer.mouseInterface = true;
-                UICommon.TooltipMouseText(this.GetLocalization($"MouseHoverName{Type}").Format(On ? this.GetLocalization("On").Value : this.GetLocalization("Off").Value));
+                UICommon.TooltipMouseText(this.GetLocalization($"MouseHoverName{Type}").Format(Lang.menu[ On ? 126 : 124 ]));
             }
         }
         public override void LeftClick(UIMouseEvent evt)

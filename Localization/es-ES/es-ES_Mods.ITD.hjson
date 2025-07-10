@@ -519,7 +519,7 @@ DeathMessage: {
 	IncrediblySharpKnife: cortó demasiado profundo.
 	BloodPact: se quedó sin sangre.
 	KSGlandAftershock: sufrió un aplanamiento por el aftershock.
-	// MudkarpEvil: "{0} meddled with eldritch terrors."
+	MudkarpEvil: "{0} se entrometió en asuntos incomprensibles."
 	// OrionsRingTimeOut: "{0} is bad at the game testing 123."
 }
 
@@ -538,26 +538,26 @@ Tiles: {
 	// Debugger.MapEntry: Debugger
 
 	CharbleChestTile: {
-		// MapEntryUnlocked: Charble Chest
-		// MapEntryLocked: Locked Charble Chest
+		MapEntryUnlocked: Cofre de mármizo
+		MapEntryLocked: Cofre de mármizo cerrado
 	}
 
 	PyracottaChestTile: {
-		// MapEntryUnlocked: Pyracotta Chest
-		// MapEntryLocked: Locked Pyracotta Chest
+		MapEntryUnlocked: Cofre de pirracota
+		MapEntryLocked: Cofre de pirracota cerrado
 	}
 
 	CharbleDoubleChestTile: {
-		// MapEntryUnlocked: Charble Double Chest
-		// MapEntryLocked: Locked Charble Double Chest
+		MapEntryUnlocked: Cofre doble de mármizo
+		MapEntryLocked: Cofre doble de mármizo cerrado
 	}
 
 	PyracottaDoubleChestTile: {
-		// MapEntryUnlocked: Pyracotta Double Chest
-		// MapEntryLocked: Locked Pyracotta Double Chest
+		MapEntryUnlocked: Cofre doble de pirracota
+		MapEntryLocked: Cofre doble de pirracota cerrado
 	}
 
-	// PyracottaDresserTile.MapEntry: Pyracotta Dresser Tile
+	PyracottaDresserTile.MapEntry: Aparador de pirracota
 }
 
 Biomes: {
@@ -597,20 +597,18 @@ UI: {
 	UnrecruitmentButton.MouseHoverName: Despedir
 
 	MirrorManButton: {
-		// MouseHoverNameSelect: Toggle Select Mode
-		// MouseHoverNameToggleMirrorHorizontal: Toggle Horizontal Mirror
-		// MouseHoverNameToggleMirrorVertical: Toggle Vertical Mirror
-		// MouseHoverNameUndo: Undo Paste
-		// MouseHoverNameToggleCut: Toggle Cut Mode
+		MouseHoverNameSelect: Activar/Desactivar modo de selección
+		MouseHoverNameToggleMirrorHorizontal: Activar/Desactivar espejo horizontal
+		MouseHoverNameToggleMirrorVertical: Activar/Desactivar espejo vertical
+		MouseHoverNameUndo: Deshacer pegado
+		MouseHoverNameToggleCut: Activar/Desactivar modo de corte
 	}
 
 	TileDataButton: {
-		// MouseHoverNameTile: Use Tile Data: {0}
-		// MouseHoverNameWall: Use Wall Data: {0}
-		// MouseHoverNameLiquid: Use Liquid Data: {0}
-		// MouseHoverNameWiring: Use Wiring Data: {0}
-		// On: On
-		// Off: Off
+		MouseHoverNameTile: Usar datos de bloque: {0}
+		MouseHoverNameWall: Usar datos de pared: {0}
+		MouseHoverNameLiquid: Usar datos de líquido: {0}
+		MouseHoverNameWiring: Usar datos de circuito: {0}
 	}
 }
 
@@ -622,11 +620,11 @@ RecruitmentSystem: {
 
 Configs: {
 	ITDServerConfig: {
-		// DisplayName: ITD Server Config
+		DisplayName: Configuración del servidor de ITD
 
 		ResizeDesertForDeepDesert: {
-			// Label: Resize Desert For Deep Desert
-			// Tooltip: Turn on for the vanilla Desert to generate smaller to make space for Deep Desert generation. On by default.
+			Label: Cambiar el tamaño del desierto para las profundidades del desierto
+			Tooltip: Si está activado, el desierto vanilla se generará más pequeño para que las profundidades del desierto sean más grandes. Activado por defecto.
 		}
 
 		AutoMergeChestsIntoDoubleChest: {
@@ -636,156 +634,256 @@ Configs: {
 	}
 
 	ITDClientConfig: {
-		// DisplayName: ITD Client Config
+		DisplayName: Configuración del cliente de ITD
 
 		ScreenshakeIntensity: {
-			// Label: Screenshake Intensity
-			// Tooltip: The intensity (in percentage) by which screenshake effects will be visible.
+			Label: Intensidad del movimiento de la pantalla
+			Tooltip: El porciento de la intensidad de los efectos de movimiento de pantalla generados por ITD.
 		}
 	}
 }
 
 Prefixes: {
-	// PowerTooltip: Mods.ITD.Prefixes.PowerTooltip
-
-	Lengthy: {
-		// AdditionalTooltip: Mods.ITD.Prefixes.Lengthy.AdditionalTooltip
-		// DisplayName: Lengthy
-	}
-
 	SnaptrapPrefix: {
 		// LengthBonusText: "{0}% chain length"
 		// RetractRateBonusText: "{0}% retract rate"
 	}
 
-	// Abhorrent.DisplayName: Abhorrent
-	// Acute.DisplayName: Acute
-	// Ample.DisplayName: Ample
-	// Barbed.DisplayName: Barbed
-	// Dwarf.DisplayName: Dwarf
-	// Extensive.DisplayName: Extensive
-	// Fabled.DisplayName: Fabled
-	// Feral.DisplayName: Feral
-	// Immense.DisplayName: Immense
-	// Miniscule.DisplayName: Miniscule
-	// Scourned.DisplayName: Scourned
-	// Sleek.DisplayName: Sleek
-	// Smoothed.DisplayName: Smoothed
-	// Tapered.DisplayName: Tapered
-	// Wretched.DisplayName: Wretched
-	// Heroic.DisplayName: Heroic
+	Abhorrent.DisplayName: (Aborrecible)
+	Acute.DisplayName: (Agudo)
+	Ample.DisplayName: (Ámplio)
+	Barbed.DisplayName: (Punzante)
+	Dwarf.DisplayName: (Enano)
+	Extensive.DisplayName: (Extenso)
+	Feral.DisplayName: (Silvestre)
+	Immense.DisplayName: (Inmenso)
+	Lengthy.DisplayName: (Largo)
+	Miniscule.DisplayName: (Minúsculo)
+	Scourned.DisplayName: (Despreciado)
+	Sleek.DisplayName: (Pulcro)
+	Smoothed.DisplayName: (Alisado)
+	Tapered.DisplayName: (Afilado)
+	Wretched.DisplayName: (Mísero)
+	Heroic.DisplayName: (Heroico)
 }
 
-// Events.LavaRainEvent.EventProgressTitle: Lava Rain
+Events.LavaRainEvent.EventProgressTitle: Lluvia de lava
 
 InflectionData: {
 	Items: {
+		# DisplayName: Topaz Necklace
 		// TopazNecklace: /
+		# DisplayName: Lentes de sol Bad@$$
 		// BadassSunglasses: /
+		# DisplayName: Flaming Razor
 		// FlamingRazor: /
+		# DisplayName: Orion's Ring
 		// OrionsRing: /
+		# DisplayName: Poison Fang
 		// PoisonFang: /
+		# DisplayName: Vino arrasado
 		// RazedWine: /
+		# DisplayName: Sheering Bane
 		// SheeringBane: /
+		# DisplayName: Soul Talisman
 		// SoulTalisman: /
+		# DisplayName: Wicked Heart
 		// WickedHeart: /
+		# DisplayName: Pesa para cadena
 		// ChainWeight: /
+		# DisplayName: Magic Polish
 		// MagicPolish: /
+		# DisplayName: Safety Latch
 		// SafetyLatch: /
+		# DisplayName: Unyielding Chain
 		// UnyieldingChain: /
+		# DisplayName: Cabrestante
 		// Winch: /
+		# DisplayName: Taza de café
 		// CupOJoe: /
+		# DisplayName: Limpiaparabrisas
 		// SwimshieldWipers: /
+		# DisplayName: Calavet
 		// Skullmet: /
+		# DisplayName: Caparazón horrible
 		// DreadShell: /
+		# DisplayName: Talismán de los condenados
 		// CharmOfTheAccursed: /
+		# DisplayName: Gomita galáctica
 		// GalacticJellyBean: /
+		# DisplayName: Capa Ventiscípula
 		// WindCape: /
+		# DisplayName: Incomprehensible Polyhedron
 		// IncomprehensiblePolyhedron: /
+		# DisplayName: Tail of the Eater
 		// EatersTail: /
+		# DisplayName: Eye of Eldritch Insight
 		// EyeofEldritchInsight: /
+		# DisplayName: Prophylaxis
 		// Prophylaxis: /
+		# DisplayName: Slime Secretion Gland
 		// SlimeSecretionGland: /
+		# DisplayName: Antídoto corrupto
 		// CorruptAntidote: /
+		# DisplayName: Antídoto carmesí
 		// CrimsonAntidote: /
+		# DisplayName: Portable Lab
 		// PortableLab: /
+		# DisplayName: Rooks Brew
 		// RooksBrew: /
+		# DisplayName: Danzantes de Gravedad Zero
 		// GravityBoots: /
+		# DisplayName: Pluma airosa
 		// DashingFeather: /
+		# DisplayName: Desastre embotellado
 		// DisasterInABottle: /
+		# DisplayName: Tormenta de fuego embotellada
 		// FirestormInABottle: /
+		# DisplayName: Esposas de impulso
 		// ImpulseShackles: /
+		# DisplayName: Frijol saltarín
 		// JumpingBean: /
+		# DisplayName: Tormenta embotellada
 		// StormInABottle: /
+		# DisplayName: Tornado embotellado
 		// TwisterInABottle: /
+		# DisplayName: Oblivion Pickaxe
 		// OblivionPickaxe: /
+		# DisplayName: Martillo de cianita
 		// CyaniteHammer: /
+		# DisplayName: Pico de cianita
 		// CyanitePickaxe: /
+		# DisplayName: Crowd Controller
 		// CrowdController: /
+		# DisplayName: Eternal Bubble Wand
 		// EternalBubbleWand: /
+		# DisplayName: Fungal Rod
 		// FungalRod: /
+		# DisplayName: Necromatomo
 		// Necromatome: /
+		# DisplayName: Royal Jelly Scepter
 		// RoyalJellyScepter: /
+		# DisplayName: Bastón de Luz Astral
 		// StarlightStaff: /
+		# DisplayName: Bastón del Trueno
 		// ThunderStaff: /
+		# DisplayName: Tome Of Reach
 		// TomeOfReach: /
+		# DisplayName: Twilight Demise
 		// TwilightDemise: /
+		# DisplayName: Weeping Wand
 		// WeepingWand: /
+		# DisplayName: Espada de aleación
 		// AlloySword: /
+		# DisplayName: Aster-Knuckle
 		// AsterKnuckle: /
+		# DisplayName: Bleedbreaker
 		// Bleedbreaker: /
+		# DisplayName: Chained Gun
 		// ChainedGun: /
+		# DisplayName: Cicadarang
 		// Cicadarang: /
+		# DisplayName: Cosmisumaru
 		// Cosmisumaru: /
+		# DisplayName: Bumerán de cianita
 		// CyaniteBoomerang: /
+		# DisplayName: Lanza de cianita
 		// CyaniteSpear: /
+		# DisplayName: Caos Incesable
 		// DespoticSuperMeleeSword: /
+		# DisplayName: Ectoespada
 		// Ectoblade: /
+		# DisplayName: Lanza de electro
 		// ElectrumSpear: /
+		# DisplayName: Tajadora de llamarada
 		// EmberSlasher: /
+		# DisplayName: Flyswatter
 		// Flyswatter: /
+		# DisplayName: Mandinata
 		// Mandinata: /
+		# DisplayName: Mangled Sheerthorn
 		// MangledSheerthorn: /
+		# DisplayName: Moulder
 		// Moulder: /
+		# DisplayName: Espada de rodio
 		// RhodiumBroadsword: /
+		# DisplayName: Sherbet Flail
 		// SherbetFlail: /
+		# DisplayName: ARCTrap
 		// ARCTrap: /
+		# DisplayName: Calcio
 		// Calcium: /
+		# DisplayName: Látigo de cadena
 		// Chainwhip: /
+		# DisplayName: Mandíbulas de cobre
 		// CopperMandibles: /
+		# DisplayName: Carmengancho
 		// Crimeratrap: /
+		# DisplayName: Fauces del Abísmo
 		// DespoticSnaptrap: /
+		# DisplayName: Agarresfrío
 		// Frostgrip: /
+		# DisplayName: Sr. Snapkins
 		// MrSnapkins: /
+		# DisplayName: Enganchadora
 		// Snaptrap: /
+		# DisplayName: Enganchadorcilla
 		// Sniptrap: /
+		# DisplayName: Enganchaalmas
 		// Soulsnapper: /
+		# DisplayName: Stabtrap
 		// Stabtrap: /
+		# DisplayName: Sticky Hand
 		// StickyHand: /
+		# DisplayName: El Jalacrán
 		// TheScorpion: /
+		# DisplayName: Venus Enganchamoscas
 		// VenusSnaptrap: /
+		# DisplayName: Vocal Zero
 		// VocalZero: /
+		# DisplayName: Whiplatch
 		// Whiplatch: /
+		# DisplayName: Comida de araña
 		// Spidermeal: /
+		# DisplayName: Tridente de viento
 		// WindTrident: /
+		# DisplayName: Desgarradora del Espaciotiempo
 		// WormholeRipper: /
+		# DisplayName: Black Cacophony
 		// BlackCacophony: /
+		# DisplayName: Depthrock Bow
 		// DepthrockBow: /
+		# DisplayName: Cañones de dunas
 		// Dunebarrel: /
+		# DisplayName: Arco de electro
 		// ElectrumBow: /
+		# DisplayName: Fwoomstick
 		// Fwoomstick: /
+		# DisplayName: Ghostbuster
 		// Ghostbuster: /
+		# DisplayName: Explocazadora
 		// Houndboom: /
+		# DisplayName: Gran arco del Hun-Terr
 		// HunterrGreatbow: /
+		# DisplayName: Potshot
 		// Potshot: /
+		# DisplayName: Cuásar
 		// Quasar: /
+		# DisplayName: Resonance Crossbow
 		// ResonanceCrossbow: /
+		# DisplayName: Skyshot
 		// Skyshot: /
+		# DisplayName: The {Prefix} Epicenter
 		// TheEpicenter: /
+		# DisplayName: Cicadian Staff
 		// CicadianStaff: /
+		# DisplayName: Fishbacker
 		// Fishbacker: /
+		# DisplayName: Pala del Guardatumbas
 		// KeepersShovel: /
+		# DisplayName: Nightmare Manuscript
 		// NightmareManuscript: /
+		# DisplayName: Rite Of Immolation
 		// RiteOfImmolation: /
 	}
 
