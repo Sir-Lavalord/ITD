@@ -70,7 +70,7 @@ namespace ITD.Content.Items.Weapons.Ranger
                 modPlayer.recoilFront = 0.075f;
                 modPlayer.recoilBack = 0.075f;
                 int proj = Projectile.NewProjectile(source, position, velocity, type, player.ownedProjectileCounts[ModContent.ProjectileType<TheEpicenterBlackhole>()] <= 0 ? (int)(damage * 1f): (int)(damage * 0.75f), knockback);
-                Main.projectile[proj].GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromTheEpicenter = true;
+                Main.projectile[proj].GetGlobalProjectile<ITDInstancedGlobalProjectile>().ProjectileSource = ITDInstancedGlobalProjectile.ProjectileItemSource.TheEpicenter;
             }
             else
             {

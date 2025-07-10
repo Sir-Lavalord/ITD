@@ -15,15 +15,18 @@ using ITD.Content.Items.Accessories.Combat.All;
 
 namespace ITD.Content.Projectiles
 {
-    public class ITDInstancedGlobalProjectile : GlobalProjectile//fuck, there must be a better way to implement this
+    public class ITDInstancedGlobalProjectile : GlobalProjectile//there is now, thanks qDangle
     {
         public override bool InstancePerEntity => true;
 
-        public bool isFromPotshot;
-        public bool isFromTheEpicenter;//I don't want to do this // you could make this a single int/enum instead, which is probably mroe mememory efficient too
-        public bool isFromFwoomstick;
-        public bool isFromSkyProjectileBow;
-
+        public enum ProjectileItemSource : byte
+        {
+            Potshot,
+            TheEpicenter,
+            Fwoomstick,
+            Skyshot
+        }
+        public ProjectileItemSource ProjectileSource;
         private int ExplodeTimer = 0;
         public override void Load()
         {
@@ -52,7 +55,7 @@ namespace ITD.Content.Projectiles
 
         public override void PostAI(Projectile projectile)
         {
-			if (isFromFwoomstick)
+			if (ProjectileSource == ProjectileItemSource.Fwoomstick)
             {
                 ExplodeTimer++;
                 if (ExplodeTimer > 45)
@@ -61,7 +64,7 @@ namespace ITD.Content.Projectiles
                 }
             }
 
-            if (isFromSkyProjectileBow)
+            if (ProjectileSource == ProjectileItemSource.Skyshot)
             {
                 Lighting.AddLight(projectile.Center, 2.5f, 2.5f, 2.5f);
 
@@ -76,7 +79,7 @@ namespace ITD.Content.Projectiles
         {
             Player player = Main.player[projectile.owner];
 
-			if (isFromFwoomstick)
+			if (ProjectileSource == ProjectileItemSource.Fwoomstick)
             {
                 if (projectile.owner == Main.myPlayer)
 				{
@@ -96,7 +99,7 @@ namespace ITD.Content.Projectiles
 				SoundEngine.PlaySound(SoundID.Item45, projectile.Center);
             }
 
-            if (isFromSkyProjectileBow)
+            if (ProjectileSource == ProjectileItemSource.Skyshot)
             {
                 if (projectile.owner == Main.myPlayer)
                 {
@@ -118,7 +121,7 @@ namespace ITD.Content.Projectiles
 
         public override bool PreDraw(Projectile projectile, ref Color lightColor)
         {
-            if (isFromSkyProjectileBow)
+            if (ProjectileSource == ProjectileItemSource.Skyshot)
             {
                 Texture2D texture = TextureAssets.Extra[91].Value;
                 Rectangle rectangle = texture.Frame(1, 1);

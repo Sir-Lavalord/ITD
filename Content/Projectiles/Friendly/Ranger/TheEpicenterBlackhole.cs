@@ -155,7 +155,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
                         other.netUpdate = true;
                         Projectile.localAI[1] += 20f;
                         CurrentBulletCount++;
-                        totalDamage += (int)(other.damage * (other.GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromTheEpicenter ? 1.25f:1f));
+                        totalDamage += (int)(other.damage * (other.GetGlobalProjectile<ITDInstancedGlobalProjectile>().ProjectileSource == ITDInstancedGlobalProjectile.ProjectileItemSource.TheEpicenter ? 1.25f:1f));
 
                     }
                 }

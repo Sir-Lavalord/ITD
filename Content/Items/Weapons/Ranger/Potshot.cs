@@ -111,7 +111,7 @@ namespace ITD.Content.Items.Weapons.Ranger
                 newVelocity *= 1f - Main.rand.NextFloat(miss);
                 Vector2 offsetSpawn = bulletVel.RotatedBy((double)((MathHelper.Pi/10) * piOffsetAmt), default);
                 int proj = Projectile.NewProjectile(source, vector2.X + offsetSpawn.X, vector2.Y + offsetSpawn.Y, newVelocity.X, newVelocity.Y, type, damage, knockback, player.whoAmI);
-                Main.projectile[proj].GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromPotshot = true;
+                Main.projectile[proj].GetGlobalProjectile<ITDInstancedGlobalProjectile>().ProjectileSource = ITDInstancedGlobalProjectile.ProjectileItemSource.Potshot;
 
             }
             for (int i = 0; i < 12; i++)

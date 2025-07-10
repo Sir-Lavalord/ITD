@@ -40,7 +40,7 @@ namespace ITD.Content.Items.Weapons.Ranger
 			if (Main.rand.NextBool(4))
             {
                 int proj = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
-                Main.projectile[proj].GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromSkyProjectileBow = true;
+                Main.projectile[proj].GetGlobalProjectile<ITDInstancedGlobalProjectile>().ProjectileSource = ITDInstancedGlobalProjectile.ProjectileItemSource.Skyshot;
                 return false;
             } 
             else

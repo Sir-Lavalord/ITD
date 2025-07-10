@@ -87,7 +87,7 @@ namespace ITD.Content.Items.Weapons.Ranger
 				Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(20));
 				newVelocity *= 1f - Main.rand.NextFloat(0.3f);
 				Projectile proj = Projectile.NewProjectileDirect(source, position, newVelocity, type, damage, knockback, player.whoAmI);
-				proj.GetGlobalProjectile<ITDInstancedGlobalProjectile>().isFromFwoomstick = true;
+                proj.GetGlobalProjectile<ITDInstancedGlobalProjectile>().ProjectileSource = ITDInstancedGlobalProjectile.ProjectileItemSource.Fwoomstick;
 			}
 			ITDPlayer modPlayer = player.GetModPlayer<ITDPlayer>();
 			modPlayer.recoilFront = 0.2f;
