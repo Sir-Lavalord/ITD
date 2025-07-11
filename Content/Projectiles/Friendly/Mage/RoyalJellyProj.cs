@@ -1,19 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.DataStructures;
-using Microsoft.Build.Evaluation;
 using ITD.Content.Buffs.Debuffs;
 using ITD.Content.Buffs.GeneralBuffs;
 using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Particles;
-using ITD.Particles.Misc;
 using ITD.Particles.Projectile;
 
 namespace ITD.Content.Projectiles.Friendly.Mage

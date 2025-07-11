@@ -1,8 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-
-namespace ITD.Content.Dusts
+﻿namespace ITD.Content.Dusts
 {
     public class StarlitDust : ModDust
     {

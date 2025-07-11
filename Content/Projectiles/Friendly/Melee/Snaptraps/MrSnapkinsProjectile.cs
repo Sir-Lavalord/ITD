@@ -1,7 +1,4 @@
 ﻿using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 using Terraria.Localization;
 

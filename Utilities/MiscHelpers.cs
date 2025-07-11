@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Terraria.ID;
-using Terraria;
 using ReLogic.Utilities;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.ModLoader;
 using System.Runtime.CompilerServices;
-using static log4net.Appender.ColoredConsoleAppender;
 using Terraria.DataStructures;
 using System.Collections.Generic;
-using Terraria.GameContent;
-
-using ITD.Content.NPCs;
 
 namespace ITD.Utilities
 {

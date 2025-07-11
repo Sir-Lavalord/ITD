@@ -1,7 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Content.Dusts;
+﻿using ITD.Content.Dusts;
 
 namespace ITD.Content.Tiles.DeepDesert
 {

@@ -1,14 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader;
-using Terraria;
-using Terraria.GameContent;
-
-using ITD.Utilities;
+﻿using Terraria.GameContent;
+using System.Runtime.InteropServices;
 
 namespace ITD.Particles.Projectile
 {
@@ -37,13 +28,13 @@ namespace ITD.Particles.Projectile
 			Rectangle sourceRectangle = texture.Frame(1, 1);
 			Vector2 origin = sourceRectangle.Size() / 2f;			
 			
-            for (int i = 0; i < particles.Count; i++)
+            foreach (ITDParticle particle in CollectionsMarshal.AsSpan(particles))
             {
-				Color color = new Color(120, 184, 255, 50) * (particles[i].ProgressOneToZero * 1.5f);
-				float scale = particles[i].ProgressOneToZero*particles[i].scale;
-				
-                particles[i].DrawCommon(Main.spriteBatch, texture, CanvasOffset, color, sourceRectangle, origin, particles[i].ProgressOneToZero*4f+MathHelper.PiOver4, scale);
-				particles[i].DrawCommon(Main.spriteBatch, texture, CanvasOffset, color, sourceRectangle, origin, particles[i].ProgressOneToZero*4f-MathHelper.PiOver4, scale);
+                Color color = new Color(120, 184, 255, 50) * (particle.ProgressOneToZero * 1.5f);
+                float scale = particle.ProgressOneToZero * particle.scale;
+
+                particle.DrawCommon(in Main.spriteBatch, in texture, CanvasOffset, color, sourceRectangle, origin, particle.ProgressOneToZero * 4f + MathHelper.PiOver4, scale);
+                particle.DrawCommon(in Main.spriteBatch, in texture, CanvasOffset, color, sourceRectangle, origin, particle.ProgressOneToZero * 4f - MathHelper.PiOver4, scale);
             }
         }
     }

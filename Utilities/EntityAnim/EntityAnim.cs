@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using Terraria;
 
 namespace ITD.Utilities.EntityAnim
 {

@@ -1,9 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-
-namespace ITD.Content.Buffs.GeneralBuffs
+﻿namespace ITD.Content.Buffs.GeneralBuffs
 {
     public class RoyalJellyBuff : ModBuff
     {

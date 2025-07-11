@@ -1,8 +1,5 @@
 ﻿using ITD.Content.Items.Weapons.Summoner;
-using Microsoft.Xna.Framework.Graphics;
 using System.IO;
-using Terraria;
-using Terraria.ModLoader;
 using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI

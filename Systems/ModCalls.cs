@@ -3,12 +3,6 @@ using ITD.Players;
 using ITD.Systems.Recruitment;
 using ITD.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.ModLoader;
 
 namespace ITD.Systems
 {

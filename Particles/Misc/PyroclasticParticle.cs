@@ -1,6 +1,5 @@
 ﻿using ITD.Utilities;
 using ITD.Utilities.EntityAnim;
-using Terraria;
 
 namespace ITD.Particles.Misc
 {

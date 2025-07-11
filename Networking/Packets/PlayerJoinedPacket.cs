@@ -1,12 +1,8 @@
-﻿using ITD.Content.TileEntities;
-using ITD.Players;
+﻿using ITD.Players;
 using ITD.Systems.Recruitment;
 using ITD.Utilities;
 using System.IO;
 using System.Linq;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
 
 namespace ITD.Networking.Packets
 {

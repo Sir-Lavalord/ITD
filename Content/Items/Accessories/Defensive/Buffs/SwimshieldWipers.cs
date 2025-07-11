@@ -1,9 +1,4 @@
-﻿using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Items.Accessories.Defensive.Buffs
+﻿namespace ITD.Content.Items.Accessories.Defensive.Buffs
 {
     public class SwimshieldWipers : ModItem
     {

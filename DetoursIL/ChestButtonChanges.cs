@@ -10,8 +10,6 @@ using Terraria.UI;
 using MonoMod.Cil;
 using Terraria.Localization;
 using Terraria.GameContent.UI.States;
-using Terraria.ID;
-using UtfUnknown.Core.Models.SingleByte.Finnish;
 
 namespace ITD.DetoursIL
 {

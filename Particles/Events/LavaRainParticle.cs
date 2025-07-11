@@ -1,6 +1,4 @@
 ﻿using ITD.Utilities;
-using Terraria;
-using Terraria.ID;
 
 namespace ITD.Particles.Events
 {

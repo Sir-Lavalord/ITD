@@ -25,8 +25,6 @@ using ITD.Systems.Extensions;
 
 using ITD.Particles.CosJel;
 using ITD.Particles;
-using static System.Net.Mime.MediaTypeNames;
-using ITD.Content.Projectiles.Unused;
 namespace ITD.Content.NPCs.Bosses
 
 {

@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Walls.Catacombs;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable.Biomes.Catacombs
 {

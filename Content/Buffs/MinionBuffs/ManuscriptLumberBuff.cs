@@ -1,7 +1,4 @@
 ﻿using ITD.Content.Projectiles.Friendly.Summoner;
-using ITD.Utilities.Placeholders;
-using Terraria;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Buffs.MinionBuffs
 {

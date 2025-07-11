@@ -1,8 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Dusts
+﻿namespace ITD.Content.Dusts
 {
     public class CosJelDust : ModDust
     {

@@ -1,6 +1,4 @@
 ﻿using Terraria.GameContent.ItemDropRules;
-using Terraria.ModLoader;
-using Terraria;
 
 namespace ITD.ItemDropRules.Conditions
 {

@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using ITD.Content.Tiles.Furniture.Relics;
+﻿using ITD.Content.Tiles.Furniture.Relics;
 
 namespace ITD.Content.Items.Placeable.Furniture.Relics
 {

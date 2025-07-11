@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Backgrounds
+﻿namespace ITD.Content.Backgrounds
 {
     public class BlueshroomGrovesSurfaceBackgroundStyle : ModSurfaceBackgroundStyle
     {

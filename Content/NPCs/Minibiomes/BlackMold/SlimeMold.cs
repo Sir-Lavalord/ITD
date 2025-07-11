@@ -1,14 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.Audio;
+﻿using Terraria.GameContent;
 using System;
-
-using ITD.Utilities;
-using ITD.Content.Dusts;
 using ITD.Content.Buffs.Debuffs;
 
 namespace ITD.Content.NPCs.Minibiomes.BlackMold

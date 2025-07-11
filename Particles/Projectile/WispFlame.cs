@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria;
-using Terraria.ID;
+﻿using System.Runtime.InteropServices;
 
 namespace ITD.Particles.Projectile
 {
@@ -36,13 +34,14 @@ namespace ITD.Particles.Projectile
             Rectangle sourceRectangle = Texture.Frame(1, 1);
             Vector2 origin = sourceRectangle.Size() / 2f;
 
-            for (int i = 0; i < particles.Count; i++)
+            foreach (ITDParticle particle in CollectionsMarshal.AsSpan(particles))
             {
-				for (int j = 0; j < 5; j++) {
-					Color color = new Color(75, 75, 75, 0);
-					particles[i].DrawCommon(Main.spriteBatch, Texture, CanvasOffset + (Main.rand.NextVector2Square(-6f, 6f)*particles[i].scale), color, sourceRectangle, origin, particles[i].rotation, particles[i].scale);
-				}
-			}
+                for (int j = 0; j < 5; j++)
+                {
+                    Color color = new Color(75, 75, 75, 0);
+                    particle.DrawCommon(in Main.spriteBatch, Texture, CanvasOffset + (Main.rand.NextVector2Square(-6f, 6f) * particle.scale), color, sourceRectangle, origin, particle.rotation, particle.scale);
+                }
+            }
         }
     }
 }

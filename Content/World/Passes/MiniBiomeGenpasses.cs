@@ -1,8 +1,6 @@
 ﻿using ITD.Content.Tiles.Misc;
 using ITD.Utilities;
 using Terraria.DataStructures;
-using Terraria.GameContent.Biomes;
-using Terraria.WorldBuilding;
 
 namespace ITD.Content.World.Passes
 {

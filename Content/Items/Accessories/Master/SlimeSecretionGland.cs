@@ -1,11 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using System;
-using ITD.Content.Projectiles.Friendly.Misc;
+﻿using Terraria.DataStructures;
 using ITD.Content.NPCs.Friendly;
 namespace ITD.Content.Items.Accessories.Master
 {

@@ -1,13 +1,8 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using ITD.Content.Rarities;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using System.Linq;
 using ITD.Utilities;
-using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {

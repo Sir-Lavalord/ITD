@@ -1,10 +1,6 @@
 ﻿using ITD.Utilities;
 using System;
-using Microsoft.Xna.Framework;
 using System.Linq;
-using Terraria.ModLoader;
-using Terraria;
-using Terraria.ID;
 using System.Collections.Generic;
 using Terraria.Localization;
 using System.IO;

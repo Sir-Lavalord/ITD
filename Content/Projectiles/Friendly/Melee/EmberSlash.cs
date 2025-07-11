@@ -1,12 +1,4 @@
-﻿using Terraria;
-using System;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.Audio;
+﻿using System;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {

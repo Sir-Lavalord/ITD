@@ -1,12 +1,4 @@
-﻿using Terraria;
-using System;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria.Audio;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Other
 {

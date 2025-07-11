@@ -1,9 +1,4 @@
 ﻿using ITD.Content.Projectiles.Friendly.Mage;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Weapons.Mage

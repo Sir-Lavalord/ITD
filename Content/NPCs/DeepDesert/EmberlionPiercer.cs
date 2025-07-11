@@ -1,10 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
+﻿using System;
 using ITD.Content.Items.Materials;
 using ITD.Content.Items.Weapons.Melee;
 using Terraria.GameContent.ItemDropRules;

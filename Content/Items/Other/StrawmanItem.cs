@@ -1,18 +1,8 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent.Creative;
-using Terraria.DataStructures;
-using Humanizer;
+﻿using Terraria.DataStructures;
 using System.Collections.Generic;
 using ITD.Content.NPCs.Friendly;
-using ITD.Content.Items.Accessories.Combat.All;
 using Terraria.Localization;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.UI;
-using Mono.Cecil;
 
 namespace ITD.Content.Items.Other
 {

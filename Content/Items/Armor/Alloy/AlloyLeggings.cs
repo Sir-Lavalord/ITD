@@ -1,8 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Items.Armor.Alloy
+﻿namespace ITD.Content.Items.Armor.Alloy
 {
     [AutoloadEquip(EquipType.Legs)]
     public class AlloyLeggings : ModItem

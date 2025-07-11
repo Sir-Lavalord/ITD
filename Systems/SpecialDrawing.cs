@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using System.Collections.Generic;
-using ReLogic.Graphics;
+﻿using ReLogic.Graphics;
 
 namespace ITD.Systems
 {

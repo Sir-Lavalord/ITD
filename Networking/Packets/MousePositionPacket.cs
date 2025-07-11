@@ -1,8 +1,6 @@
 ﻿using ITD.Players;
 using ITD.Utilities;
 using System.IO;
-using Terraria;
-using Terraria.ID;
 
 namespace ITD.Networking.Packets
 {

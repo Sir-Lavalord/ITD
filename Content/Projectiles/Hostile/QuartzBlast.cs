@@ -1,12 +1,5 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.Graphics;
+﻿using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Hostile
 {

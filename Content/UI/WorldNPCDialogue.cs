@@ -2,21 +2,14 @@
 using ITD.Utilities;
 using ITD.Utilities.EntityAnim;
 using ITD.Utilities.Placeholders;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using ReLogic.Graphics;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
 using System;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework.Input;
 using System.Linq;
 
 namespace ITD.Content.UI

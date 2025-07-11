@@ -1,7 +1,3 @@
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-
 namespace ITD.Content.Rarities
 {
     using Microsoft.Xna.Framework;

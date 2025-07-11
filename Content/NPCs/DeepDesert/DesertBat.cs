@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using ITD.Content.Buffs.Debuffs;
+﻿using ITD.Content.Buffs.Debuffs;
 using Terraria.GameContent.ItemDropRules;
 using ITD.Utilities;
 

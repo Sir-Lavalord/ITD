@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-
-namespace ITD.Particles
+﻿namespace ITD.Particles
 {
     public readonly record struct ParticleSpawnParameters(short TimeLeft, float Scale);
     public struct ITDParticle()

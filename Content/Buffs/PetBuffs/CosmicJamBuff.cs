@@ -1,6 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using ITD.Content.Projectiles.Friendly.Pets;
+﻿using ITD.Content.Projectiles.Friendly.Pets;
 
 namespace ITD.Content.Buffs.PetBuffs
 {

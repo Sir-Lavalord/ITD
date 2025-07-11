@@ -1,8 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using System;
+﻿using System;
 using ITD.Utilities;
 
 namespace ITD.Content.Items.Accessories.Movement.Dashes

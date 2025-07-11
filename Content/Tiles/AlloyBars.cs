@@ -1,8 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using Terraria.ObjectData;
+﻿using Terraria.ObjectData;
 using Terraria.Localization;
 
 namespace ITD.Content.Tiles

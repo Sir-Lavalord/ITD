@@ -1,10 +1,4 @@
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Systems;
 using ITD.Content.Items.Materials;

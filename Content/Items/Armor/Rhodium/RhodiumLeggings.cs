@@ -1,7 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Content.Items.Materials;
+﻿using ITD.Content.Items.Materials;
 
 namespace ITD.Content.Items.Armor.Rhodium
 {

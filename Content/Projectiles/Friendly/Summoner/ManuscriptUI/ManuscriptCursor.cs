@@ -1,11 +1,5 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ITD.Utilities;
+﻿using ITD.Utilities;
 using ITD.Content.Items.Weapons.Summoner;
-using ITD.Content.Projectiles.Friendly.Pets;
 using ITD.Content.Buffs.MinionBuffs;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI

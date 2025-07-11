@@ -1,5 +1,4 @@
 ﻿using ReLogic.Utilities;
-using Terraria;
 using Terraria.GameContent.Biomes.Desert;
 using System.Runtime.CompilerServices;
 

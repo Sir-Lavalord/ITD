@@ -1,9 +1,5 @@
 ﻿using ITD.Content.NPCs.Bosses;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.Graphics.Effects;
-using Terraria.ModLoader;
 
 namespace ITD.Skies
 {

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Input;
 
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Localization;
 using Terraria.GameInput;
-using Terraria.GameContent;
 using Terraria.ModLoader.IO;
 
 using ITD.Systems;
@@ -21,15 +18,12 @@ using ITD.Networking.Packets;
 using ITD.Content.Buffs.EquipmentBuffs;
 using ITD.Content.UI;
 using ITD.Content.Items.DevTools;
-using ITD.Systems.DataStructures;
 using ITD.Content.Projectiles;
 using ITD.Content.TileEntities;
 using ITD.Content.Projectiles.Friendly.Mage;
 using ITD.Content.Projectiles.Friendly.Summoner;
 using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Content.Projectiles.Friendly.Melee;
-using Terraria;
-using MonoMod.Logs;
 
 namespace ITD.Players
 {

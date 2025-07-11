@@ -1,15 +1,6 @@
 ﻿using ITD.Content.Buffs.PetBuffs;
 using ITD.Content.Projectiles.Friendly.Pets;
 using ITD.Utilities.Placeholders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 
 namespace ITD.Content.Items.PetSummons
 {

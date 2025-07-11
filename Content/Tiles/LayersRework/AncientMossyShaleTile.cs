@@ -1,8 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Tiles.LayersRework
+﻿namespace ITD.Content.Tiles.LayersRework
 {
     public class AncientMossyShaleTile : ModTile
     {

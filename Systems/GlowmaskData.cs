@@ -1,12 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ID;
+﻿using System.Collections.Generic;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 using System;
-using ReLogic.Content;
 
 //Credit to the clicker class (Open source mod) for all of this
 namespace ITD.Systems

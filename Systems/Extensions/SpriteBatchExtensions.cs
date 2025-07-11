@@ -1,5 +1,4 @@
 ﻿using ITD.Systems.DataStructures;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace ITD.Systems.Extensions
 {

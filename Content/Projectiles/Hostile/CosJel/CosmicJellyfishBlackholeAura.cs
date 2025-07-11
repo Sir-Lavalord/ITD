@@ -1,16 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.Graphics;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
-using ITD.Utilities.Placeholders;
-using ITD.PrimitiveDrawing;
-using Terraria.Graphics.Shaders;
+﻿using System.Collections.Generic;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel
 {

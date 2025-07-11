@@ -2,7 +2,6 @@
 using Terraria.Localization;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
-using Terraria.Graphics;
 using System;
 
 namespace ITD.Content.NPCs

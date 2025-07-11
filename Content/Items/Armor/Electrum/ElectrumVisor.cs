@@ -1,12 +1,6 @@
-﻿using Terraria.ID;
-using Terraria.Localization;
-using Terraria;
-using Terraria.ModLoader;
+﻿using Terraria.Localization;
 using Terraria.Audio;
-
-using ITD.Utilities;
 using ITD.Content.Items.Materials;
-using ITD.Content.NPCs;
 using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Items.Armor.Electrum

@@ -1,8 +1,4 @@
-﻿using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria.ID;
-
-namespace ITD.Content.Walls.DeepDesert
+﻿namespace ITD.Content.Walls.DeepDesert
 {
     public class PegmatiteWallUnsafe : ModWall
     {

@@ -1,18 +1,7 @@
-﻿using ITD.Content.Buffs.Debuffs;
-using ITD.Players;
-using ITD.Utilities;
-using Microsoft.Build.Evaluation;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner
 {

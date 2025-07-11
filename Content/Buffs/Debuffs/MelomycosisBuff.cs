@@ -1,7 +1,5 @@
 ﻿using ITD.Content.NPCs;
 using ITD.Utilities;
-using Terraria;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Buffs.Debuffs
 {

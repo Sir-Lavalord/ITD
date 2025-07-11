@@ -1,13 +1,4 @@
-﻿using Terraria;
-using System;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria.Audio;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-
-namespace ITD.Content.Projectiles.Hostile
+﻿namespace ITD.Content.Projectiles.Hostile
 {
     public class Sporeflake : ModProjectile
     {		

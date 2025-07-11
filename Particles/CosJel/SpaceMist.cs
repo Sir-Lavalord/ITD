@@ -1,21 +1,10 @@
-﻿using ITD.Content.Items.Dyes;
-using ITD.Content.Projectiles.Unused;
-using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.Graphics.Shaders;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using System.Runtime.InteropServices;
 
 namespace ITD.Particles.CosJel
 {
     public class SpaceMist : ParticleEmitter
     {
+        internal static Asset<Texture2D> outlineTex;
         /*
         public override void SetDefaults()
         {
@@ -24,6 +13,10 @@ namespace ITD.Particles.CosJel
             timeLeft = 60;
         }
         */
+        public override void SetStaticDefaults()
+        {
+            outlineTex = Mod.Assets.Request<Texture2D>("Particles/Textures/SpaceMist_Outline");
+        }
         public override void OnEmitParticle(ref ITDParticle particle)
         {
             particle.scale *= 1.3f;
@@ -37,12 +30,13 @@ namespace ITD.Particles.CosJel
         public override Color GetAlpha(ITDParticle particle) => Color.White;
         public override void PreDrawAllParticles()
         {
-            Texture2D tex = ModContent.Request<Texture2D>("ITD/Particles/Textures/SpaceMist_Outline").Value;
+            Texture2D tex = outlineTex.Value;
             Color color1 = new(255, 242, 191);
             Color color2 = new(168, 241, 255);
-            for (int i = 0; i < particles.Count; i++)
+
+            foreach (ITDParticle particle in CollectionsMarshal.AsSpan(particles))
             {
-                particles[i].DrawCommon(Main.spriteBatch, tex, CanvasOffset, Color.Lerp(color1, color2, Utils.PingPongFrom01To010(MathHelper.Lerp(0, 1, timeLeft / 60f))));
+                particle.DrawCommon(in Main.spriteBatch, in tex, CanvasOffset, Color.Lerp(color1, color2, Utils.PingPongFrom01To010(MathHelper.Lerp(0, 1, timeLeft / 60f))));
             }
         }
     }

@@ -3,8 +3,6 @@ using ITD.Content.Tiles.DeepDesert;
 using System;
 using System.IO;
 using Terraria.ModLoader.IO;
-using Terraria.ModLoader;
-using Terraria;
 using ITD.Systems.Recruitment;
 using System.Collections.Generic;
 using ITD.Utilities;
@@ -13,11 +11,6 @@ using Terraria.Localization;
 using Terraria.Chat;
 using ITD.Networking;
 using ITD.Networking.Packets;
-using Microsoft.Xna.Framework.Graphics;
-using ITD.Content.Items.DevTools;
-using ReLogic.Content;
-using Terraria.UI;
-using ITD.Content.Tiles;
 
 namespace ITD.Systems
 {

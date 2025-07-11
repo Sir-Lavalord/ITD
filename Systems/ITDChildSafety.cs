@@ -1,7 +1,5 @@
 ﻿using ITD.DetoursIL;
-using Terraria;
 using Terraria.GameContent;
-using Terraria.ModLoader;
 
 namespace ITD.Systems
 {

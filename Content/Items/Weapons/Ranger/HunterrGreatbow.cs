@@ -1,11 +1,7 @@
 ﻿using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Content.Rarities;
 using ITD.Systems;
-using Microsoft.Xna.Framework;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {

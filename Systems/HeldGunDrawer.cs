@@ -1,16 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ID;
+﻿using System.Collections.Generic;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Terraria.GameContent;
-using System;
-using ReLogic.Content;
 
 using ITD.Players;
-using ITD.Utilities;
 
 namespace ITD.Systems
 {

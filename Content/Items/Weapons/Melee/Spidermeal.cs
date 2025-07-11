@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Terraria.Audio;
 
 namespace ITD.Content.Items.Weapons.Melee
 {

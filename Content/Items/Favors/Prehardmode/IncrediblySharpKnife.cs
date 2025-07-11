@@ -1,14 +1,9 @@
 ﻿using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Systems;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 using System.Linq;
-using Terraria.Localization;
 using ITD.Utilities;
 
 namespace ITD.Content.Items.Favors.Prehardmode

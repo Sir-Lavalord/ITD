@@ -1,13 +1,4 @@
-﻿using ITD.Particles.CosJel;
-using Microsoft.Xna.Framework.Graphics;
-using ITD.Particles;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.ModLoader;
-using System.Collections.Generic;
-using Terraria.ID;
-using ITD.DetoursIL;
-using System.Linq;
+﻿using Terraria.GameContent;
 
 namespace ITD.Content.Projectiles.Unused
 {

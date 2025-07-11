@@ -1,10 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
+﻿using System;
 using Terraria.Localization;
-using Terraria.ModLoader;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps

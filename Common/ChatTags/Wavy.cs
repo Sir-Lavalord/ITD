@@ -1,11 +1,5 @@
-﻿using ITD.Content.UI;
-using ITD.Systems.WorldNPCs;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using ReLogic.Graphics;
-using SteelSeries.GameSense;
+﻿using ReLogic.Graphics;
 using System;
-using Terraria;
 using Terraria.GameContent;
 using Terraria.UI.Chat;
 

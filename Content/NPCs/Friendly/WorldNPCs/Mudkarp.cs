@@ -1,12 +1,8 @@
 ﻿using ITD.Systems.WorldNPCs;
 using ITD.Utilities.Placeholders;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.NPCs.Friendly.WorldNPCs
 {

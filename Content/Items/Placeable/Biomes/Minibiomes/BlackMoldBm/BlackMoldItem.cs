@@ -1,8 +1,5 @@
 ﻿using ITD.Content.Tiles.Misc;
 using ITD.Utilities;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable.Biomes.Minibiomes.BlackMoldBm
 {

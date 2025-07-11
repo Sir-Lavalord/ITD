@@ -1,14 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader;
-using Terraria;
-using Terraria.GameContent;
-
-using ITD.Utilities;
+﻿using Terraria.GameContent;
+using System.Runtime.InteropServices;
 
 namespace ITD.Particles.Projectile
 {
@@ -26,15 +17,15 @@ namespace ITD.Particles.Projectile
         public override void DrawAllParticles()
         {
             Texture2D texture = TextureAssets.Extra[98].Value;
-            Rectangle sourceRectangle = texture.Frame(1, 1);
-            Vector2 origin = sourceRectangle.Size() / 2f;
+            // Rectangle sourceRectangle = texture.Frame(1, 1);
+            Vector2 origin = texture.Size() * 0.5f;
 
-            for (int i = 0; i < particles.Count; i++)
+            foreach (ITDParticle particle in CollectionsMarshal.AsSpan(particles))
             {
-                Color color = new Color(255, 255, 255, 50) * (particles[i].ProgressOneToZero * 1.5f);
-                float scale = particles[i].ProgressOneToZero * particles[i].scale;
+                Color color = new Color(255, 255, 255, 50) * (particle.ProgressOneToZero * 1.5f);
+                float scale = particle.ProgressOneToZero * particle.scale;
 
-                particles[i].DrawCommon(Main.spriteBatch, texture, CanvasOffset, color, sourceRectangle, origin, particles[i].rotation, scale);
+                particle.DrawCommon(in Main.spriteBatch, in texture, CanvasOffset, color, null, origin, particle.rotation, scale);
             }
         }
     }

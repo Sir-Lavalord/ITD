@@ -1,9 +1,6 @@
 ﻿using ITD.Utilities.EntityAnim;
 using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
 using System;
-using Terraria.ModLoader;
-using Terraria;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {

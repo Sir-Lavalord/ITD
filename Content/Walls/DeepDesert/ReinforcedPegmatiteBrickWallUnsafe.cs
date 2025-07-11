@@ -1,7 +1,4 @@
-﻿using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Walls.DeepDesert
+﻿namespace ITD.Content.Walls.DeepDesert
 {
     public class ReinforcedPegmatiteBrickWallUnsafe : ModWall
     {

@@ -1,19 +1,8 @@
-﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
-using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
-using ITD.Systems;
-using Microsoft.Xna.Framework;
+﻿using ITD.Systems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using static System.Net.Mime.MediaTypeNames;
-using ITD.Content.Rarities;
 using ITD.Content.Buffs.FavorBuffs;
 
 namespace ITD.Content.Items.Favors.Prehardmode

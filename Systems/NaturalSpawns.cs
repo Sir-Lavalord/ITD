@@ -1,11 +1,6 @@
 ﻿using ITD.Content.NPCs.Bosses;
-using Microsoft.Xna.Framework;
 using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
 using Terraria.Localization;
-using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using ITD.Utilities;
 
 namespace ITD.Systems

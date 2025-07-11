@@ -1,14 +1,8 @@
 ﻿using ITD.Utilities;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System;
 using Terraria.GameContent;
 using Terraria.ModLoader.IO;
 using System.IO;
-using ITD.Particles;
 using ITD.Content.NPCs;
 using ITD.Content.UI;
 using Terraria.Audio;

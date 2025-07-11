@@ -1,10 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using Terraria.GameContent.Creative;
-using ITD.Content.Tiles;
-using ITD.Content.Buffs.GeneralBuffs;
-using ITD.Content.Tiles.Misc;
+﻿using ITD.Content.Buffs.GeneralBuffs;
 using ITD.Content.Items.Placeable.Biomes.Minibiomes.BlackMoldBm;
 
 namespace ITD.Content.Items.Consumables

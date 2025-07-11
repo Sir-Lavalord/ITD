@@ -1,23 +1,7 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using System;
-using ITD.Physics;
-using Terraria.DataStructures;
-using ITD.Content.Buffs.PetBuffs;
-using Terraria.UI;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
+﻿using System;
 using ITD.Utilities;
 using ITD.Content.Items.Weapons.Summoner;
-using ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI;
 using ITD.Content.Buffs.MinionBuffs;
-using ITD.Players;
-using SteelSeries.GameSense;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner
 {

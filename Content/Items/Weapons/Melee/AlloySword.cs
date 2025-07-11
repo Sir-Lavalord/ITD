@@ -1,8 +1,3 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using ITD.Utilities;
 
 namespace ITD.Content.Items.Weapons.Melee

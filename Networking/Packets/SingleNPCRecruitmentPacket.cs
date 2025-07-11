@@ -1,7 +1,6 @@
 ﻿using ITD.Systems.Recruitment;
 using System;
 using System.IO;
-using Terraria;
 
 namespace ITD.Networking.Packets
 {

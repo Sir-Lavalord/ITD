@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Dusts
+﻿namespace ITD.Content.Dusts
 {
     public class CosmisumaruIndicator : ModDust
     {

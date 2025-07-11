@@ -4,12 +4,8 @@ using ITD.Networking.Packets;
 using ITD.Particles;
 using ITD.Particles.Events;
 using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
 using System.Linq;
 using ITD.Utilities;
-using Terraria.ID;
-using ITD.Content.Tiles;
 
 namespace ITD.Content.Events
 {

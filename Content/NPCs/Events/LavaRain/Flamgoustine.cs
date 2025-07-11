@@ -1,13 +1,8 @@
-﻿using ITD.Systems.DataStructures;
-using ITD.Systems.Extensions;
-using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
+﻿using ITD.Utilities;
 using System;
-using Terraria;
 using Terraria.Audio;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
-using Terraria.ID;
 
 namespace ITD.Content.NPCs.Events.LavaRain
 {

@@ -1,11 +1,4 @@
-﻿using ITD.Content.Dusts;
-using ITD.Content.Tiles.LayersRework;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Tiles.BlueshroomGroves
+﻿namespace ITD.Content.Tiles.BlueshroomGroves
 {
     public class CharbleBlockTile : ModTile
     {

@@ -1,8 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Items.Armor.Blueshroom
+﻿namespace ITD.Content.Items.Armor.Blueshroom
 {
     [AutoloadEquip(EquipType.Body)]
     public class BlueshroomCoat : ModItem

@@ -1,11 +1,5 @@
-﻿using ITD.Content.Items.Weapons.Summoner;
-using Microsoft.Xna.Framework.Graphics;
-using System.IO;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Utilities;
+﻿using System.IO;
 using ITD.Content.NPCs.Bosses;
-using Terraria.ID;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel
 {

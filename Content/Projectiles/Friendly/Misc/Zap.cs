@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
+﻿using System;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 using Terraria.Utilities;

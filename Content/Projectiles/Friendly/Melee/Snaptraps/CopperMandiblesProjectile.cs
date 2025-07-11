@@ -1,9 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {

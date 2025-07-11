@@ -1,9 +1,5 @@
 ﻿using ITD.Content.Backgrounds;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
 using ITD.Systems;
-using Terraria.ID;
 using ITD.Particles;
 using ITD.Particles.Ambience;
 using ITD.Utilities;

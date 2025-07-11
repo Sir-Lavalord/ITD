@@ -1,11 +1,7 @@
-﻿using Terraria.ID;
-using Terraria.Localization;
-using Terraria;
-using Terraria.ModLoader;
+﻿using Terraria.Localization;
 using Terraria.Audio;
 
 using ITD.Content.Items.Materials;
-using ITD.Utilities;
 using ITD.Content.Buffs.EquipmentBuffs;
 
 namespace ITD.Content.Items.Armor.Rhodium

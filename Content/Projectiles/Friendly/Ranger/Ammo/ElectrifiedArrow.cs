@@ -1,9 +1,4 @@
-﻿using Terraria;
-using System;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 
 using ITD.Content.Projectiles.Friendly.Misc;
 

@@ -1,12 +1,5 @@
-﻿using ITD.Content.Items.Accessories.Combat.Melee.Snaptraps;
-using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
-using ITD.Utilities;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
+﻿using ITD.Utilities;
 using Terraria.Localization;
-using Terraria.ModLoader;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {

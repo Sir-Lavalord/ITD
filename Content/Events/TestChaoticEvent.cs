@@ -1,11 +1,4 @@
-﻿using ITD.Content.NPCs.DeepDesert;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using System.Collections.Generic;
 
 namespace ITD.Content.Events
 {

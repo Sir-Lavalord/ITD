@@ -1,10 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using Terraria.GameContent.Creative;
-using Terraria.DataStructures;
-using ITD.Content.Tiles;
-using ITD.Content.Items.Placeable;
+﻿using Terraria.GameContent.Creative;
 
 namespace ITD.Content.Items.Materials
 {

@@ -1,6 +1,3 @@
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-
 namespace ITD.Content.Walls.Catacombs
 {
     public class GreenCatacombBrickWallSafe : ModWall

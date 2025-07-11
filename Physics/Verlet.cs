@@ -1,9 +1,4 @@
-﻿using ITD.Physics;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using Terraria.ModLoader;
-using Terraria;
-using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
 
 namespace ITD.Physics
 {

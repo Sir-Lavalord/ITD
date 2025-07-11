@@ -1,5 +1,4 @@
 ﻿using ITD.Content.TileEntities;
-using System;
 using System.IO;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;

@@ -1,11 +1,8 @@
 ﻿using ITD.Content.Dusts;
-using Microsoft.Xna.Framework;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles.Friendly.Mage
 {

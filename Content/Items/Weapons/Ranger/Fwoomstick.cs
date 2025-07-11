@@ -1,23 +1,9 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent;
+﻿using Terraria.DataStructures;
 
 using ITD.Systems;
 using ITD.Players;
 using ITD.Utilities;
 using ITD.Content.Projectiles;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Drawing.Text;
-using System.IO;
-using System.Collections.Generic;
-using System;
-using Terraria.GameContent.Creative;
-using Terraria.Localization;
 
 namespace ITD.Content.Items.Weapons.Ranger
 {

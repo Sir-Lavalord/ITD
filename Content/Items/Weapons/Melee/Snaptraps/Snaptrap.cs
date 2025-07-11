@@ -1,7 +1,4 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using System.Collections.Generic;
 using System.Linq;
 using ITD.Utilities;

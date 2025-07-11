@@ -1,10 +1,3 @@
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Utilities;
-using Terraria.Localization;
-using ITD.Content.Items.Armor.Alloy;
-
 namespace ITD.Content.Items.Armor.Vanity.Masks
 {
     [AutoloadEquip(EquipType.Head)]

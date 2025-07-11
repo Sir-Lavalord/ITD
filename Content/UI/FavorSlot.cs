@@ -1,11 +1,9 @@
 ﻿using ITD.Content.Items.Favors;
 using System;
-using Terraria;
 using Terraria.UI;
 using ITD.Systems;
 using System.Collections.Generic;
 using Terraria.ModLoader.UI;
-using Terraria.ModLoader;
 
 namespace ITD.Content.UI
 {

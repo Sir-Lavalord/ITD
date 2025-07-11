@@ -1,8 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Items.Armor.Cyanite
+﻿namespace ITD.Content.Items.Armor.Cyanite
 {
     [AutoloadEquip(EquipType.Legs)]
     public class CyaniteGreaves : ModItem

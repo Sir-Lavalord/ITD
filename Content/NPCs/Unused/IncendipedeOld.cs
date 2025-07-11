@@ -1,11 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.IO;
-using Terraria;
+﻿using System.IO;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.Audio;
 using ITD.Content.Projectiles.Hostile;
 

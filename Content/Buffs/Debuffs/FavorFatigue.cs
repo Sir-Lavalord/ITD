@@ -1,6 +1,4 @@
 ﻿using ITD.Systems;
-using Terraria;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Buffs.Debuffs
 {

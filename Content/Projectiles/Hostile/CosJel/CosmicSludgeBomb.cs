@@ -1,15 +1,4 @@
-﻿using Terraria;
-using System;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria.Audio;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using ReLogic.Content;
-using ITD.Content.NPCs.Bosses;
-using SteelSeries.GameSense;
-using Microsoft.Build.Evaluation;
+﻿using System.Collections.Generic;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel
 {

@@ -1,16 +1,7 @@
-﻿using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ITD.Content.Projectiles.Friendly.Melee;
-using ITD.Systems;
+﻿using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Utilities;
 using System;
 using Terraria.Audio;
-using ITD.Content.Projectiles.Friendly.Summoner;
-using ITD.Content.Projectiles.Hostile.CosJel;
 
 namespace ITD.Content.Items.Weapons.Melee
 {

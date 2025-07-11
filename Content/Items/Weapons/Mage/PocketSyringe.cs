@@ -1,14 +1,6 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using Terraria.GameContent.Creative;
-using Terraria.DataStructures;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using System.Linq;
+﻿using Terraria.DataStructures;
 
 using ITD.Content.Items.Placeable;
-using ITD.Utilities;
 
 
 namespace ITD.Content.Items.Weapons.Mage

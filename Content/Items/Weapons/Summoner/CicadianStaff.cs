@@ -1,15 +1,5 @@
-using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-using ITD.Content.Buffs.Debuffs;
 using ITD.Content.Projectiles.Friendly.Summoner;
-using ITD.Content.Items.Materials;
-using ITD.Utilities;
 
 namespace ITD.Content.Items.Weapons.Summoner
 {

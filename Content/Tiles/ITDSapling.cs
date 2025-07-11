@@ -1,14 +1,8 @@
-﻿using ITD.Content.Dusts;
-using ITD.Content.Tiles.BlueshroomGroves;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using ITD.Content.Tiles.BlueshroomGroves;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Metadata;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 using static Terraria.ModLoader.ModContent;
 

@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.DataStructures;
-using ITD.Content.Projectiles.Friendly.Melee;
+﻿using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Content.Items.Materials;
 
 namespace ITD.Content.Items.Weapons.Melee

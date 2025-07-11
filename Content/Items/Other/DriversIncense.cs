@@ -1,8 +1,5 @@
 ﻿using static Terraria.Mount;
-using Terraria;
-using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using Terraria.ID;
 using Terraria.Localization;
 
 namespace ITD.Content.Items.Other

@@ -1,9 +1,4 @@
-﻿using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace ITD.Particles.Misc
+﻿namespace ITD.Particles.Misc
 {
     public class BloodParticle : ParticleEmitter
     {

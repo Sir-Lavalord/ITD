@@ -1,7 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Utilities;
+﻿using ITD.Utilities;
 using System;
 
 namespace ITD.Content.Projectiles.Friendly.Misc

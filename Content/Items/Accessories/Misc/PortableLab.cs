@@ -1,11 +1,7 @@
 ﻿using ITD.Utilities;
 using ITD.Utilities.Placeholders;
-using System;
 using MonoMod.Cil;
 using Mono.Cecil.Cil;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using ITD.DetoursIL;
 
 namespace ITD.Content.Items.Accessories.Misc

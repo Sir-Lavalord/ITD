@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Projectiles.Other
+﻿namespace ITD.Content.Projectiles.Other
 {
     public class CacophanyBulletCasing : ModProjectile
     {

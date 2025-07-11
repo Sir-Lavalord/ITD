@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
+﻿using System.Collections.Generic;
 using Terraria.UI;
 using Terraria.ModLoader.UI;
 using ITD.Utilities;
@@ -9,7 +6,6 @@ using ReLogic.Graphics;
 using Terraria.GameContent;
 using ITD.Systems.Recruitment;
 using Terraria.UI.Chat;
-using Terraria.ID;
 using ITD.Networking;
 using ITD.Networking.Packets;
 using ITD.Systems;

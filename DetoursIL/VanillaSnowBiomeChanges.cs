@@ -1,13 +1,9 @@
-﻿using ITD.DetoursIL;
-using MonoMod.Cil;
+﻿using MonoMod.Cil;
 using Mono.Cecil.Cil;
 using Mono.Cecil;
-using Terraria;
 using MonoMod.RuntimeDetour;
 using System.Reflection;
 using MonoMod.Utils;
-using System;
-using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 
 namespace ITD.DetoursIL

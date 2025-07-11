@@ -1,19 +1,14 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader;
-using Terraria;
-using ITD.Utilities;
+﻿using System.Runtime.InteropServices;
 
 namespace ITD.Particles.Projectile
 {
     public class HoneyParticle : ParticleEmitter
     {
+        internal static Asset<Texture2D> outlineTex;
         public override void SetStaticDefaults()
         {
+            outlineTex = Mod.Assets.Request<Texture2D>("Particles/Textures/HoneyParticle_Outline");
+
             ParticleSystem.particleUsesRenderTarget[type] = true;
         }
         public override void OnEmitParticle(ref ITDParticle particle)
@@ -28,10 +23,10 @@ namespace ITD.Particles.Projectile
         public override Color GetAlpha(ITDParticle particle) => Color.White;
         public override void PreDrawAllParticles()
         {
-            Texture2D tex = ModContent.Request<Texture2D>("ITD/Particles/Textures/HoneyParticle_Outline").Value;
-            for (int i = 0; i < particles.Count; i++)
+            Texture2D tex = outlineTex.Value;
+            foreach (ITDParticle particle in CollectionsMarshal.AsSpan(particles))
             {
-                particles[i].DrawCommon(Main.spriteBatch, tex, CanvasOffset);
+                particle.DrawCommon(in Main.spriteBatch, in tex, CanvasOffset);
             }
         }
     }

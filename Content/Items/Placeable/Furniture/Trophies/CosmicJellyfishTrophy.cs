@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using ITD.Content.Tiles;
+﻿using ITD.Content.Tiles;
 
 namespace ITD.Content.Items.Placeable.Furniture.Trophies
 {

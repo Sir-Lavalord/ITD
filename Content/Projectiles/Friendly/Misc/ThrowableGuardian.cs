@@ -1,13 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria.ID;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.ModLoader;
-using Terraria.Audio;
-using System;
-
-using ITD.Players;
+﻿using Terraria.Audio;
 using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Misc

@@ -1,7 +1,4 @@
 using ITD.Content.Projectiles.Friendly.Melee;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Weapons.Melee
 {

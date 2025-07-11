@@ -1,8 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Items.Materials
+﻿namespace ITD.Content.Items.Materials
 {
     public class EmberlionMandible : ModItem
     {

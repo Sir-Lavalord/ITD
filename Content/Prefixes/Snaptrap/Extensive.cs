@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Prefixes.Snaptrap;
-using Terraria;
 
 namespace ITD.Content.Prefixes
 {

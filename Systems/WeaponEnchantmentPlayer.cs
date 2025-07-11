@@ -1,15 +1,4 @@
 ﻿using ITD.Content.Buffs.Debuffs;
-using ITD.Content.Buffs.GeneralBuffs;
-using ITD.Content.Projectiles;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Systems
 {

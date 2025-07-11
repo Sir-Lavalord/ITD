@@ -1,10 +1,6 @@
 ﻿using ITD.Utilities;
 using ITD.Utilities.Placeholders;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Accessories.Gimmicks.IncomprehensiblePolyhedron
 {

@@ -1,12 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using ITD.Utilities;
-
-namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
+﻿namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
 {
     public class FrostgripIcicle : ModProjectile
     {

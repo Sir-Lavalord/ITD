@@ -1,5 +1,4 @@
 ﻿using ITD.Utilities;
-using Terraria.ID;
 
 namespace ITD.Content.Tiles.LayersRework
 {

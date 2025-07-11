@@ -1,17 +1,6 @@
-﻿using ITD.Content.Buffs.Debuffs;
-using ITD.Content.Dusts;
-using ITD.Content.NPCs;
-using ITD.Utilities;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using ITD.Content.Dusts;
 using System;
-using System.Linq.Expressions;
-using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
-using Terraria.Map;
-using Terraria.ModLoader;
-using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
 {

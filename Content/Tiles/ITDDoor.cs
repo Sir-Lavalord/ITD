@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;

@@ -1,6 +1,4 @@
-﻿using ITD.Content.Dusts;
-using ITD.Content.Items.Placeable.Furniture.DeepDesert;
-using Terraria.Localization;
+﻿using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace ITD.Content.Tiles.Furniture.Stations

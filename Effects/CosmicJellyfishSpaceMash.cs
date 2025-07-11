@@ -1,10 +1,6 @@
 ﻿using ITD.Content.NPCs.Bosses;
 using ITD.Players;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 
 namespace ITD.Effects
 {

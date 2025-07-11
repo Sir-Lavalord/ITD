@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Tiles.LayersRework;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable.LayersRework
 {

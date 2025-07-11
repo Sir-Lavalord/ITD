@@ -1,9 +1,5 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Localization;
+﻿using Terraria.Localization;
 using ITD.Content.Tiles.BlueshroomGroves;
-using Microsoft.Xna.Framework.Graphics;
 using ITD.Utilities;
 using Terraria.DataStructures;
 using ITD.Systems;

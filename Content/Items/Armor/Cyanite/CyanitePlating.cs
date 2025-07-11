@@ -1,9 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Utilities;
-
-namespace ITD.Content.Items.Armor.Cyanite
+﻿namespace ITD.Content.Items.Armor.Cyanite
 {
     [AutoloadEquip(EquipType.Body)]
     public class CyanitePlating : ModItem

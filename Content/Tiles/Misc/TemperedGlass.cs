@@ -1,13 +1,4 @@
-﻿using ITD.Utilities;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using ITD.Content.Buffs.Debuffs;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace ITD.Content.Tiles.Misc
+﻿namespace ITD.Content.Tiles.Misc
 {
     public class TemperedGlass : ModTile
     {

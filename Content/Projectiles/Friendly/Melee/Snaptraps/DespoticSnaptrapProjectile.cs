@@ -1,11 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using ITD.Content.Dusts;
+﻿using ITD.Content.Dusts;
 using Terraria.Localization;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 

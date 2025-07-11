@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using Terraria.ID;
-using Terraria;
 using ITD.Systems.Recruitment;
 using Terraria.Localization;
 using System;

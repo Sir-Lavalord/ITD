@@ -1,8 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using Terraria.GameContent.Creative;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Terraria.GameContent.Creative;
 using ITD.Content.Tiles;
 using ITD.Systems;
 

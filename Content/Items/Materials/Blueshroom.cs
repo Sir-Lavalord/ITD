@@ -1,11 +1,4 @@
-﻿using ITD.Content.Tiles;
-using ITD.Content.Tiles.BlueshroomGroves;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using ITD.Content.Tiles.BlueshroomGroves;
 
 namespace ITD.Content.Items.Materials
 {

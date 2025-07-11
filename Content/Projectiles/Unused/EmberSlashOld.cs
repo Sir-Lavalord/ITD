@@ -1,8 +1,4 @@
-﻿using Terraria;
-using System;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
+﻿using System;
 using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Unused

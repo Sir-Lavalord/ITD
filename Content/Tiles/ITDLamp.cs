@@ -1,12 +1,7 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
+﻿using Terraria.GameContent;
 using Terraria.Enums;
 using Terraria.Localization;
 using Terraria.ObjectData;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using ITD.Utilities;

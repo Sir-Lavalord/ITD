@@ -1,15 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader;
-using Terraria;
-using Terraria.GameContent;
-
-using ITD.Utilities;
-using Terraria.Graphics.Renderers;
+﻿using Terraria.GameContent;
+using System.Runtime.InteropServices;
 
 namespace ITD.Particles.Projectile
 {
@@ -39,16 +29,16 @@ namespace ITD.Particles.Projectile
         public override void DrawAllParticles()
         {
             Texture2D texture = TextureAssets.Extra[98].Value;
-            Rectangle sourceRectangle = texture.Frame(1, 1);
-            Vector2 origin = sourceRectangle.Size() / 2f;
+            // Rectangle sourceRectangle = texture.Frame(1, 1); // idk if this had an actual intention behind it or not so i'll keep it commented out
+            Vector2 origin = texture.Size() * 0.5f;
 
-            for (int i = 0; i < particles.Count; i++)
+            foreach (ITDParticle particle in CollectionsMarshal.AsSpan(particles))
             {
-                Color color = Color.Red * (particles[i].ProgressOneToZero * 1.5f);
-                float scale = particles[i].ProgressOneToZero * particles[i].scale;
-                particles[i].DrawCommon(Main.spriteBatch, texture, CanvasOffset, color, sourceRectangle, origin, particles[i].ProgressOneToZero * 4f, scale);
-                particles[i].DrawCommon(Main.spriteBatch, texture, CanvasOffset, color, sourceRectangle, origin, particles[i].ProgressOneToZero * 5f + MathHelper.Pi/3, scale);
-                particles[i].DrawCommon(Main.spriteBatch, texture, CanvasOffset, color, sourceRectangle, origin, particles[i].ProgressOneToZero * 5f - MathHelper.Pi / 3, scale);
+                Color color = Color.Red * (particle.ProgressOneToZero * 1.5f);
+                float scale = particle.ProgressOneToZero * particle.scale;
+                particle.DrawCommon(in Main.spriteBatch, in texture, CanvasOffset, color, null, origin, particle.ProgressOneToZero * 4f, scale);
+                particle.DrawCommon(in Main.spriteBatch, in texture, CanvasOffset, color, null, origin, particle.ProgressOneToZero * 5f + MathHelper.Pi / 3, scale);
+                particle.DrawCommon(in Main.spriteBatch, in texture, CanvasOffset, color, null, origin, particle.ProgressOneToZero * 5f - MathHelper.Pi / 3, scale);
             }
         }
     }

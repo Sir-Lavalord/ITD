@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent.ItemDropRules;
-using ITD.Utilities;
+﻿using ITD.Utilities;
 
 namespace ITD.Content.NPCs.Catacombs
 {

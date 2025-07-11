@@ -1,29 +1,15 @@
-﻿using Terraria;
-using System;
+﻿using System;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.Audio;
 
 using ITD.Content.Dusts;
 using Terraria.DataStructures;
-using System.Threading;
-using ITD.Content.Items.Weapons.Summoner;
 using ITD.Utilities;
 using ITD.Content.Items.Weapons.Ranger;
 using ITD.PrimitiveDrawing;
 using Terraria.Graphics.Shaders;
-using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 using Terraria.Graphics;
-using ITD.Particles;
-using ITD.Particles.Misc;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger
 {

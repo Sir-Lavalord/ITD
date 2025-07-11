@@ -1,13 +1,4 @@
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria.Audio;
-
-using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Systems;
 using ITD.Utilities;
 using ITD.Particles.Misc;

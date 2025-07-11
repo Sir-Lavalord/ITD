@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using System.Linq;
-using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.ModLoader.Utilities;
-using Terraria.GameContent.Bestiary;
-using Terraria.Audio;
-using Terraria.GameContent.ItemDropRules;
+﻿using Terraria.Audio;
 using ITD.Content.Items.Other;
 using Terraria.DataStructures;
 using Terraria.Localization;
-using Terraria.GameContent.Personalities;
 
 namespace ITD.Content.NPCs.Friendly
 

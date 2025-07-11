@@ -1,12 +1,8 @@
-﻿using Terraria;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 using ITD.Systems;
 using ITD.Players;
 using ITD.Utilities;
-using Terraria.GameContent.Creative;
 using System;
 using System.Collections.Generic;
 using Terraria.Localization;

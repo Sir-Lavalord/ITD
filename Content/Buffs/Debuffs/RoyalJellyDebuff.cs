@@ -1,8 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using ITD.Content.Buffs.Debuffs;
+﻿using ITD.Content.Buffs.Debuffs;
 
 namespace ITD.Content.Buffs.Debuffs
 {

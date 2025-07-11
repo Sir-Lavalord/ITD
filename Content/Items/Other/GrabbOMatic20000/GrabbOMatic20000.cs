@@ -1,13 +1,7 @@
 ﻿using ITD.Kinematics;
 using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using System.Security.Cryptography.X509Certificates;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameInput;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Other.GrabbOMatic20000
 {

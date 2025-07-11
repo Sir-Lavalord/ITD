@@ -1,7 +1,5 @@
 ﻿using ITD.Particles;
 using ITD.Particles.Misc;
-using Terraria;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles.Hostile
 {

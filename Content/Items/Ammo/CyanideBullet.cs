@@ -1,13 +1,4 @@
-﻿using ITD.Content.Buffs;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Items.Ammo
+﻿namespace ITD.Content.Items.Ammo
 {
     // This example is similar to the Wooden Arrow item
     public class CyanideBullet : ModItem

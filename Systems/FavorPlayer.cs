@@ -1,8 +1,5 @@
 ﻿using ITD.Content.Items.Favors;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using ITD.Utilities;
 using ITD.Content.Buffs.Debuffs;

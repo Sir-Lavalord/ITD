@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Linq;
-using ITD.Content.Items.Accessories.Gimmicks.IncomprehensiblePolyhedron;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
-using ITD.Content.Projectiles.Friendly.Summoner;
 using ITD.Players;
 using ITD.Utilities;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {

@@ -3,12 +3,8 @@ using ITD.Networking.Packets;
 using ITD.Systems;
 using ITD.Systems.Recruitment;
 using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
 

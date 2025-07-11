@@ -1,17 +1,6 @@
-﻿using Terraria;
-using System;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.Audio;
-using System.Collections.Generic;
+﻿using Terraria.Audio;
 using Terraria.Graphics.Shaders;
 using Terraria.Graphics;
-using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
-using Terraria.Map;
 using Terraria.DataStructures;
 
 namespace ITD.Content.Projectiles.Friendly.Melee

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using ITD.Utilities.ObserverPatterns;
 
 ///Should note that I've included 2 types of state machine. Use the one that fits the use case. You would be surprised by how often they could be used in places. But each one will have extra overhead.

@@ -1,10 +1,4 @@
-﻿using ITD.Content.NPCs.Bosses;
-using ITD.Content.Items.Materials;
-using ITD.Content.Items.Placeable;
-using Terraria;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Terraria.GameContent.ItemDropRules;
 using ITD.Content.Items.Weapons.Ranger;
 using ITD.Content.Items.Accessories.Defensive.Defense;
 using ITD.Content.Items.Accessories.Expert;

@@ -9,8 +9,6 @@ using ITD.Systems.DataStructures;
 using ITD.Utilities;
 using ITD.Content.TileEntities;
 using System.Linq;
-using Terraria.UI.Chat;
-using Terraria.Chat;
 
 namespace ITD.Content.Tiles
 {

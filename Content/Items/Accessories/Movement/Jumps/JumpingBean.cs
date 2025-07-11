@@ -1,13 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
-using System;
-using ITD.Utilities;
-using ITD.Utilities.Placeholders;
-
-namespace ITD.Content.Items.Accessories.Movement.Jumps
+﻿namespace ITD.Content.Items.Accessories.Movement.Jumps
 {
     public class JumpingBean : ModItem
     {

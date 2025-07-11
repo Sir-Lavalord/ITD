@@ -1,8 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Buffs.FavorBuffs
+﻿namespace ITD.Content.Buffs.FavorBuffs
 {
     public class SqueakyClean : ModBuff
     {

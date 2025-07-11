@@ -1,11 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.DataStructures;
-using Terraria.GameContent.ItemDropRules;
+﻿using System;
 using Terraria.Audio;
 
 using ITD.Content.Projectiles.Hostile;

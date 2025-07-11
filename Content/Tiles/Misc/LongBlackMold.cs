@@ -1,13 +1,7 @@
 ﻿using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.Enums;
-using Terraria.ID;
-using Terraria;
 using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent.Skies;
-using ITD.Systems;
 using Terraria.GameContent;
 using ITD.Content.Items.Placeable.Biomes.Minibiomes.BlackMoldBm;
 

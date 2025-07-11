@@ -1,10 +1,7 @@
 ﻿using ITD.Content.Rarities;
 using ITD.Systems;
-using Microsoft.Xna.Framework.Graphics;
 using System;
-using Terraria;
 using Terraria.Audio;
-using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
 namespace ITD.Content.Items.Favors

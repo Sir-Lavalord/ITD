@@ -1,26 +1,12 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
-using ITD.Content.Buffs.Debuffs;
 using ITD.Utilities;
 using Terraria.Graphics;
 using System.Collections.Generic;
 using Terraria.Graphics.Shaders;
-using System.Threading;
-using ITD.Content.Projectiles.Friendly.Summoner;
-using ITD.Particles.Misc;
 using ITD.Particles;
 using ITD.Particles.Projectile;
-using ITD.Content.Projectiles.Friendly.Melee;
-using System.Collections;
-using ITD.Particles.CosJel;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger
 {

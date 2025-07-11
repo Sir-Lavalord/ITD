@@ -1,10 +1,4 @@
-﻿using ITD.Content.Dusts;
-using ITD.Content.Rarities;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.GameContent.UI;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using ITD.Content.Rarities;
 
 namespace ITD.Content.Items.DevTools
 {

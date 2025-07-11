@@ -1,17 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
-using ITD.Content.Buffs.Debuffs;
-using ITD.Utilities;
 using Terraria.Graphics;
-using System.Collections.Generic;
 using Terraria.Graphics.Shaders;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger

@@ -1,16 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using Microsoft.Xna.Framework;
-using Terraria.GameContent;
-using Terraria.DataStructures;
-using Terraria.GameContent.Drawing;
-using Terraria.Audio;
-using Mono.Cecil;
+﻿using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Friendly.Mage
 {

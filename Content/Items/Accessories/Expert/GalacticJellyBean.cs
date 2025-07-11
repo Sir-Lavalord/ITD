@@ -1,8 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Content.Projectiles.Friendly.Misc;
-using Terraria.DataStructures;
+﻿using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Items.Accessories.Expert
 {

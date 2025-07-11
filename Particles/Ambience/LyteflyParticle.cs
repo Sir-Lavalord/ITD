@@ -1,16 +1,16 @@
 ﻿using ITD.Utilities.EntityAnim;
-using Microsoft.Xna.Framework.Graphics;
 using System;
-using Terraria;
-using Terraria.ModLoader;
 
 namespace ITD.Particles.Ambience
 {
     public class LyteflyParticle : ParticleEmitter
     {
+        internal static Asset<Texture2D> outlineTex;
         public const float ParticleSpeed = 2f;
         public override void SetStaticDefaults()
         {
+            outlineTex = Mod.Assets.Request<Texture2D>("Particles/Textures/LyteflyParticle_Glow");
+
             ParticleSystem.particleFramesVertical[type] = 2;
         }
         public override void OnEmitParticle(ref ITDParticle particle)
@@ -44,12 +44,12 @@ namespace ITD.Particles.Ambience
         }
         public override void PreDrawAllParticles()
         {
-            Texture2D tex = ModContent.Request<Texture2D>("ITD/Particles/Textures/LyteflyParticle_Glow").Value;
-            for (int i = 0; i < particles.Count; i++)
+            Texture2D tex = outlineTex.Value;
+            foreach (ITDParticle particle in particles)
             {
-                float scale = 0.4f + MathF.Sin((float)Main.timeForVisualEffects / 32f + (particles[i].timeLeft / 16f)) * 0.2f;
-                Color color = (Color.Yellow with { A = 0 }) * particles[i].opacity;
-                particles[i].DrawCommon(Main.spriteBatch, tex, CanvasOffset, color, tex.Bounds, tex.Size() * 0.5f, scale: scale);
+                float scale = 0.4f + MathF.Sin((float)Main.timeForVisualEffects / 32f + (particle.timeLeft / 16f)) * 0.2f;
+                Color color = (Color.Yellow with { A = 0 }) * particle.opacity;
+                particle.DrawCommon(in Main.spriteBatch, in tex, CanvasOffset, color, tex.Bounds, tex.Size() * 0.5f, scale: scale);
             }
         }
     }

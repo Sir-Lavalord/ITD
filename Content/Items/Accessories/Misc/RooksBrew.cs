@@ -1,11 +1,6 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using rail;
-using ITD.Content.Items.Accessories.Movement.Dashes;
+﻿using ITD.Content.Items.Accessories.Movement.Dashes;
 using ITD.Content.Items.Accessories.Movement.Jumps;
 using ITD.Content.Items.Accessories.Defensive.Buffs;
-using ITD.Utilities.Placeholders;
 
 namespace ITD.Content.Items.Accessories.Misc
 {

@@ -2,13 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Terraria;
 using Terraria.Audio;
-using Terraria.ModLoader;
-using Terraria.Localization;
-using Terraria.DataStructures;
-using Terraria.ID;
 using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Utilities;
 

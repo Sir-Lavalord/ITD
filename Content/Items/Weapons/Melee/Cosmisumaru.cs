@@ -1,23 +1,7 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using ITD.Utilities;
-using ITD.Players;
-using ITD.Systems;
 using Terraria.DataStructures;
-using ITD.Content.Items.Materials;
-using ITD.Content.Projectiles.Friendly.Misc;
-using Terraria.Audio;
 using ITD.Content.Projectiles.Friendly.Melee;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ITD.Content.Dusts;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using System.Linq.Expressions;
-using ReLogic.Graphics;
-using static System.Net.Mime.MediaTypeNames;
-using ITD.Content.Items.Favors;
 
 namespace ITD.Content.Items.Weapons.Melee
 {

@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Systems;
-using Terraria.ID;
-using Terraria.GameContent;
+﻿using ITD.Systems;
 
 namespace ITD.Content.Biomes
 {

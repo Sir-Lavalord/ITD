@@ -1,13 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using Terraria.ID;
-
-
-namespace ITD.Content.Projectiles.Friendly.Misc
+﻿namespace ITD.Content.Projectiles.Friendly.Misc
 {
     public class CyaniteIceShard : ModProjectile
     {

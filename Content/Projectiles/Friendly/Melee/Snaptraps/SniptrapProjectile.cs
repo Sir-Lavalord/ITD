@@ -1,6 +1,4 @@
-﻿using Terraria.ID;
-
-namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
+﻿namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {
     public class SniptrapProjectile : ITDSnaptrap
     {

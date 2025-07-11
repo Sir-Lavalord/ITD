@@ -1,8 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Projectiles.Hostile
+﻿namespace ITD.Content.Projectiles.Hostile
 {
     public class IncendipedeFireSpike : ModProjectile
     {

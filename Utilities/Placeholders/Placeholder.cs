@@ -1,5 +1,3 @@
-using ITD.Content.Items.PetSummons;
-
 namespace ITD.Utilities.Placeholders
 {
     internal class Placeholder

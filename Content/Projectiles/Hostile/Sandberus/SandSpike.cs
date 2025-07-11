@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.Graphics;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Terraria.GameContent;
 using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Hostile.Sandberus

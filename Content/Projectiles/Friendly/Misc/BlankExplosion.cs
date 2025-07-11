@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Projectiles.Friendly.Misc
+﻿namespace ITD.Content.Projectiles.Friendly.Misc
 {
     public class BlankExplosion : ModProjectile
     {

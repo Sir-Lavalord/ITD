@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
+﻿using System.Collections.Generic;
 
 namespace ITD.Content.Items.Other
 {

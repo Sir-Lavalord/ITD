@@ -1,19 +1,10 @@
-﻿using ITD.Content.NPCs.Bosses;
-using ITD.Content.World;
-using ITD.Particles.CosJel;
-using ITD.Particles.MetaBalls;
-using ITD.PrimitiveDrawing;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
+﻿using ITD.PrimitiveDrawing;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Terraria;
 using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
-using Terraria.ModLoader;
-using Terraria.Utilities.Terraria.Utilities;
 using static ITD.Particles.MetaballSystem.Sets;
 
 // HEADS UP: this code kinda sucks because its my first time making a metaball + fakemetaball system -John Shader

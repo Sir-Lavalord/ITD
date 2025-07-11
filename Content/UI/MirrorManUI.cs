@@ -2,10 +2,8 @@
 using ITD.Players;
 using ITD.Utilities;
 using System.Collections.Generic;
-using Terraria.Chat;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
-using Terraria.UI.Chat;
 
 namespace ITD.Content.UI
 {

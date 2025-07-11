@@ -1,11 +1,4 @@
 ﻿using ITD.Content.Items.Accessories.Master;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Buffs.EquipmentBuffs
 {

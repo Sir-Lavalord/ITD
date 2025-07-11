@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Events;
 using System.IO;
-using Terraria;
 
 namespace ITD.Networking.Packets
 {

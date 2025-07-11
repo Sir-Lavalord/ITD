@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria.ModLoader;
-
-namespace ITD.Common.Rarities
+﻿namespace ITD.Common.Rarities
 {
     public abstract class RarityModifier : ModType // from better expert rarity mod
     {

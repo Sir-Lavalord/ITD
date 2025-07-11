@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Utilities;
-using Microsoft.Xna.Framework;
-using ITD.Content.Buffs.Debuffs;
-using ITD.Content.Projectiles.Friendly.Misc;
-using ITD.Content.NPCs;
+﻿using ITD.Utilities;
 using ITD.Players;
-using ITD.Utilities.Placeholders;
-using Terraria.ID;
 
 namespace ITD.Content.Items.Accessories.Combat.All
 {

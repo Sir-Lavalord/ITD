@@ -1,15 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using Terraria;
+﻿using System;
 using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.UI;
 
 using ITD.Utilities;
 using ITD.ItemDropRules.Conditions;
@@ -19,8 +10,6 @@ using ITD.Content.Items.Other;
 using ITD.Content.Items.Weapons.Mage;
 using ITD.Content.Items.Weapons.Melee;
 using ITD.Content.Items.Weapons.Summoner;
-using ITD.Particles.Misc;
-using ITD.Particles;
 
 namespace ITD.Content.NPCs.Bosses
 {

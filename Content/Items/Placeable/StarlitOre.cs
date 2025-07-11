@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 using ITD.Content.Tiles;
 
 namespace ITD.Content.Items.Placeable

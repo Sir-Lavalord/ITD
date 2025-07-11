@@ -1,16 +1,10 @@
 ﻿using ITD.Networking;
 using ITD.Networking.Packets;
-using Microsoft.Build.Tasks.Deployment.ManifestUtilities;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Terraria;
 using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace ITD.Content.Events

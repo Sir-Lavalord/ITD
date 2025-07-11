@@ -1,14 +1,6 @@
 ﻿using ITD.Content.Backgrounds;
-using ITD.Networking;
-using ITD.Particles;
-using ITD.Utilities.EntityAnim;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System;
 using System.Collections.Generic;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Menus
 {

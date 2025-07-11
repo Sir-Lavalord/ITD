@@ -1,6 +1,4 @@
-﻿using Terraria.ModLoader;
-
-namespace ITD.Content.Backgrounds
+﻿namespace ITD.Content.Backgrounds
 {
     public class BlueshroomGrovesBackgroundStyle : ModUndergroundBackgroundStyle
     {

@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
-using System;
+﻿using Terraria.Audio;
 using ITD.Utilities;
 
 namespace ITD.Content.Items.Accessories.Movement.Jumps

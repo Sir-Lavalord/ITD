@@ -1,10 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 using Terraria.DataStructures;
-using System;
 
 using ITD.Content.Buffs.EquipmentBuffs;
 using ITD.Particles.Misc;

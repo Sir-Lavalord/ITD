@@ -1,9 +1,6 @@
 ﻿using ITD.Content.Projectiles.Hostile;
 using ITD.Utilities;
 using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.NPCs.Events.LavaRain
 {

@@ -1,22 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.ModLoader;
+﻿using System;
 using Terraria.GameContent.Drawing;
 using ITD.Utilities;
 using ITD.Content.Items.Accessories.Expert;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.ID;
-using ITD.Particles.CosJel;
 using ITD.Particles;
 using Terraria.Audio;
 using Terraria.GameContent;
 using ITD.Particles.Misc;
-using ITD.Content.Projectiles.Hostile;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {

@@ -1,12 +1,6 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.ID;
 using Terraria.Audio;
-using Terraria.ModLoader;
 using Terraria.DataStructures;
-using ReLogic.Content;
 
 using ITD.Content.NPCs;
 using ITD.Content.Buffs.Debuffs;

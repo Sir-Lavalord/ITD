@@ -6,8 +6,6 @@ using ITD.Systems;
 using ITD.Utilities;
 using System.IO;
 using Terraria.ModLoader.IO;
-using System;
-using Terraria.WorldBuilding;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {

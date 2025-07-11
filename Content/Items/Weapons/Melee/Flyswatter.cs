@@ -1,13 +1,4 @@
-﻿using ITD.Content.Dusts;
-using ITD.Content.Projectiles.Friendly.Melee;
-using ITD.Utilities;
-using ITD.Utilities.EntityAnim;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static ITD.Utilities.ITDShapes;
+﻿using ITD.Content.Projectiles.Friendly.Melee;
 
 namespace ITD.Content.Items.Weapons.Melee
 {

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Terraria;
-using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 namespace ITD.Utilities

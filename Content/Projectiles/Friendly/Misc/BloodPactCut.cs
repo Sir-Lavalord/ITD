@@ -1,8 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System;
 using Terraria.GameContent;
 
 namespace ITD.Content.Projectiles.Friendly.Misc

@@ -1,5 +1,4 @@
-﻿using Terraria;
-using ITD.Systems;
+﻿using ITD.Systems;
 
 namespace ITD.DetoursIL
 {

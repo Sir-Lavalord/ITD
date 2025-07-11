@@ -1,14 +1,6 @@
-﻿using Terraria;
-using System;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria.Audio;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Terraria.Audio;
 using Terraria.GameContent;
 using System.Collections.Generic;
-using System.Threading;
-using Terraria.UI;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 using ITD.Content.Dusts;

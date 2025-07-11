@@ -1,7 +1,4 @@
-﻿using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Particles;
+﻿using ITD.Particles;
 using System.Linq;
 using ITD.Particles.Misc;
 using Terraria.Audio;

@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework.Graphics;
 using ITD.Utilities;
-using Terraria.ID;
 using Terraria.GameContent.Drawing;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace ITD.Systems

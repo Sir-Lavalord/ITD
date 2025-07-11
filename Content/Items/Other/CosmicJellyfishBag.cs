@@ -1,10 +1,6 @@
 ﻿using ITD.Content.NPCs.Bosses;
-using ITD.Content.Items.Materials;
 using ITD.Content.Items.Placeable;
-using Terraria;
 using Terraria.GameContent.ItemDropRules;
-using Terraria.ID;
-using Terraria.ModLoader;
 using ITD.Content.Items.Armor.Vanity.Masks;
 using ITD.Content.Items.Accessories.Expert;
 using ITD.Content.Items.Accessories.Movement.Boots;

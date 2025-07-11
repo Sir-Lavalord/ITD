@@ -2,7 +2,6 @@
 using ITD.Systems;
 using System;
 using System.Linq;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.Localization;
 

@@ -1,14 +1,4 @@
-﻿using ITD.PrimitiveDrawing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent;
-using Terraria.Graphics.Shaders;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel
 {

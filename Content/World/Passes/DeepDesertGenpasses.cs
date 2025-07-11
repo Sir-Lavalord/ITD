@@ -1,16 +1,10 @@
-﻿using ITD.Content.Items.Placeable.Biomes.DeepDesert;
-using ITD.Content.Tiles.DeepDesert;
+﻿using ITD.Content.Tiles.DeepDesert;
 using ITD.Content.Walls.DeepDesert;
 using ITD.Utilities;
-using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.IO;
-using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using static ITD.Utilities.WorldGenHelpers.Procedural;
 using static Terraria.WorldGen;

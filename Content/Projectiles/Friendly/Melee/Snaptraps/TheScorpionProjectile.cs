@@ -1,6 +1,4 @@
 ﻿using System;
-using Terraria;
-using Terraria.ID;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
 {

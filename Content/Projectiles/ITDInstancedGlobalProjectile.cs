@@ -1,14 +1,6 @@
-﻿using Terraria.ModLoader;
-using Terraria;
-using System;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.Audio;
-
-using ITD.Content.Projectiles.Other;
-using ITD.Content.Projectiles.Friendly;
 using ITD.Content.Dusts;
 using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Content.Items.Accessories.Combat.All;

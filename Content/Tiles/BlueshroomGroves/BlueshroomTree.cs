@@ -1,15 +1,8 @@
 ﻿using ITD.Content.Dusts;
 using ITD.Content.Items.Materials;
 using static Terraria.ModLoader.ModContent;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria;
-using System;
 using ITD.Systems;
 using ITD.Content.NPCs.BlueshroomGroves.Critters;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.GameContent;
 using ITD.Content.Items.Placeable.Biomes.BlueshroomGroves;
 

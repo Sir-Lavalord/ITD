@@ -1,14 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using MonoMod.Cil;
-using ReLogic.Content;
+﻿using MonoMod.Cil;
 using ReLogic.Graphics;
 using System.Collections.ObjectModel;
 using System.Reflection;
-using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Common.Rarities
 {

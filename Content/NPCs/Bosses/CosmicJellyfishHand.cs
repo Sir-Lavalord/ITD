@@ -1,23 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using ITD.Particles.CosJel;
 using ITD.Particles;
-using System.Runtime.CompilerServices;
-using ITD.Utilities.EntityAnim;
-using System.Diagnostics;
-using ITD.Content.Projectiles.Hostile;
 using Terraria.Audio;
 using Terraria.GameContent.Drawing;
 using Terraria.DataStructures;
 using ITD.Content.Projectiles.Hostile.CosJel;
-using System.Threading;
 namespace ITD.Content.NPCs.Bosses
 {
     public class CosmicJellyfishHand : ModNPC

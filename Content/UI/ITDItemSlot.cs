@@ -1,10 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.UI;
-using Terraria;
 namespace ITD.Content.UI
 {
     public abstract class ITDItemSlot : ITDUIElement

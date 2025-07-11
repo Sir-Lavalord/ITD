@@ -1,19 +1,5 @@
-﻿using ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI;
-using ITD.Utilities;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using ITD.Content.Buffs.PetBuffs;
+﻿using ITD.Utilities;
 using ITD.Physics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using rail;
-using Terraria.DataStructures;
-using System;
-using Terraria.Map;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra
 {

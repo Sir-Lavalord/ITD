@@ -1,12 +1,7 @@
 ﻿using ITD.Content.Buffs.Debuffs;
-using Microsoft.Xna.Framework;
-using Steamworks;
 using System;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {

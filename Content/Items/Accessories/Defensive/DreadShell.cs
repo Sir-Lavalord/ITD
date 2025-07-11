@@ -1,10 +1,4 @@
 ﻿using ITD.Players;
-using ITD.Content.Projectiles;
-using System.Linq;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Accessories.Defensive
 {

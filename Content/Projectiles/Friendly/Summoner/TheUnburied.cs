@@ -1,9 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner

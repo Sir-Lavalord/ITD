@@ -1,19 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria.DataStructures;
 using ITD.Kinematics;
 using ITD.Utilities;
-using Terraria.GameContent.Bestiary;
-using ITD.Content.NPCs.DeepDesert;
 
 namespace ITD.Content.NPCs.Bosses
 {

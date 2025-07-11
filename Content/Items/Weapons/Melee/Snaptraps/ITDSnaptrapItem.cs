@@ -1,6 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using ITD.Utilities;
+﻿using ITD.Utilities;
 using Terraria.DataStructures;
 using Terraria.Utilities;
 using ITD.Content.Prefixes.Snaptrap;

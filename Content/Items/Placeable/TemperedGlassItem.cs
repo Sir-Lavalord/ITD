@@ -1,8 +1,5 @@
 ﻿using ITD.Content.Items.Materials;
-using ITD.Content.Tiles.Catacombs;
 using ITD.Content.Tiles.Misc;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable
 {

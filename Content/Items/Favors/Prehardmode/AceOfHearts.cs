@@ -1,15 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria;
 using ITD.Systems;
-using Terraria.ModLoader;
-using Terraria.Localization;
 
 namespace ITD.Content.Items.Favors.Prehardmode
 {

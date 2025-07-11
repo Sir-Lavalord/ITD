@@ -1,11 +1,4 @@
-﻿using ITD.Content.Dusts;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.GameContent.UI;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace ITD.Content.Items.Tools.Cyanite
+﻿namespace ITD.Content.Items.Tools.Cyanite
 {
     public class CyanitePickaxe : ModItem
     {

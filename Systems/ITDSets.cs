@@ -1,6 +1,4 @@
-﻿using Terraria.ID;
-
-namespace ITD
+﻿namespace ITD
 {
     public class ITDSets
     {

@@ -1,13 +1,6 @@
-﻿using ITD.Particles;
-using ITD.Particles.Misc;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.GameContent;
-using Terraria.Graphics.Renderers;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Projectiles.Hostile
 {

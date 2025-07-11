@@ -1,10 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using ITD.Utilities;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps
 {

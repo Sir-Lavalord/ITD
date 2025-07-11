@@ -1,7 +1,4 @@
 ﻿using ITD.Utilities;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.Graphics.Shaders;
 
 namespace ITD.PrimitiveDrawing
 {

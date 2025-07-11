@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using ITD.Content.Buffs.EquipmentBuffs;
+﻿using ITD.Content.Buffs.EquipmentBuffs;
 
 namespace ITD.Content.Items.Accessories.Misc
 {

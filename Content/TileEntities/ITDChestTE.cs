@@ -17,7 +17,6 @@ using System.Linq;
 using System;
 using Terraria.UI.Gamepad;
 using System.IO;
-using Terraria.ID;
 
 namespace ITD.Content.TileEntities
 {

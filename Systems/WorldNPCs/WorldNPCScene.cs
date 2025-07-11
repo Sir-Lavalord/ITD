@@ -1,7 +1,4 @@
 ﻿using ITD.Content.UI;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Systems.WorldNPCs
 {

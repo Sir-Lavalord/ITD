@@ -1,18 +1,7 @@
-﻿using ITD.Content.Items.Accessories.Expert;
-using ITD.Content.Items.Accessories.Master;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Terraria;
-using Terraria.Audio;
+﻿using ITD.Content.Items.Accessories.Master;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace ITD.Content.NPCs.Friendly
 {

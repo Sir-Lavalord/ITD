@@ -1,8 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using ITD.Systems;
+﻿using ITD.Systems;
 
 namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps
 {

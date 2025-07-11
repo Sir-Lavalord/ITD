@@ -1,9 +1,7 @@
 ﻿using ITD.Common.Prefixes;
 using ITD.Utilities;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.Localization;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Prefixes.Snaptrap
 {

@@ -1,7 +1,5 @@
 ﻿using ITD.Systems;
 using System.IO;
-using Terraria;
-using Terraria.ID;
 
 namespace ITD.Networking.Packets
 {

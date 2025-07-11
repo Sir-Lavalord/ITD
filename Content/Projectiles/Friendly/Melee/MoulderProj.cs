@@ -1,16 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using Terraria;
+﻿using System;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 using ITD.Utilities;
-using ITD.Particles.Misc;
-using ITD.Particles;
 using ITD.Content.Buffs.Debuffs;
 
 namespace ITD.Content.Projectiles.Friendly.Melee

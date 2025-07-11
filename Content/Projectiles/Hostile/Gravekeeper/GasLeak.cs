@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
 using ITD.Content.Buffs.Debuffs;
 
 namespace ITD.Content.Projectiles.Hostile.Gravekeeper

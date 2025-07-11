@@ -1,12 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 using Terraria.DataStructures;
-using System;
 using Terraria.Localization;
-using ITD.Content.Items.Other;
 namespace ITD.Content.Items.Accessories.Master
 {
     public class EatersTail : ModItem

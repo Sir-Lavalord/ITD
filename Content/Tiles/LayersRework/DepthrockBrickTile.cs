@@ -1,8 +1,4 @@
-﻿using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
-
-namespace ITD.Content.Tiles.LayersRework
+﻿namespace ITD.Content.Tiles.LayersRework
 {
     public class DepthrockBrickTile : ModTile
     {

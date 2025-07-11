@@ -1,13 +1,4 @@
-﻿using ITD.Content.NPCs.Bosses;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 namespace ITD.Content.Projectiles.Hostile.CosJel
 {
     public class CosmicSwarm : ModProjectile

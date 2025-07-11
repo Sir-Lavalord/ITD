@@ -1,13 +1,6 @@
 ﻿using ITD.Content.Items.Weapons.Melee;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
 using Terraria.Localization;
-using System.Security.Cryptography.X509Certificates;
-using System.Collections.Generic;
-using ITD.Utilities;
 using ITD.Content.Items.Placeable.LayersRework;
-using System.Security.Cryptography;
 using ITD.Content.Tiles.Furniture.Stations;
 
 namespace ITD.Systems

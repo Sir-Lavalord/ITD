@@ -1,14 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-
-using ITD.Particles.CosJel;
+﻿using ITD.Particles.CosJel;
 using ITD.Particles;
 using ITD.Players;
-using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {

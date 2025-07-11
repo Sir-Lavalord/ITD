@@ -1,8 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria;
+﻿using System;
 using Terraria.GameContent;
-using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace ITD.Content.UI

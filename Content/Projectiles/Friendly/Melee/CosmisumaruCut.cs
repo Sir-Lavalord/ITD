@@ -1,12 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using Terraria.DataStructures;
-using ITD.Content.Tiles.Misc;
-using ITD.Content.Dusts;
+﻿using ITD.Content.Dusts;
 using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Melee

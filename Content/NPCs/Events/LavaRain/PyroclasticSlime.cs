@@ -1,11 +1,7 @@
 ﻿using ITD.Content.Projectiles.Hostile;
-using Microsoft.Xna.Framework.Graphics;
 using System;
-using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ITD.Content.NPCs.Events.LavaRain
 {

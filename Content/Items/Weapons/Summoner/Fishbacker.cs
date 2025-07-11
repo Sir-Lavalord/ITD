@@ -1,16 +1,6 @@
 ﻿using ITD.Content.Projectiles.Friendly.Summoner;
-using ITD.Content.Projectiles.Hostile;
-using Microsoft.Build.Evaluation;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent.Creative;
-using Terraria.ID;
-using Terraria.ModLoader;
 using ITD.Systems;
-using ITD.Players;
-using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Content.Items.Materials;
 
 namespace ITD.Content.Items.Weapons.Summoner

@@ -1,19 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using ITD.Utilities;
-using static tModPorter.ProgressUpdate;
-using Terraria.ID;
 using Terraria.DataStructures;
-using Mono.Cecil;
-using ITD.Content.Projectiles.Friendly.Misc;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {

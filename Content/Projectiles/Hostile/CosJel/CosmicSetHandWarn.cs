@@ -1,10 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using Terraria.ModLoader;
-using Terraria;
+﻿using System;
 using ITD.Content.NPCs.Bosses;
-using Terraria.ID;
-using ITD.Content.Items.Accessories.Expert;
 using Terraria.DataStructures;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel

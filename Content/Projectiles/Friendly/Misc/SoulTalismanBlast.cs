@@ -1,22 +1,4 @@
-﻿using ITD.Content.Projectiles.Friendly.Misc;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using ITD.Content.Buffs.Debuffs;
-using ITD.Players;
-using ITD.Utilities;
-using Microsoft.Build.Evaluation;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
-using Terraria.ID;
-using Microsoft.CodeAnalysis;
-
-namespace ITD.Content.Projectiles.Friendly.Misc
+﻿namespace ITD.Content.Projectiles.Friendly.Misc
 {
     public class SoulTalismanBlast : BigBlankExplosion
     {

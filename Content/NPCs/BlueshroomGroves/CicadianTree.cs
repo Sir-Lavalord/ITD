@@ -1,12 +1,5 @@
-﻿using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 using ITD.Content.Projectiles.Other;
-using ReLogic.Content;
 using ITD.Content.Tiles.BlueshroomGroves;
 using ITD.Content.Dusts;
 using ITD.Utilities;

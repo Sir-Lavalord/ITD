@@ -1,11 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-
-using ITD.Particles.Projectile;
+﻿using ITD.Particles.Projectile;
 using ITD.Particles;
 using ITD.Players;
 using ITD.Utilities;

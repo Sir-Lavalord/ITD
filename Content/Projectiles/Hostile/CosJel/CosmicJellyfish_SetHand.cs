@@ -1,20 +1,6 @@
-﻿
-using Terraria;
-using System;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Terraria.Audio;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
+﻿using Terraria.GameContent;
 using ITD.Utilities;
-using Terraria.DataStructures;
-using ITD.Content.NPCs.Bosses;
-using ITD.Particles.CosJel;
 using ITD.Particles;
-using System.Linq;
-using Terraria.GameContent.Drawing;
-using System.IO;
 using ITD.Particles.Misc;
 
 

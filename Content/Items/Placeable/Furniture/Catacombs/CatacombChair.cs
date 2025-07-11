@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Tiles.Furniture.Catacombs;
-using Terraria.ModLoader;
 
 namespace ITD.Content.Items.Placeable.Furniture.Catacombs
 {

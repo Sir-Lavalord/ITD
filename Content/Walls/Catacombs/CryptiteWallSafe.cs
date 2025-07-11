@@ -1,7 +1,4 @@
-﻿using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-
-namespace ITD.Content.Walls.Catacombs
+﻿namespace ITD.Content.Walls.Catacombs
 {
     public class CryptiteWallSafe : ModWall
     {

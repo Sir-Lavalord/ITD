@@ -1,10 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using System.Security.Cryptography.Pkcs;
-using System.Net.Http.Headers;
-using System;
-using ITD.Content.Buffs.EquipmentBuffs;
+﻿using ITD.Content.Buffs.EquipmentBuffs;
 
 namespace ITD.Content.Items.Accessories.Misc
 {

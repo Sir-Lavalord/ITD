@@ -1,7 +1,6 @@
 ﻿using ITD.Systems.DataStructures;
 using Terraria.DataStructures;
 using ITD.Content.TileEntities;
-using Terraria;
 
 namespace ITD.Content.Tiles
 {

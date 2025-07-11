@@ -1,12 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ITD.Utilities;
-using ITD.Content.Projectiles.Friendly.Melee;
-using Terraria.DataStructures;
-using ITD.Content.Projectiles.Friendly.Ranger;
+﻿using ITD.Content.Projectiles.Friendly.Melee;
 
 namespace ITD.Content.Items.Weapons.Melee
 {

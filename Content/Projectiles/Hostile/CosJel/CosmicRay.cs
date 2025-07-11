@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using ITD.PrimitiveDrawing;
+﻿using ITD.PrimitiveDrawing;
 using Terraria.Graphics.Shaders;
 using Terraria.GameContent;
 using Terraria.DataStructures;

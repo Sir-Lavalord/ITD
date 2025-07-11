@@ -1,15 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using System;
-using ITD.Systems;
-using Terraria.GameContent;
-using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
-namespace ITD.Content.Items.Accessories.Master
+﻿namespace ITD.Content.Items.Accessories.Master
 {
     public class EyeofEldritchInsight : ModItem
     {
