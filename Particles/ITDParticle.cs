@@ -20,7 +20,7 @@
         public readonly float ProgressOneToZero => 1f - ProgressZeroToOne;
         public readonly void DrawCommon(in SpriteBatch sb, in Texture2D texture, Vector2 offset = default, Color? color = null, Rectangle? sourceRect = null, Vector2? origin = null, float? rotation = null, float? scale = null, SpriteEffects? spriteEffects = null)
         {
-            ParticleFramingData framingData = parent.GetFramingData(this);
+            ParticleFramingData framingData = parent.GetFramingData(this, texture);
 
             Color drawColor = color ?? parent.GetAlpha(this);
             if (parent.additive)

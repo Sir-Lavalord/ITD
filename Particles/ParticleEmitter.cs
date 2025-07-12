@@ -61,12 +61,13 @@ namespace ITD.Particles
                 drawActions.RemoveAt(i);
             }
         }
-        public ParticleFramingData GetFramingData(ITDParticle particle)
+        public ParticleFramingData GetFramingData(ITDParticle particle, Texture2D texture = null)
         {
+            Texture2D tex = texture ?? Texture;
             int framesVertical = ParticleSystem.particleFramesVertical[type];
             int framesHorizontal = ParticleSystem.particleFramesHorizontal[type];
-            int frameHeight = Texture.Height / framesVertical;
-            int frameWidth = Texture.Width / framesHorizontal;
+            int frameHeight = tex.Height / framesVertical;
+            int frameWidth = tex.Width / framesHorizontal;
             return new(new Rectangle(frameWidth * particle.frameHorizontal, frameHeight * particle.frameVertical, frameWidth, frameHeight), new Vector2(frameWidth * 0.5f, frameHeight * 0.5f));
         }
         public Vector2 CanvasOffset => canvas == ParticleEmitterDrawCanvas.UI ? Vector2.Zero : Main.screenPosition;
