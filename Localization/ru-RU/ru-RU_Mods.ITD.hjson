@@ -238,6 +238,9 @@ Projectiles: {
 	// MoldExplosion.DisplayName: Mold Explosion
 	// Zap.DisplayName: Zap
 	// CosmicWave.DisplayName: Cosmic Wave
+	// DelayedMiasma.DisplayName: Delayed Miasma
+	// MiasmaTrail.DisplayName: Miasma Trail
+	// CyaniteSpike.DisplayName: Cyanite Spike
 }
 
 NPCs: {

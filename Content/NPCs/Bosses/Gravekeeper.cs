@@ -30,6 +30,7 @@ namespace ITD.Content.NPCs.Bosses
             ShovelSlam,
 			DarkFountain,
 			Skullduggery,
+			TrailOfHell,
 			Goodbye
         }
 		private ActionState AI_State;
@@ -225,6 +226,36 @@ namespace ITD.Content.NPCs.Bosses
 					else
 						NPC.velocity *= 0.9f;
 					break;
+				case ActionState.TrailOfHell:
+					if (StateTimer == 30)
+					{
+						if (Main.netMode != NetmodeID.MultiplayerClient)
+						{
+							int type = ModContent.ProjectileType<MiasmaTrail>();
+							int damage = 20;
+							int trailCount = 6;
+							Vector2 vectorToTarget2 = Main.player[NPC.target].Center - NPC.Center;
+							for (int l = 0; l < trailCount; l++)
+							{
+								Vector2 offset = vectorToTarget2.RotatedByRandom(MathHelper.ToRadians(60));
+								offset.Normalize();
+								offset *= 100f;
+								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + offset, new Vector2(), type, damage, 0, -1, vectorToTarget2.X, vectorToTarget2.Y, 12);
+							}
+						}
+						SoundEngine.PlaySound(SoundID.Item103, NPC.Center);
+						int dustType = DustID.GiantCursedSkullBolt;
+						//if (Form == 1)
+						//	dustType = DustID.DungeonSpirit;
+						for (int l = 0; l < 8; l++)
+						{
+							int spawnDust = Dust.NewDust(NPC.Center, 0, 0, dustType, 0, 0, 0, default, 2f);
+							Main.dust[spawnDust].noGravity = true;
+							Main.dust[spawnDust].velocity *= 3f;
+						}
+					}
+					NPC.velocity *= 0.9f;
+					break;
 			}
 			
 			StateTimer--;
@@ -289,10 +320,15 @@ namespace ITD.Content.NPCs.Bosses
 							StateTimer = 120;
 							Necromancy();
 							break;
+						//case 2:
+						//	NPC.TargetClosest(false);
+						//	AI_State = ActionState.Skullduggery;
+						//	StateTimer = 10;
+						//	break;
 						case 2:
 							NPC.TargetClosest(false);
-							AI_State = ActionState.Skullduggery;
-							StateTimer = 10;
+							AI_State = ActionState.TrailOfHell;
+							StateTimer = 30;
 							break;
 					}
 					break;
@@ -332,6 +368,10 @@ namespace ITD.Content.NPCs.Bosses
 				case ActionState.Skullduggery:
 					AI_State = ActionState.Chasing;
 					StateTimer = 160;
+					break;
+				case ActionState.TrailOfHell:
+					AI_State = ActionState.Chasing;
+					StateTimer = 200;
 					break;
 				case ActionState.Goodbye:
 					NPC.active = false;

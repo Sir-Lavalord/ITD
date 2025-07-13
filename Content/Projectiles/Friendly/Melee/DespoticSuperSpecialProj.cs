@@ -12,7 +12,13 @@ namespace ITD.Content.Projectiles.Friendly.Melee
     {
 		public override string Texture => "ITD/Content/Items/Weapons/Melee/DespoticSuperMeleeSword";
 		
-		public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
+		public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile")
+			.UseProjectionMatrix(true)
+			.UseImage0("Images/Extra_" + 192)
+			.UseImage1("Images/Extra_" + 194)
+			.UseImage2("Images/Extra_" + 193)
+			.UseSaturation(-2.8f)
+			.UseOpacity(2f);
 		public VertexStrip TrailStrip = new VertexStrip();
 		
 		public override void SetStaticDefaults()
@@ -32,12 +38,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.ignoreWater = false;
             Projectile.tileCollide = false;
 			Projectile.scale = 1.75f;
-			
-			Shader.UseImage0("Images/Extra_" + 192);
-			Shader.UseImage1("Images/Extra_" + 194);
-			Shader.UseImage2("Images/Extra_" + 193);
-			Shader.UseSaturation(-2.8f);
-			Shader.UseOpacity(2f);
         }
 
         public override void AI()

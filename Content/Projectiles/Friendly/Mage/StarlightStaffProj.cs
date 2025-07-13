@@ -10,7 +10,14 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 {
     public class StarlightStaffProj : ModProjectile
     {
-        public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
+        public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile")
+			.UseProjectionMatrix(true)
+			.UseImage0("Images/Extra_" + 192)
+			.UseImage1("Images/Extra_" + 194)
+			.UseImage2("Images/Extra_" + 190)
+			.UseSaturation(-4f)
+			.UseOpacity(2f)
+			.UseColor(Color.Black);
 
         public VertexStrip TrailStrip = new VertexStrip();
         public override string Texture => ITD.BlankTexture;
@@ -44,13 +51,6 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
-            Shader.UseImage0("Images/Extra_" + 192);
-            Shader.UseImage1("Images/Extra_" + 194);
-            Shader.UseImage2("Images/Extra_" + 190);
-            Shader.UseSaturation(-4f);
-            Shader.UseOpacity(2f);
-            Shader.UseColor(Color.Black);
-
         }
         public override void AI()
         {

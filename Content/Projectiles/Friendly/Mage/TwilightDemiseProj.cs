@@ -11,7 +11,13 @@ namespace ITD.Content.Projectiles.Friendly.Mage
 {
     public class TwilightDemiseProj : ITDProjectile
     {
-        public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
+        public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile")
+			.UseProjectionMatrix(true)
+			.UseImage0("Images/Extra_" + 192)
+			.UseImage1("Images/Extra_" + 194)
+			.UseImage2("Images/Extra_" + 193)
+			.UseSaturation(-2.8f)
+			.UseOpacity(2f);
 
         public VertexStrip TrailStrip = new VertexStrip();
 
@@ -51,11 +57,6 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             Projectile.alpha = 0;
             Projectile.Opacity = 1;
 
-            Shader.UseImage0("Images/Extra_" + 192);
-            Shader.UseImage1("Images/Extra_" + 194);
-            Shader.UseImage2("Images/Extra_" + 193);
-            Shader.UseSaturation(-2.8f);
-            Shader.UseOpacity(2f);
             emitter = ParticleSystem.NewEmitter<TwilightDemiseFlash>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
             emitter.tag = Projectile;
         }

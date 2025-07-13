@@ -19,7 +19,13 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 		public int maxTime = 30;
 		public float speed;
 		
-		public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
+		public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile")
+			.UseProjectionMatrix(true)
+			.UseImage0("Images/Extra_" + 201)
+			.UseImage1("Images/Extra_" + 193)
+			.UseImage2("Images/Extra_" + 252)
+			.UseSaturation(-2.8f)
+			.UseOpacity(2f);
 		public static VertexStrip vertexStrip = new VertexStrip();
 		
         public override void SetStaticDefaults()
@@ -39,12 +45,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			Projectile.scale = 1.75f;
 			Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
-			
-			Shader.UseImage0("Images/Extra_" + 201);
-			Shader.UseImage1("Images/Extra_" + 193);
-			Shader.UseImage2("Images/Extra_" + 252);
-			Shader.UseSaturation(-2.8f);
-			Shader.UseOpacity(2f);
         }
         public override void AI()
         {

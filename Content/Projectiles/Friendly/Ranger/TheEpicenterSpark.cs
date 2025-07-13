@@ -9,7 +9,13 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
 {
     public class TheEpicenterSpark : ModProjectile
     {
-        public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
+        public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile")
+			.UseProjectionMatrix(true)
+			.UseImage0("Images/Extra_" + 192)
+			.UseImage1("Images/Extra_" + 194)
+			.UseImage2("Images/Extra_" + 190)
+			.UseSaturation(-4f)
+			.UseOpacity(2f);
 
         public VertexStrip TrailStrip = new VertexStrip();
         public ParticleEmitter emitter;
@@ -36,11 +42,6 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             Projectile.penetrate = 1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 10;
-            Shader.UseImage0("Images/Extra_" + 192);
-            Shader.UseImage1("Images/Extra_" + 194);
-            Shader.UseImage2("Images/Extra_" + 190);
-            Shader.UseSaturation(-4f);
-            Shader.UseOpacity(2f);
             emitter = ParticleSystem.NewEmitter<TheEpicenterFlash>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
             emitter.tag = Projectile;
         }

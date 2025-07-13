@@ -9,7 +9,13 @@ namespace ITD.Content.Projectiles.Friendly.Melee
     {
 		public override string Texture => ITD.BlankTexture;
 		
-		public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
+		public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile")
+			.UseProjectionMatrix(true)
+			.UseImage0("Images/Extra_" + 191)
+			.UseImage1("Images/Extra_" + 194)
+			.UseImage2("Images/Extra_" + 190)
+			.UseSaturation(-2.8f)
+			.UseOpacity(2f);
 		public VertexStrip TrailStrip = new VertexStrip();
 		
 		public override void SetStaticDefaults()
@@ -28,12 +34,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             Projectile.timeLeft = 30;
             Projectile.ignoreWater = false;
             Projectile.tileCollide = false;
-			
-			Shader.UseImage0("Images/Extra_" + 191);
-			Shader.UseImage1("Images/Extra_" + 194);
-			Shader.UseImage2("Images/Extra_" + 190);
-			Shader.UseSaturation(-2.8f);
-			Shader.UseOpacity(2f);
         }
 		
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)

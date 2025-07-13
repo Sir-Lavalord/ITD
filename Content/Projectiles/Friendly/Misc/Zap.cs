@@ -18,10 +18,15 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 		public ref float Seed => ref Projectile.localAI[0];
 		public ref float Chain => ref Projectile.localAI[1];
 		
-		public MiscShaderData Shader = new MiscShaderData(ModContent.Request<Effect>("ITD/Shaders/MiscShaders/ZapShader"), "ZapPass").UseProjectionMatrix(true);
+		public MiscShaderData Shader = new MiscShaderData(ModContent.Request<Effect>("ITD/Shaders/MiscShaders/ZapShader"), "ZapPass")
+			.UseProjectionMatrix(true)
+			.UseImage0("Images/Extra_" + 197)
+			.UseImage1("Images/Extra_" + 197)
+			.UseImage2("Images/Extra_" + 190)
+			.UseOpacity(2f);
 		public VertexStrip TrailStrip = new VertexStrip();
 		
-		 private static int duration = 30;
+		private static int duration = 30;
         public override void SetDefaults()
         {
             Projectile.width = 16;
@@ -33,11 +38,6 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
             Projectile.timeLeft = duration;
-			
-			Shader.UseImage0("Images/Extra_" + 197);
-			Shader.UseImage1("Images/Extra_" + 197);
-			Shader.UseImage2("Images/Extra_" + 190);
-			Shader.UseOpacity(2f);
         }
 
 		public override void AI() 

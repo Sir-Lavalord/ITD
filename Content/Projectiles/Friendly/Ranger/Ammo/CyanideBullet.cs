@@ -6,9 +6,7 @@ using ITD.Particles;
 namespace ITD.Content.Projectiles.Friendly.Ranger.Ammo
 {
     public class CyanideBullet : ModProjectile
-    {
-		private bool explosion = false;
-		
+    {		
 		public ParticleEmitter emitter;
 		
         public override void SetDefaults()
@@ -25,9 +23,6 @@ namespace ITD.Content.Projectiles.Friendly.Ranger.Ammo
             Projectile.tileCollide = true;
             Projectile.extraUpdates = 1;
 
-			Projectile.usesLocalNPCImmunity = true;
-			Projectile.localNPCHitCooldown = -1;
-
             AIType = ProjectileID.Bullet;
 			
 			emitter = ParticleSystem.NewEmitter<CyaniteFlash>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
@@ -42,16 +37,27 @@ namespace ITD.Content.Projectiles.Friendly.Ranger.Ammo
 
 		public override void OnKill(int timeLeft)
         {
-			Projectile.penetrate = -1;
-			Projectile.Resize(75, 75);
-			Projectile.Damage();
 			SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
 			emitter?.Emit(Projectile.Center, new Vector2(), 1.6f, 20);
         }
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            target.AddBuff(BuffID.Frostburn2, 600);
+			target.AddBuff(BuffID.Frostburn2, 600);
+			if (Main.myPlayer == Projectile.owner)
+			{
+				Projectile spike = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity, Projectile.velocity, ModContent.ProjectileType<CyaniteSpike>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, Main.rand.NextFloat(0.7f, 0.8f), 0f);
+				spike.localNPCImmunity[target.whoAmI] = -1; // no double hitsies
+			}
+        }
+		
+		public override bool OnTileCollide(Vector2 oldVelocity) 
+		{
+			if (Main.myPlayer == Projectile.owner)
+			{
+				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + oldVelocity, oldVelocity, ModContent.ProjectileType<CyaniteSpike>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, Main.rand.NextFloat(0.7f, 0.8f), 0f);
+			}
+			return true;
 		}
     }
 }

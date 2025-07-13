@@ -4,10 +4,11 @@ using ITD.Content.Buffs.Debuffs;
 namespace ITD.Content.Projectiles.Hostile.Gravekeeper
 {
 	public class GasLeak : ModProjectile
-	{		
+	{
+		private static float Lifespan = 70f;
 		public override void SetDefaults() {
-			Projectile.width = 6;
-			Projectile.height = 6;
+			Projectile.width = 70;
+			Projectile.height = 70;
 			Projectile.hostile = true;
 			Projectile.penetrate = -1;
 			Projectile.tileCollide = false;
@@ -18,17 +19,10 @@ namespace ITD.Content.Projectiles.Hostile.Gravekeeper
             target.AddBuff(ModContent.BuffType<NecrosisBuff>(), 300, false);
         }
 		
-		public override void ModifyDamageHitbox(ref Rectangle hitbox)
-        {
-            hitbox.Inflate(32, 32);
-        }
-		
 		public override void AI() 
 		{
 			Projectile.localAI[0] += 1f;
-			float lifespan = 70;
-
-			if (Projectile.localAI[0] >= lifespan)
+			if (Projectile.localAI[0] >= Lifespan)
 				Projectile.Kill();
 			
 			Projectile.velocity.X *= 0.99f;
@@ -41,11 +35,9 @@ namespace ITD.Content.Projectiles.Hostile.Gravekeeper
 			//}
 		}
 		
-		public override bool PreDraw(ref Color lightColor) 
+		public override bool PreDraw(ref Color lightColor)  // horrible evil vanilla code
 		{
 			float num = 56f;
-			float num2 = 14f;
-			float lifespan = num + num2;
 			Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 			Color value2 = Color.Transparent;
 			Color color2 = new Color(100, 120, 255, 70);
@@ -55,44 +47,44 @@ namespace ITD.Content.Projectiles.Hostile.Gravekeeper
 			float num4 = 0.7f;
 			float num5 = 0.85f;
 			float num6 = (Projectile.localAI[0] > num - 10f) ? 0.175f : 0.2f;
-			float opacity = Utils.Remap(Projectile.localAI[0], num, lifespan, 1f, 0f, true);
+			float opacity = Utils.Remap(Projectile.localAI[0], num, Lifespan, 1f, 0f, true);
 			float num7 = Math.Min(Projectile.localAI[0], 20f);
-			float num8 = Utils.Remap(Projectile.localAI[0], 0f, lifespan, 0f, 1f, true);
-			float scale = Utils.Remap(num8, 0f, 1f, 0.5f, 1.5f, true);
+			float progress = Utils.Remap(Projectile.localAI[0], 0f, Lifespan, 0f, 1f, true);
+			float scale = Utils.Remap(progress, 0f, 1f, 0.5f, 1.5f, true);
 			Rectangle rectangle = texture.Frame(1, 1);
-			if (num8 < 1f)
+			if (progress < 1f)
 			{
 				for (int i = 0; i < 2; i++)
 				{
 					for (float num10 = 1f; num10 >= 0f; num10 -= num6)
 					{
-						if (num8 < 0.2f)
+						if (progress < 0.2f)
 						{
-							value2 = Color.Lerp(Color.Transparent, color2, Utils.GetLerpValue(0f, 0.2f, num8, true));
+							value2 = Color.Lerp(Color.Transparent, color2, Utils.GetLerpValue(0f, 0.2f, progress, true));
 						}
 						else
 						{
-							if (num8 < num3)
+							if (progress < num3)
 							{
 								value2 = color2;
 							}
 							else
 							{
-								if (num8 < num4)
+								if (progress < num4)
 								{
-									value2 = Color.Lerp(color2, color3, Utils.GetLerpValue(num3, num4, num8, true));
+									value2 = Color.Lerp(color2, color3, Utils.GetLerpValue(num3, num4, progress, true));
 								}
 								else
 								{
-									if (num8 < num5)
+									if (progress < num5)
 									{
-										value2 = Color.Lerp(color3, color4, Utils.GetLerpValue(num4, num5, num8, true));
+										value2 = Color.Lerp(color3, color4, Utils.GetLerpValue(num4, num5, progress, true));
 									}
 									else
 									{
-										if (num8 < 1f)
+										if (progress < 1f)
 										{
-											value2 = Color.Lerp(color4, Color.Transparent, Utils.GetLerpValue(num5, 1f, num8, true));
+											value2 = Color.Lerp(color4, Color.Transparent, Utils.GetLerpValue(num5, 1f, progress, true));
 										}
 										else
 										{
@@ -102,14 +94,14 @@ namespace ITD.Content.Projectiles.Hostile.Gravekeeper
 								}
 							}
 						}
-						float num11 = (1f - num10) * Utils.Remap(num8, 0f, 0.2f, 0f, 1f, true);
+						float num11 = (1f - num10) * Utils.Remap(progress, 0f, 0.2f, 0f, 1f, true);
 						Vector2 position = Projectile.Center - Main.screenPosition;
 						Color color5 = value2 * num11;
 						Color value3 = color5;
 							value3.G /= 2;
 							value3.B /= 2;
 							value3.A = (byte)Math.Min((float)color5.A + 80f * num11, 255f);
-							Utils.Remap(Projectile.localAI[0], 20f, lifespan, 0f, 1f, true);
+							Utils.Remap(Projectile.localAI[0], 20f, Lifespan, 0f, 1f, true);
 						float num12 = 1f / num6 * (num10 + 1f);
 						float rotation = Projectile.rotation + num10 * 1.57079637f + Main.GlobalTimeWrappedHourly * num12 * 2f * Projectile.direction;
 						if (i == 0)

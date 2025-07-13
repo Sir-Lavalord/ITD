@@ -122,13 +122,6 @@ namespace ITD.Content.NPCs.Bosses
 					
 				if (Main.netMode != NetmodeID.MultiplayerClient)
 				{					
-					if (Main.expertMode)
-					{
-						for (int i = 0; i < 5; i++)
-						{
-							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(Main.rand.NextFloat(-6f, 6f), Main.rand.NextFloat(-8f, -2f)), ProjectileID.SkeletonBone, 50, 0f, -1);
-						}
-					}		
 					NPC npc = Main.npc[NPC.NewNPC(NPC.GetSource_FromThis(), (int)(NPC.Center.X), (int)(NPC.Center.Y), TheList[Main.rand.Next(18)])];
 					if (NPC.ai[0] >= 0) //hell is war
 					{
