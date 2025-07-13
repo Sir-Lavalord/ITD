@@ -1241,7 +1241,7 @@ Stabtrap: {
 }
 
 DepthrockBow: {
-	// Tooltip: Encases arrows in a layer depthrock, which when shattered, fires the encased arrow at the closest target
+	// Tooltip: Encases arrows in a layer of depthrock, which fires the encased arrow at the closest target when shattered
 	// DisplayName: Depthrock Bow
 }
 
@@ -1502,4 +1502,34 @@ WickedHeart: {
 TwilightDemise: {
 	// Tooltip: ""
 	// DisplayName: Twilight Demise
+}
+
+BlueCatacombCarvedEmblem: {
+	// DisplayName: Blue Catacomb Carved Emblem
+	// Tooltip: ""
+}
+
+GreenCatacombCarvedEmblem: {
+	// DisplayName: Green Catacomb Carved Emblem
+	// Tooltip: ""
+}
+
+PinkCatacombCarvedEmblem: {
+	// DisplayName: Pink Catacomb Carved Emblem
+	// Tooltip: ""
+}
+
+BlueCatacombPlatform: {
+	// DisplayName: Blue Catacomb Platform
+	// Tooltip: ""
+}
+
+GreenCatacombPlatform: {
+	// DisplayName: Green Catacomb Platform
+	// Tooltip: ""
+}
+
+PinkCatacombPlatform: {
+	// DisplayName: Pink Catacomb Platform
+	// Tooltip: ""
 }

@@ -119,8 +119,12 @@ namespace ITD.Content.NPCs
                         {
                             for (int i = 0; i < 4; i++)
                             {
-                                Vector2 velocity = (MathHelper.TwoPi * i / 4f).ToRotationVector2() * 3f;
-                                Projectile.NewProjectile(projectile.GetSource_FromThis(), projectile.Center, velocity, ModContent.ProjectileType<TwilightDemiseProj>(), projectile.damage, projectile.knockBack, projectile.owner);
+                                Vector2 velocity = (MathHelper.TwoPi * i / 4f).ToRotationVector2() * 6f;
+                                Projectile twilight = Projectile.NewProjectileDirect(projectile.GetSource_FromThis(), projectile.Center, velocity, ModContent.ProjectileType<TwilightDemiseProj>(), projectile.damage, projectile.knockBack, projectile.owner);
+                                twilight.ai[2]++;
+                                twilight.damage *= (int)1.1f;
+                                twilight.timeLeft = 300 - (int)(twilight.ai[2] * 30);
+
                             }
                         }
                     }

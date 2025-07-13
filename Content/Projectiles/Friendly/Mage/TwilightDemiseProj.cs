@@ -5,6 +5,8 @@ using Terraria.GameContent;
 using Terraria.DataStructures;
 using ITD.Particles.Projectile;
 using ITD.Particles;
+using Terraria.Audio;
+using Terraria;
 namespace ITD.Content.Projectiles.Friendly.Mage
 {
     public class TwilightDemiseProj : ITDProjectile
@@ -30,7 +32,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             }
         }
         public ParticleEmitter emitter;
-
+        public bool spawnAnim = false;
         public override void SetDefaults()
         {
             Projectile.width = 40;
@@ -57,6 +59,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             emitter = ParticleSystem.NewEmitter<TwilightDemiseFlash>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
             emitter.tag = Projectile;
         }
+       
         public override void OnSpawn(IEntitySource source)
         {
             if (emitter != null)
@@ -67,15 +70,32 @@ namespace ITD.Content.Projectiles.Friendly.Mage
             if (emitter != null)
                 emitter.keptAlive = true;
             Projectile.rotation = Projectile.velocity.ToRotation();
-            if (Main.rand.NextBool(2))
-            {
-                for (int i = 0; i < 1; i++)
+                if (Main.rand.NextBool(2))
                 {
                     emitter?.Emit(Projectile.Center + Main.rand.NextVector2Circular(15, 15), Vector2.Zero);
                 }
+
+            float maxDetectRadius = 800 - (Projectile.ai[2] * 100);
+            if (!spawnAnim)
+            {                //from clamtea
+                float dustLoopCheck = 24f;
+                int dustIncr = 0;
+                while ((float)dustIncr < dustLoopCheck)
+                {
+                    Vector2 dustRotate = Vector2.UnitX * 0f;
+                    dustRotate += -Vector2.UnitY.RotatedBy((double)((float)dustIncr * (MathHelper.TwoPi / dustLoopCheck)), default) * new Vector2(2f, 8f);
+                    dustRotate = dustRotate.RotatedBy((double)Projectile.velocity.ToRotation(), default);
+                    Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.WhiteTorch, 0f, 0f, 0, default, 2f);
+                    dust.noGravity = true;
+                    dust.scale = 2f;
+                    dust.position = Projectile.Center + dustRotate;
+                    dust.velocity = Projectile.velocity * 0f + dustRotate.SafeNormalize(Vector2.UnitY) * 2f;
+                    dustIncr++;
+                }
+                spawnAnim = true;
+
             }
-            float maxDetectRadius = 1000;
-            if (HomingTime++ >= 2)
+            if (HomingTime++ >= 4)
             {
                 if (Projectile.timeLeft >= 20)
                 {
@@ -105,7 +125,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         }
         public override bool? CanDamage()
         {
-            if (Projectile.timeLeft > 20 && HomingTime >= 2)
+            if (Projectile.timeLeft > 20 && HomingTime >= 4)
             {
                 return true;
             }
@@ -126,48 +146,60 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         }
         private Color StripColors(float progressOnStrip)
         {
-            Color result = Color.Lerp(Color.Black, Color.Purple, Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
+            Color result = Color.Lerp(new Color(122, 0, 208, 0), Color.White, Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
             result.A /= 2;
             return result * Projectile.Opacity;
         }
         private float StripWidth(float progressOnStrip)
         {
-            return MathHelper.Lerp(36f, 60f, 1f);
+            return MathHelper.Lerp(36f, 60f, 2f);
         }
         public override void OnKill(int timeLeft)
         {
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 8; i++)
             {
-                emitter?.Emit(Projectile.Center, (Vector2.UnitX * 3).RotatedByRandom(MathHelper.Pi) * Main.rand.NextFloat(0.5f, 1.5f));
+                emitter?.Emit(Projectile.Center, (Vector2.UnitX * 3).RotatedByRandom(MathHelper.Pi) * Main.rand.NextFloat(0.75f, 2f));
             }
 
         }
         float innerScale = 1f;
         public override bool PreDraw(ref Color lightColor)
         {
-            Shader.Apply(null);
-            TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
-            TrailStrip.DrawTrail();
             Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
             Texture2D texture = TextureAssets.Projectile[Type].Value;
+            //this should be remade, i got this from fargo
+            Texture2D texture2 = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
             Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+            Rectangle frame2 = texture2.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+            Texture2D deathTex = TextureAssets.Extra[98].Value;
+            Rectangle deathFrame = deathTex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+
             void DrawAtProj(Texture2D tex)
             {
-                Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f), Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+                Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f), innerScale * Projectile.scale , Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
             }
+
             if (Projectile.timeLeft >= 20)
             {
+                Shader.Apply(null);
+                TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
+                TrailStrip.DrawTrail();
                 innerScale = 1f;
             }
             else
             {
-                innerScale *= 0.96f;
+                Projectile.ai[2]++;
+                innerScale *= (0.99f - Projectile.ai[2]/50);
             }
+            emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => Main.EntitySpriteDraw(texture2, Projectile.Center - Main.screenPosition, frame2, new Color(122, 0, 208, 0), Projectile.rotation, new Vector2(texture2.Width * 0.5f, (texture2.Height / Main.projFrames[Type]) * 0.5f), innerScale * Projectile.scale * 0.6f, SpriteEffects.None, 0f));
+
             emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => DrawAtProj(outline));
-            if (Projectile.timeLeft >= 10)
-            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(texture.Width * 0.5f, (texture.Height / Main.projFrames[Type]) * 0.5f), innerScale * Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+            if (Projectile.timeLeft >= 5)
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(texture.Width * 0.5f, (texture.Height / Main.projFrames[Type]) * 0.5f), innerScale * Projectile.scale,SpriteEffects.None, 0f);
+
             return false;
         }
 
