@@ -44,7 +44,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger.Ammo
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			target.AddBuff(BuffID.Frostburn2, 600);
-			if (Main.myPlayer == Projectile.owner)
+			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				Projectile spike = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + Projectile.velocity, Projectile.velocity, ModContent.ProjectileType<CyaniteSpike>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, Main.rand.NextFloat(0.7f, 0.8f), 0f);
 				spike.localNPCImmunity[target.whoAmI] = -1; // no double hitsies
@@ -53,7 +53,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger.Ammo
 		
 		public override bool OnTileCollide(Vector2 oldVelocity) 
 		{
-			if (Main.myPlayer == Projectile.owner)
+			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + oldVelocity, oldVelocity, ModContent.ProjectileType<CyaniteSpike>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, Main.rand.NextFloat(0.7f, 0.8f), 0f);
 			}

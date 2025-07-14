@@ -53,7 +53,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 				SoundEngine.PlaySound(SoundID.Item94, Projectile.Center);
 				Seed = Main.rand.Next(128);
 			}
-			else if (Projectile.timeLeft == duration - 5 && Chain > 0 && Main.myPlayer == Projectile.owner)
+			else if (Projectile.timeLeft == duration - 5 && Chain > 0 && Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				NPC newTarget = null;
 				float reach = 600;

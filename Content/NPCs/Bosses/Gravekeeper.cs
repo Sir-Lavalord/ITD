@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using Terraria.Audio;
 using Terraria.GameContent.ItemDropRules;
 
@@ -27,17 +29,19 @@ namespace ITD.Content.NPCs.Bosses
         {
             Chasing,
 			Cooking,
-            ShovelSlam,
+            FountainWindup,
 			DarkFountain,
-			Skullduggery,
+			ShovelsWindup,
+			DozensOfShovels,
 			TrailOfHell,
 			Goodbye
         }
 		private ActionState AI_State;
 		private int AttackCycle = 0;
-		private int StateTimer = 100;
-		private int StateExtra = 0;
-		private Vector2 Teleposition;
+		private int NecromancyCycle = 0;
+		private float StateTimer = 100;
+		private float ImpactY = 0;
+		private int TpIdentity;
 		//private int Form = 0;
 		
         public override void SetStaticDefaults()
@@ -81,6 +85,16 @@ namespace ITD.Content.NPCs.Bosses
 			}
         }*/
 		
+		public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(TpIdentity);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            TpIdentity = reader.ReadInt32();
+        }
+		
 		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
 			//if (Form == 1)
@@ -118,13 +132,13 @@ namespace ITD.Content.NPCs.Bosses
 				case ActionState.Cooking:
 					NPC.velocity *= 0.9f;
                     break;
-				case ActionState.ShovelSlam:
+				case ActionState.FountainWindup:
 					if (StateTimer < 10)
 					{
 						NPC.velocity.Y += 0.5f;
 						StateTimer = 10;
 						if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
-							StateSwitch();
+							StateTimer = 1;
 					}
 					else
 					{
@@ -165,66 +179,57 @@ namespace ITD.Content.NPCs.Bosses
 							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Bottom, new Vector2(-6f-Main.rand.NextFloat(4f)*range, 4f*Main.rand.NextFloat()), type, damage, 0, -1);
 						}
 					}
-					for (int i = 0; i < 4; i++)
+					break;
+				case ActionState.ShovelsWindup:
+					NPC.velocity.Y += 1f;
+					StateTimer = 10;
+					if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
 					{
-						Vector2 dustOffset = new Vector2(0f, 60f).RotatedBy(MathHelper.ToRadians(90*i+45));
+						ImpactY = NPC.position.Y;
+						NPC.velocity.Y = -8f;
+						
+						if (Main.netMode != NetmodeID.MultiplayerClient)
+						{
+							int type = ModContent.ProjectileType<NecroSkull>();
+							int damage = 20;
+							//if (Form == 1)
+							//{
+							//	type = ModContent.ProjectileType<SoulSkull>();
+							//	damage = 40;
+							//}
+							int skullCount = 2;
+							if (Main.expertMode)
+								skullCount += 1;
+							for (int l = 0; l < skullCount; l++)
+							{
+								float offset = Main.rand.NextFloat(-300f, 300f);
+								Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(offset, 0f), new Vector2(offset*0.01f, -2f), type, damage, 0, -1);
+							}	
+						}
+						SoundEngine.PlaySound(SoundID.Item70, NPC.Center);
 						int dustType = DustID.GiantCursedSkullBolt;
 						//if (Form == 1)
 						//	dustType = DustID.DungeonSpirit;
-						Dust dust = Main.dust[Dust.NewDust(Teleposition, 0, 0, dustType, 0, 0, 100, default, 1.5f)];
-						dust.noGravity = true;
-						dust.velocity = dustOffset*0.05f;
+						for (int l = 0; l < 8; l++)
+						{
+							int spawnDust = Dust.NewDust(NPC.Center, 0, 0, dustType, 0, 0, 0, default, 2f);
+							Main.dust[spawnDust].noGravity = true;
+							Main.dust[spawnDust].velocity *= 3f;
+						}
+						StateTimer = 1;
+						//StateSwitch();
 					}
 					break;
-				case ActionState.Skullduggery:
-					if (StateTimer < 10)
+				case ActionState.DozensOfShovels:
+					if (StateTimer % 30 == 0)
 					{
-						if (StateExtra < 3)
+						if (Main.netMode != NetmodeID.MultiplayerClient)
 						{
-							NPC.velocity.Y += 1f;
-							StateTimer = 10;
-							if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
-							{
-								StateExtra++;
-								NPC.velocity.Y = -8f;
-								StateTimer = 35;
-								
-								if (Main.netMode != NetmodeID.MultiplayerClient)
-								{
-									int type = ModContent.ProjectileType<NecroSkull>();
-									int damage = 20;
-									//if (Form == 1)
-									//{
-									//	type = ModContent.ProjectileType<SoulSkull>();
-									//	damage = 40;
-									//}
-									int skullCount = 3;
-									if (Main.expertMode)
-										skullCount += 1;
-									for (int l = 0; l < skullCount; l++)
-									{
-										float offset = Main.rand.NextFloat(-200f, 200f);
-										Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(offset, 0f), new Vector2(offset*0.01f, -2f), type, damage, 0, -1);
-									}
-									
-								}
-								SoundEngine.PlaySound(SoundID.Item70, NPC.Center);
-								int dustType = DustID.GiantCursedSkullBolt;
-								//if (Form == 1)
-								//	dustType = DustID.DungeonSpirit;
-								for (int l = 0; l < 8; l++)
-								{
-									int spawnDust = Dust.NewDust(NPC.Center, 0, 0, dustType, 0, 0, 0, default, 2f);
-									Main.dust[spawnDust].noGravity = true;
-									Main.dust[spawnDust].velocity *= 3f;
-								}
-							}
+							float offset = Main.rand.NextFloat(-500f, 500f);
+							Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(offset, -400f), new Vector2(), ModContent.ProjectileType<GravekeeperCloneSkulls>(), 0, 0, -1, ImpactY);
 						}
-						else
-							StateSwitch();
 					}
-					else
-						NPC.velocity *= 0.9f;
+					NPC.velocity *= 0.9f;
 					break;
 				case ActionState.TrailOfHell:
 					if (StateTimer == 30)
@@ -298,7 +303,6 @@ namespace ITD.Content.NPCs.Bosses
 		
 		private void StateSwitch()
 		{
-			StateExtra = 0;
 			switch (AI_State)
             {
 				case ActionState.Chasing:
@@ -306,33 +310,38 @@ namespace ITD.Content.NPCs.Bosses
 					StateTimer = 20;
 					break;
 				case ActionState.Cooking:
-					AttackCycle = ++AttackCycle % 3;
-					switch (AttackCycle)
+					NecromancyCycle = ++NecromancyCycle % 3;
+					if (NecromancyCycle == 1)
 					{
-						case 0:
-							AI_State = ActionState.ShovelSlam;
-							StateTimer = 40;
-							NPC.velocity = new Vector2(0, -3f);
-							SoundEngine.PlaySound(SoundID.Zombie54, NPC.Center);
-							break;
-						case 1:
-							AI_State = ActionState.Chasing;
-							StateTimer = 120;
-							Necromancy();
-							break;
-						//case 2:
-						//	NPC.TargetClosest(false);
-						//	AI_State = ActionState.Skullduggery;
-						//	StateTimer = 10;
-						//	break;
-						case 2:
-							NPC.TargetClosest(false);
-							AI_State = ActionState.TrailOfHell;
-							StateTimer = 30;
-							break;
+						AI_State = ActionState.Chasing;
+						StateTimer = 120;
+						Necromancy();
+					}
+					else
+					{
+						AttackCycle = ++AttackCycle % 3;
+						switch (AttackCycle)
+						{
+							case 0:
+								AI_State = ActionState.FountainWindup;
+								StateTimer = 40;
+								NPC.velocity = new Vector2(0, -3f);
+								SoundEngine.PlaySound(SoundID.Zombie54, NPC.Center);
+								break;
+							case 1:
+								NPC.TargetClosest(false);
+								AI_State = ActionState.ShovelsWindup;
+								StateTimer = 10;
+								break;
+							case 2:
+								NPC.TargetClosest(false);
+								AI_State = ActionState.TrailOfHell;
+								StateTimer = 30;
+								break;
+						}
 					}
 					break;
-				case ActionState.ShovelSlam:
+				case ActionState.FountainWindup:
 					NPC.TargetClosest(false);
 					Vector2 vectorToTarget = Main.player[NPC.target].Center - NPC.Center;
 					float distanceToTarget = vectorToTarget.Length();
@@ -353,19 +362,27 @@ namespace ITD.Content.NPCs.Bosses
 						tpOffset.X += (float)(Math.Sin(angle) * 240);
 						tpOffset.Y += (float)(Math.Cos(angle) * 240);*/
 				
-						Teleposition = Main.player[NPC.target].Center - new Vector2(0, 240f);
+						if (Main.netMode != NetmodeID.MultiplayerClient)
+						{
+							TpIdentity = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), Main.player[NPC.target].Center - new Vector2(0, 240f), new Vector2(), ModContent.ProjectileType<GravekeeperCloneTeleport>(), 0, 0, -1).identity;
+							NPC.netUpdate = true;
+						}
 					}
 					
 					Main.player[Main.myPlayer].GetITDPlayer().BetterScreenshake(20, 4, 4, false);
 					SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
 					SoundEngine.PlaySound(SoundID.NPCDeath51, NPC.Center);
 					break;
+				case ActionState.ShovelsWindup:
+					AI_State = ActionState.DozensOfShovels;
+					StateTimer = 120;
+					break;
 				case ActionState.DarkFountain:
 					AI_State = ActionState.Chasing;
 					StateTimer = 120;
 					Teleport();
 					break;
-				case ActionState.Skullduggery:
+				case ActionState.DozensOfShovels:
 					AI_State = ActionState.Chasing;
 					StateTimer = 160;
 					break;
@@ -391,7 +408,12 @@ namespace ITD.Content.NPCs.Bosses
 				dust.noGravity = true;
 				dust.velocity = -dustOffset*0.05f;
 			}			
-			NPC.Center = Teleposition;
+			Projectile TpTarget = Main.projectile.FirstOrDefault(x => x.identity == TpIdentity);
+			if (TpTarget != null)
+			{
+				NPC.Center = TpTarget.Center;
+				TpTarget.ai[0] = 1f;
+			}
 			
 			Vector2 vectorToTarget = Main.player[NPC.target].Center - NPC.Center;
 			float distanceToTarget = vectorToTarget.Length();

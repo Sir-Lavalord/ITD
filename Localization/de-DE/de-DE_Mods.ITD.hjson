@@ -241,6 +241,8 @@ Projectiles: {
 	// DelayedMiasma.DisplayName: Delayed Miasma
 	// MiasmaTrail.DisplayName: Miasma Trail
 	// CyaniteSpike.DisplayName: Cyanite Spike
+	// GravekeeperCloneTeleport.DisplayName: Gravekeeper Clone Teleport
+	// GravekeeperCloneSkulls.DisplayName: Gravekeeper Clone Skulls
 }
 
 NPCs: {

@@ -74,7 +74,7 @@ namespace ITD.Content.Projectiles.Hostile.Gravekeeper
 					Vector2 distance = Main.player[target].Center - Projectile.Center;
 					distance.Normalize();
 					distance *= scaleFactor;
-					Projectile.velocity = (Projectile.velocity * 19f + distance) / 20f;
+					Projectile.velocity = (Projectile.velocity * 29f + distance) / 30f;
 					Projectile.velocity.Normalize();
 					Projectile.velocity *= scaleFactor;
 				}
