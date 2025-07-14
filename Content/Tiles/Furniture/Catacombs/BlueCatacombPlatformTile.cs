@@ -41,8 +41,6 @@ namespace ITD.Content.Tiles.Furniture.Catacombs
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             TileHelpers.DrawSlopedGlowMask(i, j, glowmask.Value, Color.White, Vector2.Zero);
-            if (Main.rand.NextBool(16) && !Main.gameInactive)
-                Rain.NewRainForced(new Point(i, j).ToWorldCoordinates() + Vector2.UnitY * 16f, new Vector2(1f, 16f));
         }
         public override void PostSetDefaults() => Main.tileNoSunLight[Type] = false;
 
