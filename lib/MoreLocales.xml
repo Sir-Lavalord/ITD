@@ -1,0 +1,1517 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MoreLocales</name>
+    </assembly>
+    <members>
+        <member name="T:MoreLocales.Common.BetterLangMenuUI">
+            <summary>
+            MoreLocales' UI. Generally you don't want to mess with this.
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Common.BetterLangMenuUI.PreviousUIState">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Common.BetterLangMenuUI.OnInitialize">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Common.BetterLangMenuUI.Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch)">
+            <inheritdoc/>
+        </member>
+        <member name="T:MoreLocales.Common.BetterLangMenuV2">
+            <summary>
+            <see href="https://bit.ly/3ZwJJaD"/>
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Common.BetterLangMenuV2.FlagsCount">
+            <summary>
+            The amount of flags (frames) in MoreLocales' flags spritesheet.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Common.LocalizationTweaks.EmitJsonObjectLastKey(MonoMod.Cil.ILCursor)">
+            <summary>
+            System.Linq.Last, now hyperoptimized! (final time per mod load goes from around 2 seconds to 10 milliseconds)
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Config.ClientSideConfig">
+            <summary>
+            MoreLocales configuration.
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Config.ClientSideConfig.Mode">
+            <inheritdoc/>
+        </member>
+        <member name="F:MoreLocales.Config.ClientSideConfig.LocalizedPrefixPlacement">
+            <summary>
+            Related to formatting via <see cref="T:MoreLocales.Utilities.AdjectiveOrder"/>.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Config.ClientSideConfig.LocalizedPrefixGenderPluralization">
+            <summary>
+            Related to formatting via <see cref="M:MoreLocales.Core.LangFeaturesPlus.GetPrefixNameWithItemContext(Terraria.Item)"/>.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Config.ClientSideConfig.ForcedFont">
+            <summary>
+            Forces a font style (only does anything for CJK fonts).
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.ModCulture">
+            <summary>
+            Represents an autoloaded culture.<para/>
+            Works similarly to tModLoader's ModX classes, except this class' instance is not relevant to the user. It is simply used as a template to generate a <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>.<para/>
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Core.ModCulture.Mod">
+            <summary>
+            The mod this belongs to.
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Core.ModCulture.Name">
+            <summary>
+            The internal name of this. Used for localization generation.
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Core.ModCulture.LanguageCode">
+            <summary>
+            The language code for this culture.<para/>
+            Vanilla examples:<br/>
+            <list type="bullet">
+            <item>en-US</item>
+            <item>de-DE</item>
+            <item>it-IT</item>
+            <item>zh-Hans</item>
+            </list>
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.SetCultureData(System.Int32@,System.Boolean@,System.Boolean@)">
+            <summary>
+            Allows you to set different parameters about this culture right before it is registered.
+            </summary>
+            <param name="fallbackCulture">
+            The <see cref="F:Terraria.Localization.GameCulture.LegacyId"/> of the culture this culture should fall back to in case keys for this culture aren't found.<br/>
+            Examples: All vanilla cultures have this set to 1 (English), while Traditional Chinese in MoreLocales has this set to 7 (Simplified Chinese)<para/>
+            Defaults to 1 (English).
+            </param>
+            <param name="hasSubtitle">
+            Whether or not this culture should have a subtitle in the language menu.<br/>
+            Typically, subtitles add information on the specific nature of the language. en-US's subtitle is 'United States' for example.<para/>
+            If this is true, the mod will look for, or generate a subtitle key in <code>Mods.YourMod.Cultures.MyCulture.Subtitle</code><para/>
+            Defaults to <see langword="true"/>.
+            </param>
+            <param name="hasDescription">
+            Whether or not this culture should show some text (a description, for example) in the language menu when hovered.<para/>
+            Defaults to <see langword="false"/>.
+            </param>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.SetGrammarData(MoreLocales.Core.PluralizationStyle@,MoreLocales.Utilities.AdjectiveOrder@)">
+            <summary>
+            Allows you to define some aspects of this culture's grammar right before it is registered, including pluralization style and the adjective order formatter.<para/>
+            <b>Note:</b> If <paramref name="pluralizationStyle"/> is set to <see cref="F:MoreLocales.Core.PluralizationStyle.Custom"/>, you also need to override <see cref="M:MoreLocales.Core.ModCulture.CustomPluralizationRule(System.Int32,System.Int32,System.Int32)"/>
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.CustomPluralizationRule(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Allows you to define a custom pluralization rule for this culture.<br/>
+            This is necessary if you set this culture's pluralization style to <see cref="F:MoreLocales.Core.PluralizationStyle.Custom"/>.<para/>
+            If this culture represents a real language, this rule should mirror the real one.<br/>
+            You can find rules for different languages <a href="https://docs.translatehouse.org/projects/localization-guide/en/latest/l10n/pluralforms.html">here.</a>
+            </summary>
+            <param name="count">The amount of <i>something</i>.</param>
+            <param name="mod10"><paramref name="count"/> % 10</param>
+            <param name="mod100"><paramref name="mod100"/> % 100</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.ContextChangesAdjective(MoreLocales.Core.GrammaticalGender,MoreLocales.Core.Pluralization)">
+            <summary>
+            <b>Note:</b> Overriding this method is not necessary, but it might avoid the game making unnecessary calculations.<para/>
+            Called early on when attempting to inflect a prefix. If this returns false, the regular form of the prefix will be used.
+            </summary>
+            <returns>Whether or not the given data can change an adjective's form in this culture.</returns>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.IsAvailable">
+            <summary>
+            Whether or not this culture should show up on the language menu.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.SetButtonDrawData(ReLogic.Content.Asset{Microsoft.Xna.Framework.Graphics.Texture2D}@,System.Nullable{System.Int32}@,System.Nullable{System.Int32}@)">
+            <summary>
+            Allows you to set different parameters for drawing this culture's respective button in the language menu, right before it is registered.
+            </summary>
+            <param name="sheet">The texture that will be used to draw this button.</param>
+            <param name="sheetFrameCount">The amount of vertical frames in the texture.</param>
+            <param name="sheetFrame">The frame that this specific language button will use.</param>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.PreDrawButtonPanel(Terraria.DataStructures.DrawData@)">
+            <inheritdoc cref="T:MoreLocales.Core.ButtonPanelDraw"/>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.Load">
+            <inheritdoc cref="M:Terraria.ModLoader.ILoadable.Load(Terraria.ModLoader.Mod)"/>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.Unload">
+            <inheritdoc cref="M:Terraria.ModLoader.ILoadable.Unload"/>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.Register(Terraria.ModLoader.Mod)">
+            <summary>
+            Registers this <see cref="T:MoreLocales.Core.ModCulture"/> instance.<br/>
+            If this instance is already registered, it does nothing.
+            </summary>
+            <param name="mod">The mod to register it under.</param>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Core.ModCulture.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:MoreLocales.Core.CultureNamePlus">
+            <summary>
+            The new added cultures. Enums can be freely cast into other enums without any errors. The enum underneath will keep the value.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.BritishEnglish">
+            <summary>
+            en-GB
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Japanese">
+            <summary>
+            ja-JP
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Korean">
+            <summary>
+            ko-KR
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.TraditionalChinese">
+            <summary>
+            zh-Hant
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Turkish">
+            <summary>
+            tr-TR
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Thai">
+            <summary>
+            th-TH
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Ukrainian">
+            <summary>
+            uk-UA
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.MexicanSpanish">
+            <summary>
+            es-MX
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Czech">
+            <summary>
+            cs-CZ
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Hungarian">
+            <summary>
+            hu-HU
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.PortugalPortuguese">
+            <summary>
+            pt-PT
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Swedish">
+            <summary>
+            sv-SE
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Dutch">
+            <summary>
+            nl-NL
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Danish">
+            <summary>
+            da-DK
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Vietnamese">
+            <summary>
+            vn-VN
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Finnish">
+            <summary>
+            fi-FI
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Romanian">
+            <summary>
+            ro-RO
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Indonesian">
+            <summary>
+            id-ID
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.CultureNamePlus.Unknown">
+            <summary>
+            9999
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.LocalizedFont">
+            <summary>
+            List of fonts that are needed to support different languages, especially Asian languages.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.LocalizedFont.None">
+            <summary>
+            Does not change the font.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.LocalizedFont.Default">
+            <summary>
+            Forces default style CJK characters.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.LocalizedFont.Japanese">
+            <summary>
+            Forces Japanese style CJK characters.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.LocalizedFont.Korean">
+            <summary>
+            Forces Korean style CJK characters.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.PluralizationStyle">
+            <summary>
+            Defines a 'pluralization style' for text formatting.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.PluralizationStyle.None">
+            <summary>
+            Like zh-Hans.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.PluralizationStyle.Simple">
+            <summary>
+            Like en-US, de-DE, it-IT, es-ES, pt-BR.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.PluralizationStyle.SimpleWithSingularZero">
+            <summary>
+            Like fr-FR.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.PluralizationStyle.RussianThreeway">
+            <summary>
+            Like ru-RU.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.PluralizationStyle.PolishThreeway">
+            <summary>
+            Like pl-PL.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.PluralizationStyle.Custom">
+            <summary>
+            Needs special pluralization rule. Defined in <see cref="F:MoreLocales.Core.MoreLocalesCulture.GrammarData"/> in <see cref="M:MoreLocales.Utilities.CultureHelper.CustomPluralization(System.Int32,System.Int32,System.Int32,System.Int32)"/>.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.AdjectiveOrderType">
+            <summary>
+            Adjective order type for <see cref="T:MoreLocales.Utilities.AdjectiveOrder"/>.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.AdjectiveOrderType.Before">
+            <summary>
+            Adjective comes before the noun.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.AdjectiveOrderType.After">
+            <summary>
+            Adjective comes after the noun.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.ChildFont">
+            <summary>
+            Contains information for a child font of a specific <see cref="T:ReLogic.Content.Asset`1"/> of type <see cref="T:ReLogic.Graphics.DynamicSpriteFont"/>
+            </summary>
+            <param name="Font">The child font</param>
+            <param name="OverrideParent">Whether or not this font should override the parent font's character if the parent font contains that character</param>
+        </member>
+        <member name="M:MoreLocales.Core.ChildFont.#ctor(ReLogic.Content.Asset{ReLogic.Graphics.DynamicSpriteFont},System.Func{System.Boolean})">
+            <summary>
+            Contains information for a child font of a specific <see cref="T:ReLogic.Content.Asset`1"/> of type <see cref="T:ReLogic.Graphics.DynamicSpriteFont"/>
+            </summary>
+            <param name="Font">The child font</param>
+            <param name="OverrideParent">Whether or not this font should override the parent font's character if the parent font contains that character</param>
+        </member>
+        <member name="P:MoreLocales.Core.ChildFont.Font">
+            <summary>The child font</summary>
+        </member>
+        <member name="P:MoreLocales.Core.ChildFont.OverrideParent">
+            <summary>Whether or not this font should override the parent font's character if the parent font contains that character</summary>
+        </member>
+        <member name="T:MoreLocales.Core.ChildFontData">
+            <summary>
+            Contains data to include fonts inside other fonts.
+            </summary>
+            <param name="children"></param>
+        </member>
+        <member name="M:MoreLocales.Core.ChildFontData.#ctor(MoreLocales.Core.ChildFont[])">
+            <summary>
+            Contains data to include fonts inside other fonts.
+            </summary>
+            <param name="children"></param>
+        </member>
+        <member name="F:MoreLocales.Core.ChildFontData.Children">
+            <summary>
+            Children fonts which can override the parent.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.ChildFontData.Nudge">
+            <summary>
+            Waits for the children assets to be loaded.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.ChildFontData.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Core.ChildFontData.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Core.FontHelperV2.GetChildren(ReLogic.Graphics.DynamicSpriteFont)">
+            <summary>
+            I'm DEAD my guy<para/>
+            (Returns the correct children for a given font in the worst way possible.)
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.FontHelperV2._currentlyDrawnFont">
+            <summary>
+            I'm sorry.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.InflectionDelegates">
+            <summary>
+            Contains some helper delegates for inflection when building a custom culture.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.InflectionDelegates.inflectionNeverChanges(MoreLocales.Core.GrammaticalGender,MoreLocales.Core.Pluralization)">
+            <summary>
+            This culture doesn't do adjective inflection for grammatical gender nor pluralization. (Like en-US)
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.InflectionDelegates.inflectionChangesWhenNotDefault(MoreLocales.Core.GrammaticalGender,MoreLocales.Core.Pluralization)">
+            <summary>
+            This culture does adjective inflection if either the grammatical gender or pluralization aren't default. (Like es-ES)
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.LangFeaturesPlus">
+            <summary>
+            Container for all features of Localization+ that are not (directly) related to extra language support.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.LangFeaturesPlus.GetPrefixNameWithItemContext(Terraria.Item)">
+            <summary>
+            Retrieves a LocalizedText that contains the gendered and pluralized form of a prefix depending on the item it's applied to (if applicable)
+            </summary>
+            <param name="context">The item.</param>
+        </member>
+        <member name="M:MoreLocales.Core.LangFeaturesPlus.WithIndexFormat(Terraria.Localization.LocalizedText,System.Int32[])">
+            <summary>
+            Allows you to work with what's usually used as a pluralization system (things like <c>"It has been {0} {^0:day;days}."</c>), but by supplying indices to those arrays (in this case <c>["day","days"]</c>) directly, meaning it can be used for direct pluralization via <see cref="T:MoreLocales.Core.Pluralization"/>, or even just dynamically choosing elements from each array to display stuff dynamically.<para/>
+            This must be used <b>before</b> any formatting via <see cref="M:Terraria.Localization.LocalizedText.Format(System.Object[])"/>, <see cref="M:Terraria.Localization.LocalizedText.WithFormatArgs(System.Object[])"/>, etc.
+            </summary>
+            <param name="baseText"></param>
+            <param name="indices"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Core.LangFeaturesPlus.InflectionDataChangesAdjectiveForm(Terraria.Localization.GameCulture,MoreLocales.Core.InflectionData)">
+            <summary>
+            Checks if this culture changes the adjective form based on grammatical gender and/or pluralization of the noun.<para/>
+            This is added to a custom culture via the <see cref="T:MoreLocales.Core.GrammarData"/> parameter when registering manually, or <see cref="M:MoreLocales.Core.ModCulture.ContextChangesAdjective(MoreLocales.Core.GrammaticalGender,MoreLocales.Core.Pluralization)"/> when using the autoloaded culture API.
+            </summary>
+            <param name="c">The culture to check.</param>
+            <param name="data">The inflection data to check for.</param>
+            <param name="gender">The grammatical gender to check for.</param>
+            <param name="pluralization">The pluralization to check for.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Core.LangFeaturesPlus.InflectionDataChangesAdjectiveForm(Terraria.Localization.GameCulture,MoreLocales.Core.GrammaticalGender,MoreLocales.Core.Pluralization)">
+            <inheritdoc cref="M:MoreLocales.Core.LangFeaturesPlus.InflectionDataChangesAdjectiveForm(Terraria.Localization.GameCulture,MoreLocales.Core.InflectionData)"/>
+        </member>
+        <member name="M:MoreLocales.Core.LangFeaturesPlus.ItemIsGenderPluralizable(System.Int32)">
+            <summary>
+            Only items that can be reforged should be able to affect adjectives.
+            </summary>
+            <param name="type">The type of the item to look up.</param>
+            <returns>Whether or not this item can have prefixes for localization purposes.</returns>
+        </member>
+        <member name="M:MoreLocales.Core.LangFeaturesPlus.GetItemInflection(System.Int32,System.Boolean)">
+            <summary>
+            Gets this item type's current inflection data.
+            </summary>
+            <param name="type">Item type.</param>
+            <param name="addComments">Add comments to the localization file or not.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Core.LangFeaturesPlus.TryParse(System.String,MoreLocales.Core.InflectionData@,Terraria.ModLoader.Mod)">
+            <summary>
+            Attempts to parse a string containing inflection data into <see cref="T:MoreLocales.Core.InflectionData"/>.
+            </summary>
+            <param name="value">The inflection data string.</param>
+            <param name="result">The result of the parsing operation if successful.</param>
+            <param name="sourceMod">The mod this value belongs to. If your mod contains pluralization aliases (set by the localizers), you must set this to your mod instance.</param>
+            <returns>Whether or not the operation was successful.</returns>
+        </member>
+        <member name="M:MoreLocales.Core.LangFeaturesPlus.Deconstruct(MoreLocales.Core.InflectionData,MoreLocales.Core.GrammaticalGender@,MoreLocales.Core.Pluralization@)">
+            <summary>
+            Deconstructs an <see cref="T:MoreLocales.Core.InflectionData"/> into its individual parts.
+            </summary>
+            <param name="data"></param>
+            <param name="gender"></param>
+            <param name="pluralization"></param>
+        </member>
+        <member name="M:MoreLocales.Core.LangFeaturesPlus.TryGetInflectionFileKey(Terraria.ModLoader.Mod,System.String@)">
+            <summary>
+            Tries to get the inflection file key for a given mod.<para/>
+            A mod can choose to opt out of having an inflection file generated by calling <see cref="M:MoreLocales.MoreLocales.ProtectModFromInflectionFileGeneration(Terraria.ModLoader.Mod)"/><br/>
+            or calling <see cref="M:Terraria.ModLoader.Mod.Call(System.Object[])"/> on MoreLocales' instance with the mod/mod name as a single argument. (Must be done during <see cref="M:Terraria.ModLoader.Mod.Load"/> or earlier)
+            </summary>
+            <param name="target"></param>
+            <param name="inflectionFileKey"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MoreLocales.Core.InflectionData">
+            <summary>
+            Container for grammatical gender and pluralization.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.InflectionData.Default">
+            <summary>
+            No inflection.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.GrammaticalGender">
+            <summary>
+            Grammatical gender.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.GrammaticalGender.Masculine">
+            <summary>
+            Masculine grammatical gender. Also known as Common gender in certain languages.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.GrammaticalGender.Feminine">
+            <summary>
+            Feminine grammatical gender.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.GrammaticalGender.Neuter">
+            <summary>
+            Neuter grammatical gender.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.Pluralization">
+            <summary>
+            Grammatical pluralization.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.Pluralization.Singular">
+            <summary>
+            Singular noun.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.Pluralization.Plural">
+            <summary>
+            Basic plural noun.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.Pluralization.Few">
+            <summary>
+            Basic plural noun (same value as <see cref="F:MoreLocales.Core.Pluralization.Plural"/>).
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.Pluralization.Many">
+            <summary>
+            'Many' plural noun. Used in certain languages.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.ButtonPanelDraw">
+            <summary>
+            Allows you to do stuff before drawing a certain culture's button.<para/>
+            Return <see langword="true"/> to draw the button normally, using the <see cref="T:Terraria.DataStructures.DrawData"/> provided.<br/>
+            Return <see langword="null"/> to stop only the drawing of this button's panel.<br/>
+            Return <see langword="false"/> to stop the drawing of this button entirely.<para/>
+            The only fields the instance of <see cref="T:Terraria.DataStructures.DrawData"/> already has set are <see cref="F:Terraria.DataStructures.DrawData.texture"/>, <see cref="F:Terraria.DataStructures.DrawData.position"/> and <see cref="F:Terraria.DataStructures.DrawData.color"/> (Set to <see cref="P:Microsoft.Xna.Framework.Color.White"/>)<br/>
+            Nothing that you change in this <see cref="T:Terraria.DataStructures.DrawData"/> instance will affect other steps.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.GrammarData">
+            <summary>
+            A structure used to provide information about a certain <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>'s grammar.<br/>
+            Used mainly for advanced localization features like adjective form inflection and adjective ordering.<para/>
+            <b>Note:</b> Setting the pluralization rule to <see cref="F:MoreLocales.Core.PluralizationStyle.Custom"/> requires you to also set <see cref="F:MoreLocales.Core.GrammarData.CustomPluralizationRule"/>
+            </summary>
+            <param name="pluralizationStyle">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.PluralizationRule"/>
+            </param>
+            <param name="customPluralizationRule">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.CustomPluralizationRule"/>
+            </param>
+            <param name="adjectiveOrder">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.AdjectiveOrder"/>
+            </param>
+            <param name="contextChangesAdjective">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.ContextChangesAdjective"/>
+            </param>
+        </member>
+        <member name="M:MoreLocales.Core.GrammarData.#ctor(MoreLocales.Core.PluralizationStyle,System.Func{System.Int32,System.Int32,System.Int32,System.Int32},System.Nullable{MoreLocales.Utilities.AdjectiveOrder},System.Func{MoreLocales.Core.GrammaticalGender,MoreLocales.Core.Pluralization,System.Boolean})">
+            <summary>
+            A structure used to provide information about a certain <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>'s grammar.<br/>
+            Used mainly for advanced localization features like adjective form inflection and adjective ordering.<para/>
+            <b>Note:</b> Setting the pluralization rule to <see cref="F:MoreLocales.Core.PluralizationStyle.Custom"/> requires you to also set <see cref="F:MoreLocales.Core.GrammarData.CustomPluralizationRule"/>
+            </summary>
+            <param name="pluralizationStyle">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.PluralizationRule"/>
+            </param>
+            <param name="customPluralizationRule">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.CustomPluralizationRule"/>
+            </param>
+            <param name="adjectiveOrder">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.AdjectiveOrder"/>
+            </param>
+            <param name="contextChangesAdjective">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.ContextChangesAdjective"/>
+            </param>
+        </member>
+        <member name="F:MoreLocales.Core.GrammarData.PluralizationRule">
+            <summary>
+            The pluralization style that should be used for this <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>.<para/>
+            If the value of this is <see cref="F:MoreLocales.Core.PluralizationStyle.Custom"/>, setting the value of <see cref="F:MoreLocales.Core.GrammarData.CustomPluralizationRule"/> <b>is mandatory.</b>
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.GrammarData.CustomPluralizationRule">
+            <summary>
+            The pluralization rule function for a <see cref="T:MoreLocales.Core.MoreLocalesCulture"/> with a <see cref="F:MoreLocales.Core.GrammarData.PluralizationRule"/> of value <see cref="F:MoreLocales.Core.PluralizationStyle.Custom"/>.<para/>
+            This function should take in 'count, mod10, mod100' as parameters, and return the index of the final pluralization type.<br/>
+            If your culture represents a language that already exists, refer to this list to learn how to write this function: <see href="https://docs.translatehouse.org/projects/localization-guide/en/latest/l10n/pluralforms.html"/>
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.GrammarData.AdjectiveOrder">
+            <summary>
+            The adjective-noun order formatter for this <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.GrammarData.ContextChangesAdjective">
+            <summary>
+            Whether or not a pair of gender and pluralization data from a noun should change the form of the adjective attached to it. <br/>
+            For example, in English, adjective form never changes, so you'd always return true. In Spanish, the adjective changes if the gender isn't masculine or if the noun is plural. <para/>
+            This function should take in 'gender, pluralizationType' as parameters, and return the result.<br/>
+            For more info on pluralization type, see <see cref="F:MoreLocales.Core.GrammarData.CustomPluralizationRule"/>.<para/>
+            <b>Note:</b> Setting this is not necessary for a new culture to function. It simply allows for culling unnecessary calculations for slighly better performance.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.GrammarData.Context(System.Func{MoreLocales.Core.GrammaticalGender,MoreLocales.Core.Pluralization,System.Boolean})">
+            <summary>
+            Makes a new <see cref="T:MoreLocales.Core.GrammarData"/> instance with only <see cref="F:MoreLocales.Core.GrammarData.ContextChangesAdjective"/> set.
+            </summary>
+            <param name="contextChangesAdjective">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.ContextChangesAdjective"/>
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Core.GrammarData.StyleOrder(MoreLocales.Core.PluralizationStyle,MoreLocales.Utilities.AdjectiveOrder)">
+            <summary>
+            Makes a new <see cref="T:MoreLocales.Core.GrammarData"/> instance with only <see cref="F:MoreLocales.Core.GrammarData.PluralizationRule"/> and <see cref="F:MoreLocales.Core.GrammarData.AdjectiveOrder"/> set.
+            </summary>
+            <param name="pluralizationStyle">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.PluralizationRule"/>
+            </param>
+            <param name="adjectiveOrder">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.AdjectiveOrder"/>
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Core.GrammarData.OrderContext(MoreLocales.Utilities.AdjectiveOrder,System.Func{MoreLocales.Core.GrammaticalGender,MoreLocales.Core.Pluralization,System.Boolean})">
+            <summary>
+            Makes a new <see cref="T:MoreLocales.Core.GrammarData"/> instance with only <see cref="F:MoreLocales.Core.GrammarData.AdjectiveOrder"/> and <see cref="F:MoreLocales.Core.GrammarData.ContextChangesAdjective"/> set.
+            </summary>
+            <param name="adjectiveOrder">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.AdjectiveOrder"/>
+            </param>
+            <param name="contextChangesAdjective">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.ContextChangesAdjective"/>
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Core.GrammarData.StyleContext(MoreLocales.Core.PluralizationStyle,System.Func{MoreLocales.Core.GrammaticalGender,MoreLocales.Core.Pluralization,System.Boolean})">
+            <summary>
+            Makes a new <see cref="T:MoreLocales.Core.GrammarData"/> instance with only <see cref="F:MoreLocales.Core.GrammarData.PluralizationRule"/> and <see cref="F:MoreLocales.Core.GrammarData.ContextChangesAdjective"/> set.
+            </summary>
+            <param name="pluralizationStyle">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.PluralizationRule"/>
+            </param>
+            <param name="contextChangesAdjective">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.ContextChangesAdjective"/>
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Core.GrammarData.StyleOrderContext(MoreLocales.Core.PluralizationStyle,MoreLocales.Utilities.AdjectiveOrder,System.Func{MoreLocales.Core.GrammaticalGender,MoreLocales.Core.Pluralization,System.Boolean})">
+            <summary>
+            Makes a new <see cref="T:MoreLocales.Core.GrammarData"/> instance with <see cref="F:MoreLocales.Core.GrammarData.PluralizationRule"/>, <see cref="F:MoreLocales.Core.GrammarData.AdjectiveOrder"/> and <see cref="F:MoreLocales.Core.GrammarData.ContextChangesAdjective"/> set.
+            </summary>
+            <param name="pluralizationStyle">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.PluralizationRule"/>
+            </param>
+            <param name="adjectiveOrder">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.AdjectiveOrder"/>
+            </param>
+            <param name="contextChangesAdjective">
+            <inheritdoc cref="F:MoreLocales.Core.GrammarData.ContextChangesAdjective"/>
+            </param>
+            <returns></returns>
+        </member>
+        <member name="T:MoreLocales.Core.LanguageButtonDrawData">
+            <summary>
+            A structure used for control over the drawing of the language button for a certain culture.<para/>
+            Can control basic stuff (using the basic fields) and also more advanced stuff at the different button draw steps (using the delegate fields).
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.LanguageButtonDrawData.#ctor(ReLogic.Content.Asset{Microsoft.Xna.Framework.Graphics.Texture2D},System.Nullable{System.Int32},System.Nullable{System.Int32},MoreLocales.Core.ButtonPanelDraw)">
+            <summary>
+            A structure used for control over the drawing of the language button for a certain culture.<para/>
+            Can control basic stuff (using the basic fields) and also more advanced stuff at the different button draw steps (using the delegate fields).
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.LanguageButtonDrawData.Sheet">
+            <summary>
+            The sheet where the language symbol graphic will be taken from. If this field is left null, this will be Flags.png
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.LanguageButtonDrawData.SheetFrameCount">
+            <summary>
+            The amount of vertical frames in <see cref="F:MoreLocales.Core.LanguageButtonDrawData.Sheet"/>.<para/>
+            Defaults to 28 if <see cref="F:MoreLocales.Core.LanguageButtonDrawData.Sheet"/> is also null, otherwise defaults to 1.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.LanguageButtonDrawData.SheetFrame">
+            <summary>
+            The index of the vertical frame that this language symbol should use. Defaults to 0.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.LanguageButtonDrawData.HijackPanelDraw">
+            <summary>
+            Allows you to do a range of things before drawing the main button panel. Leave null to not do anything.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.MoreLocalesCulture">
+            <summary>
+            A structure used to significantly extend the functionality of <see cref="T:Terraria.Localization.GameCulture"/>.<br/>
+            Cultures registered through <see cref="T:MoreLocales.MoreLocales"/> will create localization keys inside the <see cref="F:MoreLocales.Core.MoreLocalesCulture.Mod"/>'s localization file.<br/>
+            These keys are needed for correct display inside <see cref="T:MoreLocales.MoreLocales"/>'s UI.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesCulture.#ctor(Terraria.Localization.GameCulture,System.String,System.Int32,System.Boolean,System.Boolean,MoreLocales.Core.GrammarData,System.Func{System.Boolean},MoreLocales.Core.LanguageButtonDrawData,Terraria.ModLoader.Mod)">
+            <summary>
+            A structure used to significantly extend the functionality of <see cref="T:Terraria.Localization.GameCulture"/>.<br/>
+            Cultures registered through <see cref="T:MoreLocales.MoreLocales"/> will create localization keys inside the <see cref="F:MoreLocales.Core.MoreLocalesCulture.Mod"/>'s localization file.<br/>
+            These keys are needed for correct display inside <see cref="T:MoreLocales.MoreLocales"/>'s UI.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesCulture.Culture">
+            <summary>
+            The child culture of this <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesCulture.Name">
+            <summary>
+            The internal name of this <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>. Used for certain language info lookups.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesCulture.FallbackCulture">
+            <summary>
+            The fallback culture of this <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>.<br/>
+            If localizations for this culture aren't found, localizations from the fallback culture will be used instead.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesCulture.HasSubtitle">
+            <summary>
+            Used for display in <see cref="T:MoreLocales.Common.BetterLangMenuUI"/>.<br/>
+            If this is true for a custom culture, <see cref="T:MoreLocales.MoreLocales"/> will search for (or create) a subtitle key using <see cref="M:Terraria.ModLoader.Mod.GetLocalization(System.String,System.Func{System.String})"/> using the "Cultures.{Name}.Subtitle" suffix.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesCulture.HasDescription">
+            <summary>
+            Used for hover text in <see cref="T:MoreLocales.Common.BetterLangMenuUI"/>.<br/>
+            If this is true for a custom culture, the mod will search for (or create) a description key using <see cref="M:Terraria.ModLoader.Mod.GetLocalization(System.String,System.Func{System.String})"/> using the "Cultures.{Name}.Description" suffix.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesCulture.GrammarData">
+            <inheritdoc cref="T:MoreLocales.Core.GrammarData"/>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesCulture.Available">
+            <summary>
+            Whether or not this culture should be visible on the language menu. Defaults to null (always available).
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesCulture.ButtonDrawData">
+            <inheritdoc cref="T:MoreLocales.Core.LanguageButtonDrawData"/>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesCulture.Mod">
+            <summary>
+            The parent mod for this <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>. Null if this represents a vanilla culture.
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Core.MoreLocalesCulture.OtherCustom">
+            <summary>
+            Whether or not this <see cref="T:MoreLocales.Core.MoreLocalesCulture"/> was registered by an external source that is not Terraria nor <see cref="T:MoreLocales.MoreLocales"/>.
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Core.MoreLocalesCulture.NativeCustom">
+            <summary>
+            Whether or not this <see cref="T:MoreLocales.Core.MoreLocalesCulture"/> was registered as part of the set of languages defined by <see cref="T:MoreLocales.MoreLocales"/> in <see cref="T:MoreLocales.Core.CultureNamePlus"/>.
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Core.MoreLocalesCulture.Vanilla">
+            <summary>
+            Whether or not this <see cref="T:MoreLocales.Core.MoreLocalesCulture"/> was registered as part of the set of languages defined by Terraria in <see cref="T:Terraria.Localization.GameCulture.CultureName"/>.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.Ref`1">
+            <summary>
+            <see href="https://bit.ly/458nsBZ"/>
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.Ref`1.#ctor(`0@)">
+            <summary>
+            <see href="https://bit.ly/458nsBZ"/>
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.Ref`1.Value">
+            <summary>
+            The reference contained in this.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.MoreLocalesAPI">
+            <summary>
+            Contains methods to interface with the cultures API extended by MoreLocales.
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Core.MoreLocalesAPI.ProtectedMods">
+            <summary>
+            Mods in this collection are protected from getting their localization files automatically marked as '.legacy' by tModLoader if they contain localization files without en-US counterparts.<para/>
+            Useful for making mods that register a culture to add localizations to vanilla.<para/>
+            Add your mod to this set using <see cref="M:MoreLocales.Core.MoreLocalesAPI.ProtectFilesFromLegacyMarking(Terraria.ModLoader.Mod)"/>.
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Core.MoreLocalesAPI.ActiveCulture">
+            <summary>
+            Gets a reference to the currently active <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.GetCulture(System.Int32)">
+            <summary>
+            Returns a reference to the requested <see cref="T:MoreLocales.Core.MoreLocalesCulture"/> based on its <see cref="F:Terraria.Localization.GameCulture.LegacyId"/>.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.GetCulture``1">
+            <summary>
+            Returns a reference to the requested autoloaded <see cref="T:MoreLocales.Core.MoreLocalesCulture"/> based on its <see cref="T:System.Type"/>.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.TryGetCulture``1(MoreLocales.Core.Ref{MoreLocales.Core.MoreLocalesCulture}@)">
+            <summary>
+            Attempts to get a reference to the requested autoloaded <see cref="T:MoreLocales.Core.MoreLocalesCulture"/> based on its <see cref="T:System.Type"/>.
+            </summary>
+            <typeparam name="T">A type inheriting from <see cref="T:MoreLocales.Core.ModCulture"/></typeparam>
+            <param name="culture">
+            A <see cref="T:MoreLocales.Core.Ref`1"/> containing a reference to the requested <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>.<br/>
+            If this method fails to find the requested culture, the value of this will be a reference to a default <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>.
+            </param>
+            <returns>Whether or not the requested <see cref="T:MoreLocales.Core.MoreLocalesCulture"/> was found.</returns>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.GetCultureExtra(Terraria.Localization.GameCulture)">
+            <summary>
+            Returns a reference to the <see cref="T:MoreLocales.Core.MoreLocalesCulture"/> that contains this <see cref="T:Terraria.Localization.GameCulture"/>.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.HasLocalizationsFor(Terraria.ModLoader.Mod,System.Int32)">
+            <summary>
+            Checks if this mod has localizations for a given <see cref="T:Terraria.Localization.GameCulture"/> using its <see cref="F:Terraria.Localization.GameCulture.LegacyId"/>.
+            </summary>
+            <param name="mod">The mod.</param>
+            <param name="legacyID">The legacy ID for the localizable culture.</param>
+            <returns>Whether or not this mod has localizations for the given culture.</returns>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.HasLocalizationsFor(Terraria.ModLoader.Mod,Terraria.Localization.GameCulture)">
+            <summary>
+            Checks if this mod has localizations for a given <see cref="T:Terraria.Localization.GameCulture"/>.
+            </summary>
+            <param name="mod">The mod.</param>
+            <param name="culture">The <see cref="T:Terraria.Localization.GameCulture"/> instance.</param>
+            <returns>Whether or not this mod has localizations for the given culture.</returns>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.HasLocalizationsFor(Terraria.ModLoader.Mod,MoreLocales.Core.MoreLocalesCulture@)">
+            <summary>
+            Checks if this mod has localizations for a given <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>.
+            </summary>
+            <param name="mod">The mod.</param>
+            <param name="culture">The <see cref="T:MoreLocales.Core.MoreLocalesCulture"/> instance.</param>
+            <returns>Whether or not this mod has localizations for the given culture.</returns>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.HasLocalizationsFor(Terraria.ModLoader.Mod,System.String)">
+            <summary>
+            Checks if this mod has localizations for a given <see cref="T:Terraria.Localization.GameCulture"/> using its <see cref="P:Terraria.Localization.GameCulture.Name"/> (language code).
+            </summary>
+            <param name="mod">The mod.</param>
+            <param name="langCode">The language code.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.HasLocalizationsFor``1(Terraria.ModLoader.Mod)">
+            <summary>
+            Checks if this mod has localizations for a given <see cref="T:MoreLocales.Core.ModCulture"/> type.
+            </summary>
+            <param name="mod">The mod.</param>
+            <typeparam name="TCulture">The ModCulture type.</typeparam>
+            <returns>Whether or not this mod has localizations for the given culture.</returns>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.RegisterCulture(System.String,System.String,System.Int32,System.Boolean,System.Boolean,MoreLocales.Core.GrammarData,System.Func{System.Boolean},MoreLocales.Core.LanguageButtonDrawData,Terraria.ModLoader.Mod)">
+            <summary>
+            Registers a new localizable culture. Can only be called during a Load hook.
+            </summary>
+            <param name="internalName">The internal name of this.</param>
+            <param name="languageCode">The language code of this culture, e. g. en-US, es-ES, etc.</param>
+            <param name="fallbackCulture">The <see cref="F:Terraria.Localization.GameCulture.LegacyId"/> of a fallback culture. Localizations from the fallback culture will be loaded if one for this culture isn't found.</param>
+            <param name="hasSubtitle">Whether or not a subtitle should be searched for and shown in the language menu.</param>
+            <param name="hasDescription">Whether or not a hover text (description) should be searched for and shown in the language menu.</param>
+            <param name="grammarData">Data related to handling grammar for this culture.</param>
+            <param name="available">Whether or not this culture should be visible in the language menu. Useful if you want cultures to be 'unlockable' for whatever reason.</param>
+            <param name="buttonDrawData">Data related to the drawing of this culture's button in the language menu.</param>
+            <param name="mod">The mod that registers this culture.</param>
+            <returns>A reference to the newly registered culture.</returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.NullReferenceException"></exception>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.ProtectFilesFromLegacyMarking(Terraria.ModLoader.Mod)">
+            <summary>
+            Adds this mod to <see cref="P:MoreLocales.Core.MoreLocalesAPI.ProtectedMods"/> (read those docs for more information).
+            </summary>
+            <param name="mod">The mod to add to the protected list.</param>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesAPI.SetLanguageSoft(Terraria.Localization.GameCulture)">
+            <summary>
+            Sets the game's language without calling <see cref="M:Terraria.Localization.LanguageManager.SetLanguage(Terraria.Localization.GameCulture)"/>
+            </summary>
+            <param name="culture"></param>
+        </member>
+        <member name="T:MoreLocales.Core.MoreLocalesSets">
+            <summary>
+            sorry nothing
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Core.MoreLocalesSystem">
+            <summary>
+            Contains stuff I could only do in a ModSystem.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesSystem.betterLangMenuID">
+            <summary>
+            The menu ID (<see cref="T:Terraria.ID.MenuID"/>) of the improved language menu added by MoreLocales, 'LANGS'
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesSystem.betterLangMenu">
+            <summary>
+            The instance of the language menu UI.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Core.MoreLocalesSystem.ingameLangMenuButtonUI">
+            <summary>
+            The user interface used to display the in-game language menu button.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesSystem.Load">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesSystem.SetStaticDefaults">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesSystem.OnLocalizationsLoaded">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesSystem.ModifyInterfaceLayers(System.Collections.Generic.List{Terraria.UI.GameInterfaceLayer})">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesSystem.UpdateUI(Microsoft.Xna.Framework.GameTime)">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Core.MoreLocalesSystem.PostUpdateDusts">
+            <inheritdoc/>
+        </member>
+        <member name="T:MoreLocales.MoreLocales">
+            <summary>
+            A super cool localization extension mod. <para/>
+            <see href="https://github.com/queueAngel/MoreLocales"/>
+            </summary>
+        </member>
+        <member name="P:MoreLocales.MoreLocales.Instance">
+            <summary>
+            The instance of MoreLocales.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.MoreLocales.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.MoreLocales.Load">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.MoreLocales.PostSetupContent">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.MoreLocales.ProtectModFromInflectionFileGeneration(Terraria.ModLoader.Mod)">
+            <summary>
+            Call this for your mod during <see cref="M:Terraria.ModLoader.Mod.Load"/> or earlier if you don't want localization files for inflection data (grammatical gender, pluralization) to be generated at all.
+            </summary>
+            <param name="mod">The mod to protect.</param>
+        </member>
+        <member name="M:MoreLocales.MoreLocales.Call(System.Object[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.MoreLocales.Unload">
+            <inheritdoc/>
+        </member>
+        <member name="M:MoreLocales.Utilities.AssetHelper.UnsafeRequestSpriteFont(System.String)">
+            <summary>
+            The provided path must already be clean.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:MoreLocales.Utilities.CultureHelper">
+            <summary>
+            Contains some helpers to work with <see cref="T:Terraria.Localization.GameCulture"/> and <see cref="T:MoreLocales.Core.MoreLocalesCulture"/>.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Utilities.CultureHelper.CustomCultureActive(MoreLocales.Core.CultureNamePlus)">
+            <summary>
+            Checks if a given MoreLocales culture is active.
+            </summary>
+            <param name="customCulture">Culture.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.CultureHelper.FullName(Terraria.Localization.GameCulture)">
+            <summary>
+            Internal name for a <see cref="T:Terraria.Localization.GameCulture"/>.
+            </summary>
+            <param name="culture">The culture.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.CultureHelper.IsCustom(Terraria.Localization.GameCulture)">
+            <summary>
+            Checks if this culture isn't vanilla.
+            </summary>
+            <param name="culture">The culture.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.CultureHelper.IsValid(System.Int32)">
+            <summary>
+            Checks if the provided legacy ID corresponds to an actual culture or not.
+            </summary>
+            <param name="culture"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.CultureHelper.MapLegacyIDToPluralizationID(System.Int32)">
+            <summary>
+            Maps a custom culture's legacy ID to a vanilla culture with the same pluralization rule. Returns 10 for <see cref="F:MoreLocales.Core.PluralizationStyle.Custom"/>.
+            </summary>
+            <param name="realID">The legacy ID.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.CultureHelper.czechPlural(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            cs-CZ style pluralization.
+            </summary>
+            <param name="count">The amount.</param>
+            <param name="mod10">The amount % 10.</param>
+            <param name="mod100">The amount % 100.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.CultureHelper.turkishPlural(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            tr-TR style pluralization.
+            </summary>
+            <param name="count">The amount.</param>
+            <param name="mod10">The amount % 10.</param>
+            <param name="mod100">The amount % 100.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.CultureHelper.romanianPlural(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            ro-RO style pluralization.
+            </summary>
+            <param name="count">The amount.</param>
+            <param name="mod10">The amount % 10.</param>
+            <param name="mod100">The amount % 100.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.CultureHelper.GetRealName(Terraria.Item)">
+            <summary>
+            Replicates the behavior of <see cref="P:Terraria.Item.Name"/> before the effects of <see cref="M:MoreLocales.Core.LangFeaturesPlus.RemovePrefixLiteralFromName(MonoMod.Cil.ILContext)"/>.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.CultureHelper.RegisterCulture(Terraria.ModLoader.Mod,System.String,System.String,System.Int32,System.Boolean,System.Boolean,MoreLocales.Core.GrammarData,System.Func{System.Boolean},MoreLocales.Core.LanguageButtonDrawData)">
+            <inheritdoc cref="M:MoreLocales.Core.MoreLocalesAPI.RegisterCulture(System.String,System.String,System.Int32,System.Boolean,System.Boolean,MoreLocales.Core.GrammarData,System.Func{System.Boolean},MoreLocales.Core.LanguageButtonDrawData,Terraria.ModLoader.Mod)"/>
+        </member>
+        <member name="T:MoreLocales.Utilities.AdjectiveOrder">
+            <summary>
+            A light text formatting structure for adjective-noun order.
+            </summary>
+            <param name="Type">Whether or not the adjective should go before or after the noun.</param>
+            <param name="Connector">The string to insert between the adjective and the noun, if any.</param>
+        </member>
+        <member name="M:MoreLocales.Utilities.AdjectiveOrder.#ctor(MoreLocales.Core.AdjectiveOrderType,System.String)">
+            <summary>
+            A light text formatting structure for adjective-noun order.
+            </summary>
+            <param name="Type">Whether or not the adjective should go before or after the noun.</param>
+            <param name="Connector">The string to insert between the adjective and the noun, if any.</param>
+        </member>
+        <member name="P:MoreLocales.Utilities.AdjectiveOrder.Type">
+            <summary>Whether or not the adjective should go before or after the noun.</summary>
+        </member>
+        <member name="P:MoreLocales.Utilities.AdjectiveOrder.Connector">
+            <summary>The string to insert between the adjective and the noun, if any.</summary>
+        </member>
+        <member name="P:MoreLocales.Utilities.AdjectiveOrder.Before">
+            <summary>
+            {Adjective}{Noun}
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Utilities.AdjectiveOrder.After">
+            <summary>
+            {Noun}{Adjective}
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Utilities.AdjectiveOrder.BeforeWithSpace">
+            <summary>
+            {Adjective} {Noun}
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Utilities.AdjectiveOrder.AfterWithSpace">
+            <summary>
+            {Noun} {Adjective}
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Utilities.AdjectiveOrder.#ctor">
+            <summary>
+            Creates a default <see cref="T:MoreLocales.Utilities.AdjectiveOrder"/> instance with the values of <see cref="P:MoreLocales.Utilities.AdjectiveOrder.BeforeWithSpace"/>
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Utilities.AdjectiveOrder.Apply(System.String,System.String)">
+            <summary>
+            Formats the adjective and noun together
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Utilities.ILHelper.UpdateInstructionOffsets(MonoMod.Cil.ILCursor)">
+            <summary>
+            Updates the instruction offsets within <paramref name="c"/>
+            </summary>
+            <param name="c">The cursor</param>
+        </member>
+        <member name="T:MoreLocales.Utilities.HjsonCommentType">
+            <summary>
+            Type of Hjson comment delimiter.
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Utilities.HjsonCommentType.Slashes">
+            <summary>
+            // This is my comment!
+            </summary>
+        </member>
+        <member name="F:MoreLocales.Utilities.HjsonCommentType.Hash">
+            <summary>
+            # This is my comment!
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Utilities.MultisourceLocalizedText">
+            <summary>
+            Like <see cref="T:Terraria.Localization.LocalizedText"/>, but contains multiple <see cref="T:Terraria.Localization.LocalizedText"/>s from different <see cref="T:Terraria.ModLoader.Mod"/>s inside that refer to the same thing.<para/>
+            Designed to always retrieve the value from the original source for en-US.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Utilities.MultisourceLocalizedText.#ctor(Terraria.Localization.LocalizedText,Terraria.Localization.LocalizedText[])">
+            <summary>
+            Creates a new instance using the given localized texts.
+            </summary>
+            <param name="original">The 'base text' that is given by the source mod.</param>
+            <param name="alts">The 'alt texts' given by other mods.</param>
+        </member>
+        <member name="M:MoreLocales.Utilities.MultisourceLocalizedText.#ctor(System.String,System.String[])">
+            <summary>
+            Creates a new instance using the given modded localization keys.
+            </summary>
+            <param name="original">The 'base key' that is given by the source mod.</param>
+            <param name="alts">The 'alt keys' given by other mods.</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:MoreLocales.Utilities.MultisourceLocalizedText.GetCurrent(System.String)">
+            <summary>
+            Gets the appropriate text for the active culture.
+            </summary>
+            <param name="backup">A backup suffix for lookup if a text isn't found. Used like this internally: <c>'Mods.LookupMod.{backup}'</c></param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.MultisourceLocalizedText.GetForCulture(MoreLocales.Core.MoreLocalesCulture@,System.String,System.Boolean)">
+            <summary>
+            Gets the appropriate text for the given culture (not translated in that culture, just contained in it).
+            </summary>
+            <param name="culture">The culture.</param>
+            <param name="backup">A backup suffix for lookup if a text isn't found. Used like this internally: <c>'Mods.LookupMod.{backup}'</c></param>
+            <param name="prioritizeActiveCulture">Looks for the value inside the keys for the active culture's owner first, and returns it if successful.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.MultisourceLocalizedText.GetFromMod(Terraria.ModLoader.Mod,System.String)">
+            <summary>
+            Gets the appropriate text using the given mod.
+            </summary>
+            <param name="mod">The mod.</param>
+            <param name="key">A fully qualified modded key (i. e. including <c>'Mods.ModName'</c>) or a suffix as used in <see cref="M:Terraria.ModLoader.Mod.GetLocalizationKey(System.String)"/>.</param>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="T:MoreLocales.Utilities.LangUtils">
+            <summary>
+            Contains various helper methods for working with a mod's localization files.<para/>
+            Many of the methods seen here are actually parts of <see cref="M:Terraria.ModLoader.LocalizationLoader.UpdateLocalizationFilesForMod(Terraria.ModLoader.Mod,System.String,Terraria.Localization.GameCulture)"/>, which may or may not be more performant than the original versions.<br/>
+            For whatever reason, the method I mention above does not separate potentially helpful logic into other methods, instead choosing to do it all in a single method.
+            </summary>
+        </member>
+        <member name="T:MoreLocales.Utilities.LangUtils.QueuedComment">
+            <summary>
+            Represents a comment in the comment queue.
+            </summary>
+            <param name="Mod">The mod that submitted this comment.</param>
+            <param name="Key">The category or key this comment is targeting.</param>
+            <param name="Comment">The content of the comment.</param>
+            <param name="CommentType">The Hjson comment delimiter this comment should use.</param>
+            <param name="OverwriteComment">Whether or not this comment should be overridden (usually yes) or if the contents should be appended to the end of the existing comment.</param>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.QueuedComment.#ctor(Terraria.ModLoader.Mod,System.String,System.String,MoreLocales.Utilities.HjsonCommentType,System.Boolean)">
+            <summary>
+            Represents a comment in the comment queue.
+            </summary>
+            <param name="Mod">The mod that submitted this comment.</param>
+            <param name="Key">The category or key this comment is targeting.</param>
+            <param name="Comment">The content of the comment.</param>
+            <param name="CommentType">The Hjson comment delimiter this comment should use.</param>
+            <param name="OverwriteComment">Whether or not this comment should be overridden (usually yes) or if the contents should be appended to the end of the existing comment.</param>
+        </member>
+        <member name="P:MoreLocales.Utilities.LangUtils.QueuedComment.Mod">
+            <summary>The mod that submitted this comment.</summary>
+        </member>
+        <member name="P:MoreLocales.Utilities.LangUtils.QueuedComment.Key">
+            <summary>The category or key this comment is targeting.</summary>
+        </member>
+        <member name="P:MoreLocales.Utilities.LangUtils.QueuedComment.Comment">
+            <summary>The content of the comment.</summary>
+        </member>
+        <member name="P:MoreLocales.Utilities.LangUtils.QueuedComment.CommentType">
+            <summary>The Hjson comment delimiter this comment should use.</summary>
+        </member>
+        <member name="P:MoreLocales.Utilities.LangUtils.QueuedComment.OverwriteComment">
+            <summary>Whether or not this comment should be overridden (usually yes) or if the contents should be appended to the end of the existing comment.</summary>
+        </member>
+        <member name="P:MoreLocales.Utilities.LangUtils.Categories">
+            <summary>
+            The localization categories recognized by MoreLocales. This is populated once during <see cref="M:Terraria.ModLoader.Mod.PostSetupContent"/>.
+            </summary>
+        </member>
+        <member name="P:MoreLocales.Utilities.LangUtils.VanillaCultures">
+            <summary>
+            An array containing all vanilla <see cref="T:Terraria.Localization.GameCulture"/>s in the order they appear.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.AddComment(System.String,System.String,MoreLocales.Utilities.HjsonCommentType,System.Boolean)">
+            <summary>
+            Attempts to add a comment before a localization key in a localization file in this fashion:<para/>
+            <code>
+            // My super cool comment!
+            Key: Value
+            </code>
+            </summary>
+            <param name="key">The key of the localization entry to add a comment to.</param>
+            <param name="suffix">The key of the localization entry to add a comment to, not including the 'Mods.ModName' prefix.</param>
+            <param name="comment">The comment to add.</param>
+            <param name="commentType">The style of the comment (which Hjson comment delimiter to use).</param>
+            <param name="overwriteComment">Whether the comment should be overwritten or added to. Defaults to true (overwrite).</param>
+            <returns>
+            Whether or not the comment was successfully added.<para/>
+            Adding comments will fail if:
+            <list type="bullet">
+            <item>This code runs on a server.</item>
+            <item>The given key doesn't exist.</item>
+            <item>The mod associated with the key does not have its <see cref="T:Terraria.ModLoader.Core.TmodFile"/> open (during <see cref="M:Terraria.ModLoader.Mod.Unload"/> for example)</item>
+            <item>The mod associated with the key is not locally built.</item>
+            </list>
+            </returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.AddComment(Terraria.ModLoader.Mod,System.String,System.String,MoreLocales.Utilities.HjsonCommentType,System.Boolean)">
+            <inheritdoc cref="M:MoreLocales.Utilities.LangUtils.AddComment(System.String,System.String,MoreLocales.Utilities.HjsonCommentType,System.Boolean)"/>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.CategoryExists(System.String)">
+            <summary>
+            Checks if the given localization category has been registered or not.<br/>
+            A localization category refers to a key in a localization file that isn't bound to a value directly, but rather contains other keys.<para/>
+            <b>Note:</b> If this is seemingly not working, rebuild your mod. If it still isn't working, check that you've spelled the category key correctly and that it is in fact a category and not an entry.
+            </summary>
+            <param name="categoryKey">The category to search for</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.EntryOrCategoryExists(System.String)">
+            <summary>
+            Checks if the given key exists in any way (localization category or entry).<br/>
+            MoreLocales uses this to check if a comment can be placed on a given key, as comments can both be added to entries and categories.
+            </summary>
+            <param name="keyNoContext">A localization key that corresponds to either a localization entry or a localization category.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.Substitute(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Formats a string containing a substitution (e.g. <c>'{$Mods.ExampleMod.ExampleSubstitution}'</c>) with the key that's inside it,<br/>
+            optionally with a pre-defined scope and/or lookup table.
+            </summary>
+            <param name="containsSubstitution">A string containing a substitution.</param>
+            <param name="scope">A scope to try to find the substituted key inside.<br/>
+            (e. g. <c>'Mods.ExampleMod'</c> if the substitution is just <c>'Items.ExampleStaff.DisplayName'</c>)</param>
+            <param name="specificSearch"><b>(Advanced)</b><br/>
+            If you wish to look for a substitution inside a localization dictionary that isn't the one currently loaded by tModLoader, set this.
+            </param>
+            <returns>The string with the correct substituted value, or the original string if the given key isn't found.</returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.FindKeyInScope(System.String,System.String,System.Collections.Generic.HashSet{System.String})">
+            <summary>
+            Finds and returns a valid key given a key in any scope and a scope.<para/>
+            Original is a nested method inside <see cref="M:Terraria.Localization.LanguageManager.ProcessCopyCommandsInTexts"/> for some reason.
+            </summary>
+            <param name="key">A key in any scope.</param>
+            <param name="scope">A scope to search in.</param>
+            <param name="specificSearch">A specific lookup table. If left null, <see cref="F:Terraria.Localization.LanguageManager._localizedTexts"/> will be used.</param>
+            <returns>A valid localization key, or <see langword="null"/> if one isn't found.</returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.GetLocalizationFiles(Terraria.ModLoader.Mod,System.Boolean)">
+            <summary>
+            Returns an array of the files inside the given mod which are considered localization files by tModLoader (those with the .hjson extension).<para/>
+            If the given mod's file has already been closed (for example, during <see cref="M:Terraria.ModLoader.Mod.Unload"/>) this will return null.
+            </summary>
+            <param name="mod">The mod to fetch localization files from.</param>
+            <param name="onlyBase">Whether or not only base localization files (en-US) should be returned.<para/>
+            This is <see langword="false"/> by default, which means localization files from all cultures will be returned.</param>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.GetVanillaLanguageFilesForCulture(Terraria.Localization.GameCulture)">
+            <summary>
+            Returns the embedded resource paths for all vanilla localization files for a certain culture.<para/>
+            These can be read using <see cref="M:Terraria.Utils.ReadEmbeddedResource(System.String)"/> if you wish to parse them yourself or for whatever other reason.<br/>
+            However, you may also use <see cref="M:MoreLocales.Utilities.LangUtils.ParseVanillaLanguageFile(System.String)"/> to quickly parse them. <para/>
+            To save yourself the trouble, you can also use the sister methods <see cref="M:MoreLocales.Utilities.LangUtils.GetVanillaLanguageFilesForCultureParsed(Terraria.Localization.GameCulture)"/> and <see cref="M:MoreLocales.Utilities.LangUtils.GetVanillaLanguageFilesForCultureFlattened(Terraria.Localization.GameCulture)"/> depending on your needs.
+            </summary>
+            <param name="culture">The culture whose language code should be used to look for embedded vanilla .json files.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.GetVanillaLanguageFilesForCultureParsed(Terraria.Localization.GameCulture)">
+            <summary>
+            Returns all vanilla localization files for a given culture, returned as the direct Json deserialization of said files.<para/>
+            <see cref="M:MoreLocales.Utilities.LangUtils.GetVanillaLanguageFilesForCultureFlattened(Terraria.Localization.GameCulture)"/> may be more helpful.<br/>
+            (read <see cref="M:MoreLocales.Utilities.LangUtils.FlattenVanillaLanguageDict(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.Dictionary{System.String,System.String}})"/>'s docs for more info)
+            </summary>
+            <param name="culture"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.GetVanillaLanguageFilesForCultureFlattened(Terraria.Localization.GameCulture)">
+            <summary>
+            Returns all vanilla localization files for a given culture, formatted as string-string dictionaries.
+            </summary>
+            <param name="culture">The culture whose language code should be used to look for embedded vanilla .json files.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.GetVanillaLocalizationValues(System.String,Terraria.Localization.GameCulture[])">
+            <summary>
+            Allows you to get an array of the localization values for a given key, as long as all the target cultures are vanilla cultures.<br/>
+            If no cultures are passed in, the value will be retrieved from every vanilla culture.<para/>
+            If you wish for something similar to this for modded cultures, scream at me in the Discord because I am so incredibly tired from writing all of this code<br/>
+            or just impl it urself (and PR it if you're really cool)
+            </summary>
+            <param name="key">The vanilla key to search values for.</param>
+            <param name="targetCultures">The vanilla cultures to search values from.</param>
+            <param name="textAnyCulture">A <see cref="T:Terraria.Localization.LocalizedText"/> to search other culture localizations for.<br/>
+            This can be from any culture as long as it's a vanilla <see cref="T:Terraria.Localization.LocalizedText"/>.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.GetVanillaLocalizationValues(Terraria.Localization.LocalizedText,Terraria.Localization.GameCulture[])">
+            <inheritdoc cref="M:MoreLocales.Utilities.LangUtils.GetVanillaLocalizationValues(System.String,Terraria.Localization.GameCulture[])"/>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.ParseVanillaLanguageFile(System.String)">
+            <summary>
+            Attempts to parse a vanilla localization file, and returns the result as a dictionary.<para/>
+            The dictionary's keys are the topmost localization categories, e. g. <c>'ItemTooltip'</c>, <c>'MapObject'</c>, <c>'WorldGeneration'</c>, etc.<br/>
+            The dictionary's values are dicts containing the actual keys (not including the topmost category), and the localization values for those keys.<para/>
+            So, to access a localized value from this dictionary, for example, <c>'ItemTooltip.CopperAxe'</c>, you'd do <c>'dict["ItemTooltip"]["CopperAxe"]'</c>.<para/>
+            If you wish to flatten this into a simpler string-string dictionary, use <see cref="M:MoreLocales.Utilities.LangUtils.FlattenVanillaLanguageDict(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.Dictionary{System.String,System.String}})"/>
+            </summary>
+            <param name="embeddedPath">The path for the embedded .json file. May be obtained using <see cref="M:MoreLocales.Utilities.LangUtils.GetVanillaLanguageFilesForCulture(Terraria.Localization.GameCulture)"/>.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.FlattenVanillaLanguageDict(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.Dictionary{System.String,System.String}})">
+            <summary>
+            Flattens a vanilla localization dictionary (like the one provided by <see cref="M:MoreLocales.Utilities.LangUtils.ParseVanillaLanguageFile(System.String)"/>) to a more workable format.<para/>
+            If you read the example in the mentioned method, the same value could be accessed by using <c>'dict["ItemTooltip.CopperAxe"]'</c> with this dictionary.
+            </summary>
+            <param name="original"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.ReadFileUTF8(Terraria.ModLoader.Mod,Terraria.ModLoader.Core.TmodFile.FileEntry)">
+            <summary>
+            Reads a file assuming UTF8 encoding and returns the result as a string.
+            </summary>
+            <param name="file"></param>
+            <param name="mod">The mod this file belongs to.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.ParseLocalizationFile(Terraria.ModLoader.Mod,Terraria.ModLoader.Core.TmodFile.FileEntry)">
+            <summary>
+            Attempts to parse a localization file and returns the result as a <see cref="T:Hjson.WscJsonObject"/> if successful.<para/>
+            Throws an exception on failure to parse.
+            </summary>
+            <param name="mod">The mod the file is from.</param>
+            <param name="file">The file entry.</param>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.ParseLocalizationFile(System.String)">
+            <inheritdoc cref="M:MoreLocales.Utilities.LangUtils.ParseLocalizationFile(Terraria.ModLoader.Mod,Terraria.ModLoader.Core.TmodFile.FileEntry)"/>
+            <param name="fileContents">The HJSON object as a string.</param>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.ParseLocalizationEntries(Hjson.WscJsonObject,System.String)">
+            <summary>
+            Turns a parsed .hjson file into a list of <see cref="T:Terraria.ModLoader.LocalizationLoader.LocalizationEntry"/>.
+            </summary>
+            <param name="jsonObjectEng">The parsed .hjson file (may be obtained through <see cref="M:MoreLocales.Utilities.LangUtils.ParseLocalizationFile(System.String)"/>)</param>
+            <param name="prefix">The prefix (e.g. 'Mods.ExampleMod') associated with this localization file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.ToLocalizationFile(Terraria.ModLoader.Core.TmodFile.FileEntry,System.Collections.Generic.List{Terraria.ModLoader.LocalizationLoader.LocalizationEntry},System.String)">
+            <summary>
+            Turns an appropriate <see cref="T:Terraria.ModLoader.Core.TmodFile.FileEntry"/> into its temporary <see cref="T:Terraria.ModLoader.LocalizationLoader.LocalizationFile"/> equivalent (used exclusively for changing the .hjson file in some way)
+            </summary>
+            <param name="entry">The file entry. It must be already associated with an .hjson file and it <b>must be a base localization file (en-US).</b></param>
+            <param name="prefix">The prefix (e.g. 'Mods.ExampleMod') associated with this localization file.<para/>
+            If left null, the most appropriate prefix will be retrieved and used.</param>
+            <param name="entries">The individual localization entries that make up this file.</param>
+            <param name="jsonObjectEng">The parsed .hjson file (may be obtained through <see cref="M:MoreLocales.Utilities.LangUtils.ParseLocalizationFile(System.String)"/>)</param>
+            <param name="fileContents">The .hjson file contents (may be obtained through <see cref="M:MoreLocales.Utilities.LangUtils.ReadFileUTF8(Terraria.ModLoader.Mod,Terraria.ModLoader.Core.TmodFile.FileEntry)"/>)</param>
+            <param name="mod">The mod associated with the given file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.ToLocalizationFile(Terraria.ModLoader.Core.TmodFile.FileEntry,Hjson.WscJsonObject,System.String)">
+            <inheritdoc cref="M:MoreLocales.Utilities.LangUtils.ToLocalizationFile(Terraria.ModLoader.Core.TmodFile.FileEntry,System.Collections.Generic.List{Terraria.ModLoader.LocalizationLoader.LocalizationEntry},System.String)"/>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.ToLocalizationFile(Terraria.ModLoader.Core.TmodFile.FileEntry,System.String,System.String)">
+            <inheritdoc cref="M:MoreLocales.Utilities.LangUtils.ToLocalizationFile(Terraria.ModLoader.Core.TmodFile.FileEntry,System.Collections.Generic.List{Terraria.ModLoader.LocalizationLoader.LocalizationEntry},System.String)"/>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.ToLocalizationFile(Terraria.ModLoader.Core.TmodFile.FileEntry,Terraria.ModLoader.Mod,System.String)">
+            <inheritdoc cref="M:MoreLocales.Utilities.LangUtils.ToLocalizationFile(Terraria.ModLoader.Core.TmodFile.FileEntry,System.Collections.Generic.List{Terraria.ModLoader.LocalizationLoader.LocalizationEntry},System.String)"/>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.FindHJSONFileForKey(System.Collections.Generic.List{Terraria.ModLoader.LocalizationLoader.LocalizationFile},System.String)">
+            <summary>
+            Attempts to find a localization file from the given list that contains the given localization key.<para/>
+            <b>Note: If a matching file isn't found, a new base file will be created (in memory, not in disk) and added to the list.</b>
+            </summary>
+            <param name="files">The list to search in.</param>
+            <param name="key">The key to search for.</param>
+            <returns>The matching localization file.</returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.LongestMatchingPrefix(Terraria.ModLoader.LocalizationLoader.LocalizationFile,System.String)">
+            <summary>
+            Finds the 'closeness' factor of the given key inside the given file sequentially.<br/>
+            Closeness here meaning the amount of levels sequentially down the file where it still matches the given key.<para/>
+            <b>Example:</b><para/>
+            Let's say a file has a localization key <c>'Misc.CharacterDialogue.DialogueFirstTime'</c>, and we pass in the key <c>'Misc.CharacterDialogue.DialogueLastTime'</c>.<br/>
+            In this example we would get <c>2</c>, because <c>Misc</c> matches, and <c>CharacterDialogue</c> also matches, but <c>DialogueFirstTime/LastTime</c> are different.<para/>
+            <b>Note: The above example depends on the file's localization prefix.<br/>
+            In the example we say the prefix is <see cref="F:System.String.Empty"/>, but we would get a higher number (<c>4</c>) if the prefix was <c>'Mods.ExampleMod'</c> for example.</b>
+            </summary>
+            <param name="file">The file to match in.</param>
+            <param name="key">The key to match for. It must not include the file's localization prefix. (<see cref="P:Terraria.ModLoader.LocalizationLoader.LocalizationFile.prefix"/>)</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.LocalizationFileToHJSONText(Terraria.ModLoader.LocalizationLoader.LocalizationFile,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Returns a fully formatted version of the given localization file as a valid Hjson string.
+            </summary>
+            <param name="file">The file to format as an Hjson string.</param>
+            <param name="localizationsForCulture">A dictionary containing all relevant modded localization entries. (See <see cref="M:MoreLocales.Utilities.LangUtils.EntriesListToDictionary(System.Collections.Generic.List{Terraria.ModLoader.LocalizationLoader.LocalizationEntry})"/>)</param>
+            <returns>The file formatted as an Hjson string.</returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.EntriesListToDictionary(System.Collections.Generic.List{Terraria.ModLoader.LocalizationLoader.LocalizationEntry})">
+            <summary>
+            Returns a list of localization entries as a dictionary.
+            </summary>
+            <param name="entries">The entries to format as a dictionary.</param>
+            <returns>The entries formatted as a dictionary.</returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.TryGetEntry(Terraria.ModLoader.LocalizationLoader.LocalizationFile,System.String,MoreLocales.Core.Ref{Terraria.ModLoader.LocalizationLoader.LocalizationEntry}@)">
+            <summary>
+            Attempts to find the <see cref="T:Terraria.ModLoader.LocalizationLoader.LocalizationEntry"/> in <see cref="P:Terraria.ModLoader.LocalizationLoader.LocalizationFile.Entries"/> which exactly matches the given key.<para/>
+            <b>Note:</b> Despite the name, this also works to find categories, which are also considered entries inside <see cref="T:Terraria.ModLoader.LocalizationLoader.LocalizationFile"/>s.
+            </summary>
+            <param name="file">The file to search in.</param>
+            <param name="key">The key to search for. May or may not include the file prefix (doesn't matter).</param>
+            <param name="entry">A reference to the found entry. It is returned as <see cref="T:MoreLocales.Core.Ref`1"/> so you can change it.</param>
+            <returns>Whether or not the entry was found.</returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.GetPathForCulture(Terraria.ModLoader.LocalizationLoader.LocalizationFile,Terraria.Localization.GameCulture)">
+            <summary>
+            Gets the appropriate path to write to for a specific culture, no matter the given file's original culture.
+            </summary>
+            <param name="file">The original file.</param>
+            <param name="culture">The culture to adapt the path for.</param>
+            <returns>The path adapted for the given culture.</returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.WriteToDisk(Terraria.ModLoader.LocalizationLoader.LocalizationFile,System.Collections.Generic.IEnumerable{Terraria.ModLoader.LocalizationLoader.LocalizationFile},System.String,Terraria.Localization.GameCulture,System.Int32)">
+            <summary>
+            Attempts to write the temporary file's contents back to disk.<para/>
+            Due to how tModLoader constructs the Hjson string, you also need to provide files from the same mod and culture as the target file.
+            </summary>
+            <param name="file">The file to write to disk.</param>
+            <param name="culture">The culture the file belongs to. If left null, it will be searched for based on the file name.</param>
+            <param name="outputFolder">The output folder. Make this <see cref="P:Terraria.ModLoader.Mod.SourceFolder"/> if you have the mod's instance.</param>
+            <param name="sameCultureFiles">Files belonging to the same culture as the target file.</param>
+            <param name="protect">If you don't want tModLoader to detect changes to this file for whatever reason, set this to the amount of frames you'd like to pause tModLoader's file change detection system for.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MoreLocales.Utilities.LangUtils.ProtectFiles(System.Int32)">
+            <summary>
+            Pauses tModLoader's file detection system for <paramref name="time"/> amount of frames.
+            </summary>
+        </member>
+        <member name="M:MoreLocales.Utilities.UIHelper.DrawAdjustableBox(Microsoft.Xna.Framework.Graphics.SpriteBatch,Microsoft.Xna.Framework.Graphics.Texture2D,Microsoft.Xna.Framework.Rectangle,Microsoft.Xna.Framework.Color)">
+            <summary>
+            Ported from ITD
+            </summary>
+            <param name="spriteBatch"></param>
+            <param name="tex"></param>
+            <param name="rect"></param>
+            <param name="col"></param>
+        </member>
+    </members>
+</doc>

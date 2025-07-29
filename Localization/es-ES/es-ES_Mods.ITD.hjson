@@ -238,11 +238,10 @@ Projectiles: {
 	// MoldExplosion.DisplayName: Mold Explosion
 	// Zap.DisplayName: Zap
 	// CosmicWave.DisplayName: Cosmic Wave
-	// DelayedMiasma.DisplayName: Delayed Miasma
-	// MiasmaTrail.DisplayName: Miasma Trail
 	// CyaniteSpike.DisplayName: Cyanite Spike
-	// GravekeeperCloneTeleport.DisplayName: Gravekeeper Clone Teleport
 	// GravekeeperCloneSkulls.DisplayName: Gravekeeper Clone Skulls
+	// GravekeeperCloneTeleport.DisplayName: Gravekeeper Clone Teleport
+	// MiasmaTrail.DisplayName: Miasma Trail
 }
 
 NPCs: {
@@ -678,311 +677,327 @@ InflectionData: {
 	Items: {
 		# DisplayName: Topaz Necklace
 		// TopazNecklace: /
-		# DisplayName: Lentes de sol Bad@$$
+		# DisplayName:
 		// BadassSunglasses: /
-		# DisplayName: Flaming Razor
+		# DisplayName:
 		// FlamingRazor: /
-		# DisplayName: Orion's Ring
+		# DisplayName:
 		// OrionsRing: /
-		# DisplayName: Poison Fang
+		# DisplayName:
 		// PoisonFang: /
-		# DisplayName: Vino arrasado
+		# DisplayName:
 		// RazedWine: /
-		# DisplayName: Sheering Bane
+		# DisplayName:
 		// SheeringBane: /
-		# DisplayName: Soul Talisman
+		# DisplayName:
 		// SoulTalisman: /
-		# DisplayName: Wicked Heart
+		# DisplayName:
 		// WickedHeart: /
-		# DisplayName: Pesa para cadena
+		# DisplayName:
 		// ChainWeight: /
-		# DisplayName: Magic Polish
+		# DisplayName:
 		// MagicPolish: /
-		# DisplayName: Safety Latch
+		# DisplayName:
 		// SafetyLatch: /
-		# DisplayName: Unyielding Chain
+		# DisplayName:
 		// UnyieldingChain: /
-		# DisplayName: Cabrestante
+		# DisplayName:
 		// Winch: /
-		# DisplayName: Taza de café
+		# DisplayName:
 		// CupOJoe: /
-		# DisplayName: Limpiaparabrisas
+		# DisplayName:
 		// SwimshieldWipers: /
-		# DisplayName: Calavet
+		# DisplayName:
 		// Skullmet: /
-		# DisplayName: Caparazón horrible
+		# DisplayName:
 		// DreadShell: /
-		# DisplayName: Talismán de los condenados
+		# DisplayName:
 		// CharmOfTheAccursed: /
-		# DisplayName: Gomita galáctica
+		# DisplayName:
 		// GalacticJellyBean: /
-		# DisplayName: Capa Ventiscípula
+		# DisplayName:
 		// WindCape: /
-		# DisplayName: Incomprehensible Polyhedron
+		# DisplayName:
 		// IncomprehensiblePolyhedron: /
-		# DisplayName: Tail of the Eater
+		# DisplayName:
 		// EatersTail: /
-		# DisplayName: Eye of Eldritch Insight
+		# DisplayName:
 		// EyeofEldritchInsight: /
-		# DisplayName: Prophylaxis
+		# DisplayName:
 		// Prophylaxis: /
-		# DisplayName: Slime Secretion Gland
+		# DisplayName:
 		// SlimeSecretionGland: /
-		# DisplayName: Antídoto corrupto
+		# DisplayName:
 		// CorruptAntidote: /
-		# DisplayName: Antídoto carmesí
+		# DisplayName:
 		// CrimsonAntidote: /
-		# DisplayName: Portable Lab
+		# DisplayName:
 		// PortableLab: /
-		# DisplayName: Rooks Brew
+		# DisplayName:
 		// RooksBrew: /
-		# DisplayName: Danzantes de Gravedad Zero
+		# DisplayName:
 		// GravityBoots: /
-		# DisplayName: Pluma airosa
+		# DisplayName:
 		// DashingFeather: /
-		# DisplayName: Desastre embotellado
+		# DisplayName:
 		// DisasterInABottle: /
-		# DisplayName: Tormenta de fuego embotellada
+		# DisplayName:
 		// FirestormInABottle: /
-		# DisplayName: Esposas de impulso
+		# DisplayName:
 		// ImpulseShackles: /
-		# DisplayName: Frijol saltarín
+		# DisplayName:
 		// JumpingBean: /
-		# DisplayName: Tormenta embotellada
+		# DisplayName:
 		// StormInABottle: /
-		# DisplayName: Tornado embotellado
+		# DisplayName:
 		// TwisterInABottle: /
-		# DisplayName: Oblivion Pickaxe
+		# DisplayName:
 		// OblivionPickaxe: /
-		# DisplayName: Martillo de cianita
+		# DisplayName:
 		// CyaniteHammer: /
-		# DisplayName: Pico de cianita
+		# DisplayName:
 		// CyanitePickaxe: /
-		# DisplayName: Crowd Controller
+		# DisplayName:
 		// CrowdController: /
-		# DisplayName: Eternal Bubble Wand
+		# DisplayName:
 		// EternalBubbleWand: /
-		# DisplayName: Fungal Rod
+		# DisplayName:
 		// FungalRod: /
-		# DisplayName: Necromatomo
+		# DisplayName:
 		// Necromatome: /
-		# DisplayName: Royal Jelly Scepter
+		# DisplayName:
 		// RoyalJellyScepter: /
-		# DisplayName: Bastón de Luz Astral
+		# DisplayName:
 		// StarlightStaff: /
-		# DisplayName: Bastón del Trueno
+		# DisplayName:
 		// ThunderStaff: /
-		# DisplayName: Tome Of Reach
+		# DisplayName:
 		// TomeOfReach: /
-		# DisplayName: Twilight Demise
+		# DisplayName:
 		// TwilightDemise: /
-		# DisplayName: Weeping Wand
+		# DisplayName:
 		// WeepingWand: /
-		# DisplayName: Espada de aleación
+		# DisplayName:
 		// AlloySword: /
-		# DisplayName: Aster-Knuckle
+		# DisplayName:
 		// AsterKnuckle: /
-		# DisplayName: Bleedbreaker
+		# DisplayName:
 		// Bleedbreaker: /
-		# DisplayName: Chained Gun
+		# DisplayName:
 		// ChainedGun: /
-		# DisplayName: Cicadarang
+		# DisplayName:
 		// Cicadarang: /
-		# DisplayName: Cosmisumaru
+		# DisplayName:
 		// Cosmisumaru: /
-		# DisplayName: Bumerán de cianita
+		# DisplayName:
 		// CyaniteBoomerang: /
-		# DisplayName: Lanza de cianita
+		# DisplayName:
 		// CyaniteSpear: /
-		# DisplayName: Caos Incesable
+		# DisplayName:
 		// DespoticSuperMeleeSword: /
-		# DisplayName: Ectoespada
+		# DisplayName:
 		// Ectoblade: /
-		# DisplayName: Lanza de electro
+		# DisplayName:
 		// ElectrumSpear: /
-		# DisplayName: Tajadora de llamarada
+		# DisplayName:
 		// EmberSlasher: /
-		# DisplayName: Flyswatter
+		# DisplayName:
 		// Flyswatter: /
-		# DisplayName: Mandinata
+		# DisplayName:
 		// Mandinata: /
-		# DisplayName: Mangled Sheerthorn
+		# DisplayName:
 		// MangledSheerthorn: /
-		# DisplayName: Moulder
+		# DisplayName:
 		// Moulder: /
-		# DisplayName: Espada de rodio
+		# DisplayName:
 		// RhodiumBroadsword: /
-		# DisplayName: Sherbet Flail
+		# DisplayName:
 		// SherbetFlail: /
-		# DisplayName: ARCTrap
+		# DisplayName:
 		// ARCTrap: /
-		# DisplayName: Calcio
+		# DisplayName:
 		// Calcium: /
-		# DisplayName: Látigo de cadena
+		# DisplayName:
 		// Chainwhip: /
-		# DisplayName: Mandíbulas de cobre
+		# DisplayName:
 		// CopperMandibles: /
-		# DisplayName: Carmengancho
+		# DisplayName:
 		// Crimeratrap: /
-		# DisplayName: Fauces del Abísmo
+		# DisplayName:
 		// DespoticSnaptrap: /
-		# DisplayName: Agarresfrío
+		# DisplayName:
 		// Frostgrip: /
-		# DisplayName: Sr. Snapkins
+		# DisplayName:
 		// MrSnapkins: /
-		# DisplayName: Enganchadora
+		# DisplayName:
 		// Snaptrap: /
-		# DisplayName: Enganchadorcilla
+		# DisplayName:
 		// Sniptrap: /
-		# DisplayName: Enganchaalmas
+		# DisplayName:
 		// Soulsnapper: /
-		# DisplayName: Stabtrap
+		# DisplayName:
 		// Stabtrap: /
-		# DisplayName: Sticky Hand
+		# DisplayName:
 		// StickyHand: /
-		# DisplayName: El Jalacrán
+		# DisplayName:
 		// TheScorpion: /
-		# DisplayName: Venus Enganchamoscas
+		# DisplayName:
 		// VenusSnaptrap: /
-		# DisplayName: Vocal Zero
+		# DisplayName:
 		// VocalZero: /
-		# DisplayName: Whiplatch
+		# DisplayName:
 		// Whiplatch: /
-		# DisplayName: Comida de araña
+		# DisplayName:
 		// Spidermeal: /
-		# DisplayName: Tridente de viento
+		# DisplayName:
 		// WindTrident: /
-		# DisplayName: Desgarradora del Espaciotiempo
+		# DisplayName:
 		// WormholeRipper: /
-		# DisplayName: Black Cacophony
+		# DisplayName:
 		// BlackCacophony: /
-		# DisplayName: Depthrock Bow
+		# DisplayName:
 		// DepthrockBow: /
-		# DisplayName: Cañones de dunas
+		# DisplayName:
 		// Dunebarrel: /
-		# DisplayName: Arco de electro
+		# DisplayName:
 		// ElectrumBow: /
-		# DisplayName: Fwoomstick
+		# DisplayName:
 		// Fwoomstick: /
-		# DisplayName: Ghostbuster
+		# DisplayName:
 		// Ghostbuster: /
-		# DisplayName: Explocazadora
+		# DisplayName:
 		// Houndboom: /
-		# DisplayName: Gran arco del Hun-Terr
+		# DisplayName:
 		// HunterrGreatbow: /
-		# DisplayName: Potshot
+		# DisplayName:
 		// Potshot: /
-		# DisplayName: Cuásar
+		# DisplayName:
 		// Quasar: /
-		# DisplayName: Resonance Crossbow
+		# DisplayName:
 		// ResonanceCrossbow: /
-		# DisplayName: Skyshot
+		# DisplayName:
 		// Skyshot: /
-		# DisplayName: The {Prefix} Epicenter
+		# DisplayName:
 		// TheEpicenter: /
-		# DisplayName: Cicadian Staff
+		# DisplayName:
 		// CicadianStaff: /
-		# DisplayName: Fishbacker
+		# DisplayName:
 		// Fishbacker: /
-		# DisplayName: Pala del Guardatumbas
+		# DisplayName:
 		// KeepersShovel: /
-		# DisplayName: Nightmare Manuscript
+		# DisplayName:
 		// NightmareManuscript: /
-		# DisplayName: Rite Of Immolation
+		# DisplayName:
 		// RiteOfImmolation: /
 	}
 
 	Prefixes: {
+		# Abhorrent
 		Abhorrent: {
 			// Masculine: Abhorrent
 			// Feminine: Abhorrent
 			// Neuter: Abhorrent
 		}
 
+		# Acute
 		Acute: {
 			// Masculine: Acute
 			// Feminine: Acute
 			// Neuter: Acute
 		}
 
+		# Ample
 		Ample: {
 			// Masculine: Ample
 			// Feminine: Ample
 			// Neuter: Ample
 		}
 
+		# Barbed
 		Barbed: {
 			// Masculine: Barbed
 			// Feminine: Barbed
 			// Neuter: Barbed
 		}
 
+		# Dwarf
 		Dwarf: {
 			// Masculine: Dwarf
 			// Feminine: Dwarf
 			// Neuter: Dwarf
 		}
 
+		# Extensive
 		Extensive: {
 			// Masculine: Extensive
 			// Feminine: Extensive
 			// Neuter: Extensive
 		}
 
+		# Feral
 		Feral: {
 			// Masculine: Feral
 			// Feminine: Feral
 			// Neuter: Feral
 		}
 
+		# Heroic
 		Heroic: {
 			// Masculine: Heroic
 			// Feminine: Heroic
 			// Neuter: Heroic
 		}
 
+		# Immense
 		Immense: {
 			// Masculine: Immense
 			// Feminine: Immense
 			// Neuter: Immense
 		}
 
+		# Lengthy
 		Lengthy: {
 			// Masculine: Lengthy
 			// Feminine: Lengthy
 			// Neuter: Lengthy
 		}
 
+		# Miniscule
 		Miniscule: {
 			// Masculine: Miniscule
 			// Feminine: Miniscule
 			// Neuter: Miniscule
 		}
 
+		# Scourned
 		Scourned: {
 			// Masculine: Scourned
 			// Feminine: Scourned
 			// Neuter: Scourned
 		}
 
+		# Sleek
 		Sleek: {
 			// Masculine: Sleek
 			// Feminine: Sleek
 			// Neuter: Sleek
 		}
 
+		# Smoothed
 		Smoothed: {
 			// Masculine: Smoothed
 			// Feminine: Smoothed
 			// Neuter: Smoothed
 		}
 
+		# Tapered
 		Tapered: {
 			// Masculine: Tapered
 			// Feminine: Tapered
 			// Neuter: Tapered
 		}
 
+		# Wretched
 		Wretched: {
 			// Masculine: Wretched
 			// Feminine: Wretched

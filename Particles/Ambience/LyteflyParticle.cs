@@ -1,5 +1,6 @@
 ﻿using ITD.Utilities.EntityAnim;
 using System;
+using System.Runtime.InteropServices;
 
 namespace ITD.Particles.Ambience
 {
@@ -45,7 +46,7 @@ namespace ITD.Particles.Ambience
         public override void PreDrawAllParticles()
         {
             Texture2D tex = outlineTex.Value;
-            foreach (ITDParticle particle in particles)
+            foreach (ITDParticle particle in CollectionsMarshal.AsSpan(particles))
             {
                 float scale = 0.4f + MathF.Sin((float)Main.timeForVisualEffects / 32f + (particle.timeLeft / 16f)) * 0.2f;
                 Color color = (Color.Yellow with { A = 0 }) * particle.opacity;
