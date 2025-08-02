@@ -26,7 +26,7 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.knockBack = 7;
             Item.value = Item.sellPrice(gold: 1);
             Item.rare = ItemRarityID.Green;
-            Item.autoReuse = false;
+            Item.autoReuse = true;
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.shootSpeed = 4f;
@@ -37,9 +37,9 @@ namespace ITD.Content.Items.Weapons.Melee
         {
             Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<MandinataProjectile>(), damage, knockback, player.whoAmI);
 
-            Projectile.NewProjectileDirect(source, position, velocity * 0.99f, ModContent.ProjectileType<MandinataBreath>(), damage / 3, knockback * 0.25f, player.whoAmI);
-            Projectile.NewProjectileDirect(source, position, velocity * 0.66f, ModContent.ProjectileType<MandinataBreath>(), damage / 3, knockback * 0.25f, player.whoAmI);
-            Projectile.NewProjectileDirect(source, position, velocity * 0.33f, ModContent.ProjectileType<MandinataBreath>(), damage / 3, knockback * 0.25f, player.whoAmI);
+            //Projectile.NewProjectileDirect(source, position, velocity * 0.99f, ModContent.ProjectileType<MandinataBreath>(), damage / 3, knockback * 0.25f, player.whoAmI);
+            //Projectile.NewProjectileDirect(source, position, velocity * 0.66f, ModContent.ProjectileType<MandinataBreath>(), damage / 3, knockback * 0.25f, player.whoAmI);
+            //Projectile.NewProjectileDirect(source, position, velocity * 0.33f, ModContent.ProjectileType<MandinataBreath>(), damage / 3, knockback * 0.25f, player.whoAmI);
 
             return false;
         }
