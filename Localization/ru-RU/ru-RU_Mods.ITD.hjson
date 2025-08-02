@@ -238,10 +238,11 @@ Projectiles: {
 	// MoldExplosion.DisplayName: Mold Explosion
 	// Zap.DisplayName: Zap
 	// CosmicWave.DisplayName: Cosmic Wave
-	// CyaniteSpike.DisplayName: Cyanite Spike
-	// GravekeeperCloneSkulls.DisplayName: Gravekeeper Clone Skulls
-	// GravekeeperCloneTeleport.DisplayName: Gravekeeper Clone Teleport
+	// DelayedMiasma.DisplayName: Delayed Miasma
 	// MiasmaTrail.DisplayName: Miasma Trail
+	// CyaniteSpike.DisplayName: Cyanite Spike
+	// GravekeeperCloneTeleport.DisplayName: Gravekeeper Clone Teleport
+	// GravekeeperCloneSkulls.DisplayName: Gravekeeper Clone Skulls
 }
 
 NPCs: {
