@@ -121,7 +121,6 @@ namespace ITD.Content.NPCs.Bosses
             FollowingSlow,//follow the player but slower, for deathray sweep attack, player outruns cosjel
             Inbetween,//transition
             Dashing,//is currently dashing
-            Suffocate,//unused, but, trap the player inside cosjel
             Explode,//stand still
             Slamdown//slam attack, is currently dropping down
         }
@@ -395,7 +394,6 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         AITimer2 = 0;
                         SoundEngine.PlaySound(SoundID.Zombie101, NPC.Center);
-                        if (AI_State != MovementState.Suffocate)
                             AI_State = MovementState.Dashing;
                     }
                     break;
@@ -589,21 +587,6 @@ namespace ITD.Content.NPCs.Bosses
                     NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
                     NetSync();
                     break;
-                case MovementState.Suffocate:
-                    var suffer = player.GetModPlayer<ITDPlayer>();
-                    NPC.velocity *= 0.6f;
-                    player.velocity *= 0;
-                    player.Center = NPC.Center;
-                    player.AddBuff(BuffID.Suffocation, 5);
-                    player.AddBuff(BuffID.Obstructed, 5);
-                    if (!suffer.CosJellSuffocated)
-                    {
-                        AITimer1 = 0;
-                        AI_State = MovementState.FollowingRegular;
-
-                    }
-                    break;
-
                 case MovementState.Explode:
                     NPC.velocity *= 0.9f;
                     break;

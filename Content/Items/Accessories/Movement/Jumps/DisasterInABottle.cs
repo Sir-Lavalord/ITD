@@ -114,11 +114,6 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
 
             // Firestorm
             SoundEngine.PlaySound(new SoundStyle($"ITD/Content/Sounds/FirestormInABottle{Main.rand.Next(1, 3)}"), Player.position);
-            firestormPlayer.fireCloudTimer = FirestormPlayer.FireCloudDuration;
-            firestormPlayer.fireTrailTimer = FirestormPlayer.FireTrailDuration;
-            firestormPlayer.rainTimer = FirestormPlayer.RainDuration;
-            firestormPlayer.damageTimer = FirestormPlayer.DamageInterval;
-            firestormPlayer.jumpPosition = Player.Bottom;
 
             // Twister
             SoundEngine.PlaySound(SoundID.DoubleJump, Player.position);

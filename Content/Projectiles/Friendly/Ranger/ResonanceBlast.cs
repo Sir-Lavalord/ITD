@@ -38,6 +38,10 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
         {
             base.AI();
         }
+        public override Color? GetAlpha(Color lightColor)
+        {
+            return new Color(243, 162, 63);
+        }
         public override void PostAI() => Lighting.AddLight(Projectile.Center, 0.2f, 0.1f, 0f);
     }
 }
