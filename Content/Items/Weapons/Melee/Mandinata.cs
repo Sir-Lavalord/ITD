@@ -2,6 +2,8 @@
 using Terraria.DataStructures;
 using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Content.Items.Materials;
+using ITD.Players;
+using ITD.Utilities;
 
 namespace ITD.Content.Items.Weapons.Melee
 {
@@ -20,8 +22,9 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
-            Item.useTime = 40;
-            Item.useAnimation = 40;
+            Item.useTime = 26;
+            Item.useAnimation = 26;
+			Item.UseSound = SoundID.Item20;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.knockBack = 7;
             Item.value = Item.sellPrice(gold: 1);
@@ -29,18 +32,17 @@ namespace ITD.Content.Items.Weapons.Melee
             Item.autoReuse = true;
             Item.noMelee = true;
             Item.noUseGraphic = true;
-            Item.shootSpeed = 4f;
+            Item.shootSpeed = 32f;
             Item.shoot = ModContent.ProjectileType<MandinataProjectile>();
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<MandinataProjectile>(), damage, knockback, player.whoAmI);
-
-            //Projectile.NewProjectileDirect(source, position, velocity * 0.99f, ModContent.ProjectileType<MandinataBreath>(), damage / 3, knockback * 0.25f, player.whoAmI);
-            //Projectile.NewProjectileDirect(source, position, velocity * 0.66f, ModContent.ProjectileType<MandinataBreath>(), damage / 3, knockback * 0.25f, player.whoAmI);
-            //Projectile.NewProjectileDirect(source, position, velocity * 0.33f, ModContent.ProjectileType<MandinataBreath>(), damage / 3, knockback * 0.25f, player.whoAmI);
-
+			ITDPlayer modPlayer = player.GetITDPlayer();
+			float ai = Main.rand.NextFloat(0.5f, 1f) * Item.shootSpeed * 0.75f * (float)player.direction;
+            Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<MandinataProjectile>(), damage, knockback, player.whoAmI, ai, modPlayer.itemVar[0]);
+			if (modPlayer.itemVar[0] == 1f)
+				modPlayer.itemVar[0] = 0f;
             return false;
         }
 
