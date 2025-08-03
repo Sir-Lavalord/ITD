@@ -5,6 +5,13 @@ namespace ITD.Content.Projectiles.Hostile
 {
     public class QuartzBlast : ModProjectile
     {
+		public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile")
+			.UseProjectionMatrix(true)
+			.UseImage0("Images/Extra_" + 190)
+			.UseImage1("Images/Extra_" + 190)
+			.UseImage2("Images/Extra_" + 197)
+			.UseSaturation(-2.8f)
+			.UseOpacity(2f);
 		public VertexStrip TrailStrip = new VertexStrip();
 		
 		public override void SetStaticDefaults()
@@ -15,11 +22,11 @@ namespace ITD.Content.Projectiles.Hostile
 		
         public override void SetDefaults()
         {
-            Projectile.width = 20; Projectile.height = 34;
+            Projectile.width = Projectile.height = 20;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 30;
+            Projectile.timeLeft = 25;
             Projectile.ignoreWater = false;
             Projectile.tileCollide = false;
         }
@@ -59,17 +66,18 @@ namespace ITD.Content.Projectiles.Hostile
 			return result * Projectile.Opacity * Projectile.Opacity;
 		}
 		private float StripWidth(float progressOnStrip)
-		{
-			return MathHelper.Lerp(36f, 48f, Utils.GetLerpValue(0f, 0.2f, progressOnStrip, true)) * Utils.GetLerpValue(0f, 0.07f, progressOnStrip, true);
-		}
+        {
+            return MathHelper.Lerp(20f, 15f, Utils.GetLerpValue(0f, 0.6f, progressOnStrip, true)) * Utils.GetLerpValue(0f, 0.1f, progressOnStrip, true) * 1.2f;
+        }
 		public override bool PreDraw(ref Color lightColor)
 		{
-			GameShaders.Misc["MagicMissile"].Apply(null);
+			//GameShaders.Misc["MagicMissile"].Apply(null);
+			Shader.Apply(null);
             TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
             TrailStrip.DrawTrail();
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 			
-			return true;
+			return false;
 		}
     }
 }
