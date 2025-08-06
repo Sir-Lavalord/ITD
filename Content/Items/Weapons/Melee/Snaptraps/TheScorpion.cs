@@ -18,7 +18,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.FossilOre, 16);
             recipe.AddIngredient(ItemID.Chain, 16);
-            recipe.AddIngredient(ItemID.AncientBattleArmorMaterial, 3);
+            recipe.AddIngredient(ItemID.AncientBattleArmorMaterial, 1);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.Register();
         }

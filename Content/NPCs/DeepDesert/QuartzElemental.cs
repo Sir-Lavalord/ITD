@@ -100,8 +100,8 @@ namespace ITD.Content.NPCs.DeepDesert
 					num = i;
 				}
 			//}
-
-			if ((Main.player[NPC.target].position - NPC.position).Length() < 200 && Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height)) // the part where it attacks
+			// the part where it attacks
+			if (((Main.player[NPC.target].position - NPC.position).Length() < 200 && Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height)) || NPC.ai[3] >= 32f) 
 			{
 				if (NPC.ai[3] >= 32f)
 					NPC.velocity *= 0.9f;

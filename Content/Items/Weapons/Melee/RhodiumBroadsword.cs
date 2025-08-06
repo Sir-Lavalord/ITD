@@ -56,7 +56,7 @@ namespace ITD.Content.Items.Weapons.Melee
         public override void AddRecipes()
         {
             CreateRecipe(1)
-                .AddIngredient(ModContent.ItemType<RhodiumBar>(), 10)
+                .AddIngredient(ModContent.ItemType<RhodiumBar>(), 7)
                 .AddTile(TileID.Anvils)
                 .Register();
         } 

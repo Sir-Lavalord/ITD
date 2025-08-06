@@ -17,7 +17,7 @@ namespace ITD.Content.Items.Weapons.Melee.Snaptraps
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.FrostCore, 1);
-            recipe.AddIngredient(ItemID.HallowedBar, 16);
+            recipe.AddIngredient(ItemID.HallowedBar, 8);
             recipe.AddIngredient(ItemID.Chain, 12);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.Register();

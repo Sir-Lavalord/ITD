@@ -47,8 +47,8 @@ namespace ITD.Content.Items.Materials
         public override void AddRecipes()
         {
             CreateRecipe(1)
-                .AddIngredient(ItemID.PlatinumOre, 5)
-                .AddIngredient(ItemID.TungstenOre, 10)
+                .AddIngredient(ItemID.PlatinumOre, 2)
+                .AddIngredient(ItemID.TungstenOre, 4)
                 .AddTile(TileID.Hellforge)
                 .Register();
         }

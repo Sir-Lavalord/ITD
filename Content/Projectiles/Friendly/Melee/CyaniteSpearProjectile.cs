@@ -45,7 +45,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
 			float num32 = 0f;
-			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity.SafeNormalize(-Vector2.UnitY) * 100f * Projectile.scale, 96f * Projectile.scale, ref num32);
+			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity.SafeNormalize(-Vector2.UnitY) * 100f * Projectile.scale, 40f * Projectile.scale, ref num32);
 		}
 
 		public override bool PreAI()
@@ -94,10 +94,17 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			Texture2D effectTexture = TextureAssets.Extra[98].Value;
 			Vector2 effectOrigin = effectTexture.Size() / 2f;
 
-			Main.EntitySpriteDraw(effectTexture, position, new Rectangle?(rectangle), new Color(120, 184, 255, 50)*0.05f*Projectile.timeLeft, Projectile.rotation, effectOrigin, new Vector2(1f, Progress(Projectile.timeLeft)*3.5f) * Projectile.scale, SpriteEffects.None, 0f);
-			Main.EntitySpriteDraw(effectTexture, position, new Rectangle?(rectangle), new Color(120, 184, 255, 50)*0.05f*Projectile.timeLeft, Projectile.rotation - MathHelper.PiOver2, effectOrigin, new Vector2(1f, Progress(Projectile.timeLeft)*3.5f) * Projectile.scale, SpriteEffects.None, 0f);
+			float yScale = (20 - Projectile.timeLeft) / StoppingPoint;
+			float alphaMultiplier = 1f;
+			if (Projectile.timeLeft < StoppingPoint)
+			{
+				alphaMultiplier = Projectile.timeLeft / StoppingPoint;
+			}
+			float effectProgress = Progress(Projectile.timeLeft);
+			Main.EntitySpriteDraw(effectTexture, position, new Rectangle?(rectangle), new Color(120, 184, 255, 50)*alphaMultiplier, Projectile.rotation, effectOrigin, new Vector2(1f, yScale * 2.5f) * Projectile.scale, SpriteEffects.None, 0f);
+			Main.EntitySpriteDraw(effectTexture, position, new Rectangle?(rectangle), new Color(120, 184, 255, 50)*alphaMultiplier, Projectile.rotation - MathHelper.PiOver2, effectOrigin, new Vector2(1f, yScale * 2.5f) * Projectile.scale, SpriteEffects.None, 0f);
 			
-			Main.EntitySpriteDraw(effectTexture, position, new Rectangle?(rectangle), new Color(120, 184, 255, 50)*0.05f*Projectile.timeLeft, Projectile.rotation - MathHelper.PiOver2 * 0.5f, effectOrigin, new Vector2(1f, Progress(Projectile.timeLeft)*5f) * Projectile.scale, SpriteEffects.None, 0f);
+			Main.EntitySpriteDraw(effectTexture, position + rotatedDirection * 36f * Projectile.scale, new Rectangle?(rectangle), new Color(120, 184, 255, 50)*alphaMultiplier, Projectile.rotation - MathHelper.PiOver2 * 0.5f, effectOrigin, new Vector2(1f, yScale * 2.5f) * Projectile.scale, SpriteEffects.None, 0f);
 			
 			Main.EntitySpriteDraw(texture, position, new Rectangle?(rectangle), lightColor, Projectile.rotation, rectangle.Size() / 6f, Projectile.scale, SpriteEffects.None, 0f);
 			return false;
