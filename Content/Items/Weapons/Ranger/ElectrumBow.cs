@@ -41,7 +41,7 @@ namespace ITD.Content.Items.Weapons.Ranger
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ModContent.ItemType<ElectrumBar>(), 10);
+            recipe.AddIngredient(ModContent.ItemType<ElectrumBar>(), 7);
             recipe.AddTile(TileID.Anvils);
             recipe.Register();
         }

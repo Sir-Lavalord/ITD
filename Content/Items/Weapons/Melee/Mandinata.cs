@@ -65,8 +65,8 @@ namespace ITD.Content.Items.Weapons.Melee
         {
             CreateRecipe(1)
                 .AddIngredient(ModContent.ItemType<EmberlionMandible>(), 1)
-                .AddIngredient(ModContent.ItemType<EmberlionSclerite>(), 6)
-                .AddIngredient(ItemID.IronBar, 12)
+                .AddIngredient(ModContent.ItemType<EmberlionSclerite>(), 4)
+                .AddIngredient(ItemID.IronBar, 6)
                 .AddTile(TileID.Anvils)
                 .Register();
         }

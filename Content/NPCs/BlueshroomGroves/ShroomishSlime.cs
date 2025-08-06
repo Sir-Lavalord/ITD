@@ -1,4 +1,5 @@
 ﻿using Terraria.Audio;
+using Terraria.GameContent;
 using System;
 
 using ITD.Utilities;
@@ -10,7 +11,12 @@ namespace ITD.Content.NPCs.BlueshroomGroves
 {
     public class ShroomishSlime : ModNPC
     {
-		public bool attack = false;
+		public bool canTriggerLanding = false;
+		public ref float AITimer => ref NPC.ai[0];
+		public ref float AIIsActiveOrOppositeDirTimer => ref NPC.ai[1];
+        public ref float AIBigJumpXPosition => ref NPC.ai[2];
+		public Vector2 stretchScale = Vector2.One;
+		
 		private readonly Asset<Texture2D> glow = ModContent.Request<Texture2D>("ITD/Content/NPCs/BlueshroomGroves/ShroomishSlime_Glow");
 		public override void SetStaticDefaults()
         {
@@ -38,9 +44,9 @@ namespace ITD.Content.NPCs.BlueshroomGroves
 				aggro = true;
 			}
 			
-			if (NPC.ai[2] > 1f)
+			if (AIBigJumpXPosition > 1f)
 			{
-				NPC.ai[2] -= 1f;
+				AIBigJumpXPosition -= 1f;
 			}
 			if (NPC.wet)
 			{
@@ -51,7 +57,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
 				if (NPC.velocity.Y < 0f && NPC.ai[3] == NPC.position.X)
 				{
 					NPC.direction *= -1;
-					NPC.ai[2] = 200f;
+					AIBigJumpXPosition = 200f;
 				}
 				if (NPC.velocity.Y > 0f)
 				{
@@ -66,23 +72,23 @@ namespace ITD.Content.NPCs.BlueshroomGroves
 				{
 					NPC.velocity.Y = -4f;
 				}
-				if (NPC.ai[2] == 1f & aggro)
+				if (AIBigJumpXPosition == 1f & aggro)
 				{
 					NPC.TargetClosest(true);
 				}
-				attack = false; // ow my attack
+				canTriggerLanding = false; // ow my canTriggerLanding
 			}
 			
 			NPC.aiAction = 0;
-			if (NPC.ai[2] == 0f)
+			if (AIBigJumpXPosition == 0f)
 			{
-				NPC.ai[0] = -100f;
-				NPC.ai[2] = 1f;
+				AITimer = -100f;
+				AIBigJumpXPosition = 1f;
 				NPC.TargetClosest(true);
 			}
 			if (NPC.velocity.Y == 0f)
 			{
-				if (attack) // the slime has landed, commence the attack
+				if (canTriggerLanding) // the slime has landed, commence the canTriggerLanding
 				{
 					if (Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
 					{
@@ -90,7 +96,9 @@ namespace ITD.Content.NPCs.BlueshroomGroves
 						Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + NPC.velocity * 4, new Vector2(-6f, 0), ModContent.ProjectileType<Sporeflake>(), 15, 0, -1);
 					}
 					SoundEngine.PlaySound(SoundID.NPCHit1, NPC.Center);
-					attack = false;
+					stretchScale.X = 2f;
+					stretchScale.Y = 0.5f;
+					canTriggerLanding = false;
 				}
 				if (NPC.collideY && NPC.oldVelocity.Y != 0f && Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
 				{
@@ -99,7 +107,7 @@ namespace ITD.Content.NPCs.BlueshroomGroves
 				if (NPC.ai[3] == NPC.position.X)
 				{
 					NPC.direction *= -1;
-					NPC.ai[2] = 200f;
+					AIBigJumpXPosition = 200f;
 				}
 				NPC.ai[3] = 0f;
 				NPC.velocity.X = NPC.velocity.X * 0.8f;
@@ -109,56 +117,60 @@ namespace ITD.Content.NPCs.BlueshroomGroves
 				}
 				if (aggro)
 				{
-					NPC.ai[0] += 1f;
+					AITimer += 1f;
 				}
-				NPC.ai[0] += 1f;
+				AITimer += 1f;
 				float num31 = -1000f;
 				int num32 = 0;
-				if (NPC.ai[0] >= 0f)
+				if (AITimer >= 0f)
 				{
 					num32 = 1;
 				}
-				if (NPC.ai[0] >= num31 && NPC.ai[0] <= num31 * 0.5f)
+				if (AITimer >= num31 && AITimer <= num31 * 0.5f)
 				{
 					num32 = 2;
 				}
-				if (NPC.ai[0] >= num31 * 2f && NPC.ai[0] <= num31 * 1.5f)
+				if (AITimer >= num31 * 2f && AITimer <= num31 * 1.5f)
 				{
 					num32 = 3;
 				}
 				if (num32 > 0)
 				{
 					NPC.netUpdate = true;
-					if (aggro && NPC.ai[2] == 1f)
+					if (aggro && AIBigJumpXPosition == 1f)
 					{
 						NPC.TargetClosest(true);
 					}
 					if (num32 == 3)
 					{
+						stretchScale.Y = 2f;
+                        stretchScale.X = 0.5f;
 						NPC.velocity.Y = -8f;
 						NPC.velocity.X = NPC.velocity.X + (float)(3 * NPC.direction);
-						NPC.ai[0] = -200f;
+						AITimer = -200f;
 						NPC.ai[3] = NPC.position.X;
 					}
 					else
 					{
+						stretchScale.Y = 2f;
+                        stretchScale.X = 0.5f;
 						NPC.velocity.Y = -6f;
 						NPC.velocity.X = NPC.velocity.X + (float)(2 * NPC.direction);
-						NPC.ai[0] = -120f;
+						AITimer = -120f;
 						if (num32 == 1)
 						{
-							NPC.ai[0] += num31;
+							AITimer += num31;
 						}
 						else
 						{
-							NPC.ai[0] += num31 * 2f;
+							AITimer += num31 * 2f;
 						}
 					}
-					attack = true; // prepare attack
+					canTriggerLanding = true; // prepare canTriggerLanding
 				}
 				else
 				{
-					if (NPC.ai[0] >= -30f)
+					if (AITimer >= -30f)
 					{
 						NPC.aiAction = 1;
 						return;
@@ -187,14 +199,6 @@ namespace ITD.Content.NPCs.BlueshroomGroves
 			}
 		}
 		
-		public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-        {			
-			Rectangle sourceRectangle = NPC.frame;
-			Vector2 origin = sourceRectangle.Size() / 2f;
-
-            spriteBatch.Draw(glow.Value, NPC.Center - screenPos + new Vector2(0f, NPC.gfxOffY + 2), sourceRectangle, Color.White * BlueshroomTree.opac, 0f, origin, 1f, SpriteEffects.None, 0f);
-        }
-			
 		public override void HitEffect(NPC.HitInfo hit)
         {
             if (NPC.life > 0)
@@ -212,7 +216,23 @@ namespace ITD.Content.NPCs.BlueshroomGroves
 				Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<BlueshroomSporesDust>(), 0f, 0f, 0, default, 1f);
 			}
         }
-			
+		
+		public override void FindFrame(int frameHeight)
+        {
+            stretchScale = Vector2.SmoothStep(stretchScale, Vector2.One, 0.25f);
+        }
+		
+		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Texture2D tex = TextureAssets.Npc[Type].Value;
+            float texHeight = tex.Height / Main.npcFrameCount[Type];
+            Vector2 origin = new(tex.Width / 2, texHeight);
+            Vector2 offset = new(0f, NPC.gfxOffY + 1f + texHeight / 2f);
+            spriteBatch.Draw(tex, NPC.Center - screenPos + offset, NPC.frame, drawColor, 0f, origin, stretchScale, SpriteEffects.None, 0f);
+			spriteBatch.Draw(glow.Value, NPC.Center - screenPos + offset, NPC.frame, Color.White * BlueshroomTree.opac, 0f, origin, stretchScale, SpriteEffects.None, 0f);
+            return false;
+        }
+		
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)

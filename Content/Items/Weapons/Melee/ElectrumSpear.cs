@@ -57,7 +57,7 @@ namespace ITD.Content.Items.Weapons.Melee
 		{
 			CreateRecipe(1)
                 .AddIngredient(ItemID.ThunderSpear, 1)
-                .AddIngredient(ModContent.ItemType<ElectrumBar>(), 10)
+                .AddIngredient(ModContent.ItemType<ElectrumBar>(), 5)
                 .AddTile(TileID.Anvils)
                 .Register();
 		}
