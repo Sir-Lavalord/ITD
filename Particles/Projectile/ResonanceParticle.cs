@@ -13,5 +13,9 @@ namespace ITD.Particles.Projectile
             particle.scale = particle.spawnParameters.Scale + (EasingFunctions.OutQuad(particle.ProgressZeroToOne) * 0.5f);
             particle.opacity = particle.ProgressOneToZero;
         }
+        public override Color GetAlpha(ITDParticle particle)
+        {
+            return new Color(243, 162, 63);
+        }
     }
 }

@@ -393,7 +393,7 @@ ModContent.ProjectileType<ResonanceBlast>(), Projectile.damage * 2, Projectile.k
         }
         private Color StripColors(float progressOnStrip)
         {
-            Color result = Color.Lerp(new Color(173, 196, 199), new Color(66, 77, 89), Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
+            Color result = Color.Lerp(new Color(243, 162, 63), new Color(227, 98, 43), Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
             result.A /= 2;
             return result * 0.5f;
         }

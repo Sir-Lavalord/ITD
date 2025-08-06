@@ -1,7 +1,16 @@
-﻿using Terraria.Audio;
-using System;
+﻿using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Utilities;
-
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.Enums;
+using Terraria.ID;
+using Terraria.ModLoader;
 namespace ITD.Content.Items.Accessories.Movement.Jumps
 {
     public class FirestormInABottle : ModItem
@@ -22,232 +31,180 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<FirestormPlayer>().hasFireJump = true;
+            player.GetJumpState<FirestormJump>().Enable();
         }
     }
+    public class FirestormJump : ExtraJump
+    {
+        public override Position GetDefaultPosition() => new Before(CloudInABottle);
 
+        /*        public override IEnumerable<Position> GetModdedConstraints()
+                {
+                    yield return new Before(ModContent.GetInstance<MultipleUseExtraJump>());
+                }
+        */
+        public override float GetDurationMultiplier(Player player)
+        {
+            return 1.5f;
+        }
+        public int pillarCount = 0;
+        public int pillarCountMax = 5;
+        public override void UpdateHorizontalSpeeds(Player player)
+        {
+            player.runAcceleration *= 1;
+            player.maxRunSpeed *= 1f;
+
+        }
+        public override void OnRefreshed(Player player)
+        {
+            // Reset the jump counter
+            player.GetModPlayer<FirestormPlayer>().pillarCount = 0;
+            player.GetModPlayer<FirestormPlayer>().fireJumped = false;
+
+        }
+
+        public override void OnStarted(Player player, ref bool playSound)
+        {
+            player.GetModPlayer<FirestormPlayer>().fireJumped = true;
+            for (int j = 0; j < 20; j++)
+            {
+                Dust dust = Dust.NewDustDirect(player.Bottom + new Vector2(-20, 0), player.width * 2, 10, DustID.Torch);
+                dust.noGravity = true;
+                dust.scale = 2f * Main.rand.NextFloat(0.75f, 1.25f);
+                dust.velocity.X = 4  * (j % 2 == 0 ? 1 : -1) * Main.rand.NextFloat(0.25f, 1.25f);
+            }
+
+        }
+        public override void OnEnded(Player player)
+        {
+        }
+        public override void ShowVisuals(Player player)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                int direction = i == 0 ? 1 : -1;
+
+                Vector2 position = player.Center + new Vector2(direction * 12f, (player.height + 2f) * player.gravDir * 0.5f);
+
+                Dust dust = Dust.NewDustDirect(position - new Vector2(4f, 4f), 0, 0, DustID.Torch, 0f, 0f, 0, default, 3f);
+                //dust.shader = GameShaders.Armor.GetSecondaryShader(Player.cShoe, Player);
+                dust.noGravity = true;
+                dust.velocity = player.velocity / 3 + new Vector2(0, 
+                    6f).RotatedByRandom(MathHelper.ToRadians(10));
+            }
+        }
+    }
     public class FirestormPlayer : ModPlayer
     {
-        public const int FireCloudDuration = 180;
-        public const int FireTrailDuration = 60;
-        public const int RainDuration = 120;
-        public const int FireRainLifetime = 180;
-        public const int DamageInterval = 30;
+        public bool hasFireJump = false;
+        public bool fireJumped = false;
+        public int pillarCount = 0;
+        public int pillarCountMax = 5;
 
-        public bool hasFireJump;
-        public bool canDoubleJump;
-        public bool waitDoubleJump;
-        public int fireCloudTimer;
-        public int fireTrailTimer;
-        public int rainTimer;
-        public int damageTimer;
-        public Vector2 jumpPosition;
-
-        public override void ResetEffects() => hasFireJump = false;
-
-        public override void PreUpdate()
+        public override void ResetEffects()
         {
-            if (!hasFireJump)
+            hasFireJump = false;
+        }
+        public override void PostUpdate()
+        {
+            if (fireJumped && hasFireJump)
             {
-                canDoubleJump = false;
-            }
-
-            HandleDoubleJump();
-            UpdateTimers();
-        }
-
-        public override void PostUpdate() => UpdateFireRain();
-
-        private void HandleDoubleJump()
-        {
-            if ((Player.velocity.Y == 0f || Player.sliding || Player.autoJump && Player.justJumped) && hasFireJump)
-            {
-                canDoubleJump = true;
-                waitDoubleJump = true;
-            }
-            else if (canDoubleJump && Player.controlJump && !waitDoubleJump)
-            {
-                PerformDoubleJump();
-            }
-
-            waitDoubleJump = Player.controlJump;
-        }
-
-        private void PerformDoubleJump()
-        {
-            if (Player.jump > 0) return;
-
-            Player.velocity.Y = -Player.jumpSpeed * Player.gravDir;
-            Player.jump = Player.jumpHeight;
-            canDoubleJump = false;
-
-            SoundEngine.PlaySound(new SoundStyle($"ITD/Content/Sounds/FirestormInABottle{Main.rand.Next(1, 3)}"), Player.position);
-
-            fireCloudTimer = FireCloudDuration;
-            fireTrailTimer = FireTrailDuration;
-            rainTimer = RainDuration;
-            damageTimer = DamageInterval;
-            jumpPosition = Player.Bottom;
-        }
-
-        private void UpdateTimers()
-        {
-            if (fireCloudTimer > 0) { fireCloudTimer--; FireCloud(); }
-            if (fireTrailTimer > 0) { fireTrailTimer--; FireTrail(); }
-            if (rainTimer > 0) { rainTimer--; FireRain(); }
-            if (damageTimer > 0) damageTimer--;
-        }
-
-        private void FireCloud()
-        {
-            float progress = (float)fireCloudTimer / FireCloudDuration;
-            for (int i = 0; i < 10; i++) CreateFireCloudDust(progress);
-            DamageEnemy(jumpPosition, damageTimer <= 0);
-            if (damageTimer <= 0) damageTimer = DamageInterval;
-        }
-
-        private void CreateFireCloudDust(float progress)
-        {
-            Vector2 speed = Main.rand.NextVector2Circular(5f * progress, 5f * progress);
-            speed.Y -= Main.rand.NextFloat(2f * progress, 8f * progress);
-
-            int dustType = Main.rand.Next(3) switch
-            {
-                0 => DustID.Torch,
-                1 => DustID.Smoke,
-                _ => DustID.Cloud
-            };
-
-            Dust dust = Dust.NewDustPerfect(
-                jumpPosition + new Vector2(Main.rand.Next(-50, 51), Main.rand.Next(-20, 21)),
-                dustType,
-                speed,
-                100,
-                Color.OrangeRed * progress,
-                Main.rand.NextFloat(1f, 2.5f) * progress
-            );
-
-            dust.noGravity = true;
-            dust.fadeIn = 1f * progress;
-
-            if (dustType == DustID.Cloud)
-            {
-                dust.color = Color.Lerp(Color.OrangeRed, Color.White, Main.rand.NextFloat(0.5f));
-            }
-        }
-
-        private void FireTrail()
-        {
-            for (int i = 0; i < 3; i++) CreateFireTrailDust();
-            DamageEnemy(Player.Bottom, false);
-        }
-
-        private void CreateFireTrailDust()
-        {
-            Vector2 speed = new(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1.5f, -0.5f));
-
-            Dust dust = Dust.NewDustPerfect(
-                Player.Bottom + new Vector2(Main.rand.Next(-10, 11), 0),
-                DustID.Torch,
-                speed,
-                100,
-                Color.OrangeRed,
-                Main.rand.NextFloat(0.5f, 1f)
-            );
-
-            dust.noGravity = true;
-            dust.fadeIn = 0.5f;
-            dust.color = Color.Lerp(Color.OrangeRed, Color.Yellow, Main.rand.NextFloat(0.5f));
-        }
-
-        private void FireRain()
-        {
-            float progress = (float)rainTimer / RainDuration;
-            for (int i = 0; i < 3; i++) CreateFireRainDust(progress);
-        }
-
-        private void CreateFireRainDust(float progress)
-        {
-            Vector2 rainPosition = jumpPosition + new Vector2(Main.rand.Next(-50, 51), Main.rand.Next(-20, 0));
-            Vector2 rainVelocity = new(Main.windSpeedCurrent * 0.3f, Main.rand.Next(2, 4));
-
-            Dust dust = Dust.NewDustPerfect(
-                rainPosition,
-                DustID.Torch,
-                rainVelocity,
-                0,
-                Color.OrangeRed * progress,
-                Main.rand.NextFloat(0.5f, 1.5f) * progress
-            );
-
-            dust.noGravity = false;
-            dust.fadeIn = 0.5f;
-            dust.color = Color.Lerp(Color.OrangeRed, Color.Yellow, Main.rand.NextFloat(0.5f));
-
-            dust.customData = new FireRainData { InitialPosition = rainPosition, CreationTime = Main.GameUpdateCount };
-        }
-
-        private static void UpdateFireRain()
-        {
-            for (int i = 0; i < Main.maxDust; i++)
-            {
-                Dust dust = Main.dust[i];
-                if (dust.active && dust.type == DustID.Torch && dust.customData is FireRainData data)
+                if (Player.velocity.Y == 0 || (pillarCount > 0 && pillarCount < pillarCountMax))
                 {
-                    if (Main.GameUpdateCount - data.CreationTime > FireRainLifetime)
+                    while (pillarCount < pillarCountMax)
                     {
-                        dust.active = false;
-                        continue;
+                        SpawnFirestorm();
                     }
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    int direction = i == 0 ? 1 : -1;
 
-                    Vector2 nextPosition = dust.position + dust.velocity;
-                    if (IsTileCollision(nextPosition))
-                    {
-                        dust.scale *= 0.9f;
-                        dust.velocity = Vector2.Zero;
-                        if (dust.scale < 0.1f) dust.active = false;
-                    }
+                    Vector2 position = Player.Center + new Vector2(direction * 12f, (Player.height + 2f) * Player.gravDir * 0.5f);
 
-                    if (dust.position.Y > data.InitialPosition.Y + 300) dust.active = false;
+                    Dust dust = Dust.NewDustDirect(position - new Vector2(4f, 4f), 0, 0, DustID.Torch, 0f, 0f, 0, default, 2f);
+                    //dust.shader = GameShaders.Armor.GetSecondaryShader(Player.cShoe, Player);
+                    dust.noGravity = true;
+                    dust.velocity = Player.velocity / 2 + new Vector2(0, -Player.gravDir * 6f).RotatedByRandom(MathHelper.ToRadians(10));
                 }
             }
         }
 
-        private static bool IsTileCollision(Vector2 position)
+        private Vector2 FindGroundBelow(ref Vector2 position)
         {
-            Point tileCoords = position.ToTileCoordinates();
-            return TileHelpers.SolidTile(tileCoords.X, tileCoords.Y);
+            RaycastData data = Helpers.QuickRaycast(position, Vector2.UnitY, (point)
+                => { return (!Main.tile[point].HasTile && Main.tile[point].TileType != TileID.Platforms) && Main.tile[point].IsActuated ; }, 300,false);
+            return data.End + new Vector2(0,- 30);
         }
-
-        private static void DamageEnemy(Vector2 position, bool dealDamage)
+        private void SpawnFirestorm()
         {
-            for (int i = 0; i < Main.maxNPCs; i++)
-            {
-                NPC npc = Main.npc[i];
-                if (npc.active && !npc.friendly && npc.Bottom.Y > position.Y &&
-                    Math.Abs(npc.Center.X - position.X) < 100f &&
-                    Math.Abs(npc.Center.Y - position.Y) < 100f)
-                {
-                    npc.AddBuff(BuffID.OnFire, 60);
+            float radius = 150f;
 
-                    if (dealDamage)
-                    {
-                        npc.StrikeNPC(new NPC.HitInfo
-                        {
-                            Damage = Main.rand.Next(21, 30),
-                            Knockback = 0,
-                            HitDirection = npc.direction,
-                            Crit = false,
-                            DamageType = DamageClass.Default
-                        });
-                    }
-                }
+
+            Vector2 position = Player.Center + new Vector2(
+                Main.rand.NextFloat(-radius, radius),
+                0
+            );
+            if (Math.Abs(position.Y - FindGroundBelow(ref position).Y) >= 50)
+            {
+                return;
+            }
+
+            Projectile.NewProjectile(
+                Player.GetSource_FromThis(),
+                FindGroundBelow(ref position),
+                Vector2.Zero,
+                ModContent.ProjectileType<FirestormPillar>(),
+                30,
+                5f,
+                Player.whoAmI, pillarCount * 25
+            );
+
+            pillarCount++;
+            for (int j = 0; j < 12; j++)
+            {
+                Dust dust = Dust.NewDustDirect(Player.Bottom + new Vector2(-20,0), Player.width * 2, 10, DustID.Torch);
+                dust.noGravity = true;
+                dust.scale = 1.5f * Main.rand.NextFloat(0.75f, 1.25f);
+                dust.velocity.X = 10 * (j % 2 == 0 ? 1: -1) * Main.rand.NextFloat(0.25f,1.25f);
             }
         }
-
-        private class FireRainData
+        public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
-            public Vector2 InitialPosition;
-            public uint CreationTime;
+            if (hasFireJump && fireJumped && drawInfo.shadow == 0f)
+            {
+                Texture2D texture = ModContent.Request<Texture2D>("ITD/Content/Items/Accessories/Movement/Jumps/FirestormInABottle_Fire").Value;
+                Rectangle sourceRectangle = texture.Frame(1, 1);
+                Vector2 origin = sourceRectangle.Size() / 2f;
+
+                float time = Main.GlobalTimeWrappedHourly;
+                float timer = (float)Main.time / 240f + time * 0.04f;
+                time %= 4f;
+                time /= 2f;
+
+                if (time >= 1f)
+                {
+                    time = 2f - time;
+                }
+
+                time = time * 0.5f + 0.5f;
+                for (int i = 0; i < 2; i++)
+                {
+                    int direction = i == 0 ? 1 : -1;
+                    Vector2 position = drawInfo.Position - Main.screenPosition + new Vector2(Player.width * 0.5f + direction * 12f, Player.height * (Player.gravDir == 1 ? 1 : 0) - 4f * Player.gravDir);
+                    float sine = (float)Math.Sin(Main.GlobalTimeWrappedHourly * 10);
+                    Vector2 miragePos = position - Main.screenPosition + origin;
+
+                    for (float f = 0f; f < 1f; f += 0.3f)
+                    {
+                        float radians = (f + timer) * MathHelper.TwoPi;
+
+                        Main.EntitySpriteDraw(texture, position + new Vector2(0f, 4).RotatedBy(radians) * time, sourceRectangle, new Color(255, 130, 41, 100), default, origin, 0.75f, SpriteEffects.None, 0);
+                    }
+                    Main.EntitySpriteDraw(texture, position, sourceRectangle, new Color(255, 130, 41, 50), default, origin, 0.75f + sine * 0.05f, drawInfo.itemEffect, 0f);
+                   
+                }
+            }
         }
     }
 }

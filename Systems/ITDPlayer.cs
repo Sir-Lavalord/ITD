@@ -84,12 +84,6 @@ namespace ITD.Players
 
         public int DebuffCount;
 		
-        //Drawlayer nonsense
-        public int frameCounter = 0;
-        public int frameEffect = 0;
-        public bool CosJellSuffocated;
-        public const int CosJellEscapeMax = 10;
-        public int CosJellEscapeCurrent;
         //shakeDuration
         public int shakeDuration;
         public float shakeIntensityX;
@@ -140,27 +134,6 @@ namespace ITD.Players
             //shakeDuration
             if (shakeDuration > 0)
                 shakeDuration--;
-            //Suffocrap
-            if (CosJellSuffocated)
-            {
-                Player.velocity *= 0;
-                Player.RemoveAllGrapplingHooks();
-                if (CosJellEscapeCurrent <= 0)
-                {
-                    CosJellSuffocated = false;
-                    Player.immune = true;//probably op
-                    Player.immuneTime = 180;
-                }
-            }
-            if ((Player.controlJump && Player.releaseJump))
-            {
-                CosJellEscapeCurrent--;
-
-                if (CosJellEscapeCurrent <= 0)
-                {
-                    CosJellEscapeCurrent = 0;
-                }
-            }
 
             if (heldItem != Player.inventory[Player.selectedItem].type)
 			{
@@ -219,8 +192,6 @@ namespace ITD.Players
             soulTalismanEffect = false;
             soulTalismanTally = 0;
             soulTalismanStack = 0;
-            CosJellSuffocated = false;
-            CosJellEscapeCurrent = 0;
             if (shakeDuration > 0)
                 shakeDuration--; 
             itemVar = new float[4];

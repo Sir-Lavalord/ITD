@@ -76,7 +76,6 @@ namespace ITD.Content.NPCs.Friendly
             NPC.netUpdate = true;
             
         }
-        int iHitDamage;
         public override void HitEffect(NPC.HitInfo hit)
         {
             Player player = Main.player[(int)NPC.ai[0]];

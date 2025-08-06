@@ -77,6 +77,9 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                     int dust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, 0, 0, 0, default, 1f);
                     Main.dust[dust2].noGravity = false;
                     Main.dust[dust2].velocity *= 1f;
+                    int dust3 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.RedTorch, 0, 0, 0, default, 2f);
+                    Main.dust[dust3].noGravity = true;
+                    Main.dust[dust3].velocity *= 2f;
                 }
                 Projectile.Center = npc.Center;
                 if (npc.velocity == Vector2.Zero)
@@ -93,22 +96,25 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 NPC npc = Main.npc[MainTarget];
                 for (int i = 0; i < 20; i++)
                 {
+                    int dust2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, 0, 0, 0, default, 1f);
+                    Main.dust[dust2].noGravity = false;
+                    Main.dust[dust2].velocity = new Vector2(0, 6).RotatedByRandom(4f) * Main.rand.NextFloat(0.9f, 1.1f);
                     int dust = Dust.NewDust(Projectile.position, 1, 1, DustID.RedTorch, 0, 0, 0, default, 2f);
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].velocity = new Vector2(0, 15).RotatedByRandom(4f) * Main.rand.NextFloat(0.9f, 1.1f);
                 }
-                Projectile.Resize(160, 160);
+                Projectile.Resize(200, 200);
                 Projectile.timeLeft = 3;
                 float power = 10 * Utils.GetLerpValue(1200f, 0f, Projectile.Distance(Main.LocalPlayer.Center), true);
                 Player player = Main.player[Projectile.owner];
                 player.GetITDPlayer().BetterScreenshake(10, power, power, false);
-                npc.velocity.X = - Projectile.direction * 2f;
                 if (target.Gimmickable())
                 {
 
                     target.velocity.Y = Main.rand.NextFloat(-2, -1);
-                    target.velocity.X = Projectile.direction * 4f;
+                    target.velocity.X = npc.oldVelocity.X / 2f;
                 }
+                npc.velocity.X = -npc.oldVelocity.X/1.5f;
                 }
             }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)

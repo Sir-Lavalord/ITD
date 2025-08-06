@@ -1,11 +1,13 @@
-﻿using ITD.Utilities;
+﻿using ITD.Content.NPCs.Friendly;
+using ITD.Particles;
+using ITD.Particles.Projectile;
+using ITD.Utilities;
+using System;
 using System.Collections.Generic;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
-using ITD.Particles.Projectile;
-using ITD.Particles;
-using ITD.Content.NPCs.Friendly;
+using Terraria.Map;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {
@@ -53,17 +55,17 @@ namespace ITD.Content.Projectiles.Friendly.Melee
             switch (Projectile.frame)
             {
                 case 2:
-                    modifiers.FinalDamage.Flat = (int)(Projectile.damage * (swingCharge/120));
+                    modifiers.FinalDamage.Flat = (int)(Projectile.damage * (swingCharge/60));
                     break;
                 case 3:
-                    modifiers.FinalDamage.Flat = (int)(Projectile.damage * (swingCharge / 240));
+                    modifiers.FinalDamage.Flat = (int)(Projectile.damage * (swingCharge / 120));
                     break;
             }
         }
         public int swingCharge;
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (hitFrame != Projectile.frame && Projectile.frame <= 5)
+            if (hitFrame != Projectile.frame && Projectile.frame <= 5 && Projectile.frame > 1)
             {
                 hitFrame = Projectile.frame;
                 if (hitreg <= 0)
@@ -96,53 +98,37 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                                 bomb.width = (int)(target.width * 0.5f);
 
                                 target.velocity.Y = Main.rand.NextFloat(-6, -4);
-                                target.velocity.X = Projectile.spriteDirection * 18f;
+                                target.velocity.X = Projectile.spriteDirection * 6 * ((swingCharge/60) + 1);
 
                                 break;
                             case 3:
                                 target.velocity.Y = Main.rand.NextFloat(-2, -1);
-                                target.velocity.X = Projectile.spriteDirection * 12f;
+                                target.velocity.X = Projectile.spriteDirection * 4 * ((swingCharge / 60) + 1);
                                 break;
                         }
-                    }
-                    else if (!target.Gimmickable())
-                    {
-/*                        switch (Projectile.frame)
-                        {
-                            case 2:
-
-                                damageDone = (int)(Projectile.damage * 2);
-                                break;
-                            case 3:
-
-                                damageDone = (int)(Projectile.damage * 1.25f);
-                                break;
-                        }*/
                     }
                 }
             }
         }
-        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-        {
-            overPlayers.Add(index);
-        }
         int hitreg;
         int hitFrame = 0;
+        float angle;
         public override void AI()
         {
-            Main.NewText((Projectile.frame, hitFrame,Projectile.direction,Projectile.spriteDirection));
+            Projectile.alpha = 255;
             Player player = Main.player[Projectile.owner];
-            Projectile.Center = player.MountedCenter;
+            Projectile.Center = player.MountedCenter + new Vector2(0,-20);
             if (hitreg-- <= 0)
             {
                 Projectile.frameCounter++;
             }
             else
             {
-                Projectile.Center += Main.rand.NextVector2Circular(5, 5);
+                Projectile.Center += Main.rand.NextVector2Circular(7, 5);
             }
             if (emitter != null)
                 emitter.keptAlive = true;
+
             switch (Projectile.frame)
             {
                 case 0:
@@ -164,12 +150,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                     Projectile.Resize((int)(180 * Projectile.scale), (int)(100 * Projectile.scale));
                     break;
             }
+            player.heldProj = Projectile.whoAmI;
             if (!player.channel)
             {
-                Projectile.direction = Projectile.spriteDirection;
-
-                player.direction = Projectile.spriteDirection;
-                if (Projectile.frameCounter >= 7)
+                if (Projectile.frameCounter >= 8)
                 {
                     Projectile.frameCounter = 0;
                     Projectile.frame++;
@@ -179,6 +163,10 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                         Projectile.Kill();
                     }
                 }
+                if (angle <= MathHelper.Pi * 1.25f)
+                    angle += 0.2f;
+                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full,
+                        (MathHelper.Pi + angle) * player.direction);
             }
             else
             {
@@ -187,10 +175,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                 swingCharge++;
                 if (Main.rand.NextBool(4))
                 {
-                    int dust = Dust.NewDust(Projectile.position, 1, 1, DustID.RedTorch, 0, 0, 0, default, 2f);
+                    int dust = Dust.NewDust(Projectile.Center + new Vector2(-20 * Projectile.spriteDirection, -Projectile.height/1.25f), 1, 1, DustID.RedTorch, 0, 0, 0, default, 2f);
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].velocity = new Vector2(0, 4).RotatedByRandom(3f) * Main.rand.NextFloat(0.9f, 1.1f);
                 }
+                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full,  MathHelper.Pi);
+
             }
         }
         public override bool? CanDamage()
@@ -199,10 +189,38 @@ namespace ITD.Content.Projectiles.Friendly.Melee
         }
         public override bool PreDraw(ref Color lightColor)
         {
+            Player player = Main.player[Projectile.owner];
+
             SpriteBatch sb = Main.spriteBatch;
-            Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
-            sb.Draw(texture, new Vector2(Projectile.Center.X, Projectile.Center.Y - 80) - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(frame.Width * 0.5f, (frame.Height / Main.projFrames[Type]) * 0.5f), Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+            Texture2D tex = TextureAssets.Projectile[Type].Value;
+            Rectangle frame = tex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+            Vector2 center = Projectile.Size / 2f;
+            float time = Main.GlobalTimeWrappedHourly;
+            float timer = (float)Main.time / 240f + time * 0.04f;
+            Vector2 miragePos = Projectile.position - Main.screenPosition + center;
+            Vector2 origin = new(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f);
+            time %= 4f;
+            time /= 2f;
+
+            if (time >= 1f)
+            {
+                time = 2f - time;
+            }
+
+            time = time * 0.5f + 0.5f;
+
+
+            if (player.channel)
+            {
+                for (float i = 0f; i < 1f; i += 0.3f )
+                {
+                    float radians = (i + timer) * MathHelper.TwoPi;
+
+                    Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 2 + swingCharge/60).RotatedBy(radians) * time, frame, new Color(255, 71, 71, 50), Projectile.rotation, origin, Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                }
+            }
+            
+            Main.EntitySpriteDraw(tex, miragePos, frame, Color.White, Projectile.rotation, origin, Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
             return false;
         }
     }
