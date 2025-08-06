@@ -76,8 +76,6 @@ namespace ITD.Content.NPCs.Bosses
         public ref float DashTimer => ref NPC.localAI[1];
 
         //check if cosjel is dashing
-        bool IsDashing;
-
         //dash velocity
         Vector2 dashVel;
 

@@ -1,7 +1,9 @@
-﻿using Terraria.GameContent;
-using ITD.Utilities.EntityAnim;
-using ITD.Particles;
+﻿using ITD.Particles;
 using ITD.Particles.Misc;
+using ITD.Utilities.EntityAnim;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
 
 namespace ITD.Content.Projectiles.Friendly.Misc
 {
@@ -22,7 +24,19 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             Projectile.height = 64;
             Projectile.timeLeft = LifeTime;
             Projectile.penetrate = -1;
-            emitter = ParticleSystem.NewEmitter<PyroclasticParticle>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+            Projectile.usesIDStaticNPCImmunity = true;
+            Projectile.idStaticNPCHitCooldown = 60;
+            emitter = ParticleSystem.NewEmitter<PyroclasticParticle>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
+            emitter.tag = Projectile;
+        }
+        public int frameShift = 0;
+        public float fireStart = 0;
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (emitter != null)
+                emitter.keptAlive = true;
+            frameShift = Main.rand.Next(-2, 6);
+            fireStart = Projectile.ai[0] + 1;
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
@@ -30,11 +44,17 @@ namespace ITD.Content.Projectiles.Friendly.Misc
         }
         public override void AI()
         {
-            if (Projectile.ai[0]-- < 0)
-            {
-
-                Projectile.Opacity = 1f;
+            if (emitter != null)
                 emitter.keptAlive = true;
+            if (Projectile.ai[0] <= fireStart * 0.75f)
+            {
+                emitter?.Emit(Projectile.Bottom + new Vector2(Main.rand.NextFloat(-Projectile.width/ 1.75f * (1 - (Projectile.ai[0]/fireStart)) ,Projectile.width/1.75f * (1 - (Projectile.ai[0] / fireStart))), 0), Vector2.Zero,20);
+            }
+
+            if (Projectile.ai[0]-- <= 0)
+            {
+                Projectile.ai[0] = 0;
+
                 if (Main.rand.NextFloat() < ProgressOneToZero)
                 {
                     Rectangle dustRect = Projectile.Hitbox;
@@ -43,7 +63,7 @@ namespace ITD.Content.Projectiles.Friendly.Misc
                     d.noGravity = true;
                     d.velocity.Y -= 1f;
                 }
-                if (++Projectile.frameCounter >= 6)
+                if (++Projectile.frameCounter >= 6 + frameShift)
                 {
                     Projectile.frameCounter = 0;
                     Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
@@ -53,7 +73,15 @@ namespace ITD.Content.Projectiles.Friendly.Misc
 
                 }
             }
-            else Projectile.Opacity = 0f;
+            else
+            {
+                Projectile.timeLeft = LifeTime;
+            }
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (Main.rand.NextBool(3))
+            target.AddBuff(BuffID.OnFire, 60);
         }
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
@@ -69,33 +97,26 @@ namespace ITD.Content.Projectiles.Friendly.Misc
             int newY = baseHitbox.Y + (baseHitbox.Height - newHeight);
             hitbox = new(newX, newY, newWidth, newHeight);
         }
-        float factor = 0f;
+        float factor = 1f;
+        
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D tex = TextureAssets.Projectile[Type].Value;
             int frameHeight = tex.Height / Main.projFrames[Type];
             Vector2 origin = new(tex.Width / 2, frameHeight); // bottom middle origin
             Rectangle frame = tex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
-            if (Projectile.ai[0]-- < 0)
+            float progress = 1f - ProgressOneToZero;
+            if (Projectile.ai[0] <= 0)
             {
-                float progress = 1f - ProgressOneToZero;
-                float lim = 0.15f;
-                if (Projectile.ai[0]-- < 0)
+                float lim = 0.05f;
+                if (progress <= lim)
                 {
-                    if (progress <= lim)
-                    {
-                        factor = MathHelper.Lerp(1f, 0f, EasingFunctions.OutQuad(progress / lim));
-                    }
-                    else
-                    {
-
-                        factor = MathHelper.Lerp(0f, 1f, EasingFunctions.InQuad((progress - lim) / (1f - lim)));
-
-                    }
+                    factor = MathHelper.Lerp(1f, 0f, EasingFunctions.OutQuad(progress / lim));
                 }
-                frame.Height = (int)MathHelper.Lerp(frame.Height, 1, factor);
             }
-            Main.spriteBatch.Draw(tex, Projectile.Bottom - Main.screenPosition + Vector2.UnitY * (frameHeight - frame.Height), frame, Color.White with { A = 0 }, 0f, origin, 1f, SpriteEffects.None, 0f);
+            frame.Height = (int)MathHelper.Lerp(frame.Height, 1, factor);
+        
+            Main.spriteBatch.Draw(tex, Projectile.Bottom - Main.screenPosition + Vector2.UnitY * (frameHeight - frame.Height), frame, Color.White with { A = 0 }, 0f, origin, 1f, frameShift % 2 == 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
             return false;
         }
     }

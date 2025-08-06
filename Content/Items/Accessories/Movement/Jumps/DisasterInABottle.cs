@@ -85,7 +85,6 @@ namespace ITD.Content.Items.Accessories.Movement.Jumps
 
         private void UpdateSubPlayers()
         {
-            firestormPlayer.hasFireJump = hasDisasterJump;
             twisterPlayer.hasTwisterJump = hasDisasterJump;
             stormPlayer.hasStormJump = hasDisasterJump;
         }
