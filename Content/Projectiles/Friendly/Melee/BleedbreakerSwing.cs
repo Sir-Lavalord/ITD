@@ -76,12 +76,12 @@ namespace ITD.Content.Projectiles.Friendly.Melee
                     player.GetITDPlayer().BetterScreenshake(10, 8, 5, false);
                     SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), target.Center);
 
-                    for (int i = 0; i < 6; i++)
+                    for (int i = 0; i < 18; i++)
                     {
-                        Dust dust = Dust.NewDustDirect(target.Center, 1, 1, DustID.RedTorch, Projectile.direction * 8f, Main.rand.NextFloat(-6, -4), 60, default, Main.rand.NextFloat(1f, 1.2f));
-                        dust.noGravity = true;
+                        Dust dust = Dust.NewDustDirect(target.Center, 1, 1, DustID.RedTorch, Projectile.direction * 4f, Main.rand.NextFloat(-6, -4), 60, default, Main.rand.NextFloat(1.25f, 1.5f));
+                        dust.noGravity = false;
                         dust.velocity *= 2f;
-                        Dust dust1 = Dust.NewDustDirect(target.Center, 1, 1, DustID.Blood, Projectile.direction * 5f, Main.rand.NextFloat(-6, -4), 60, default, Main.rand.NextFloat(1f, 1.2f));
+                        Dust dust1 = Dust.NewDustDirect(target.Center, 1, 1, DustID.Blood, Projectile.direction * 6f, Main.rand.NextFloat(-3, -2), 60, default, Main.rand.NextFloat(1.75f, 2.25f));
                         dust1.noGravity = false;
 
                     }

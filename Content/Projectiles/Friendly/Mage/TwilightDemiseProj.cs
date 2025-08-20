@@ -169,7 +169,7 @@ namespace ITD.Content.Projectiles.Friendly.Mage
         {
             Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
             Texture2D texture = TextureAssets.Projectile[Type].Value;
-            //this should be remade, i got this from fargo
+            //this sprite should be remade, i got this from fargo
             Texture2D texture2 = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
             Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
             Rectangle frame2 = texture2.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
