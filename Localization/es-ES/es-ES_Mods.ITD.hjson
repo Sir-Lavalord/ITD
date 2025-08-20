@@ -243,6 +243,10 @@ Projectiles: {
 	// CyaniteSpike.DisplayName: Cyanite Spike
 	// GravekeeperCloneTeleport.DisplayName: Gravekeeper Clone Teleport
 	// GravekeeperCloneSkulls.DisplayName: Gravekeeper Clone Skulls
+	// FirestormPillar.DisplayName: Firestorm Pillar
+	// CosmicFistBump.DisplayName: Cosmic Fist Bump
+	// CosmicFistTelegraph.DisplayName: Cosmic Fist Telegraph
+	// CosmicSwarmTelegraph.DisplayName: Cosmic Swarm Telegraph
 }
 
 NPCs: {

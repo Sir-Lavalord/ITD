@@ -255,7 +255,7 @@ namespace ITD.Content.NPCs.Bosses
                     if (AttackCount > 0)//doesn't loop
                     {
                         AI_State = MovementState.FollowingRegular;
-                        AttackID = 1;//set next attack to 4(hand)
+                        AttackID = 3;//set next attack to 4(hand)
                         AITimer1 = 0;
                         AITimer2 = 0;
                         AttackCount = 0;
@@ -304,74 +304,48 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 3:
-                    //clap attack, clapping makes hand spawn a save ring to stand inside
-                    //when reaches max size, explodes into shard outside of ring border
-
-                    //CLAP HAND MIGHT BE CHANGED INTO PROJECTILES INSTEAD,
-                    //fist bump around cosjel instead, so the dodge is easier
+                    distanceAbove = 350;
                     AITimer1++;
-                    if (AITimer1 < 100)
+                    if (AITimer1 >= 250)
                     {
-                        AI_State = MovementState.FollowingRegular;
-                        NetSync();
-                    }
-                    if (AITimer1 == 1)
-                    {
-                        distanceAbove = 250;
-                        NetSync();
-                    }
-                    if (AITimer1 == 30)
-                    {
-                        distanceAbove = 350;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            if (!HandExist(1))
-                                NPCHelpers.NewNPCEasy(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<CosmicJellyfishHand>(), NPC.whoAmI, 0, 0, NPC.whoAmI, 1);
-                            if (!HandExist(-1))
-                                NPCHelpers.NewNPCEasy(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<CosmicJellyfishHand>(), NPC.whoAmI, 0, 0, NPC.whoAmI, -1);
+                            float dur = (AttackCount % 2 == 0)? 60:120;
+                            Projectile proj1 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
+                             ModContent.ProjectileType<CosmicFistBump>(), NPC.damage, 0f, -1, player.whoAmI, 0, dur);
+                            Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
+                             ModContent.ProjectileType<CosmicFistBump>(), NPC.damage, 0f, -1, player.whoAmI, 1, dur);
+                            AttackCount++;
+                            AITimer1 = 0;
                         }
-                        NetSync();
                     }
-                    if (AITimer1 == 100)
-                    {
-                        AI_State = MovementState.Explode;
-                        HandControl(1, 1, 2, false);
-                        HandControl(-1, 1, 2, false);
-                        NetSync();
-                    }
-
-                    if (AttackCount > 1)
+                    if (AttackCount > 3)
                     {
 
                         AI_State = MovementState.FollowingRegular;
                         AttackID = Main.rand.Next(1, 5);
                         ResetStats(true);
                         distanceAbove = 250;
-
                     }
-            
                     break;
-                case 4://set non-spell plagiarism
-                    //Shoots slow moving hands that spam shard trail
+                case 4://mini swarm dance thing
                     distanceAbove = 350;
                     AITimer1++;
-                    if (AITimer1 == 150)
+                    if (AITimer1 >= 350)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            if (!HandExist(currentHand))
-                                NPCHelpers.NewNPCEasy(NPC.GetSource_FromAI(), NPC.Center, ModContent.NPCType<CosmicJellyfishHand>(), NPC.whoAmI, 0, 0, NPC.whoAmI, currentHand);
-                            HandControl(currentHand, 8, 8, false);
-                        }
-                        NetSync();
-                    }
-                    else if (AITimer1 == 300)
-                    {
-                        currentHand *= -1;
-                        AITimer1 = 0;
+                            float side = Main.rand.Next(0, 4);
+                            Main.NewText((side,"WIP WIP WIP WIP, DELETE LINE WHEN DONE"));
+                            Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center, vel,
+                             ModContent.ProjectileType<CosmicSwarmTelegraph>(), NPC.damage, 0f, -1, player.whoAmI,0,side);
+                        
                         AttackCount++;
+                            AITimer1 = 0;
+                        }
                     }
-                    if (AttackCount > 2 && !HandExist(1) && !HandExist(-1))//if hand still exists, keep attacking
+                    if (AttackCount > 2)//if hand still exists, keep attacking
                     {
                         HandControl(1, 7, 3, true);
                         HandControl(-1, 7, 3, true);
@@ -567,7 +541,6 @@ namespace ITD.Content.NPCs.Bosses
 
                     break;
                 case MovementState.Dashing:
-                    Main.NewText(dashPos);
                     AITimer1++;
                     if (AITimer1 <= 10)
                     {
@@ -1095,18 +1068,12 @@ namespace ITD.Content.NPCs.Bosses
 
         public void Draw(Vector2 position, Vector2 size, float rotation)
         {
-            GameShaders.Misc["Telegraph"].UseColor(new Color(192, 59, 166));
-            GameShaders.Misc["Telegraph"].UseSecondaryColor(Color.Beige);
-            GameShaders.Misc["Telegraph"].UseImage0(TextureAssets.Extra[196]);
-            GameShaders.Misc["Telegraph"].UseShaderSpecificData(new Vector4(300,0,position.X,position.Y));
-
+            GameShaders.Misc["Telegraph"].UseColor(Color.Purple);
+            GameShaders.Misc["Telegraph"].UseSecondaryColor(Color.Purple);
             GameShaders.Misc["Telegraph"].Apply();
             square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
         }
-
-
-
     }
 }
