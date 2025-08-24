@@ -42,16 +42,16 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
                 switch (Side)
                 {
                     case 0:
-                        Projectile.Center = new Vector2(MathHelper.Lerp(Projectile.Center.X, player.Center.X, lerp), player.Center.Y - (float)(Main.screenHeight / 1.25f));
+                        Projectile.Center = new Vector2(MathHelper.Lerp(Projectile.Center.X, player.Center.X + player.velocity.X/2, lerp), player.Center.Y - (float)(Main.screenHeight / 1.5f));
                         break;
                     case 1:
-                        Projectile.Center = new Vector2(player.Center.X + (float)(Main.screenWidth / 1.25f), MathHelper.Lerp(Projectile.Center.Y, player.Center.Y, lerp));
+                        Projectile.Center = new Vector2(player.Center.X + (float)(Main.screenWidth / 1.5f), MathHelper.Lerp(Projectile.Center.Y, player.Center.Y + player.velocity.Y / 2, lerp));
                         break;
                     case 2:
-                        Projectile.Center = new Vector2(MathHelper.Lerp(Projectile.Center.X, player.Center.X, lerp), player.Center.Y + (float)(Main.screenHeight / 1.25f));
+                        Projectile.Center = new Vector2(MathHelper.Lerp(Projectile.Center.X, player.Center.X + player.velocity.X / 2, lerp), player.Center.Y + (float)(Main.screenHeight / 1.5f));
                         break;
                     case 3:
-                        Projectile.Center = new Vector2(player.Center.X - (float)(Main.screenWidth / 1.25f), MathHelper.Lerp(Projectile.Center.Y, player.Center.Y, lerp));
+                        Projectile.Center = new Vector2(player.Center.X - (float)(Main.screenWidth / 1.5f), MathHelper.Lerp(Projectile.Center.Y, player.Center.Y + player.velocity.Y / 2, lerp));
                         break;
                 }
 
@@ -66,10 +66,11 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
                 }
                 else
                 {
-                    if (Projectile.localAI[0]++ >= 120)
+                    if (Projectile.localAI[0]++ >= 60)
                     {
                         lockPos = Projectile.Center;
                         LockIn = true;
+                        Projectile.timeLeft = 300;
                     }
                 }
             }
@@ -80,8 +81,9 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Square(-50, 50);
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), spawnPos, new Vector2(-10, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver2) * 2, ModContent.ProjectileType<CosmicSwarm>(), 20, 0, -1, player.whoAmI);
+                        Vector2 spawnPos = Projectile.Center;
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), spawnPos, new Vector2(-10, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver2) * 2,
+                            ModContent.ProjectileType<CosmicSwarm>(), 20, 0, -1, player.whoAmI, (Projectile.localAI[1] / 10), Projectile.timeLeft);
                     }
                 }
                 Projectile.Center = lockPos;

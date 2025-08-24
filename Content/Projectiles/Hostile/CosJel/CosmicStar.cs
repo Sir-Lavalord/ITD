@@ -7,24 +7,24 @@ using ITD.Content.Dusts;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel
 {
-    public class CosmicWave : ModProjectile
+    public class CosmicStar : ModProjectile
     {
         //john vertexstrip!
         public VertexStrip TrailStrip = new VertexStrip();
-       
+
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-            Main.projFrames[Projectile.type] = 5;
+            Main.projFrames[Projectile.type] = 1;
         }
         public override void SetDefaults()
         {
-            Projectile.width = 40; Projectile.height = 30;
+            Projectile.width = 24; Projectile.height = 24;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 400;
+            Projectile.timeLeft = 180;
             Projectile.light = 0.5f;
             Projectile.ignoreWater = false;
             Projectile.tileCollide = false;
@@ -45,41 +45,20 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
 
         public override void AI()
         {
-            if (Projectile.ai[1]++ < 40)
+            if (Projectile.localAI[1]++ >= 60)
             {
-                Projectile.velocity *= 1.05f;
-                Projectile.netUpdate = true;
-                if (++Projectile.frameCounter >= 4)
-                {
-                    Projectile.frameCounter = 0;
-                    if (Projectile.frame < 2)
-                        Projectile.frame++;
-                }
-            }
-            else if (Projectile.ai[1] >= 60 && Projectile.ai[1] <= 120)
-            {
-                Projectile.velocity *= 0.98f;
-                Projectile.netUpdate = true;
-                if (++Projectile.frameCounter >= 4)
-                {
-                    Projectile.frameCounter = 0;
-                    if (Projectile.frame < 4)
-                        Projectile.frame++;
-                }
+                Projectile.alpha += 2;
 
+                if (Projectile.alpha > 255)
+                {
+                    Projectile.Kill();
+                }
             }
-            else if (Projectile.ai[1] > 120)
-            {
-                if (Projectile.alpha < 180)
-                    Projectile.alpha += 2;
-                else Projectile.Kill();
-            }
-            
-            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+            Projectile.rotation = Projectile.velocity.ToRotation();
         }
         public override Color? GetAlpha(Color lightColor)
         {
-            return Color.White * (1f - Projectile.alpha / 255f);
+            return Color.White;
         }
         private Color StripColors(float progressOnStrip)
         {
@@ -102,7 +81,6 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
             Texture2D tex = TextureAssets.Projectile[Type].Value;
             Rectangle frame = tex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
             Vector2 center = Projectile.Size / 2f;
-            stretch = new Vector2(1f, 1f + Projectile.velocity.Length() * 0.05f);
             for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
             {
                 Projectile.oldRot[i] = Projectile.oldRot[i - 1];
@@ -130,21 +108,21 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
 
             time = time * 0.5f + 0.5f;
 
-            for (float i = 0f; i < 1f; i += 0.25f)
+            for (float i = 0f; i < 1f; i += 0.35f)
             {
                 float radians = (i + timer) * MathHelper.TwoPi;
 
-                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 4f).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50), Projectile.rotation, origin, stretch, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 2).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             }
 
-            for (float i = 0f; i < 1f; i += 0.34f)
+            for (float i = 0f; i < 1f; i += 0.5f)
             {
                 float radians = (i + timer) * MathHelper.TwoPi;
 
-                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 6f).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50), Projectile.rotation, origin, stretch, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 4).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             }
-            Main.EntitySpriteDraw(tex, center, frame, default, Projectile.rotation, origin, stretch, SpriteEffects.None, 0);
 
+            Main.EntitySpriteDraw(tex, miragePos, frame, Color.White * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             return false;
         }
     }
