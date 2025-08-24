@@ -53,6 +53,8 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
         public override void OnSpawn(IEntitySource source)
         {
         }
+        bool isExpert => Main.expertMode;
+        bool isMaster => Main.masterMode;
         public override void AI()
         {
             Player player = Main.player[(int)Projectile.ai[0]];
@@ -131,8 +133,28 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
                                 dust.velocity = velo.RotatedByRandom(0.8f) * Main.rand.NextFloat(0.75f,1.25f);
 
                             }
-                            SoundEngine.PlaySound(SoundID.Item70, Projectile.Center);
+                            if (isMainHand)
+                            {
+                                if (isMaster || isExpert)
+                                {
+                                    int amount = 6;
+                                    for (int i = 0; i < amount; i++)
+                                    {
+                                        double rad = Math.PI / (amount / 2) * i;
+                                        int damage = (int)(Projectile.damage * 0.28f);
+                                        int knockBack = 3;
+                                        float speed = 12f;
+                                        Vector2 vector = Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * speed;
+                                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                                        {
+                                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicStar>(), damage, knockBack, Main.myPlayer, 0, 1);
+                                        }
+                                    }
 
+                                }
+                            }
+                                SoundEngine.PlaySound(SoundID.Item70, Projectile.Center);
+                            
                             AI_State = ActionState.Spamming;
                         }
                     }
@@ -143,16 +165,17 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
                         player.GetITDPlayer().BetterScreenshake(4, 2, 2, true);
                         Vector2 velo = Projectile.rotation.ToRotationVector2() * 8;
                         SoundEngine.PlaySound(SoundID.Item103, Projectile.Center);
-
-                        if (Main.rand.NextBool(2))
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Vector2 veloDelta = Projectile.velocity;
-                            Projectile proj1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, -((velo * 2f) + veloDelta).RotatedByRandom(0.8f), ModContent.ProjectileType<CosmicWave>(), (Projectile.damage), 0, Main.myPlayer);
-                            proj1.tileCollide = false;
-                            proj1.friendly = false;
-                            proj1.hostile = true;
+                            if (Main.rand.NextBool(2))
+                            {
+                                Vector2 veloDelta = Projectile.velocity;
+                                Projectile proj1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, -((velo * 2f) + veloDelta).RotatedByRandom(0.8f), ModContent.ProjectileType<CosmicWave>(), (Projectile.damage), 0, Main.myPlayer);
+                                proj1.tileCollide = false;
+                                proj1.friendly = false;
+                                proj1.hostile = true;
+                            }
                         }
-
                         Dust dust = Dust.NewDustDirect(Projectile.Center, 10, 10, ModContent.DustType<CosJelDust>(), 0, 0, 60, default, Main.rand.NextFloat(1.5f, 2f));
                         dust.noGravity = false;
                         dust.velocity = velo.RotatedByRandom(0.8f) * Main.rand.NextFloat(0.75f, 1.25f);

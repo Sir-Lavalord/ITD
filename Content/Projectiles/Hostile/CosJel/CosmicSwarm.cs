@@ -1,4 +1,5 @@
-﻿using Terraria.DataStructures;
+﻿using Terraria;
+using Terraria.DataStructures;
 namespace ITD.Content.Projectiles.Hostile.CosJel
 {
     public class CosmicSwarm : ModProjectile
@@ -19,17 +20,23 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
             Projectile.ignoreWater = true;
             Projectile.hostile = true;
             CooldownSlot = 1;
-            Projectile.scale = 1.25f;
+            Projectile.scale = 1.5f;
             Projectile.alpha = 50;
             Projectile.extraUpdates = 0;
-            Projectile.timeLeft = 1200 * (Projectile.extraUpdates + 1);
+            Projectile.timeLeft = 400;
         }
         bool isStuck = false;
+        public float spawnRot;
         public override void AI()
         {
-            if (Projectile.localAI[0]++ >= 120)
+            Projectile.localAI[0]++;
+            if (Projectile.localAI[0] >= Projectile.ai[2] * 0.4f && Projectile.localAI[0] <= Projectile.ai[2])
             {
-                Projectile.velocity *= 0.9f;
+                Projectile.velocity *= 0.95f;
+            }
+            if (Projectile.localAI[0] == Projectile.ai[2])
+            {
+                Projectile.velocity = Vector2.Normalize(Projectile.velocity.RotatedBy((Projectile.ai[1] % 2 == 0) ? MathHelper.PiOver2 : -MathHelper.PiOver2)) * 12;
             }
             if (++Projectile.frameCounter >= 10)
             {
@@ -49,7 +56,6 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
                 dust2.velocity *= 1f;
                 dust2.noGravity = true;
             }
-            Projectile.scale += Main.rand.NextFloat(0.5f, 1f);
         }
         public override void OnKill(int timeleft)
         {

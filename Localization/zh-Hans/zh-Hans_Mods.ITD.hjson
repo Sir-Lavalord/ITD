@@ -245,7 +245,10 @@ Projectiles: {
 	// GravekeeperCloneSkulls.DisplayName: Gravekeeper Clone Skulls
 	// FirestormPillar.DisplayName: Firestorm Pillar
 	// CosmicFistBump.DisplayName: Cosmic Fist Bump
+	// CosmicFistBarrier.DisplayName: Cosmic Fist Barrier
 	// CosmicFistTelegraph.DisplayName: Cosmic Fist Telegraph
+	// CosmicGlowStar.DisplayName: Cosmic Glow Star
+	// CosmicStar.DisplayName: Cosmic Star
 	// CosmicSwarmTelegraph.DisplayName: Cosmic Swarm Telegraph
 }
 

@@ -32,7 +32,7 @@ namespace ITD.Content.Projectiles.Friendly.Ranger
             Projectile.width = 20;
             Projectile.height = 20;
             Projectile.aiStyle = 0;
-            Projectile.DamageType = DamageClass.Magic;
+            Projectile.DamageType = DamageClass.Ranged;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.ignoreWater = true;
