@@ -3,7 +3,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.DataStructures;
 using Terraria.Audio;
 
-namespace ITD.Content.Projectiles.Friendly.Melee
+namespace ITD.Content.Projectiles.Unused
 {
     public class GhostlyBlade : ModProjectile
     {

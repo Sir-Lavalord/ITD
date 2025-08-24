@@ -1,7 +1,7 @@
 ﻿using Terraria.GameContent;
 using Terraria.Audio;
 
-namespace ITD.Content.Projectiles.Friendly.Ranger.Ammo
+namespace ITD.Content.Projectiles.Friendly.Misc
 {
     public class CyaniteSpike : ModProjectile
     {

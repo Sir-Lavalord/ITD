@@ -1533,3 +1533,14 @@ PinkCatacombPlatform: {
 	DisplayName: Pink Catacomb Platform
 	Tooltip: ""
 }
+
+JarOfEyes: {
+	DisplayName: Jar Of Eyes
+	Tooltip:
+		'''
+		Lauches 10 bouncing eyes in random directions
+		Take damage to increase charge. Every point of damage grants 2% charge
+		Press {0} to use when at full charge
+		'Looks delicious!'
+		'''
+}

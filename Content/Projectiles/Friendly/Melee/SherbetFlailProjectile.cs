@@ -2,15 +2,13 @@ using System;
 using Terraria.Audio;
 using Terraria.GameContent;
 
+using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Utilities;
-using ITD.Particles.Projectile;
-using ITD.Particles;
+//using ITD.Particles.Projectile;
+//using ITD.Particles;
 
 namespace ITD.Content.Projectiles.Friendly.Melee
 {
-	// Example Advanced Flail is a complete adaption of Ball O' Hurt projectile. The code has been rewritten a bit to make it easier to follow. Compare this code against the decompiled Terraria code for an example of adapting vanilla code. A few comments and extra code snippets show features from other vanilla flails as well.
-	// Example Advanced Flail shows a plethora of advanced AI and collision topics.
-	// See ExampleFlail for a simpler but less customizable flail projectile example.
 	public class SherbetFlailProjectile : ModProjectile
 	{
 		private static Asset<Texture2D> chainTexture;
@@ -22,7 +20,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			Retracting
 		}
 
-		// These properties wrap the usual ai and localAI arrays for cleaner and easier to understand code.
 		private AIState CurrentAIState {
 			get => (AIState)Projectile.ai[0];
 			set => Projectile.ai[0] = (float)value;
@@ -32,14 +29,13 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 		public ref float CollisionCounter => ref Projectile.localAI[0];
 		public ref float SpinningStateTimer => ref Projectile.localAI[1];
 
-		public ParticleEmitter emitter;
+		//public ParticleEmitter emitter;
 
 		public override void Load() {
 			chainTexture = ModContent.Request<Texture2D>(Texture + "Chain");
 		}
 
 		public override void SetStaticDefaults() {
-			// These lines facilitate the trail drawing
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 
@@ -48,22 +44,21 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 
 		public override void SetDefaults() {
 			Projectile.netImportant = true; // This ensures that the projectile is synced when other players join the world.
-			Projectile.width = 16; // The width of your projectile
-			Projectile.height = 16; // The height of your projectile
-			Projectile.friendly = true; // Deals damage to enemies
-			Projectile.penetrate = -1; // Infinite pierce
-			Projectile.DamageType = DamageClass.Melee; // Deals melee damage
-			Projectile.usesLocalNPCImmunity = true; // Used for hit cooldown changes in the ai hook
-			Projectile.localNPCHitCooldown = 10; // This facilitates custom hit cooldown logic
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.friendly = true;
+			Projectile.penetrate = -1;
+			Projectile.DamageType = DamageClass.Melee;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 10;
 			
-			emitter = ParticleSystem.NewEmitter<SherbetFlash>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
-            emitter.tag = Projectile;
+			//emitter = ParticleSystem.NewEmitter<SherbetFlash>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+            //emitter.tag = Projectile;
 		}
 
-		// This AI code was adapted from vanilla code: Terraria.Projectile.AI_015_Flails() 
 		public override void AI() {
-			if (emitter != null)
-                emitter.keptAlive = true;
+			//if (emitter != null)
+            //    emitter.keptAlive = true;
 			
 			Player player = Main.player[Projectile.owner];
 			// Kill the projectile if the player dies or gets crowd controlled
@@ -77,7 +72,6 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 			}
 
 			Vector2 mountedCenter = player.MountedCenter;
-			//bool doFastThrowDust = false;
 			bool shouldOwnerHitCheck = false;
 			int launchTimeLimit = 20;  // How much time the projectile can go before retracting (speed and shootTimer will set the flail's range)
 			float launchSpeed = 20f; // How fast the projectile can move
@@ -281,11 +275,15 @@ namespace ITD.Content.Projectiles.Friendly.Melee
 		private void Impact() {
 			Main.player[Main.myPlayer].GetITDPlayer().BetterScreenshake(4, 4, 4, false);
 			SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
-			emitter?.Emit(Projectile.Center, new Vector2(), 0.25f + (0.25f * ChargeLevel), 25);
+			//emitter?.Emit(Projectile.Center, new Vector2(), 0.25f + (0.25f * ChargeLevel), 25);
 			for (int i = 0; i < 4; i++) {
 				Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.Firework_Pink, 0f, 0f, 150, default(Color), 1f + (0.5f * ChargeLevel));
 				dust.noGravity = true;
 				dust.velocity *= 2f;
+			}
+			for (int i = 0; i < 8; i++) {
+				Vector2 direction = Vector2.UnitX.RotatedBy(MathHelper.PiOver4 * i + Projectile.rotation);
+				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + direction * (14f + 7f * ChargeLevel), direction, ModContent.ProjectileType<SherbetSpike>(), (int)(Projectile.damage * ChargeLevel), Projectile.knockBack * 0.25f, Projectile.owner, 0f, 0.4f + 0.2f * ChargeLevel, 0f);
 			}
 			
 			CurrentAIState = AIState.Retracting;

@@ -2,6 +2,7 @@
 using Terraria.Audio;
 using Terraria.GameContent;
 
+using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Particles.Projectile;
 using ITD.Particles;
 
