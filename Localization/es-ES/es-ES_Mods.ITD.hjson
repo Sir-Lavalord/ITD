@@ -245,13 +245,13 @@ Projectiles: {
 	// GravekeeperCloneSkulls.DisplayName: Gravekeeper Clone Skulls
 	// FirestormPillar.DisplayName: Firestorm Pillar
 	// CosmicFistBump.DisplayName: Cosmic Fist Bump
-	// CosmicSwarmTelegraph.DisplayName: Cosmic Swarm Telegraph
-	// CosmicStar.DisplayName: Cosmic Star
-	// CosmicGlowStar.DisplayName: Cosmic Glow Star
-	// CosmicFistTelegraph.DisplayName: Cosmic Fist Telegraph
-	// CosmicFistBarrier.DisplayName: Cosmic Fist Barrier
-	// SherbetSpike.DisplayName: Sherbet Spike
 	// PickledEye.DisplayName: Pickled Eye
+	// SherbetSpike.DisplayName: Sherbet Spike
+	// CosmicFistBarrier.DisplayName: Cosmic Fist Barrier
+	// CosmicFistTelegraph.DisplayName: Cosmic Fist Telegraph
+	// CosmicGlowStar.DisplayName: Cosmic Glow Star
+	// CosmicStar.DisplayName: Cosmic Star
+	// CosmicSwarmTelegraph.DisplayName: Cosmic Swarm Telegraph
 }
 
 NPCs: {
@@ -354,6 +354,7 @@ NPCs: {
 	}
 
 	// MoldSpore.DisplayName: Mold Spore
+	// BloatedSlime.DisplayName: Bloated Slime
 }
 
 Buffs: {
