@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Terraria.GameContent;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel
 {
@@ -35,7 +36,11 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
         {
             behindNPCsAndTiles.Add(index);
         }
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
 
+            return base.Colliding(projHitbox, targetHitbox);
+        }
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture = effect.Value;
@@ -46,8 +51,46 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
                 Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
                 Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
+            Texture2D tex = TextureAssets.Projectile[Type].Value;
+            Rectangle frame = tex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+            Vector2 center = Projectile.Size / 2f;
+            for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
+            {
+                Projectile.oldRot[i] = Projectile.oldRot[i - 1];
+                Projectile.oldRot[i] = Projectile.rotation + MathHelper.PiOver2;
 
-            return true;
+            }
+            Vector2 miragePos = Projectile.position - Main.screenPosition + center;
+            Vector2 origin = new(tex.Width * 0.5f, (tex.Height / Main.projFrames[Type]) * 0.5f);
+            float time = Main.GlobalTimeWrappedHourly;
+            float timer = (float)Main.time / 240f + time * 0.04f;
+
+            time %= 4f;
+            time /= 2f;
+
+            if (time >= 1f)
+            {
+                time = 2f - time;
+            }
+
+            time = time * 0.5f + 0.5f;
+
+            for (float i = 0f; i < 1f; i += 0.35f)
+            {
+                float radians = (i + timer) * MathHelper.TwoPi;
+
+                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 6).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+            }
+
+            for (float i = 0f; i < 1f; i += 0.5f)
+            {
+                float radians = (i + timer) * MathHelper.TwoPi;
+
+                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 8).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+            }
+
+            Main.EntitySpriteDraw(tex, miragePos, frame, Color.White * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+            return false;
         }
         bool expertMode = Main.expertMode;
         bool masterMode = Main.masterMode;

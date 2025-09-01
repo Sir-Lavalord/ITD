@@ -1,6 +1,7 @@
 ﻿using ITD.Content.Dusts;
 using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Particles;
+using ITD.Particles.Misc;
 using ITD.Particles.Projectile;
 using ITD.Utilities;
 using System;
@@ -70,6 +71,22 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
         public override void AI()
         {
             Player player = Main.player[(int)Projectile.ai[0]];
+            if (!Main.dedServ)
+            {
+                if (emitter is null)
+                {
+                    emitter = ParticleSystem.NewEmitter<TwilightDemiseFlash>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
+                    emitter.additive = true;
+                }
+                emitter.keptAlive = true; 
+                emitter.timeLeft = 180;
+
+                for (int i = 0; i <= 2; i++)
+                {
+                    emitter?.Emit(Projectile.Top + Main.rand.NextVector2Circular(Projectile.width/3, Projectile.height/3), -Vector2.UnitY * 3f);
+                }
+
+            }
             switch (AI_State)
             {
 
@@ -132,30 +149,42 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
                     }
                     else
                     {
+                        Rectangle rect = new Rectangle((int)Projectile.TopLeft.X, (int)Projectile.TopLeft.Y, (int)Vector2.Distance(Projectile.BottomLeft, Projectile.BottomRight), (int)(-200 - Projectile.localAI[1] * 8));
+                        Vector2 spawnPos = Main.rand.NextVector2FromRectangle(rect);
                         if (Vector2.Distance(Projectile.Center, playerPos) <= 10)
                         {
                             if (Main.rand.NextBool(2))
                             {
-                                Rectangle rect = new Rectangle((int)Projectile.TopLeft.X, (int)Projectile.TopLeft.Y, (int)Vector2.Distance(Projectile.BottomLeft, Projectile.BottomRight), (int)(-200 - Projectile.localAI[1] * 8));
-                                Vector2 spawnPos = Main.rand.NextVector2FromRectangle(rect);
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     int damage = (int)(Projectile.damage * 0.28f);
                                     int knockBack = 3;
                                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), spawnPos, Vector2.Zero, ModContent.ProjectileType<CosmicStar>(), damage, knockBack, Main.myPlayer, 0, 1);
                                 }
-                                if (emitter != null)
-                                    emitter.keptAlive = true;
-                                emitter?.Emit(spawnPos + Main.rand.NextVector2Circular(15, 15), Vector2.Zero);
 
                                 for (int i = 0; i < 10; i++)
                                 {
                                     Dust.NewDust(spawnPos, 2, 2, ModContent.DustType<StarlitDust>(), Projectile.velocity.X, Projectile.velocity.Y, 0, Color.White, 1);
                                 }
                             }
+                            if (!Main.dedServ)
+                            {
+                                if (emitter is null)
+                                {
+                                    emitter = ParticleSystem.NewEmitter<TwilightDemiseFlash>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
+                                    emitter.additive = true;
+                                }
+                                emitter.keptAlive = true;
+                                emitter.timeLeft = 180;
+                                emitter.scale = 2;
+                                for (int i = 0; i <= 6; i++)
+                                {
+                                    emitter?.Emit(spawnPos + Main.rand.NextVector2Circular(5, 5), -Vector2.UnitY * 3f);
+                                }
+
+                            }
                         }
                     }
-
                     break;
             }
         }

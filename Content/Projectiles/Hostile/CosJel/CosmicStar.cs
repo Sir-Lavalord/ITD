@@ -20,11 +20,11 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
         }
         public override void SetDefaults()
         {
-            Projectile.width = 24; Projectile.height = 24;
+            Projectile.width = 22; Projectile.height = 22;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 180;
+            Projectile.timeLeft = 200;
             Projectile.light = 0.5f;
             Projectile.ignoreWater = false;
             Projectile.tileCollide = false;
@@ -54,8 +54,15 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
                     Projectile.Kill();
                 }
             }
-            Projectile.rotation = Projectile.velocity.ToRotation();
+            if (Projectile.velocity != Vector2.Zero)
+            {
+
+
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+            }
+            else Projectile.rotation += 0.025f;
         }
+        
         public override Color? GetAlpha(Color lightColor)
         {
             return Color.White;
