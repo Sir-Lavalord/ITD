@@ -1537,3 +1537,8 @@ JarOfEyes: {
 		'Looks delicious!'
 		''' */
 }
+
+BigBerth: {
+	// DisplayName: Big Berth
+	// Tooltip: ""
+}

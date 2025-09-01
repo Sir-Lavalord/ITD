@@ -245,12 +245,15 @@ Projectiles: {
 	// GravekeeperCloneSkulls.DisplayName: Gravekeeper Clone Skulls
 	// FirestormPillar.DisplayName: Firestorm Pillar
 	// CosmicFistBump.DisplayName: Cosmic Fist Bump
+	// BigBerthProj.DisplayName: Big Berth Proj
 	// PickledEye.DisplayName: Pickled Eye
 	// SherbetSpike.DisplayName: Sherbet Spike
 	// CosmicFistBarrier.DisplayName: Cosmic Fist Barrier
 	// CosmicFistTelegraph.DisplayName: Cosmic Fist Telegraph
 	// CosmicGlowStar.DisplayName: Cosmic Glow Star
+	// CosmicGlowStar2.DisplayName: Cosmic Glow Star2
 	// CosmicStar.DisplayName: Cosmic Star
+	// CosmicStarlitMeteorite.DisplayName: Cosmic Starlit Meteorite
 	// CosmicSwarmTelegraph.DisplayName: Cosmic Swarm Telegraph
 }
 
@@ -900,6 +903,7 @@ InflectionData: {
 		// NightmareManuscript: /
 		# DisplayName:
 		// RiteOfImmolation: /
+		// BigBerth: Mods.ITD.InflectionData.Items.BigBerth
 	}
 
 	Prefixes: {

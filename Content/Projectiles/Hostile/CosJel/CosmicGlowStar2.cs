@@ -9,8 +9,10 @@ using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel
 {
-    public class CosmicGlowStar : ModProjectile
+    public class CosmicGlowStar2 : ModProjectile
     {
+        public override string Texture => "ITD/Content/Projectiles/Hostile/CosJel/CosmicGlowStar";
+
         public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile")
             .UseProjectionMatrix(true)
             .UseImage0("Images/Extra_" + 192)
@@ -36,46 +38,37 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
             Projectile.ignoreWater = true;
             Projectile.light = 1f;
             Projectile.tileCollide = false;
-            Projectile.timeLeft = 240;
+            Projectile.timeLeft = 105;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 10;
+            Projectile.localNPCHitCooldown = 10; 
+            Projectile.Opacity = 0f;
+            Projectile.scale = 0.5f;
         }
         public float spawnTime;
-        public Player player => Main.player[(int)Projectile.ai[0]];
+        public NPC target => Main.npc[(int)Projectile.ai[2]];
         public override void AI()
         {
-            if (Projectile.localAI[0] != 0)
+            if (Projectile.Opacity <= 0.75f)
+            Projectile.Opacity += 0.01f;
+            if (Projectile.scale < 1)
             {
-                Projectile.scale = Projectile.localAI[0];
+                Projectile.scale += 0.025f;
             }
-            if (Projectile.ai[2]++ >= spawnTime && Projectile.ai[2] < spawnTime * 1.5f)
+            if (++Projectile.localAI[0] > 30 && Projectile.localAI[0] < 110)
             {
-                Projectile.velocity *= 0.9f;
+                Projectile.velocity *= Projectile.ai[0];
             }
-            if (Projectile.ai[2] == spawnTime * 1.5f)
-            {
-                if (Projectile.localAI[0] != 0)
-                {
-                    Projectile.velocity = Vector2.Normalize(player.Center - Projectile.Center) * 24;
-                }
-                else Projectile.velocity = Vector2.Normalize(player.Center - Projectile.Center) * 18;
-                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-                Projectile.netUpdate = true;
-            }
-        }
-        public override bool? CanDamage()
-        {
-            return Projectile.ai[2] >= spawnTime * 1.5f;
-        }
 
-        public override void OnSpawn(IEntitySource source)
-        {
-            spawnTime = Projectile.ai[1];
-            if (Projectile.localAI[0] != 0)
+            if (Projectile.localAI[0] > 60 && Projectile.localAI[0] < 180)
             {
-                Projectile.scale = Projectile.localAI[0];
+                    float rotation = Projectile.velocity.ToRotation();
+                    Vector2 vel = new Vector2(target.Center.X,target.Center.Y + 500) - Projectile.Center;
+                    float targetAngle = vel.ToRotation();
+                    Projectile.velocity = new Vector2(Projectile.velocity.Length(), 0f).RotatedBy(rotation.AngleLerp(targetAngle, Projectile.ai[1]));
             }
+
+            Projectile.rotation = Projectile.velocity.ToRotation() + (float)Math.PI / 2;
         }
         public override Color? GetAlpha(Color lightColor)
         {
@@ -84,13 +77,13 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
         private Color StripColors(float progressOnStrip)
         {
 
-            Color result = Color.Lerp(Color.White, new Color(90, 70, 255, 50), Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
+            Color result = Color.Lerp(Color.Black, new Color(249, 203, 151, 50), Utils.GetLerpValue(0f, 0.7f, progressOnStrip, true)) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip, false));
             result.A /= 2;
             return result * Projectile.Opacity;
         }
         private float StripWidth(float progressOnStrip)
         {
-            return Projectile.localAI[0] != 0 ? 60f : 30f;
+            return 30f;
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -130,17 +123,17 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
             {
                 float radians = (i + timer) * MathHelper.TwoPi;
 
-                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 4).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 4).RotatedBy(radians) * time, frame, new Color(255, 255, 255, 255) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             }
 
             for (float i = 0f; i < 1f; i += 0.5f)
             {
                 float radians = (i + timer) * MathHelper.TwoPi;
 
-                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 6).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 6).RotatedBy(radians) * time, frame, new Color(255, 255, 255, 255) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             }
 
-            Main.EntitySpriteDraw(tex, miragePos, frame, Color.White * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(tex, miragePos, frame, new Color(15, 13, 59,255) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
             return false;
         }
     }
