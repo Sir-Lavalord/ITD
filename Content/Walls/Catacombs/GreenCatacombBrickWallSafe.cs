@@ -1,14 +1,13 @@
-namespace ITD.Content.Walls.Catacombs
+namespace ITD.Content.Walls.Catacombs;
+
+public class GreenCatacombBrickWallSafe : ModWall
 {
-    public class GreenCatacombBrickWallSafe : ModWall
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
-        {
-            AddMapEntry(new Color(42, 32, 42));
-        }
-        public override void NumDust(int i, int j, bool fail, ref int num)
-        {
-            num = fail ? 1 : 3;
-        }
+        AddMapEntry(new Color(42, 32, 42));
+    }
+    public override void NumDust(int i, int j, bool fail, ref int num)
+    {
+        num = fail ? 1 : 3;
     }
 }

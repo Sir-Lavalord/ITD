@@ -3,19 +3,12 @@
 
 using DECIMAL = System.Single;
 
-namespace ITD.Content.World.WorldGenUtils
-{
-	public partial class FastNoise
-	{
-		private struct Decimal2
-		{
-			public readonly DECIMAL x,y;
+namespace ITD.Content.World.WorldGenUtils;
 
-			public Decimal2(DECIMAL x,DECIMAL y)
-			{
-				this.x = x;
-				this.y = y;
-			}
-		}
-	}
+public partial class FastNoise
+{
+    private readonly struct Decimal2(DECIMAL x, DECIMAL y)
+    {
+        public readonly DECIMAL x = x, y = y;
+    }
 }

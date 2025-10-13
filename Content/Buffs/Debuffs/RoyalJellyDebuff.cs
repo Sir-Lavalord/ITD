@@ -1,17 +1,13 @@
-﻿using ITD.Content.Buffs.Debuffs;
+﻿namespace ITD.Content.Buffs.Debuffs;
 
-namespace ITD.Content.Buffs.Debuffs
+public class RoyalJellyDebuff : ModBuff
 {
-    public class RoyalJellyDebuff : ModBuff
+    public const int TagDamage = 6;//Raw tag damage, might be op
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
-        {
-            BuffID.Sets.IsATagBuff[Type] = true;
-        }
-        public static int TagDamage = 6;//Raw tag damage, might be op
+        BuffID.Sets.IsATagBuff[Type] = true;
     }
 }
-
 public class RoyalJellyDebuffTag : GlobalNPC
 {
     public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)

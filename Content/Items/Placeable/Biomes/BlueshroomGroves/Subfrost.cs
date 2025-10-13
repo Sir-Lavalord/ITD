@@ -1,19 +1,18 @@
 ﻿using ITD.Content.Tiles.BlueshroomGroves;
 
-namespace ITD.Content.Items.Placeable.Biomes.BlueshroomGroves
-{
-    public class Subfrost : ModItem
-    {
-        public override void SetStaticDefaults()
-        {
-            Item.ResearchUnlockCount = 100;
-        }
+namespace ITD.Content.Items.Placeable.Biomes.BlueshroomGroves;
 
-        public override void SetDefaults()
-        {
-            Item.DefaultToPlaceableTile(ModContent.TileType<SubfrostTile>());
-            Item.width = 12;
-            Item.height = 12;
-        }
+public class Subfrost : ModItem
+{
+    public override void SetStaticDefaults()
+    {
+        Item.ResearchUnlockCount = 100;
+    }
+
+    public override void SetDefaults()
+    {
+        Item.DefaultToPlaceableTile(ModContent.TileType<SubfrostTile>());
+        Item.width = 12;
+        Item.height = 12;
     }
 }

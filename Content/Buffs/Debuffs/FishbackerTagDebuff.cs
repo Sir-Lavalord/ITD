@@ -1,36 +1,28 @@
-﻿using ITD.Content.Buffs.Debuffs;
-using ITD.Utilities.Placeholders;
+﻿using ITD.Utilities.Placeholders;
 
-namespace ITD.Content.Buffs.Debuffs
+namespace ITD.Content.Buffs.Debuffs;
+
+public class FishbackerTagDebuff : ModBuff
 {
-    public class FishbackerTagDebuff : ModBuff
+    public const int TagDamage = 4;
+    public override string Texture => Placeholder.PHDebuff;
+    public override void SetStaticDefaults()
     {
-        public override string Texture => Placeholder.PHDebuff;
-
-        public override void SetStaticDefaults()
-        {
-            BuffID.Sets.IsATagBuff[Type] = true;
-        }
-        public static int TagDamage = 4;
-
-    }
-    public class FishbackerReflectTagDebuff : ModBuff
-    {
-        public override string Texture => Placeholder.PHDebuff;
-
-        public override void SetStaticDefaults()
-        {
-            BuffID.Sets.IsATagBuff[Type] = true;
-        }
-        public static int TagDamage = 16;
-
+        BuffID.Sets.IsATagBuff[Type] = true;
     }
 }
-
+public class FishbackerReflectTagDebuff : ModBuff
+{
+    public const int TagDamage = 16;
+    public override string Texture => Placeholder.PHDebuff;
+    public override void SetStaticDefaults()
+    {
+        BuffID.Sets.IsATagBuff[Type] = true;
+    }
+}
 public class FishbackerTaggedNPC : GlobalNPC
 {
     public override bool InstancePerEntity => true;
-
     public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
     {
         if (projectile.npcProj || projectile.trap || !projectile.IsMinionOrSentryRelated)

@@ -1,6 +1,5 @@
-﻿namespace ITD.Content.Tiles.Furniture.DeepDesert
+﻿namespace ITD.Content.Tiles.Furniture.DeepDesert;
+
+public class PyracottaChandelierTile : ITDChandelier
 {
-    public class PyracottaChandelierTile : ITDChandelier
-    {
-    }
 }

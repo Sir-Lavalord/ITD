@@ -1,55 +1,54 @@
 ﻿using System.Collections.Generic;
 
-namespace ITD.Common.Rarities
+namespace ITD.Common.Rarities;
+
+public class RarityModifierSystem : ModSystem // from better expert rarity mod
 {
-    public class RarityModifierSystem : ModSystem // from better expert rarity mod
+    // [public static properties and fields]
+
+    public static readonly IReadOnlyList<RarityModifier> Modifiers;
+
+    // [private static properties and fields]
+
+    private static readonly List<RarityModifier> modifierInstances;
+    private static readonly Dictionary<int, RarityModifier> modifiersByRarityType;
+
+    // [static constructors]
+
+    static RarityModifierSystem()
     {
-        // [public static properties and fields]
+        Modifiers = (modifierInstances = []).AsReadOnly();
+        modifiersByRarityType = [];
+    }
 
-        public static readonly IReadOnlyList<RarityModifier> Modifiers;
+    // [public static methods]
 
-        // [private static properties and fields]
+    public static void AddModifier(RarityModifier modifier)
+    {
+        if (modifierInstances.Contains(modifier)) return;
 
-        private static readonly List<RarityModifier> modifierInstances;
-        private static readonly Dictionary<int, RarityModifier> modifiersByRarityType;
+        modifierInstances.Add(modifier);
+    }
 
-        // [static constructors]
+    public static bool TryGetModifier(int rarity, out RarityModifier modifier)
+        => modifiersByRarityType.TryGetValue(rarity, out modifier);
 
-        static RarityModifierSystem()
+    // [public methods]
+
+    public override void PostSetupContent()
+    {
+        foreach (var modifier in modifierInstances)
         {
-            Modifiers = (modifierInstances = new()).AsReadOnly();
-            modifiersByRarityType = new();
+            if (modifiersByRarityType.ContainsKey(modifier.RarityType))
+                throw new System.Exception("...");
+
+            modifiersByRarityType.Add(modifier.RarityType, modifier);
         }
+    }
 
-        // [public static methods]
-
-        public static void AddModifier(RarityModifier modifier)
-        {
-            if (modifierInstances.Contains(modifier)) return;
-
-            modifierInstances.Add(modifier);
-        }
-
-        public static bool TryGetModifier(int rarity, out RarityModifier modifier)
-            => modifiersByRarityType.TryGetValue(rarity, out modifier);
-
-        // [public methods]
-
-        public override void PostSetupContent()
-        {
-            foreach (var modifier in modifierInstances)
-            {
-                if (modifiersByRarityType.ContainsKey(modifier.RarityType))
-                    throw new System.Exception("...");
-
-                modifiersByRarityType.Add(modifier.RarityType, modifier);
-            }
-        }
-
-        public override void Unload()
-        {
-            modifierInstances.Clear();
-            modifiersByRarityType.Clear();
-        }
+    public override void Unload()
+    {
+        modifierInstances.Clear();
+        modifiersByRarityType.Clear();
     }
 }

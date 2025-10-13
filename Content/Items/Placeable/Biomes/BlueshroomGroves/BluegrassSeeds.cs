@@ -1,18 +1,17 @@
-﻿using ITD.Utilities;
-using ITD.Content.Tiles.BlueshroomGroves;
+﻿using ITD.Content.Tiles.BlueshroomGroves;
+using ITD.Utilities;
 
-namespace ITD.Content.Items.Placeable.Biomes.BlueshroomGroves
+namespace ITD.Content.Items.Placeable.Biomes.BlueshroomGroves;
+
+public class BluegrassSeeds : ModItem
 {
-    public class BluegrassSeeds : ModItem
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
-        {
-            Item.ResearchUnlockCount = 100;
-        }
-        public override void SetDefaults()
-        {
-            Item.DefaultToSeeds();
-        }
-        public override bool? UseItem(Player player) => Helpers.UseItem_PlaceSeeds(player, ModContent.TileType<Bluegrass>(), TileID.SnowBlock);
+        Item.ResearchUnlockCount = 100;
     }
+    public override void SetDefaults()
+    {
+        Item.DefaultToSeeds();
+    }
+    public override bool? UseItem(Player player) => Helpers.UseItemPlaceSeeds(player, ModContent.TileType<Bluegrass>(), TileID.SnowBlock);
 }

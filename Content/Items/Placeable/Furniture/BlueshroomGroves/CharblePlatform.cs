@@ -1,12 +1,11 @@
 ﻿using ITD.Content.Tiles.Furniture.BlueshroomGroves;
 
-namespace ITD.Content.Items.Placeable.Furniture.BlueshroomGroves
+namespace ITD.Content.Items.Placeable.Furniture.BlueshroomGroves;
+
+public class CharblePlatform : ModItem
 {
-    public class CharblePlatform : ModItem
+    public override void SetDefaults()
     {
-        public override void SetDefaults()
-        {
-            Item.DefaultToPlaceableTile(ModContent.TileType<CharblePlatformTile>());
-        }
+        Item.DefaultToPlaceableTile(ModContent.TileType<CharblePlatformTile>());
     }
 }

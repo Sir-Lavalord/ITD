@@ -1,36 +1,35 @@
-﻿using ITD.Utilities;
-using ITD.Players;
-using ITD.Common.Prefixes;
+﻿using ITD.Common.Prefixes;
+using ITD.Systems;
+using ITD.Utilities;
 
-namespace ITD.Content.Items
+namespace ITD.Content.Items;
+
+public class ITDGlobalItem : GlobalItem
 {
-    public class ITDGlobalItem : GlobalItem
+    public override void HoldItem(Item item, Player player)
     {
-        public override void HoldItem(Item item, Player player)
-        {
-            ModPrefix prefix = PrefixLoader.GetPrefix(item.prefix);
+        ModPrefix prefix = PrefixLoader.GetPrefix(item.prefix);
 
-            if (prefix is ComplexPrefix complexPrefix)
-                complexPrefix.UpdateHeldPrefix(item, player);
-        }
-        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
-        {
-            ModPrefix prefix = PrefixLoader.GetPrefix(item.prefix);
+        if (prefix is ComplexPrefix complexPrefix)
+            complexPrefix.UpdateHeldPrefix(item, player);
+    }
+    public override void UpdateAccessory(Item item, Player player, bool hideVisual)
+    {
+        ModPrefix prefix = PrefixLoader.GetPrefix(item.prefix);
 
-            if (prefix is ComplexPrefix complexPrefix)
-                complexPrefix.UpdateEquippedPrefix(item, player);
-        }
-        public override bool? UseItem(Item item, Player player)
+        if (prefix is ComplexPrefix complexPrefix)
+            complexPrefix.UpdateEquippedPrefix(item, player);
+    }
+    public override bool? UseItem(Item item, Player player)
+    {
+        ITDPlayer modPlayer = player.GetITDPlayer();
+        if (item.buffTime > 0)
         {
-            ITDPlayer modPlayer = player.GetITDPlayer();
-            if ((item.buffTime > 0))
+            if (modPlayer.portableLab)
             {
-                if (modPlayer.portableLab)
-                {
-                    player.AddBuff(item.buffType, (int)(item.buffTime * 1.1f), true);
-                }
+                player.AddBuff(item.buffType, (int)(item.buffTime * 1.1f), true);
             }
-            return base.UseItem(item, player);
         }
+        return base.UseItem(item, player);
     }
 }

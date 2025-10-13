@@ -2,92 +2,91 @@
 using ITD.Utilities;
 using Terraria.Localization;
 
-namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
+namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
+
+public class StabtrapProjectile : ITDSnaptrap
 {
-    public class StabtrapProjectile : ITDSnaptrap
+    public static LocalizedText OneTimeLatchMessage { get; private set; }
+    public override void SetSnaptrapDefaults()
     {
-        public static LocalizedText OneTimeLatchMessage { get; private set; }
-        public override void SetSnaptrapDefaults()
-        {
-            OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(StabtrapProjectile)}.OneTimeLatchMessage"));
-            ShootRange = 16f * 12f;
-            RetractAccel = 1.5f;
-            ExtraFlexibility = 16f * 2f;
-            MinDamage = 20;
-            FullPowerHitsAmount = 10;
-            WarningFrames = 60;
-            ChompDust = DustID.Copper;
-            ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/StabtrapProjectileChain";
+        OneTimeLatchMessage = Language.GetOrRegister(Mod.GetLocalizationKey($"Projectiles.{nameof(StabtrapProjectile)}.OneTimeLatchMessage"));
+        ShootRange = 16f * 12f;
+        RetractAccel = 1.5f;
+        ExtraFlexibility = 16f * 2f;
+        MinDamage = 20;
+        FullPowerHitsAmount = 10;
+        WarningFrames = 60;
+        ChompDust = DustID.Copper;
+        ToChainTexture = "ITD/Content/Projectiles/Friendly/Melee/Snaptraps/StabtrapProjectileChain";
 
-        }
-        public Player player => Main.player[Projectile.owner];
-        public override bool OneTimeLatchEffect()
+    }
+    public Player Player => Main.player[Projectile.owner];
+    public override bool OneTimeLatchEffect()
+    {
+        AdvancedPopupRequest popupSettings = new()
         {
-            AdvancedPopupRequest popupSettings = new()
-            {
-                Text = OneTimeLatchMessage.Value,
-                Color = Color.RosyBrown,
-                DurationInFrames = 60,
-                Velocity = Projectile.velocity,
-            };
-            PopupText.NewText(popupSettings, Projectile.Center + new Vector2(0f, -50f));
-            ExtraFlexibility = 16f * 40f;
-            Projectile stinger = MiscHelpers.NewProjectileDirectSafe(Projectile.GetSource_FromThis(), player.Center, Vector2.Zero,
-            ModContent.ProjectileType<StabtrapStingerProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-            if (stinger != null)
-            {
-                stinger.localAI[0] = Projectile.identity;
-            }
-            return true;
-        }
-        public override void ConstantLatchEffect()
-        {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                ExtraFlexibility = 16f * 40f;
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapStingerProjectile>()] <= 0)
-                {
-                    Projectile stinger = MiscHelpers.NewProjectileDirectSafe(Projectile.GetSource_FromThis(), player.Center, Vector2.Zero,
+            Text = OneTimeLatchMessage.Value,
+            Color = Color.RosyBrown,
+            DurationInFrames = 60,
+            Velocity = Projectile.velocity,
+        };
+        PopupText.NewText(popupSettings, Projectile.Center + new Vector2(0f, -50f));
+        ExtraFlexibility = 16f * 40f;
+        Projectile stinger = MiscHelpers.NewProjectileDirectSafe(Projectile.GetSource_FromThis(), Player.Center, Vector2.Zero,
         ModContent.ProjectileType<StabtrapStingerProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-                    if (stinger != null)
-                    {
-                        stinger.localAI[0] = Projectile.identity;
-                    }
-                }
-            }
-            }
-        public override bool PreDraw(ref Color lightColor)
+        if (stinger != null)
         {
-            Asset<Texture2D> chainTexture = ModContent.Request<Texture2D>(ToChainTexture);
-            Rectangle? chainSourceRectangle = null;
-            float chainHeightAdjustment = 0f; // Use this to adjust the chain overlap. 
-                Vector2 chainOrigin = chainSourceRectangle.HasValue ? (chainSourceRectangle.Value.Size() / 2f) : (chainTexture.Size() / 2f);
-                Vector2 chainDrawPosition = Projectile.Center;
-                Vector2 vectorFromProjectileToPlayer = player.Center.MoveTowards(chainDrawPosition, 4f) - chainDrawPosition;
-                Vector2 unitVectorFromProjectileToPlayerArms = vectorFromProjectileToPlayer.SafeNormalize(Vector2.Zero);
-                float chainSegmentLength = (chainSourceRectangle.HasValue ? chainSourceRectangle.Value.Height : chainTexture.Height()) + chainHeightAdjustment;
-                if (chainSegmentLength == 0)
-                {
-                    chainSegmentLength = 10;
-                }
-                float chainRotation = unitVectorFromProjectileToPlayerArms.ToRotation() + MathHelper.PiOver2;
-                int chainCount = 0;
-                float chainLengthRemainingToDraw = vectorFromProjectileToPlayer.Length() + chainSegmentLength / 2f;
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapStingerProjectile>()] <= 0)
+            stinger.localAI[0] = Projectile.identity;
+        }
+        return true;
+    }
+    public override void ConstantLatchEffect()
+    {
+        if (Main.netMode != NetmodeID.MultiplayerClient)
+        {
+            ExtraFlexibility = 16f * 40f;
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapStingerProjectile>()] <= 0)
             {
-                while (chainLengthRemainingToDraw > 0f)
+                Projectile stinger = MiscHelpers.NewProjectileDirectSafe(Projectile.GetSource_FromThis(), Player.Center, Vector2.Zero,
+    ModContent.ProjectileType<StabtrapStingerProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                if (stinger != null)
                 {
-                    ExtraChainEffects(ref chainDrawPosition, chainCount);
-                    Color chainDrawColor = GetChainColor(chainDrawPosition, chainCount);
-                    var chainTextureToDraw = GetChainTexture(chainTexture, chainDrawPosition, chainCount);
-                    Main.spriteBatch.Draw(chainTextureToDraw.Value, chainDrawPosition - Main.screenPosition, chainSourceRectangle, chainDrawColor, chainRotation, chainOrigin, 1f, SpriteEffects.None, 0f);
-
-                    chainDrawPosition += unitVectorFromProjectileToPlayerArms * chainSegmentLength;
-                    chainCount++;
-                    chainLengthRemainingToDraw -= chainSegmentLength;
+                    stinger.localAI[0] = Projectile.identity;
                 }
             }
-                return true;
         }
+    }
+    public override bool PreDraw(ref Color lightColor)
+    {
+        Asset<Texture2D> chainTexture = ModContent.Request<Texture2D>(ToChainTexture);
+        Rectangle? chainSourceRectangle = null;
+        float chainHeightAdjustment = 0f; // Use this to adjust the chain overlap. 
+        Vector2 chainOrigin = chainSourceRectangle.HasValue ? (chainSourceRectangle.Value.Size() / 2f) : (chainTexture.Size() / 2f);
+        Vector2 chainDrawPosition = Projectile.Center;
+        Vector2 vectorFromProjectileToPlayer = Player.Center.MoveTowards(chainDrawPosition, 4f) - chainDrawPosition;
+        Vector2 unitVectorFromProjectileToPlayerArms = vectorFromProjectileToPlayer.SafeNormalize(Vector2.Zero);
+        float chainSegmentLength = (chainSourceRectangle.HasValue ? chainSourceRectangle.Value.Height : chainTexture.Height()) + chainHeightAdjustment;
+        if (chainSegmentLength == 0)
+        {
+            chainSegmentLength = 10;
+        }
+        float chainRotation = unitVectorFromProjectileToPlayerArms.ToRotation() + MathHelper.PiOver2;
+        int chainCount = 0;
+        float chainLengthRemainingToDraw = vectorFromProjectileToPlayer.Length() + chainSegmentLength / 2f;
+        if (Player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapStingerProjectile>()] <= 0)
+        {
+            while (chainLengthRemainingToDraw > 0f)
+            {
+                ExtraChainEffects(ref chainDrawPosition, chainCount);
+                Color chainDrawColor = GetChainColor(chainDrawPosition, chainCount);
+                var chainTextureToDraw = GetChainTexture(chainTexture, chainDrawPosition, chainCount);
+                Main.spriteBatch.Draw(chainTextureToDraw.Value, chainDrawPosition - Main.screenPosition, chainSourceRectangle, chainDrawColor, chainRotation, chainOrigin, 1f, SpriteEffects.None, 0f);
+
+                chainDrawPosition += unitVectorFromProjectileToPlayerArms * chainSegmentLength;
+                chainCount++;
+                chainLengthRemainingToDraw -= chainSegmentLength;
+            }
+        }
+        return true;
     }
 }

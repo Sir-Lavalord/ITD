@@ -1,11 +1,10 @@
-﻿namespace ITD.Content.Tiles.Unused
+﻿namespace ITD.Content.Tiles.Unused;
+
+public class Debugger : ModTile
 {
-    public class Debugger : ModTile
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
-        {
-            var name = CreateMapEntryName();
-            AddMapEntry(Color.Red, name);
-        }
+        var name = CreateMapEntryName();
+        AddMapEntry(Color.Red, name);
     }
 }

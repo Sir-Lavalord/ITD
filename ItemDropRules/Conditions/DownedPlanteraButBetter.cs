@@ -1,27 +1,26 @@
 ﻿using Terraria.GameContent.ItemDropRules;
 
-namespace ITD.ItemDropRules.Conditions
+namespace ITD.ItemDropRules.Conditions;
+
+public class DownedPlanteraButBetter : IItemDropRuleCondition
 {
-    public class DownedPlanteraButBetter : IItemDropRuleCondition
+    protected readonly string description;
+
+    public bool CanDrop(DropAttemptInfo info)
     {
-		protected readonly string description;
-		
-        public bool CanDrop(DropAttemptInfo info)
-        {
-            if (info.IsInSimulation)
-                return false;
+        if (info.IsInSimulation)
+            return false;
 
-            return NPC.downedPlantBoss;
-        }
+        return NPC.downedPlantBoss;
+    }
 
-        public bool CanShowItemDropInUI()
-        {
-            return NPC.downedPlantBoss;
-        }
-		
-		public string GetConditionDescription()
-        {
-            return description;
-        }
+    public bool CanShowItemDropInUI()
+    {
+        return NPC.downedPlantBoss;
+    }
+
+    public string GetConditionDescription()
+    {
+        return description;
     }
 }

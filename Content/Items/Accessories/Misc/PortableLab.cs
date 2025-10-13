@@ -1,61 +1,60 @@
-﻿using ITD.Utilities;
+﻿using ITD.DetoursIL;
+using ITD.Utilities;
 using ITD.Utilities.Placeholders;
-using MonoMod.Cil;
 using Mono.Cecil.Cil;
-using ITD.DetoursIL;
+using MonoMod.Cil;
 
-namespace ITD.Content.Items.Accessories.Misc
+namespace ITD.Content.Items.Accessories.Misc;
+
+public class PortableLab : ModItem
 {
-    public class PortableLab : ModItem
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
+        Item.ResearchUnlockCount = 1;
+    }
+    public override string Texture => Placeholder.PHAxe;
+    public override void Load()
+    {
+        IL_Player.AdjTiles += AddAlchTableIfLabEquipped;
+    }
+    private static void ApplyChange(Player player)
+    {
+        if (player.GetITDPlayer().portableLab)
         {
-            Item.ResearchUnlockCount = 1;
+            player.adjTile[TileID.Bottles] = true;
+            player.adjTile[TileID.AlchemyTable] = true;
+            player.alchemyTable = true;
         }
-        public override string Texture => Placeholder.PHAxe;
-        public override void Load()
+    }
+    private static void AddAlchTableIfLabEquipped(ILContext il)
+    {
+        try
         {
-            IL_Player.AdjTiles += AddAlchTableIfLabEquipped;
-        }
-        private static void ApplyChange(Player player)
-        {
-            if (player.GetITDPlayer().portableLab)
-            {
-                player.adjTile[TileID.Bottles] = true;
-                player.adjTile[TileID.AlchemyTable] = true;
-                player.alchemyTable = true;
-            }
-        }
-        private static void AddAlchTableIfLabEquipped(ILContext il)
-        {
-            try
-            {
-                var c = new ILCursor(il);
+            var c = new ILCursor(il);
 
-                // find the alchemyTable = false statement
-                if (!c.TryGotoNext(MoveType.After, i => i.MatchStfld(typeof(Player), "alchemyTable")))
-                {
-                    DetourGroup.LogError("PortableLab: Assign to field alchemyTable not found");
-                }
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate(ApplyChange);
-            }
-            catch
+            // find the alchemyTable = false statement
+            if (!c.TryGotoNext(MoveType.After, i => i.MatchStfld(typeof(Player), "alchemyTable")))
             {
-                DetourGroup.DumpIL(il);
+                DetourGroup.LogError("PortableLab: Assign to field alchemyTable not found");
             }
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate(ApplyChange);
         }
-        public override void SetDefaults()
+        catch
         {
-            Item.DefaultToAccessory();
+            DetourGroup.DumpIL(il);
         }
-        public override void UpdateInfoAccessory(Player player)
-        {
-            player.GetITDPlayer().portableLab = true;
-        }
-        public override void UpdateAccessory(Player player, bool hideVisual)
-        {
-            player.GetITDPlayer().portableLab = true;
-        }
+    }
+    public override void SetDefaults()
+    {
+        Item.DefaultToAccessory();
+    }
+    public override void UpdateInfoAccessory(Player player)
+    {
+        player.GetITDPlayer().portableLab = true;
+    }
+    public override void UpdateAccessory(Player player, bool hideVisual)
+    {
+        player.GetITDPlayer().portableLab = true;
     }
 }

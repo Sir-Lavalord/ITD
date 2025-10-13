@@ -245,6 +245,16 @@ Projectiles: {
 	GravekeeperCloneSkulls.DisplayName: Gravekeeper Clone Skulls
 	FirestormPillar.DisplayName: Firestorm Pillar
 	CosmicFistBump.DisplayName: Cosmic Fist Bump
+	BigBerthProj.DisplayName: Big Berth Proj
+	PickledEye.DisplayName: Pickled Eye
+	SherbetSpike.DisplayName: Sherbet Spike
+	CosmicFistBarrier.DisplayName: Cosmic Fist Barrier
+	CosmicFistTelegraph.DisplayName: Cosmic Fist Telegraph
+	CosmicGlowStar.DisplayName: Cosmic Glow Star
+	CosmicGlowStar2.DisplayName: Cosmic Glow Star2
+	CosmicStar.DisplayName: Cosmic Star
+	CosmicStarlitMeteorite.DisplayName: Cosmic Starlit Meteorite
+	CosmicSwarmTelegraph.DisplayName: Cosmic Swarm Telegraph
 }
 
 NPCs: {
@@ -347,6 +357,7 @@ NPCs: {
 	}
 
 	MoldSpore.DisplayName: Mold Spore
+	BloatedSlime.DisplayName: Bloated Slime
 }
 
 Buffs: {
@@ -590,11 +601,17 @@ Achievements: {
 	CosmicConundrum: {
 		Name: Cosmic Conundrum
 		Description: Defeat the Cosmic Jellyfish, mutated aquatic alien from outer space, for the first time.
+		FriendlyName: Mods.ITD.Achievements.CosmicConundrum.FriendlyName
 	}
 
 	+PARRY: {
 		Name: +PARRY
 		Description: Parry the Cosmic Jellyfish’s slap attack.
+	}
+
+	PARRY: {
+		FriendlyName: Mods.ITD.Achievements.PARRY.FriendlyName
+		Description: Mods.ITD.Achievements.PARRY.Description
 	}
 }
 
@@ -675,336 +692,3 @@ Prefixes: {
 }
 
 Events.LavaRainEvent.EventProgressTitle: Lava Rain
-
-InflectionData: {
-	Items: {
-		# DisplayName: Topaz Necklace
-		TopazNecklace: "/"
-		# DisplayName:
-		BadassSunglasses: "/"
-		# DisplayName:
-		FlamingRazor: "/"
-		# DisplayName:
-		OrionsRing: "/"
-		# DisplayName:
-		PoisonFang: "/"
-		# DisplayName:
-		RazedWine: "/"
-		# DisplayName:
-		SheeringBane: "/"
-		# DisplayName:
-		SoulTalisman: "/"
-		# DisplayName:
-		WickedHeart: "/"
-		# DisplayName:
-		ChainWeight: "/"
-		# DisplayName:
-		MagicPolish: "/"
-		# DisplayName:
-		SafetyLatch: "/"
-		# DisplayName:
-		UnyieldingChain: "/"
-		# DisplayName:
-		Winch: "/"
-		# DisplayName:
-		CupOJoe: "/"
-		# DisplayName:
-		SwimshieldWipers: "/"
-		# DisplayName:
-		Skullmet: "/"
-		# DisplayName:
-		DreadShell: "/"
-		# DisplayName:
-		CharmOfTheAccursed: "/"
-		# DisplayName:
-		GalacticJellyBean: "/"
-		# DisplayName:
-		WindCape: "/"
-		# DisplayName:
-		IncomprehensiblePolyhedron: "/"
-		# DisplayName:
-		EatersTail: "/"
-		# DisplayName:
-		EyeofEldritchInsight: "/"
-		# DisplayName:
-		Prophylaxis: "/"
-		# DisplayName:
-		SlimeSecretionGland: "/"
-		# DisplayName:
-		CorruptAntidote: "/"
-		# DisplayName:
-		CrimsonAntidote: "/"
-		# DisplayName:
-		PortableLab: "/"
-		# DisplayName:
-		RooksBrew: "/"
-		# DisplayName:
-		GravityBoots: "/"
-		# DisplayName:
-		DashingFeather: "/"
-		# DisplayName:
-		DisasterInABottle: "/"
-		# DisplayName:
-		FirestormInABottle: "/"
-		# DisplayName:
-		ImpulseShackles: "/"
-		# DisplayName:
-		JumpingBean: "/"
-		# DisplayName:
-		StormInABottle: "/"
-		# DisplayName:
-		TwisterInABottle: "/"
-		# DisplayName:
-		OblivionPickaxe: "/"
-		# DisplayName:
-		CyaniteHammer: "/"
-		# DisplayName:
-		CyanitePickaxe: "/"
-		# DisplayName:
-		CrowdController: "/"
-		# DisplayName:
-		EternalBubbleWand: "/"
-		# DisplayName:
-		FungalRod: "/"
-		# DisplayName:
-		Necromatome: "/"
-		# DisplayName:
-		RoyalJellyScepter: "/"
-		# DisplayName:
-		StarlightStaff: "/"
-		# DisplayName:
-		ThunderStaff: "/"
-		# DisplayName:
-		TomeOfReach: "/"
-		# DisplayName:
-		TwilightDemise: "/"
-		# DisplayName:
-		WeepingWand: "/"
-		# DisplayName:
-		AlloySword: "/"
-		# DisplayName:
-		AsterKnuckle: "/"
-		# DisplayName:
-		Bleedbreaker: "/"
-		# DisplayName:
-		ChainedGun: "/"
-		# DisplayName:
-		Cicadarang: "/"
-		# DisplayName:
-		Cosmisumaru: "/"
-		# DisplayName:
-		CyaniteBoomerang: "/"
-		# DisplayName:
-		CyaniteSpear: "/"
-		# DisplayName:
-		DespoticSuperMeleeSword: "/"
-		# DisplayName:
-		Ectoblade: "/"
-		# DisplayName:
-		ElectrumSpear: "/"
-		# DisplayName:
-		EmberSlasher: "/"
-		# DisplayName:
-		Flyswatter: "/"
-		# DisplayName:
-		Mandinata: "/"
-		# DisplayName:
-		MangledSheerthorn: "/"
-		# DisplayName:
-		Moulder: "/"
-		# DisplayName:
-		RhodiumBroadsword: "/"
-		# DisplayName:
-		SherbetFlail: "/"
-		# DisplayName:
-		ARCTrap: "/"
-		# DisplayName:
-		Calcium: "/"
-		# DisplayName:
-		Chainwhip: "/"
-		# DisplayName:
-		CopperMandibles: "/"
-		# DisplayName:
-		Crimeratrap: "/"
-		# DisplayName:
-		DespoticSnaptrap: "/"
-		# DisplayName:
-		Frostgrip: "/"
-		# DisplayName:
-		MrSnapkins: "/"
-		# DisplayName:
-		Snaptrap: "/"
-		# DisplayName:
-		Sniptrap: "/"
-		# DisplayName:
-		Soulsnapper: "/"
-		# DisplayName:
-		Stabtrap: "/"
-		# DisplayName:
-		StickyHand: "/"
-		# DisplayName:
-		TheScorpion: "/"
-		# DisplayName:
-		VenusSnaptrap: "/"
-		# DisplayName:
-		VocalZero: "/"
-		# DisplayName:
-		Whiplatch: "/"
-		# DisplayName:
-		Spidermeal: "/"
-		# DisplayName:
-		WindTrident: "/"
-		# DisplayName:
-		WormholeRipper: "/"
-		# DisplayName:
-		BlackCacophony: "/"
-		# DisplayName:
-		DepthrockBow: "/"
-		# DisplayName:
-		Dunebarrel: "/"
-		# DisplayName:
-		ElectrumBow: "/"
-		# DisplayName:
-		Fwoomstick: "/"
-		# DisplayName:
-		Ghostbuster: "/"
-		# DisplayName:
-		Houndboom: "/"
-		# DisplayName:
-		HunterrGreatbow: "/"
-		# DisplayName:
-		Potshot: "/"
-		# DisplayName:
-		Quasar: "/"
-		# DisplayName:
-		ResonanceCrossbow: "/"
-		# DisplayName:
-		Skyshot: "/"
-		# DisplayName:
-		TheEpicenter: "/"
-		# DisplayName:
-		CicadianStaff: "/"
-		# DisplayName:
-		Fishbacker: "/"
-		# DisplayName:
-		KeepersShovel: "/"
-		# DisplayName:
-		NightmareManuscript: "/"
-		# DisplayName:
-		RiteOfImmolation: /
-	}
-
-	Prefixes: {
-		# Abhorrent
-		Abhorrent: {
-			Masculine: Abhorrent
-			Feminine: Abhorrent
-			Neuter: Abhorrent
-		}
-
-		# Acute
-		Acute: {
-			Masculine: Acute
-			Feminine: Acute
-			Neuter: Acute
-		}
-
-		# Ample
-		Ample: {
-			Masculine: Ample
-			Feminine: Ample
-			Neuter: Ample
-		}
-
-		# Barbed
-		Barbed: {
-			Masculine: Barbed
-			Feminine: Barbed
-			Neuter: Barbed
-		}
-
-		# Dwarf
-		Dwarf: {
-			Masculine: Dwarf
-			Feminine: Dwarf
-			Neuter: Dwarf
-		}
-
-		# Extensive
-		Extensive: {
-			Masculine: Extensive
-			Feminine: Extensive
-			Neuter: Extensive
-		}
-
-		# Feral
-		Feral: {
-			Masculine: Feral
-			Feminine: Feral
-			Neuter: Feral
-		}
-
-		# Heroic
-		Heroic: {
-			Masculine: Heroic
-			Feminine: Heroic
-			Neuter: Heroic
-		}
-
-		# Immense
-		Immense: {
-			Masculine: Immense
-			Feminine: Immense
-			Neuter: Immense
-		}
-
-		# Lengthy
-		Lengthy: {
-			Masculine: Lengthy
-			Feminine: Lengthy
-			Neuter: Lengthy
-		}
-
-		# Miniscule
-		Miniscule: {
-			Masculine: Miniscule
-			Feminine: Miniscule
-			Neuter: Miniscule
-		}
-
-		# Scourned
-		Scourned: {
-			Masculine: Scourned
-			Feminine: Scourned
-			Neuter: Scourned
-		}
-
-		# Sleek
-		Sleek: {
-			Masculine: Sleek
-			Feminine: Sleek
-			Neuter: Sleek
-		}
-
-		# Smoothed
-		Smoothed: {
-			Masculine: Smoothed
-			Feminine: Smoothed
-			Neuter: Smoothed
-		}
-
-		# Tapered
-		Tapered: {
-			Masculine: Tapered
-			Feminine: Tapered
-			Neuter: Tapered
-		}
-
-		# Wretched
-		Wretched: {
-			Masculine: Wretched
-			Feminine: Wretched
-			Neuter: Wretched
-		}
-	}
-}

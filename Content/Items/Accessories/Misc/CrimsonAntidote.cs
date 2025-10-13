@@ -1,88 +1,87 @@
 ﻿using ITD.Content.Buffs.EquipmentBuffs;
 
-namespace ITD.Content.Items.Accessories.Misc
+namespace ITD.Content.Items.Accessories.Misc;
+
+internal class CrimsonAntidote : ModItem
 {
-    internal class CrimsonAntidote : ModItem
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
-        {
-            Item.ResearchUnlockCount = 1;
-        }
-        public override void SetDefaults()
-        {
-            Item.width = 32;
-            Item.height = 32;
+        Item.ResearchUnlockCount = 1;
+    }
+    public override void SetDefaults()
+    {
+        Item.width = 32;
+        Item.height = 32;
 
-            Item.rare = ItemRarityID.Cyan;
-            Item.value = Item.sellPrice(gold: 3);
+        Item.rare = ItemRarityID.Cyan;
+        Item.value = Item.sellPrice(gold: 3);
 
-            Item.accessory = true;
-        }
-        public override void UpdateAccessory(Player player, bool hideVisual)
+        Item.accessory = true;
+    }
+    public override void UpdateAccessory(Player player, bool hideVisual)
+    {
+        player.GetModPlayer<CrimsonAntidotePlayer>().hasCrimsonAntidote = true;
+    }
+}
+
+internal class CrimsonAntidotePlayer : ModPlayer
+{
+    public bool hasCrimsonAntidote;
+    public bool shortSickness = false;
+    public float buffTimeRemaining;
+
+    public override void ResetEffects()
+    {
+        hasCrimsonAntidote = false;
+    }
+
+    public override void GetHealLife(Item item, bool quickHeal, ref int healValue)
+    {
+        if (hasCrimsonAntidote)
         {
-            player.GetModPlayer<CrimsonAntidotePlayer>().hasCrimsonAntidote = true;
+            healValue = (int)(healValue * 1.2f);
         }
     }
 
-    internal class CrimsonAntidotePlayer : ModPlayer
+    public override void PreUpdate()
     {
-        public bool hasCrimsonAntidote;
-        public bool shortSickness = false;
-        public float buffTimeRemaining;
-
-        public override void ResetEffects()
+        if (hasCrimsonAntidote)
         {
-            hasCrimsonAntidote = false;
-        }
-
-        public override void GetHealLife(Item item, bool quickHeal, ref int healValue)
-        {
-            if (hasCrimsonAntidote)
+            if (!shortSickness && Player.potionDelay > 0)
             {
-                healValue = (int)(healValue * 1.2f);
+                buffTimeRemaining = Player.potionDelay;
+                Player.potionDelay = (int)(buffTimeRemaining * 0.85f);
+                Player.ClearBuff(BuffID.PotionSickness);
+                Player.AddBuff(BuffID.PotionSickness, Player.potionDelay);
+                shortSickness = true;
             }
         }
-
-        public override void PreUpdate()
+        else
         {
-            if (hasCrimsonAntidote)
+            if (shortSickness && Player.potionDelay > 0)
             {
-                if (!shortSickness && Player.potionDelay > 0)
-                {
-                    buffTimeRemaining = Player.potionDelay;
-                    Player.potionDelay = (int)(buffTimeRemaining * 0.85f);
-                    Player.ClearBuff(BuffID.PotionSickness);
-                    Player.AddBuff(BuffID.PotionSickness, Player.potionDelay);
-                    shortSickness = true;
-                }
-             }
-            else
-            {
-                if (shortSickness && Player.potionDelay > 0)
-                {
-                    buffTimeRemaining = Player.potionDelay;
-                    Player.potionDelay = (int)(buffTimeRemaining / 85 * 100);
-                    Player.ClearBuff(BuffID.PotionSickness);
-                    Player.AddBuff(BuffID.PotionSickness, Player.potionDelay);
-                    shortSickness = false;
-                }
-            }
-            if (!Player.HasBuff(BuffID.PotionSickness))
-            {
+                buffTimeRemaining = Player.potionDelay;
+                Player.potionDelay = (int)(buffTimeRemaining / 85 * 100);
+                Player.ClearBuff(BuffID.PotionSickness);
+                Player.AddBuff(BuffID.PotionSickness, Player.potionDelay);
                 shortSickness = false;
             }
         }
-    }
-
-    internal class CrimsonAntidoteHealItem : GlobalItem
-    {
-        public override bool? UseItem(Item item, Player player)
+        if (!Player.HasBuff(BuffID.PotionSickness))
         {
-            if (item.healLife > 0 && player.GetModPlayer<CrimsonAntidotePlayer>().hasCrimsonAntidote)
-            {
-				player.AddBuff(ModContent.BuffType<CrimsonAntidoteBuff>(), 60 * 5, false);
-            }
-            return null;
+            shortSickness = false;
         }
+    }
+}
+
+internal class CrimsonAntidoteHealItem : GlobalItem
+{
+    public override bool? UseItem(Item item, Player player)
+    {
+        if (item.healLife > 0 && player.GetModPlayer<CrimsonAntidotePlayer>().hasCrimsonAntidote)
+        {
+            player.AddBuff(ModContent.BuffType<CrimsonAntidoteBuff>(), 60 * 5, false);
+        }
+        return null;
     }
 }

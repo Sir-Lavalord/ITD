@@ -1,38 +1,37 @@
 ﻿using Terraria.Localization;
 
-namespace ITD.Content.Items.Armor.Cyanite
+namespace ITD.Content.Items.Armor.Cyanite;
+
+[AutoloadEquip(EquipType.Head)]
+public class CyaniteMask : ModItem
 {
-    [AutoloadEquip(EquipType.Head)]
-    public class CyaniteMask : ModItem
+    public static LocalizedText SetBonusText { get; private set; }
+    public override void SetStaticDefaults()
     {
-        public static LocalizedText SetBonusText { get; private set; }
-        public override void SetStaticDefaults()
-        {
-            Item.ResearchUnlockCount = 1;
-            SetBonusText = this.GetLocalization("SetBonus");
-        }
-        public override void SetDefaults()
-        {
-            Item.width = 24;
-            Item.height = 26;
-            Item.value = Item.sellPrice(silver: 10);
-            Item.rare = ItemRarityID.Green;
-            Item.defense = 19;
-        }
-        public override bool IsArmorSet(Item head, Item body, Item legs)
-        {
-            return body.type == ModContent.ItemType<CyaniteGreaves>() && legs.type == ModContent.ItemType<CyanitePlating>();
-        }
+        Item.ResearchUnlockCount = 1;
+        SetBonusText = this.GetLocalization("SetBonus");
+    }
+    public override void SetDefaults()
+    {
+        Item.width = 24;
+        Item.height = 26;
+        Item.value = Item.sellPrice(silver: 10);
+        Item.rare = ItemRarityID.Green;
+        Item.defense = 19;
+    }
+    public override bool IsArmorSet(Item head, Item body, Item legs)
+    {
+        return body.type == ModContent.ItemType<CyaniteGreaves>() && legs.type == ModContent.ItemType<CyanitePlating>();
+    }
 
-        public override void UpdateEquip(Player player)
-        {
-            player.GetDamage(DamageClass.Ranged) += 0.15f;
-            player.ammoCost75 = true;
-        }
+    public override void UpdateEquip(Player player)
+    {
+        player.GetDamage(DamageClass.Ranged) += 0.15f;
+        player.ammoCost75 = true;
+    }
 
-        public override void UpdateArmorSet(Player player)
-        {
-            player.setBonus = SetBonusText.Value;
-        }
+    public override void UpdateArmorSet(Player player)
+    {
+        player.setBonus = SetBonusText.Value;
     }
 }
