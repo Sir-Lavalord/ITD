@@ -10,8 +10,8 @@ using ITD.Content.Projectiles.Hostile;
 using ITD.Content.Projectiles.Hostile.CosJel;
 using ITD.Particles;
 using ITD.Particles.CosJel;
-using ITD.Players;
 using ITD.PrimitiveDrawing;
+using ITD.Systems;
 using ITD.Systems.DataStructures;
 using ITD.Systems.Extensions;
 using ITD.Utilities;
@@ -33,7 +33,7 @@ namespace ITD.Content.NPCs.Bosses
     [AutoloadBossHead]
     public class CosmicJellyfish : ITDNPC
     {
-        public override Func<bool> DownedMe => () => DownedBossSystem.downedCosJel;
+        public override Func<bool> DownedMe => () => DownedBossSystem.DownedCosJel;
         public override float BossWeight => 3.9f;
         public override IItemDropRule[] CollectibleRules =>
         [
@@ -136,7 +136,7 @@ namespace ITD.Content.NPCs.Bosses
             NPC.HitSound = new SoundStyle("ITD/Content/Sounds/NPCSounds/Bosses/CosjelOuch")
             {
                 PitchVariance = 0.75f
-            }; 
+            };
             NPC.DeathSound = SoundID.DD2_DefeatScene;
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
@@ -195,13 +195,13 @@ namespace ITD.Content.NPCs.Bosses
         //kill flag
         public override void OnKill()
         {
-            DownedBossSystem.downedCosJel = true;
+            DownedBossSystem.DownedCosJel = true;
         }
         private Vector2[] dashOldPositions = new Vector2[40];
         private float[] dashOldRotations = new float[40];
         public override void AI()
         {
-/*            Main.NewText((AI_State,AITimer1,AITimer2));*/
+            /*            Main.NewText((AI_State,AITimer1,AITimer2));*/
 
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
@@ -396,7 +396,7 @@ namespace ITD.Content.NPCs.Bosses
 
                         int amount = 6;
                         float dist = 1000;
-                        float randrot = Main.rand.NextFloat(0,MathHelper.PiOver4);
+                        float randrot = Main.rand.NextFloat(0, MathHelper.PiOver4);
                         for (int i = 0; i < amount; i++)
                         {
 
@@ -523,7 +523,7 @@ namespace ITD.Content.NPCs.Bosses
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, vel,
                                  ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI);
                             }
-                        }       
+                        }
                         if (AITimer2 >= 800)
                         {
                             AI_State = MovementState.FollowingRegular;
@@ -690,7 +690,7 @@ namespace ITD.Content.NPCs.Bosses
                             else
                             {
                                 if (expertMode || masterMode)
-                                Dash(dashPos, 1, 25, 30, 40, 2);
+                                    Dash(dashPos, 1, 25, 30, 40, 2);
                                 else Dash(dashPos, 1, 25, 40, 60, 2);
 
                             }
@@ -820,7 +820,7 @@ namespace ITD.Content.NPCs.Bosses
             }
             NPC.netUpdate = true;
 
-        
+
             if (DashTimer > time1 && DashTimer < time2)
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -899,7 +899,7 @@ namespace ITD.Content.NPCs.Bosses
                 AttackID = -1;
                 AI_State = MovementState.Explode;
                 NetSync();
-                
+
             }
             return;
         }
@@ -909,7 +909,7 @@ namespace ITD.Content.NPCs.Bosses
             AITimer1 = 0;
             AITimer2 = 0;
             AttackCount = 0;
-            DashTimer = 0; 
+            DashTimer = 0;
             NetSync();
         }
         //check if cosjel is dead, if hasn't done final attack, don't kill cosjel
@@ -998,7 +998,7 @@ namespace ITD.Content.NPCs.Bosses
                     && Main.npc[i].ai[3] == whichHand)
                 {
                     return true;
-                }               
+                }
             }
             return false;
         }
@@ -1105,7 +1105,7 @@ namespace ITD.Content.NPCs.Bosses
 
         }
         //john vertexstrip o
-        public MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
+        public static MiscShaderData Shader = new MiscShaderData(Main.VertexPixelShaderRef, "MagicMissile").UseProjectionMatrix(true);
 
         public VertexStrip TrailStrip = new VertexStrip();
 
@@ -1123,11 +1123,11 @@ namespace ITD.Content.NPCs.Bosses
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            Vector2 stretch = new Vector2(1f, 1f);
+            Vector2 stretch = new(1f, 1f);
             Texture2D tex = TextureAssets.Npc[NPC.type].Value;
             int vertSize = tex.Height / Main.npcFrameCount[NPC.type];
-            Vector2 origin = new Vector2(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);
-            Rectangle frameRect = new Rectangle(0, NPC.frame.Y, tex.Width, vertSize);
+            Vector2 origin = new(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);
+            Rectangle frameRect = new(0, NPC.frame.Y, tex.Width, vertSize);
             Vector2 center = NPC.Size / 2f;
             if (DashTimer > 0 && AI_State != MovementState.FollowingRegular)
             {
@@ -1145,7 +1145,7 @@ namespace ITD.Content.NPCs.Bosses
             }
             if (AI_State == MovementState.Dashing)
             {
-                Shader.Apply(null);
+                Shader.Apply();
                 TrailStrip.PrepareStrip(dashOldPositions, dashOldRotations, StripColors, StripWidth, NPC.Size * 0.5f - Main.screenPosition, dashOldPositions.Length, true);
                 TrailStrip.DrawTrail();
                 Main.spriteBatch.End(out SpriteBatchData spriteBatchData); // unapply shaders
@@ -1219,44 +1219,37 @@ namespace ITD.Content.NPCs.Bosses
             }
 
             if (AttackID == -2)
-            {
-                default(BlackholeVertex).Draw(NPC.Center - Main.screenPosition, 1024);
+                BlackholeVertex.Draw(NPC.Center - Main.screenPosition, 1024);
 
-            }
             Main.EntitySpriteDraw(TextureAssets.Npc[Type].Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White, NPC.rotation, NPC.frame.Size() / 2f, stretch, SpriteEffects.None);
             return false;
         }
     }
     //shader rip
 
-    public struct BlackholeVertex
+    public readonly struct BlackholeVertex
     {
-
-        private static SimpleSquare square = new SimpleSquare();
-
-        public void Draw(Vector2 position, float size)
+        public static void Draw(Vector2 position, float size)
         {
-            GameShaders.Misc["Blackhole"].UseImage0(TextureAssets.Extra[196]);
-            GameShaders.Misc["Blackhole"].UseColor(new Color(192, 59, 166));
-            GameShaders.Misc["Blackhole"].UseSecondaryColor(Color.Beige);
-            GameShaders.Misc["Blackhole"].Apply();
-            square.Draw(position, size: new Vector2(size, size));
+            GameShaders.Misc["Blackhole"]
+                .UseImage0(TextureAssets.Extra[ExtrasID.RainbowRodTrailErosion])
+                .UseColor(new Color(192, 59, 166))
+                .UseSecondaryColor(Color.Beige)
+                .Apply();
+            SimpleSquare.Draw(position, size: new Vector2(size, size));
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         }
 
     }
-
-    public struct CosmicTelegraphVertex 
+    public readonly struct CosmicTelegraphVertex
     {
-
-        private static SimpleSquare square = new SimpleSquare();
-
-        public void Draw(Vector2 position, Vector2 size, float rotation)
+        public static void Draw(Vector2 position, Vector2 size, float rotation)
         {
-            GameShaders.Misc["Telegraph"].UseColor(Color.Purple);
-            GameShaders.Misc["Telegraph"].UseSecondaryColor(Color.Purple);
-            GameShaders.Misc["Telegraph"].Apply();
-            square.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
+            GameShaders.Misc["Telegraph"]
+                .UseColor(Color.Purple)
+                .UseSecondaryColor(Color.Purple)
+                .Apply();
+            SimpleSquare.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
         }
