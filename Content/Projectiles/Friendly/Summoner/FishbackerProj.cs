@@ -60,7 +60,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 Projectile.Kill();
                 return;
             }
-            if ((Timer >= swingTime * 0.5f && Timer <= swingTime * 0.75f) && CanParry)
+            if ((Timer >= swingTime * 0.5f && Timer <= swingTime * 0.8f) && CanParry)
             {
                 List<Vector2> points = Projectile.WhipPointsForCollision;
                 Projectile.FillWhipControlPoints(Projectile, points);
@@ -70,7 +70,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
                     if (i != Projectile.whoAmI && other.Reflectable()
                         && Math.Abs(points[points.Count - 1].X - other.position.X)
-                        + Math.Abs(points[points.Count -1].Y - other.position.Y) < 40)
+                        + Math.Abs(points[points.Count -1].Y - other.position.Y) < 50)
                     {
                         if (!Main.dedServ)
                         {
@@ -80,8 +80,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                             Main.player[Projectile.owner].GetModPlayer<ITDPlayer>().BetterScreenshake(16, 16, 16, true);
                             other.GetGlobalProjectile<FishbackerReflectedProj>().IsReflected = true;
                             other.owner = Main.myPlayer;
-                            other.velocity.X *= -3f;
-                            other.velocity.Y *= -1f;
+                            other.velocity = other.velocity.RotatedBy(other.velocity.AngleTo(Projectile.velocity)) * 5 * (other.rotation <= MathHelper.PiOver2? 1:-1);
 
                             ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
                             {

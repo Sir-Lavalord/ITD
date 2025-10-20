@@ -387,7 +387,7 @@ namespace ITD.Content.NPCs.Bosses
                         }
                     }
                     break;
-                case 5://spits meteor, to player, dash to meteor
+                case 6://spits meteor, to player, dash to meteor
                     AITimer1++;
 
                     if (AITimer2++ == 90)
@@ -396,12 +396,13 @@ namespace ITD.Content.NPCs.Bosses
 
                         int amount = 6;
                         float dist = 1000;
+                        float randrot = Main.rand.NextFloat(0,MathHelper.PiOver4);
                         for (int i = 0; i < amount; i++)
                         {
 
                             double rad = Math.PI / (amount / 2) * i;
                             int damage = (int)(NPC.damage * 0.28f);
-                            Vector2 vector = Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * dist;
+                            Vector2 vector = (Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * dist).RotatedBy(randrot);
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicStarlitMeteorite>(), 60, 0f, Main.myPlayer, NPC.whoAmI, vector.X, vector.Y);
@@ -446,7 +447,7 @@ namespace ITD.Content.NPCs.Bosses
                             }
                         }
                     }
-                    if (AttackCount > 5)//loop twice
+                    if (AttackCount > 4)//loop twice
                     {
                         AI_State = MovementState.FollowingRegular;
                         AttackID++;
@@ -455,7 +456,7 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
 
-                case 6:
+                case 5:
 
                     distanceAbove = 350;
                     AITimer1++;
@@ -472,7 +473,7 @@ namespace ITD.Content.NPCs.Bosses
                             AITimer1 = 0;
                         }
                     }
-                    if (AttackCount > 0)//if hand still exists, keep attacking
+                    if (AttackCount > 3)//if hand still exists, keep attacking
                     {
                         HandControl(1, 7, 3, true);
                         HandControl(-1, 7, 3, true);
