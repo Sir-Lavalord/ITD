@@ -1,86 +1,85 @@
 ﻿using System;
 using Terraria.Audio;
 using Terraria.UI;
-namespace ITD.Content.UI
+namespace ITD.Content.UI;
+
+public abstract class ITDItemSlot : ITDUIElement
 {
-    public abstract class ITDItemSlot : ITDUIElement
+    public abstract ref Item item { get; }
+    public abstract Func<Item, bool> isValid { get; }
+    public abstract string Texture { get; }
+    public bool NoItem => item is null || item.IsAir;
+    public bool IsMouseOver => ContainsPoint(Main.MouseScreen);
+    public void UpdateProperties(float dimension, float left, float top)
     {
-        public abstract ref Item item { get; }
-        public abstract Func<Item, bool> isValid { get; }
-        public abstract string Texture { get; }
-        public bool NoItem => item is null || item.IsAir;
-        public bool IsMouseOver => ContainsPoint(Main.MouseScreen);
-        public void UpdateProperties(float dimension, float left, float top)
-        {
-            Width.Set(dimension, 0f);
-            Height.Set(dimension, 0f);
-            Left.Set(left, 0f);
-            Top.Set(top, 0f);
-        }
-        public virtual void PostClickItemIn(ref Item slotItem)
-        {
+        Width.Set(dimension, 0f);
+        Height.Set(dimension, 0f);
+        Left.Set(left, 0f);
+        Top.Set(top, 0f);
+    }
+    public virtual void PostClickItemIn(ref Item slotItem)
+    {
 
-        }
-        public virtual void PostClickItemOut(ref Item mouseItem)
-        {
+    }
+    public virtual void PostClickItemOut(ref Item mouseItem)
+    {
 
-        }
-        public virtual void PostDraw(SpriteBatch spriteBatch)
-        {
+    }
+    public virtual void PostDraw(SpriteBatch spriteBatch)
+    {
 
-        }
-        public sealed override void LeftClick(UIMouseEvent evt)
+    }
+    public sealed override void LeftClick(UIMouseEvent evt)
+    {
+        if (!Main.playerInventory)
+            return;
+        if (!Main.mouseItem.IsAir && isValid(Main.mouseItem) && NoItem)
         {
-            if (!Main.playerInventory)
-                return;
-            if (!Main.mouseItem.IsAir && isValid(Main.mouseItem) && NoItem)
-            {
-                item = Main.mouseItem.Clone();
-                PostClickItemIn(ref item);
-                Main.mouseItem.TurnToAir();
-                SoundEngine.PlaySound(SoundID.Grab);
-            }
-            else if (Main.mouseItem.IsAir && !NoItem)
-            {
-                Main.mouseItem = item.Clone();
-                PostClickItemOut(ref Main.mouseItem);
-                item.TurnToAir();
-                SoundEngine.PlaySound(SoundID.Grab);
-            }
-            else if (!Main.mouseItem.IsAir && isValid(Main.mouseItem) && !NoItem)
-            {
-                var temp = item.Clone();
-                item = Main.mouseItem.Clone();
-                Main.mouseItem = temp;
-                PostClickItemIn(ref item);
-                PostClickItemOut(ref Main.mouseItem);
-                SoundEngine.PlaySound(SoundID.Grab);
-            }
-            base.LeftClick(evt);
+            item = Main.mouseItem.Clone();
+            PostClickItemIn(ref item);
+            Main.mouseItem.TurnToAir();
+            SoundEngine.PlaySound(SoundID.Grab);
         }
-        public override void Update(GameTime gameTime)
+        else if (Main.mouseItem.IsAir && !NoItem)
         {
-            if (IsMouseOver)
-                Main.LocalPlayer.mouseInterface = true;
+            Main.mouseItem = item.Clone();
+            PostClickItemOut(ref Main.mouseItem);
+            item.TurnToAir();
+            SoundEngine.PlaySound(SoundID.Grab);
         }
-        public override void Draw(SpriteBatch spriteBatch)
+        else if (!Main.mouseItem.IsAir && isValid(Main.mouseItem) && !NoItem)
         {
-            var tex = ModContent.Request<Texture2D>(Texture).Value;
-            spriteBatch.Draw(tex, GetDimensions().ToRectangle(), Color.White);
-            if (!NoItem)
-            {
-                ItemSlot.DrawItemIcon(item, 21, spriteBatch, GetDimensions().Position() + new Vector2(GetDimensions().Width / 2, GetDimensions().Height / 2), 1f, 64f, Color.White);
-                if (IsMouseOver)
-                {
-                    Main.HoverItem = item.Clone();
-                    Main.hoverItemName = "a";
-                }
-            }
+            var temp = item.Clone();
+            item = Main.mouseItem.Clone();
+            Main.mouseItem = temp;
+            PostClickItemIn(ref item);
+            PostClickItemOut(ref Main.mouseItem);
+            SoundEngine.PlaySound(SoundID.Grab);
+        }
+        base.LeftClick(evt);
+    }
+    public override void Update(GameTime gameTime)
+    {
+        if (IsMouseOver)
+            Main.LocalPlayer.mouseInterface = true;
+    }
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        var tex = ModContent.Request<Texture2D>(Texture).Value;
+        spriteBatch.Draw(tex, GetDimensions().ToRectangle(), Color.White);
+        if (!NoItem)
+        {
+            ItemSlot.DrawItemIcon(item, 21, spriteBatch, GetDimensions().Position() + new Vector2(GetDimensions().Width / 2, GetDimensions().Height / 2), 1f, 64f, Color.White);
             if (IsMouseOver)
             {
-                Main.LocalPlayer.mouseInterface = true;
+                Main.HoverItem = item.Clone();
+                Main.hoverItemName = "a";
             }
-            PostDraw(spriteBatch);
         }
+        if (IsMouseOver)
+        {
+            Main.LocalPlayer.mouseInterface = true;
+        }
+        PostDraw(spriteBatch);
     }
 }

@@ -1,83 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ITD.Utilities.ObserverPatterns
+namespace ITD.Utilities;
+
+public interface IITDMessageInterface
 {
-    public interface I_ITDMessageInterface
+    void RecievingMessage(string message);
+}
+
+public class ITDMessageInterfaceGroup
+{
+    private readonly List<IITDMessageInterface> _observers = [];
+
+    public void AddListener(IITDMessageInterface iITDMessageInterface)
     {
-        void RecievingMessage(string message);
+        _observers.Add(iITDMessageInterface);
     }
 
-    public class ITDMessageInterfaceGroup
+    public void RemoveListener(IITDMessageInterface iITDMessageInterface)
     {
-        private readonly List<I_ITDMessageInterface> _observers = new List<I_ITDMessageInterface>();
-
-        public void AddListener(I_ITDMessageInterface i_ITDMessageInterface)
-        {
-            _observers.Add(i_ITDMessageInterface);
-        }
-
-        public void RemoveListener(I_ITDMessageInterface i_ITDMessageInterface)
-        {
-            _observers.Remove(i_ITDMessageInterface);
-        }
-
-        public void SendMessage(string message)
-        {
-            foreach (I_ITDMessageInterface i_ in _observers)
-            {
-                i_.RecievingMessage(message); 
-            }
-        }
+        _observers.Remove(iITDMessageInterface);
     }
 
-    public class ITDListenerEvent
+    public void SendMessage(string message)
     {
-        private event Action listeners;
-        public void AddListener(Action listener)
+        foreach (IITDMessageInterface i_ in _observers)
         {
-            listeners += listener;
-        }
-
-        public void RemoveListener(Action listener)
-        {
-            listeners -= listener;
-        }
-
-        public void Invoke()
-        {
-            listeners?.Invoke();
-        }
-
-        public void RemoveAllListeners()
-        {
-            listeners = null;
+            i_.RecievingMessage(message);
         }
     }
+}
 
-    public class ITDListenerEvent<T>
+public class ITDListenerEvent
+{
+    private event Action Listeners;
+    public void AddListener(Action listener)
     {
-        private event Action<T> listeners;
+        Listeners += listener;
+    }
 
-        public void AddListener(Action<T> listener)
-        {
-            listeners += listener;
-        }
+    public void RemoveListener(Action listener)
+    {
+        Listeners -= listener;
+    }
 
-        public void RemoveListener(Action<T> listener)
-        {
-            listeners -= listener;
-        }
+    public void Invoke()
+    {
+        Listeners?.Invoke();
+    }
 
-        public void Invoke(T value)
-        {
-            listeners?.Invoke(value);
-        }
+    public void RemoveAllListeners()
+    {
+        Listeners = null;
+    }
+}
 
-        public void RemoveAllListeners()
-        {
-            listeners = null;
-        }
+public class ITDListenerEvent<T>
+{
+    private event Action<T> Listeners;
+
+    public void AddListener(Action<T> listener)
+    {
+        Listeners += listener;
+    }
+
+    public void RemoveListener(Action<T> listener)
+    {
+        Listeners -= listener;
+    }
+
+    public void Invoke(T value)
+    {
+        Listeners?.Invoke(value);
+    }
+
+    public void RemoveAllListeners()
+    {
+        Listeners = null;
     }
 }
 
@@ -87,18 +86,18 @@ namespace ITD.Utilities.ObserverPatterns
 /// </summary>
 private class Test
 {
-    ITD.Utilities.ObserverPatterns.ITDListenerEvent<int> TestEvent = new ITD.Utilities.ObserverPatterns.ITDListenerEvent<int>();
-    ITD.Utilities.ObserverPatterns.ITDMessageInterfaceGroup TestMessageGroup = new ITD.Utilities.ObserverPatterns.ITDMessageInterfaceGroup();
+ITD.Utilities.ObserverPatterns.ITDListenerEvent<int> TestEvent = new ITD.Utilities.ObserverPatterns.ITDListenerEvent<int>();
+ITD.Utilities.ObserverPatterns.ITDMessageInterfaceGroup TestMessageGroup = new ITD.Utilities.ObserverPatterns.ITDMessageInterfaceGroup();
 
-    public void TestFunction(int i)
-    {
+public void TestFunction(int i)
+{
 
-    }
+}
 
-    public void EventFunction()
-    {
-        TestEvent.AddListener(TestFunction);
-        TestEvent.RemoveListener(TestFunction);
-    }
+public void EventFunction()
+{
+    TestEvent.AddListener(TestFunction);
+    TestEvent.RemoveListener(TestFunction);
+}
 }
 #endif

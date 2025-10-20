@@ -1,33 +1,32 @@
 ﻿using ITD.Content.Dusts;
 
-namespace ITD.Content.Tiles.DeepDesert
+namespace ITD.Content.Tiles.DeepDesert;
+
+public class LightPyracottaTiles : ModTile
 {
-    public class LightPyracottaTiles : ModTile
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
-        {
-            Main.tileSolid[Type] = true;
-            Main.tileBlockLight[Type] = true;
+        Main.tileSolid[Type] = true;
+        Main.tileBlockLight[Type] = true;
 
-            MinPick = 55;
-            HitSound = SoundID.Tink;
-            DustType = ModContent.DustType<PyracottaDust>();
+        MinPick = 55;
+        HitSound = SoundID.Tink;
+        DustType = ModContent.DustType<PyracottaDust>();
 
-            AddMapEntry(new Color(196, 162, 126));
-        }
+        AddMapEntry(new Color(196, 162, 126));
     }
-    public class DarkPyracottaTiles : ModTile
+}
+public class DarkPyracottaTiles : ModTile
+{
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
-        {
-            Main.tileSolid[Type] = true;
-            Main.tileBlockLight[Type] = true;;
+        Main.tileSolid[Type] = true;
+        Main.tileBlockLight[Type] = true; ;
 
-            MinPick = 55;
-            HitSound = SoundID.Tink;
-            DustType = ModContent.DustType<PyracottaDust>();
+        MinPick = 55;
+        HitSound = SoundID.Tink;
+        DustType = ModContent.DustType<PyracottaDust>();
 
-            AddMapEntry(new Color(191, 88, 65));
-        }
+        AddMapEntry(new Color(191, 88, 65));
     }
 }

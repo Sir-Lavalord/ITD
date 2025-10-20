@@ -1,19 +1,18 @@
 ﻿using ITD.Content.Tiles.DeepDesert;
 
-namespace ITD.Content.Items.Placeable.Biomes.DeepDesert
+namespace ITD.Content.Items.Placeable.Biomes.DeepDesert;
+
+public class LightPyracottaTilesItem : ModItem
 {
-    public class LightPyracottaTilesItem : ModItem
+    public override void SetDefaults()
     {
-        public override void SetDefaults()
-        {
-            Item.DefaultToPlaceableTile(ModContent.TileType<LightPyracottaTiles>());
-        }
+        Item.DefaultToPlaceableTile(ModContent.TileType<LightPyracottaTiles>());
     }
-    public class DarkPyracottaTilesItem : ModItem
+}
+public class DarkPyracottaTilesItem : ModItem
+{
+    public override void SetDefaults()
     {
-        public override void SetDefaults()
-        {
-            Item.DefaultToPlaceableTile(ModContent.TileType<DarkPyracottaTiles>());
-        }
+        Item.DefaultToPlaceableTile(ModContent.TileType<DarkPyracottaTiles>());
     }
 }

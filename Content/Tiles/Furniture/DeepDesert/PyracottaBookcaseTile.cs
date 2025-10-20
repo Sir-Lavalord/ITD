@@ -1,12 +1,11 @@
 ﻿using ITD.Utilities;
 
-namespace ITD.Content.Tiles.Furniture.DeepDesert
+namespace ITD.Content.Tiles.Furniture.DeepDesert;
+
+public class PyracottaBookcaseTile : ModTile
 {
-    public class PyracottaBookcaseTile : ModTile
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
-        {
-            this.DefaultToBookcase();
-        }
+        this.DefaultToBookcase();
     }
 }

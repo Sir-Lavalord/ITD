@@ -1,10 +1,9 @@
-namespace ITD.Content.Walls.BlueshroomGroves
+namespace ITD.Content.Walls.BlueshroomGroves;
+
+public class SmoothedCharbleWallPlaced : ModWall
 {
-    public class SmoothedCharbleWallPlaced : ModWall
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
-        {
-            AddMapEntry(new Color(129, 140, 159));
-        }
+        AddMapEntry(new Color(129, 140, 159));
     }
 }

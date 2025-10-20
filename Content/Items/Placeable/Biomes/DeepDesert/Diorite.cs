@@ -1,17 +1,16 @@
 ﻿using ITD.Content.Tiles.DeepDesert;
 
-namespace ITD.Content.Items.Placeable.Biomes.DeepDesert
-{
-    public class Diorite : ModItem
-    {
-        public override void SetStaticDefaults()
-        {
-            Item.ResearchUnlockCount = 100;
-        }
+namespace ITD.Content.Items.Placeable.Biomes.DeepDesert;
 
-        public override void SetDefaults()
-        {
-            Item.DefaultToPlaceableTile(ModContent.TileType<DioriteTile>());
-        }
+public class Diorite : ModItem
+{
+    public override void SetStaticDefaults()
+    {
+        Item.ResearchUnlockCount = 100;
+    }
+
+    public override void SetDefaults()
+    {
+        Item.DefaultToPlaceableTile(ModContent.TileType<DioriteTile>());
     }
 }

@@ -1,13 +1,12 @@
 ﻿using ITD.Content.Tiles.Furniture.DeepDesert;
 using ITD.Utilities;
 
-namespace ITD.Content.Items.Placeable.Furniture.DeepDesert
+namespace ITD.Content.Items.Placeable.Furniture.DeepDesert;
+
+public class BaldsnapStatue : ModItem
 {
-    public class BaldsnapStatue : ModItem
+    public override void SetDefaults()
     {
-        public override void SetDefaults()
-        {
-            Item.DefaultToFurniture(ModContent.TileType<BaldsnapStatueTile>(), 34, 44);
-        }
+        Item.DefaultToFurniture(ModContent.TileType<BaldsnapStatueTile>(), 34, 44);
     }
 }

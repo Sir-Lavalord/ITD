@@ -1,28 +1,27 @@
-﻿using ITD.Players;
+﻿using ITD.Systems;
 using ITD.Utilities;
 using System.IO;
 
-namespace ITD.Networking.Packets
+namespace ITD.Networking.Packets;
+
+public sealed class MousePositionPacket : ITDPacket
 {
-    public sealed class MousePositionPacket : ITDPacket
+    public MousePositionPacket(Player player)
     {
-        public MousePositionPacket(Player player)
+        var modPlayer = player.GetITDPlayer();
+        Writer.TryWriteSenderPlayer(player);
+        Writer.WriteVector2(modPlayer.MousePosition);
+    }
+    public override void Read(BinaryReader reader, int sender)
+    {
+        if (!reader.TryReadSenderPlayer(sender, out var player) || !player.TryGetModPlayer(out ITDPlayer modPlayer))
         {
-            var modPlayer = player.GetITDPlayer();
-            Writer.TryWriteSenderPlayer(player);
-            Writer.WriteVector2(modPlayer.MousePosition);
+            return;
         }
-        public override void Read(BinaryReader reader, int sender)
+        modPlayer.MousePosition = reader.ReadVector2();
+        if (Main.dedServ)
         {
-            if (!reader.TryReadSenderPlayer(sender, out var player) || !player.TryGetModPlayer(out ITDPlayer modPlayer))
-            {
-                return;
-            }
-            modPlayer.MousePosition = reader.ReadVector2();
-            if (Main.dedServ)
-            {
-                NetSystem.SendPacket(new MousePositionPacket(player), ignoreClient: sender);
-            }
+            NetSystem.SendPacket(new MousePositionPacket(player), ignoreClient: sender);
         }
     }
 }

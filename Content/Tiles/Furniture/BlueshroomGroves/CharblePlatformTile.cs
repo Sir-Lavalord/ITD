@@ -1,13 +1,12 @@
 ﻿using ITD.Utilities;
 
-namespace ITD.Content.Tiles.Furniture.BlueshroomGroves
+namespace ITD.Content.Tiles.Furniture.BlueshroomGroves;
+
+public class CharblePlatformTile : ModTile
 {
-    public class CharblePlatformTile : ModTile
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
-        {
-            this.DefaultToPlatform();
-            DustType = DustID.Marble;
-        }
+        this.DefaultToPlatform();
+        DustType = DustID.Marble;
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using ITD.Utilities.ObserverPatterns;
 
 ///Should note that I've included 2 types of state machine. Use the one that fits the use case. You would be surprised by how often they could be used in places. But each one will have extra overhead.
-namespace ITD.Utilities.StateMachines
+namespace ITD.Utilities
 {
     /// <summary>
     /// This is the common type that most people know. Here we use event dispatchers to allow for function hooking for when the state changes. 
@@ -10,7 +9,7 @@ namespace ITD.Utilities.StateMachines
     /// </summary>
     public class SwitchingStateMachine
     {
-        private List<SwitchingState> StateList = new List<SwitchingState>();
+        private readonly List<SwitchingState> StateList = [];
         public SwitchingState CurrentActiveState { get; private set; }
         public int CurrentActiveStateIndex { get; private set; }
 
@@ -57,8 +56,8 @@ namespace ITD.Utilities.StateMachines
         {
             public SwitchingStateMachine OwningStateMachine { get; private set; }
 
-            public ITDListenerEvent OnStateEnter = new ITDListenerEvent();
-            public ITDListenerEvent OnStateExit = new ITDListenerEvent();
+            public ITDListenerEvent OnStateEnter = new();
+            public ITDListenerEvent OnStateExit = new();
             public void SetOwningStateMachine(SwitchingStateMachine owningStateMachine) => OwningStateMachine = owningStateMachine;
         }
     }
@@ -70,7 +69,7 @@ namespace ITD.Utilities.StateMachines
     /// <typeparam name="T"></typeparam>
     public class LayeredStateMachine<T>
     {
-        private List<LayeredState> StateList = [];
+        private readonly List<LayeredState> StateList = [];
 
         public void AddState(LayeredState state)
         {
@@ -124,7 +123,7 @@ namespace ITD.Utilities.StateMachines
         /// </summary>
         public class SwitchingStateUpdating : SwitchingStateMachine.SwitchingState, IUpdatedFunction
         {
-            public ITDListenerEvent OnStateUpdate = new ITDListenerEvent();
+            public ITDListenerEvent OnStateUpdate = new();
             public void Update()
             {
                 OnStateUpdate.Invoke();

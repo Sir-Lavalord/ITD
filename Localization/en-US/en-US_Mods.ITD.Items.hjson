@@ -1548,8 +1548,8 @@ JarOfEyes: {
 BigBerth: {
 	DisplayName: Big Berth
 	Tooltip:
-	'''
-	Throws a heavy mortar which fires a shell when dropped 
-	Mortar shell always crits airborne target
-	'''
+		'''
+		Throws a heavy mortar which fires a shell when dropped 
+		Mortar shell always crits airborne target
+		'''
 }

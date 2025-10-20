@@ -1,58 +1,57 @@
-﻿using ITD.Content.Items.Weapons.Melee;
-using Terraria.Localization;
-using ITD.Content.Items.Placeable.LayersRework;
+﻿using ITD.Content.Items.Placeable.LayersRework;
+using ITD.Content.Items.Weapons.Melee;
 using ITD.Content.Tiles.Furniture.Stations;
+using Terraria.Localization;
 
-namespace ITD.Systems
+namespace ITD.Systems;
+
+public class RecipeSystem : ModSystem
 {
-    public class RecipeSystem : ModSystem
+    public override void PostAddRecipes()
     {
-        public override void PostAddRecipes()
+        for (int i = 0; i < Recipe.numRecipes; i++)
         {
-            for (int i = 0; i < Recipe.numRecipes; i++)
-            {
-                Recipe recipe = Main.recipe[i];
+            Recipe recipe = Main.recipe[i];
 
-                // spidermeal shimmering. we can't use ItemID.Sets.ShimmerTransformToItem since you can't add a condition to it
-                if (recipe.HasResult(ItemID.Flymeal))
-                {
-                    recipe.AddDecraftCondition(Condition.Hardmode);
-                    recipe.AddCustomShimmerResult(ModContent.ItemType<Spidermeal>());
-                }
+            // spidermeal shimmering. we can't use ItemID.Sets.ShimmerTransformToItem since you can't add a condition to it
+            if (recipe.HasResult(ItemID.Flymeal))
+            {
+                recipe.AddDecraftCondition(Condition.Hardmode);
+                recipe.AddCustomShimmerResult(ModContent.ItemType<Spidermeal>());
             }
         }
+    }
 
-        public override void AddRecipes()
-        {
-            Recipe recipe = Recipe.Create(ModContent.ItemType<Shale>());
-            recipe.AddIngredient(ItemID.StoneBlock);
-            recipe.AddTile(ModContent.TileType<StonepresserTile>());
-            recipe.Register();
+    public override void AddRecipes()
+    {
+        Recipe recipe = Recipe.Create(ModContent.ItemType<Shale>());
+        recipe.AddIngredient(ItemID.StoneBlock);
+        recipe.AddTile(ModContent.TileType<StonepresserTile>());
+        recipe.Register();
 
-            recipe = Recipe.Create(ModContent.ItemType<Depthrock>());
-            recipe.AddIngredient(ModContent.ItemType<Shale>());
-            recipe.AddTile(ModContent.TileType<StonepresserTile>());
-            recipe.Register();
+        recipe = Recipe.Create(ModContent.ItemType<Depthrock>());
+        recipe.AddIngredient(ModContent.ItemType<Shale>());
+        recipe.AddTile(ModContent.TileType<StonepresserTile>());
+        recipe.Register();
 
-            /*      recipe = Recipe.Create(ModContent.ItemType<Blackstone>());
-                  recipe.AddIngredient(ModContent.ItemType<Depthrock>());
-                  recipe.AddTile(ModContent.TileType<StonepresserTile>());
-                  recipe.Register();*/
+        /*      recipe = Recipe.Create(ModContent.ItemType<Blackstone>());
+              recipe.AddIngredient(ModContent.ItemType<Depthrock>());
+              recipe.AddTile(ModContent.TileType<StonepresserTile>());
+              recipe.Register();*/
 
-           /* recipe = Recipe.Create(ItemID.StoneBlock);
-            recipe.AddIngredient(ModContent.ItemType<Blackstone>());
-            recipe.AddTile(ModContent.TileType<StonepresserTile>());
-            recipe.Register();*/
-        }
+        /* recipe = Recipe.Create(ItemID.StoneBlock);
+         recipe.AddIngredient(ModContent.ItemType<Blackstone>());
+         recipe.AddTile(ModContent.TileType<StonepresserTile>());
+         recipe.Register();*/
+    }
 
-        public override void AddRecipeGroups()
-        {
-            RecipeGroup group = new(() => Language.GetTextValue("LegacyMisc.37") + " Iron Ore",
-            [
-                ItemID.IronOre,
-                ItemID.LeadOre
-            ]);
-            RecipeGroup.RegisterGroup("IronOre", group);
-        }
+    public override void AddRecipeGroups()
+    {
+        RecipeGroup group = new(() => Language.GetTextValue("LegacyMisc.37") + " Iron Ore",
+        [
+            ItemID.IronOre,
+            ItemID.LeadOre
+        ]);
+        RecipeGroup.RegisterGroup("IronOre", group);
     }
 }

@@ -1,40 +1,39 @@
 ﻿using ITD.Content.Projectiles.Friendly.Misc;
 
-namespace ITD.Content.Items.Accessories.Expert
+namespace ITD.Content.Items.Accessories.Expert;
+
+public class GalacticJellyBean : ModItem
 {
-    public class GalacticJellyBean : ModItem
+    public override void SetStaticDefaults()
     {
-        public override void SetStaticDefaults()
-        {
-            Item.ResearchUnlockCount = 1;
-        }
-        public override void SetDefaults()
-        {
-            Item.DefaultToAccessory(20);
-            Item.expert = true;
-        }
-        public override void UpdateAccessory(Player player, bool hideVisual)
-        {
-            player.GetModPlayer<CosmicHandMinionPlayer>().Active = true;
-        }
+        Item.ResearchUnlockCount = 1;
     }
-    public class CosmicHandMinionPlayer : ModPlayer
+    public override void SetDefaults()
     {
-        public bool Active;
-        public override void ResetEffects()
+        Item.DefaultToAccessory(20);
+        Item.expert = true;
+    }
+    public override void UpdateAccessory(Player player, bool hideVisual)
+    {
+        player.GetModPlayer<CosmicHandMinionPlayer>().Active = true;
+    }
+}
+public class CosmicHandMinionPlayer : ModPlayer
+{
+    public bool Active;
+    public override void ResetEffects()
+    {
+        Active = false;
+    }
+    public override void PostUpdateEquips()
+    {
+        if (Active)
         {
-            Active = false;
-        }
-        public override void PostUpdateEquips()
-        {
-            if (Active)
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<GalacticJellyBeanHand>()] <= 0)
             {
-                if (Player.ownedProjectileCounts[ModContent.ProjectileType<GalacticJellyBeanHand>()] <= 0)
-                {
-                    int projID = Projectile.NewProjectile(Player.GetSource_FromThis(),Player.Center,Vector2.Zero,
-                        ModContent.ProjectileType<GalacticJellyBeanHand>(),(int)(Player.GetDamage(DamageClass.Generic).ApplyTo(50)),10f,Player.whoAmI);//knock yo clock off
-                    Main.projectile[projID].scale = 1f;
-                }
+                int projID = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero,
+                    ModContent.ProjectileType<GalacticJellyBeanHand>(), (int)Player.GetDamage(DamageClass.Generic).ApplyTo(50), 10f, Player.whoAmI);//knock yo clock off
+                Main.projectile[projID].scale = 1f;
             }
         }
     }

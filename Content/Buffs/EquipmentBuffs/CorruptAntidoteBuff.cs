@@ -1,11 +1,10 @@
-﻿namespace ITD.Content.Buffs.EquipmentBuffs
+﻿namespace ITD.Content.Buffs.EquipmentBuffs;
+
+public class CorruptAntidoteBuff : ModBuff
 {
-    public class CorruptAntidoteBuff : ModBuff
+    public override void Update(Player player, ref int buffIndex)
     {
-        public override void Update(Player player, ref int buffIndex)
-        {
-            player.GetDamage(DamageClass.Magic) *= 1.25f;
-            player.manaCost *= 0.85f;
-        }
+        player.GetDamage(DamageClass.Magic) *= 1.25f;
+        player.manaCost *= 0.85f;
     }
 }

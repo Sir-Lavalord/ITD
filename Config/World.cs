@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
-namespace ITD.Config
+namespace ITD.Config;
+
+public partial class ITDServerConfig : ModConfig
 {
-    public partial class ITDServerConfig : ModConfig
-    {
-        public override ConfigScope Mode => ConfigScope.ServerSide;
+    public override ConfigScope Mode => ConfigScope.ServerSide;
 
-        [DefaultValue(true)]
-        public bool ResizeDesertForDeepDesert;
+    [DefaultValue(true)]
+    public bool ResizeDesertForDeepDesert;
 
-        [DefaultValue(false)]
-        public bool AutoMergeChestsIntoDoubleChest;
-    }
+    [DefaultValue(false)]
+    public bool AutoMergeChestsIntoDoubleChest;
 }

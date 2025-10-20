@@ -1,21 +1,16 @@
-﻿using ITD.Content.Buffs.Debuffs;
-using ITD.Utilities.Placeholders;
+﻿using ITD.Utilities.Placeholders;
 
-namespace ITD.Content.Buffs.Debuffs
+namespace ITD.Content.Buffs.Debuffs;
+
+public class RiteOfImmolationTagDebuff : ModBuff
 {
-    public class RiteOfImmolationTagDebuff : ModBuff
+    public const int TagDamage = 4;
+    public override string Texture => Placeholder.PHDebuff;
+    public override void SetStaticDefaults()
     {
-        public override string Texture => Placeholder.PHDebuff;
-
-        public override void SetStaticDefaults()
-        {
-            BuffID.Sets.IsATagBuff[Type] = true;
-        }
-        public static int TagDamage = 4;
-
+        BuffID.Sets.IsATagBuff[Type] = true;
     }
 }
-
 public class RiteOfImmolationTaggedNPC : GlobalNPC
 {
     public override bool InstancePerEntity => true;

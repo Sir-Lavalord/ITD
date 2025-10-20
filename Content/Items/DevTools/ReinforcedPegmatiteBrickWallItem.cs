@@ -1,12 +1,11 @@
 ﻿using ITD.Content.Walls.DeepDesert;
 
-namespace ITD.Content.Items.DevTools
+namespace ITD.Content.Items.DevTools;
+
+public class ReinforcedPegmatiteBrickWallItem : ModItem
 {
-    public class ReinforcedPegmatiteBrickWallItem : ModItem
+    public override void SetDefaults()
     {
-        public override void SetDefaults()
-        {
-            Item.DefaultToPlaceableWall(ModContent.WallType<ReinforcedPegmatiteBrickWallUnsafe>());
-        }
+        Item.DefaultToPlaceableWall(ModContent.WallType<ReinforcedPegmatiteBrickWallUnsafe>());
     }
 }

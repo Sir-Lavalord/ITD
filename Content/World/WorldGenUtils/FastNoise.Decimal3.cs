@@ -3,20 +3,12 @@
 
 using DECIMAL = System.Single;
 
-namespace ITD.Content.World.WorldGenUtils
-{
-	public partial class FastNoise
-	{
-		private struct Decimal3
-		{
-			public readonly DECIMAL x,y,z;
+namespace ITD.Content.World.WorldGenUtils;
 
-			public Decimal3(DECIMAL x,DECIMAL y,DECIMAL z)
-			{
-				this.x = x;
-				this.y = y;
-				this.z = z;
-			}
-		}
-	}
+public partial class FastNoise
+{
+    private readonly struct Decimal3(DECIMAL x, DECIMAL y, DECIMAL z)
+    {
+        public readonly DECIMAL x = x, y = y, z = z;
+    }
 }
