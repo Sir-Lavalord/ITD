@@ -262,7 +262,7 @@ namespace ITD.Content.NPCs.Bosses
                     if (AttackCount > 0)//doesn't loop
                     {
                         AI_State = MovementState.FollowingRegular;
-                        AttackID = 5;
+                        AttackID = 1;
                         ResetStats();
                         distanceAbove = 250;
                     }
@@ -387,7 +387,7 @@ namespace ITD.Content.NPCs.Bosses
                         }
                     }
                     break;
-                case 6://spits meteor, to player, dash to meteor
+                case 5://spits meteor, to player, dash to meteor
                     AITimer1++;
 
                     if (AITimer2++ == 90)
@@ -401,7 +401,7 @@ namespace ITD.Content.NPCs.Bosses
                         {
 
                             double rad = Math.PI / (amount / 2) * i;
-                            int damage = (int)(NPC.damage * 0.28f);
+                            int damage = (int)(NPC.damage * 0.5f);
                             Vector2 vector = (Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * dist).RotatedBy(randrot);
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
@@ -447,7 +447,7 @@ namespace ITD.Content.NPCs.Bosses
                             }
                         }
                     }
-                    if (AttackCount > 4)//loop twice
+                    if (AttackCount > 4)//loop
                     {
                         AI_State = MovementState.FollowingRegular;
                         AttackID++;
@@ -456,41 +456,16 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
 
-                case 5:
+                case 6:
 
                     distanceAbove = 350;
-                    AITimer1++;
-                    if (AITimer1 >= 500)
-                    {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            float side = Main.rand.Next(0, 4);
-                            Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center, vel,
-                             ModContent.ProjectileType<CosmicSwarmTelegraph>(), NPC.damage, 0f, -1, player.whoAmI, 0, side);
 
-                            AttackCount++;
-                            AITimer1 = 0;
-                        }
-                    }
-                    if (AttackCount > 3)//if hand still exists, keep attacking
-                    {
-                        HandControl(1, 7, 3, true);
-                        HandControl(-1, 7, 3, true);
-                        AI_State = MovementState.FollowingRegular;
-                        AttackID = Main.rand.Next(1, 5);
-                        AITimer1 = 0;
-                        AITimer2 = 0;
-                        AttackCount = 0;
-                        DashTimer = 0;
-                        distanceAbove = 250;
-                    }
                     AITimer1++;
-                    if (AITimer1 >= 60)
+                    if (AITimer1 >= 90)
                     {
                         distanceAbove = 400;
                     }
-                    if (AITimer1++ >= 120)
+                    if (AITimer1 >= 120)
                     {
                         AI_State = MovementState.Explode;
                         for (int j = -1; j <= 1; j++)
@@ -506,6 +481,35 @@ namespace ITD.Content.NPCs.Bosses
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(-25 * j, -60), vel, ModContent.ProjectileType<CosmicGlowStar2>(), (NPC.defDamage), 0f, Main.myPlayer, ai0, ai1, NPC.whoAmI);
                             }
                         }
+                    }
+                    if (AITimer1 == 240)
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            float side = Main.rand.Next(0, 4);
+                            Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center, vel,
+                             ModContent.ProjectileType<CosmicSwarmTelegraph>(), NPC.damage, 0f, -1, player.whoAmI, 0, side);
+                        }
+                    }
+                    if (AITimer1 >= 360)
+                    {
+
+                        AttackCount++;
+                        AITimer1 = 0;
+                        AI_State = MovementState.FollowingRegular;
+                    }
+                    if (AttackCount > 3)
+                    {
+                        HandControl(1, 7, 3, true);
+                        HandControl(-1, 7, 3, true);
+                        AI_State = MovementState.FollowingRegular;
+                        AttackID = Main.rand.Next(1, 5);
+                        AITimer1 = 0;
+                        AITimer2 = 0;
+                        AttackCount = 0;
+                        DashTimer = 0;
+                        distanceAbove = 250;
                     }
                     break;
 
@@ -819,7 +823,6 @@ namespace ITD.Content.NPCs.Bosses
                 }
             }
             NPC.netUpdate = true;
-
 
             if (DashTimer > time1 && DashTimer < time2)
             {

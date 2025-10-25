@@ -140,7 +140,7 @@ public class BigBerthProj : ModProjectile
                 }
             case AIState.LaunchingForward:
                 {
-                    Projectile.Resize(32, 32);
+                    Projectile.Resize(48, 48);
                     bool shouldSwitchToRetracting = StateTimer++ >= launchTimeLimit;
                     shouldSwitchToRetracting |= Projectile.Distance(mountedCenter) >= maxLaunchLength;
                     if (player.controlUseItem) // If the player clicks, transition to the Dropping state
@@ -216,25 +216,22 @@ public class BigBerthProj : ModProjectile
                     player.ChangeDir((player.Center.X < Projectile.Center.X).ToDirectionInt());
                     break;
                 }
-            case AIState.Ricochet:
-                if (StateTimer++ >= ricochetTimeLimit)
-                {
-                    CurrentAIState = AIState.Dropping;
-                    StateTimer = 0f;
-                    Projectile.netUpdate = true;
-                }
-                else
-                {
-                    Projectile.localNPCHitCooldown = movingHitCooldown;
-                    Projectile.velocity.Y += 0.6f;
-                    Projectile.velocity.X *= 0.95f;
-                    player.ChangeDir((player.Center.X < Projectile.Center.X).ToDirectionInt());
-                }
-                break;
             case AIState.Dropping:
                 Projectile.Resize(48, 48);
-
-                if (!player.controlUseItem || Projectile.Distance(mountedCenter) > maxDroppedRange)
+                if (Dropped)
+                {
+                    if (StateTimer++ == 15)
+                    {
+                        Vector2 vel = Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 18;
+                        Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(40, -40).RotatedBy(Projectile.rotation),
+        vel, ModContent.ProjectileType<BigBerthShell>(), Projectile.damage, 3, -1);
+                    }
+                }
+                if (CollisionCounter++ % 10 == 0 && !Dropped)
+                {
+                    impactIntensity++;
+                }
+                if (!player.controlUseItem && Dropped|| Projectile.Distance(mountedCenter) > maxDroppedRange)
                 {
                     CurrentAIState = AIState.ForcedRetracting;
                     StateTimer = 0f;
@@ -257,15 +254,18 @@ public class BigBerthProj : ModProjectile
 
         // This rotation code is unique to this flail, since the sprite isn't rotationally symmetric and has tip.
         bool freeRotation = CurrentAIState == AIState.Ricochet || CurrentAIState == AIState.Dropping;
-        if (freeRotation)
+        if (!Dropped)
         {
-            Vector2 vectorTowardsPlayer = Projectile.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero);
-            Projectile.rotation = vectorTowardsPlayer.ToRotation() + MathHelper.PiOver4;
-        }
-        else
-        {
-            Vector2 vectorTowardsPlayer = Projectile.DirectionTo(mountedCenter).SafeNormalize(Vector2.Zero);
-            Projectile.rotation = vectorTowardsPlayer.ToRotation() + MathHelper.PiOver4;
+            if (freeRotation)
+            {
+                Vector2 vectorTowardsPlayer = Projectile.DirectionTo(Main.MouseWorld).SafeNormalize(Vector2.Zero);
+                Projectile.rotation = vectorTowardsPlayer.ToRotation() + MathHelper.PiOver4;
+            }
+            else
+            {
+                Vector2 vectorTowardsPlayer = Projectile.DirectionTo(mountedCenter).SafeNormalize(Vector2.Zero);
+                Projectile.rotation = vectorTowardsPlayer.ToRotation() + MathHelper.PiOver4;
+            }
         }
         Projectile.timeLeft = 2; // Makes sure the flail doesn't die (good when the flail is resting on the ground)
         player.heldProj = Projectile.whoAmI;
@@ -278,62 +278,48 @@ public class BigBerthProj : ModProjectile
         player.itemRotation = MathHelper.WrapAngle(player.itemRotation);
 
     }
+    int impactIntensity = 0;
 
     public override bool OnTileCollide(Vector2 oldVelocity)
     {
         int defaultLocalNPCHitCooldown = 10;
-        int impactIntensity = 0;
         Vector2 velocity = Projectile.velocity;
         float bounceFactor = 0.2f;
         if (CurrentAIState == AIState.LaunchingForward || CurrentAIState == AIState.Ricochet)
         {
             bounceFactor = 0.4f;
         }
-
         if (CurrentAIState == AIState.Dropping)
         {
             if (!Dropped)
             {
                 SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
-
-                Vector2 center = Projectile.Center;
-                Vector2 vel = Vector2.Normalize(Main.MouseWorld - center) * 24;
-
-                Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(30, -30).RotatedBy(Projectile.rotation),
-                    vel, ProjectileID.MiniNukeRocketI, Projectile.damage, 3, -1);
+                StateTimer = 0f;
+                float width = 250 * impactIntensity;
+                float height = 60;
+                Projectile explode = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Bottom - new Vector2(width/3f,0),
+                    Vector2.Zero, ModContent.ProjectileType<BigBerthExplosion>(), Projectile.damage,0);
+                explode.width = (int)width;
+                explode.height = (int)height;
                 Projectile.ai[2]++;
-                for (int j = 0; j < 40; j++)
+                for (int j = 0; j < 20 * impactIntensity; j++)
                 {
                     Dust dust = Dust.NewDustDirect(Projectile.Bottom + new Vector2(-30, 0), Projectile.width * 2, 10, DustID.Stone);
                     dust.noGravity = true;
                     dust.scale = 1.5f * Main.rand.NextFloat(1.25f, 2f);
-                    dust.velocity.X = 10 * (j % 2 == 0 ? 1 : -1) * Main.rand.NextFloat(0.25f, 2f);
+                    dust.velocity.X = 4 * impactIntensity * (j % 2 == 0 ? 1 : -1) * Main.rand.NextFloat(0.25f, 2f);
+                }
+                for (int i = 0; i < 5 * impactIntensity; i++) 
+                {
+                    Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Stone, 0, -Projectile.velocity.Y/4, 60, default, Main.rand.NextFloat(1f, 1.7f));
+                    dust.noGravity = false;
+                    dust.velocity *= impactIntensity * Main.rand.NextFloat(0.75f, 1.25f);
+                    dust.velocity = dust.velocity.RotatedByRandom(MathHelper.ToRadians(20));
+                    dust.scale = 1.5f * Main.rand.NextFloat(0.5f, 1.5f);
+
                 }
             }
             bounceFactor = 0f;
-
-        }
-
-        if (oldVelocity.X != Projectile.velocity.X)
-        {
-            if (Math.Abs(oldVelocity.X) > 4f)
-            {
-                impactIntensity = 1;
-            }
-
-            Projectile.velocity.X = (0f - oldVelocity.X) * bounceFactor;
-            CollisionCounter += 1f;
-        }
-
-        if (oldVelocity.Y != Projectile.velocity.Y)
-        {
-            if (Math.Abs(oldVelocity.Y) > 4f)
-            {
-                impactIntensity = 1;
-            }
-
-            Projectile.velocity.Y = (0f - oldVelocity.Y) * bounceFactor;
-            CollisionCounter += 1f;
         }
 
         // If in the Launched state, spawn sparks
@@ -350,7 +336,7 @@ public class BigBerthProj : ModProjectile
             Projectile.position -= velocity;
         }
 
-        // Here the tiles spawn dust indicating they've been hit
+/*        // Here the tiles spawn dust indicating they've been hit
         if (impactIntensity > 0)
         {
             Projectile.netUpdate = true;
@@ -361,7 +347,7 @@ public class BigBerthProj : ModProjectile
 
             SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
         }
-
+*/
         // Force retraction if stuck on tiles while retracting
         if (CurrentAIState != AIState.UnusedState && CurrentAIState != AIState.Spinning && CurrentAIState != AIState.Ricochet && CurrentAIState != AIState.Dropping && CollisionCounter >= 10f)
         {
@@ -431,7 +417,14 @@ public class BigBerthProj : ModProjectile
         }
     }
 
-    // PreDraw is used to draw a chain and trail before the projectile is drawn normally.
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+    {
+        //Almost No tile collide
+        width = 30;
+        height = 30;
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
     public override bool PreDraw(ref Color lightColor)
     {
         Texture2D texture = gun.Value;
@@ -494,7 +487,7 @@ public class BigBerthProj : ModProjectile
         }
 
         // Add a motion trail when moving forward, like most flails do (don't add trail if already hit a tile)
-        if (CurrentAIState == AIState.LaunchingForward)
+        if (CurrentAIState == AIState.Dropping)
         {
             Texture2D projectileTexture = TextureAssets.Projectile[Type].Value;
             Vector2 drawOrigin = new(projectileTexture.Width * 0.5f, Projectile.height * 0.5f);
