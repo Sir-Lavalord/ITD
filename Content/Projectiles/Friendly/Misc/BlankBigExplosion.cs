@@ -16,6 +16,10 @@ public abstract class BigBlankExplosion : ModProjectile
     public override string Texture => ITD.BlankTexture;
     public abstract Vector2 ScaleRatio { get; }
 
+    public override void SetStaticDefaults()
+    {
+        ProjectileID.Sets.Explosive[Projectile.type] = true;
+    }
     public override void AI()
     {
         CurrentRadius = MathHelper.Lerp(CurrentRadius, MaxRadius, 0.25f);

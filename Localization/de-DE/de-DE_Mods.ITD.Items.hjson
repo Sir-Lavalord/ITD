@@ -1550,3 +1550,8 @@ BigBerth: {
 		Mortar shell always crits airborne target
 		''' */
 }
+
+ElectrumPickaxe: {
+	// DisplayName: Electrum Pickaxe
+	// Tooltip: ""
+}

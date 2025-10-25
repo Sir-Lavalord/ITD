@@ -17,7 +17,7 @@ public class BigBerth : ModItem
         Item.knockBack = 2f;
         Item.width = 30;
         Item.height = 10;
-        Item.damage = 20;
+        Item.damage = 32;
         Item.crit = 4;
         Item.scale = 1f;
         Item.noUseGraphic = true;

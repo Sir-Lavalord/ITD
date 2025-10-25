@@ -1,6 +1,15 @@
-﻿namespace ITD.Content.Projectiles.Friendly.Misc;
+﻿using ITD.Content.NPCs;
+using ITD.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Terraria;
 
-public class BlankExplosion : ModProjectile
+namespace ITD.Content.Projectiles.Friendly.Melee;
+
+public class BigBerthExplosion : ModProjectile
 {
     public override string Texture => ITD.BlankTexture;
 
@@ -10,15 +19,14 @@ public class BlankExplosion : ModProjectile
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
     }
-    //A default for all explosion that isn't the og proj
-    //Multiply, divide to get the intended explosion
+    //should have made explosion a partial class
     public override void SetDefaults()
     {
         Projectile.width = 100;
         Projectile.height = 100;
         Projectile.aiStyle = 0;
         Projectile.friendly = true;
-        Projectile.DamageType = DamageClass.Generic; //fargo's soul explosion note here, aka funny words
+        Projectile.DamageType = DamageClass.Melee;
         Projectile.penetrate = -1;
         Projectile.timeLeft = 3;
         Projectile.tileCollide = false;
@@ -34,6 +42,11 @@ public class BlankExplosion : ModProjectile
     }
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
     {
+        if (target.Gimmickable())
+        {
+            float kbIntensity = 1 - ((Vector2.Distance(Projectile.Center, target.Center))/(Projectile.width/2));
+            target.velocity.Y = -16f * kbIntensity;
+        }
         modifiers.HitDirectionOverride = (Projectile.Center.X < target.Center.X).ToDirectionInt();
     }
 }
