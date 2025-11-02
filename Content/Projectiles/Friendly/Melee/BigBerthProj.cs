@@ -222,9 +222,9 @@ public class BigBerthProj : ModProjectile
                 {
                     if (StateTimer++ == 15)
                     {
-                        Vector2 vel = Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 18;
+                        Vector2 vel = Vector2.Normalize(Main.MouseWorld - Projectile.Center) * 24;
                         Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(40, -40).RotatedBy(Projectile.rotation),
-        vel, ModContent.ProjectileType<BigBerthShell>(), Projectile.damage, 3, -1);
+                            vel, ModContent.ProjectileType<BigBerthShell>(), Projectile.damage, 3, -1);
                     }
                 }
                 if (CollisionCounter++ % 10 == 0 && !Dropped)

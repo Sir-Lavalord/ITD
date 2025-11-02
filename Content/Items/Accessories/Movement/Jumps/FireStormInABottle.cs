@@ -51,6 +51,7 @@ public class FirestormJump : ExtraJump
         // Reset the jump counter
         player.GetModPlayer<FirestormPlayer>().pillarCount = 0;
         player.GetModPlayer<FirestormPlayer>().fireJumped = false;
+        player.GetModPlayer<FirestormPlayer>().failAttempt = 0;
 
     }
 
@@ -100,13 +101,6 @@ public class FirestormPlayer : ModPlayer
     {
         if (fireJumped && hasFireJump)
         {
-            if (Player.velocity.Y == 0 || (pillarCount > 0 && pillarCount < pillarCountMax))
-            {
-                while (pillarCount < pillarCountMax)
-                {
-                    SpawnFirestorm();
-                }
-            }
             for (int i = 0; i < 2; i++)
             {
                 int direction = i == 0 ? 1 : -1;
@@ -118,6 +112,13 @@ public class FirestormPlayer : ModPlayer
                 dust.noGravity = true;
                 dust.velocity = Player.velocity / 2 + new Vector2(0, -Player.gravDir * 6f).RotatedByRandom(MathHelper.ToRadians(10));
             }
+            if (Player.velocity.Y == 0 || (pillarCount > 0 && pillarCount < pillarCountMax))
+            {
+                while (pillarCount < pillarCountMax)
+                {
+                    SpawnFirestorm();
+                }
+            }
         }
     }
 
@@ -126,25 +127,32 @@ public class FirestormPlayer : ModPlayer
         RaycastData data = Helpers.QuickRaycast(position, Vector2.UnitY, (point) =>
         {
             Tile t = Main.tile[point];
-            return !t.HasTile && !Main.tileSolidTop[t.TileType] && t.IsActuated;
+            bool water = (t.LiquidAmount > 0);
+            return !t.HasTile && !Main.tileSolidTop[t.TileType] && t.IsActuated && !water;
         }, 
-        300);
+       300,visualize: false);
         return data.End + new Vector2(0, -30);
     }
+    public int failAttempt = 0;
+    float failBoost = 1;// to increase the chance of finding ground if it keeps failing
     private void SpawnFirestorm()
     {
         float radius = 150f;
-
 
         Vector2 position = Player.Center + new Vector2(
             Main.rand.NextFloat(-radius, radius),
             0
         );
-        if (Math.Abs(position.Y - FindGroundBelow(ref position).Y) >= 50)
+
+        if (Math.Abs(position.Y - FindGroundBelow(ref position).Y) >= 50 + 10 * failAttempt)
         {
+            failAttempt++;
+            if (failAttempt >= 20)
+            {
+                pillarCount = pillarCountMax;
+            }
             return;
         }
-
         Projectile.NewProjectile(
             Player.GetSource_FromThis(),
             FindGroundBelow(ref position),

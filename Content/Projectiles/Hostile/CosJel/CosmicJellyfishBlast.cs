@@ -2,16 +2,17 @@
 using ITD.Utilities;
 using ITD.Utilities.EntityAnim;
 using System;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel;
 
 public class CosmicJellyfishBlast : BigBlankExplosion
 {
-    public override int Lifetime => 250;
+    public override int Lifetime => 150;
     public override Vector2 ScaleRatio => new(1.5f, 1f);
 
-    public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.Gray * 1.6f, Color.Purple, MathHelper.Clamp(pulseCompletionRatio * 2.2f, 0f, 1f));
+    public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.White * 1.6f, Color.Purple, MathHelper.Clamp(pulseCompletionRatio * 2.2f, 0f, 1f));
 
     public override void SetStaticDefaults()
     {
@@ -34,6 +35,8 @@ public class CosmicJellyfishBlast : BigBlankExplosion
     {
         if (Main.netMode != NetmodeID.MultiplayerClient)
         {
+            SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
+
         }
     }
     public override void AI()
@@ -46,22 +49,6 @@ public class CosmicJellyfishBlast : BigBlankExplosion
     }
     public override void OnKill(int timeLeft)
     {
-        int projectileAmount = Main.rand.Next(40, 46);
-        float radius = 10f;
-        float sector = MathHelper.TwoPi;
-        float sectorOfSector = sector / projectileAmount;
-        float startAngle = 0;
-        if (Main.netMode != NetmodeID.MultiplayerClient)
-        {
-            for (int i = 0; i < projectileAmount; i++)
-            {
-                float angle = startAngle + sectorOfSector * i;
-                Vector2 projectileVelo = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * radius;
-                float rotation = 0 + (float)Math.PI * 2 / projectileAmount * i;
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + MaxRadius * Vector2.UnitX.RotatedBy(rotation), projectileVelo,
-                    ModContent.ProjectileType<CosmicVoidShard>(), 20, 0f, Main.myPlayer);
-            }
-        }
         base.OnKill(timeLeft);
     }
     public override void PostAI() => Lighting.AddLight(Projectile.Center, 0.2f, 0.1f, 0f);
