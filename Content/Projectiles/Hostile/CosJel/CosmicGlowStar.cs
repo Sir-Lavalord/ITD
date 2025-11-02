@@ -53,7 +53,8 @@ public class CosmicGlowStar : ModProjectile
         {
             if (Projectile.localAI[0] != 0)
             {
-                Projectile.velocity = Vector2.Normalize(player.Center - Projectile.Center) * 24;
+                Vector2 targetPos = player.Center + player.velocity * 5;
+                Projectile.velocity = Vector2.Normalize(targetPos - Projectile.Center) * 24;
             }
             else Projectile.velocity = Vector2.Normalize(player.Center - Projectile.Center) * 18;
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;

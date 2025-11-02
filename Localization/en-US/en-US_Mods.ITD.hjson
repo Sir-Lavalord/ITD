@@ -257,6 +257,7 @@ Projectiles: {
 	CosmicSwarmTelegraph.DisplayName: Cosmic Swarm Telegraph
 	BigBerthExplosion.DisplayName: Big Berth Explosion
 	BigBerthShell.DisplayName: Big Berth Shell
+	CosmicSwordStar.DisplayName: Cosmic Sword Star
 }
 
 NPCs: {

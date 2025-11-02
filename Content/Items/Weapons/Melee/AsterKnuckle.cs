@@ -54,7 +54,7 @@ public class AsterKnuckle : ModItem
         modPlayer.BetterScreenshake(10, 5, 5, true);
         Projectile Blast = Projectile.NewProjectileDirect(player.GetSource_FromThis(), Item.Center, Vector2.Zero,
 ModContent.ProjectileType<AsterBlasterBlast>(), Item.damage, Item.knockBack, player.whoAmI);
-        Blast.ai[1] = 100f;
+        Blast.ai[1] = 200f;
         Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
         Blast.netUpdate = true;
         Vector2 Shootpos = -Vector2.Normalize(Main.MouseWorld - player.MountedCenter) * Main.rand.NextFloat(12, 16);

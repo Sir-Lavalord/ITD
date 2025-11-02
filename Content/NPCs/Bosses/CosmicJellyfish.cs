@@ -16,6 +16,7 @@ using ITD.Systems.DataStructures;
 using ITD.Systems.Extensions;
 using ITD.Utilities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
@@ -122,7 +123,8 @@ namespace ITD.Content.NPCs.Bosses
             Dashing,//is currently dashing
             Explode,//stand still
             Slamdown,//slam attack, is currently dropping down
-            RandomMove// Sort of lock in but move randomly away from the player
+            RandomMove,// Sort of lock in but move randomly away from the player
+            Teleport//so cheap god damn
         }
         private MovementState AI_State = MovementState.FollowingRegular;// starts in normal follow mode
 
@@ -201,8 +203,6 @@ namespace ITD.Content.NPCs.Bosses
         private float[] dashOldRotations = new float[40];
         public override void AI()
         {
-            /*            Main.NewText((AI_State,AITimer1,AITimer2));*/
-
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
                 NPC.TargetClosest();
@@ -243,16 +243,83 @@ namespace ITD.Content.NPCs.Bosses
                     break;
 
                 case -1://transition for phase 2
-                    BlackholeDusting(1);
-                    NPC.dontTakeDamage = true;
-                    if (AITimer1++ >= 300)
+                    int hitTime = 4;
+
+                    if (AI_State == MovementState.Teleport)
                     {
-                        AI_State = MovementState.FollowingRegular;
-                        AttackID = Main.rand.Next(1, 4);//randomized, but not reveal new attack now
-                        AITimer1 = 0;
-                        NPC.dontTakeDamage = false;
+                        NPC.dontTakeDamage = true;
+                    }
+                    else
+                    {
+                        if (goodtransition < 5)
+                        {
+                            if (AITimer2 < hitTime)
+                            {
+                                if (AITimer1++ >= 60)
+                                {
+                                    AITimer2++;
+                                    AITimer1 = 0;
+                                    int count = 6 + (int)AITimer2 * 2;
+                                    float dist = 300 + 300 * AITimer2;
+                                    float baseRot = 0 + AITimer2 * MathHelper.ToRadians(15);
+                                    Vector2 eyePos = NPC.Center + new Vector2(0, -60);
+                                    SoundEngine.PlaySound(SoundID.Item28, eyePos);
+                                    for (int i = 0; i < count; i++)
+                                    {
+                                        float rot = baseRot + MathF.Tau * ((float)i / count);
+                                        Vector2 vel = -rot.ToRotationVector2() * 14;
+                                        Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot), Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), (NPC.damage), 1f, Main.myPlayer, NPC.whoAmI, i >= (count - 1) ? 1 : 0);
+                                        sword.rotation = vel.ToRotation();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (AITimer1++ >= 180)
+                                {
+                                    goodtransition = 5;
+                                    AITimer2 = 0;
+                                    AITimer1 = 0;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (AITimer2 < hitTime)
+                            {
+                                if (AITimer1++ >= 60)
+                                {
+                                    AITimer2++;
+                                    AITimer1 = 0;
+                                    int count = 10;
+                                    float dist = 200 - 30 * AITimer2;
+                                    float baseRot = 0 + AITimer2 * MathHelper.ToRadians(15);
+                                    Vector2 eyePos = NPC.Center + new Vector2(0, -60);
+                                    SoundEngine.PlaySound(SoundID.Item28, eyePos);
+                                    for (int i = 0; i < count; i++)
+                                    {
+                                        float rot = baseRot + MathF.Tau * ((float)i / count);
+                                        Vector2 vel = rot.ToRotationVector2() * 14;
+                                        Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot),
+                                            Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), (NPC.damage), 1f, Main.myPlayer, NPC.whoAmI, 0, 1);
+                                        sword.rotation = vel.ToRotation();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (AITimer1++ >= 180)
+                                {
+                                    AI_State = MovementState.FollowingRegular;
+                                    AttackID = Main.rand.Next(1, 4);//randomized, but not reveal new attack now
+                                    AITimer1 = 0;
+                                    NPC.dontTakeDamage = false;
+                                }
+                            }
+                        }
                     }
                     break;
+
                 case 0://Slam down on start
                     distanceAbove = 700;//goes high above player
                     if (AITimer1++ == 120)
@@ -262,7 +329,7 @@ namespace ITD.Content.NPCs.Bosses
                     if (AttackCount > 0)//doesn't loop
                     {
                         AI_State = MovementState.FollowingRegular;
-                        AttackID = 1;
+                        AttackID = 4;
                         ResetStats();
                         distanceAbove = 250;
                     }
@@ -393,16 +460,14 @@ namespace ITD.Content.NPCs.Bosses
                     if (AITimer2++ == 90)
                     {
                         AI_State = MovementState.Explode;
-
-                        int amount = 6;
+                        float baseRotation = Main.rand.NextFloat(MathF.Tau);
+                        int amount = 5;
                         float dist = 1000;
-                        float randrot = Main.rand.NextFloat(0, MathHelper.PiOver4);
                         for (int i = 0; i < amount; i++)
                         {
-
-                            double rad = Math.PI / (amount / 2) * i;
+                            float rot = baseRotation + MathF.Tau * ((float)i / amount);
                             int damage = (int)(NPC.damage * 0.5f);
-                            Vector2 vector = (Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * dist).RotatedBy(randrot);
+                            Vector2 vector = (Vector2.Normalize(Vector2.UnitY.RotatedBy(rot)) * dist);
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicStarlitMeteorite>(), 60, 0f, Main.myPlayer, NPC.whoAmI, vector.X, vector.Y);
@@ -411,7 +476,7 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     if (AITimer1 >= 240)
                     {
-                        MeteorTarget ??= FindMeteorite(10000);
+                        MeteorTarget ??= FindMeteorite(20000);
 
                         if (MeteorTarget == null)
                             return;
@@ -428,7 +493,7 @@ namespace ITD.Content.NPCs.Bosses
 
                     if (AI_State == MovementState.Dashing)
                     {
-                        MeteorTarget ??= FindMeteorite(10000);
+                        MeteorTarget ??= FindMeteorite(20000);
 
                         for (int i = 0; i < Main.maxProjectiles; i++)
                         {
@@ -573,7 +638,7 @@ namespace ITD.Content.NPCs.Bosses
                                     ? Main.rand.NextFloat((float)Math.PI * 2) : player.velocity.ToRotation();
                                 float rotation = offset + (float)Math.PI * 2 / Main.rand.Next(10);
                                 int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + saferange * Vector2.UnitX.RotatedBy(rotation), Vector2.Zero,
-                                    ModContent.ProjectileType<TouhouBullet>(), 30, 0f, -1, NPC.whoAmI, 2);
+                                    ModContent.ProjectileType<CosmicSwordStar>(), 30, 0f, -1, NPC.whoAmI, 2);
                                 ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
                                     new ParticleOrchestraSettings { PositionInWorld = Main.projectile[proj].Center }, Main.projectile[proj].owner);
                                 AITimer1 = 0;
@@ -677,7 +742,7 @@ namespace ITD.Content.NPCs.Bosses
                         case 5:
                             if (AITimer1 <= 10)
                             {
-                                MeteorTarget ??= FindMeteorite(10000);
+                                MeteorTarget ??= FindMeteorite(20000);
                                 if (MeteorTarget == null)
                                 {
                                     AttackCount++;
@@ -694,7 +759,7 @@ namespace ITD.Content.NPCs.Bosses
                             else
                             {
                                 if (expertMode || masterMode)
-                                    Dash(dashPos, 1, 25, 30, 40, 2);
+                                    Dash(dashPos, 1, 25, 35, 45, 2);
                                 else Dash(dashPos, 1, 25, 40, 60, 2);
 
                             }
@@ -765,10 +830,36 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     NPC.rotation = 0;
                     break;
+                case MovementState.Teleport:// flash whole body, then teleport on top of player, no contact damage
 
+                    if (NPC.HasValidTarget)
+                    {
+                        Teleport(Main.player[NPC.target].Center + new Vector2(0, -400), 60, 120, (int)AttackID);
+                    }
+
+                    NPC.velocity *= 0.95f;
+                    rotation = rotationFactor * maxRotation;
+                    NPC.rotation = rotation;
+                    break;
             }
         }
-
+        public void Teleport(Vector2 telePos, int time1, int time2, int attackID)
+        {
+            if (AITimer1++ == time1)
+            {
+                NPC.Center = telePos;
+            }
+            else if (AITimer1 >= time2)
+            {
+                AITimer1 = 0;
+                switch (attackID)
+                {
+                    case -1:
+                        AI_State = MovementState.Explode;
+                        break;
+                }
+            }
+        }
         //pos: set dash to where
         //time1: when to start dashing, start gaining velocity
         //time2: stop gaining velocity
@@ -900,7 +991,7 @@ namespace ITD.Content.NPCs.Bosses
                 HandControl(1, 7, 3, true);
                 HandControl(-1, 7, 3, true);
                 AttackID = -1;
-                AI_State = MovementState.Explode;
+                AI_State = MovementState.Teleport;
                 NetSync();
 
             }
@@ -1020,10 +1111,6 @@ namespace ITD.Content.NPCs.Bosses
         {
             int startFrame = 0;
             int finalFrame = 4;
-            if (bSecondStage)
-            {
-                goodtransition = 5;
-            }
             if (!bFinalAttack)
             {
                 int frameSpeed = 5;
