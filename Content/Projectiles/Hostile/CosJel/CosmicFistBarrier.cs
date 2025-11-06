@@ -21,7 +21,7 @@ public class CosmicFistBarrier : ModProjectile
     public override string Texture => "ITD/Content/Projectiles/Hostile/CosJel/CosmicFistBump";
 
     private ActionState AI_State;
-    private float PhaseTime => Projectile.ai[2];
+    private float distFromPlayer => Projectile.ai[2];
     private Vector2 playerPos = Vector2.Zero;
     private Vector2 defaultPos = Vector2.Zero;
 
@@ -115,7 +115,7 @@ public class CosmicFistBarrier : ModProjectile
                     }
                 }
                 Projectile.rotation = 0;
-                Projectile.Center = player.Center + new Vector2(isMainHand ? 400 : -400, -500);
+                Projectile.Center = player.Center + new Vector2(isMainHand ? distFromPlayer : -distFromPlayer, -500);
                 playerPos = Projectile.Center;
                 playerPos.Y += 1000;
                 break;

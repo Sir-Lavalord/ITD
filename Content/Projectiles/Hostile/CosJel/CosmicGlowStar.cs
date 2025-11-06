@@ -1,4 +1,5 @@
-﻿using Terraria.DataStructures;
+﻿using System;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
@@ -38,6 +39,7 @@ public class CosmicGlowStar : ModProjectile
         Projectile.localNPCHitCooldown = 10;
     }
     public float spawnTime;
+    float spawnGlow = 1;
     public Player player => Main.player[(int)Projectile.ai[0]];
     public override void AI()
     {
@@ -60,6 +62,7 @@ public class CosmicGlowStar : ModProjectile
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             Projectile.netUpdate = true;
         }
+        spawnGlow -= 0.1f;
     }
     public override bool? CanDamage()
     {
@@ -136,7 +139,12 @@ public class CosmicGlowStar : ModProjectile
 
             Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 6).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
         }
-
+        if (spawnGlow > 0)//fargo eridanus epic
+        {
+            float scale = 2f * Projectile.scale * (float)Math.Cos(Math.PI / 2 * spawnGlow);
+            float opacity = Projectile.Opacity * (float)Math.Sqrt(spawnGlow);
+            Main.EntitySpriteDraw(tex, miragePos, frame, Color.White * opacity, Projectile.rotation, tex.Size() / 2f, Projectile.scale * scale, SpriteEffects.None, 0);
+        }
         Main.EntitySpriteDraw(tex, miragePos, frame, Color.White * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
         return false;
     }
