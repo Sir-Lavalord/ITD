@@ -14,9 +14,11 @@ public class CosmicFistBump : ModProjectile
         Phasing,
         Spinning,
         Ramming,
-        Spamming
+        Spamming,
+        Chainbombing
     }
     private ActionState AI_State;
+    private bool shouldDoStar => Projectile.ai[0] == 1;
     private float PhaseTime => Projectile.ai[2];
     private Vector2 playerPos = Vector2.Zero;
     public bool isMainHand => Projectile.ai[1] == 0;
@@ -50,7 +52,7 @@ public class CosmicFistBump : ModProjectile
     static bool isMaster => Main.masterMode;
     public override void AI()
     {
-        Player player = Main.player[(int)Projectile.ai[0]];
+        Player player = Main.player[Projectile.owner];
         switch (AI_State)
         {
 
@@ -128,7 +130,7 @@ public class CosmicFistBump : ModProjectile
                         }
                         if (isMainHand)
                         {
-                            if (isMaster || isExpert)
+                            if (shouldDoStar)
                             {
                                 int amount = 6;
                                 for (int i = 0; i < amount; i++)
@@ -143,7 +145,6 @@ public class CosmicFistBump : ModProjectile
                                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicStar>(), damage, knockBack, Main.myPlayer, 0, 1);
                                     }
                                 }
-
                             }
                         }
                         SoundEngine.PlaySound(SoundID.Item70, Projectile.Center);
@@ -178,14 +179,52 @@ public class CosmicFistBump : ModProjectile
                 else
                 if (Projectile.localAI[1] >= 180)
                 {
+                    if (isExpert || isMaster)
+                    {
+                        Projectile.localAI[1] = 0;
+                        AI_State = ActionState.Chainbombing;
+                    }
                     Projectile.alpha += 2;
 
                     if (Projectile.alpha > 255)
                     {
                         Projectile.Kill();
                     }
+
                 }
                 break;
+            case ActionState.Chainbombing:
+                if (Projectile.localAI[1]++ <= 30)
+                {
+                    Projectile.Center += Vector2.Normalize(Projectile.Center - playerPos) * 4;
+                }
+                else
+                {
+                    Projectile.Center = Vector2.Lerp(Projectile.Center, playerPos, 0.5f);
+                    if (Vector2.Distance(Projectile.Center, playerPos) <= 10)
+                    {
+                        Projectile.Kill();
+                        player.GetITDPlayer().BetterScreenshake(10, 10, 10, true);
+                    }
+                }
+                break;
+        }
+    }
+    public override void OnKill(int timeLeft)
+    {
+        if (AI_State == ActionState.Chainbombing)
+        {
+            if (isMainHand)
+            {
+            }
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(Projectile.width / 2, 0).RotatedBy(Projectile.rotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
+    0, 0f, Main.myPlayer, 40, Projectile.rotation + MathHelper.PiOver2, 0f);
+            for (int i = 0; i < 20; i++)
+            {
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, 2f);
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
+            }
         }
     }
     public override Color? GetAlpha(Color lightColor)

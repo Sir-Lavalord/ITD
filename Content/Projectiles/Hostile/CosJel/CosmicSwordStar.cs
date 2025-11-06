@@ -1,8 +1,11 @@
 ﻿
+using ITD.Content.Dusts;
 using ITD.Content.NPCs.Bosses;
 using ITD.Content.Projectiles.Friendly.Melee;
+using ITD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
@@ -42,13 +45,26 @@ public class CosmicSwordStar : ModProjectile
 
     public override void OnSpawn(IEntitySource source)
     {
-
         NPC CosJel = Main.npc[(int)Projectile.ai[0]];
         if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
         {
+            if (!RoundTrip)
+            {
+                Vector2 eyePos = CosJel.Center + new Vector2(0, -60); 
+                Vector2 magVec = eyePos - Projectile.Center;
+                magVec.Along(Projectile.Center, 10, v =>
+                {
+                    for (int i = 0; i <= 1; i++)
+                    {
+                        Dust dust = Dust.NewDustPerfect(new Vector2(v.X, v.Y), ModContent.DustType<CosJelDust>(), Vector2.Zero,0,Scale:2);
+                        dust.scale = 1.75f;
+                        dust.noGravity = true;
+                    }
+                });
+            }
             for (int i = 0; i < 20; i++)
             {
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.PurpleCrystalShard, 0, 0, 0, default, 2f);
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, 2f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
             }
@@ -104,14 +120,13 @@ public class CosmicSwordStar : ModProjectile
             if (Projectile.localAI[0]++ == 100)
             {
                 SoundEngine.PlaySound(SoundID.Item20, eyePos);
-
-                Projectile.velocity = Vector2.Normalize(eyePos - Projectile.Center) * 14;
+                Projectile.velocity = Vector2.Normalize(eyePos - Projectile.Center) * 16;
                 Projectile.rotation = Projectile.velocity.ToRotation();
             }
             for (int i = 0; i < 1; i++)
             {
 
-                int dust = Dust.NewDust(Projectile.Center, 0, 0, DustID.PurpleCrystalShard, 0, 0, 0, default, 2f);
+                int dust = Dust.NewDust(Projectile.Center + new Vector2(-20, 0).RotatedBy(Projectile.rotation), 0, 0, DustID.PurpleCrystalShard, 0, 0, 0, default, 2f);
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 4;
             }

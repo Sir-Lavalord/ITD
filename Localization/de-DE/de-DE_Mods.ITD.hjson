@@ -258,6 +258,8 @@ Projectiles: {
 	// BigBerthExplosion.DisplayName: Big Berth Explosion
 	// BigBerthShell.DisplayName: Big Berth Shell
 	// CosmicSwordStar.DisplayName: Cosmic Sword Star
+	// CosmicShockwave.DisplayName: Cosmic Shockwave
+	// CosmicChainBomb.DisplayName: Cosmic Chain Bomb
 }
 
 NPCs: {
