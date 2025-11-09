@@ -97,7 +97,8 @@ public class CosmicSwordStar : ModProjectile
             ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
                     Blast.ai[1] = 250f;
                     Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
-                    Blast.netUpdate = true; Projectile.Kill();
+                    Blast.netUpdate = true; 
+                    Projectile.Kill();
                 }
                 Projectile.Kill();
             }
@@ -109,7 +110,7 @@ public class CosmicSwordStar : ModProjectile
             {
                 SoundEngine.PlaySound(SoundID.Item20, eyePos);
 
-                Projectile.velocity = -Vector2.Normalize(eyePos - Projectile.Center) * 22;
+                Projectile.velocity = -Vector2.Normalize(eyePos - Projectile.Center) * 30;
                 Projectile.rotation = Projectile.velocity.ToRotation();
             }
         }
@@ -120,7 +121,7 @@ public class CosmicSwordStar : ModProjectile
             if (Projectile.localAI[0]++ == 100)
             {
                 SoundEngine.PlaySound(SoundID.Item20, eyePos);
-                Projectile.velocity = Vector2.Normalize(eyePos - Projectile.Center) * 16;
+                Projectile.velocity = Vector2.Normalize(eyePos - Projectile.Center) * 20;
                 Projectile.rotation = Projectile.velocity.ToRotation();
             }
             for (int i = 0; i < 1; i++)
@@ -138,7 +139,7 @@ public class CosmicSwordStar : ModProjectile
     }
     private float StripWidth(float progressOnStrip)
     {
-        return MathHelper.Lerp(8f, 1f, Utils.GetLerpValue(0f, 0.6f, progressOnStrip, true)) * Utils.GetLerpValue(0f, 0.07f, progressOnStrip, true);
+        return MathHelper.Lerp(10f, 2f, Utils.GetLerpValue(0f, 0.6f, progressOnStrip, true)) * Utils.GetLerpValue(0f, 0.07f, progressOnStrip, true);
     }
     float scaleX = 0.75f;
     float scaleY = 2f;

@@ -260,6 +260,7 @@ Projectiles: {
 	// CosmicSwordStar.DisplayName: Cosmic Sword Star
 	// CosmicShockwave.DisplayName: Cosmic Shockwave
 	// CosmicChainBomb.DisplayName: Cosmic Chain Bomb
+	// CosmicTentacleArena.DisplayName: Cosmic Tentacle Arena
 }
 
 NPCs: {
