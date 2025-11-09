@@ -12,7 +12,7 @@ public class CosmicChainBomb : ModProjectile
 
     public override void SetStaticDefaults()
     {
-        Main.projFrames[Projectile.type] = 4;
+        Main.projFrames[Projectile.type] = 7;
     }
     public ref float lifeLeft =>ref Projectile.ai[0];
     public ref float setRotation => ref Projectile.ai[1];
@@ -61,14 +61,14 @@ public class CosmicChainBomb : ModProjectile
     public override void AI()
     {
 
-        if (Projectile.frame >= 1)
+        if (Projectile.frame >= 3)
         {
             if (doBomb)
             {
                 Projectile.ai[2] = 1;
                 lifeLeft--;
                 if (lifeLeft > 0)
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(Projectile.width/2, 0).RotatedBy(setRotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(Projectile.width, 0).RotatedBy(setRotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
                         0, 0f, Main.myPlayer, lifeLeft, setRotation, 0f);
             }
         }

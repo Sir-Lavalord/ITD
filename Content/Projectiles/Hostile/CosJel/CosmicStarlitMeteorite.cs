@@ -1,15 +1,18 @@
 ﻿using ITD.Content.NPCs.Bosses;
 using ITD.Particles;
+using ITD.Particles.CosJel;
 using ITD.Particles.Projectiles;
 using ITD.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Graphics;
+using Terraria.Graphics.Shaders;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel;
 
-public class CosmicStarlitMeteorite : ModProjectile
+public class CosmicStarlitMeteorite : ITDProjectile
 {
     public override void SetStaticDefaults()
     {
@@ -18,6 +21,7 @@ public class CosmicStarlitMeteorite : ModProjectile
         Main.projFrames[Projectile.type] = 1;
     }
 
+    public VertexStrip TrailStrip = new();
     readonly int defaultWidthHeight = 8;
     public ParticleEmitter emitter;
     public override void SetDefaults()
@@ -33,9 +37,9 @@ public class CosmicStarlitMeteorite : ModProjectile
         Projectile.tileCollide = false;
         DrawOffsetX = -16;
         DrawOriginOffsetY = -16;
-        Projectile.hide = true;
+        Projectile.hide = false;
         Projectile.alpha = 0;
-        emitter = ParticleSystem.NewEmitter<TwilightDemiseFlash>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+        emitter = ParticleSystem.NewEmitter<SpaceMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
         emitter.tag = Projectile;
     }
     public override void OnSpawn(IEntitySource source)
@@ -44,13 +48,10 @@ public class CosmicStarlitMeteorite : ModProjectile
         if (emitter != null)
             emitter.keptAlive = true;
     }
+
     public override Color? GetAlpha(Color lightColor)
     {
         return Color.White * (1f - Projectile.alpha / 255f);
-    }
-    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-    {
-        behindNPCsAndTiles.Add(index);
     }
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
@@ -64,49 +65,43 @@ public class CosmicStarlitMeteorite : ModProjectile
         return base.Colliding(projHitbox, targetHitbox);
 
     }
+    float innerScale = 1f;
+
     public override bool PreDraw(ref Color lightColor)
     {
-        Texture2D tex = TextureAssets.Projectile[Type].Value;
-        Rectangle frame = tex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
-        Vector2 center = Projectile.Size / 2f;
-        for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
+        Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+        Texture2D texture = TextureAssets.Projectile[Type].Value;
+        //this sprite should be remade, i got this from fargo
+        Texture2D texture2 = Mod.Assets.Request<Texture2D>("Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
+        Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+        Rectangle frame2 = texture2.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+
+        Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+        Texture2D deathTex = TextureAssets.Extra[ExtrasID.SharpTears].Value;
+        Rectangle deathFrame = deathTex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+
+        void DrawAtProj(Texture2D tex)
         {
-            Projectile.oldRot[i] = Projectile.oldRot[i - 1];
-            Projectile.oldRot[i] = Projectile.rotation + MathHelper.PiOver2;
-
-        }
-        Vector2 miragePos = Projectile.position - Main.screenPosition + center;
-        Vector2 origin = new(tex.Width * 0.5f, tex.Height / Main.projFrames[Type] * 0.5f);
-        float time = Main.GlobalTimeWrappedHourly;
-        float timer = (float)Main.time / 240f + time * 0.04f;
-
-        time %= 4f;
-        time /= 2f;
-
-        if (time >= 1f)
-        {
-            time = 2f - time;
+            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(tex.Width * 0.5f, tex.Height / Main.projFrames[Type] * 0.5f), innerScale * Projectile.scale, Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
         }
 
-        time = time * 0.5f + 0.5f;
-        if (Projectile.localAI[0] >= 300)
+        if (Projectile.timeLeft >= 20)
         {
-            for (float i = 0f; i < 1f; i += 0.35f)
-            {
-                float radians = (i + timer) * MathHelper.TwoPi;
-
-                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 4).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
-            }
-
-            for (float i = 0f; i < 1f; i += 0.5f)
-            {
-                float radians = (i + timer) * MathHelper.TwoPi;
-
-                Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 6).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
-            }
+            innerScale = 1f;
         }
-        Main.EntitySpriteDraw(tex, miragePos, frame, Color.White * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => 
+        Main.EntitySpriteDraw(texture2, Projectile.Center - Main.screenPosition, frame2, new Color(122, 0, 208, 0) * Main.essScale,
+        Projectile.rotation, new Vector2(texture2.Width * 0.5f, texture2.Height / Main.projFrames[Type] * 0.5f), innerScale * Projectile.scale * 1.25f *  Main.essScale, SpriteEffects.None, 0f));
+
+        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => DrawAtProj(outline));
+        if (Projectile.timeLeft >= 5)
+            Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(texture.Width * 0.5f, texture.Height / Main.projFrames[Type] * 0.5f), innerScale * Projectile.scale, SpriteEffects.None, 0f);
+
         return false;
+    }
+    public override int ProjectileShader(int originalShader)
+    {
+        return GameShaders.Armor.GetShaderIdFromItemId(ItemID.TwilightDye);
     }
     public int OwnerIndex => (int)Projectile.ai[0];
     public override bool? CanDamage()
@@ -135,7 +130,7 @@ public class CosmicStarlitMeteorite : ModProjectile
                 emitter.keptAlive = true;
                 emitter.timeLeft = 180;
 
-                for (int i = 0; i <= 2; i++)
+                for (int i = 0; i <= 3; i++)
                 {
                     emitter?.Emit(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), Vector2.Zero);
                 }
@@ -146,6 +141,12 @@ public class CosmicStarlitMeteorite : ModProjectile
         {
             if (!Main.dedServ)
             {
+                for (int i = 0; i <= 3; i++)
+                {
+                    emitter?.Emit(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), Vector2.Zero);
+                    emitter.scale *= 10;
+
+                }
                 if (emitter is null)
                 {
                     emitter = ParticleSystem.NewEmitter<TwilightDemiseFlash>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
@@ -158,7 +159,7 @@ public class CosmicStarlitMeteorite : ModProjectile
 
                     for (int i = 0; i < 18; i++)
                     {
-                        emitter?.Emit(Projectile.Center, Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10);
+                        emitter?.Emit(Projectile.Center, Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 20);
                     }
 
                 }
@@ -192,10 +193,5 @@ public class CosmicStarlitMeteorite : ModProjectile
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicStar>(), damage, knockBack, Main.myPlayer, 0, 1);
             }
         }
-        /*            Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CosmicGlowStar>(),
-                        Projectile.damage,
-                        0f,
-                        -1, Main.player[owner.target].whoAmI, 30);
-                    proj.localAI[0] = 1.5f;*/
     }
 }
