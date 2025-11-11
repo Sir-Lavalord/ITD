@@ -3,7 +3,6 @@ using ITD.Content.Items.Materials;
 using ITD.Content.Items.Placeable.Biomes.BlueshroomGroves;
 using ITD.Systems;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;

@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Tiles.LayersRework;
+﻿namespace ITD.Content.Tiles.LayersRework;
 
 public class EmberstoneTile : ModTile
 {

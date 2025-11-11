@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.NPCs.Catacombs;
+﻿namespace ITD.Content.NPCs.Catacombs;
 
 public class FlamingSkull : ModNPC
 {
@@ -85,7 +83,7 @@ public class FlamingSkull : ModNPC
     }
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
-        if (spawnInfo.Player.GetITDPlayer().ZoneCatacombs)
+        if (spawnInfo.Player.ITD().ZoneCatacombs)
         {
             return 0.25f;
         }

@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using System;
+﻿using System;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 
@@ -65,7 +64,7 @@ public class WindTridentProjectile : ModProjectile
         {
             Projectile.timeLeft = 20;
             Charge = Math.Clamp(Charge + chargeSpeed, 0f, 4f);
-            Projectile.velocity = (player.GetITDPlayer().MousePosition - player.MountedCenter).SafeNormalize(Vector2.Zero);
+            Projectile.velocity = (player.ITD().MousePosition - player.MountedCenter).SafeNormalize(Vector2.Zero);
             player.ChangeDir(Projectile.direction);
             player.SetDummyItemTime(2);
             player.itemRotation = (Projectile.velocity * Projectile.direction).ToRotation();

@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 
 namespace ITD.Content.Buffs.EquipmentBuffs;
 
@@ -29,7 +28,7 @@ public class WickedHeartBuff : ModBuff
 
     public override void Update(Player player, ref int buffIndex)
     {
-        var modPlayer = player.GetITDPlayer();
+        var modPlayer = player.ITD();
         modPlayer.wickedHeartEffect = true;
         if (player.IsLocalPlayer() && player.buffTime[buffIndex] == 2)
             CurrentStack--;

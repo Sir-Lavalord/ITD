@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-using System;
-using System.Runtime.CompilerServices;
+﻿using System;
 using Terraria.GameContent.Drawing;
 
 namespace ITD.Systems;
@@ -27,13 +25,11 @@ public static class WeatherSystem
         Main.instance.TilesRenderer.GetTileDrawData(i, j, tile, tile.TileType, ref _, ref _, out var tileWidth, out var _, out var tileTop, out var halfBrickHeight, out var _, out var _, out var _, out var _, out var _, out var _);
         return new Vector2(tileWidth / 2, 16 - halfBrickHeight - tileTop);
     }
-    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_grassWindCounter")]
-    extern static ref double GetGrassWindCounter(TileDrawing instance);
     internal static float GetGrassSway(int i, int j, ref Vector2 position)
     {
         Tile tile = Main.tile[i, j];
         TileDrawing tilesRenderer = Main.instance.TilesRenderer;
-        double windCounter = GetGrassWindCounter(tilesRenderer);
+        double windCounter = tilesRenderer._grassWindCounter;
         float rotation = tilesRenderer.GetWindCycle(i, j, windCounter);
 
         if (!WallID.Sets.AllowsWind[tile.WallType])
@@ -59,12 +55,10 @@ public static class WeatherSystem
 
         spriteBatch.Draw(tex, drawPos, source, col, rot * 0.08f, origin ?? source.Value.Size() / 2f, 1f, effect, 0f);
     }
-    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_treeWindCounter")]
-    extern static ref double GetTreeWindCounter(TileDrawing instance);
     private static float GetTreeSway(int i, int j, ref Vector2 pos)
     {
         TileDrawing tilesRenderer = Main.instance.TilesRenderer;
-        double windCounter = GetTreeWindCounter(tilesRenderer);
+        double windCounter = tilesRenderer._treeWindCounter;
         float rot = tilesRenderer.GetWindCycle(i, j, windCounter);
 
         pos.X += rot * 2f;

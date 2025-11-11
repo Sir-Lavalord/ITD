@@ -23,7 +23,7 @@ public class NecromatomeProjectile : ModProjectile
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
     {
-        target.AddBuff(ModContent.BuffType<NecrosisBuff>(), 120, false);
+        target.AddBuff<NecrosisBuff>(120, false);
     }
 
     public override void ModifyDamageHitbox(ref Rectangle hitbox)

@@ -1,5 +1,3 @@
-using ITD.Utilities;
-
 namespace ITD.Content.Items.Weapons.Melee;
 
 public class AlloySword : ModItem

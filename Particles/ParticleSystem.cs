@@ -1,11 +1,11 @@
-﻿using ITD.DetoursIL;
+﻿using Daybreak.Common.Features.Hooks;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace ITD.Particles;
 
-public class ParticleSystem : DetourGroup
+public static class ParticleSystem
 {
     private static readonly HashSet<ParticleEmitter> emitterPrototypes = [];
     public static byte[] particleFramesVertical = [];
@@ -13,9 +13,8 @@ public class ParticleSystem : DetourGroup
     public static bool[] particleUsesRenderTarget = [];
     private static readonly Dictionary<Type, ParticleEmitter> emittersByType = [];
     public static ParticleEmitter currentlyDrawnEmitter;
-    public List<ParticleEmitter> emitters = [];
+    public static List<ParticleEmitter> emitters = [];
     //public static ParticlesRT particlesRT;
-    public static ParticleSystem Instance => DetourManager.GetInstance<ParticleSystem>();
     public static T NewEmitter<T>(ParticleEmitterDrawCanvas canvas = ParticleEmitterDrawCanvas.WorldOverProjectiles) where T : ParticleEmitter, new()
     {
         Type particleType = typeof(T);
@@ -25,7 +24,7 @@ public class ParticleSystem : DetourGroup
             type = emittersByType[particleType].type,
             ExpectedTexturePath = Main.dedServ ? null : $"ITD/Particles/Textures/{particleType.Name}"
         };
-        Instance.emitters.Add(newInstance);
+        emitters.Add(newInstance);
         return newInstance;
     }
     public static ParticleEmitter NewSingleParticle<T>(Vector2 position, Vector2 velocity, float rotation = 0f, short lifetime = 30, ParticleEmitterDrawCanvas canvas = ParticleEmitterDrawCanvas.WorldOverProjectiles) where T : ParticleEmitter, new()
@@ -34,7 +33,7 @@ public class ParticleSystem : DetourGroup
         emitter.Emit(position, velocity, rotation, lifetime);
         return emitter;
     }
-    public void ClearParticlesOfType<T>() // this method must be accessed through ModContent.GetInstance<ParticleSystem>();
+    public static void ClearParticlesOfType<T>()
     {
         emitters.RemoveAll(x => x.GetType() == typeof(T));
     }
@@ -58,17 +57,17 @@ public class ParticleSystem : DetourGroup
         particleFramesHorizontal[type] = 1;
         particleUsesRenderTarget[type] = false;
     }
-    public override void Load()
+    [OnLoad(Side = ModSide.Client)]
+    public static void Load()
     {
-        if (Main.dedServ)
-            return;
         //Main.ContentThatNeedsRenderTargets.Add(particlesRT = new());
         On_Main.DrawSuperSpecialProjectiles += DrawParticlesUnderProjectiles; // subscribe to events for drawing
         On_Main.DrawCachedProjs += DrawParticlesOverProjectiles;
         On_Main.DrawInterface += DrawParticlesOnUI;
         On_Main.UpdateParticleSystems += UpdateAllParticles;
     }
-    public override void Unload()
+    [OnUnload(Side = ModSide.Client)]
+    public static void Unload()
     {
         if (Main.dedServ)
             return;
@@ -77,7 +76,7 @@ public class ParticleSystem : DetourGroup
         emitterPrototypes?.Clear();
         emittersByType?.Clear();
     }
-    public void UpdateAllParticles(On_Main.orig_UpdateParticleSystems orig, Main self)
+    private static void UpdateAllParticles(On_Main.orig_UpdateParticleSystems orig, Main self)
     {
         orig(self);
         for (int i = emitters.Count - 1; i >= 0; i--)
@@ -99,7 +98,7 @@ public class ParticleSystem : DetourGroup
         }
     }
 
-    public void DrawParticles(ParticleEmitterDrawCanvas canvas)
+    private static void DrawParticles(ParticleEmitterDrawCanvas canvas)
     {
         foreach (ParticleEmitter p in CollectionsMarshal.AsSpan(emitters))
         {
@@ -128,7 +127,7 @@ public class ParticleSystem : DetourGroup
         */
     }
 
-    public void DrawParticlesUnderProjectiles(On_Main.orig_DrawSuperSpecialProjectiles orig, Main self, List<int> projCache, bool startSpriteBatch)
+    private static void DrawParticlesUnderProjectiles(On_Main.orig_DrawSuperSpecialProjectiles orig, Main self, List<int> projCache, bool startSpriteBatch)
     {
         orig(self, projCache, startSpriteBatch);
         if (!startSpriteBatch)
@@ -144,7 +143,7 @@ public class ParticleSystem : DetourGroup
         if (!startSpriteBatch)
             Main.spriteBatch.Begin(default, default, SamplerState.PointClamp, default, RasterizerState.CullNone, default, Main.GameViewMatrix.TransformationMatrix);
     }
-    public void DrawParticlesOverProjectiles(On_Main.orig_DrawCachedProjs orig, Main self, List<int> projCache, bool startSpriteBatch)
+    private static void DrawParticlesOverProjectiles(On_Main.orig_DrawCachedProjs orig, Main self, List<int> projCache, bool startSpriteBatch)
     {
         orig(self, projCache, startSpriteBatch);
 
@@ -164,7 +163,7 @@ public class ParticleSystem : DetourGroup
         if (!startSpriteBatch)
             Main.spriteBatch.Begin(default, default, SamplerState.PointClamp, default, RasterizerState.CullNone, default, Main.GameViewMatrix.TransformationMatrix);
     }
-    public void DrawParticlesOnUI(On_Main.orig_DrawInterface orig, Main self, GameTime gameTime)
+    private static void DrawParticlesOnUI(On_Main.orig_DrawInterface orig, Main self, GameTime gameTime)
     {
         orig(self, gameTime);
 
@@ -179,7 +178,7 @@ public class ParticleSystem : DetourGroup
 /*
 public class ParticlesRT : ARenderTargetContentByRequest
 {
-    protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
+    public override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
         PrepareARenderTarget_AndListenToEvents(ref _target, device, Main.screenWidth, Main.screenHeight, RenderTargetUsage.PreserveContents);
 

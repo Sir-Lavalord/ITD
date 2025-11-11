@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps;
+﻿namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps;
 
 public class Winch : ModItem
 {
@@ -19,7 +17,7 @@ public class Winch : ModItem
 
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        var plr = player.GetSnaptrapPlayer();
+        var plr = player.Snaptrap();
         plr.LengthModifier += 0.1f;
         plr.RetractVelocityModifier += 0.15f;
     }

@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps;
+﻿namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps;
 
 public class MagicPolish : ModItem
 {
@@ -19,7 +17,7 @@ public class MagicPolish : ModItem
 
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        player.GetSnaptrapPlayer().FullPowerHitsModifier.Flat += 1;
-        player.GetSnaptrapPlayer().RetractVelocityModifier += 0.05f;
+        player.Snaptrap().FullPowerHitsModifier.Flat += 1;
+        player.Snaptrap().RetractVelocityModifier += 0.05f;
     }
 }

@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps;
+﻿namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps;
 
 public class SafetyLatch : ModItem
 {
@@ -19,6 +17,6 @@ public class SafetyLatch : ModItem
 
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        player.GetSnaptrapPlayer().WarningModifier.Flat += 10;
+        player.Snaptrap().WarningModifier.Flat += 10;
     }
 }

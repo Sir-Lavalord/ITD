@@ -1,7 +1,7 @@
-﻿using ITD.Content.TileEntities;
+﻿using Daybreak.Common.Features.Hooks;
+using ITD.Content.TileEntities;
 using ITD.Networking;
 using ITD.Networking.Packets;
-using ITD.Utilities;
 using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
@@ -13,10 +13,12 @@ using Terraria.UI;
 
 namespace ITD.DetoursIL;
 
-public class ChestButtonChanges : DetourGroup
+public static class ChestButtonChanges
 {
     private const int SpecialKey = 9512;
-    public override void Load()
+
+    [OnLoad]
+    public static void Load()
     {
         // fix the resetti
         On_ChestUI.Draw += ButtonValuesITDChestAdjust;
@@ -55,7 +57,7 @@ public class ChestButtonChanges : DetourGroup
             // this is the start of the senddata call. now we can skip
             if (!c.TryGotoNext(i => i.MatchLdcI4(32)))
             {
-                LogError("Couldn't find start of NetMessage.SendData variable loading");
+                ITD.Log("Couldn't find start of NetMessage.SendData variable loading");
             }
 
             var skipLabel = il.DefineLabel();
@@ -68,7 +70,7 @@ public class ChestButtonChanges : DetourGroup
             // now let's move after it for actually skipping
             if (!c.TryGotoNext(MoveType.After, i => i.MatchCall<NetMessage>("SendData")))
             {
-                LogError("Couldn't find SendData call");
+                ITD.Log("Couldn't find SendData call");
             }
 
             // we will jump here to avoid both calls being calledeleld
@@ -93,7 +95,7 @@ public class ChestButtonChanges : DetourGroup
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
 
@@ -106,7 +108,7 @@ public class ChestButtonChanges : DetourGroup
             // this is the start of the senddata call. now we can skip
             if (!c.TryGotoNext(i => i.MatchLdcI4(32)))
             {
-                LogError("Couldn't find start of NetMessage.SendData variable loading");
+                ITD.Log("Couldn't find start of NetMessage.SendData variable loading");
             }
 
             var skipLabel = il.DefineLabel();
@@ -119,7 +121,7 @@ public class ChestButtonChanges : DetourGroup
             // now let's move after it for actually skipping
             if (!c.TryGotoNext(MoveType.After, i => i.MatchCall<NetMessage>("SendData")))
             {
-                LogError("Couldn't find SendData call");
+                ITD.Log("Couldn't find SendData call");
             }
 
             // we will jump here to avoid both calls being calledeleld
@@ -143,7 +145,7 @@ public class ChestButtonChanges : DetourGroup
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
 
@@ -181,7 +183,7 @@ public class ChestButtonChanges : DetourGroup
                 // find the beginning of when the variables start to load for the SendData call
                 if (!c.TryGotoNext(i => i.MatchLdcI4(32)))
                 {
-                    LogError("Couldn't find NetMessage.SendData loading start");
+                    ITD.Log("Couldn't find NetMessage.SendData loading start");
                 }
 
                 // first label
@@ -198,19 +200,19 @@ public class ChestButtonChanges : DetourGroup
 
                 if (!c.TryGotoNext(MoveType.After, i => i.MatchLdloc2()))
                 {
-                    LogError("Couldn't find local variable 2 loading");
+                    ITD.Log("Couldn't find local variable 2 loading");
                 }
 
                 int localI = 0;
 
                 if (!c.TryGotoNext(i => i.MatchLdloc(out localI)))
                 {
-                    LogError("Couldn't find for loop variable i loading");
+                    ITD.Log("Couldn't find for loop variable i loading");
                 }
 
                 if (!c.TryGotoNext(MoveType.After, i => i.MatchCall<NetMessage>("SendData")))
                 {
-                    LogError("Couldn't find SendData call");
+                    ITD.Log("Couldn't find SendData call");
                 }
 
                 c.MarkLabel(skipLabel0);
@@ -235,7 +237,7 @@ public class ChestButtonChanges : DetourGroup
 
                 if (!c.TryGotoNext(i => i.MatchLdloc(out _)))
                 {
-                    LogError("Couldn't find branch to loop condition");
+                    ITD.Log("Couldn't find branch to loop condition");
                 }
 
                 c.MarkLabel(skipLabel01);
@@ -243,7 +245,7 @@ public class ChestButtonChanges : DetourGroup
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
 
@@ -259,7 +261,7 @@ public class ChestButtonChanges : DetourGroup
             {
                 array[i] = Tuple.Create(item[i].netID, item[i].stack, item[i].prefix);
             }
-            UIAccessors.CallSort(null, item);
+            ItemSorting.Sort(item);
             Tuple<int, int, int>[] array2 = new Tuple<int, int, int>[chest.TotalSlots];
             for (int j = 0; j < chest.TotalSlots; j++)
             {
@@ -386,7 +388,7 @@ public class ChestButtonChanges : DetourGroup
 
             if (!c.TryGotoNext(i => i.MatchCall<ChestUI>("RenameChestCancel")))
             {
-                LogError("ChestUI RenameChestCancel call not found");
+                ITD.Log("ChestUI RenameChestCancel call not found");
             }
 
             var skipLabel = il.DefineLabel();
@@ -397,14 +399,14 @@ public class ChestButtonChanges : DetourGroup
 
             if (!c.TryGotoNext(i => i.MatchLdsfld<Main>("inputTextEscape")))
             {
-                LogError("Load static field inputTextEscape not found");
+                ITD.Log("Load static field inputTextEscape not found");
             }
 
             c.MarkLabel(skipLabel);
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
 
@@ -425,7 +427,7 @@ public class ChestButtonChanges : DetourGroup
                 i => i.MatchLdcI4(0),
                 i => i.MatchStsfld<Main>("editChest")))
             {
-                LogError("Couldn't find correct place in Player.Update");
+                ITD.Log("Couldn't find correct place in Player.Update");
                 return;
             }
 
@@ -439,7 +441,7 @@ public class ChestButtonChanges : DetourGroup
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
 
@@ -452,13 +454,13 @@ public class ChestButtonChanges : DetourGroup
             // get to the general area where we wanna reset the bool
             if (!c.TryGotoNext(i => i.MatchLdsfld<Main>("editChest"), i => i.MatchBrfalse(out _)))
             {
-                LogError("Couldn't find start of condition");
+                ITD.Log("Couldn't find start of condition");
             }
 
             // get to where the branch happens
             if (!c.TryGotoNext(MoveType.After, i => i.MatchLdcI4(0), i => i.MatchStsfld<Main>("editChest")))
             {
-                LogError("Couldn't find end of branch");
+                ITD.Log("Couldn't find end of branch");
             }
 
             // reset back to true if our flag is true
@@ -472,7 +474,7 @@ public class ChestButtonChanges : DetourGroup
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
 
@@ -485,7 +487,7 @@ public class ChestButtonChanges : DetourGroup
             // try to find this instruction, which is right before the switch case
             if (!c.TryGotoNext(MoveType.After, i => i.MatchStloc0()))
             {
-                LogError("Storing string.Empty in Loc0 not found");
+                ITD.Log("Storing string.Empty in Loc0 not found");
                 return;
             }
 
@@ -517,7 +519,7 @@ public class ChestButtonChanges : DetourGroup
             // now for the second part. we can actually just set context back to 2 for this. let's go to the Main.clrInput call
             if (!c.TryGotoNext(MoveType.After, i => i.MatchCall<Main>("clrInput")))
             {
-                LogError("clrInput call not found");
+                ITD.Log("clrInput call not found");
                 return;
             }
 
@@ -528,7 +530,7 @@ public class ChestButtonChanges : DetourGroup
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
 
@@ -575,8 +577,7 @@ public class ChestButtonChanges : DetourGroup
             Vector2 center = player.Center;
             Vector2 containerWorldPosition = context.GetContainerWorldPosition();
             bool canVisualizeTransfers = context.CanVisualizeTransfers;
-            Item[] item = player.bank.item;
-            item = chest.items;
+            Item[] item = chest.items;
             List<int> list = [];
             List<int> list2 = [];
             List<int> list3 = [];

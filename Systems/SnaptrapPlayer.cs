@@ -9,11 +9,23 @@ public class SnaptrapPlayer : ModPlayer
     public StatModifier RetractVelocityModifier;
     public StatModifier FullPowerHitsModifier;
     public StatModifier WarningModifier;
+    private ITDSnaptrap _activeSnaptrap;
+    public ITDSnaptrap ActiveSnaptrap
+    {
+        get => _activeSnaptrap;
+        set
+        {
+            if (value is null || value.Projectile is null || !value.Projectile.active)
+                _activeSnaptrap = null;
+            else
+                _activeSnaptrap = value;
+        }
+    }
     public bool CanUseSnaptrap
     {
         get
         {
-            ITDSnaptrap snaptrap = GetActiveSnaptrap();
+            ITDSnaptrap snaptrap = ActiveSnaptrap;
             return snaptrap is null || snaptrap.IsStickingToTarget;
         }
     }
@@ -27,7 +39,7 @@ public class SnaptrapPlayer : ModPlayer
     }
     public bool ShootSnaptrap()
     {
-        ITDSnaptrap snaptrap = GetActiveSnaptrap();
+        ITDSnaptrap snaptrap = ActiveSnaptrap;
         if (snaptrap is null)
             return true;
         else if (snaptrap is not null)
@@ -37,16 +49,5 @@ public class SnaptrapPlayer : ModPlayer
             snaptrap.Projectile.netUpdate = true;
         }
         return false;
-    }
-    public ITDSnaptrap GetActiveSnaptrap()
-    {
-        foreach (var proj in Main.ActiveProjectiles)
-        {
-            if (proj.ModProjectile is ITDSnaptrap snaptrap && proj.owner == Player.whoAmI)
-            {
-                return snaptrap;
-            }
-        }
-        return null;
     }
 }

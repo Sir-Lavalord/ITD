@@ -78,7 +78,7 @@ namespace ITD.Content.Projectiles
         private bool shouldBeWarning = false; //
         private bool hasDoneLatchEffect = false;
 
-        //True if gravity should affect the snaptrap
+        //True if Gravity should affect the snaptrap
         private bool chainWeight = false;
         //Use floats in the form of percentages to increase this
         private float lengthIncrease = 0f;

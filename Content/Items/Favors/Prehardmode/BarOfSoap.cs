@@ -34,7 +34,7 @@ public class BarOfSoap : Favor
         {
             Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, new Vector2((float)Math.Cos(MathHelper.PiOver4 * i) * 2f, (float)Math.Sin(MathHelper.PiOver4 * i) * 2f), ProjectileID.PureSpray, 0, 0.1f, player.whoAmI);
         }
-        player.AddBuff(ModContent.BuffType<SqueakyClean>(), 60 * 60 * 4);
+        player.AddBuff<SqueakyClean>(60 * 60 * 4);
         return true;
     }
     public override float ChargeAmount(ChargeData chargeData)

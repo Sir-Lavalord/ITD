@@ -2,7 +2,6 @@
 using ITD.Networking.Packets;
 using ITD.Systems;
 using ITD.Systems.Recruitment;
-using ITD.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria.ModLoader.UI;
@@ -83,7 +82,7 @@ public class UnrecruitmentButton : ITDUIElement
     {
         Player player = Main.LocalPlayer;
         UnrecruitmentGui gui = UILoader.GetUIState<UnrecruitmentGui>();
-        Guid guid = player.GetITDPlayer().guid;
+        Guid guid = player.ITD().guid;
         RecruitData rData = ITDSystem.recruitmentData[guid];
 
         if (Main.netMode == NetmodeID.SinglePlayer)

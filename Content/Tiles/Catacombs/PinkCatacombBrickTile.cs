@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Dusts;
-using ITD.Utilities;
 
 namespace ITD.Content.Tiles.Catacombs;
 

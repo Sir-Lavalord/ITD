@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Hostile;
 using ITD.Systems;
-using ITD.Utilities;
 using System;
 
 namespace ITD.Content.NPCs.Events.LavaRain;

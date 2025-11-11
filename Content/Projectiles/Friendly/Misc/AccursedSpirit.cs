@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using System;
+﻿using System;
 using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Friendly.Misc;

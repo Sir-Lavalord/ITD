@@ -1,7 +1,6 @@
 ﻿using ITD.Particles;
 using ITD.Particles.Projectiles;
 using ITD.Systems;
-using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Mage;
 
@@ -42,7 +41,7 @@ public class WeepWandWisp : ModProjectile
             Player player = Main.player[Projectile.owner];
             if (player.channel)
             {
-                ITDPlayer modPlayer = player.GetITDPlayer();
+                ITDPlayer modPlayer = player.ITD();
                 Vector2 mouse = modPlayer.MousePosition;
 
                 float xDistance = mouse.X - Projectile.Center.X;

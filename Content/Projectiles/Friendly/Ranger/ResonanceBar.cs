@@ -1,6 +1,5 @@
 ﻿using ITD.Particles;
 using ITD.Particles.Projectiles;
-using ITD.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria.Audio;
@@ -88,7 +87,7 @@ public class ResonanceBar : ModProjectile
 
                             Player player = Main.LocalPlayer;
                             float power = 6 * Utils.GetLerpValue(800f, 0f, Projectile.Distance(Main.LocalPlayer.Center), true);
-                            player.GetITDPlayer().BetterScreenshake(6, power, power, false);
+                            player.ITD().BetterScreenshake(6, power, power, false);
                             Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
 ModContent.ProjectileType<ResonanceBlast>(), Projectile.damage * 2, Projectile.knockBack);
                             Blast.ai[1] = 60f;
@@ -103,7 +102,7 @@ ModContent.ProjectileType<ResonanceBlast>(), Projectile.damage * 2, Projectile.k
                         {
                             Player player = Main.LocalPlayer;
                             float power = 4 * Utils.GetLerpValue(800f, 0f, Projectile.Distance(Main.LocalPlayer.Center), true);
-                            player.GetITDPlayer().BetterScreenshake(6, power, power, false);
+                            player.ITD().BetterScreenshake(6, power, power, false);
                             doCollsion = true;
                             OnCollision(other);
                         }

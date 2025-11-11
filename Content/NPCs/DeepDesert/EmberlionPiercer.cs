@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Items.Materials;
 using ITD.Content.Items.Weapons.Melee;
-using ITD.Utilities;
 using System;
 using Terraria.GameContent.ItemDropRules;
 
@@ -121,7 +120,7 @@ public class EmberlionPiercer : ModNPC
     }
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
-        if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
+        if (spawnInfo.Player.ITD().ZoneDeepDesert)
         {
             return 0.15f;
         }

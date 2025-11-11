@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Tiles.Catacombs;
+﻿namespace ITD.Content.Tiles.Catacombs;
 
 public class MonsoonCryptiteTile : ModTile
 {

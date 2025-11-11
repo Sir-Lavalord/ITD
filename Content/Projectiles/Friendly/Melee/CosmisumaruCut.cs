@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Dusts;
-using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Melee;
 
@@ -34,7 +33,7 @@ public class CosmisumaruCut : ModProjectile
         Player player = Main.player[Projectile.owner];
         target.immune[Projectile.owner] = 8;
 
-        player.GetITDPlayer().charge += damageDone;
+        player.ITD().charge += damageDone;
     }
 
     public override void AI()

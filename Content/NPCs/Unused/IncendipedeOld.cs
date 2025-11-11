@@ -48,7 +48,7 @@ internal class IncendipedeHeadOld : WormHead
     public override void Init()
     {
         // Set the segment variance
-        // If you want the segment length to be constant, set these two properties to the same value
+        // If you want the segment Length to be constant, set these two properties to the same value
         MinSegmentLength = 12;
         MaxSegmentLength = 18;
 

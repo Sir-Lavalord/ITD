@@ -1,6 +1,5 @@
-﻿using ITD.Content.NPCs.Friendly.WorldNPCs;
+﻿using Daybreak.Common.Features.NPCs;
 using ITD.Systems.Recruitment;
-using ITD.Utilities;
 using System;
 
 namespace ITD.Systems;
@@ -9,35 +8,18 @@ public static class ModCalls
 {
     public static bool Downed(string bossOrEvent)
     {
-        return bossOrEvent.ToLower() switch
-        {
-            "sandberus" => DownedBossSystem.DownedSandberus,
-            "lostarchivist" or "keeperofthelost" => DownedBossSystem.DownedLostArchivist,
-            "cosjel" or "cosmicjellyfish" => DownedBossSystem.DownedCosJel,
-            "gravekeeper" or "gravekeeper1" => DownedBossSystem.DownedGravekeeper,
-            "gravekeeperrematch" or "gravekeeper2" => DownedBossSystem.DownedGravekeeperRematch,
-            "floraldevourer" or "flordev" or "womr" => DownedBossSystem.DownedWomr,
-            _ => false,
-        };
+        string sanitized = bossOrEvent.ToLower();
+        return DownedFlagHandler.GetHandle(ITD.Instance, sanitized).Value;
     }
     public static bool Zone(Player player, string zone)
     {
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         return zone.ToLower() switch
         {
             "blueshroomsurface" or "blueshroomssurface" or "blueshroomgrovessurface" or "bgsurface" => modPlayer.ZoneBlueshroomsSurface,
             "blueshroomunderground" or "blueshroomsunderground" or "blueshroomgroves" or "blueshroomgrovesunderground" or "bgunderground" => modPlayer.ZoneBlueshroomsUnderground,
             "deepdesert" or "dd" => modPlayer.ZoneDeepDesert,
             "catacombs" => modPlayer.ZoneCatacombs,
-            _ => false,
-        };
-    }
-    public static bool TalkingTo(Player player, string worldNPC)
-    {
-        ITDPlayer modPlayer = player.GetITDPlayer();
-        return worldNPC.ToLower() switch
-        {
-            "mudkarp" => Main.npc[modPlayer.TalkWorldNPC].ModNPC is Mudkarp,
             _ => false,
         };
     }
@@ -87,7 +69,6 @@ public static class ModCalls
             "Downed" => Downed(args[1].ToString()),
             "Zone" => Zone(CastToPlayer(args[1]), args[2].ToString()),
             "RegisterRecruitment" => TryRegisterRecruitment(args),
-            "TalkingTo" or "TalkingToWorldNPC" => TalkingTo(CastToPlayer(args[1]), args[2].ToString()),
             _ => null,
         };
     }

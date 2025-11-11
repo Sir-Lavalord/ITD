@@ -52,7 +52,7 @@ internal class CorruptAntidoteManaItem : GlobalItem
     {
         if (item.healMana > 0 && player.GetModPlayer<CorruptAntidotePlayer>().hasCorruptAntidote)
         {
-            player.AddBuff(ModContent.BuffType<CorruptAntidoteBuff>(), 60 * 5, false);
+            player.AddBuff<CorruptAntidoteBuff>(60 * 5, false);
         }
         return null;
     }

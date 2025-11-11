@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using ITD.Content.Rarities;
-using ITD.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 

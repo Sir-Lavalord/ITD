@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.Localization;
+﻿using Terraria.Localization;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 

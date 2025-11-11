@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Buffs.Debuffs;
-using ITD.Utilities;
 using System.Collections.Generic;
 
 namespace ITD.Content.Tiles.Misc;
@@ -43,7 +42,7 @@ public class BlackMold : ModTile
             return;
         float range = 96f;
         if (Vector2.DistanceSquared(worldPos, player.Center) < range * range)
-            player.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 59);
+            player.AddBuff<MelomycosisBuff>(59);
     }
     public override void RandomUpdate(int i, int j)
     {

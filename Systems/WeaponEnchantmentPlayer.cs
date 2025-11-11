@@ -17,7 +17,7 @@ public class WeaponEnchantmentPlayer : ModPlayer
     {
         if (melomycosisImbue && item.DamageType.CountsAsClass<MeleeDamageClass>())
         {
-            target.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 60 * Main.rand.Next(3, 7));
+            target.AddBuff<MelomycosisBuff>(60 * Main.rand.Next(3, 7));
         }
         if (flamingRazor)
         {
@@ -58,7 +58,7 @@ public class WeaponEnchantmentPlayer : ModPlayer
     {
         if (melomycosisImbue && (proj.DamageType.CountsAsClass<MeleeDamageClass>() || ProjectileID.Sets.IsAWhip[proj.type]))
         {
-            target.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 60 * Main.rand.Next(3, 7));
+            target.AddBuff<MelomycosisBuff>(60 * Main.rand.Next(3, 7));
         }
         if (flamingRazor)
         {

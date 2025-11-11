@@ -1,6 +1,5 @@
 ﻿using ITD.Systems;
 using ITD.Systems.Recruitment;
-using ITD.Utilities;
 using System.IO;
 using System.Linq;
 
@@ -10,7 +9,7 @@ public sealed class PlayerJoinedPacket : ITDPacket
 {
     public PlayerJoinedPacket(Player player)
     {
-        var modPlayer = player.GetITDPlayer();
+        var modPlayer = player.ITD();
         Writer.TryWriteSenderPlayer(player);
         Writer.WriteGuid(modPlayer.guid);
 

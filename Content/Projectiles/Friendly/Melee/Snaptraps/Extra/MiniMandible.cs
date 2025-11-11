@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 

@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.Graphics;
+﻿using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 
 namespace ITD.Content.Projectiles.Friendly.Melee;

@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Tiles.DeepDesert;
-using ITD.Utilities;
 
 namespace ITD.Content.Items.DevTools;
 
@@ -25,7 +24,7 @@ public class Pillarificationizerator : DevTool
             PlayerLog(player, "Mode changed to: " + (destroyPillars ? "Pillar Destroy" : "Pillar Create"), Color.Yellow);
             return true;
         }
-        Point p = player.GetITDPlayer().MousePosition.ToTileCoordinates();
+        Point p = player.ITD().MousePosition.ToTileCoordinates();
         Rectangle dustRect = new(p.X * 16, p.Y * 16, 16, 16);
         if (destroyPillars)
         {

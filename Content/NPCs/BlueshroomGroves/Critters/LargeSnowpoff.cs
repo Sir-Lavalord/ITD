@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.NPCs.BlueshroomGroves.Critters;
+﻿namespace ITD.Content.NPCs.BlueshroomGroves.Critters;
 
 public class LargeSnowpoff : GenericSnowpoff
 {
@@ -15,7 +13,7 @@ public class LargeSnowpoff : GenericSnowpoff
     }
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
-        if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)
+        if (spawnInfo.Player.ITD().ZoneBlueshroomsUnderground)
             return 0.2f;
         return 0f;
     }

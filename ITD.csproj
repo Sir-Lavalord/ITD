@@ -1,297 +1,38 @@
 ﻿
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\tModLoader.targets" />
+	<Import Project="..\tModLoader.targets" />
 	
-  <PropertyGroup>
-    <AssemblyName>ITD</AssemblyName>
-    <LangVersion>latest</LangVersion>
-    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-  </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyName>ITD</AssemblyName>
+		<LangVersion>latest</LangVersion>
+		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+		<NoWarn>$(NoWarn);CS0436</NoWarn>
+	</PropertyGroup>
 	
-  <ItemGroup>
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\AllAround\TopazNecklace.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Combat\All\BadassSunglasses.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Combat\All\BadassSunglasses_Aura.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Combat\All\BadassSunglasses_Face.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Combat\All\RazedWine.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Combat\All\SoulTalisman.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Combat\All\WickedHeart.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Combat\Melee\Snaptraps\ChainWeight.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Combat\Melee\Snaptraps\MagicPolish.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Combat\Melee\Snaptraps\SafetyLatch.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Combat\Melee\Snaptraps\UnyieldingChain.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Combat\Melee\Snaptraps\Winch.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Defensive\Buffs\CupOJoe.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Defensive\Buffs\SwimshieldWipers.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Defensive\Defense\Skullmet.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Defensive\DreadShell.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Expert\CharmOfTheAccursed.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Expert\CharmOfTheAccursed_Aura.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Expert\GalacticJellyBean.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Expert\WindCape.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Master\EatersTail.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Master\EyeofEldritchInsight.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Master\Prophylaxis.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Master\SlimeSecretionGland.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Misc\CorruptAntidote.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Misc\CrimsonAntidote.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Misc\RooksBrew.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Movement\Boots\GravityBoots.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Movement\Boots\GravityBoots_Propulsion.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Movement\Boots\GravityBoots_Shoes.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Movement\Dashes\DashingFeather.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Movement\Jumps\DisasterInABottle.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Movement\Jumps\FirestormInABottle.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Movement\Jumps\ImpulseShackles.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Movement\Jumps\JumpingBean.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Movement\Jumps\StormInABottle.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Accessories\Movement\Jumps\TwisterInABottle.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Ammo\CyanideArrow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Ammo\CyanideBullet.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Ammo\FrostichorArrow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Ammo\FrostichorBullet.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Alloy\AlloyChestplate.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Alloy\AlloyChestplate_Body.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Alloy\AlloyHeadgear.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Alloy\AlloyHeadgear_Head.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Alloy\AlloyHelmet.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Alloy\AlloyHelmet_Head.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Alloy\AlloyLeggings.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Alloy\AlloyLeggings_Legs.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Alloy\AlloyVisor.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Alloy\AlloyVisor_Head.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Blueshroom\BlueshroomCap.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Blueshroom\BlueshroomCap_Head.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Blueshroom\BlueshroomCoat.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Blueshroom\BlueshroomCoat_Body.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Blueshroom\BlueshroomHat.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Blueshroom\BlueshroomHat_Head.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Blueshroom\BlueshroomPants.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Blueshroom\BlueshroomPants_Legs.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Cyanite\CyaniteGreaves.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Cyanite\CyaniteGreaves_Legs.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Cyanite\CyaniteHelm.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Cyanite\CyaniteHelm_Head.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Cyanite\CyaniteHood.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Cyanite\CyaniteHood_Head.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Cyanite\CyaniteMask.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Cyanite\CyaniteMask_Head.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Cyanite\CyanitePlating.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Cyanite\CyanitePlating_Body.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Electrum\ElectrumChestplate.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Electrum\ElectrumChestplate_Body.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Electrum\ElectrumLeggings.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Electrum\ElectrumLeggings_Legs.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Electrum\ElectrumVisor.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Electrum\ElectrumVisor_Head.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Rhodium\RhodiumChestplate.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Rhodium\RhodiumChestplate_Body.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Rhodium\RhodiumLeggings.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Rhodium\RhodiumLeggings_Legs.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Rhodium\RhodiumVisor.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Rhodium\RhodiumVisor_Head.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Vanity\Masks\CosmicJellyfishMask.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Armor\Vanity\Masks\CosmicJellyfishMask_Head.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\BossSummons\DuneSkull.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\BossSummons\SpacePrawn.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Consumables\BlackFlask.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\DevTools\MirrorMan.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\DevTools\OblivionPickaxe.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\DevTools\Pillarificationizerator.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\DevTools\ReinforcedPegmatiteBricksItem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\DevTools\ReinforcedPegmatiteBrickWallItem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Dyes\CosmicDye.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Favors\BarStyles\DefaultBarStyle.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Favors\BarStyles\FireBarStyle.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Favors\BarStyles\SoapBarStyle.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Favors\Hardmode\BloodPact.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Favors\Prehardmode\AceOfHearts.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Favors\Prehardmode\BarOfSoap.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Favors\Prehardmode\Cursebreaker.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Favors\Prehardmode\IncrediblySharpKnife.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Favors\Prehardmode\Trailblazer.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Materials\Blueshroom.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Materials\Blueshroom_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Materials\Electroshroom.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Materials\ElectrumBar.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Materials\ElectrumBar_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Materials\EmberlionMandible.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Materials\EmberlionSclerite.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Materials\RefinedCyanite.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Materials\RhodiumBar.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Materials\RhodiumBar_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Materials\StarlitBar.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Other\BottomlessSandBucket.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Other\CosmicJellyfishBag.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Other\DriversIncense.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Other\GrabbOMatic20000\GrabbOMatic20000.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Other\GrabbOMatic20000\SegBase.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Other\GrabbOMatic20000\SegHand.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Other\GrabbOMatic20000\SegMid.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Other\GravekeeperBag.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Other\HardmodeGravekeeperBag.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Other\SandberusBag.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Other\StrawmanItem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\PetSummons\CosmicJam.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\PetSummons\SnowyLantern.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\BlueshroomGroves\BluegrassSeeds.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\BlueshroomGroves\BlueshroomCapBlock.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\BlueshroomGroves\BlueshroomStem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\BlueshroomGroves\CharbleBlock.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\BlueshroomGroves\CharbleWall.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\BlueshroomGroves\CyaniteOre.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\BlueshroomGroves\SmoothedCharbleBlock.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\BlueshroomGroves\SmoothedCharbleWall.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\BlueshroomGroves\Subfrost.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Catacombs\BlueCatacombBrick.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Catacombs\BlueCatacombBrickWall.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Catacombs\Cryptite.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Catacombs\CryptiteWall.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Catacombs\GreenCatacombBrick.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Catacombs\GreenCatacombBrickWall.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Catacombs\MonsoonCryptite.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Catacombs\MossyGreenCatacombBrick.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Catacombs\PinkCatacombBrick.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Catacombs\PinkCatacombBrickWall.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Catacombs\WornBlueCatacombBrick.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\DeepDesert\DarkPyracottaBricksItem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\DeepDesert\DarkPyracottaTilesItem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\DeepDesert\Diorite.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\DeepDesert\LightPyracotta.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\DeepDesert\LightPyracottaBricksItem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\DeepDesert\LightPyracottaTilesItem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\DeepDesert\Pegmatite.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Biomes\Minibiomes\BlackMoldBm\BlackMoldItem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\BlueshroomGroves\CharbleChest.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\BlueshroomGroves\CharbleDoubleChest.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\BlueshroomGroves\CharblePlatform.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\BlueshroomGroves\CharbleWorkBench.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\BlueCatacombChair.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\BlueCatacombDoor.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\BlueCatacombLamp.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\BlueCatacombTable.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\GreenCatacombChair.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\GreenCatacombDoor.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\GreenCatacombLamp.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\GreenCatacombTable.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\PinkCatacombChair.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\PinkCatacombDoor.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\PinkCatacombLamp.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Catacombs\PinkCatacombTable.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\BaldsnapStatue.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\PyracottaBookcase.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\PyracottaCandle.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\PyracottaChair.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\PyracottaChandelier.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\PyracottaChest.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\PyracottaDoor.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\PyracottaDoubleChest.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\PyracottaDresser.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\PyracottaLamp.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\PyracottaLantern.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\DeepDesert\PyracottaTable.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Relics\CosmicJellyfishRelic.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Stations\Stonepresser.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\Furniture\Trophies\CosmicJellyfishTrophy.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\LayersRework\Depthrock.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\LayersRework\DepthrockBricksItem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\LayersRework\Emberstone.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\LayersRework\Shale.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\LayersRework\ShaleBricksItem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\StarlitOre.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Placeable\TemperedGlassItem.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Tools\Cyanite\CyaniteHammer.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Tools\Cyanite\CyanitePickaxe.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\CrowdController.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\EternalBubbleWand.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\FungalRod.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\Necromatome.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\PocketSyringe.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\RoyalJellyScepter.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\StarlightStaff.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\StarlightStaff_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\ThunderStaff.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\TomeOfReach.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\TwilightDemise.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Mage\WeepingWand.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\AlloySword.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\AsterKnuckle.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\AsterKnuckle_Arm.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Bleedbreaker.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\ChainedGun.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Cicadarang.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Cosmisumaru.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\CyaniteBoomerang.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\CyaniteSpear.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\DespoticSuperMeleeSword.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Ectoblade.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Ectoblade_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\ElectrumSpear.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\ElectrumSpear_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\EmberSlasher.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\EmberSlasher_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Flyswatter.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Mandinata.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\MangledSheerthorn.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Moulder.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\RhodiumBroadsword.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\RhodiumBroadsword_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\SherbetFlail.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\ARCTrap.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\Calcium.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\Chainwhip.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\CopperMandibles.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\Crimeratrap.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\DespoticSnaptrap.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\Frostgrip.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\MrSnapkins.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\Snaptrap.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\Sniptrap.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\Soulsnapper.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\Stabtrap.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\StickyHand.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\TheScorpion.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\VenusSnaptrap.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\VocalZero.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\Whiplatch.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Snaptraps\Whiplatch_ArmA.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\Spidermeal.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\WindTrident.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Melee\WormholeRipper.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\BlackCacophony.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\DepthrockBow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\Dunebarrel.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\ElectrumBow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\Fwoomstick.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\Ghostbuster.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\Houndboom.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\HunterrGreatbow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\HunterrGreatbow_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\Potshot.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\Potshot_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\Quasar.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\Quasar_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\ResonanceCrossbow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\ResonanceCrossbow_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\Skyshot.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Ranger\TheEpicenter.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Summoner\CicadianStaff.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Summoner\Fishbacker.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Summoner\Fishbacker_Glow.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Summoner\KeepersShovel.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Summoner\NightmareManuscript.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\Items\Weapons\Summoner\RiteOfImmolation.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\TwilightDemiseProj.png" />
-    <None Remove="Content\Projectiles\Friendly\Mage\TwilightDemiseProj_ExplosionA.png" />
-  </ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Krafs.Publicizer" Version="2.3.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<Publicize Include="ReLogic" IncludeCompilerGeneratedMembers="false" />
+		<Publicize Include="tModLoader" IncludeCompilerGeneratedMembers="false" />
+		<Publicize Include="FNA" IncludeCompilerGeneratedMembers="false" />
+		<DoNotPublicize Include="tModLoader:Terraria.UI.UIElement" />
+		<DoNotPublicize Include="tModLoader:Terraria.Main.OnResolutionChanged" />
+	</ItemGroup>
 	
-  <ItemGroup>
-    <Reference Include="StructureHelper">
-      <HintPath>lib\StructureHelper.dll</HintPath>
-    </Reference>
-    <Reference Include="MoreLocales">
-      <HintPath>lib\MoreLocales.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+	<ItemGroup>
+		<Reference Include="StructureHelper">
+			<HintPath>lib\StructureHelper.dll</HintPath>
+		</Reference>
+		<Reference Include="Daybreak">
+			<HintPath>lib\Daybreak.dll</HintPath>
+		</Reference>
+		<Reference Include="DialogueTweak">
+			<HintPath>lib\DialogueTweak.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 	
 </Project>

@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Items.Tools.Electrum;
+﻿namespace ITD.Content.Items.Tools.Electrum;
 
 public class ElectrumPickaxe : ModItem
 {

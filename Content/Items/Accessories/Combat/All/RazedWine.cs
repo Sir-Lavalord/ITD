@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Systems;
-using ITD.Utilities;
 using System.Linq;
 
 namespace ITD.Content.Items.Accessories.Combat.All;
@@ -18,7 +17,7 @@ public class RazedWine : ModItem
     }
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        ITDPlayer itdPlayer = player.GetITDPlayer();
+        ITDPlayer itdPlayer = player.ITD();
         player.GetDamage(DamageClass.Generic) += 0.1f;
         itdPlayer.razedWine = true;
         if (itdPlayer.razedCooldown > 0)

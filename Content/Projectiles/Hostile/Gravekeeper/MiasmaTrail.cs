@@ -23,7 +23,7 @@ public class MiasmaTrail : ModProjectile
 
     public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
     {
-        target.AddBuff(ModContent.BuffType<NecrosisBuff>(), 300, false);
+        target.AddBuff<NecrosisBuff>(300, false);
     }
 
     public override bool CanHitPlayer(Player target)

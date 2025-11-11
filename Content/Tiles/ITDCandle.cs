@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.GameContent.Drawing;
+﻿using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 using Terraria.ObjectData;
 

@@ -80,7 +80,7 @@ internal class CrimsonAntidoteHealItem : GlobalItem
     {
         if (item.healLife > 0 && player.GetModPlayer<CrimsonAntidotePlayer>().hasCrimsonAntidote)
         {
-            player.AddBuff(ModContent.BuffType<CrimsonAntidoteBuff>(), 60 * 5, false);
+            player.AddBuff<CrimsonAntidoteBuff>(60 * 5, false);
         }
         return null;
     }

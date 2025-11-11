@@ -2,7 +2,6 @@
 using ITD.Content.Items.Other;
 using ITD.Content.Items.Weapons.Ranger;
 using ITD.Content.Projectiles.Hostile.Sandberus;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -100,7 +99,7 @@ public class Sandberus : ITDNPC
                 if (NPC.collideX)
                 {
                     StateTimer = 1;
-                    Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 4, 4, false);
+                    Main.LocalPlayer.ITD().BetterScreenshake(20, 4, 4, false);
                     SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
                 }
                 else if (Math.Abs(NPC.velocity.X) > 6 && Main.netMode != NetmodeID.MultiplayerClient)
@@ -138,7 +137,7 @@ public class Sandberus : ITDNPC
                         Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + new Vector2(-NPC.width * 0.5f, NPC.height * 0.5f), new Vector2(-2f, -16f), ModContent.ProjectileType<SandBoulder>(), 15, 0, -1);
                     }
 
-                    Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 4, 4, false);
+                    Main.LocalPlayer.ITD().BetterScreenshake(20, 4, 4, false);
                     SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
                 }
                 else if (StateTimer < 10)

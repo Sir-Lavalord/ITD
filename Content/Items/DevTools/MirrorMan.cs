@@ -1,7 +1,6 @@
 ﻿using ITD.Content.UI;
 using ITD.Systems;
 using ITD.Systems.DataStructures;
-using ITD.Utilities;
 using Microsoft.Xna.Framework.Input;
 using ReLogic.Graphics;
 using System;
@@ -75,7 +74,7 @@ public class MirrorMan : DevTool
     }
     public override bool? UseItem(Player player)
     {
-        ITDPlayer plr = player.GetITDPlayer();
+        ITDPlayer plr = player.ITD();
         if (player.altFunctionUse == 2)
         {
             if (plr.selectBox)
@@ -114,7 +113,7 @@ public class MirrorMan : DevTool
                         int xNormal = i - tl.X;
                         int yNormal = j - tl.Y;
                         Tile original = Framing.GetTileSafely(i, j);
-                        tilesRect[xNormal, yNormal] = new(original);
+                        tilesRect[xNormal, yNormal] = new(ref original);
                         if (Cut)
                         {
                             TileDataType remove = 0;
@@ -187,7 +186,7 @@ public class MirrorMan : DevTool
                     int placeI = mirrorX ? width - 1 - i : i;
                     int placeJ = mirrorY ? height - 1 - j : j;
                     Tile t = Framing.GetTileSafely(start.X + i, start.Y + j);
-                    undoHistory[i, j] = new(t);
+                    undoHistory[i, j] = new(ref t);
                     TinyTile tt = tilesRect[placeI, placeJ];
 
                     if (tileData && tt.HasTile)
@@ -256,7 +255,7 @@ public class MirrorMan : DevTool
     }
     public override void DrawSpecialPreviews(SpriteBatch sb, Player player)
     {
-        ITDPlayer plr = player.GetITDPlayer();
+        ITDPlayer plr = player.ITD();
         if (Select)
             return;
         Vector2 MousePosition = plr.MousePosition;
@@ -280,7 +279,7 @@ public class MirrorMan : DevTool
             {
                 if (i >= 0 && i < width && j >= 0 && j < height)
                     return tilesRect[i, j];
-                return new TinyTile(new Tile());
+                return new TinyTile();
             }
 
             Vector2 baseDrawPos = (MousePosition.ToTileCoordinates() + offset).ToWorldCoordinates(0, 0) - Main.screenPosition;

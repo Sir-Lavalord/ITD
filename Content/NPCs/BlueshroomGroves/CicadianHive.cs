@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Biomes;
-using ITD.Utilities;
 using Terraria.Localization;
 
 namespace ITD.Content.NPCs.BlueshroomGroves;

@@ -8,8 +8,8 @@ public struct Point8
 {
     public readonly sbyte X;
     public readonly sbyte Y;
-    public static Point8 Zero = new(0, 0);
-    public static Point8 One = new(1, 1);
+    public static readonly Point8 Zero;
+    public static readonly Point8 One = new(1, 1);
     public Point8(int v)
     {
         X = (sbyte)v;

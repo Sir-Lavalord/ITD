@@ -1,5 +1,4 @@
 ﻿using ITD.Physics;
-using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 
@@ -17,7 +16,7 @@ public class StabtrapStingerProjectile : ModProjectile
 
     private readonly Asset<Texture2D> chainSprite = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Melee/Snaptraps/Extra/StabtrapStingerChain");
 
-    VerletChain TailChain;
+    private VerletChain TailChain;
     public Player player => Main.player[Projectile.owner];
     public override void SetStaticDefaults()
     {
@@ -55,18 +54,9 @@ public class StabtrapStingerProjectile : ModProjectile
         {
             proj = Main.projectile[byIdentity];
             Vector2 chainStart = Projectile.Center;
-            if (TailChain != null)
-            {
 
-                TailChain.Update(chainStart, proj.Center);
-            }
-            else
-            {
-                TailChain = PhysicsMethods.CreateVerletChain(22, 10, chainStart, proj.Center, endLength: 0);
-            }
-            if (SpawnTimer-- == 60)
-                TailChain = PhysicsMethods.CreateVerletChain(22, 10, chainStart, proj.Center, endLength: 0);
-
+            TailChain ??= new(22, 10, chainStart, proj.Center);
+            TailChain.Update(chainStart, proj.Center);
         }
         if (!player.dead && player.ownedProjectileCounts[ModContent.ProjectileType<StabtrapProjectile>()] > 0)
         {
@@ -130,7 +120,7 @@ public class StabtrapStingerProjectile : ModProjectile
         }
         Vector2 vectorToTrap = proj.Center - Projectile.Center;
         float distanceToTrap = vectorToTrap.Length();
-        if (distanceToTrap > 150f || !player.GetSnaptrapPlayer().CanUseSnaptrap && player.GetSnaptrapPlayer().GetActiveSnaptrap().retracting && distanceToTrap > 30f)
+        if (distanceToTrap > 150f || !player.Snaptrap().CanUseSnaptrap && player.Snaptrap().ActiveSnaptrap.retracting && distanceToTrap > 30f)
         {
             int where = Projectile.Center.X < proj.Center.X ? 1 : -1;
             int where2 = Projectile.Center.Y < proj.Center.Y ? 1 : -1;
@@ -154,11 +144,6 @@ public class StabtrapStingerProjectile : ModProjectile
     {
         TailChain?.Draw(Main.spriteBatch, Main.screenPosition, chainSprite.Value, Color.White, true, null, null, chainSprite.Value);
     }
-    public override void OnKill(int timeLeft)
-    {
-        TailChain?.Kill();
-    }
-
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
         NPC HomingTarget = Main.npc[(int)proj.ai[1]];

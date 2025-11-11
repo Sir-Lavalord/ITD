@@ -1,6 +1,4 @@
-﻿using ITD.Systems;
-
-namespace ITD.Content.Items.Accessories.AllAround;
+﻿namespace ITD.Content.Items.Accessories.AllAround;
 
 public class TopazNecklace : ModItem
 {

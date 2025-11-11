@@ -1,7 +1,6 @@
 ﻿using ITD.Content.Dusts;
 using ITD.Content.Projectiles.Other;
 using ITD.Content.Tiles.BlueshroomGroves;
-using ITD.Utilities;
 using Terraria.DataStructures;
 
 namespace ITD.Content.NPCs.BlueshroomGroves;
@@ -99,7 +98,7 @@ public class CicadianTree : ModNPC
     }
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
-        if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground && Main.hardMode)
+        if (spawnInfo.Player.ITD().ZoneBlueshroomsUnderground && Main.hardMode)
             return 0.1f;
         return 0f;
     }

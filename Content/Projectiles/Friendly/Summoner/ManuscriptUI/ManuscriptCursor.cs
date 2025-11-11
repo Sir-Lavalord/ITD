@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Buffs.MinionBuffs;
 using ITD.Content.Items.Weapons.Summoner;
-using ITD.Utilities;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI;
 
@@ -31,7 +30,7 @@ public class ManuscriptCursor : ModProjectile
 
         }
         RegisterLeftClick(player);
-        Point mouseTiles = player.GetITDPlayer().MousePosition.ToTileCoordinates();
+        Point mouseTiles = player.ITD().MousePosition.ToTileCoordinates();
         if (TileHelpers.SolidTile(mouseTiles))
         {
             isOverlapping = true;
@@ -57,18 +56,18 @@ public class ManuscriptCursor : ModProjectile
             {
                 case 1:
                     player.CheckMana(50, true);
-                    player.AddBuff(ModContent.BuffType<ManuscriptMinerBuff>(), 10);
+                    player.AddBuff<ManuscriptMinerBuff>(10);
                     type = ModContent.ProjectileType<ManuscriptMinerProj>();
                     break;
                 case 2:
                     player.CheckMana(50, true);
-                    player.AddBuff(ModContent.BuffType<ManuscriptDuelistBuff>(), 10);
+                    player.AddBuff<ManuscriptDuelistBuff>(10);
                     type = ModContent.ProjectileType<ManuscriptDuelistProj>();
                     damage = 34;
                     break;
                 case 3:
                     player.CheckMana(50, true);
-                    player.AddBuff(ModContent.BuffType<ManuscriptLumberBuff>(), 10);
+                    player.AddBuff<ManuscriptLumberBuff>(10);
                     type = ModContent.ProjectileType<ManuscriptLumberProj>();
                     break;
                 case 4:

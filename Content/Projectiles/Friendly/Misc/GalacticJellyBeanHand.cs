@@ -1,7 +1,6 @@
 ﻿using ITD.Content.Items.Accessories.Expert;
 using ITD.Particles;
 using ITD.Particles.Misc;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -37,7 +36,7 @@ public class GalacticJellyBeanHand : ModProjectile
     private HandState handState = HandState.Default;
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12; // The length of old position to be recorded
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12; // The Length of old position to be recorded
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording mode
         Main.projFrames[Type] = 6;
     }

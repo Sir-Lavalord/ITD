@@ -1,5 +1,4 @@
 ﻿using ITD.Kinematics;
-using ITD.Utilities;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 
@@ -45,7 +44,7 @@ public class GrabbOMaticPlayer : ModPlayer
             arm = new KineChain(Player.Center.X, Player.Center.Y, armP);
         }
         arm.basePoint = Player.Center;
-        arm.GenUpdate(Player.GetITDPlayer().MousePosition);
+        arm.GenUpdate(Player.ITD().MousePosition);
         arm.Draw(Main.spriteBatch, Main.screenPosition, Color.White, Player.direction == 1, armMidTex.Value, handTex.Value, armTex.Value);
     }
     public override void ProcessTriggers(TriggersSet triggersSet)
@@ -57,12 +56,8 @@ public class GrabbOMaticPlayer : ModPlayer
             Vector2 grabbyPart = arm is null ? Vector2.Zero : arm.joints[^1];
             Point mouse = grabbyPart.ToPoint();
             int inflate = 16;
-            NPC[] grabbedNPCs = MiscHelpers.EntityQuery<NPC>(predicate: n => n.Exists() && n.Hitbox.Inflated(inflate).Contains(mouse));
-            Projectile[] grabbedProjectiles = MiscHelpers.EntityQuery<Projectile>(predicate: p => p.Exists() && p.Hitbox.Inflated(inflate).Contains(mouse));
-            Player[] grabbedPlayers = MiscHelpers.EntityQuery(ignore: Player, predicate: p => p.Exists() && p.Hitbox.Inflated(inflate).Contains(mouse));
-            Item[] grabbedItems = MiscHelpers.EntityQuery<Item>(predicate: i => i.ExistsInWorld() && i.Hitbox.Inflated(inflate).Contains(mouse));
-            Entity[] entities = [.. grabbedNPCs, .. grabbedProjectiles, .. grabbedPlayers, .. grabbedItems];
-            foreach (Entity entity in entities)
+            var entities = MiscHelpers.EntityQuery<Entity>(Player, predicate: e => e.Hitbox.Inflated(inflate).Contains(mouse));
+            foreach (var entity in entities)
             {
                 Vector2 toGrabbyPart = grabbyPart - entity.Center;
                 entity.velocity = toGrabbyPart;

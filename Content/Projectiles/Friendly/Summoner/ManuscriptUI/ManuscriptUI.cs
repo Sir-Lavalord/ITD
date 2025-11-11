@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Items.Weapons.Summoner;
-using ITD.Utilities;
 using System.IO;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner.ManuscriptUI;

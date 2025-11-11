@@ -50,7 +50,7 @@ public class RazedWineBottle : ModProjectile
     {
         if (target.whoAmI == travelTarget.whoAmI)
         {
-            target.AddBuff(ModContent.BuffType<ToastedBuff>(), 120);
+            target.AddBuff<ToastedBuff>(120);
             Projectile.Kill();
         }
     }

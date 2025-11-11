@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Systems;
-using ITD.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.Audio;
@@ -26,7 +25,7 @@ public class Cursebreaker : Favor
     }
     public override bool UseFavor(Player player)
     {
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         Vector2 mouse = modPlayer.MousePosition;
 
         Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center - new Vector2(20, 0), Vector2.Normalize(mouse - player.Center) * 16f, ModContent.ProjectileType<ThrowableGuardian>(), 499, 0.1f, player.whoAmI);

@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.Localization;
+﻿using Terraria.Localization;
 
 namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 
@@ -55,7 +54,7 @@ public class ChainwhipSnaptrapProjectile : ITDSnaptrap
     public override bool PreAI()
     {
         Player player = Main.player[Projectile.owner];
-        ITDSnaptrap snaptrap = player.GetSnaptrapPlayer().GetActiveSnaptrap();
+        ITDSnaptrap snaptrap = player.Snaptrap().ActiveSnaptrap;
         if (snaptrap.retracting)
             constantEffect = 0f;
 

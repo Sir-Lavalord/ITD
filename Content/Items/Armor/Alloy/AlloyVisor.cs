@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.Localization;
+﻿using Terraria.Localization;
 
 namespace ITD.Content.Items.Armor.Alloy;
 
@@ -26,7 +25,7 @@ public class AlloyVisor : ModItem
     }
     public override void UpdateArmorSet(Player player)
     {
-        player.GetITDPlayer().setAlloy_Magic = true;
+        player.ITD().setAlloy_Magic = true;
         player.setBonus = SetBonusText.Value;
     }
 }

@@ -1,6 +1,5 @@
 ﻿using ITD.Particles;
 using ITD.Particles.Projectiles;
-using ITD.Utilities;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics;

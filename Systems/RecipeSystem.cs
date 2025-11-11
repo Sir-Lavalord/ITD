@@ -24,15 +24,15 @@ public class RecipeSystem : ModSystem
 
     public override void AddRecipes()
     {
-        Recipe recipe = Recipe.Create(ModContent.ItemType<Shale>());
-        recipe.AddIngredient(ItemID.StoneBlock);
-        recipe.AddTile(ModContent.TileType<StonepresserTile>());
-        recipe.Register();
+        Recipe.Create(ModContent.ItemType<Shale>())
+            .AddIngredient(ItemID.StoneBlock)
+            .AddTile(ModContent.TileType<StonepresserTile>())
+            .Register();
 
-        recipe = Recipe.Create(ModContent.ItemType<Depthrock>());
-        recipe.AddIngredient(ModContent.ItemType<Shale>());
-        recipe.AddTile(ModContent.TileType<StonepresserTile>());
-        recipe.Register();
+        Recipe.Create(ModContent.ItemType<Depthrock>())
+            .AddIngredient(ModContent.ItemType<Shale>())
+            .AddTile(ModContent.TileType<StonepresserTile>())
+            .Register();
 
         /*      recipe = Recipe.Create(ModContent.ItemType<Blackstone>());
               recipe.AddIngredient(ModContent.ItemType<Depthrock>());

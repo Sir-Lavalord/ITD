@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 
@@ -104,7 +103,7 @@ public class MangledSheerthorn : ModItem
             {
                 position = new Vector2(point.X * 16 + 5, point.Y * 16 - 5);
                 float power = 1 * Utils.GetLerpValue(600f, 0f, point.ToWorldCoordinates().Distance(Main.LocalPlayer.Center), true);
-                player.GetITDPlayer().BetterScreenshake(2, power, power, false);
+                player.ITD().BetterScreenshake(2, power, power, false);
                 attackCycle = ++attackCycle % 3;
                 if (attackCycle == 0)
                 {
@@ -119,7 +118,7 @@ public class MangledSheerthorn : ModItem
                         }
                     }
                     power = 6 * Utils.GetLerpValue(800f, 0f, point.ToWorldCoordinates().Distance(Main.LocalPlayer.Center), true);
-                    player.GetITDPlayer().BetterScreenshake(8, power, power, false);
+                    player.ITD().BetterScreenshake(8, power, power, false);
                 }
                 SoundEngine.PlaySound(SoundID.Dig, position);
 

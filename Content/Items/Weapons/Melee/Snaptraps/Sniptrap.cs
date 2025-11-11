@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
-using ITD.Utilities;
 
 namespace ITD.Content.Items.Weapons.Melee.Snaptraps;
 

@@ -194,7 +194,7 @@ public class SlimeMold : MoldNpc
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
     {
-        target.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 60 * 8);
+        target.AddBuff<MelomycosisBuff>(60 * 8);
     }
 
     public override bool CheckDead()
@@ -253,7 +253,7 @@ public class SlimeMold : MoldNpc
 
     //public override float SpawnChance(NPCSpawnInfo spawnInfo)
     //{
-    //    if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)
+    //    if (spawnInfo.Player.ITD().ZoneBlueshroomsUnderground)
     //    {
     //        return 0.45f;
     //    }

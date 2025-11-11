@@ -51,7 +51,7 @@ public sealed class HeadLayer : PlayerDrawLayer
         return true;
     }
 
-    protected override void Draw(ref PlayerDrawSet drawInfo)
+    public override void Draw(ref PlayerDrawSet drawInfo)
     {
         Player drawPlayer = drawInfo.drawPlayer;
 
@@ -144,7 +144,7 @@ public sealed class LegsLayer : PlayerDrawLayer
         return true;
     }
 
-    protected override void Draw(ref PlayerDrawSet drawInfo)
+    public override void Draw(ref PlayerDrawSet drawInfo)
     {
         Player drawPlayer = drawInfo.drawPlayer;
 
@@ -207,7 +207,7 @@ public sealed class WingsLayer : PlayerDrawLayer
         return true;
     }
 
-    protected override void Draw(ref PlayerDrawSet drawInfo)
+    public override void Draw(ref PlayerDrawSet drawInfo)
     {
         Player drawPlayer = drawInfo.drawPlayer;
 
@@ -275,7 +275,7 @@ public sealed class ShoesLayer : PlayerDrawLayer
         return true;
     }
 
-    protected override void Draw(ref PlayerDrawSet drawInfo)
+    public override void Draw(ref PlayerDrawSet drawInfo)
     {
         Player drawPlayer = drawInfo.drawPlayer;
 
@@ -343,7 +343,7 @@ public sealed class HeldItemLayer : PlayerDrawLayer
         return true;
     }
 
-    protected override void Draw(ref PlayerDrawSet drawInfo)
+    public override void Draw(ref PlayerDrawSet drawInfo)
     {
         Player drawPlayer = drawInfo.drawPlayer;
 

@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Dusts;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -116,7 +115,7 @@ public class CosmicFistBump : ModProjectile
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CosmicFistTelegraph>(),
                             0, 0f, Main.myPlayer, Projectile.rotation, Projectile.whoAmI, 0f);
                         Projectile.localAI[1] = 0;
-                        player.GetITDPlayer().BetterScreenshake(10, 10, 10, true);
+                        player.ITD().BetterScreenshake(10, 10, 10, true);
 
                         for (int i = 0; i < 12; i++)
                         {
@@ -155,7 +154,7 @@ public class CosmicFistBump : ModProjectile
             case ActionState.Spamming:
                 if (Projectile.localAI[1]++ >= 30 && Projectile.localAI[1] < 180)
                 {
-                    player.GetITDPlayer().BetterScreenshake(4, 2, 2, true);
+                    player.ITD().BetterScreenshake(4, 2, 2, true);
                     Vector2 velo = Projectile.rotation.ToRotationVector2() * 8;
                     SoundEngine.PlaySound(SoundID.Item103, Projectile.Center);
                     if (Main.netMode != NetmodeID.MultiplayerClient)

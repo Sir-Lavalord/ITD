@@ -1,7 +1,6 @@
 ﻿using ITD.Particles;
 using ITD.Particles.CosJel;
 using ITD.PrimitiveDrawing;
-using ITD.Utilities;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -71,7 +70,7 @@ public class CosmicRay : ModProjectile
     {
         NPC npc = Main.npc[NPCOwner];
         Player player = Main.player[npc.target];
-        player.GetITDPlayer().BetterScreenshake(20, 5, 5, true);
+        player.ITD().BetterScreenshake(20, 5, 5, true);
         Projectile.Center = npc.Center - new Vector2(0, 15);
         // change the projetile rotation for adjusting the laser rotation
         if (!LockIn)
@@ -81,7 +80,7 @@ public class CosmicRay : ModProjectile
         Projectile.velocity = Projectile.rotation.ToRotationVector2();
         UpdateLaserCollision();
 
-        //update current laser length slowly, if you dont want that, just uncomment the comment at the end of the AI hook
+        //update current laser Length slowly, if you dont want that, just uncomment the comment at the end of the AI hook
         if (LasersLength > CurrentLasterLength)
         {
             CurrentLasterLength += 25;

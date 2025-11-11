@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Mage;
 using ITD.Systems;
-using ITD.Utilities;
 using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Weapons.Mage;
@@ -57,7 +56,7 @@ public class CrowdController : ModItem
     }
     public static void Hold(Player player)
     {
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         Vector2 mouse = modPlayer.MousePosition;
 
         if (mouse.X < player.Center.X)

@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Buffs.Debuffs;
-using ITD.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria.Audio;
@@ -346,7 +345,7 @@ public class WheelerTrashProj : ModProjectile
         {
             if (name == "plague")
             {
-                target.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 300);
+                target.AddBuff<MelomycosisBuff>(300);
 
             }
         }
@@ -357,7 +356,7 @@ public class WheelerTrashProj : ModProjectile
             case 1:
                 break;
             case 2:
-                target.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 300);
+                target.AddBuff<MelomycosisBuff>(300);
                 break;
             case 3:
                 break;

@@ -1,5 +1,4 @@
 ﻿using ITD.Systems;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 
@@ -23,7 +22,7 @@ public class MandinataProjectile : ModProjectile
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
         Player player = Main.player[Projectile.owner];
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         if (Projectile.ai[1] == 0f && modPlayer.itemVar[0] == 0f)
         {
             modPlayer.itemVar[0] = 1f;

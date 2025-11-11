@@ -2,7 +2,6 @@
 using ITD.Networking.Packets;
 using ITD.Systems;
 using ITD.Systems.Recruitment;
-using ITD.Utilities;
 using ReLogic.Graphics;
 using System.Collections.Generic;
 using Terraria.GameContent;
@@ -15,23 +14,25 @@ namespace ITD.Content.UI;
 public class RecruitmentButtonGui : ITDUIState
 {
     private RecruitmentButton recruitmentButton;
-    public override bool Visible => RecruitmentButtonVisible();
-    private static bool RecruitmentButtonVisible()
+    public override bool Visible
     {
-        bool talking = Main.LocalPlayer.talkNPC > -1;
-        bool inSpecialNPCTalkMenu = Main.InGuideCraftMenu || Main.InReforgeMenu || Main.npcShop > 0;
+        get
+        {
+            bool talking = Main.LocalPlayer.talkNPC > -1;
+            bool inSpecialNPCTalkMenu = Main.InGuideCraftMenu || Main.InReforgeMenu || Main.npcShop > 0;
 
-        bool shouldShow = talking && !inSpecialNPCTalkMenu;
+            bool shouldShow = talking && !inSpecialNPCTalkMenu;
 
-        Mod dialogueTweakMod = ITD.Instance.dialogueTweak;
-        if (dialogueTweakMod is null)
-            return shouldShow;
+            if (!ModLoader.HasMod("DialogueTweak"))
+                return shouldShow;
 
-        if (dialogueTweakMod.TryGetModConfigValue("Configuration", "VanillaUI", null, out bool isDialogueTweakVanillaUI))
-            return shouldShow && isDialogueTweakVanillaUI;
-
-        return shouldShow;
+            return shouldShow && VanillaUI;
+        }
     }
+    [JITWhenModsEnabled("DialogueTweak")]
+    public static bool VanillaUI => DialogueTweak.Configuration.Instance.VanillaUI;
+    [JITWhenModsEnabled("DialogueTweak")]
+    public static bool AltDrawToLeft => DialogueTweak.Configuration.Instance.ShowSwapButton;
     public override int InsertionIndex(List<GameInterfaceLayer> layers)
     {
         return layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 2"));
@@ -48,11 +49,9 @@ public class RecruitmentButtonGui : ITDUIState
         float xOffset = 0f;
         Mod dialogueTweakMod = ITD.Instance.dialogueTweak;
 
-        bool altDrawToLeft = dialogueTweakMod != null;
-        if (altDrawToLeft)
-        {
-            dialogueTweakMod.TryGetModConfigValue("Configuration", "ShowSwapButton", null, out altDrawToLeft); // who needs readable code
-        }
+        bool altDrawToLeft = false;
+        if (ModLoader.HasMod("DialogueTweak"))
+            altDrawToLeft = AltDrawToLeft;
 
         if (Main.npcChatCornerItem > 0 || altDrawToLeft)
             xOffset -= 32f;
@@ -71,7 +70,7 @@ public class RecruitmentButton : ITDUIElement
 {
     public const string buttonTex = "ITD/Content/UI/RecruitmentButton";
     public const string highlight = buttonTex + "_Highlight";
-    protected override void DrawSelf(SpriteBatch spriteBatch)
+	protected override void DrawSelf(SpriteBatch spriteBatch)
     {
         Texture2D swordTexture = ModContent.Request<Texture2D>(buttonTex).Value;
         Texture2D highlightTexture = ModContent.Request<Texture2D>(highlight).Value;
@@ -100,7 +99,7 @@ public class RecruitmentButton : ITDUIElement
         if (Main.netMode == NetmodeID.SinglePlayer)
             TownNPCRecruitmentLoader.QueueRecruit(player.TalkNPC, player);
         else
-            NetSystem.SendPacket(new QueueRecruitmentPacket(new QueuedRecruitment(player.talkNPC, player.TalkNPC.type, player.GetITDPlayer().guid)));
+            NetSystem.SendPacket(new QueueRecruitmentPacket(new QueuedRecruitment(player.talkNPC, player.TalkNPC.type, player.ITD().guid)));
 
         player.SetTalkNPC(-1);
     }

@@ -13,7 +13,7 @@ public class PetPigPet : ModProjectile
     private Chest chosenChest = null;
     private const int detectRadius = 30;
     readonly float lastDir;
-    VerletChain pigChain;
+    private VerletChain pigChain;
     bool goToChosenChest = false;
     public override void SetStaticDefaults()
     {
@@ -37,12 +37,7 @@ public class PetPigPet : ModProjectile
     {
         // create the verletChain
         Vector2 chainStart = Projectile.Center + Projectile.velocity + Vector2.UnitY * Projectile.height / 2;
-        pigChain = PhysicsMethods.CreateVerletChain(8, 6, chainStart, chainStart + Vector2.One);
-    }
-    public override void OnKill(int timeLeft)
-    {
-        // destroy the verletChain at the same time as the projectile
-        pigChain?.Kill();
+        pigChain = new(8, 6, chainStart, chainStart + Vector2.One);
     }
     public override void AI()
     {

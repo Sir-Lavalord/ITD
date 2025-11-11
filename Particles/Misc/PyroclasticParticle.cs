@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using ITD.Utilities.EntityAnim;
+﻿using ITD.Utilities.Tweening;
 
 namespace ITD.Particles.Misc;
 

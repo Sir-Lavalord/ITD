@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Projectiles.Hostile;
-using ITD.Utilities;
 using System;
 using System.IO;
 using System.Linq;
@@ -19,7 +18,7 @@ public class IncendipedeHead : ITDNPC
     public override void SetStaticDefaultsSafe()
     {
         Main.npcFrameCount[Type] = 3;
-        // i'm using this for the actual segment following logic so consider this the length limit for incendipedes
+        // i'm using this for the actual segment following logic so consider this the Length limit for incendipedes
         NPCID.Sets.TrailCacheLength[Type] = 10 * SpacingBetween;
         // idc about getting rotations cuz we can just calculate those on the fly
         NPCID.Sets.TrailingMode[Type] = NPCTrailingID.PosRotEveryFrame;
@@ -209,7 +208,7 @@ public class IncendipedeHead : ITDNPC
     }
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
-        if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
+        if (spawnInfo.Player.ITD().ZoneDeepDesert)
         {
             return 0.25f;
         }

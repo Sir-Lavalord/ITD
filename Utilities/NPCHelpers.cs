@@ -1,4 +1,5 @@
-﻿using Terraria.DataStructures;
+﻿global using ITD.Utilities;
+using Terraria.DataStructures;
 
 namespace ITD.Utilities;
 
@@ -118,4 +119,6 @@ public static class NPCHelpers
         }
         return n;
     }
+
+    public static void AddBuff<T>(this NPC n, int time, bool quiet = false) where T : ModBuff => n.AddBuff<T>(time, quiet);
 }

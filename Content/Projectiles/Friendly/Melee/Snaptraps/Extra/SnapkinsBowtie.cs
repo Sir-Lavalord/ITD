@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
+﻿namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 
 public class SnapkinsBowtie : ModProjectile
 {

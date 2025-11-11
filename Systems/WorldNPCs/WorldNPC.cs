@@ -1,5 +1,4 @@
 ﻿using ITD.Content.NPCs;
-using ITD.Utilities;
 using ITD.Utilities.Placeholders;
 using System.Collections.Generic;
 using Terraria.Audio;
@@ -16,7 +15,7 @@ public abstract class WorldNPC : ITDNPC
     public const string WorldNPCAssetsPath = "ITD/Systems/WorldNPCs/Assets/";
     public override void OnRightClick(Player player)
     {
-        player.GetITDPlayer().TalkWorldNPC = NPC.whoAmI;
+        player.ITD().TalkWorldNPC = NPC.whoAmI;
     }
     public virtual Asset<Texture2D> DialogueBoxStyle => ModContent.Request<Texture2D>(WorldNPCAssetsPath + "BoxStyles/DefaultBoxStyle");
     public virtual SpeakerHeadDrawingData DrawingData => new(ModContent.Request<Texture2D>(Placeholder.PHGeneric), 1);

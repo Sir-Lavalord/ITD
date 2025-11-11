@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.Localization;
 using Terraria.ObjectData;

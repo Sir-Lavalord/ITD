@@ -11,8 +11,11 @@ using ITD.Particles;
 using ITD.Skies;
 using ITD.Systems;
 using ITD.Systems.Recruitment;
+using MonoMod.Cil;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
@@ -270,6 +273,28 @@ public class ITD : Mod
         var tex = ITD.Instance.Assets.Request<Texture2D>("Effects/ClassicLifeOverlay");
         sb.Draw(tex.Value, panel.Location.ToVector2(), Main.DiscoColor);
     }
+
+    public static void Log(string message, LogType type = LogType.Error)
+    {
+        var logger = Instance.Logger;
+
+        message = $"{MethodBase.GetCurrentMethod().Name}: {message}";
+
+        Action<string> logMethod = type switch
+        {
+            LogType.Debug => logger.Debug,
+            LogType.Info => logger.Info,
+            LogType.Warn => logger.Warn,
+            LogType.Error => logger.Error,
+            LogType.Fatal => logger.Fatal,
+            _ => null
+        };
+
+        logMethod(message);
+    }
+
+    public static void Dump(ILContext il) => MonoModHooks.DumpIL(Instance, il);
+
     public override void Unload()
     {
         foreach (MetaballShaderData s in ITDMetaBallsShaders.Values)
@@ -283,4 +308,13 @@ public class ITD : Mod
         dialogueTweak = null;
         Instance = null;
     }
+}
+
+public enum LogType
+{
+    Debug,
+    Info,
+    Warn,
+    Error,
+    Fatal,
 }

@@ -3,11 +3,9 @@ using ITD.Content.Tiles.DeepDesert;
 using ITD.Networking;
 using ITD.Networking.Packets;
 using ITD.Systems.Recruitment;
-using ITD.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using Terraria.Chat;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
@@ -76,8 +74,7 @@ public class ITDSystem : ModSystem
         recruitmentData.Clear();
         // i wonder why this dictionary is private
 
-        var dictionary =
-            ReflectionHelpers.Get<FieldInfo, Dictionary<string, object>>("dict", tag, flags: BindingFlags.Instance | BindingFlags.NonPublic);
+        var dictionary = tag.dict;
 
         foreach (var key in dictionary.Keys)
         {
@@ -153,7 +150,7 @@ public class ITDSystem : ModSystem
 
                         if (npc.ModNPC is RecruitedNPC rNpc)
                         {
-                            rNpc.Recruiter = player.GetITDPlayer().guid;
+                            rNpc.Recruiter = player.ITD().guid;
                             rNpc.recruitmentData = recruitmentData[q.player];
                             if (Main.dedServ)
                                 NetSystem.SendPacket(new SingleNPCRecruitmentPacket((byte)npc.whoAmI, rNpc.Recruiter, rNpc.recruitmentData));

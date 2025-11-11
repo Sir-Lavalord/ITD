@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Items.Placeable.Biomes.Minibiomes.BlackMoldBm;
 using ITD.Systems;
-using ITD.Utilities;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;

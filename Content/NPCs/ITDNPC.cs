@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using System;
+﻿using System;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
@@ -16,10 +15,6 @@ public abstract class ITDNPC : ModNPC
     /// Override and provide a <see cref="LocalizedText"/> that tells the player how to summon this boss. This can, indeed, have logic and be dynamic.
     /// </summary>
     public virtual LocalizedText HowToSummon => null;
-    /// <summary>
-    /// Override and return a bool that tells us if this boss has been downed.
-    /// </summary>
-    public virtual Func<bool> DownedMe => null;
     /// <summary>
     /// Override to define this boss's collectibles for BossChecklist! If you call the base impl of <see cref="ModNPC.ModifyNPCLoot(NPCLoot)"/>, these will additionally be automatically registered for the loot.
     /// </summary>

@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Items.Weapons.Melee.Snaptraps;
 using ITD.Systems;
-using ITD.Utilities;
 using ReLogic.Utilities;
 using System.IO;
 using Terraria.Audio;
@@ -189,6 +188,7 @@ public abstract class ITDSnaptrap : ITDProjectile
     }
     private void SetSnaptrapPlayerFlags(SnaptrapPlayer player)
     {
+        player.ActiveSnaptrap = this;
         if (player.ChainWeightEquipped)
             gravity += 2f;
         ShootRange = player.LengthModifier.ApplyTo(ShootRange);
@@ -201,7 +201,7 @@ public abstract class ITDSnaptrap : ITDProjectile
         this.source = source as EntitySource_ItemUse_WithAmmo;
         Projectile.localNPCHitCooldown = SourceItem.Item.useTime;
         MaxDamage = SourceItem.Item.damage;
-        SetSnaptrapPlayerFlags(this.source.Player.GetSnaptrapPlayer());
+        SetSnaptrapPlayerFlags(this.source.Player.Snaptrap());
         OnSnaptrapSpawn();
     }
     public sealed override bool OnTileCollide(Vector2 oldVelocity)
@@ -370,7 +370,7 @@ public abstract class ITDSnaptrap : ITDProjectile
 
         float chainLength = toOwner.Length();
 
-        // Apply gravity (i. e. chainWeight)
+        // Apply Gravity (i. e. chainWeight)
         if (!IsStickingToTarget)
         {
             Projectile.velocity.Y += gravity / (Projectile.extraUpdates + 1);

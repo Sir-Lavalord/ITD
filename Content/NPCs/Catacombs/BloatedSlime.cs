@@ -252,7 +252,7 @@ public class BloatedSlime : ModNPC
 
     //public override float SpawnChance(NPCSpawnInfo spawnInfo)
     //{
-    //    if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)
+    //    if (spawnInfo.Player.ITD().ZoneBlueshroomsUnderground)
     //    {
     //        return 0.45f;
     //    }

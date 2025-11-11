@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.Localization;
+﻿using Terraria.Localization;
 
 namespace ITD.Content.Items.Armor.Alloy;
 
@@ -26,7 +25,7 @@ public class AlloyHeadgear : ModItem
     }
     public override void UpdateArmorSet(Player player)
     {
-        player.GetITDPlayer().setAlloy_Ranged = true;
+        player.ITD().setAlloy_Ranged = true;
         player.setBonus = SetBonusText.Value;
     }
 }

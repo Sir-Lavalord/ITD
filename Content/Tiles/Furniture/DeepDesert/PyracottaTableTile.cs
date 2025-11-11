@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Tiles.Furniture.DeepDesert;
+﻿namespace ITD.Content.Tiles.Furniture.DeepDesert;
 
 public class PyracottaTableTile : ModTile
 {

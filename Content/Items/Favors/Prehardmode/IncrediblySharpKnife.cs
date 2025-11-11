@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Systems;
-using ITD.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.Audio;

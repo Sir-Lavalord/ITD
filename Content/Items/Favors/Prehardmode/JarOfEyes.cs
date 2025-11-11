@@ -24,7 +24,7 @@ public class JarOfEyes : Favor
     }
     public override bool UseFavor(Player player)
     {
-        //ITDPlayer modPlayer = player.GetITDPlayer();
+        //ITDPlayer modPlayer = player.ITD();
         for (int i = 0; i < 10; i++)
         {
             Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, Vector2.UnitX.RotatedBy(Main.rand.NextFloat(MathHelper.TwoPi)) * Main.rand.NextFloat(8f, 12f), ModContent.ProjectileType<PickledEye>(), 40, 0.1f, player.whoAmI);

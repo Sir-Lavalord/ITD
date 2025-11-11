@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Tiles.Furniture.BlueshroomGroves;
+﻿namespace ITD.Content.Tiles.Furniture.BlueshroomGroves;
 
 public class CharblePlatformTile : ModTile
 {

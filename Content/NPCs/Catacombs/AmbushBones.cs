@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using System;
+﻿using System;
 
 namespace ITD.Content.NPCs.Catacombs;
 
@@ -56,7 +55,7 @@ public class AmbushBones : ModNPC
 
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
-        if (spawnInfo.Player.GetITDPlayer().ZoneCatacombs)
+        if (spawnInfo.Player.ITD().ZoneCatacombs)
         {
             return 0.25f;
         }

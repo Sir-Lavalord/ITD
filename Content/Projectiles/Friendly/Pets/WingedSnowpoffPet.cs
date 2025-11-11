@@ -8,7 +8,7 @@ public class WingedSnowpoffPet : ModProjectile
 {
     private readonly Asset<Texture2D> lanternSprite = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Pets/WingedSnowpoffLantern");
     private readonly Asset<Texture2D> chainSprite = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Pets/WingedSnowpoffChain");
-    VerletChain lanternChain;
+    private VerletChain lanternChain;
     float lastDir;
     int targetDir;
     Vector2 randomWander;
@@ -41,7 +41,7 @@ public class WingedSnowpoffPet : ModProjectile
         if (!Main.dedServ && lanternChain is null)
         {
             Vector2 chainStart = Projectile.Center + Vector2.UnitY * Projectile.height / 2;
-            lanternChain = PhysicsMethods.CreateVerletChain(4, 10, chainStart, chainStart + Vector2.One, endLength: 44);
+            lanternChain = new(4, 10, chainStart, chainStart + Vector2.One, endLength: 44);
         }
         Player player = Main.player[Projectile.owner];
         int sign = Math.Sign(player.velocity.X);
@@ -62,8 +62,9 @@ public class WingedSnowpoffPet : ModProjectile
         DoFloating(player);
         if (lanternChain != null)
         {
+            lanternChain.UpdatePhysics();
             lanternChain.UpdateStart(Projectile.Center + (Vector2.UnitY * Projectile.height / 2) + Projectile.velocity);
-            Vector2 lanternCenter = Vector2.Lerp(lanternChain.endStick.pointA.pos, lanternChain.endStick.pointB.pos, 0.5f);
+            Vector2 lanternCenter = Vector2.Lerp(lanternChain.Points[^2], lanternChain.End, 0.5f);
             Lighting.AddLight(lanternCenter, new Vector3(0f, 0.8f, 1.2f));
         }
     }
@@ -85,9 +86,5 @@ public class WingedSnowpoffPet : ModProjectile
     public override void PostDraw(Color lightColor)
     {
         lanternChain?.Draw(Main.spriteBatch, Main.screenPosition, chainSprite.Value, Color.White, true, null, null, lanternSprite.Value);
-    }
-    public override void OnKill(int timeLeft)
-    {
-        lanternChain?.Kill();
     }
 }

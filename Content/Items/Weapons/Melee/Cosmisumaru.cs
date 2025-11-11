@@ -1,6 +1,5 @@
 using ITD.Content.Dusts;
 using ITD.Content.Projectiles.Friendly.Melee;
-using ITD.Utilities;
 using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Weapons.Melee;
@@ -69,7 +68,7 @@ public class Cosmisumaru : ModItem
             player.itemLocation.X = player.Center.X - 40f;
         }
 
-        if (player.GetITDPlayer().charge > 1499)
+        if (player.ITD().charge > 1499)
         {
             if (Main.rand.NextBool(3))
             {
@@ -96,7 +95,7 @@ public class Cosmisumaru : ModItem
             player.itemLocation.X = player.Center.X - 40f;
         }
 
-        if (player.GetITDPlayer().charge > 1499)
+        if (player.ITD().charge > 1499)
         {
             if (Main.rand.NextBool(3))
             {
@@ -112,7 +111,7 @@ public class Cosmisumaru : ModItem
     {
         if (player.altFunctionUse == 2)
         {
-            if (player.GetITDPlayer().charge < 1499)
+            if (player.ITD().charge < 1499)
             {
                 return false;
             }
@@ -131,9 +130,9 @@ public class Cosmisumaru : ModItem
     {
         if (player.altFunctionUse == 2)
         {
-            if (player.GetITDPlayer().charge > 1499)
+            if (player.ITD().charge > 1499)
             {
-                player.GetITDPlayer().charge = 0;
+                player.ITD().charge = 0;
                 Vector2 mousePosition = Main.MouseWorld;
                 Vector2 direction = mousePosition - player.position;
                 direction.Normalize();
@@ -166,7 +165,7 @@ public class Cosmisumaru : ModItem
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
-        if (player.altFunctionUse == 2 && player.GetITDPlayer().charge > 1499)
+        if (player.altFunctionUse == 2 && player.ITD().charge > 1499)
         {
             position.Y = Main.MouseWorld.Y;
             position.X = Main.MouseWorld.X;

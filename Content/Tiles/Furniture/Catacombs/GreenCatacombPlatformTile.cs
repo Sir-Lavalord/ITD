@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Dusts;
-using ITD.Utilities;
 using Terraria.ObjectData;
 
 namespace ITD.Content.Tiles.Furniture.Catacombs;

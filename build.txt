@@ -1,5 +1,6 @@
 displayName = Into The Depths
-modReferences = StructureHelper, MoreLocales
-buildIgnore = *.csproj, *.user, obj\*, bin\*, lib\*, .vs\*
+weakReferences = DialogueTweak
+modReferences = StructureHelper, Daybreak
+buildIgnore = *.csproj, *.user, *.pdb, *.xml, obj\*, bin\*, lib\*, .vs\*
 author = ITDevs
 version = 0.1.0.0

@@ -2,12 +2,10 @@
 using ITD.Networking;
 using ITD.Networking.Packets;
 using ITD.Systems.DataStructures;
-using ITD.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -376,7 +374,7 @@ public class ITDChestTE : ModTileEntity
 
         bool flag = false;
         int num = 0;
-        int gamepadPointForSlot = UIAccessors.CallGetGamepadPointForSlot(null, inv, context, slot);
+        int gamepadPointForSlot = ItemSlot.GetGamepadPointForSlot(inv, context, slot);
         if (PlayerInput.UsingGamepadUI)
         {
             flag = UILinkPointNavigator.CurrentPoint == gamepadPointForSlot;
@@ -461,7 +459,7 @@ public class ITDChestTE : ModTileEntity
                 case ItemSlot.Context.ModdedAccessorySlot:
                 case ItemSlot.Context.ModdedVanityAccessorySlot:
                 case ItemSlot.Context.ModdedDyeSlot:
-                    value = UIAccessors.CallGetBackgroundTexture(LoaderManager.Get<AccessorySlotLoader>(), slot, context);
+                    value = LoaderManager.Get<AccessorySlotLoader>().GetBackgroundTexture(slot, context).Item1;
                     break;
                 case 3:
                     value = TextureAssets.InventoryBack5.Value;
@@ -517,26 +515,26 @@ public class ITDChestTE : ModTileEntity
             }
         }
 
-        if ((context == 0 || context == 2) && UIAccessors.GetInventoryGlowTime(null)[slot] > 0 && !inv[slot].favorited && !inv[slot].IsAir)
+        if ((context == 0 || context == 2) && ItemSlot.inventoryGlowTime[slot] > 0 && !inv[slot].favorited && !inv[slot].IsAir)
         {
             float num5 = Main.invAlpha / 255f;
             Color value2 = new Color(63, 65, 151, 255) * num5;
-            Color value3 = Main.hslToRgb(UIAccessors.GetInventoryGlowHue(null)[slot], 1f, 0.5f) * num5;
-            float num6 = UIAccessors.GetInventoryGlowTime(null)[slot] / 300f;
+            Color value3 = Main.hslToRgb(ItemSlot.inventoryGlowHue[slot], 1f, 0.5f) * num5;
+            float num6 = ItemSlot.inventoryGlowTime[slot] / 300f;
             num6 *= num6;
             color2 = Color.Lerp(value2, value3, num6 / 2f);
             value = TextureAssets.InventoryBack13.Value;
         }
 
-        if ((context == 4 || context == 32 || context == 3) && UIAccessors.GetInventoryGlowTimeChest(null)[slot] > 0 && !inv[slot].favorited && !inv[slot].IsAir)
+        if ((context == 4 || context == 32 || context == 3) && ItemSlot.inventoryGlowTimeChest[slot] > 0 && !inv[slot].favorited && !inv[slot].IsAir)
         {
             float num7 = Main.invAlpha / 255f;
             Color value4 = new Color(130, 62, 102, 255) * num7;
             if (context == 3)
                 value4 = new Color(104, 52, 52, 255) * num7;
 
-            Color value5 = Main.hslToRgb(UIAccessors.GetInventoryGlowHueChest(null)[slot], 1f, 0.5f) * num7;
-            float num8 = UIAccessors.GetInventoryGlowTimeChest(null)[slot] / 300f;
+            Color value5 = Main.hslToRgb(ItemSlot.inventoryGlowHueChest[slot], 1f, 0.5f) * num7;
+            float num8 = ItemSlot.inventoryGlowTimeChest[slot] / 300f;
             num8 *= num8;
             color2 = Color.Lerp(value4, value5, num8 / 2f);
             value = TextureAssets.InventoryBack13.Value;
@@ -631,7 +629,7 @@ public class ITDChestTE : ModTileEntity
 
             if (context is ItemSlot.Context.ModdedAccessorySlot or ItemSlot.Context.ModdedVanityAccessorySlot or ItemSlot.Context.ModdedDyeSlot)
             {
-                UIAccessors.CallDrawSlotTexture(LoaderManager.Get<AccessorySlotLoader>(), value6, position + value.Size() / 2f * inventoryScale, rectangle, Color.White * 0.35f, 0f, rectangle.Size() / 2f, inventoryScale, SpriteEffects.None, 0f, slot, context);
+                LoaderManager.Get<AccessorySlotLoader>().DrawSlotTexture(value6, position + value.Size() / 2f * inventoryScale, rectangle, Color.White * 0.35f, 0f, rectangle.Size() / 2f, inventoryScale, SpriteEffects.None, 0f, slot, context);
                 goto SkipVanillaDraw;
             }
 
@@ -864,7 +862,7 @@ public class ITDChestTE : ModTileEntity
         int x = 506 + (UIOffsetX * FullSlotDim);
         for (int i = 0; i < ChestUI.ButtonID.Count; i++)
         {
-            UIAccessors.CallDrawChestButton(null, spriteBatch, i, x, Main.instance.invBottom + 40);
+            ChestUI.DrawButton(spriteBatch, i, x, Main.instance.invBottom + 40);
         }
     }
     public static long MoveCoinsITD(Item[] pInv, Item[] cInv, ContainerTransferContext context)
@@ -1061,30 +1059,4 @@ public class ITDChestTE : ModTileEntity
 
         return num - num12;
     }
-}
-public static class UIAccessors
-{
-    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "Sort")]
-    public static extern void CallSort(ItemSorting type, Item[] inv, params int[] ignoreSlots);
-    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "DrawButton")]
-    public static extern void CallDrawChestButton(ChestUI type, SpriteBatch spriteBatch, int ID, int X, int Y);
-
-    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "inventoryGlowHue")]
-    public static extern ref float[] GetInventoryGlowHue(ItemSlot type);
-
-    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "inventoryGlowTime")]
-    public static extern ref int[] GetInventoryGlowTime(ItemSlot type);
-
-    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "inventoryGlowHueChest")]
-    public static extern ref float[] GetInventoryGlowHueChest(ItemSlot type);
-
-    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "inventoryGlowTimeChest")]
-    public static extern ref int[] GetInventoryGlowTimeChest(ItemSlot type);
-
-    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "DrawSlotTexture")]
-    public static extern void CallDrawSlotTexture(AccessorySlotLoader instance, Texture2D value6, Vector2 position, Rectangle rectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth, int slot, int context);
-    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "GetBackgroundTexture")]
-    public static extern Texture2D CallGetBackgroundTexture(AccessorySlotLoader instance, int slot, int context);
-    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "GetGamepadPointForSlot")]
-    public static extern int CallGetGamepadPointForSlot(ItemSlot type, Item[] inv, int context, int slot);
 }

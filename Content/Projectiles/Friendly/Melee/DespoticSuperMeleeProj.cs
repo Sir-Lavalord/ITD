@@ -1,6 +1,4 @@
-﻿using ITD.Systems.DataStructures;
-using ITD.Systems.Extensions;
-using ITD.Utilities;
+﻿using Daybreak.Common.Rendering;
 using Terraria.Audio;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
@@ -88,7 +86,7 @@ public class DespoticSuperMeleeProj : ModProjectile
     }
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
-        Main.LocalPlayer.GetITDPlayer().BetterScreenshake(4, 4, 4, false);
+        Main.LocalPlayer.ITD().BetterScreenshake(4, 4, 4, false);
         SoundEngine.PlaySound(SoundID.Item92, target.Center);
         for (int j = 0; j < 8; ++j)
         {
@@ -120,7 +118,7 @@ public class DespoticSuperMeleeProj : ModProjectile
         vertexStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, -Main.screenPosition, new int?(Projectile.oldPos.Length), true);
         vertexStrip.DrawTrail();
 
-        Main.spriteBatch.End(out SpriteBatchData spriteBatchData); // unapply shaders
+        Main.spriteBatch.End(out SpriteBatchSnapshot spriteBatchData); // unapply shaders
         Main.spriteBatch.Begin(spriteBatchData);
 
         Vector2 extraHoldout = Projectile.velocity * 2f;

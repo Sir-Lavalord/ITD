@@ -53,7 +53,7 @@ public sealed class FrontGunLayer : PlayerDrawLayer
         return true;
     }
 
-    protected override void Draw(ref PlayerDrawSet drawInfo)
+    public override void Draw(ref PlayerDrawSet drawInfo)
     {
         Player drawPlayer = drawInfo.drawPlayer;
         ITDPlayer modPlayer = drawPlayer.GetModPlayer<ITDPlayer>();
@@ -154,7 +154,7 @@ public sealed class BackGunLayer : PlayerDrawLayer
         return true;
     }
 
-    protected override void Draw(ref PlayerDrawSet drawInfo)
+    public override void Draw(ref PlayerDrawSet drawInfo)
     {
         Player drawPlayer = drawInfo.drawPlayer;
         ITDPlayer modPlayer = drawPlayer.GetModPlayer<ITDPlayer>();

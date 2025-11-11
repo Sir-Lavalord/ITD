@@ -7,7 +7,7 @@ public class FrostichorBullet : ModProjectile
 {
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The Length of old position to be recorded
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0; // The recording mode
     }
 

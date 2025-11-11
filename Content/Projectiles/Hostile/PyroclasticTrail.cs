@@ -1,6 +1,6 @@
 ﻿using ITD.Particles;
 using ITD.Particles.Misc;
-using ITD.Utilities.EntityAnim;
+using ITD.Utilities.Tweening;
 using Terraria.GameContent;
 
 namespace ITD.Content.Projectiles.Hostile;

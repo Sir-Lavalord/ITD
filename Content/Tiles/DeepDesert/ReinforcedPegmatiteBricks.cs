@@ -29,7 +29,7 @@ public class ReinforcedPegmatiteBricks : ModTile
     {
         Point p = new(i, j);
         // here we check if the tile hasn't been mined (fail), and if there isn't already a particle that's linked to this tile
-        if (fail && !ParticleSystem.Instance.emitters.Any(prt => prt.tag is Point pnt && pnt == p))
+        if (fail && !ParticleSystem.emitters.Any(prt => prt.tag is Point pnt && pnt == p))
         {
             SoundEngine.PlaySound(SoundID.Item15, p.ToWorldCoordinates());
             ParticleEmitter part = ParticleSystem.NewSingleParticle<ProtectedTileParticle>(p.ToWorldCoordinates(), Vector2.Zero, lifetime: 30);

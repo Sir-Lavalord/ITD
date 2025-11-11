@@ -3,35 +3,62 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Terraria.DataStructures;
 
 namespace ITD.Utilities;
 
 public static class MiscHelpers
 {
-    public static T[] EntityQuery<T>(T ignore = null, int maxAmount = -1, Func<T, bool> predicate = null) where T : Entity
+    public static Span<T> EntityQuery<T>(T ignore = null, int maxAmount = -1, Func<T, bool> predicate = null) where T : Entity
     {
-        Type entityType = typeof(T);
+        var buffer = new List<T>(maxAmount == -1 ? 8 : maxAmount);
 
-        Entity[] entitiesTemp = entityType switch
+        Entity[] everyEntityArray = null;
+        if (typeof(T) == typeof(Entity))
+            everyEntityArray = MakeEveryEntityArray();
+
+        T[] array = typeof(T) switch
         {
-            Type t when t == typeof(NPC) => Main.npc,
-            Type t when t == typeof(Projectile) => Main.projectile,
-            Type t when t == typeof(Player) => Main.player,
-            Type t when t == typeof(Item) => Main.item,
-            _ => null
+            Type t when t == typeof(NPC) => Unsafe.As<NPC[], T[]>(ref Main.npc),
+            Type t when t == typeof(Projectile) => Unsafe.As<Projectile[], T[]>(ref Main.projectile),
+            Type t when t == typeof(Player) => Unsafe.As<Player[], T[]>(ref Main.player),
+            Type t when t == typeof(Item) => Unsafe.As<Item[], T[]>(ref Main.item),
+            Type t when t == typeof(Entity) => Unsafe.As<Entity[], T[]>(ref everyEntityArray),
+            _ => default,
         };
-        if (entitiesTemp is null) return [];
 
-        T[] entities = [.. entitiesTemp.Cast<T>()];
+        int currAmt = 0;
+        for (int i = 0; i < array.Length - 1; i++)
+        {
+            T cur = array[i];
+            if (!cur.active)
+                continue;
+            if (predicate != null && !predicate(cur))
+                continue;
+            if (ignore == cur)
+                continue;
+            if (maxAmount != -1 && ++currAmt > maxAmount)
+                break;
+            buffer.Add(cur);
+        }
 
-        bool shouldTryIgnoringSelf = ignore != null && entityType == ignore.GetType();
-
-        T[] result = [.. entities
-        .Where(e => predicate(e) && (!shouldTryIgnoringSelf || ignore.whoAmI != e.whoAmI))
-        .Take(maxAmount > 0 ? maxAmount : entities.Length)];
-
-        return result;
+        return CollectionsMarshal.AsSpan(buffer);
+    }
+    private static Entity[] MakeEveryEntityArray()
+    {
+        int len = Main.maxNPCs + Main.maxProjectiles + Main.maxPlayers + Main.maxItems;
+        Entity[] array = new Entity[len + 1];
+        int cur = 0;
+        for (int i = 0; i < Main.maxNPCs; i++)
+            array[cur++] = Main.npc[i];
+        for (int i = 0; i < Main.maxProjectiles; i++)
+            array[cur++] = Main.projectile[i];
+        for (int i = 0; i < Main.maxPlayers; i++)
+            array[cur++] = Main.player[i];
+        for (int i = 0; i < Main.maxItems; i++)
+            array[cur++] = Main.item[i];
+        return array;
     }
     public static NPC FindClosestNPC(this Projectile projectile, float maxDetectDistance)
     {

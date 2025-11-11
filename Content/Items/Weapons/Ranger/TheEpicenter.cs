@@ -2,7 +2,6 @@
 using ITD.Content.Projectiles;
 using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Systems;
-using ITD.Utilities;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
@@ -98,7 +97,7 @@ public class TheEpicenter : ModItem
 
     public static void Hold(Player player)
     {
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         Vector2 mouse = modPlayer.MousePosition;
 
         if (mouse.X < player.Center.X)

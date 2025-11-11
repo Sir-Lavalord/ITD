@@ -177,7 +177,7 @@ public abstract class ITDEvent : ModType, ILocalizedModType
     /// </summary>
     /// <returns></returns>
     public virtual float GetVisualProgress() => 0f;
-    protected sealed override void Register()
+    public sealed override void Register()
     {
         Type = EventsSystem.RegisterEvent(this);
         ModTypeLookup<ITDEvent>.Register(this);

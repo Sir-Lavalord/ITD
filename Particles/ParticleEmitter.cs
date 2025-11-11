@@ -35,7 +35,7 @@ public abstract class ParticleEmitter : ModType, IDisposable
     private readonly List<ParticleEmitterDrawAction> drawActions = new(2);
     public List<ITDParticle> particles = [];
     public object tag;
-    protected sealed override void Register()
+    public sealed override void Register()
     {
         type = ParticleSystem.RegisterEmitter(this);
         ParticleSystem.ResizeArrays();

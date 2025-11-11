@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Buffs.Debuffs;
+﻿namespace ITD.Content.Buffs.Debuffs;
 
 public class SandyBuff : ModBuff
 {

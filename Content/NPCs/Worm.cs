@@ -235,7 +235,7 @@ public abstract class WormHead : Worm
                 // latestNPC is going to be used in SpawnSegment() and I'll explain it there.
                 int latestNPC = NPC.whoAmI;
 
-                // Here we determine the length of the worm.
+                // Here we determine the Length of the worm.
                 int randomWormLength = Main.rand.Next(MinSegmentLength, MaxSegmentLength + 1);
 
                 int distance = randomWormLength - 2;
@@ -416,7 +416,7 @@ public abstract class WormHead : Worm
         // Keep searching for a new target
         NPC.TargetClosest(true);
 
-        // Constant gravity of 0.11 pixels/tick
+        // Constant Gravity of 0.11 pixels/tick
         NPC.velocity.Y += 0.11f;
 
         // Ensure that the NPC does not fall too quickly
@@ -608,7 +608,7 @@ public abstract class WormBody : Worm
             // We then use Atan2 to get a correct rotation towards that parent NPC.
             // Assumes the sprite for the NPC points upward.  You might have to modify this line to properly account for your NPC's orientation
             worm.NPC.rotation = (float)Math.Atan2(dirY, dirX) + MathHelper.PiOver2;
-            // We also get the length of the direction vector.
+            // We also get the Length of the direction vector.
             float length = (float)Math.Sqrt(dirX * dirX + dirY * dirY);
             // We calculate a new, correct distance.
             float dist = (length - worm.NPC.width) / length;

@@ -1,6 +1,4 @@
-﻿using ITD.DetoursIL;
-using ITD.Utilities;
-using ITD.Utilities.Placeholders;
+﻿using ITD.Utilities.Placeholders;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
@@ -15,34 +13,23 @@ public class PortableLab : ModItem
     public override string Texture => Placeholder.PHAxe;
     public override void Load()
     {
-        IL_Player.AdjTiles += AddAlchTableIfLabEquipped;
-    }
-    private static void ApplyChange(Player player)
-    {
-        if (player.GetITDPlayer().portableLab)
-        {
-            player.adjTile[TileID.Bottles] = true;
-            player.adjTile[TileID.AlchemyTable] = true;
-            player.alchemyTable = true;
-        }
-    }
-    private static void AddAlchTableIfLabEquipped(ILContext il)
-    {
-        try
+        IL_Player.AdjTiles += static (il) =>
         {
             var c = new ILCursor(il);
 
             // find the alchemyTable = false statement
-            if (!c.TryGotoNext(MoveType.After, i => i.MatchStfld(typeof(Player), "alchemyTable")))
-            {
-                DetourGroup.LogError("PortableLab: Assign to field alchemyTable not found");
-            }
+            c.GotoNext(MoveType.After, i => i.MatchStfld(typeof(Player), "alchemyTable"));
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate(ApplyChange);
-        }
-        catch
+        };
+    }
+    private static void ApplyChange(Player player)
+    {
+        if (player.ITD().portableLab)
         {
-            DetourGroup.DumpIL(il);
+            player.adjTile[TileID.Bottles] = true;
+            player.adjTile[TileID.AlchemyTable] = true;
+            player.alchemyTable = true;
         }
     }
     public override void SetDefaults()
@@ -51,10 +38,10 @@ public class PortableLab : ModItem
     }
     public override void UpdateInfoAccessory(Player player)
     {
-        player.GetITDPlayer().portableLab = true;
+        player.ITD().portableLab = true;
     }
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        player.GetITDPlayer().portableLab = true;
+        player.ITD().portableLab = true;
     }
 }

@@ -49,7 +49,7 @@ public class FrostgripProjectile : ITDSnaptrap
 
         if (totalEffectTime >= target.width * target.height)
         {
-            target.AddBuff(ModContent.BuffType<FrostgripChilledBuff>(), 20);
+            target.AddBuff<FrostgripChilledBuff>(20);
             retracting = true;
         }
         else
@@ -64,6 +64,6 @@ public class FrostgripProjectile : ITDSnaptrap
     private void Chill()
     {
         NPC target = Main.npc[TargetWhoAmI];
-        target.AddBuff(ModContent.BuffType<FrostgripChilledBuff>(), 2);
+        target.AddBuff<FrostgripChilledBuff>(2);
     }
 }

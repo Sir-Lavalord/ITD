@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using ITD.Systems;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -34,11 +33,11 @@ public class Whiplatch : ITDSnaptrapItem
         Item.shootSpeed = 18f;
         Item.holdStyle = -1;
     }
-    public override bool CanUseItem(Player player) => player.GetSnaptrapPlayer().CanUseSnaptrap;
+    public override bool CanUseItem(Player player) => player.Snaptrap().CanUseSnaptrap;
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
         SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraHookThrow"), player.Center);
-        player.GetITDPlayer().recoilFront = 0.15f;
+        player.ITD().recoilFront = 0.15f;
         //failsafe!
         int index = player.FindItemInInventoryOrOpenVoidBag(Type, out _);
         return base.Shoot(player, source, position, velocity, type, damage, knockback);
@@ -58,7 +57,7 @@ public class Whiplatch : ITDSnaptrapItem
 
             float animProgress = 1 - player.itemTime / (float)player.itemTimeMax;
 
-            ITDPlayer modPlayer = player.GetITDPlayer();
+            ITDPlayer modPlayer = player.ITD();
             Vector2 mouse = modPlayer.MousePosition;
 
             if (mouse.X < player.Center.X)
@@ -102,8 +101,8 @@ public class Whiplatch : ITDSnaptrapItem
     {
         if (player.ownedProjectileCounts[ModContent.ProjectileType<WhiplatchProjectile>()] > 0)
         {
-            if (player.GetITDPlayer().recoilFront <= 0.4f)
-                player.GetITDPlayer().recoilFront += 0.1f;
+            if (player.ITD().recoilFront <= 0.4f)
+                player.ITD().recoilFront += 0.1f;
         }
         SetItemInHand(player, heldItemFrame);
     }

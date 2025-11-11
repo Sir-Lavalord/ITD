@@ -1,48 +1,18 @@
-﻿using ReLogic.Utilities;
-using System.Runtime.CompilerServices;
+﻿using Daybreak.Common.Features.Hooks;
+using ReLogic.Utilities;
 using Terraria.GameContent.Biomes.Desert;
 
 namespace ITD.DetoursIL;
 
-public class DesertChanges : DetourGroup
+public static class DesertChanges
 {
-    public override void Load()
+
+    [OnLoad]
+    public static void Load()
     {
         // we detouring obscure ahh methods with this one
         // i was originally going to IL this but the method's so short a detour suits it better i think
         On_DesertDescription.CreateFromPlacement += ModifyDesertHeight;
-    }
-    private static class DesertDescriptionAccessors
-    {
-        [UnsafeAccessor(UnsafeAccessorKind.Constructor)]
-        public static extern DesertDescription Create();
-
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_CombinedArea")]
-        public static extern void SetCombinedArea(DesertDescription instance, Rectangle value);
-
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Hive")]
-        public static extern void SetHive(DesertDescription instance, Rectangle value);
-
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Desert")]
-        public static extern void SetDesert(DesertDescription instance, Rectangle value);
-
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_BlockScale")]
-        public static extern void SetBlockScale(DesertDescription instance, Vector2D value);
-
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_BlockColumnCount")]
-        public static extern void SetBlockColumns(DesertDescription instance, int value);
-
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_BlockRowCount")]
-        public static extern void SetBlockRows(DesertDescription instance, int value);
-
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_Surface")]
-        public static extern void SetSurface(DesertDescription instance, SurfaceMap value);
-
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_IsValid")]
-        public static extern void SetValid(DesertDescription instance, bool value);
-
-        [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "RowHasInvalidTiles")]
-        public static extern bool RowHasInvalidTiles(DesertDescription type, int startX, int startY, int width);
     }
     private static DesertDescription ModifyDesertHeight(On_DesertDescription.orig_CreateFromPlacement orig, Point origin)
     {
@@ -73,7 +43,7 @@ public class DesertChanges : DetourGroup
         origin.X -= desertWidth / 2;
         SurfaceMap surfaceMap = SurfaceMap.FromArea(origin.X - ScanPadding, desertWidth + ScanPadding * 2);
 
-        if (DesertDescriptionAccessors.RowHasInvalidTiles(null, origin.X, surfaceMap.Bottom, desertWidth))
+        if (DesertDescription.RowHasInvalidTiles(origin.X, surfaceMap.Bottom, desertWidth))
         {
             return DesertDescription.Invalid;
         }
@@ -88,20 +58,20 @@ public class DesertChanges : DetourGroup
             hiveOffset = (int)(20.0 * worldScale);
         }
 
-        DesertDescription d = DesertDescriptionAccessors.Create();
+        DesertDescription d = new();
 
         Rectangle combArea = new(origin.X, averageSurfaceHeight, desertWidth, origin.Y + desertHeight - averageSurfaceHeight);
         Rectangle hive = new(origin.X, origin.Y + hiveOffset, desertWidth, desertHeight - hiveOffset);
         Rectangle desert = new(origin.X, averageSurfaceHeight, desertWidth, origin.Y + desertHeight / 2 - averageSurfaceHeight + hiveOffset);
 
-        DesertDescriptionAccessors.SetCombinedArea(d, combArea);
-        DesertDescriptionAccessors.SetHive(d, hive);
-        DesertDescriptionAccessors.SetDesert(d, desert);
-        DesertDescriptionAccessors.SetBlockScale(d, blockScale);
-        DesertDescriptionAccessors.SetBlockColumns(d, blockColumns);
-        DesertDescriptionAccessors.SetBlockRows(d, blockRows);
-        DesertDescriptionAccessors.SetSurface(d, surfaceMap);
-        DesertDescriptionAccessors.SetValid(d, true);
+        d.CombinedArea = combArea;
+        d.Hive = hive;
+        d.Desert = desert;
+        d.BlockScale = blockScale;
+        d.BlockColumnCount = blockColumns;
+        d.BlockRowCount = blockRows;
+        d.Surface = surfaceMap;
+        d.IsValid = true;
 
         return d;
     }

@@ -1,7 +1,6 @@
 ﻿using ITD.Content.Tiles;
 using ITD.Content.Tiles.BlueshroomGroves;
 using ITD.Content.World.WorldGenUtils;
-using ITD.Utilities;
 using Terraria.DataStructures;
 using Terraria.WorldBuilding;
 

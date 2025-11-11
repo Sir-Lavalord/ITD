@@ -9,7 +9,7 @@ namespace ITD.Content.Tiles;
 
 public abstract class ITDDoor : ModType
 {
-    protected sealed override void Register()
+    public sealed override void Register()
     {
         ModTypeLookup<ITDDoor>.Register(this);
     }
@@ -28,15 +28,15 @@ public abstract class ITDDoor : ModType
     }
     public virtual string TexturesPath => (GetType().Namespace + ".").Replace('.', '/');
     /// <summary>
-    /// If the length of this array is not the same as the number of tile styles, the overflowing styles will use the latest valid dust type.
+    /// If the Length of this array is not the same as the number of tile styles, the overflowing styles will use the latest valid dust type.
     /// </summary>
     public virtual int[] DustTypes => [DustID.WoodFurniture];
     /// <summary>
-    /// If the length of this array is not the same as the number of tile styles, the overflowing styles will use the latest valid nullable <see cref="Color"/>.
+    /// If the Length of this array is not the same as the number of tile styles, the overflowing styles will use the latest valid nullable <see cref="Color"/>.
     /// </summary>
     public virtual Color?[] MapColors => [null];
     /// <summary>
-    /// The length of this array MUST be the same as the dumber of tile styles.
+    /// The Length of this array MUST be the same as the dumber of tile styles.
     /// </summary>
     public virtual int[] DropItems => [ItemID.WoodenDoor];
     public ITDOpenedDoor OpenedDoor { get; private set; }

@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps;
+﻿namespace ITD.Content.Items.Accessories.Combat.Melee.Snaptraps;
 
 public class UnyieldingChain : ModItem
 {
@@ -19,6 +17,6 @@ public class UnyieldingChain : ModItem
 
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        player.GetSnaptrapPlayer().LengthModifier += 0.25f;
+        player.Snaptrap().LengthModifier += 0.25f;
     }
 }

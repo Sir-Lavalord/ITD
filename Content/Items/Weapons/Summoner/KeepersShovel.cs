@@ -29,7 +29,7 @@ public class KeepersShovel : ModItem
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
     {
-        target.AddBuff(ModContent.BuffType<KeepersShovelTagDebuff>(), 300);
+        target.AddBuff<KeepersShovelTagDebuff>(300);
         player.MinionAttackTargetNPC = target.whoAmI;
     }
 

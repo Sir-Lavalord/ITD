@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Items.Materials;
 using ITD.Content.Items.Placeable.Biomes.DeepDesert;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -140,7 +139,7 @@ public class EmberlionMiner : ModNPC
         // Keep searching for a new target
         NPC.TargetClosest(true);
 
-        // Constant gravity of 0.11 pixels/tick
+        // Constant Gravity of 0.11 pixels/tick
         NPC.velocity.Y += 0.11f;
 
         // Ensure that the NPC does not fall too quickly
@@ -338,7 +337,7 @@ public class EmberlionMiner : ModNPC
     }
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
-        if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
+        if (spawnInfo.Player.ITD().ZoneDeepDesert)
         {
             return 0.15f;
         }

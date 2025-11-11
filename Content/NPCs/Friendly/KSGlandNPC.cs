@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Items.Accessories.Master;
-using ITD.Utilities;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 

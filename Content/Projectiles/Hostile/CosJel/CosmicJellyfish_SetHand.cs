@@ -30,7 +30,7 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
         public ParticleEmitter emitter;
         public override void AI()
         {
-            Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 6, 8, true);
+            Main.LocalPlayer.ITD().BetterScreenshake(20, 6, 8, true);
 
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Accessories.Defensive.Defense;
 

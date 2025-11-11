@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using ITD.Utilities.Placeholders;
+﻿using ITD.Utilities.Placeholders;
 using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Accessories.Gimmicks.IncomprehensiblePolyhedron;

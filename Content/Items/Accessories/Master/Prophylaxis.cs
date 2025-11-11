@@ -74,7 +74,7 @@ internal class ProphylaxisHealItem : GlobalItem
             modPlayer.bloodShield = player.GetHealLife(item);
             modPlayer.justHealed = true; // hack fix for potions being weird
 
-            player.AddBuff(ModContent.BuffType<BloodlettingBuff>(), 480, false);
+            player.AddBuff<BloodlettingBuff>(480, false);
 
             SoundEngine.PlaySound(SoundID.NPCDeath23, player.Center);
             modPlayer.emitter = ParticleSystem.NewEmitter<BloodParticle>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);

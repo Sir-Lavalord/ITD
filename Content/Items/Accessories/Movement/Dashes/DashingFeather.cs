@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using System;
+﻿using System;
 
 namespace ITD.Content.Items.Accessories.Movement.Dashes;
 

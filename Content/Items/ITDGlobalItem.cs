@@ -1,6 +1,5 @@
 ﻿using ITD.Common.Prefixes;
 using ITD.Systems;
-using ITD.Utilities;
 
 namespace ITD.Content.Items;
 
@@ -22,7 +21,7 @@ public class ITDGlobalItem : GlobalItem
     }
     public override bool? UseItem(Item item, Player player)
     {
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         if (item.buffTime > 0)
         {
             if (modPlayer.portableLab)

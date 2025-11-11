@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,7 +34,7 @@ public struct RecruitData(byte whoAmI, ushort originalType, bool shimmered, Netw
     {
         // the first element of this will be the mod. second element is the internal name of the NPC
         string[] sourceModData = tag.GetString("sourceMod").Split(':');
-        // explanation: if the "sourceMod" tag doesn't contain a valid mod, it will not have the : character, so the array will only be of length one
+        // explanation: if the "sourceMod" tag doesn't contain a valid mod, it will not have the : character, so the array will only be of Length one
         // the problem is that this doesnt check for if the mod exists before loading, but we handle just under.
         bool isVanilla = sourceModData.Length == 1;
         Mod mod = null;
@@ -101,7 +100,7 @@ public static class TownNPCRecruitmentLoader
     public static bool CanBeRecruited(int type) => NPCsThatCanBeRecruited.Contains(type) || recruitmentDataRegistry.ContainsKey(type);
     public static void QueueRecruit(NPC npc, Player player)
     {
-        ITDSystem.recruitment.Enqueue(new QueuedRecruitment(npc.whoAmI, npc.type, player.GetITDPlayer().guid));
+        ITDSystem.recruitment.Enqueue(new QueuedRecruitment(npc.whoAmI, npc.type, player.ITD().guid));
     }
     public static void QueueUnrecruit(Guid player)
     {
@@ -120,9 +119,9 @@ public static class TownNPCRecruitmentLoader
             npc.Transform(rNPC.recruitmentData.OriginalType);
             return;
         }
-        RecruitData data = ITDSystem.recruitmentData[player.GetITDPlayer().guid];
+        RecruitData data = ITDSystem.recruitmentData[player.ITD().guid];
         npc.Transform(data.OriginalType);
         npc.GivenName = data.FullName.ToString().Split(' ')[0];
-        ITDSystem.recruitmentData.Remove(player.GetITDPlayer().guid);
+        ITDSystem.recruitmentData.Remove(player.ITD().guid);
     }
 }

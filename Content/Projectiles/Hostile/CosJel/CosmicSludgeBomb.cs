@@ -8,7 +8,7 @@ public class CosmicSludgeBomb : ModProjectile
     private readonly Asset<Texture2D> effect = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Hostile/CosJel/CosmicSludgeBomb_Effect");
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The Length of old position to be recorded
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0; // The recording mode
         Main.projFrames[Projectile.type] = 7;
     }

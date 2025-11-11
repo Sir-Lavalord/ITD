@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Systems;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -86,7 +85,7 @@ ModContent.ProjectileType<AsterBlasterBlast>(), Item.damage, Item.knockBack, pla
 
             float animProgress = 1 - player.itemTime / (float)player.itemTimeMax;
 
-            ITDPlayer modPlayer = player.GetITDPlayer();
+            ITDPlayer modPlayer = player.ITD();
             Vector2 mouse = modPlayer.MousePosition;
 
             if (mouse.X < player.Center.X)

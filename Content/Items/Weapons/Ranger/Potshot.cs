@@ -1,7 +1,6 @@
 ﻿using ITD.Content.Projectiles;
 using ITD.Content.Projectiles.Friendly.Ranger;
 using ITD.Systems;
-using ITD.Utilities;
 using System.Linq;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -44,7 +43,7 @@ public class Potshot : ModItem
 
     public override bool CanUseItem(Player player)
     {
-        ITDPlayer itdPlayer = player.GetITDPlayer();
+        ITDPlayer itdPlayer = player.ITD();
         NPC[] npcs = itdPlayer.GetNearbyNPCs(30f * 16f);
         if (npcs.Length > 0)
         {
@@ -131,7 +130,7 @@ public class Potshot : ModItem
         {
             miss = 0;
         }
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         Vector2 mouse = modPlayer.MousePosition;
 
         if (mouse.X < player.Center.X)

@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Buffs.Debuffs;
-using ITD.Utilities;
 using Terraria.GameContent.ItemDropRules;
 
 namespace ITD.Content.NPCs.DeepDesert;
@@ -32,11 +31,11 @@ public class DesertBat : ModNPC
     }
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
     {
-        target.AddBuff(ModContent.BuffType<SandyBuff>(), 60 * 8);
+        target.AddBuff<SandyBuff>(60 * 8);
     }
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
-        if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert)
+        if (spawnInfo.Player.ITD().ZoneDeepDesert)
         {
             return 0.25f;
         }

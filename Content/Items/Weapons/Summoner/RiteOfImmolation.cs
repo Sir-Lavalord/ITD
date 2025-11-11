@@ -1,7 +1,6 @@
 using ITD.Content.Buffs.Debuffs;
 using ITD.Content.Items.Materials;
 using ITD.Content.Projectiles.Friendly.Summoner;
-using ITD.Utilities;
 using Terraria.DataStructures;
 
 namespace ITD.Content.Items.Weapons.Summoner;
@@ -39,7 +38,7 @@ public class RiteOfImmolation : ModItem
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
     {
-        target.AddBuff(ModContent.BuffType<RiteOfImmolationTagDebuff>(), 300);
+        target.AddBuff<RiteOfImmolationTagDebuff>(300);
         player.MinionAttackTargetNPC = target.whoAmI;
     }
 

@@ -1,6 +1,5 @@
 ﻿using ITD.Content.NPCs;
 using ITD.Content.UI;
-using ITD.Utilities;
 using System;
 using System.IO;
 using System.Linq;
@@ -76,7 +75,7 @@ public class RecruitedNPC : ITDNPC
     {
         AIState = (ActionState)reader.ReadByte();
     }
-    public bool RecruiterExists => Main.player.Any(p => p.Exists() && ITDSystem.recruitmentData.TryGetValue(p.GetITDPlayer().guid, out RecruitData recDat) && recDat.OriginalType == recruitmentData.OriginalType);
+    public bool RecruiterExists => Main.player.Any(p => p.Exists() && ITDSystem.recruitmentData.TryGetValue(p.ITD().guid, out RecruitData recDat) && recDat.OriginalType == recruitmentData.OriginalType);
 
     public static void DoMerchantAI()
     {

@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Tiles.Misc;
-using ITD.Utilities;
 using Terraria.DataStructures;
 
 namespace ITD.Content.World.Passes;

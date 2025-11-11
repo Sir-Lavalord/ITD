@@ -1,7 +1,6 @@
 ﻿using ITD.Content.NPCs.Friendly;
 using ITD.Particles;
 using ITD.Particles.Projectiles;
-using ITD.Utilities;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
@@ -71,7 +70,7 @@ public class BleedbreakerSwing : ModProjectile
                 hitreg = 40;
 
                 Player player = Main.player[Projectile.owner];
-                player.GetITDPlayer().BetterScreenshake(10, 8, 5, false);
+                player.ITD().BetterScreenshake(10, 8, 5, false);
                 SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), target.Center);
 
                 for (int i = 0; i < 18; i++)

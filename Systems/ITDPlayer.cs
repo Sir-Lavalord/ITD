@@ -13,7 +13,6 @@ using ITD.Content.UI;
 using ITD.Networking;
 using ITD.Networking.Packets;
 using ITD.Physics;
-using ITD.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria.Audio;
@@ -433,7 +432,7 @@ public class ITDPlayer : ModPlayer
             {
                 soulTalismanTally = 0;
                 soulTalismanEffect = true;
-                Player.AddBuff(ModContent.BuffType<SoulTalismanBuff>(), 600);
+                Player.AddBuff<SoulTalismanBuff>(600);
             }
         }
 
@@ -451,7 +450,7 @@ public class ITDPlayer : ModPlayer
             {
                 wickedHeartStack = 0;
                 wickedHeartEffect = true;
-                Player.AddBuff(ModContent.BuffType<WickedHeartBuff>(), 1200);
+                Player.AddBuff<WickedHeartBuff>(1200);
             }
         }
     }
@@ -653,7 +652,6 @@ public class ITDPlayer : ModPlayer
         {
             // Player player = Main.CurrentPlayer;
             NaturalSpawns.LeaveWorld();
-            PhysicsMethods.ClearAll();
         }
         public override void PostDrawTiles()
         {
@@ -662,10 +660,10 @@ public class ITDPlayer : ModPlayer
             //Main.spriteBatch.Draw(tex.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
             foreach (var plr in Main.ActivePlayers)
             {
-                plr.GetITDPlayer().DrawSelectBox(Main.spriteBatch, tex);
+                plr.ITD().DrawSelectBox(Main.spriteBatch, tex);
             }
             Player p = Main.LocalPlayer;
-            p.GetITDPlayer().DrawSpecialPreviews(Main.spriteBatch);
+            p.ITD().DrawSpecialPreviews(Main.spriteBatch);
             Main.spriteBatch.End();
         }
     }

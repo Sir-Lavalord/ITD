@@ -37,7 +37,7 @@ internal class ExternalModSupport
         {
             ITDNPC iNPC = (ITDNPC)boss;
 
-            var downed = iNPC.DownedMe ?? throw new Exception("Override the DownedMe hook in ITDNPC and provide a valid value.");
+            var downed = () => false;// iNPC.DownedMe ?? throw new Exception("Override the DownedMe hook in ITDNPC and provide a valid value.");
             string name = boss.Name;
             float prog = iNPC.BossWeight;
             int type = boss.Type;

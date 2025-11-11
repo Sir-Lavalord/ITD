@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Buffs.Debuffs;
-using ITD.Utilities;
 using Terraria.Audio;
 using Terraria.GameContent;
 
@@ -45,15 +44,15 @@ public class MoulderBoulderProj : ModProjectile
     public override void OnHitPlayer(Player target, Player.HurtInfo info)
     {
         float power = 6 * Utils.GetLerpValue(800f, 0f, Projectile.Distance(Main.LocalPlayer.Center), true);
-        Main.LocalPlayer.GetITDPlayer().BetterScreenshake(4, power, power, false);
-        target.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 300);
+        Main.LocalPlayer.ITD().BetterScreenshake(4, power, power, false);
+        target.AddBuff<MelomycosisBuff>(300);
         base.OnHitPlayer(target, info);
     }
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
         float power = 6 * Utils.GetLerpValue(800f, 0f, Projectile.Distance(Main.LocalPlayer.Center), true);
-        Main.LocalPlayer.GetITDPlayer().BetterScreenshake(4, power, power, false);
-        target.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 300);
+        Main.LocalPlayer.ITD().BetterScreenshake(4, power, power, false);
+        target.AddBuff<MelomycosisBuff>(300);
         base.OnHitNPC(target, hit, damageDone);
     }
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -68,7 +67,7 @@ public class MoulderBoulderProj : ModProjectile
         BounceCount++;
         Player player = Main.LocalPlayer;
         float power = 12 * Utils.GetLerpValue(800f, 0f, Projectile.Distance(Main.LocalPlayer.Center), true);
-        player.GetITDPlayer().BetterScreenshake(6, power, power, false);
+        player.ITD().BetterScreenshake(6, power, power, false);
         for (int i = 0; i < 3; i++)
         {
             Collision.HitTiles(Projectile.position, oldVelocity, Projectile.width, Projectile.height);

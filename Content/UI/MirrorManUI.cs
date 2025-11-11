@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Items.DevTools;
 using ITD.Systems;
-using ITD.Utilities;
 using System.Collections.Generic;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
@@ -259,7 +258,7 @@ public class TileDataButton(SimpleTileDataType type) : ITDUIElement
     {
         get
         {
-            SimpleTileDataType flags = Main.LocalPlayer.GetITDPlayer().tileDataSelection;
+            SimpleTileDataType flags = Main.LocalPlayer.ITD().tileDataSelection;
             return (flags & Type) == Type;
         }
     }
@@ -289,7 +288,7 @@ public class TileDataButton(SimpleTileDataType type) : ITDUIElement
     public override void LeftClick(UIMouseEvent evt)
     {
         base.LeftClick(evt);
-        ITDPlayer plr = Main.LocalPlayer.GetITDPlayer();
+        ITDPlayer plr = Main.LocalPlayer.ITD();
         // if player has this flag
         if ((plr.tileDataSelection & Type) == Type)
         {

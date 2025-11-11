@@ -1,4 +1,5 @@
-﻿using ITD.Content.TileEntities;
+﻿using Daybreak.Common.Features.Hooks;
+using ITD.Content.TileEntities;
 using ITD.Content.Tiles;
 using MonoMod.Cil;
 using System;
@@ -8,10 +9,12 @@ using Terraria.UI;
 
 namespace ITD.DetoursIL;
 
-public class ItemSlotChanges : DetourGroup
+public static class ItemSlotChanges
 {
     private static int maxArrayNewSize = 40;
-    public override void Load()
+
+    [OnLoad]
+    public static void Load()
     {
         foreach (var type in ITD.Instance.Code.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ITDChest))))
         {
@@ -19,10 +22,10 @@ public class ItemSlotChanges : DetourGroup
             maxArrayNewSize = Math.Max(maxArrayNewSize, instance.StorageDimensions.X * instance.StorageDimensions.Y);
         }
         // this is necessary so the game doesn't crash
-        Array.Resize(ref UIAccessors.GetInventoryGlowTime(null), maxArrayNewSize + 18);
-        Array.Resize(ref UIAccessors.GetInventoryGlowHue(null), maxArrayNewSize + 18);
-        Array.Resize(ref UIAccessors.GetInventoryGlowTimeChest(null), maxArrayNewSize + 18);
-        Array.Resize(ref UIAccessors.GetInventoryGlowHueChest(null), maxArrayNewSize + 18);
+        Array.Resize(ref ItemSlot.inventoryGlowTime, maxArrayNewSize + 18);
+        Array.Resize(ref ItemSlot.inventoryGlowHue, maxArrayNewSize + 18);
+        Array.Resize(ref ItemSlot.inventoryGlowTimeChest, maxArrayNewSize + 18);
+        Array.Resize(ref ItemSlot.inventoryGlowHueChest, maxArrayNewSize + 18);
 
         IL_ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += SkipGamepadThing;
     }
@@ -35,7 +38,7 @@ public class ItemSlotChanges : DetourGroup
             // find this sequence of instructions
             if (!c.TryGotoNext(i => i.MatchLdloc(out _), i => i.MatchLdarg(out _), i => i.MatchLdloc(out _), i => i.MatchLdcR4(0.75f)))
             {
-                LogError("Instructions not found");
+                ITD.Log("Instructions not found");
                 return;
             }
             // define a label for branching
@@ -51,7 +54,7 @@ public class ItemSlotChanges : DetourGroup
             // go to ret to mark the label
             if (!c.TryGotoNext(i => i.MatchRet()))
             {
-                LogError("Couldn't find method end");
+                ITD.Log("Couldn't find method end");
                 return;
             }
             // mark it
@@ -59,7 +62,7 @@ public class ItemSlotChanges : DetourGroup
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
 }

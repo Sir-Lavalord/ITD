@@ -2,7 +2,6 @@
 using ITD.Content.Projectiles.Hostile.CosJel;
 using ITD.Particles;
 using ITD.Particles.CosJel;
-using ITD.Utilities;
 using System;
 using System.IO;
 using Terraria.Audio;
@@ -221,7 +220,7 @@ public class CosmicJellyfishHand : ModNPC
                             {
                                 if (NPC.ai[3] == 1)
                                 {
-                                    player.GetITDPlayer().BetterScreenshake(20, 10, 20, true);//Very shaky, might need some tweaking to the decay
+                                    player.ITD().BetterScreenshake(20, 10, 20, true);//Very shaky, might need some tweaking to the decay
 
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
                                     {
@@ -344,7 +343,7 @@ public class CosmicJellyfishHand : ModNPC
                     ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
                         new ParticleOrchestraSettings { PositionInWorld = projectile.Center }, NPC.whoAmI);
                     SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/UltraParry"), NPC.Center);
-                    player.GetITDPlayer().BetterScreenshake(20, 5, 5, true);
+                    player.ITD().BetterScreenshake(20, 5, 5, true);
                     AIState = ActionState.DownToSize;
                     NetSync();
 

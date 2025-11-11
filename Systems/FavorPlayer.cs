@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Buffs.Debuffs;
 using ITD.Content.Items.Favors;
-using ITD.Utilities;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
 using Terraria.GameInput;
@@ -44,7 +43,7 @@ public class FavorPlayer : ModPlayer
                 if (!favorItem.IsCursedFavor)
                     favorItem.Charge = 0f;
                 if (favorItem.FavorFatigueTime > 0)
-                    Player.AddBuff(ModContent.BuffType<FavorFatigue>(), favorItem.FavorFatigueTime);
+                    Player.AddBuff<FavorFatigue>(favorItem.FavorFatigueTime);
             }
         }
     }

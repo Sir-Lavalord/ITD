@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 using Terraria.GameContent;
 
 namespace ITD.Content.Projectiles.Friendly.Melee;
@@ -107,7 +106,7 @@ public class BleedbreakerKnockbackBomb : ModProjectile
             Projectile.timeLeft = 3;
             float power = 10 * Utils.GetLerpValue(1200f, 0f, Projectile.Distance(Main.LocalPlayer.Center), true);
             Player player = Main.player[Projectile.owner];
-            player.GetITDPlayer().BetterScreenshake(10, power, power, false);
+            player.ITD().BetterScreenshake(10, power, power, false);
             if (target.Gimmickable())
             {
 

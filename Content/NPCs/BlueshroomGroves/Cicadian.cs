@@ -1,7 +1,6 @@
 ﻿using ITD.Content.Biomes;
 using ITD.Content.Items.Weapons.Summoner;
 using ITD.Content.Projectiles.Hostile;
-using ITD.Utilities;
 using System;
 using Terraria.DataStructures;
 using Terraria.GameContent;

@@ -146,7 +146,7 @@ public class RoyalJellyProj : ModProjectile
                     closestPlayer.honey = true;
                     if (!closestPlayer.HasBuff(ModContent.BuffType<RoyalJellyBuff>()))
                     {
-                        closestPlayer.AddBuff(ModContent.BuffType<RoyalJellyBuff>(), 1200);
+                        closestPlayer.AddBuff<RoyalJellyBuff>(1200);
                         if (grounded)
                         {
                             closestPlayer.Heal(25);
@@ -231,7 +231,7 @@ public class RoyalJellyProj : ModProjectile
         {
             emitter?.Emit(Projectile.Center, (Projectile.velocity / 3).RotatedByRandom(4f) * Main.rand.NextFloat(0.9f, 1.1f));
         }
-        target.AddBuff(ModContent.BuffType<RoyalJellyDebuff>(), 600);
+        target.AddBuff<RoyalJellyDebuff>(600);
         SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
         if (!IsStickingToTarget)
         {

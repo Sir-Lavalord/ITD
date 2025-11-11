@@ -2,7 +2,6 @@
 using ITD.Particles;
 using ITD.Particles.Ambience;
 using ITD.Systems;
-using ITD.Utilities;
 
 namespace ITD.Content.Biomes;
 

@@ -1,6 +1,6 @@
-﻿using ITD.Content.TileEntities;
+﻿using Daybreak.Common.Features.Hooks;
+using ITD.Content.TileEntities;
 using ITD.Content.Tiles;
-using ITD.Utilities;
 using MonoMod.Cil;
 using System;
 using Terraria.DataStructures;
@@ -8,9 +8,10 @@ using Terraria.UI;
 
 namespace ITD.DetoursIL;
 
-public class InventoryButtonsChanges : DetourGroup
+public static class InventoryButtonsChanges
 {
-    public override void Load()
+    [OnLoad]
+    public static void Load()
     {
         // not entirely sure why these are separate methods when they're basically the same method just with different x. even the IL edits are the exact same
         IL_Main.DrawBestiaryIcon += BestiaryITDChestAdjust;
@@ -25,7 +26,7 @@ public class InventoryButtonsChanges : DetourGroup
         On_ItemSlot.SetGlow += ItemGlowITDChestAdjust;
     }
 
-    private void PlayerQuickStackITDChest(On_Player.orig_QuickStackAllChests orig, Player self)
+    private static void PlayerQuickStackITDChest(On_Player.orig_QuickStackAllChests orig, Player self)
     {
         orig(self);
         int num2 = 39;
@@ -87,7 +88,7 @@ public class InventoryButtonsChanges : DetourGroup
                 i => i.MatchCall<Main>("get_LocalPlayer"),
                 i => i.MatchLdflda<Player>("tileEntityAnchor")))
             {
-                LogError("Couldn't find instruction sequence for recipe list fix");
+                ITD.Log("Couldn't find instruction sequence for recipe list fix");
                 return;
             }
 
@@ -106,7 +107,7 @@ public class InventoryButtonsChanges : DetourGroup
             // find instruction to jump to which should be when -1 is loaded
             if (!c.TryGotoNext(i => i.MatchLdcI4(-1)))
             {
-                LogError("Couldn't find -1 load");
+                ITD.Log("Couldn't find -1 load");
                 return;
             }
 
@@ -116,7 +117,7 @@ public class InventoryButtonsChanges : DetourGroup
 
             if (!c.TryGotoNext(MoveType.After, i => i.MatchLdcR4(410f)))
             {
-                LogError("Couldn't find y position init for avaiable recipe buttons");
+                ITD.Log("Couldn't find y position init for avaiable recipe buttons");
                 return;
             }
 
@@ -135,7 +136,7 @@ public class InventoryButtonsChanges : DetourGroup
             // try to find this call. this is clean as this is only done once in the whole code
             if (!c.TryGotoNext(MoveType.After, i => i.MatchCallvirt<TileEntity>("OnInventoryDraw")))
             {
-                LogError("OnInventoryDraw call not found");
+                ITD.Log("OnInventoryDraw call not found");
                 return;
             }
 
@@ -154,7 +155,7 @@ public class InventoryButtonsChanges : DetourGroup
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
 
@@ -167,7 +168,7 @@ public class InventoryButtonsChanges : DetourGroup
             // find the instructions to load 534 onto the stack
             if (!c.TryGotoNext(MoveType.After, i => i.MatchLdcI4(534)))
             {
-                LogError("Couldn't find X position loading");
+                ITD.Log("Couldn't find X position loading");
             }
             // add our own amount
             c.EmitDelegate(() =>
@@ -187,7 +188,7 @@ public class InventoryButtonsChanges : DetourGroup
             // find the instructions to load num4 and 4 onto the stack
             if (!c.TryGotoNext(MoveType.After, i => i.MatchLdloc(out _), i => i.MatchAdd(), i => i.MatchLdcI4(4), i => i.MatchAdd()))
             {
-                LogError("num4 and 4 load instructions not found");
+                ITD.Log("num4 and 4 load instructions not found");
                 return;
             }
             // now let's add our own amount to the thing
@@ -202,7 +203,7 @@ public class InventoryButtonsChanges : DetourGroup
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
     private static void BestiaryITDChestAdjust(ILContext il)
@@ -214,7 +215,7 @@ public class InventoryButtonsChanges : DetourGroup
             // find the instructions to load 498 onto the stack
             if (!c.TryGotoNext(MoveType.After, i => i.MatchLdcI4(498)))
             {
-                LogError("Couldn't find X position loading");
+                ITD.Log("Couldn't find X position loading");
             }
             // add our own amount
             c.EmitDelegate(() =>
@@ -234,7 +235,7 @@ public class InventoryButtonsChanges : DetourGroup
             // find the instructions to load num4 and 4 onto the stack
             if (!c.TryGotoNext(MoveType.After, i => i.MatchLdloc(out _), i => i.MatchAdd(), i => i.MatchLdcI4(4), i => i.MatchAdd()))
             {
-                LogError("Couldn't find Y position loading");
+                ITD.Log("Couldn't find Y position loading");
                 return;
             }
             // now let's add our own amount to the thing
@@ -249,7 +250,7 @@ public class InventoryButtonsChanges : DetourGroup
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
 }

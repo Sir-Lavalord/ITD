@@ -1,7 +1,5 @@
 ﻿using ITD.Content.Tiles.BlueshroomGroves;
 using ITD.Systems;
-using ITD.Utilities;
-using System.Runtime.CompilerServices;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Localization;
@@ -431,23 +429,15 @@ public abstract class ITDTree : ModTile
         top = new(i, j);
         return false;
     }
-    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "numTreeShakes")]
-    extern static ref int GetSetNumTreeShakes(WorldGen type);
-    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "maxTreeShakes")]
-    extern static ref int GetMaxTreeShakes(WorldGen type);
-    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "treeShakeX")]
-    extern static ref int[] GetTreeShakeX(WorldGen type);
-    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "treeShakeY")]
-    extern static ref int[] GetTreeShakeY(WorldGen type);
     public void ShakeTree(int i, int j)
     {
         // adapted from confection rebaked
         // hello kibtenbun
 
-        ref int numTreeShakes = ref GetSetNumTreeShakes(null);
-        int maxTreeShakes = GetMaxTreeShakes(null);
-        int[] treeShakeX = GetTreeShakeX(null);
-        int[] treeShakeY = GetTreeShakeY(null);
+        ref int numTreeShakes = ref WorldGen.numTreeShakes;
+        int maxTreeShakes = WorldGen.maxTreeShakes;
+        int[] treeShakeX = WorldGen.treeShakeX;
+        int[] treeShakeY = WorldGen.treeShakeY;
         if (numTreeShakes == maxTreeShakes)
             return;
         Point bottom = GetTreeBottom(i, j);

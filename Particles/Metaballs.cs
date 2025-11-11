@@ -77,7 +77,7 @@ public abstract class Metaball : ModType
     {
 
     }
-    protected sealed override void Register()
+    public sealed override void Register()
     {
         ModTypeLookup<Metaball>.Register(this);
         MetaballSystem.MetaballInstances.Add(this);
@@ -257,7 +257,7 @@ public class MetaballsNormalDrawingRenderTarget : ARenderTargetContentByRequest
         this.MetaBallsType = MetaBallsType;
         Main.OnResolutionChanged += OnResChanged;
     }
-    protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
+    public override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
         PrepareARenderTarget_AndListenToEvents(ref _target, device, Main.screenWidth, Main.screenHeight, RenderTargetUsage.PreserveContents);
         var oldTargets = device.GetRenderTargets();
@@ -294,7 +294,7 @@ public class MetaballsMiscShaderRenderTarget : ARenderTargetContentByRequest
         Main.OnResolutionChanged += OnResChanged;
     }
 
-    protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
+    public override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
 
         PrepareARenderTarget_AndListenToEvents(ref _target, device, Main.screenWidth, Main.screenHeight, RenderTargetUsage.PreserveContents);
@@ -359,7 +359,7 @@ public class MetaballsRenderTarget : ARenderTargetContentByRequest
         Main.OnResolutionChanged += OnResChanged;
     }
 
-    protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
+    public override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
 
         PrepareARenderTarget_AndListenToEvents(ref _target, device, Main.screenWidth, Main.screenHeight, RenderTargetUsage.PreserveContents);

@@ -1,5 +1,4 @@
 ﻿using ITD.Systems;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.Graphics;

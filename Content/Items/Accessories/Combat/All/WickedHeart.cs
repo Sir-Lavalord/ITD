@@ -1,5 +1,4 @@
 ﻿using ITD.Systems;
-using ITD.Utilities;
 
 namespace ITD.Content.Items.Accessories.Combat.All;
 
@@ -18,7 +17,7 @@ public class WickedHeart : ModItem
     }
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
-        ITDPlayer itdPlayer = player.GetITDPlayer();
+        ITDPlayer itdPlayer = player.ITD();
         itdPlayer.wickedHeart = true;
     }
     public override Color? GetAlpha(Color lightColor)

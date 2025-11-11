@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Misc;
 using ITD.Content.Projectiles.Friendly.Summoner;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.GameContent.Drawing;

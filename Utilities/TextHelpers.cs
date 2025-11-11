@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using Terraria.UI.Chat;
 
@@ -139,7 +138,7 @@ public static class TextHelpers
             string value2 = item.Groups["text"].Value;
             string value3 = item.Groups["options"].Value;
 
-            ITagHandler handler = (ITagHandler)ReflectionHelpers.CallMethod("GetHandler", null, typeof(ChatManager), BindingFlags.Static | BindingFlags.NonPublic, value);
+            ITagHandler handler = ChatManager.GetHandler(value);
 
             if (handler != null)
             {

@@ -1,5 +1,4 @@
 ﻿using ITD.Common.Prefixes;
-using ITD.Utilities;
 using System.Collections.Generic;
 using Terraria.Localization;
 
@@ -51,8 +50,8 @@ public abstract class SnaptrapPrefix : ComplexPrefix
         // multiplication and addition to the actual modifier is in percentages iirc
         // so modifier += 1f; would be 100% more.
         // and modifier *= 2f; would double the damage before addition.
-        player.GetSnaptrapPlayer().LengthModifier += lengthBonus;
-        player.GetSnaptrapPlayer().RetractVelocityModifier += retractRateBonus;
+        player.Snaptrap().LengthModifier += lengthBonus;
+        player.Snaptrap().RetractVelocityModifier += retractRateBonus;
     }
     public sealed override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
     {

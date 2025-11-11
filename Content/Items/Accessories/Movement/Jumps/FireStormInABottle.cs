@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Projectiles.Friendly.Misc;
-using ITD.Utilities;
 using System;
 using Terraria.DataStructures;
 namespace ITD.Content.Items.Accessories.Movement.Jumps;

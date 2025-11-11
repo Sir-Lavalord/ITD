@@ -28,7 +28,7 @@ public class RiteOfImmolationProj : ModProjectile
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
         target.AddBuff(BuffID.OnFire, 300);
-        target.AddBuff(ModContent.BuffType<RiteOfImmolationTagDebuff>(), 300);
+        target.AddBuff<RiteOfImmolationTagDebuff>(300);
         Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
     }
 

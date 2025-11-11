@@ -36,7 +36,7 @@ public abstract class ITDGenpass : ILoadable
 }
 public sealed class SmartGenpass(ITDGenpass passTemplate) : GenPass($"[ITD] {passTemplate.Name}", passTemplate.Weight)
 {
-    protected sealed override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+    public sealed override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
     {
         Point16 origin = passTemplate.SelectOrigin();
 

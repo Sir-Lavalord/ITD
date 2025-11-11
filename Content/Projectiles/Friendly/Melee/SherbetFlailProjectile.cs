@@ -1,5 +1,4 @@
 using ITD.Content.Projectiles.Friendly.Misc;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -256,7 +255,7 @@ public class SherbetFlailProjectile : ModProjectile
             Vector2 mountedCenter = Main.player[Projectile.owner].MountedCenter;
             Vector2 shortestVectorFromPlayerToTarget = targetHitbox.ClosestPointInRect(mountedCenter) - mountedCenter;
             shortestVectorFromPlayerToTarget.Y /= 0.8f; // Makes the hit area an ellipse. Vertical hit distance is smaller due to this math.
-            float hitRadius = 55f; // The length of the semi-major radius of the ellipse (the long end)
+            float hitRadius = 55f; // The Length of the semi-major radius of the ellipse (the long end)
             return shortestVectorFromPlayerToTarget.Length() <= hitRadius;
         }
         // Regular collision logic happens otherwise.
@@ -304,7 +303,7 @@ public class SherbetFlailProjectile : ModProjectile
 
     private void Impact()
     {
-        Main.LocalPlayer.GetITDPlayer().BetterScreenshake(4, 4, 4, false);
+        Main.LocalPlayer.ITD().BetterScreenshake(4, 4, 4, false);
         SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
         //emitter?.Emit(Projectile.Center, new Vector2(), 0.25f + (0.25f * ChargeLevel), 25);
         for (int i = 0; i < 4; i++)

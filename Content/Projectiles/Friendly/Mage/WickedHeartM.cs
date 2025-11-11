@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Projectiles.Friendly.Mage;
+﻿namespace ITD.Content.Projectiles.Friendly.Mage;
 
 public class WickedHeartM : ModProjectile
 {

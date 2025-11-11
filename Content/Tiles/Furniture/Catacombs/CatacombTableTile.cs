@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Content.Tiles.Furniture.Catacombs;
+﻿namespace ITD.Content.Tiles.Furniture.Catacombs;
 
 public class CatacombTableTile : ModTile
 {

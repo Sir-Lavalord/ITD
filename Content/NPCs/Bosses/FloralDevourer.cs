@@ -1,5 +1,4 @@
 ﻿using ITD.Kinematics;
-using ITD.Utilities;
 using System;
 using Terraria.DataStructures;
 

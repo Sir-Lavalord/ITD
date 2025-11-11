@@ -4,7 +4,6 @@ using ITD.Networking.Packets;
 using ITD.Particles;
 using ITD.Particles.Events;
 using ITD.Systems;
-using ITD.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 
 namespace ITD.Content.Items.Accessories.Movement.Jumps;
 

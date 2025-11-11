@@ -58,7 +58,7 @@ public class CharmOfTheAccursed : ModItem
                         Main.dust[dustId].noGravity = true;
                         Main.dust[dustId].velocity *= 3f;
                     }
-                    npc.AddBuff(ModContent.BuffType<HauntedBuff>(), 1200);
+                    npc.AddBuff<HauntedBuff>(1200);
                     globalNPC.hauntingProgress = 0;
                 }
             }

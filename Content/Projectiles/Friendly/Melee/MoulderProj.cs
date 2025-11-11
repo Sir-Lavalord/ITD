@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Buffs.Debuffs;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -217,7 +216,7 @@ public class MoulderProj : ModProjectile
 
         Player player = Main.LocalPlayer;
         float power = 8 * Utils.GetLerpValue(800f, 0f, Projectile.Distance(Main.LocalPlayer.Center), true);
-        player.GetITDPlayer().BetterScreenshake(6, power, power, false);
+        player.ITD().BetterScreenshake(6, power, power, false);
         if (CurrentAIState != AIState.Retracting)
         {
             if (ChargeLevel >= 2)
@@ -282,12 +281,12 @@ public class MoulderProj : ModProjectile
     }
     public override void OnHitPlayer(Player target, Player.HurtInfo info)
     {
-        target.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 300);
+        target.AddBuff<MelomycosisBuff>(300);
         base.OnHitPlayer(target, info);
     }
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
-        target.AddBuff(ModContent.BuffType<MelomycosisBuff>(), 300);
+        target.AddBuff<MelomycosisBuff>(300);
         base.OnHitNPC(target, hit, damageDone);
     }
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)

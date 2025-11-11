@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Buffs.MinionBuffs;
 using ITD.Content.Items.Weapons.Summoner;
-using ITD.Utilities;
 using System;
 using Terraria.GameContent;
 

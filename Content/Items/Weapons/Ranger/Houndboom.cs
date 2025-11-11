@@ -1,5 +1,4 @@
 ﻿using ITD.Systems;
-using ITD.Utilities;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -61,7 +60,7 @@ public class Houndboom : ModItem
 
     public static void Hold(Player player)
     {
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         Vector2 mouse = modPlayer.MousePosition;
 
         if (mouse.X < player.Center.X)

@@ -1,5 +1,4 @@
-﻿using ITD.DetoursIL;
-using Terraria.GameContent;
+﻿using Terraria.GameContent;
 
 namespace ITD.Systems;
 
@@ -11,7 +10,8 @@ namespace ITD.Systems;
 /// gores need to be explicitly marked as safe or else they get turned into a puff of smoke which we don't want in the case someone's playing with child safe mode on
 /// for whatever reason.
 /// </summary>
-public class ITDChildSafety : DetourGroup
+[Autoload(Side = ModSide.Client)]
+public class ITDChildSafety : ModSystem
 {
     public override void SetStaticDefaults()
     {

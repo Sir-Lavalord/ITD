@@ -37,7 +37,7 @@ public class Trailblazer : Favor
             if (player.velocity.X > -16f)
                 player.velocity.X = -16f;
         }
-        player.AddBuff(ModContent.BuffType<Trailblazing>(), 60 * 5);
+        player.AddBuff<Trailblazing>(60 * 5);
 
         for (int i = 0; i < 15; i++)
         {

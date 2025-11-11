@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Items.Weapons.Ranger;
-using ITD.Utilities;
 using System;
 using System.IO;
 using Terraria.Audio;

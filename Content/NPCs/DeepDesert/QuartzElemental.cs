@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Projectiles.Hostile;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 
@@ -280,7 +279,7 @@ public class QuartzElemental : ModNPC
     public override bool? CanFallThroughPlatforms() => true;
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
-        if (spawnInfo.Player.GetITDPlayer().ZoneDeepDesert && Main.hardMode)
+        if (spawnInfo.Player.ITD().ZoneDeepDesert && Main.hardMode)
         {
             return 0.25f;
         }

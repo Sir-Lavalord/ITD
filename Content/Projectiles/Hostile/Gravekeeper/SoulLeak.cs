@@ -17,7 +17,7 @@ public class SoulLeak : ModProjectile
 
     public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
     {
-        target.AddBuff(ModContent.BuffType<SoulRotBuff>(), 300, false);
+        target.AddBuff<SoulRotBuff>(300, false);
     }
 
     public override void AI()

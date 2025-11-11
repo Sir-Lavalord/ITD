@@ -5,7 +5,6 @@ using ITD.Content.Items.Weapons.Melee;
 using ITD.Content.Items.Weapons.Summoner;
 using ITD.Content.Projectiles.Hostile.Gravekeeper;
 using ITD.ItemDropRules.Conditions;
-using ITD.Utilities;
 using System;
 using System.IO;
 using System.Linq;
@@ -97,9 +96,9 @@ public class Gravekeeper : ModNPC
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
     {
         //if (Form == 1)
-        //	target.AddBuff(ModContent.BuffType<SoulRotBuff>(), 60 * 8);
+        //	target.AddBuff<SoulRotBuff>(60 * 8);
         //else
-        target.AddBuff(ModContent.BuffType<NecrosisBuff>(), 60 * 8);
+        target.AddBuff<NecrosisBuff>(60 * 8);
     }
 
     readonly float speed = 10;
@@ -368,7 +367,7 @@ public class Gravekeeper : ModNPC
                     }
                 }
 
-                Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 4, 4, false);
+                Main.LocalPlayer.ITD().BetterScreenshake(20, 4, 4, false);
                 SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
                 SoundEngine.PlaySound(SoundID.NPCDeath51, NPC.Center);
                 break;

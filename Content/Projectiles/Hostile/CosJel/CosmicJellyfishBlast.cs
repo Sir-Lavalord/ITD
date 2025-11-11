@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Misc;
-using ITD.Utilities;
-using ITD.Utilities.EntityAnim;
+using ITD.Utilities.Tweening;
 using System;
 using Terraria.DataStructures;
 

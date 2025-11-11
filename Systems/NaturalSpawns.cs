@@ -1,5 +1,4 @@
 ﻿using ITD.Content.NPCs.Bosses;
-using ITD.Utilities;
 using Terraria.Audio;
 using Terraria.Localization;
 
@@ -19,7 +18,7 @@ public static class NaturalSpawns
     {
         if (prevTime && !curTime) // It has just turned into nighttime
         {
-            if (NPC.downedBoss1 && ITDSystem.HasMeteorFallen && (player.ZoneOverworldHeight || player.ZoneSkyHeight) && !cosJelCounter && !DownedBossSystem.DownedCosJel)
+            if (NPC.downedBoss1 && ITDSystem.HasMeteorFallen && (player.ZoneOverworldHeight || player.ZoneSkyHeight) && !cosJelCounter && !CosmicJellyfish.Downed.Value)
             {
                 if (Main.rand.NextBool(3))
                 {

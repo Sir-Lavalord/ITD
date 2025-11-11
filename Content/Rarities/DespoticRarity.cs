@@ -1,27 +1,14 @@
-using ITD.Common.Rarities;
+using Daybreak.Common.Features.Rarities;
+using ReLogic.Graphics;
 
 namespace ITD.Content.Rarities;
 
-[Autoload(false)]
-public class DespoticRarityModifier(DespoticRarity modRarity) : RarityModifier
-{
-    public DespoticRarity ModRarity { get; init; } = modRarity;
-    public override int RarityType { get => ModRarity.Type; }
-
-    public override void Draw(DrawData data)
-    {
-        Color blue = new(51, 191, 255);
-        RarityHelper.DrawBaseTooltipTextAndGlow(data, glowColor: blue, textOuterColor: blue, Color.Black, glowScaleOffset: new(1.2f, 1f));
-    }
-}
-
-public class DespoticRarity : ModRarity
+public class DespoticRarity : ModRarity, IRarityTextRenderer
 {
     public override Color RarityColor => Color.Black;
-
-    public sealed override void Load()
+    public void RenderText(SpriteBatch sb, DynamicSpriteFont font, string text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, RarityDrawContext drawContext, float maxWidth = -1, float spread = 2)
     {
-        var modifier = new DespoticRarityModifier(this);
-        Mod.AddContent(modifier);
+        Color blue = new(51, 191, 255);
+        RarityHelper.DrawBaseTooltipTextAndGlow(position, origin, scale, rotation, maxWidth, text, blue, blue, Color.Black, null, new(1.2f, 1f));
     }
 }

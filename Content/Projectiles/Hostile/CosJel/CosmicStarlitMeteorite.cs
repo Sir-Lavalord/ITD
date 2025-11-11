@@ -1,7 +1,6 @@
 ﻿using ITD.Content.NPCs.Bosses;
 using ITD.Particles;
 using ITD.Particles.Projectiles;
-using ITD.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria.DataStructures;
@@ -13,7 +12,7 @@ public class CosmicStarlitMeteorite : ModProjectile
 {
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The Length of old position to be recorded
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0; // The recording mode
         Main.projFrames[Projectile.type] = 1;
     }

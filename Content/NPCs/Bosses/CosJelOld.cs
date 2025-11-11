@@ -159,7 +159,7 @@ namespace ITD.Content.NPCs.Bosses
             switch ((int)AttackID)
             {
                 case -2:
-                    player.GetITDPlayer().BetterScreenshake(20, 5, 5, true);
+                    player.ITD().BetterScreenshake(20, 5, 5, true);
 
                     if (++AITimer1 <= 900)
                     {
@@ -257,7 +257,7 @@ namespace ITD.Content.NPCs.Bosses
                             }
                             if (AITimer2 == 1)
                             {
-                                player.GetITDPlayer().BetterScreenshake(60, 20, 40, true);//Very shaky, might need some tweaking to the decay
+                                player.ITD().BetterScreenshake(60, 20, 40, true);//Very shaky, might need some tweaking to the decay
                             }
                         }
                     }

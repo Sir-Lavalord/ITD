@@ -1,7 +1,6 @@
 using ITD.Particles;
 using ITD.Particles.Misc;
 using ITD.Systems;
-using ITD.Utilities;
 using Terraria.Audio;
 
 namespace ITD.Content.Items.Weapons.Melee;

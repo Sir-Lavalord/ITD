@@ -109,7 +109,7 @@ public class HauntedTombstone : ModNPC
                 NPC npc = Main.npc[NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, TheList[Main.rand.Next(6)])];
                 if (NPC.ai[0] >= 0) //hell is war
                 {
-                    npc.AddBuff(ModContent.BuffType<NecrosisBuff>(), 3600, false);
+                    npc.AddBuff<NecrosisBuff>(3600, false);
                     npc.life = (int)(npc.lifeMax * 0.66f);
                 }
             }

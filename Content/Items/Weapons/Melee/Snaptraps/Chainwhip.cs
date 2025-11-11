@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Friendly.Melee.Snaptraps;
 using ITD.Content.Projectiles.Friendly.Summoner;
-using ITD.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.DataStructures;
@@ -18,14 +17,14 @@ public class Chainwhip : ITDSnaptrapItem
     }
     public override bool CanUseItem(Player player)
     {
-        ITDSnaptrap snaptrap = player.GetSnaptrapPlayer().GetActiveSnaptrap();
+        ITDSnaptrap snaptrap = player.Snaptrap().ActiveSnaptrap;
         return snaptrap == null || snaptrap.IsStickingToTarget;
     }
     public override bool AltFunctionUse(Player player) => true;
     //uh oh custom code
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
     {
-        ITDSnaptrap snaptrap = player.GetSnaptrapPlayer().GetActiveSnaptrap();
+        ITDSnaptrap snaptrap = player.Snaptrap().ActiveSnaptrap;
         if (snaptrap != null && snaptrap.IsStickingToTarget && player.altFunctionUse == 2)
         {
             type = ModContent.ProjectileType<ChainwhipWhip>();
@@ -35,8 +34,8 @@ public class Chainwhip : ITDSnaptrapItem
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
         if (type == ModContent.ProjectileType<ChainwhipWhip>())
-            return player.GetSnaptrapPlayer().GetActiveSnaptrap() != null;
-        return player.GetSnaptrapPlayer().ShootSnaptrap();
+            return player.Snaptrap().ActiveSnaptrap != null;
+        return player.Snaptrap().ShootSnaptrap();
     }
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {

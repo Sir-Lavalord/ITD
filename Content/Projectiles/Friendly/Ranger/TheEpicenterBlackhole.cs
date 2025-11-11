@@ -1,7 +1,6 @@
 ﻿using ITD.Content.Dusts;
 using ITD.Content.Items.Weapons.Ranger;
 using ITD.PrimitiveDrawing;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.DataStructures;

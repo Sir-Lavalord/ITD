@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.Localization;
+﻿using Terraria.Localization;
 
 namespace ITD.Content.Items.Armor.Alloy;
 
@@ -26,7 +25,7 @@ public class AlloyHelmet : ModItem
     }
     public override void UpdateArmorSet(Player player)
     {
-        player.GetITDPlayer().setAlloy_Melee = true;
+        player.ITD().setAlloy_Melee = true;
         player.setBonus = SetBonusText.Value;
     }
 }

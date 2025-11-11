@@ -1,7 +1,5 @@
-﻿using ITD.Systems;
-using ITD.Systems.DataStructures;
-using ITD.Systems.Extensions;
-using ITD.Utilities;
+﻿using Daybreak.Common.Rendering;
+using ITD.Systems;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 
@@ -39,7 +37,7 @@ public class GhostbusterProj : ModProjectile
     public override void AI()
     {
         Player player = Main.player[Projectile.owner];
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         Vector2 mouse = modPlayer.MousePosition;
 
         if (FadeIn < 2f)
@@ -124,7 +122,7 @@ public class GhostbusterProj : ModProjectile
 
             // <>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
             float yRange = 100f;
-            Vector2 mouse = Main.player[Projectile.owner].GetITDPlayer().MousePosition;
+            Vector2 mouse = Main.player[Projectile.owner].ITD().MousePosition;
             Vector2 realMidPoint = Vector2.Lerp(VacuumCleaner, TargetLock.Center, 0.5f);
 
             // clamp to avoid long noodle
@@ -162,7 +160,7 @@ public class GhostbusterProj : ModProjectile
             //TrailStrip.PrepareStrip(positions, rotations, StripColorOrange, StripWidth2, - Main.screenPosition, positions.Length, true);
             //TrailStrip.DrawTrail();
 
-            Main.spriteBatch.End(out SpriteBatchData spriteBatchData); // unapply shaders
+            Main.spriteBatch.End(out SpriteBatchSnapshot spriteBatchData); // unapply shaders
             Main.spriteBatch.Begin(spriteBatchData);
         }
         return false;

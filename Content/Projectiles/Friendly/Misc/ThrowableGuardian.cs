@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Friendly.Misc;
 
@@ -26,7 +25,7 @@ public class ThrowableGuardian : ModProjectile
 
     public override void OnKill(int timeLeft)
     {
-        Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 4, 4, false);
+        Main.LocalPlayer.ITD().BetterScreenshake(20, 4, 4, false);
         SoundEngine.PlaySound(SoundID.Item62, Projectile.Center);
         Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, new Vector2(Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f)), 54);
         Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, new Vector2(Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-2f, 2f)), 55);

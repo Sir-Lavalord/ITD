@@ -380,7 +380,7 @@ public class BigBerthProj : ModProjectile
             Vector2 mountedCenter = Main.player[Projectile.owner].MountedCenter;
             Vector2 shortestVectorFromPlayerToTarget = targetHitbox.ClosestPointInRect(mountedCenter) - mountedCenter;
             shortestVectorFromPlayerToTarget.Y /= 0.8f; // Makes the hit area an ellipse. Vertical hit distance is smaller due to this math.
-            float hitRadius = 55f; // The length of the semi-major radius of the ellipse (the long end)
+            float hitRadius = 55f; // The Length of the semi-major radius of the ellipse (the long end)
             return shortestVectorFromPlayerToTarget.Length() <= hitRadius;
         }
         // Regular collision logic happens otherwise.

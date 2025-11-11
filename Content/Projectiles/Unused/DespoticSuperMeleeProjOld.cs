@@ -108,13 +108,13 @@ namespace ITD.Content.Projectiles.Unused
             Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
             Texture2D glow = ModContent.Request<Texture2D>(path + "DespoticSword_Glow").Value;
             Texture2D effect = ModContent.Request<Texture2D>(path + "DespoticSword_Effect").Value;
-            int length = Projectile.oldPos.Length;
+            int Length = Projectile.oldPos.Length;
             Vector2 extraHoldout = Projectile.velocity * 2f;
-            for (int i = length - 1; i >= 0; i--)
+            for (int i = Length - 1; i >= 0; i--)
             {
                 Vector2 pos = Projectile.oldPos[i] + (Projectile.Size * 0.5f) - Main.screenPosition + extraHoldout;
                 float rot = Projectile.oldRot[i];
-                float prog = i / (float)(length - 1);
+                float prog = i / (float)(Length - 1);
                 Color col = Color.Lerp(Color.Aqua, Color.MidnightBlue, prog);
                 float opac = 1f - prog;
                 Main.EntitySpriteDraw(effect, pos, null, col * opac * FadeIn, rot + MathHelper.PiOver2, effect.Size() * 0.5f, Projectile.scale, SpriteEffects.None);

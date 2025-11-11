@@ -1,24 +1,22 @@
-﻿using Mono.Cecil;
+﻿using Daybreak.Common.Features.Hooks;
+using Mono.Cecil;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
 using System.Reflection;
 using Terraria.WorldBuilding;
 
 namespace ITD.DetoursIL;
 
-public class VanillaSnowBiomeChanges : DetourGroup
+public static class VanillaSnowBiomeChanges
 {
     private static MethodReference methodReference;
     private static MethodBase snowBiomeGenMethod;
-    private static ILHook hook;
-    public override void Load()
+    [OnLoad]
+    public static void Load()
     {
         IL_WorldGen.AddGenPasses += SnowBiomeExtension;
-        ILHook newHook = new(snowBiomeGenMethod, ModifySnowBiomeHeight); // create hook into anonymous method
-        hook = newHook;
-        hook.Apply(); // hook into it
+        MonoModHooks.Modify(snowBiomeGenMethod, ModifySnowBiomeHeight);
     }
     private static void SnowBiomeExtension(ILContext il)
     {
@@ -29,21 +27,21 @@ public class VanillaSnowBiomeChanges : DetourGroup
             // find the instruction that loads this string onto the stack
             if (!c.TryGotoNext(i => i.MatchLdstr("Generate Ice Biome")))
             {
-                LogError("Generate Ice Biome string not found");
+                ITD.Log("Generate Ice Biome string not found");
                 return;
             }
             // get the actual delegate pointer of the anonymous GenIceBiome method
             // this has to be stored in a global variable cuz you can't access an out directly from that far of a scope
             if (!c.TryGotoNext(i => i.MatchLdftn(out methodReference)))
             {
-                LogError("Delegate pointer not found");
+                ITD.Log("Delegate pointer not found");
             }
             // store methodbase in the global variable
             snowBiomeGenMethod = methodReference.ResolveReflection();
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
     }
     private static int GetYOffset()
@@ -66,12 +64,12 @@ public class VanillaSnowBiomeChanges : DetourGroup
             // get to the maxValue load of 200 for Main.genRand (next is modifying num949)
             if (!c.TryGotoNext(i => i.MatchLdcI4(200)))
             {
-                LogError("snowThickness declaration not found");
+                ITD.Log("snowThickness declaration not found");
             }
             // from here we need to modify the number that is used as the lower Y limit in the loop (this is equal to num949 in the source code)
             if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(GenVars), "lavaLine")))
             {
-                LogError("Couldn't find lavaLine storage");
+                ITD.Log("Couldn't find lavaLine storage");
             }
             c.Index++; // advance cursor position
 
@@ -81,11 +79,7 @@ public class VanillaSnowBiomeChanges : DetourGroup
         }
         catch
         {
-            DumpIL(il);
+            ITD.Dump(il);
         }
-    }
-    public override void Unload()
-    {
-        hook?.Dispose();
     }
 }

@@ -11,7 +11,6 @@ using ITD.Content.Items.Weapons.Melee.Snaptraps;
 using ITD.Content.Projectiles.Friendly.Mage;
 using ITD.Content.Projectiles.Friendly.Melee.Snaptraps.Extra;
 using ITD.Content.Projectiles.Friendly.Ranger;
-using ITD.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -135,13 +134,13 @@ public class ITDGlobalNPC : GlobalNPC
         if (npc.AnyInteractions())
         {
             Player player = Main.player[npc.lastInteraction];//the man behind the slaughter
-            var modPlayer = player.GetITDPlayer();
+            var modPlayer = player.ITD();
             if (npc.CanBeChasedBy())//no critter
             {
                 if (modPlayer.soulTalisman)
                 {
                     modPlayer.soulTalismanEffect = true;
-                    player.AddBuff(ModContent.BuffType<SoulTalismanBuff>(), 400);
+                    player.AddBuff<SoulTalismanBuff>(400);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         for (int i = 0; i <= 2; i++)

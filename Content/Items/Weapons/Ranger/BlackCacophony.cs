@@ -1,6 +1,5 @@
 ﻿using ITD.Content.Projectiles.Other;
 using ITD.Systems;
-using ITD.Utilities;
 using System;
 using System.Collections.Generic;
 using Terraria.Audio;
@@ -50,7 +49,7 @@ public class BlackCacophony : ModItem
 
     public static void Hold(Player player)
     {
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         Vector2 mouse = modPlayer.MousePosition;
 
         if (mouse.X < player.Center.X)

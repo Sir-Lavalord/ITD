@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.PrimitiveDrawing;
+﻿namespace ITD.PrimitiveDrawing;
 
 public static class SimpleSquare
 {

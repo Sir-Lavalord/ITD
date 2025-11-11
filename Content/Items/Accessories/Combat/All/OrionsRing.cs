@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using ITD.Utilities.Placeholders;
+﻿using ITD.Utilities.Placeholders;
 using System.Collections.Generic;
 using Terraria.UI;
 

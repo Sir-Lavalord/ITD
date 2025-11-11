@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ITD.Utilities.EntityAnim;
+namespace ITD.Utilities.Tweening;
 
 public interface IKeyframe
 {

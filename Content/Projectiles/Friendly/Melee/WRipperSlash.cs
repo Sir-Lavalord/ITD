@@ -1,5 +1,4 @@
 ﻿using ITD.Systems;
-using ITD.Utilities;
 using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Friendly.Melee;
@@ -46,7 +45,7 @@ public class WRipperSlash : ModProjectile
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)//make it once per swing
     {
         Player player = Main.player[Projectile.owner];
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         if (!bFirstHit)
         {
             if (modPlayer.itemVar[0] < 3)

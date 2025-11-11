@@ -1,5 +1,4 @@
 ﻿using ITD.Systems;
-using ITD.Utilities;
 using System.IO;
 
 namespace ITD.Networking.Packets;
@@ -8,7 +7,7 @@ public sealed class MousePositionPacket : ITDPacket
 {
     public MousePositionPacket(Player player)
     {
-        var modPlayer = player.GetITDPlayer();
+        var modPlayer = player.ITD();
         Writer.TryWriteSenderPlayer(player);
         Writer.WriteVector2(modPlayer.MousePosition);
     }

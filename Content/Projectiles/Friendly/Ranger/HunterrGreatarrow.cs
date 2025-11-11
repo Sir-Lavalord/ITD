@@ -81,7 +81,7 @@ public class HunterrGreatarrow : ModProjectile
         //maybe something else goes here, kinda busted
         /*            if (Projectile.ai[0] == 3)
                     {
-                        target.AddBuff(ModContent.BuffType<ToppledDebuff>(), 300);
+                        target.AddBuff<ToppledDebuff>(300);
                     }*/
         for (int i = 0; i < 12; i++)
         {

@@ -1,7 +1,6 @@
 ﻿using ITD.Content.Dusts;
 using ITD.Content.Projectiles.Hostile;
 using ITD.Content.Tiles.BlueshroomGroves;
-using ITD.Utilities;
 using System;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -234,7 +233,7 @@ public class ShroomishSlime : ModNPC
 
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
-        if (spawnInfo.Player.GetITDPlayer().ZoneBlueshroomsUnderground)
+        if (spawnInfo.Player.ITD().ZoneBlueshroomsUnderground)
         {
             return 0.45f;
         }

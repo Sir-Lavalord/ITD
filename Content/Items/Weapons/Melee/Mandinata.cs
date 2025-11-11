@@ -1,7 +1,6 @@
 ﻿using ITD.Content.Items.Materials;
 using ITD.Content.Projectiles.Friendly.Melee;
 using ITD.Systems;
-using ITD.Utilities;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -38,7 +37,7 @@ public class Mandinata : ModItem
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
-        ITDPlayer modPlayer = player.GetITDPlayer();
+        ITDPlayer modPlayer = player.ITD();
         float ai = Main.rand.NextFloat(0.5f, 1f) * Item.shootSpeed * 0.75f * player.direction;
         Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<MandinataProjectile>(), damage, knockback, player.whoAmI, ai, modPlayer.itemVar[0]);
         if (modPlayer.itemVar[0] == 1f)

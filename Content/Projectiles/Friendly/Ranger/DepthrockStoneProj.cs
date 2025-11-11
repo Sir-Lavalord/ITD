@@ -1,5 +1,4 @@
 ﻿using ITD.Systems;
-using ITD.Utilities;
 using Terraria.Audio;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger;

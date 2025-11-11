@@ -1,5 +1,4 @@
 ﻿using ITD.Content.Items.Weapons.Ranger;
-using ITD.Utilities;
 using System.IO;
 
 namespace ITD.Content.Projectiles.Friendly.Ranger;

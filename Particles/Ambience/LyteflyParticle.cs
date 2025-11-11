@@ -1,4 +1,4 @@
-﻿using ITD.Utilities.EntityAnim;
+﻿using ITD.Utilities.Tweening;
 using System;
 using System.Runtime.InteropServices;
 

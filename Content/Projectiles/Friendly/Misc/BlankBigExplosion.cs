@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using System;
+﻿using System;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 

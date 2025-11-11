@@ -1,7 +1,6 @@
 ﻿using ITD.Systems.WorldNPCs;
-using ITD.Utilities;
-using ITD.Utilities.EntityAnim;
 using ITD.Utilities.Placeholders;
+using ITD.Utilities.Tweening;
 using ReLogic.Graphics;
 using System;
 using System.Collections.Generic;
@@ -73,7 +72,7 @@ public class WorldNPCDialogue : ITDUIState
 /// <summary>
 /// ported from my game #shamelessplug
 /// </summary>
-public class WorldNPCDialogueBox : ITDUIElement
+public sealed class WorldNPCDialogueBox : ITDUIElement
 {
     private readonly Asset<DynamicSpriteFont> font = FontAssets.MouseText;
     public const string DialogueLanguageKey = "Mods.ITD.WorldNPCDialogue";
@@ -135,7 +134,7 @@ public class WorldNPCDialogueBox : ITDUIElement
     {
         get
         {
-            int worldNPC = Main.LocalPlayer.GetITDPlayer().TalkWorldNPC;
+            int worldNPC = Main.LocalPlayer.ITD().TalkWorldNPC;
             if (worldNPC == -1)
                 return null;
             return NPCLoader.GetNPC(Main.npc[worldNPC].type) as WorldNPC;
@@ -367,14 +366,11 @@ public class WorldNPCDialogueBox : ITDUIElement
     }
     public void TweenSpeakerHead()
     {
-        Tweener.Tween(AnimHelpers.CreateFor(this, () => speakerHeadYPositionPercentOffset, () => 1f, 16, EasingFunctions.OutCubic, () =>
+        Tweener.Tween(() => speakerHeadYPositionPercentOffset, 1f, 16, EasingFunctions.OutCubic);
+        Tweener.Tween(() => speakerHeadVerticalScale, 1.6f, 16, EasingFunctions.OutCubic, () =>
         {
-
-        }));
-        Tweener.Tween(AnimHelpers.CreateFor(this, () => speakerHeadVerticalScale, () => 1.6f, 16, EasingFunctions.OutCubic, () =>
-        {
-            Tweener.Tween(AnimHelpers.CreateFor(this, () => speakerHeadVerticalScale, () => 1f, 8, EasingFunctions.OutCubic));
-        }));
+            Tweener.Tween(() => speakerHeadVerticalScale, 1f, 8, EasingFunctions.OutCubic);
+        });
     }
     public void Setup(string key)
     {
@@ -391,18 +387,18 @@ public class WorldNPCDialogueBox : ITDUIElement
     {
         openProgress = 0f;
         Setup(key);
-        tweenReference = (Keyframe<float>)Tweener.Tween(AnimHelpers.CreateFor(this, () => openProgress, () => 1f, 32, EasingFunctions.OutCubic, () =>
+        tweenReference = (Keyframe<float>)Tweener.Tween(() => openProgress, 1f, 32, EasingFunctions.OutCubic, () =>
         {
             drawSpeakerHead = true;
             TweenSpeakerHead();
-        }));
+        });
     }
     public void Close()
     {
         if (tweenReference != null)
             Tweener.CancelTween(tweenReference);
 
-        Tweener.Tween(AnimHelpers.CreateFor(this, () => openProgress, () => 0f, 32, EasingFunctions.OutCubic, () =>
+        Tweener.Tween(() => openProgress, 0f, 32, EasingFunctions.OutCubic, () =>
         {
             ParentState.ForceClose();
             tweenReference = null;
@@ -418,7 +414,7 @@ public class WorldNPCDialogueBox : ITDUIElement
             OnInitialize();
             buttons.Clear();
             drawSpeakerHead = false;
-        }));
+        });
     }
 }
 public enum DialogueAction : ushort
@@ -483,10 +479,10 @@ public class DialogueButton(GeneratedButtonData buttonData) : ITDUIElement()
             Tweener.CancelTween(tweenReference);
             tweenReference = null;
         }
-        tweenReference = (Keyframe<float>)Tweener.Tween(AnimHelpers.CreateFor(this, () => extraSize, () => 16, 8, EasingFunctions.OutCubic, () =>
+        tweenReference = (Keyframe<float>)Tweener.Tween(() => extraSize, 16, 8, EasingFunctions.OutCubic, () =>
         {
             tweenReference = null;
-        }));
+        });
         drawColor = Color.Gray;
         SoundEngine.PlaySound(SoundID.MenuTick);
     }
@@ -497,10 +493,10 @@ public class DialogueButton(GeneratedButtonData buttonData) : ITDUIElement()
             Tweener.CancelTween(tweenReference);
             tweenReference = null;
         }
-        tweenReference = (Keyframe<float>)Tweener.Tween(AnimHelpers.CreateFor(this, () => extraSize, () => 0f, 8, EasingFunctions.OutCubic, () =>
+        tweenReference = (Keyframe<float>)Tweener.Tween(() => extraSize, 0f, 8, EasingFunctions.OutCubic, () =>
         {
             tweenReference = null;
-        }));
+        });
         drawColor = Color.White;
         SoundEngine.PlaySound(SoundID.MenuTick);
     }

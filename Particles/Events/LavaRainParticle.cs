@@ -1,6 +1,4 @@
-﻿using ITD.Utilities;
-
-namespace ITD.Particles.Events;
+﻿namespace ITD.Particles.Events;
 
 public class LavaRainParticle : ParticleEmitter
 {

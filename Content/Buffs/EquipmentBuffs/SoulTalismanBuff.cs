@@ -1,5 +1,4 @@
-﻿using ITD.Utilities;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 
 namespace ITD.Content.Buffs.EquipmentBuffs;
 
@@ -29,13 +28,13 @@ public class SoulTalismanBuff : ModBuff
 
     public override void Update(Player player, ref int buffIndex)
     {
-        var modPlayer = player.GetITDPlayer();
+        var modPlayer = player.ITD();
         modPlayer.soulTalismanEffect = true;
-        CurrentStack = player.GetITDPlayer().soulTalismanStack;
+        CurrentStack = player.ITD().soulTalismanStack;
     }
     public override bool ReApply(Player player, int time, int buffIndex)
     {
-        var modPlayer = player.GetITDPlayer();
+        var modPlayer = player.ITD();
 
         if (modPlayer.soulTalismanStack < 4)
         {
