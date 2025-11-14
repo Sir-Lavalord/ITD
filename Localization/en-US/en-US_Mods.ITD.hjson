@@ -261,6 +261,8 @@ Projectiles: {
 	CosmicShockwave.DisplayName: Cosmic Shockwave
 	CosmicChainBomb.DisplayName: Cosmic Chain Bomb
 	CosmicTentacleArena.DisplayName: Cosmic Tentacle Arena
+	CosmicSwarmBlackhole.DisplayName: Cosmic Swarm Blackhole
+	CosmicSwarmGib.DisplayName: Cosmic Swarm Gib
 }
 
 NPCs: {

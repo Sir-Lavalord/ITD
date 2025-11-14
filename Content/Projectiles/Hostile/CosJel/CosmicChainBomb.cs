@@ -61,7 +61,7 @@ public class CosmicChainBomb : ModProjectile
     public override void AI()
     {
 
-        if (Projectile.frame >= 3)
+        if (Projectile.frame >= 2)
         {
             if (doBomb)
             {

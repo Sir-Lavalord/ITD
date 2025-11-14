@@ -9,7 +9,7 @@ namespace ITD.Content.Projectiles.Hostile.CosJel;
 
 public class CosmicJellyfishBlast : BigBlankExplosion
 {
-    public override int Lifetime => 150;
+    public override int Lifetime => 240;
     public override Vector2 ScaleRatio => new(1.5f, 1f);
 
     public override Color GetCurrentExplosionColor(float pulseCompletionRatio) => Color.Lerp(Color.White * 1.6f, Color.Purple, MathHelper.Clamp(pulseCompletionRatio * 2.2f, 0f, 1f));

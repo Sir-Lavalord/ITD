@@ -117,6 +117,12 @@ public class CosmicStarlitMeteorite : ITDProjectile
             Projectile.active = false;
             return;
         }
+        if (owner.ai[3] != 5)//5 is current place of meteor slam attack
+        {
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
+        }
         if (++Projectile.localAI[0] < 120) //feed us and we'll grow
         {
             Projectile.Center = Vector2.Lerp(Projectile.Center, owner.Center + new Vector2(Projectile.ai[1], Projectile.ai[2]), 0.05f);

@@ -68,6 +68,7 @@ public class CosmicTentacleArena : ModProjectile
             behindNPCs.Add(index);
     }
     public bool zapDog = false;
+    float sweepDir = 1;
     public override void AI()
     {
         NPC CosJel = Main.npc[(int)Projectile.ai[0]];
@@ -93,7 +94,7 @@ public class CosmicTentacleArena : ModProjectile
                 case ActionState.Spinning:
                     if (Projectile.localAI[0]++ >= 60)
                     {
-                        Projectile.localAI[1] -= (float)Math.PI / circleTime;
+                        Projectile.localAI[1] -= ((float)Math.PI / circleTime) * sweepDir;
 
                         Projectile.Center = CosJel.Center + new Vector2(0, -distAway).RotatedBy(Projectile.localAI[1]);
                         zapDog = true;
@@ -116,6 +117,13 @@ public class CosmicTentacleArena : ModProjectile
                         {
                             AI_State = ActionState.Retract;
                             zapDog = false;
+                        }
+                    }
+                    else
+                    {
+                        if (CosJel.HasPlayerTarget)
+                        {
+                            sweepDir = Main.player[CosJel.target].Center.X > CosJel.Center.X ? -1 : 1;
                         }
                     }
                     break;

@@ -15,6 +15,7 @@ using ITD.Systems;
 using ITD.Systems.DataStructures;
 using ITD.Systems.Extensions;
 using ITD.Utilities;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -215,6 +216,8 @@ namespace ITD.Content.NPCs.Bosses
             Movement(player);
             Vector2 toPlayer = player.Center - NPC.Center;
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
+            Vector2 eyePos = NPC.Center + new Vector2(0, -60);
+
             if (player.dead || !player.active || Main.IsItDay())//despawn at dawn
             {
                 NPC.velocity.Y -= 0.04f;
@@ -264,7 +267,6 @@ namespace ITD.Content.NPCs.Bosses
                                     int count = 6 + (int)AITimer2 * 3;
                                     float dist = 100 + 350 * AITimer2;
                                     float baseRot = 0 + AITimer2 * MathHelper.ToRadians(15);
-                                    Vector2 eyePos = NPC.Center + new Vector2(0, -60);
                                     SoundEngine.PlaySound(SoundID.Item28, eyePos);
                                     for (int i = 0; i < count; i++)
                                     {
@@ -296,14 +298,13 @@ namespace ITD.Content.NPCs.Bosses
                         {
                             if (AITimer2 < hitTime)
                             {
-                                if (AITimer1++ >= 60)
+                                if (AITimer1++ >= 45)
                                 {
                                     AITimer2++;
                                     AITimer1 = 0;
                                     int count = 10;
                                     float dist = 200 - 30 * AITimer2;
                                     float baseRot = 0 + AITimer2 * MathHelper.ToRadians(15);
-                                    Vector2 eyePos = NPC.Center + new Vector2(0, -60);
                                     SoundEngine.PlaySound(SoundID.Item28, eyePos);
                                     for (int i = 0; i < count; i++)
                                     {
@@ -323,10 +324,10 @@ namespace ITD.Content.NPCs.Bosses
                             }
                             else
                             {
-                                if (AITimer1++ >= 180)
+                                if (AITimer1++ >= 120)
                                 {
                                     AI_State = MovementState.FollowingRegular;
-                                    AttackID = Main.rand.Next(1,6);//randomized, but not reveal new attack now
+                                    AttackID = 7;//randomized, but not reveal new attack now
                                     ResetStats();
                                     NPC.dontTakeDamage = false;
                                 }
@@ -534,6 +535,7 @@ namespace ITD.Content.NPCs.Bosses
 
                             }
                         }
+
                     }
                     if (AttackCount > 2)//loop
                     {
@@ -552,7 +554,7 @@ namespace ITD.Content.NPCs.Bosses
                         AI_State = MovementState.Explode;
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, -Vector2.UnitY, ModContent.ProjectileType<CosmicTentacleArena>(), 60, 0f, Main.myPlayer, NPC.whoAmI, 0, 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicTentacleArena>(), 60, 0f, Main.myPlayer, NPC.whoAmI, 0, 0);
 
                         }
 
@@ -566,72 +568,62 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
 
-                case 7:
-                    BlackholeDusting(3);
-                    AI_State = MovementState.Explode;
+                case 7://open whitehole, kills mini jellyfish, total jellyfish death
                     AITimer1++;
-                    if (AttackCount >= 30)
+                    distanceAbove = 300;
+                    int maxAttack = 3;
+                    if (AttackCount <= maxAttack)
                     {
-                        if (AITimer2++ == 60)
+                        if (AITimer1 >= 90 && AttackCount <= 0 || AITimer1 >= 450)
                         {
+                            Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos, Vector2.Zero,
+                    ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
+                            Blast.ai[1] = 250f;
+                            Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+                            Blast.netUpdate = true;
+                            AttackCount++;
+                            AITimer1 = 0;
+                            AI_State = MovementState.Explode;
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
-                                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, vel,
-                                 ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI);
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(player.Center.X, player.Center.Y + Main.screenHeight/2), Vector2.Zero, ModContent.ProjectileType<CosmicSwarmBlackhole>(), 60, 0f, Main.myPlayer, NPC.whoAmI, 0, 0);
+
                             }
-                        }
-                        if (AITimer2 >= 800)
-                        {
-                            AI_State = MovementState.FollowingRegular;
-                            AttackID = 0;
-                            AITimer1 = 0;
-                            AITimer2 = 0;
-                            NetSync();
-                        }
-                        if (AITimer1 >= 100)
-                        {
-                            AITimer1 = 0;
-                            SoundEngine.PlaySound(SoundID.Item20, NPC.Center);
-                            //P2 stat garbage here
-                            AIRand = Main.rand.Next(20, 24);
-                            NetSync();
-                            int projectileAmount = (int)AIRand;
-                            float radius = 6.5f;
-                            float sector = (float)(MathHelper.TwoPi);
-                            float sectorOfSector = sector / projectileAmount;
-                            float towardsAngle = toPlayer.ToRotation();
-                            float startAngle = towardsAngle - sectorOfSector * (projectileAmount - 1) / 2;
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                for (int i = 0; i < projectileAmount; i++)
-                                {
-                                    float angle = startAngle + sectorOfSector * i;
-                                    Vector2 projectileVelo = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * radius;
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicVoidShard>(), 20, 5, -1);
-                                }
-                            }
+
                         }
                     }
-                    else
+                    if (AITimer1 >= 60 && AITimer1 < 120 && AttackCount <= 0 || AITimer1 >= 200 && AITimer1 <= 400)
                     {
-                        if (AITimer1 >= 8)
+                        AI_State = MovementState.FollowingRegular;
+                    }
+                    if (AttackCount > maxAttack && AITimer1 >= 500)//loop
+                    {
+                        AI_State = MovementState.FollowingRegular;
+                        AttackID++;
+                        ResetStats(true);
+                        distanceAbove = 250;
+                    }
+                    break;
+
+                case 8:
+                    AITimer1++;
+                    distanceAbove = 300;
+                    if (AITimer1 == 120)
+                    {
+                        AI_State = MovementState.Explode;
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                AIRand = Main.rand.Next(600, 800);
-                                NetSync();
-                                int saferange = (int)AIRand;
-                                float offset = AttackCount > 0 && player.velocity != Vector2.Zero
-                                    ? Main.rand.NextFloat((float)Math.PI * 2) : player.velocity.ToRotation();
-                                float rotation = offset + (float)Math.PI * 2 / Main.rand.Next(10);
-                                int proj = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + saferange * Vector2.UnitX.RotatedBy(rotation), Vector2.Zero,
-                                    ModContent.ProjectileType<CosmicSwordStar>(), 30, 0f, -1, NPC.whoAmI, 2);
-                                ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
-                                    new ParticleOrchestraSettings { PositionInWorld = Main.projectile[proj].Center }, Main.projectile[proj].owner);
-                                AITimer1 = 0;
-                            }
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicSwarmBlackhole>(), 60, 0f, Main.myPlayer, NPC.whoAmI, 0, 0);
+
                         }
+
+                    }
+                    if (AITimer1 >= 600)//loop
+                    {
+                        AI_State = MovementState.FollowingRegular;
+                        AttackID = 1;
+                        ResetStats(true);
+                        distanceAbove = 250;
                     }
                     break;
             }
@@ -763,6 +755,15 @@ namespace ITD.Content.NPCs.Bosses
                             }
                             break;
                     }
+                    if (DashTimer > 0)
+                    {
+                        if (emitter != null)
+                            emitter.keptAlive = true;
+                        for (int j = 0; j < 6; j++)
+                        {
+                            emitter?.Emit(Main.rand.NextVector2FromRectangle(NPC.Hitbox), NPC.velocity * 0.25f, 0f, 20);
+                        }
+                    }
                     NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
                     NetSync();
                     break;
@@ -832,7 +833,7 @@ namespace ITD.Content.NPCs.Bosses
 
                     if (NPC.HasValidTarget)
                     {
-                        Teleport(Main.player[NPC.target].Center + new Vector2(0, -400), 60, 120, (int)AttackID);
+                        Teleport(Main.player[NPC.target].Center + new Vector2(0, -400), 60, 90, (int)AttackID);
                     }
                     NPC.velocity *= 0.95f;
                     rotation = rotationFactor * maxRotation;
@@ -845,7 +846,7 @@ namespace ITD.Content.NPCs.Bosses
         public void Teleport(Vector2 telePos, int time1, int time2, int attackID)
         {
             AITimer1++;
-            if (AITimer1 == time1 - 20 || AITimer1 == time2 - 20)
+            if (AITimer1 == time1 - 30 || AITimer1 == time2 - 20)
             {
                 teleEffect = 1;
                 if (!reappearTele)
@@ -1289,7 +1290,7 @@ namespace ITD.Content.NPCs.Bosses
                 }
             }
 
-            if (AttackID == 5 || AI_State == MovementState.Slamdown || AI_State == MovementState.Dashing && DashTimer > 0)
+            if (AI_State == MovementState.Dashing && DashTimer > 0)
             {
                 for (int k = 0; k < NPC.oldPos.Length; k++)
                 {
@@ -1297,14 +1298,6 @@ namespace ITD.Content.NPCs.Bosses
                     Color color = NPC.GetAlpha(drawColor) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length) * 0.4f;
                     spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, 1f, SpriteEffects.None, 0f);
                 }
-                if (emitter != null)
-                    emitter.keptAlive = true;
-
-/*                for (int j = 0; j < 3; j++)
-                {
-                    emitter?.Emit(NPC.Center + Main.rand.NextVector2Square(-60, 60), NPC.velocity * 0.25f, 0f, 20);
-                }*/
-
             }
             Vector2 miragePos = NPC.position - Main.screenPosition + center;
 
