@@ -263,6 +263,7 @@ Projectiles: {
 	// CosmicTentacleArena.DisplayName: Cosmic Tentacle Arena
 	// CosmicSwarmBlackhole.DisplayName: Cosmic Swarm Blackhole
 	// CosmicSwarmGib.DisplayName: Cosmic Swarm Gib
+	// CosmicSwordStar2.DisplayName: Cosmic Sword Star2
 }
 
 NPCs: {
