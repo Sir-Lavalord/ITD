@@ -76,6 +76,9 @@ namespace ITD.Content.NPCs.Bosses
         public ref float DashTimer => ref NPC.localAI[1];
 
         //check if cosjel is dashing
+
+        //
+        Vector2 targetPos = Vector2.Zero;
         //dash velocity
         Vector2 dashVel;
 
@@ -264,9 +267,9 @@ namespace ITD.Content.NPCs.Bosses
                                 {
                                     AITimer2++;
                                     AITimer1 = 0;
-                                    int count = 6 + (int)AITimer2 * 3;
+                                    int count = 6 + (int)AITimer2 * 2;
                                     float dist = 100 + 350 * AITimer2;
-                                    float baseRot = 0 + AITimer2 * MathHelper.ToRadians(15);
+                                    float baseRot = 0 + AITimer2 * MathHelper.ToRadians(30);
                                     SoundEngine.PlaySound(SoundID.Item28, eyePos);
                                     for (int i = 0; i < count; i++)
                                     {
@@ -327,7 +330,7 @@ namespace ITD.Content.NPCs.Bosses
                                 if (AITimer1++ >= 120)
                                 {
                                     AI_State = MovementState.FollowingRegular;
-                                    AttackID = 7;//randomized, but not reveal new attack now
+                                    AttackID = 8;//randomized, but not reveal new attack now
                                     ResetStats();
                                     NPC.dontTakeDamage = false;
                                 }
@@ -607,29 +610,62 @@ namespace ITD.Content.NPCs.Bosses
 
                 case 8:
                     AITimer1++;
-                    distanceAbove = 300;
-                    if (AITimer1 == 120)
+                    float rotation = 0;
+                    float angleDeviation = 40;
+                    float amountFire = 40;
+                    if (AITimer1 == 60)
                     {
                         AI_State = MovementState.Explode;
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicSwarmBlackhole>(), 60, 0f, Main.myPlayer, NPC.whoAmI, 0, 0);
-
-                        }
-
                     }
-                    if (AITimer1 >= 600)//loop
+                    if (AITimer1 == 120)
+                    {
+                        targetPos = Vector2.Normalize(player.Center - eyePos);
+                    }
+                    if (AITimer1 >= 120)
+                    {
+
+                        Vector2 velocity = targetPos.RotateRandom(MathHelper.ToRadians(angleDeviation));
+                        Vector2 magVec = (eyePos +
+                            new Vector2(150, 0).RotatedBy(velocity.ToRotation())) - eyePos;
+                        magVec.Along(eyePos, 10, v =>
+                        {
+                            for (int i = 0; i <= 1; i++)
+                            {
+                                Dust dust = Dust.NewDustPerfect(new Vector2(v.X, v.Y), DustID.PurpleCrystalShard, Vector2.Zero, 0, Scale: 2);
+                                dust.scale = 1.75f;
+                                dust.noGravity = true;
+                            }
+                        });
+                        Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), eyePos +
+                            new Vector2(150, 0).RotatedBy(velocity.ToRotation()), Vector2.Zero,
+                            ModContent.ProjectileType<CosmicSwordStar2>(), NPC.damage, 0, -1, 0, 0, amountFire - (AITimer2));
+                        proj.rotation = velocity.ToRotation();
+                        AITimer2++;
+                        if (AITimer2 >= amountFire)
+                        {
+                            distanceAway =400 * (AttackCount % 2 == 0? 1: -1);
+                            distanceAbove = 300;
+                            AI_State = MovementState.FollowingRegular;
+                            AITimer2 = 0;
+                            AITimer1 = 0;
+                            AttackCount++;
+                        }
+                    }
+                    if (AttackCount > 5)//loop
                     {
                         AI_State = MovementState.FollowingRegular;
-                        AttackID = 1;
+                        AttackID++;
                         ResetStats(true);
                         distanceAbove = 250;
                     }
+
                     break;
             }
         }
         //--------------------------------------------------------------------------------------------------------------------------------
         float distanceAbove = 250f;//distance above the player
+        float distanceAway = 0;//distance away from the player, why did i not do this until now
+
         private void ShardSlam()//slam attack, call once hit the ground
         {
             float XVeloDifference = 2;
@@ -665,7 +701,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             Vector2 toPlayer = player.Center - NPC.Center;
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
-            Vector2 abovePlayer = toPlayer + new Vector2(0f, -distanceAbove);
+            Vector2 abovePlayer = toPlayer + new Vector2(distanceAway, -distanceAbove);
             Vector2 aboveNormalized = Vector2.Normalize(abovePlayer);
             float speed = abovePlayer.Length() / 1.2f;//raising above player slowly
             float speed2 = 20;
@@ -851,7 +887,7 @@ namespace ITD.Content.NPCs.Bosses
                 teleEffect = 1;
                 if (!reappearTele)
                 {
-                    Vector2 magVec = telePos - NPC.Center;
+/*                    Vector2 magVec = telePos - NPC.Center;
                     magVec.Along(NPC.Center, 6, v =>
                     {
                         for (int i = 0; i <= 1; i++)
@@ -859,7 +895,7 @@ namespace ITD.Content.NPCs.Bosses
                             Dust dust = Dust.NewDustPerfect(new Vector2(v.X, v.Y), DustID.PurpleCrystalShard, Vector2.Zero, 0, Scale: 2);
                             dust.noGravity = true;
                         }
-                    });
+                    });*/
                 }
             }
             if (AITimer1 == time1)
@@ -994,7 +1030,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (bSecondStage)
             {
-                if (AttackID >= 8)//use phase 2 attacks
+                if (AttackID > 8)//use phase 2 attacks
                 {
                     AttackID = 1;
                 }

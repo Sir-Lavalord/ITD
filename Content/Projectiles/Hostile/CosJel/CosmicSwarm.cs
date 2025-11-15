@@ -1,12 +1,18 @@
-﻿using Terraria.DataStructures;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.Graphics;
+using Terraria.Graphics.Shaders;
 namespace ITD.Content.Projectiles.Hostile.CosJel;
 
 public class CosmicSwarm : ModProjectile
 {
+    public VertexStrip TrailStrip = new();
+
     public override void SetStaticDefaults()
     {
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
         Main.projFrames[Projectile.type] = 5;
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
     }
 
@@ -24,7 +30,6 @@ public class CosmicSwarm : ModProjectile
         Projectile.extraUpdates = 0;
         Projectile.timeLeft = 400;
     }
-    readonly bool isStuck = false;
     public float spawnRot;
     public override void AI()
     {
@@ -46,9 +51,65 @@ public class CosmicSwarm : ModProjectile
             dust2.noGravity = true;
         }
     }
+    private Color StripColors(float progressOnStrip)
+    {
+        return new Color(90, 70, 255, 10);
+    }
+    private float StripWidth(float progressOnStrip)
+    {
+        return MathHelper.Lerp(20f, 2f, Utils.GetLerpValue(0f, 0.6f, progressOnStrip, true)) * Utils.GetLerpValue(0f, 0.07f, progressOnStrip, true);
+    }
     public override void OnKill(int timeleft)
     {
 
+    }
+    public override bool PreDraw(ref Color lightColor)
+    {
+        Texture2D tex = TextureAssets.Projectile[Type].Value;
+        Rectangle frame = tex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+        Vector2 center = Projectile.Size / 2f;
+        for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
+        {
+            Projectile.oldRot[i] = Projectile.oldRot[i - 1];
+            Projectile.oldRot[i] = Projectile.rotation;
+
+        }
+        GameShaders.Misc["LightDisc"].Apply(null);
+        TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
+        TrailStrip.DrawTrail();
+
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        Vector2 miragePos = Projectile.position - Main.screenPosition + center;
+        Vector2 origin = new(tex.Width * 0.5f, tex.Height / Main.projFrames[Type] * 0.5f);
+        float time = Main.GlobalTimeWrappedHourly;
+        float timer = (float)Main.time / 240f + time * 0.04f;
+
+        time %= 4f;
+        time /= 2f;
+
+        if (time >= 1f)
+        {
+            time = 2f - time;
+        }
+
+        time = time * 0.5f + 0.5f;
+
+        for (float i = 0f; i < 1f; i += 0.35f)
+        {
+            float radians = (i + timer) * MathHelper.TwoPi;
+
+            Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 6).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+        }
+
+        for (float i = 0f; i < 1f; i += 0.5f)
+        {
+            float radians = (i + timer) * MathHelper.TwoPi;
+
+            Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 8).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+        }
+
+        Main.EntitySpriteDraw(tex, miragePos, frame, Color.White * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+        return false;
     }
     public override Color? GetAlpha(Color lightColor)
     {

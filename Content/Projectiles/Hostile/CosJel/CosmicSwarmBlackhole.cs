@@ -108,6 +108,7 @@ public class CosmicSwarmBlackhole : ITDProjectile
                 if (Projectile.scale >= 1)
                 {
                     AI_State = ActionState.Aligning;
+                    
                 }
                 break;
             case ActionState.Aligning:
@@ -124,12 +125,15 @@ public class CosmicSwarmBlackhole : ITDProjectile
                         Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
                     }
                     Projectile.localAI[0] = 0;
+                    spawnGlow = 1;
                     AI_State = ActionState.Spamming;
                 }
                 break;
             case ActionState.Spamming:
                 if (Projectile.localAI[0]++ <= 360)
                 {
+                    if (Projectile.scale > 1)
+                    Projectile.scale = MathHelper.Clamp(Projectile.scale - 0.05f, 1, 2);
                     if (Main.essScale >= 1)
                     {
                         for (int i = 0; i < 10; i++)
@@ -147,6 +151,7 @@ public class CosmicSwarmBlackhole : ITDProjectile
                             && Math.Abs(Projectile.Center.X - other.Center.X) < Projectile.width 
                             && Math.Abs(Projectile.Center.Y - other.Center.Y) < Projectile.height)
                         {
+                            Projectile.scale += 0.1f;
                             player.GetModPlayer<ITDPlayer>().BetterScreenshake(2, 2, 2, true);
                             other.Kill();
                             other.active = false;
@@ -208,11 +213,12 @@ public class CosmicSwarmBlackhole : ITDProjectile
                 break;
 
         }
-        if (spawnGlow <= 0)
+        if (pulseGlow <= 0)
         {
-            spawnGlow = 1;
+            pulseGlow = 1;
         }
-        spawnGlow -= 0.01f;
+        pulseGlow -= 0.01f;
+        spawnGlow -= 0.025f;
     }
 
     public override void OnKill(int timeLeft)
@@ -220,7 +226,9 @@ public class CosmicSwarmBlackhole : ITDProjectile
     }
     float scaleX = 3f;
     float scaleY = 3f;
-    float spawnGlow = 1;
+    float spawnGlow = 0;
+    float pulseGlow = 0;
+
     public override bool PreDraw(ref Color lightColor)
     {
         float slowPulse = 1 + (Main.essScale / 3);
@@ -266,8 +274,14 @@ public class CosmicSwarmBlackhole : ITDProjectile
         }
         if (spawnGlow > 0)//fargo eridanus epic
         {
-            float scale = 2.25f * Projectile.scale * (float)Math.Cos(Math.PI / 2 * spawnGlow);
+            float scale = 2.5f * Projectile.scale * (float)Math.Cos(Math.PI / 2 * spawnGlow);
             float opacity = Projectile.Opacity * (float)Math.Sqrt(spawnGlow);
+            Main.EntitySpriteDraw(effectTexture, drawPosition, null, new Color(90, 70, 255, 0), Projectile.rotation, effectTexture.Size() / 2f, new Vector2(4 * Projectile.scale, 1) * scale, SpriteEffects.None, 0);
+        }
+        if (pulseGlow > 0)//fargo eridanus epic
+        {
+            float scale = 2.25f * Projectile.scale * (float)Math.Cos(Math.PI / 2 * pulseGlow);
+            float opacity = Projectile.Opacity * (float)Math.Sqrt(pulseGlow);
             Main.EntitySpriteDraw(effectTexture, drawPosition, null, new Color(90, 70, 255, 0), Projectile.rotation, effectTexture.Size() / 2f, new Vector2(4 * Projectile.scale, 1) * slowPulse, SpriteEffects.None, 0);
             Main.EntitySpriteDraw(effectTexture, drawPosition, null, new Color(10, 70, 255, 0) * opacity, Projectile.rotation, effectTexture.Size() / 2f, new Vector2(4 * Projectile.scale, 1) * scale, SpriteEffects.None, 0);
         }
