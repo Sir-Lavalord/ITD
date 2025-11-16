@@ -22,7 +22,7 @@ public class CosmicSwordStar2 : ModProjectile
 
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
     }
     public override string Texture => ITD.BlankTexture;
@@ -78,7 +78,7 @@ public class CosmicSwordStar2 : ModProjectile
             Projectile.velocity = Vector2.Zero;
         }
 
-        spawnGlow -= 0.05f;
+        spawnGlow -= 0.02f;
     }
     private Color StripColors(float progressOnStrip)
     {
@@ -98,13 +98,14 @@ public class CosmicSwordStar2 : ModProjectile
     }
     public override bool PreDraw(ref Color lightColor)
     {
+        if (getGoing)
+        {
+            GameShaders.Misc["LightDisc"].Apply(null);
+            TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
+            TrailStrip.DrawTrail();
 
-        GameShaders.Misc["LightDisc"].Apply(null);
-        TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
-        TrailStrip.DrawTrail();
-
-        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-    
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }
         Player player = Main.player[Projectile.owner];
         Texture2D effectTexture = TextureAssets.Extra[ExtrasID.SharpTears].Value;
         Vector2 effectOrigin = effectTexture.Size() / 2f;

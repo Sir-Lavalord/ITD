@@ -220,7 +220,7 @@ namespace ITD.Content.NPCs.Bosses
             Vector2 toPlayer = player.Center - NPC.Center;
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
             Vector2 eyePos = NPC.Center + new Vector2(0, -60);
-
+            NPC.damage = NPC.defDamage;
             if (player.dead || !player.active || Main.IsItDay())//despawn at dawn
             {
                 NPC.velocity.Y -= 0.04f;
@@ -290,6 +290,8 @@ namespace ITD.Content.NPCs.Bosses
                             {
                                 if (AITimer1++ >= 180)
                                 {
+                                    NPC.HealEffect((int)((NPC.lifeMax / 2) - NPC.life));
+                                    NPC.life = (NPC.lifeMax / 2);
                                     intimidateMe = 1;
                                     goodtransition = 5;
                                     AITimer2 = 0;
@@ -314,7 +316,7 @@ namespace ITD.Content.NPCs.Bosses
                                         float rot = baseRot + MathF.Tau * ((float)i / count);
                                         Vector2 vel = rot.ToRotationVector2() * 14;
                                         Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot),
-                                            Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), (NPC.damage), 1f, Main.myPlayer, NPC.whoAmI, 0, 1);
+                                            Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), (int)(NPC.damage * 0.75f), 1f, Main.myPlayer, NPC.whoAmI, 0, 1);
                                         sword.rotation = vel.ToRotation();
                                     }
                                     for (int i = 0; i < 18; i++)
@@ -330,7 +332,7 @@ namespace ITD.Content.NPCs.Bosses
                                 if (AITimer1++ >= 120)
                                 {
                                     AI_State = MovementState.FollowingRegular;
-                                    AttackID = 8;//randomized, but not reveal new attack now
+                                    AttackID = Main.rand.Next(1,6);//randomized, but not reveal new attack now
                                     ResetStats();
                                     NPC.dontTakeDamage = false;
                                 }
@@ -488,7 +490,7 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         AI_State = MovementState.Explode;
                         float baseRotation = Main.rand.NextFloat(MathF.Tau);
-                        int amount = bSecondStage ? 8 : 5;
+                        int amount = (expertMode || masterMode) ? 8 : 5;
                         float dist = 1000;
                         for (int i = 0; i < amount; i++)
                         {
@@ -612,12 +614,28 @@ namespace ITD.Content.NPCs.Bosses
                     AITimer1++;
                     float rotation = 0;
                     float angleDeviation = 40;
-                    float amountFire = 40;
+                    float amountFire = 30;
+                    float maxDeviation = 90;
+                    float maxAmount = 90;
+
+                    if (expertMode || masterMode)
+                    {
+                        maxDeviation = 100;
+                        maxAmount = 90;
+                    }
+                    else if (!expertMode || !masterMode)
+                    {
+                        maxDeviation = 70;
+                        maxAmount = 50;
+                    }
+                    amountFire = Math.Clamp(30 + 5 * AttackCount, 0, maxAmount);
+                    angleDeviation = Math.Clamp(40 + 10 * AttackCount, 0, maxDeviation);
+                    Main.NewText((expertMode, angleDeviation));
                     if (AITimer1 == 60)
                     {
                         AI_State = MovementState.Explode;
                     }
-                    if (AITimer1 == 120)
+                    if (AITimer1 == 100)
                     {
                         targetPos = Vector2.Normalize(player.Center - eyePos);
                     }
@@ -626,7 +644,7 @@ namespace ITD.Content.NPCs.Bosses
 
                         Vector2 velocity = targetPos.RotateRandom(MathHelper.ToRadians(angleDeviation));
                         Vector2 magVec = (eyePos +
-                            new Vector2(150, 0).RotatedBy(velocity.ToRotation())) - eyePos;
+                            new Vector2(100, 0).RotatedBy(velocity.ToRotation())) - eyePos;
                         magVec.Along(eyePos, 10, v =>
                         {
                             for (int i = 0; i <= 1; i++)
@@ -636,30 +654,91 @@ namespace ITD.Content.NPCs.Bosses
                                 dust.noGravity = true;
                             }
                         });
+                        for (int i = 0; i <= 3; i++)
+                        {
+                            Dust dust = Dust.NewDustDirect(eyePos, 1, 1, DustID.PurpleCrystalShard, 0, 0);
+                            dust.scale = 1.5f;
+                            dust.noGravity = true;
+                            dust.velocity = -velocity * 20;
+                        }
                         Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), eyePos +
-                            new Vector2(150, 0).RotatedBy(velocity.ToRotation()), Vector2.Zero,
+                            new Vector2(100, 0).RotatedBy(velocity.ToRotation()), Vector2.Zero,
                             ModContent.ProjectileType<CosmicSwordStar2>(), NPC.damage, 0, -1, 0, 0, amountFire - (AITimer2));
                         proj.rotation = velocity.ToRotation();
                         AITimer2++;
                         if (AITimer2 >= amountFire)
                         {
-                            distanceAway =400 * (AttackCount % 2 == 0? 1: -1);
-                            distanceAbove = 300;
+                            distanceAway =300 * (AttackCount % 2 == 0? 1: -1);
+                            distanceAbove = 0;
                             AI_State = MovementState.FollowingRegular;
                             AITimer2 = 0;
                             AITimer1 = 0;
                             AttackCount++;
                         }
                     }
-                    if (AttackCount > 5)//loop
+                    if (AttackCount > 20)//loop
                     {
                         AI_State = MovementState.FollowingRegular;
                         AttackID++;
                         ResetStats(true);
                         distanceAbove = 250;
+                        distanceAway = 0;
                     }
 
                     break;
+                case 9: //deathray 4 now
+                    BlackholeDusting(3);
+                    float ringAmount = 4;
+                    AI_State = MovementState.Explode;
+                    AITimer1++;
+
+            
+                    if (AttackCount >= ringAmount)
+                    {
+                        if (AITimer2++ == 60)
+                        {
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, vel,
+                                 ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI);
+                            }
+                        }
+                        if (AITimer2 >= 600)
+                        {
+                            AI_State = MovementState.FollowingRegular;
+                            AttackID = 1;
+                            AITimer1 = 0;
+                            AITimer2 = 0;
+                            NetSync();
+                        }
+                    }
+                    else
+                    {
+                        if (AITimer1 % 60 == 0)
+                        {
+                            AttackCount++;
+                            int count = 6 + (int)AITimer2 * 2;
+                            float dist = 100 + 350 * AITimer2;
+                            float baseRot = 0 + AITimer2 * MathHelper.ToRadians(30);
+                            SoundEngine.PlaySound(SoundID.Item28, eyePos);
+                            for (int i = 0; i < count; i++)
+                            {
+                                float rot = baseRot + MathF.Tau * ((float)i / count);
+                                Vector2 vel = -rot.ToRotationVector2() * 14;
+                                Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot), Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), (NPC.damage), 1f, Main.myPlayer, NPC.whoAmI, i >= (count - 1) ? 1 : 0);
+                                sword.rotation = vel.ToRotation();
+                            }
+                            for (int i = 0; i < 18; i++)
+                            {
+                                int dust = Dust.NewDust(eyePos, 0, 0, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, Main.rand.NextFloat(1.25f, 2.5f));
+                                Main.dust[dust].noGravity = true;
+                                Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 12;
+                            }
+                        }
+                    }
+                    break;
+
             }
         }
         //--------------------------------------------------------------------------------------------------------------------------------
@@ -682,13 +761,13 @@ namespace ITD.Content.NPCs.Bosses
                 for (int i = 0; i < 10; i++)
                 {
                     Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -5f);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), 30, 0, -1, NPC.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), (int)(NPC.damage * 0.75f), 0, -1, NPC.whoAmI);
                 }
                 if (bSecondStage)
                 {
                     for (int j = -1; j <= 1; j += 2)
                     {
-                        Projectile shockwave = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(30 * j, -10), new Vector2(1 * j, 0), ModContent.ProjectileType<CosmicShockwave>(), 30, 0, -1);
+                        Projectile shockwave = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(30 * j, -10), new Vector2(1 * j, 0), ModContent.ProjectileType<CosmicShockwave>(), NPC.damage, 0, -1);
                         shockwave.spriteDirection = j;
                     }
                 }
@@ -1053,8 +1132,8 @@ namespace ITD.Content.NPCs.Bosses
                 AITimer1 = 0;
                 AITimer2 = 0;
                 NPC.localAI[2] = 1;
-                HandControl(1, 7, 3, true);
-                HandControl(-1, 7, 3, true);
+/*                HandControl(1, 7, 3, true);
+                HandControl(-1, 7, 3, true);*/
                 AttackID = -1;
                 AI_State = MovementState.Teleport;
                 NetSync();
@@ -1074,21 +1153,11 @@ namespace ITD.Content.NPCs.Bosses
         //check if cosjel is dead, if hasn't done final attack, don't kill cosjel
         public override bool CheckDead()
         {
-            if (!bFinalAttack)//Subterranean Sun
+            //should a last stand even be in a boss like this
+            if (!bSecondStage)
             {
-                AttackID = -2;
-                NPC.life = NPC.lifeMax;
-                NPC.dontTakeDamage = true;
-                ResetStats(true);
-                NetSync();
-                bFinalAttack = true;
-                if (Main.netMode != NetmodeID.MultiplayerClient)
-                {
-                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(), ModContent.ProjectileType<CosmicJellyfishBlackholeAura>(), 0, 0, -1, NPC.whoAmI);
-                }
-                AI_State = MovementState.Explode;
+                NPC.life = 1;
                 return false;
-
             }
             return true;
         }
@@ -1104,7 +1173,7 @@ namespace ITD.Content.NPCs.Bosses
         //UpcomingID set the attack to go to after attackID
 
         //IsForceKill: ignore everything, kill hand, convoluted but it works
-        private void HandControl(int whichHand, int attackID, int upcomingID, bool IsForceKill)
+/*        private void HandControl(int whichHand, int attackID, int upcomingID, bool IsForceKill)
         {
             for (int i = 0; i < Main.maxNPCs; i++) //find hands, update
             {
@@ -1120,7 +1189,7 @@ namespace ITD.Content.NPCs.Bosses
                     Main.npc[i].netUpdate = true;
                 }
             }
-        }
+        }*/
         //find hand
         //whichHand: which hand to find
         //1 is left hand
@@ -1149,7 +1218,7 @@ namespace ITD.Content.NPCs.Bosses
 
             return closestProjectile;
         }
-        private static bool HandExist(int whichHand)
+/*        private static bool HandExist(int whichHand)
         {
             for (int i = 0; i < Main.maxNPCs; i++) //find hands, update
             {
@@ -1160,7 +1229,7 @@ namespace ITD.Content.NPCs.Bosses
                 }
             }
             return false;
-        }
+        }*/
 
         //sync hand
         private void NetSync(bool forceAll = false)

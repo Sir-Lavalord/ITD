@@ -73,7 +73,7 @@ public class CosmicChainBomb : ModProjectile
             }
         }
 
-        if (++Projectile.frameCounter >= 4)
+        if (++Projectile.frameCounter >= 3)
         {
             Projectile.frameCounter = 0;
             if (++Projectile.frame >= Main.projFrames[Projectile.type])

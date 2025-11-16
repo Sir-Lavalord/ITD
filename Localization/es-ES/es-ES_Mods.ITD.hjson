@@ -264,6 +264,7 @@ Projectiles: {
 	// CosmicSwarmBlackhole.DisplayName: Cosmic Swarm Blackhole
 	// CosmicSwarmGib.DisplayName: Cosmic Swarm Gib
 	// CosmicSwordStar2.DisplayName: Cosmic Sword Star2
+	// CosmicStarlitBlackhole.DisplayName: Cosmic Starlit Blackhole
 }
 
 NPCs: {
