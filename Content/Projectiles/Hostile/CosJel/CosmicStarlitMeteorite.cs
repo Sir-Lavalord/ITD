@@ -4,7 +4,6 @@ using ITD.Particles.CosJel;
 using ITD.Particles.Projectiles;
 using ITD.Utilities;
 using System;
-using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics;
@@ -104,6 +103,7 @@ public class CosmicStarlitMeteorite : ITDProjectile
         return GameShaders.Armor.GetShaderIdFromItemId(ItemID.TwilightDye);
     }
     public int OwnerIndex => (int)Projectile.ai[0];
+
     public override bool? CanDamage()
     {
         return Projectile.localAI[0] >= 120;
@@ -197,6 +197,13 @@ public class CosmicStarlitMeteorite : ITDProjectile
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicStar>(), damage, knockBack, Main.myPlayer, 0, 1);
+            }
+        }
+        if (owner.life <= owner.lifeMax)
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CosmicStarlitBlackhole>(), Projectile.damage, 1, Main.myPlayer, 0, 1);
             }
         }
     }

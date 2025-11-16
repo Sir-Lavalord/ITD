@@ -184,9 +184,10 @@ public class CosmicSwarmBlackhole : ITDProjectile
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
+                            int damage = (int)(Projectile.damage * 0.28f);
                             Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), 
                                 Projectile.Center - new Vector2(Main.rand.NextFloat(-600,600), Main.rand.NextFloat(2000,2600)),  Vector2.Zero,
-                                ModContent.ProjectileType<CosmicSwarm>(), 1, 0, Main.myPlayer, 0, 1);
+                                ModContent.ProjectileType<CosmicSwarm>(), damage, 0, Main.myPlayer, 0, 1);
                             proj.velocity = Vector2.Normalize(Projectile.Center - proj.Center) * 24 * Main.rand.NextFloat(0.9f,1.1f);
                             proj.rotation = proj.velocity.ToRotation();
                         }

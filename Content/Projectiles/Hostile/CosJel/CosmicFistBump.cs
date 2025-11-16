@@ -55,7 +55,7 @@ public class CosmicFistBump : ModProjectile
         Player player = Main.player[Projectile.owner];
         switch (AI_State)
         {
-
+            
             case ActionState.Phasing://phasing into existence, can't damage player
                 Projectile.Opacity = Projectile.localAI[1] / 40;
 
