@@ -88,8 +88,8 @@ public class CosmicSwordStar2 : ModProjectile
     {
         return MathHelper.Lerp(10f, 2f, Utils.GetLerpValue(0f, 0.6f, progressOnStrip, true)) * Utils.GetLerpValue(0f, 0.07f, progressOnStrip, true);
     }
-    float scaleX = 0.75f;
-    float scaleY = 2f;
+    float scaleX = 1.25f;
+    float scaleY = 2.5f;
     float spawnGlow = 0;
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
     {

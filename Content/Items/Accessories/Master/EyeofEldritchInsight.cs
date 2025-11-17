@@ -154,7 +154,7 @@ public class InsightedNPCs : GlobalNPC
             }*/
     public override Color? GetAlpha(NPC npc, Color drawColor)
     {
-        if (Main.LocalPlayer.GetModPlayer<InsightedPlayer>().CorporateInsight && !npc.friendly && npc.damage > 0 && npc.alpha < 255)
+        if (Main.LocalPlayer.GetModPlayer<InsightedPlayer>().CorporateInsight && !npc.friendly && npc.damage > 0 && npc.Opacity <= 0)
         {
             if (isGoingToHit)
             {

@@ -23,36 +23,48 @@ public class CosmicRayWarn : ModProjectile
     {
         maxTime = Timer;
     }
+    bool spawnAnim;
     public override void AI()
     {
         NPC CosJel = Main.npc[(int)NPCWhoAmI];
         Projectile.Center = CosJel.Center - new Vector2(0, 12);
+        if (!spawnAnim)
+        {                //from clamtea
+            float dustLoopCheck = 24f;
+            int dustIncr = 0;
+            while (dustIncr < dustLoopCheck)
+            {
+                Vector2 dustRotate = Vector2.UnitX * 0f;
+                dustRotate += -Vector2.UnitY.RotatedBy((double)(dustIncr * (MathHelper.TwoPi / dustLoopCheck)), default) * new Vector2(2f, 8f);
+                dustRotate = dustRotate.RotatedBy((double)Projectile.rotation, default);
+                Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.WhiteTorch, 0f, 0f, 0, default, 2f);
+                dust.noGravity = true;
+                dust.scale = 2f;
+                dust.position = Projectile.Center + dustRotate;
+                dust.velocity = Projectile.velocity * 0f + dustRotate.SafeNormalize(Vector2.UnitY) * 2f;
+                Dust dust2 = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.WhiteTorch, 0f, 0f, 0, default, 2f);
+                dust2.noGravity = true;
+                dust2.scale = 3f;
+                dust2.position = Projectile.Center + dustRotate * 2;
+                dust2.velocity = Projectile.velocity * 0f + dustRotate.SafeNormalize(Vector2.UnitY) * 3f;
+                dustIncr++;
+            }
+            spawnAnim = true;
 
-        if (!LockIn)
-        {
-
-            Projectile.velocity = Projectile.velocity.ToRotation().AngleLerp(CosJel.DirectionTo(Main.player[CosJel.target].Center + Main.player[CosJel.target].velocity * 20).ToRotation(), .1f).ToRotationVector2();
-            Projectile.rotation = Projectile.velocity.ToRotation() - (float)Math.PI / 2;
         }
 
+        Projectile.rotation = MathHelper.Pi;
+
+        if (CosJel.HasPlayerTarget)
+        {
+            sweepDir = Main.player[CosJel.target].Center.X > CosJel.Center.X ? -1 : 1;
+        }
         if (--Timer <= 0)
         {
-            if (!LockIn)
-            {
-                Projectile.ai[2] = -1;
-                Timer = maxTime / 3;
-
-            }
-            else
-                Projectile.Kill();
-
-
+            Projectile.Kill();
         }
-
-
-
-
     }
+    float sweepDir = 1;
 
     public override bool PreDraw(ref Color lightColor)
     {
@@ -70,8 +82,8 @@ public class CosmicRayWarn : ModProjectile
                 Projectile ray = Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Projectile.velocity.SafeNormalize(Vector2.UnitY), ModContent.ProjectileType<CosmicRay>(), Projectile.damage, Projectile.knockBack, -1, Projectile.ai[1], Projectile.rotation);
                 if (CosJel.AttackID != 7)
                 {
-                    ray.localAI[0] = 1;//mog
-                    ray.localAI[1] = 2;// 0 = no collision, 1 = tile collision only, 2 = tile and platform collisions.
+                    ray.localAI[0] = sweepDir;//mog
+                    ray.localAI[1] = 0;// 0 = no collision, 1 = tile collision only, 2 = tile and platform collisions.
                     ray.localAI[2] = 1;
                     ray.timeLeft = 800;
                 }
