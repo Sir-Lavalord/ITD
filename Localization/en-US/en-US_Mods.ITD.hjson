@@ -265,6 +265,7 @@ Projectiles: {
 	CosmicSwarmGib.DisplayName: Cosmic Swarm Gib
 	CosmicSwordStar2.DisplayName: Cosmic Sword Star2
 	CosmicStarlitBlackhole.DisplayName: Cosmic Starlit Blackhole
+	CosmicRayMeteorite.DisplayName: Cosmic Ray Meteorite
 }
 
 NPCs: {

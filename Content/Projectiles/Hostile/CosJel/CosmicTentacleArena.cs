@@ -144,10 +144,13 @@ public class CosmicTentacleArena : ModProjectile
         zapGlow -= 0.05f;
 
     }
+    bool expertMode = Main.expertMode;
+    bool masterMode = Main.masterMode;
+
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
         float num1 = 0f;
-        if (zapDog)
+        if (expertMode || masterMode)
         {
             NPC CosJel = Main.npc[(int)Projectile.ai[0]];
 
@@ -209,7 +212,7 @@ public class CosmicTentacleArena : ModProjectile
                 segmentTextureToDraw = segmentB;
             }
             Color segmentDrawColor = Lighting.GetColor((int)segmentDrawPosition.X / 16, (int)(segmentDrawPosition.Y / 16f));
-            if (zapDog)
+            if (expertMode || masterMode)
             {
                 for (float i = 0f; i < 1f; i += 0.35f)
                 {

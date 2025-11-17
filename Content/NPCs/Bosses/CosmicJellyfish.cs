@@ -246,7 +246,7 @@ namespace ITD.Content.NPCs.Bosses
             dashOldRotations[0] = NPC.rotation;
             switch ((int)AttackID)
             {
-                case -2://final attack should be here
+                case -2://final attack should be here, add if needed
                     NPC.checkDead();
                     break;
 
@@ -259,7 +259,7 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     else
                     {
-                        if (goodtransition < 5)
+                        if (goodtransition < 0)
                         {
                             if (AITimer2 < hitTime)
                             {
@@ -329,10 +329,10 @@ namespace ITD.Content.NPCs.Bosses
                             }
                             else
                             {
-                                if (AITimer1++ >= 120)
+                                if (AITimer1++ >= 0)
                                 {
                                     AI_State = MovementState.FollowingRegular;
-                                    AttackID = Main.rand.Next(1,6);//randomized, but not reveal new attack now
+                                    AttackID = Main.rand.Next(1, 6);//randomized, but not reveal new attack now
                                     ResetStats();
                                     NPC.dontTakeDamage = false;
                                 }
@@ -612,7 +612,6 @@ namespace ITD.Content.NPCs.Bosses
 
                 case 8:
                     AITimer1++;
-                    float rotation = 0;
                     float angleDeviation = 40;
                     float amountFire = 30;
                     float maxDeviation = 90;
@@ -676,7 +675,7 @@ namespace ITD.Content.NPCs.Bosses
                             AttackCount++;
                         }
                     }
-                    if (AttackCount > 20)//loop
+                    if (AttackCount > 8)//loop
                     {
                         AI_State = MovementState.FollowingRegular;
                         AttackID++;
@@ -689,9 +688,8 @@ namespace ITD.Content.NPCs.Bosses
                 case 9: //deathray 4 now
                     BlackholeDusting(3);
                     float ringAmount = 4;
-                    AI_State = MovementState.Explode;
                     AITimer1++;
-
+                    distanceAbove = 200;
             
                     if (AttackCount >= ringAmount)
                     {
@@ -701,33 +699,33 @@ namespace ITD.Content.NPCs.Bosses
                             {
                                 Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, vel,
-                                 ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 100, NPC.whoAmI);
+                                 ModContent.ProjectileType<CosmicRayWarn>(), NPC.damage, 0f, -1, 240, NPC.whoAmI);
                             }
                         }
-                        if (AITimer2 >= 600)
+                        if (AITimer2 >= 1000)
                         {
                             AI_State = MovementState.FollowingRegular;
                             AttackID = 1;
-                            AITimer1 = 0;
-                            AITimer2 = 0;
+                            ResetStats();
                             NetSync();
                         }
                     }
                     else
                     {
-                        if (AITimer1 % 60 == 0)
+                        if (AITimer1++ >= 60)
                         {
+                            AI_State = MovementState.Explode;
                             AttackCount++;
-                            int count = 6 + (int)AITimer2 * 2;
-                            float dist = 100 + 350 * AITimer2;
-                            float baseRot = 0 + AITimer2 * MathHelper.ToRadians(30);
+                            AITimer1 = 0;
+                            int count = 3 + (int)AttackCount * 2;
+                            float dist = 200 + 400 * AttackCount;
+                            float baseRot = 0 + AttackCount * MathHelper.ToRadians(15);
                             SoundEngine.PlaySound(SoundID.Item28, eyePos);
                             for (int i = 0; i < count; i++)
                             {
                                 float rot = baseRot + MathF.Tau * ((float)i / count);
                                 Vector2 vel = -rot.ToRotationVector2() * 14;
-                                Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot), Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), (NPC.damage), 1f, Main.myPlayer, NPC.whoAmI, i >= (count - 1) ? 1 : 0);
-                                sword.rotation = vel.ToRotation();
+                                Projectile meteor = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot), Vector2.Zero, ModContent.ProjectileType<CosmicRayMeteorite>(), (NPC.damage), 1f, Main.myPlayer, NPC.whoAmI);
                             }
                             for (int i = 0; i < 18; i++)
                             {
@@ -1109,7 +1107,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (bSecondStage)
             {
-                if (AttackID > 8)//use phase 2 attacks
+                if (AttackID > 9)//use phase 2 attacks
                 {
                     AttackID = 1;
                 }
