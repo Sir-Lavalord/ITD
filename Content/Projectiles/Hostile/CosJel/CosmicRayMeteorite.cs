@@ -86,9 +86,15 @@ public class CosmicRayMeteorite : ModProjectile
                 proj.rotation = velocity.ToRotation();
             }
         }
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 16; i++)
         {
-            int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.UltraBrightTorch, 0, 0, 0, default, 1f);
+            int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.Meteorite, 0, 0, 0, default, 1f);
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 4;
+        }
+        for (int i = 0; i < 16; i++)
+        {
+            int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.MeteorHead, 0, 0, 0, default, 1f);
             Main.dust[dust].noGravity = true;
             Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
         }

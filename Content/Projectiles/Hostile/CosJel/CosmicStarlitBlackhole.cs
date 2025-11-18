@@ -36,7 +36,7 @@ public class CosmicStarlitBlackhole : ModProjectile
         Projectile.rotation += 0.05f;
         if (Projectile.timeLeft > 30)
         {
-            Projectile.Resize(300, 300);
+            Projectile.Resize(240, 240);
             Projectile.scale = MathHelper.Clamp(Projectile.scale + 0.2f, 0, 4);
         }
         else
