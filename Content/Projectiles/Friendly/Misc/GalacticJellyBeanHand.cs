@@ -209,9 +209,7 @@ public class GalacticJellyBeanHand : ModProjectile
     }
     public override bool? CanHitNPC(NPC target)
     {
-        if (!target.friendly)
-            return handState == HandState.Slinging;
-        else return false;
+        return true;
     }
     public override Color? GetAlpha(Color lightColor)
     {
