@@ -23,7 +23,6 @@ public class CosmicChainBomb : ModProjectile
         Projectile.width = 92;
         Projectile.height = 92;
         Projectile.aiStyle = -1;
-        Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.penetrate = -1;
         Projectile.timeLeft = 60;
@@ -31,21 +30,6 @@ public class CosmicChainBomb : ModProjectile
         Projectile.ignoreWater = true;
     }
 
-    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-    {
-        int clampedX = projHitbox.Center.X - targetHitbox.Center.X;
-        int clampedY = projHitbox.Center.Y - targetHitbox.Center.Y;
-
-        if (Math.Abs(clampedX) > targetHitbox.Width / 2)
-            clampedX = targetHitbox.Width / 2 * Math.Sign(clampedX);
-        if (Math.Abs(clampedY) > targetHitbox.Height / 2)
-            clampedY = targetHitbox.Height / 2 * Math.Sign(clampedY);
-
-        int dX = projHitbox.Center.X - targetHitbox.Center.X - clampedX;
-        int dY = projHitbox.Center.Y - targetHitbox.Center.Y - clampedY;
-
-        return Math.Sqrt(dX * dX + dY * dY) <= Projectile.width / 2;
-    }
     public override void OnSpawn(IEntitySource source)
     {
         for (int i = 0; i < 5; i++)
@@ -84,9 +68,6 @@ public class CosmicChainBomb : ModProjectile
         }
     }
 
-    public override void OnHitPlayer(Player target, Player.HurtInfo info)
-    {
-    }
     public override Color? GetAlpha(Color lightColor)
     {
         return new Color(255, 255, 255, 127) * Projectile.Opacity;

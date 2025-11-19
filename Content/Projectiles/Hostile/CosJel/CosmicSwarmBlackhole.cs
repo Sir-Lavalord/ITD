@@ -6,6 +6,7 @@ using ITD.Particles.Projectiles;
 using ITD.Systems;
 using ITD.Utilities;
 using System;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics;
@@ -45,6 +46,8 @@ public class CosmicSwarmBlackhole : ITDProjectile
     }
     public override void OnSpawn(IEntitySource source)
     {
+        SoundEngine.PlaySound(SoundID.Item15, Projectile.Center);
+
         Projectile.scale = 0;
         if (emitter != null)
             emitter.keptAlive = true;
@@ -124,6 +127,8 @@ public class CosmicSwarmBlackhole : ITDProjectile
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
                     }
+                    SoundEngine.PlaySound(SoundID.Item109, Projectile.Center);
+
                     Projectile.localAI[0] = 0;
                     spawnGlow = 1;
                     AI_State = ActionState.Spamming;
@@ -201,6 +206,7 @@ public class CosmicSwarmBlackhole : ITDProjectile
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
                     }
+                    SoundEngine.PlaySound(SoundID.Item15, Projectile.Center);
                     AI_State = ActionState.Closing;
                 }
                 break;

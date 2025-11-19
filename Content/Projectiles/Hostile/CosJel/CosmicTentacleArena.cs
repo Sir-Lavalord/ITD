@@ -129,7 +129,7 @@ public class CosmicTentacleArena : ModProjectile
                     break;
                 case ActionState.Retract:
                     Projectile.Center = Vector2.Lerp(Projectile.Center, CosJel.Center, 0.05f);
-                    if (Vector2.Distance(Projectile.Center, CosJel.Center) <= 20)
+                    if (Vector2.Distance(Projectile.Center, CosJel.Center) <= 50)
                     {
                         Projectile.Kill();
                     }
