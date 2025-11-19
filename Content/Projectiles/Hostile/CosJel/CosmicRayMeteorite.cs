@@ -38,11 +38,11 @@ public class CosmicRayMeteorite : ModProjectile
         Projectile.rotation += 0.05f;
         if (Projectile.timeLeft > 30)
         {
-            Projectile.Resize(300, 300);
-            Projectile.scale = MathHelper.Clamp(Projectile.scale + 0.05f, 0, 2);
+            Projectile.Resize(150, 150);
+            Projectile.scale = MathHelper.Clamp(Projectile.scale + 0.05f, 0, 3);
         }
         else
-            Projectile.scale = MathHelper.Clamp(Projectile.scale - 0.2f, 0, 2);
+            Projectile.scale = MathHelper.Clamp(Projectile.scale - 0.2f, 0, 3);
         if (Main.essScale >= 1)
         {
             for (int i = 0; i < 20; i++)
@@ -68,6 +68,18 @@ public class CosmicRayMeteorite : ModProjectile
     }
     public override void OnKill(int timeLeft)
     {
+        for (int i = 0; i < 16; i++)
+        {
+            int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.Meteorite, 0, 0, 0, default, 1f);
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 4;
+        }
+        for (int i = 0; i < 16; i++)
+        {
+            int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.MeteorHead, 0, 0, 0, default, 1f);
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
+        }
         NPC owner = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
         if (owner == null)
         {
@@ -86,18 +98,6 @@ public class CosmicRayMeteorite : ModProjectile
                 proj.rotation = velocity.ToRotation();
             }
         }
-        for (int i = 0; i < 16; i++)
-        {
-            int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.Meteorite, 0, 0, 0, default, 1f);
-            Main.dust[dust].noGravity = true;
-            Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 4;
-        }
-        for (int i = 0; i < 16; i++)
-        {
-            int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.MeteorHead, 0, 0, 0, default, 1f);
-            Main.dust[dust].noGravity = true;
-            Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
-        }
     }
     public override bool PreDraw(ref Color lightColor)
     {
@@ -113,7 +113,7 @@ public class CosmicRayMeteorite : ModProjectile
         Rectangle deathFrame = deathTex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
 
         Main.EntitySpriteDraw(texture2, Projectile.Center - Main.screenPosition, frame2, new Color(122, 0, 208, 0) * Main.essScale,
-        Projectile.rotation, new Vector2(texture2.Width * 0.5f, texture2.Height / Main.projFrames[Type] * 0.5f), Projectile.scale * Main.essScale, SpriteEffects.None, 0f);
+        Projectile.rotation, new Vector2(texture2.Width * 0.5f, texture2.Height / Main.projFrames[Type] * 0.5f), Projectile.scale * Main.essScale * 0.75f, SpriteEffects.None, 0f);
 
         Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(texture.Width * 0.5f, texture.Height / Main.projFrames[Type] * 0.5f), Projectile.scale, SpriteEffects.None, 0f);
 

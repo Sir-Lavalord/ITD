@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics;
@@ -61,7 +62,7 @@ public class CosmicSwarm : ModProjectile
     }
     public override void OnKill(int timeleft)
     {
-
+        SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
     }
     public override bool PreDraw(ref Color lightColor)
     {

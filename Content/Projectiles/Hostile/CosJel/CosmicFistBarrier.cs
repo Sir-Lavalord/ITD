@@ -147,7 +147,7 @@ public class CosmicFistBarrier : ModProjectile
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                int damage = (int)(Projectile.damage * 0.28f);
+                                int damage = (int)(Projectile.damage * 0.75f);
                                 int knockBack = 3;
                                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), spawnPos, Vector2.Zero, ModContent.ProjectileType<CosmicStar>(), damage, knockBack, Main.myPlayer, 0, 1);
                             }

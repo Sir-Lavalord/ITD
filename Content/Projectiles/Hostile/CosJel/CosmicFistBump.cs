@@ -217,9 +217,12 @@ public class CosmicFistBump : ModProjectile
             if (isMainHand)
             {
             }
+            int damage = (int)(Projectile.damage);
+
             Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center +
-                new Vector2(Projectile.width / 2, 0).RotatedBy(Projectile.rotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
-    Projectile.damage, 0f, Main.myPlayer, 40, Projectile.rotation + MathHelper.PiOver2, 0f);
+            new Vector2(Projectile.width / 2, 0).RotatedBy(Projectile.rotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
+            damage, 0f, Main.myPlayer, 40, Projectile.rotation + MathHelper.PiOver2, 0f);
+        
             for (int i = 0; i < 20; i++)
             {
                 int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, 2f);
