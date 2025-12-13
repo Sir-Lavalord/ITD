@@ -24,10 +24,13 @@ public class CosmicChainBomb : ModProjectile
         Projectile.height = 92;
         Projectile.aiStyle = -1;
         Projectile.hostile = true;
+        Projectile.friendly = false;
         Projectile.penetrate = -1;
         Projectile.timeLeft = 60;
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
+        Projectile.alpha = 80;
+        Projectile.Opacity = 0.9f;
     }
 
     public override void OnSpawn(IEntitySource source)
@@ -53,7 +56,7 @@ public class CosmicChainBomb : ModProjectile
                 lifeLeft--;
                 if (lifeLeft > 0)
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(Projectile.width, 0).RotatedBy(setRotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
-                        0, 0f, Main.myPlayer, lifeLeft, setRotation, 0f);
+                        Projectile.damage, 0f, Main.myPlayer, lifeLeft, setRotation, 0f);
             }
         }
 
@@ -70,7 +73,7 @@ public class CosmicChainBomb : ModProjectile
 
     public override Color? GetAlpha(Color lightColor)
     {
-        return new Color(255, 255, 255, 127) * Projectile.Opacity;
+        return Color.White * Projectile.Opacity;
     }
 
     public override bool PreDraw(ref Color lightColor)

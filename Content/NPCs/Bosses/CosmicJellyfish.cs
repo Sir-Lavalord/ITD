@@ -258,17 +258,9 @@ namespace ITD.Content.NPCs.Bosses
             Vector2 toPlayerNormalized = Vector2.Normalize(toPlayer);
             Vector2 eyePos = NPC.Center + new Vector2(0, -60);
             NPC.damage = NPC.defDamage;
-            if (player.dead || !player.active || Main.dayTime)//despawn at dawn
-            {
-                AttackID = -2;
-                NPC.velocity.Y -= 0.2f;
-                NPC.EncourageDespawn(30);
-                return;
-            }
-            else
-            {
+            if (PlayerCheck(player))
                 Movement(player);
-            }
+        
 
             CheckAttackList();
             CheckSecondStage();
@@ -283,515 +275,90 @@ namespace ITD.Content.NPCs.Bosses
             dashOldRotations[0] = NPC.rotation;
             switch ((int)AttackID)
             {
-                case -2://final attack should be here, add if needed
-
-                    NPC.EncourageDespawn(10);
+                case -2://final attack should be here, add if needed, me when i die
                     break;
 
                 case -1://transition for phase 2
-                    int hitTime = 4;
-
-                    if (AI_State == MovementState.Teleport)
-                    {
-                        NPC.dontTakeDamage = true;
-                    }
-                    else
-                    {
-                        if (goodtransition <= 0)
-                        {
-                            if (AITimer2 < hitTime)
-                            {
-                                if (AITimer1++ >= 60)
-                                {
-                                    AITimer2++;
-                                    AITimer1 = 0;
-                                    int count = 6 + (int)AITimer2 * 2;
-                                    float dist = 100 + 350 * AITimer2;
-                                    float baseRot = 0 + AITimer2 * MathHelper.ToRadians(30);
-                                    SoundEngine.PlaySound(SoundID.Item28, eyePos);
-                                    for (int i = 0; i < count; i++)
-                                    {
-                                        float rot = baseRot + MathF.Tau * ((float)i / count);
-                                        Vector2 vel = -rot.ToRotationVector2() * 14;
-                                        Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot), Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), ProjectileDamage(NPC.damage), 1f, Main.myPlayer, NPC.whoAmI, i >= (count - 1) ? 1 : 0);
-                                        sword.rotation = vel.ToRotation();
-                                    }
-                                    for (int i = 0; i < 18; i++)
-                                    {
-                                        int dust = Dust.NewDust(eyePos, 0, 0, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, Main.rand.NextFloat(1.25f, 2.5f));
-                                        Main.dust[dust].noGravity = true;
-                                        Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 12;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (AITimer1++ >= 180)
-                                {
-                                    if (!masterMode && !expertMode)
-                                    {
-                                        NPC.HealEffect((int)((NPC.lifeMax / 2) - NPC.life));
-                                        NPC.life = (NPC.lifeMax / 2);
-                                    }
-                                    else
-                                    {
-                                        NPC.HealEffect((int)((NPC.lifeMax) - NPC.life));
-                                        NPC.life = (NPC.lifeMax);
-                                    }
-                                    intimidateMe = 1;
-                                    goodtransition = 5;
-                                    AITimer2 = 0;
-                                    AITimer1 = 0;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (AITimer2 < hitTime)
-                            {
-                                if (AITimer1++ >= 60)
-                                {
-                                    AITimer2++;
-                                    AITimer1 = 0;
-                                    int count = 10;
-                                    float dist = 200 - 30 * AITimer2;
-                                    float baseRot = 0 + AITimer2 * MathHelper.ToRadians(15);
-                                    SoundEngine.PlaySound(SoundID.Item28, eyePos);
-                                    for (int i = 0; i < count; i++)
-                                    {
-                                        float rot = baseRot + MathF.Tau * ((float)i / count);
-                                        Vector2 vel = rot.ToRotationVector2() * 14;
-                                        Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot),
-                                            Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), ProjectileDamage((int)(NPC.damage * 0.75f)), 1f, Main.myPlayer, NPC.whoAmI, 0, 1);
-                                        sword.rotation = vel.ToRotation();
-                                    }
-                                    for (int i = 0; i < 18; i++)
-                                    {
-                                        int dust = Dust.NewDust(eyePos, 0, 0, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, Main.rand.NextFloat(1.25f, 2.5f));
-                                        Main.dust[dust].noGravity = true;
-                                        Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 12;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (AITimer1++ >= 120)
-                                {
-                                    AI_State = MovementState.FollowingRegular;
-                                    AttackID = GetNextAttack();
-                                    ResetStats();
-                                    NPC.dontTakeDamage = false;
-                                }
-                            }
-                        }
-                    }
+                    P2Transition(player);
                     break;
-
                 case 0://Slam down on start
-                    distanceAbove = 700;//goes high above player
-                    if (AITimer1++ == 120)
-                    {
-                        AI_State = MovementState.Slamdown;
-                    }
-                    if (AttackCount > 0)//doesn't loop
-                    {
-                        AI_State = MovementState.FollowingRegular;
-                        AttackID = GetNextAttack();
-                        ResetStats();
-                        distanceAbove = 250;
-                    }
+                    if (!PlayerCheck(player))
+                        break;
+                    StartUp();
                     break;
                 case 1: //Dash attack, spawns sideway wave
-                    distanceAbove = 350;
-                    if (AITimer1++ >= 120 && AttackCount <= 0)
-                    {
-                        AITimer1 = 0;
-                        AI_State = MovementState.Dashing;
-                    }
-                    if (AttackCount > 3)//loop twice
-                    {
-                        AI_State = MovementState.FollowingRegular;
-                        AttackID = GetNextAttack();
-                        ResetStats(true);
-                        distanceAbove = 250;
-                    }
+                    if (!PlayerCheck(player))
+                        break;
+                    WaveDash();
                     break;
                 case 2: //leap up and slam down attack
-                    distanceAbove = 500;
-                    if (AI_State != MovementState.Slamdown)
-                    {
-                        AITimer1++;
-                        if (AITimer1 > 40 && AITimer1 < 60)
-                        {
-                            AI_State = MovementState.FollowingSlow;//slow so it doesn't outpace the player
-                            DashTimer = 0;
-
-                        }
-                        else if (AITimer1 >= 60)
-                        {
-                            AITimer1 = 0;
-                            AI_State = MovementState.Slamdown;
-                        }
-                    }
-                    if (AttackCount > 3)
-                    {
-                        AI_State = MovementState.FollowingRegular;
-                        AttackID = GetNextAttack();
-                        ResetStats(true);
-                        distanceAbove = 250;
-                    }
+                    if (!PlayerCheck(player))
+                        break;
+                    LeapSlam();
                     break;
                 case 3:
-                    distanceAbove = 350;
-                    AITimer1++;
-
-                    if ((AITimer1 >= 120 && AttackCount <= 0) || AITimer1 >= 250)
-                    {
-                        if (AttackCount < 3)
-                        {
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                float dur = (AttackCount % 2 == 0) ? 60 : 120;
-                                Projectile proj1 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
-                                 ModContent.ProjectileType<CosmicFistBump>(), ProjectileDamage(NPC.damage), 0f, player.whoAmI, (bSecondStage) ? 1 : 0, 0, dur);
-                                Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
-                                 ModContent.ProjectileType<CosmicFistBump>(), ProjectileDamage(NPC.damage), 0f, player.whoAmI, 0, 1, dur);
-                            }
-                        }
-                        AITimer1 = 0;
-                        AttackCount++;
-                    }
-
-                    if (AttackCount > 3)
-                    {
-                        AttackID = GetNextAttack();
-                        ResetStats(true);
-                        AttackCount = 0;
-                    }
+                    if (!PlayerCheck(player))
+                        break;
+                    FistBump(player);
                     break;
                 case 4://tensei non-spell dumbed down
-                    float dir = (AttackCount % 2 == 0) ? 1 : -1;
-                    float finalAttack = 7;
-                    bool notFinal = AttackCount < finalAttack;
-                    float rotateAngle = notFinal ? 110 : 180;
-                    float angleIncrement = notFinal ? 5 : 6;
-                    if (AITimer1++ == 10)
-                    {
-                        distanceAbove = notFinal ? 350 : 500;
-
-                        AITimer2 = -rotateAngle * dir;
-                    }
-                    if (AITimer1 >= 90)
-                    {
-                        AI_State = MovementState.Explode;
-
-                        if (dir >= 1 ? (AITimer2 <= rotateAngle * dir) : (AITimer2 >= rotateAngle * dir))
-                        {
-                            AITimer2 += angleIncrement * dir;
-                            float angleRad = MathHelper.ToRadians(AITimer2);
-                            float speed = notFinal ? Main.rand.NextFloat(4f, 10f) : 3f;
-                            Vector2 velocity = new Vector2((float)Math.Sin(angleRad), -(float)Math.Cos(angleRad)) * speed;
-                            Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -60), velocity, ModContent.ProjectileType<CosmicGlowStar>(),
-                                ProjectileDamage(NPC.damage),
-                                0f,
-                                -1, player.whoAmI, notFinal ? 30 : 60);
-                            proj.localAI[0] = notFinal ? 0 : 1.5f;
-
-                        }
-                    }
-                    if ((AITimer1 == 160 && AttackCount < finalAttack) || AITimer1 == 200)
-                    {
-                        AI_State = MovementState.FollowingRegular;
-
-                        if (((AttackCount % 2 == 0) && ((AttackCount < finalAttack - 1 && !bSecondStage))) || ((AttackCount % 2 == 0 || AttackCount == finalAttack - 1) && bSecondStage))
-                        {
-                            float dist = 400;
-                            if (expertMode || masterMode)
-                            {
-                                dist = 400 - AttackCount * 20;
-                            }
-                            if (AttackCount == finalAttack - 1 && bSecondStage)
-                                dist = 600;
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                Projectile proj1 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
-                                 ModContent.ProjectileType<CosmicFistBarrier>(), ProjectileDamage(NPC.damage), 0f, -1, player.whoAmI, 0, dist);
-                                Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
-                                 ModContent.ProjectileType<CosmicFistBarrier>(), ProjectileDamage(NPC.damage), 0f, -1, player.whoAmI, 1, dist);
-                            }
-                        }
-                        AITimer1 = 0;
-                        if (AttackCount++ >= finalAttack)
-                        {
-                            ResetStats();
-                            AttackID = GetNextAttack();
-                        }
-                    }
+                    if (!PlayerCheck(player))
+                        break;
+                    TenseiSpell(player);
                     break;
                 case 5://spits meteor, to player, dash to meteor
-                    AITimer1++;
-                    distanceAbove = 300;
-                    if (AITimer2++ == 90)
-                    {
-                        AI_State = MovementState.Explode;
-                        float baseRotation = Main.rand.NextFloat(MathF.Tau);
-                        int amount = (expertMode || masterMode) ? 8 : 5;
-                        float dist = 1250;
-                        for (int i = 0; i < amount; i++)
-                        {
-                            float rot = baseRotation + MathF.Tau * ((float)i / amount);
-                            int damage = (int)(NPC.damage * 0.5f);
-                            Vector2 vector = (Vector2.Normalize(Vector2.UnitY.RotatedBy(rot)) * dist);
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicStarlitMeteorite>(), ProjectileDamage((int)(NPC.damage*3)), 0f, Main.myPlayer, NPC.whoAmI, vector.X, vector.Y);
-                            }
-                        }
-                    }
-                    if (AITimer1 >= 240)
-                    {
-                        MeteorTarget ??= FindMeteorite(20000);
-
-                        if (MeteorTarget == null)
-                            return;
-                        if (!MeteorTarget.active || MeteorTarget.timeLeft <= 0)
-                        {
-                            MeteorTarget = null;
-                            return;
-                        }
-
-                        AITimer1 = 0;
-
-                        AI_State = MovementState.Dashing;
-                    }
-
-                    if (AI_State == MovementState.Dashing)
-                    {
-                        MeteorTarget ??= FindMeteorite(20000);
-
-                        for (int i = 0; i < Main.maxProjectiles; i++)
-                        {
-                            Projectile other = Main.projectile[i];
-
-                            if (other.type == ModContent.ProjectileType<CosmicStarlitMeteorite>() && other.active && other.timeLeft > 0
-                                && Math.Abs(NPC.Center.X - other.position.X)
-                                + Math.Abs(NPC.Center.Y - other.position.Y) < NPC.width)
-                            {
-                                NPC.velocity *= 0.5f;
-                                player.GetModPlayer<ITDPlayer>().BetterScreenshake(10, 10, 10, true);
-                                other.Kill();
-                                other.active = false;
-                                MeteorTarget = null;
-
-                            }
-                        }
-
-                    }
-                    if (AttackCount > 0)//loop
-                    {
-                        AI_State = MovementState.FollowingRegular;
-                        AttackID = GetNextAttack();
-                        ResetStats(true);
-                        distanceAbove = 250;
-                    }
+                    if (!PlayerCheck(player))
+                        break;
+                    MeteorDash(player);
                     break;
-
                 case 6://me when i lie about no arena, quasi-deathray tentacle electric border
-                    AITimer1++;
-                    distanceAbove = 300;
-                    if (AITimer1 == 120)
-                    {
-                        AI_State = MovementState.Explode;
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicTentacleArena>(), ProjectileDamage(NPC.damage), 0f, Main.myPlayer, NPC.whoAmI, 0, 0);
-
-                        }
-
-                    }
-                    if (AITimer1 >= 600)//loop
-                    {
-                        AI_State = MovementState.FollowingRegular;
-                        AttackID = GetNextAttack();
-                        ResetStats(true);
-                        distanceAbove = 250;
-                    }
+                    if (!PlayerCheck(player))
+                        break;
+                    TentacleBorder();
                     break;
-
                 case 7://open whitehole, kills mini jellyfish, total jellyfish death
-                    AITimer1++;
-                    distanceAbove = 300;
-                    int maxAttack = 3;
-                    if (AttackCount <= maxAttack)
-                    {
-                        if (AITimer1 >= 90 && AttackCount <= 0 || AITimer1 >= 450)
-                        {
-                            Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos, Vector2.Zero,
-                    ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
-                            Blast.ai[1] = 250f;
-                            Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
-                            Blast.netUpdate = true;
-                            AttackCount++;
-                            AITimer1 = 0;
-                            AI_State = MovementState.Explode;
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(player.Center.X, player.Center.Y + Main.screenHeight/2), Vector2.Zero, ModContent.ProjectileType<CosmicSwarmBlackhole>(), ProjectileDamage(NPC.damage), 0f, Main.myPlayer, NPC.whoAmI, 0, 0);
-
-                            }
-
-                        }
-                    }
-                    if (AITimer1 >= 60 && AITimer1 < 120 && AttackCount <= 0 || AITimer1 >= 200 && AITimer1 <= 400)
-                    {
-                        AI_State = MovementState.FollowingRegular;
-                    }
-                    if (AttackCount > maxAttack && AITimer1 >= 500)//loop
-                    {
-                        AI_State = MovementState.FollowingRegular;
-                        AttackID = GetNextAttack();
-                        ResetStats(true);
-                        distanceAbove = 250;
-                    }
+                    if (!PlayerCheck(player))
+                        break;
+                    WhiteholePortal(player);
                     break;
-
                 case 8:
-                    AITimer1++;
-                    float angleDeviation = 40;
-                    float amountFire = 30;
-                    float maxDeviation = 90;
-                    float maxAmount = 90;
-
-                    if (expertMode || masterMode)
-                    {
-                        maxDeviation = 100;
-                        maxAmount = 90;
-                    }
-                    else if (!expertMode || !masterMode)
-                    {
-                        maxDeviation = 70;
-                        maxAmount = 50;
-                    }
-                    amountFire = Math.Clamp(30 + 5 * AttackCount, 0, maxAmount);
-                    angleDeviation = Math.Clamp(40 + 10 * AttackCount, 0, maxDeviation);
-                    if (AITimer1 == 60)
-                    {
-                        AI_State = MovementState.Explode;
-                    }
-                    if (AITimer1 == 100)
-                    {
-                        targetPos = Vector2.Normalize(player.Center - eyePos);
-                    }
-                    if (AITimer1 >= 120)
-                    {
-
-                        Vector2 velocity = targetPos.RotateRandom(MathHelper.ToRadians(angleDeviation));
-                        Vector2 magVec = (eyePos +
-                            new Vector2(100, 0).RotatedBy(velocity.ToRotation())) - eyePos;
-                        magVec.Along(eyePos, 10, v =>
-                        {
-                            for (int i = 0; i <= 1; i++)
-                            {
-                                Dust dust = Dust.NewDustPerfect(new Vector2(v.X, v.Y), DustID.PurpleCrystalShard, Vector2.Zero, 0, Scale: 2);
-                                dust.scale = 1.75f;
-                                dust.noGravity = true;
-                            }
-                        });
-                        for (int i = 0; i <= 3; i++)
-                        {
-                            Dust dust = Dust.NewDustDirect(eyePos, 1, 1, DustID.PurpleCrystalShard, 0, 0);
-                            dust.scale = 1.5f;
-                            dust.noGravity = true;
-                            dust.velocity = -velocity * 20;
-                        }
-                        SoundEngine.PlaySound(SoundID.Item28, eyePos);
-                        SoundEngine.PlaySound(SoundID.Item20, eyePos);
-                        Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), eyePos +
-                            new Vector2(100, 0).RotatedBy(velocity.ToRotation()), Vector2.Zero,
-                            ModContent.ProjectileType<CosmicSwordStar2>(), ProjectileDamage(NPC.damage), 0, -1, 0, 0, amountFire - (AITimer2));
-                        proj.rotation = velocity.ToRotation();
-                        AITimer2++;
-                        if (AITimer2 >= amountFire)
-                        {
-                            distanceAway =300 * (AttackCount % 2 == 0? 1: -1);
-                            distanceAbove = 0;
-                            AI_State = MovementState.FollowingRegular;
-                            AITimer2 = 0;
-                            AITimer1 = 0;
-                            AttackCount++;
-                        }
-                    }
-                    if (AttackCount > 8)//loop
-                    {
-                        AI_State = MovementState.FollowingRegular;
-                        AttackID = GetNextAttack();
-                        ResetStats(true);
-                        distanceAbove = 250;
-                        distanceAway = 0;
-                    }
-
+                    if (!PlayerCheck(player))
+                        break;
+                    SwordBurstFire(player);
                     break;
                 case 9: //deathray 4 now
-                    BlackholeDusting(3);
-                    float ringAmount = 4;
-                    AITimer1++;
-                    distanceAbove = 200;
-            
-                    if (AttackCount >= ringAmount)
-                    {
-                        if (AITimer2++ == 60)
-                        {
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
-                                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, vel,
-                                 ModContent.ProjectileType<CosmicRayWarn>(), ProjectileDamage(NPC.damage * 2), 0f, -1, 240, NPC.whoAmI);
-                            }
-                        }
-                        if (AITimer2 >= 1000)
-                        {
-                            AI_State = MovementState.FollowingRegular;
-                            AttackID = GetNextAttack();
-                            ResetStats();
-                            NetSync();
-                        }
-                    }
-                    else
-                    {
-                        if (AITimer1++ >= 60)
-                        {
-                            AI_State = MovementState.Explode;
-                            AttackCount++;
-                            AITimer1 = 0;
-                            int count = 12;
-                            float dist =  400 * AttackCount;
-                            float baseRot = 0 + AttackCount * MathHelper.ToRadians(15);
-                            SoundEngine.PlaySound(SoundID.Item28, eyePos);
-                            for (int i = 0; i < count; i++)
-                            {
-                                float rot = baseRot + MathF.Tau * ((float)i / count);
-                                Vector2 vel = -rot.ToRotationVector2() * 14;
-                                Projectile meteor = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot), Vector2.Zero, ModContent.ProjectileType<CosmicRayMeteorite>(), ProjectileDamage(NPC.damage), 1f, Main.myPlayer, NPC.whoAmI);
-                            }
-                            for (int i = 0; i < 18; i++)
-                            {
-                                int dust = Dust.NewDust(eyePos, 0, 0, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, Main.rand.NextFloat(1.25f, 2.5f));
-                                Main.dust[dust].noGravity = true;
-                                Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 12;
-                            }
-                        }
-                    }
+                    if (!PlayerCheck(player))
+                        break;
+                    MeteorDeathRay(player);   
                     break;
             }
         }
         //--------------------------------------------------------------------------------------------------------------------------------
         float distanceAbove = 250f;//distance above the player
         float distanceAway = 0;//distance away from the player, why did i not do this until now
-
-        private void ShardSlam()//slam attack, call once hit the ground
+                               
+        private bool PlayerCheck(Player player)
         {
-            float XVeloDifference = 2;
-            float startXVelo = -((float)(12) / 2) * (float)XVeloDifference;
+            if ((!player.active || player.dead || Vector2.Distance(NPC.Center, player.Center) > 4000f) && AttackID != 0 || Main.dayTime)
+            {
+                NPC.TargetClosest();
+                player = Main.player[NPC.target];
+                if (!player.active || player.dead || Vector2.Distance(NPC.Center, player.Center) > 4000f || Main.dayTime)
+                {
+                    if (NPC.timeLeft > 60)
+                        NPC.timeLeft = 60;
+                    NPC.velocity.Y -= 0.2f;
+                    NPC.EncourageDespawn(30);
+                }
+                return false;
+            }
+            if (NPC.timeLeft < 600)
+                NPC.timeLeft = 600;
+            return true;
+        }
+        #region Attacks
+        public void SludgeSlam()//slam attack, call once hit the ground
+        {
             for (int j = 0; j < 30; j++)
             {
                 Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2((NPC.width), 0), NPC.width * 2, 10, DustID.PurpleTorch);
@@ -801,10 +368,14 @@ namespace ITD.Content.NPCs.Bosses
             }
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                for (int i = 0; i < 12; i++)
+                int amount = 4;
+                amount = masterMode ? 6 : expertMode ? 5 : 4;
+                for (int i = -amount; i <= amount; i++)
                 {
-                    Vector2 projectileVelo = new Vector2(startXVelo + XVeloDifference * i, -5f);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, projectileVelo, ModContent.ProjectileType<CosmicSludgeBomb>(), ProjectileDamage((int)(NPC.damage * 0.75f)), 0, -1, NPC.whoAmI);
+                    Vector2 spawnPos = new Vector2(NPC.Center.X, NPC.Center.Y);
+                    Vector2 velocity = new Vector2(i * 2f, -5);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos,
+                        velocity, ModContent.ProjectileType<CosmicSludgeBomb>(), ProjectileDamage(NPC.damage), 0f, Main.myPlayer, 0);
                 }
                 if (bSecondStage)
                 {
@@ -816,7 +387,527 @@ namespace ITD.Content.NPCs.Bosses
                 }
             }
         }
-        //movement code                    '
+      
+        public void StartUp()
+        {
+            distanceAbove = 700;//goes high above player
+            if (AITimer1++ == 120)
+            {
+                AI_State = MovementState.Slamdown;
+            }
+            if (AttackCount > 0)//doesn't loop
+            {
+                AI_State = MovementState.FollowingRegular;
+                AttackID = GetNextAttack();
+                ResetStats();
+                distanceAbove = 250;
+            }
+        }
+        public void WaveDash()
+        {
+            distanceAbove = 350;
+            if (AITimer1++ >= 120 && AttackCount <= 0)
+            {
+                AITimer1 = 0;
+                AI_State = MovementState.Dashing;
+            }
+            if (AttackCount > 3)//loop twice
+            {
+                AI_State = MovementState.FollowingRegular;
+                AttackID = GetNextAttack();
+                ResetStats(true);
+                distanceAbove = 250;
+            }
+        }
+        public void LeapSlam()
+        {
+            distanceAbove = 500;
+            if (AI_State != MovementState.Slamdown)
+            {
+                AITimer1++;
+                if (AITimer1 > 40 && AITimer1 < 60)
+                {
+                    AI_State = MovementState.FollowingSlow;//slow so it doesn't outpace the player
+                    DashTimer = 0;
+
+                }
+                else if (AITimer1 >= 60)
+                {
+                    AITimer1 = 0;
+                    AI_State = MovementState.Slamdown;
+                }
+            }
+            if (AttackCount > 3)
+            {
+                AI_State = MovementState.FollowingRegular;
+                AttackID = GetNextAttack();
+                ResetStats(true);
+                distanceAbove = 250;
+            }
+        }
+        public void FistBump(Player player)
+        {
+            distanceAbove = 350;
+            AITimer1++;
+
+            if ((AITimer1 >= 120 && AttackCount <= 0) || AITimer1 >= 250)
+            {
+                if (AttackCount < 3)
+                {
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        float dur = (AttackCount % 2 == 0) ? 60 : 120;
+                        Projectile proj1 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
+                         ModContent.ProjectileType<CosmicFistBump>(), ProjectileDamage(NPC.damage), 0f, player.whoAmI, (bSecondStage) ? 1 : 0, 0, dur);
+                        Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
+                         ModContent.ProjectileType<CosmicFistBump>(), ProjectileDamage(NPC.damage), 0f, player.whoAmI, 0, 1, dur);
+                    }
+                }
+                AITimer1 = 0;
+                AttackCount++;
+            }
+
+            if (AttackCount > 3)
+            {
+                AttackID = GetNextAttack();
+                ResetStats(true);
+                AttackCount = 0;
+            }
+        }
+        public void TenseiSpell(Player player)
+        {
+            float dir = (AttackCount % 2 == 0) ? 1 : -1;
+            float finalAttack = 7;
+            bool notFinal = AttackCount < finalAttack;
+            float rotateAngle = notFinal ? 110 : 180;
+            float angleIncrement = notFinal ? 5 : 6;
+            if (AITimer1++ == 10)
+            {
+                distanceAbove = notFinal ? 350 : 500;
+
+                AITimer2 = -rotateAngle * dir;
+            }
+            if (AITimer1 >= 90)
+            {
+                AI_State = MovementState.Explode;
+
+                if (dir >= 1 ? (AITimer2 <= rotateAngle * dir) : (AITimer2 >= rotateAngle * dir))
+                {
+                    AITimer2 += angleIncrement * dir;
+                    float angleRad = MathHelper.ToRadians(AITimer2);
+                    float speed = notFinal ? Main.rand.NextFloat(4f, 10f) : 3f;
+                    Vector2 velocity = new Vector2((float)Math.Sin(angleRad), -(float)Math.Cos(angleRad)) * speed;
+                    Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -60), velocity, ModContent.ProjectileType<CosmicGlowStar>(),
+                        ProjectileDamage(NPC.damage),
+                        0f,
+                        -1, player.whoAmI, notFinal ? 30 : 60);
+                    proj.localAI[0] = notFinal ? 0 : 1.5f;
+
+                }
+            }
+            if ((AITimer1 == 160 && AttackCount < finalAttack) || AITimer1 == 200)
+            {
+                AI_State = MovementState.FollowingRegular;
+
+                if (((AttackCount % 2 == 0) && ((AttackCount < finalAttack - 1 && !bSecondStage))) || ((AttackCount % 2 == 0 || AttackCount == finalAttack - 1) && bSecondStage))
+                {
+                    float dist = 400;
+                    if (expertMode || masterMode)
+                    {
+                        dist = 400 - AttackCount * 20;
+                    }
+                    if (AttackCount == finalAttack - 1 && bSecondStage)
+                        dist = 600;
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile proj1 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
+                         ModContent.ProjectileType<CosmicFistBarrier>(), ProjectileDamage(NPC.damage), 0f, -1, player.whoAmI, 0, dist);
+                        Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
+                         ModContent.ProjectileType<CosmicFistBarrier>(), ProjectileDamage(NPC.damage), 0f, -1, player.whoAmI, 1, dist);
+                    }
+                }
+                AITimer1 = 0;
+                if (AttackCount++ >= finalAttack)
+                {
+                    ResetStats();
+                    AttackID = GetNextAttack();
+                }
+            }
+        }
+        public void MeteorDash(Player player)
+        {
+            AITimer1++;
+            distanceAbove = 300;
+            if (AITimer2++ == 90)
+            {
+                AI_State = MovementState.Explode;
+                float baseRotation = Main.rand.NextFloat(MathF.Tau);
+                int amount = (expertMode || masterMode) ? 8 : 5;
+                float dist = 1250;
+                for (int i = 0; i < amount; i++)
+                {
+                    float rot = baseRotation + MathF.Tau * ((float)i / amount);
+                    int damage = (int)(NPC.damage * 0.5f);
+                    Vector2 vector = (Vector2.Normalize(Vector2.UnitY.RotatedBy(rot)) * dist);
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicStarlitMeteorite>(), ProjectileDamage((int)(NPC.damage * 3)), 0f, Main.myPlayer, NPC.whoAmI, vector.X, vector.Y);
+                    }
+                }
+            }
+            if (AITimer1 >= 240)
+            {
+                MeteorTarget ??= FindMeteorite(20000);
+
+                if (MeteorTarget == null)
+                    return;
+                if (!MeteorTarget.active || MeteorTarget.timeLeft <= 0)
+                {
+                    MeteorTarget = null;
+                    return;
+                }
+
+                AITimer1 = 0;
+
+                AI_State = MovementState.Dashing;
+            }
+
+            if (AI_State == MovementState.Dashing)
+            {
+                MeteorTarget ??= FindMeteorite(20000);
+
+                for (int i = 0; i < Main.maxProjectiles; i++)
+                {
+                    Projectile other = Main.projectile[i];
+
+                    if (other.type == ModContent.ProjectileType<CosmicStarlitMeteorite>() && other.active && other.timeLeft > 0
+                        && Math.Abs(NPC.Center.X - other.position.X)
+                        + Math.Abs(NPC.Center.Y - other.position.Y) < NPC.width)
+                    {
+                        NPC.velocity *= 0.5f;
+                        player.GetModPlayer<ITDPlayer>().BetterScreenshake(10, 10, 10, true);
+                        other.Kill();
+                        other.active = false;
+                        MeteorTarget = null;
+
+                    }
+                }
+
+            }
+            if (AttackCount > 0)//loop
+            {
+                AI_State = MovementState.FollowingRegular;
+                AttackID = GetNextAttack();
+                ResetStats(true);
+                distanceAbove = 250;
+            }
+        }
+        public void TentacleBorder()
+        {
+            AITimer1++;
+            distanceAbove = 300;
+            float tentacleDistAway = 1500;
+            float sweepTime = 180;
+            tentacleDistAway = masterMode ? 1200 : expertMode ? 1500 : 1800;
+            sweepTime = masterMode ? 150 : expertMode ? 180 : 120;
+            if (AITimer1 == 120)
+            {
+                AI_State = MovementState.Explode;
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicTentacleArena>(), ProjectileDamage(NPC.damage), 0f, Main.myPlayer, NPC.whoAmI, tentacleDistAway, sweepTime);
+
+                }
+
+            }
+            if (AITimer1 >= 600)//loop
+            {
+                AI_State = MovementState.FollowingRegular;
+                AttackID = GetNextAttack();
+                ResetStats(true);
+                distanceAbove = 250;
+            }
+        }
+        public void WhiteholePortal(Player player)
+        {
+            Vector2 eyePos = NPC.Center + new Vector2(0, -60);
+
+            AITimer1++;
+            distanceAbove = 300;
+            int maxAttack = 3;
+            if (AttackCount < maxAttack)
+            {
+                if (AITimer1 >= 90 && AttackCount <= 0 || AITimer1 >= 450)
+                {
+                    AttackCount++;
+
+                    Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos, Vector2.Zero,
+            ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
+                    Blast.ai[1] = 250f;
+                    Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+                    Blast.netUpdate = true;
+                    AITimer1 = 0;
+                    AI_State = MovementState.Explode;
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(player.Center.X, player.Center.Y + Main.screenHeight / 2), Vector2.Zero, ModContent.ProjectileType<CosmicSwarmBlackhole>(), ProjectileDamage(NPC.damage), 0f, Main.myPlayer, NPC.whoAmI, 0, 0);
+
+                    }
+
+                }
+            }
+            if (AITimer1 >= 60 && AITimer1 < 120 && AttackCount <= 0 || AITimer1 >= 200 && AITimer1 <= 400)
+            {
+                AI_State = MovementState.FollowingRegular;
+            }
+            if (AttackCount >= maxAttack && AITimer1 >= 500)//loop
+            {
+                AI_State = MovementState.FollowingRegular;
+                AttackID = GetNextAttack();
+                ResetStats(true);
+                distanceAbove = 250;
+            }
+        }
+
+        public void SwordBurstFire(Player player)
+        {
+            Vector2 eyePos = NPC.Center + new Vector2(0, -60);
+
+            AITimer1++;
+            float angleDeviation = 40;
+            float amountFire = 30;
+            float maxDeviation = 80;
+            float maxAmount = 80;
+
+            if (expertMode || masterMode)
+            {
+                maxDeviation = 90;
+                maxAmount = 80;
+            }
+            else if (!expertMode || !masterMode)
+            {
+                maxDeviation = 70;
+                maxAmount = 50;
+            }
+            amountFire = Math.Clamp(30 + 5 * AttackCount, 0, maxAmount);
+            angleDeviation = Math.Clamp(40 + 10 * AttackCount, 0, maxDeviation);
+            if (AITimer1 == 60)
+            {
+                AI_State = MovementState.Explode;
+            }
+            if (AITimer1 == 90)
+            {
+                targetPos = Vector2.Normalize(player.Center - eyePos);
+            }
+            if (AITimer1 >= 120)
+            {
+
+                Vector2 velocity = targetPos.RotateRandom(MathHelper.ToRadians(angleDeviation));
+                Vector2 magVec = (eyePos +
+                    new Vector2(100, 0).RotatedBy(velocity.ToRotation())) - eyePos;
+                magVec.Along(eyePos, 10, v =>
+                {
+                    for (int i = 0; i <= 1; i++)
+                    {
+                        Dust dust = Dust.NewDustPerfect(new Vector2(v.X, v.Y), DustID.PurpleCrystalShard, Vector2.Zero, 0, Scale: 2);
+                        dust.scale = 1.75f;
+                        dust.noGravity = true;
+                    }
+                });
+                for (int i = 0; i <= 3; i++)
+                {
+                    Dust dust = Dust.NewDustDirect(eyePos, 1, 1, DustID.PurpleCrystalShard, 0, 0);
+                    dust.scale = 1.5f;
+                    dust.noGravity = true;
+                    dust.velocity = -velocity * 20;
+                }
+                SoundEngine.PlaySound(SoundID.Item28, eyePos);
+                SoundEngine.PlaySound(SoundID.Item20, eyePos);
+                Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), eyePos +
+                    new Vector2(100, 0).RotatedBy(velocity.ToRotation()), Vector2.Zero,
+                    ModContent.ProjectileType<CosmicSwordStar2>(), ProjectileDamage(NPC.damage), 0, -1, 0, 0, amountFire - (AITimer2));
+                proj.rotation = velocity.ToRotation();
+                AITimer2++;
+                if (AITimer2 >= amountFire)
+                {
+                    distanceAway = 300 * (AttackCount % 2 == 0 ? 1 : -1);
+                    distanceAbove = 0;
+                    AI_State = MovementState.FollowingRegular;
+                    AITimer2 = 0;
+                    AITimer1 = 0;
+                    AttackCount++;
+                }
+            }
+            if (AttackCount > 8)//loop
+            {
+                AI_State = MovementState.FollowingRegular;
+                AttackID = GetNextAttack();
+                ResetStats(true);
+                distanceAbove = 250;
+                distanceAway = 0;
+            }
+        }
+
+        public void MeteorDeathRay(Player player)
+        {
+            Vector2 eyePos = NPC.Center + new Vector2(0, -60);
+            BlackholeDusting(3);
+            float ringAmount = 4;
+            AITimer1++;
+            distanceAbove = 200;
+
+            if (AttackCount >= ringAmount)
+            {
+                if (AITimer2++ == 60)
+                {
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Vector2 vel = NPC.DirectionTo(player.Center) * 1f; ;
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, vel,
+                         ModContent.ProjectileType<CosmicRayWarn>(), ProjectileDamage(NPC.damage * 2), 0f, -1, 240, NPC.whoAmI);
+                    }
+                }
+                if (AITimer2 >= 700)
+                {
+                    AI_State = MovementState.FollowingRegular;
+                    AttackID = GetNextAttack();
+                    ResetStats();
+                    NetSync();
+                }
+            }
+            else
+            {
+                distanceAbove = 200;
+
+                if (AITimer1 >= 30)
+                {
+                    AI_State = MovementState.Explode;
+                }
+                if (AITimer1++ >= 60)
+                {
+                    AttackCount++;
+                    AITimer1 = 0;
+                    int count = 1 + (int)AttackCount * 2;
+                    float dist = 400 * AttackCount;
+                    float baseRot = 0 + AttackCount * MathHelper.ToRadians(15);
+                    SoundEngine.PlaySound(SoundID.Item28, eyePos);
+                    for (int i = 0; i < count; i++)
+                    {
+                        float rot = baseRot + MathF.Tau * ((float)i / count);
+                        Vector2 vel = -rot.ToRotationVector2() * 14;
+                        Projectile meteor = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot)
+                            , Vector2.Zero, ModContent.ProjectileType<CosmicRayMeteorite>(), ProjectileDamage(NPC.damage), 1f, Main.myPlayer, NPC.whoAmI,60 * AttackCount);
+                    }
+                    for (int i = 0; i < 18; i++)
+                    {
+                        int dust = Dust.NewDust(eyePos, 0, 0, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, Main.rand.NextFloat(1.25f, 2.5f));
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 12;
+                    }
+                }
+            }
+        }
+        public void P2Transition(Player player)
+        {
+            Vector2 eyePos = NPC.Center + new Vector2(0, -60);
+            int hitTime = 4;
+            hitTime = masterMode ? 5 : expertMode ? 5 : 3;
+            if (AI_State == MovementState.Teleport)
+            {
+                NPC.dontTakeDamage = true;
+            }
+            else
+            {
+                if (goodtransition <= 0)
+                {
+                    if (AITimer2 < hitTime)
+                    {
+                        if (AITimer1++ >= 60)
+                        {
+                            AITimer2++;
+                            AITimer1 = 0;
+                            int count = 6 + (int)AITimer2 * 2;
+                            float dist = 100 + 350 * AITimer2;
+                            float baseRot = 0 + AITimer2 * MathHelper.ToRadians(30);
+                            SoundEngine.PlaySound(SoundID.Item28, eyePos);
+                            for (int i = 0; i < count; i++)
+                            {
+                                float rot = baseRot + MathF.Tau * ((float)i / count);
+                                Vector2 vel = -rot.ToRotationVector2() * 14;
+                                Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot), Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), ProjectileDamage(NPC.damage), 1f, Main.myPlayer, NPC.whoAmI, i >= (count - 1) ? 1 : 0);
+                                sword.rotation = vel.ToRotation();
+                            }
+                            for (int i = 0; i < 18; i++)
+                            {
+                                int dust = Dust.NewDust(eyePos, 0, 0, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, Main.rand.NextFloat(1.25f, 2.5f));
+                                Main.dust[dust].noGravity = true;
+                                Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 12;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (AITimer1++ >= 180)
+                        {
+                            if (!masterMode && !expertMode)
+                            {
+                                NPC.HealEffect((int)((NPC.lifeMax / 2) - NPC.life));
+                                NPC.life = (NPC.lifeMax / 2);
+                            }
+                            else
+                            {
+                                NPC.HealEffect((int)((NPC.lifeMax) - NPC.life));
+                                NPC.life = (NPC.lifeMax);
+                            }
+                            intimidateMe = 1;
+                            goodtransition = 5;
+                            AITimer2 = 0;
+                            AITimer1 = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    if (AITimer2 < hitTime)
+                    {
+                        if (AITimer1++ >= 60)
+                        {
+                            AITimer2++;
+                            AITimer1 = 0;
+                            int count = 10;
+                            float dist = 240 - 30 * AITimer2;
+                            float baseRot = 0 + AITimer2 * MathHelper.ToRadians(15);
+                            SoundEngine.PlaySound(SoundID.Item28, eyePos);
+                            for (int i = 0; i < count; i++)
+                            {
+                                float rot = baseRot + MathF.Tau * ((float)i / count);
+                                Vector2 vel = rot.ToRotationVector2() * 14;
+                                Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot),
+                                    Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), ProjectileDamage((int)(NPC.damage * 0.75f)), 1f, Main.myPlayer, NPC.whoAmI, 0, 1);
+                                sword.rotation = vel.ToRotation();
+                            }
+                            for (int i = 0; i < 18; i++)
+                            {
+                                int dust = Dust.NewDust(eyePos, 0, 0, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, Main.rand.NextFloat(1.25f, 2.5f));
+                                Main.dust[dust].noGravity = true;
+                                Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 12;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (AITimer1++ >= 120)
+                        {
+                            AI_State = MovementState.FollowingRegular;
+                            AttackID = GetNextAttack();
+                            ResetStats();
+                            NPC.dontTakeDamage = false;
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
         Vector2 whereToGo = Vector2.Zero;
 
         private void Movement(Player player)//___________________________________________________________________________________________________________________________________________________
@@ -962,7 +1053,7 @@ namespace ITD.Content.NPCs.Bosses
                             NPC.velocity = dashVel;
                             AttackCount++;
                             SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/NPCSounds/Bosses/CosjelSlam"), NPC.Center);
-                            ShardSlam();
+                            SludgeSlam();
                             player.GetITDPlayer().BetterScreenshake(30, 10, 20, true);//Very shaky, might need some tweaking to the decay
                         }
                         else if (AITimer2 >= 20 && AITimer2 <= 60)
@@ -1501,18 +1592,5 @@ namespace ITD.Content.NPCs.Bosses
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         }
 
-    }
-    public readonly struct CosmicTelegraphVertex
-    {
-        public static void Draw(Vector2 position, Vector2 size, float rotation)
-        {
-            GameShaders.Misc["Telegraph"]
-                .UseColor(Color.Purple)
-                .UseSecondaryColor(Color.Purple)
-                .Apply();
-            SimpleSquare.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
-            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-
-        }
     }
 }

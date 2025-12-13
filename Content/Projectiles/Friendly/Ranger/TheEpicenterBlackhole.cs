@@ -135,6 +135,7 @@ public class TheEpicenterBlackhole : ModProjectile
                     ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
                     {
                         PositionInWorld = Projectile.Center,
+                        
                     }, Projectile.whoAmI);
                     other.active = false;
                     other.netUpdate = true;

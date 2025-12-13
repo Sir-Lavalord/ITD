@@ -172,11 +172,12 @@ public class CosmicSwarmBlackhole : ITDProjectile
                             for (int k = 0; k < amount; k++)
                             {
 
-                                double rad = MathHelper.PiOver2 / (amount / 2) * k + MathHelper.PiOver2;
+                                float rad = MathHelper.PiOver2 / (amount / 2) * k + MathHelper.PiOver2;
                                 int damage = (int)(Projectile.damage * 0.28f);
                                 int knockBack = 3;
                                 float speed = 18f;
                                 Vector2 vector = Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * speed;
+                                vector = vector.RotatedByRandom(0.06f);
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicSwarmGib>(), damage, knockBack, Main.myPlayer, 0, 1);
