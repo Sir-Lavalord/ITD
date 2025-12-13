@@ -1,4 +1,5 @@
-﻿using ITD.Content.NPCs.Bosses;
+﻿using ITD.Content.Dusts;
+using ITD.Content.NPCs.Bosses;
 using ITD.Particles;
 using ITD.Utilities;
 using System;
@@ -35,14 +36,14 @@ public class CosmicRayMeteorite : ModProjectile
     }
     public override void AI()
     {
-        Projectile.rotation += 0.05f;
+        Projectile.rotation += 0.01f;
         if (Projectile.timeLeft > 30)
         {
             Projectile.Resize(150, 150);
-            Projectile.scale = MathHelper.Clamp(Projectile.scale + 0.05f, 0, 3);
+            Projectile.scale = MathHelper.Clamp(Projectile.scale + 0.05f, 0, 2);
         }
         else
-            Projectile.scale = MathHelper.Clamp(Projectile.scale - 0.2f, 0, 3);
+            Projectile.scale = MathHelper.Clamp(Projectile.scale - 0.2f, 0, 2);
         if (Main.essScale >= 1)
         {
             for (int i = 0; i < 20; i++)
@@ -54,12 +55,19 @@ public class CosmicRayMeteorite : ModProjectile
         }
     }
     public int OwnerIndex => (int)Projectile.ai[0];
+    public int SwordDelay => (int)Projectile.ai[1];
     public override bool? CanDamage()
     {
         return Projectile.scale >= 2f;
     }
     public override void OnSpawn(IEntitySource source)
     {
+        for (int i = 0; i < 14; i++)
+        {
+            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, 2f);
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
+        }
         Projectile.scale = 0;
     }
     public override Color? GetAlpha(Color lightColor)
@@ -72,13 +80,13 @@ public class CosmicRayMeteorite : ModProjectile
         {
             int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.Meteorite, 0, 0, 0, default, 1f);
             Main.dust[dust].noGravity = true;
-            Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 4;
+            Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 12;
         }
         for (int i = 0; i < 16; i++)
         {
             int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.MeteorHead, 0, 0, 0, default, 1f);
             Main.dust[dust].noGravity = true;
-            Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
+            Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 16;
         }
         NPC owner = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
         if (owner == null)
@@ -90,11 +98,11 @@ public class CosmicRayMeteorite : ModProjectile
         else
         {
             Player player = Main.player[owner.target];
-            Vector2 velocity = Vector2.Normalize(player.Center - Projectile.Center);
+            Vector2 velocity = Vector2.Normalize(owner.Center + new Vector2(0, -60) - Projectile.Center);
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero,
-    ModContent.ProjectileType<CosmicSwordStar2>(), Projectile.damage, 0, -1, 0, 0, 60);
+    ModContent.ProjectileType<CosmicSwordStar2>(), Projectile.damage, 0, -1, 0, 0, SwordDelay);
                 proj.rotation = velocity.ToRotation();
             }
         }

@@ -45,8 +45,8 @@ public class CosmicTentacleArena : ModProjectile
         Projectile.timeLeft = 99999;
         Projectile.tileCollide = false;
     }
-    /*    public bool FinalStar => Projectile.ai[1] == 1;
-        public bool RoundTrip => Projectile.ai[2] == 1;*/
+    public ref float distAway => ref Projectile.ai[1];
+    public ref float circleTime => ref Projectile.ai[2];
     public override void OnSpawn(IEntitySource source)
     {
         NPC CosJel = Main.npc[(int)Projectile.ai[0]];
@@ -74,8 +74,6 @@ public class CosmicTentacleArena : ModProjectile
         NPC CosJel = Main.npc[(int)Projectile.ai[0]];
         if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
         {
-            float distAway = 1500;
-            float circleTime = 180;
             switch (AI_State)
             {             
                 case ActionState.Extend:

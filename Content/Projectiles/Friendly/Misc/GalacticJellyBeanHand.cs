@@ -37,7 +37,7 @@ public class GalacticJellyBeanHand : ModProjectile
     private HandState handState = HandState.Default;
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12; // The length of old position to be recorded
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20; // The length of old position to be recorded
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording mode
         Main.projFrames[Type] = 6;
     }
@@ -96,7 +96,7 @@ public class GalacticJellyBeanHand : ModProjectile
         }
         HomingTarget ??= Projectile.FindClosestNPC(homingDistance);
 
-        if (HomingTarget != null && (player.Distance(HomingTarget.Center) > homingDistance || HomingTarget.immortal))
+        if (HomingTarget != null  && handState != HandState.Default && (player.Distance(HomingTarget.Center) > homingDistance || !HomingTarget.CanBeChasedBy()))
         {
             HomingTarget = null;
         }
@@ -176,6 +176,7 @@ public class GalacticJellyBeanHand : ModProjectile
                     else
                     {
                         handState = HandState.Default;
+                        HomingTarget = null;
                     }
                 }
                 Projectile.Center = Vector2.Lerp(Projectile.Center, handTarget, (float)Math.Sin(handSling * Math.PI));

@@ -134,7 +134,6 @@ public class FirestormPlayer : ModPlayer
         return data.End + new Vector2(0, -30);
     }
     public int failAttempt = 0;
-    float failBoost = 1;// to increase the chance of finding ground if it keeps failing
     private void SpawnFirestorm()
     {
         float radius = 150f;

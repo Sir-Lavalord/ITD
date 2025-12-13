@@ -1,6 +1,9 @@
 ﻿using ITD.Content.NPCs.Bosses;
+using ITD.PrimitiveDrawing;
 using System;
+using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel;
 
@@ -18,15 +21,24 @@ public class CosmicRayWarn : ModProjectile
     private ref float Timer => ref Projectile.ai[0];
     private ref float NPCWhoAmI => ref Projectile.ai[1];
     private float maxTime = 240;
+    private float rayWidthMax = 150;
+    private float rayWidth = 0;
 
     public override void OnSpawn(IEntitySource source)
     {
         maxTime = Timer;
     }
     bool spawnAnim;
+    
     public override void AI()
     {
         NPC CosJel = Main.npc[(int)NPCWhoAmI];
+        if (CosJel == null)
+        {
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
+        }
         Projectile.Center = CosJel.Center - new Vector2(0, 12);
         if (!spawnAnim)
         {                //from clamtea
@@ -52,7 +64,7 @@ public class CosmicRayWarn : ModProjectile
             spawnAnim = true;
 
         }
-
+        rayWidth = MathHelper.Lerp(rayWidth, rayWidthMax, 0.025f);
         Projectile.rotation = MathHelper.Pi;
 
         if (CosJel.HasPlayerTarget)
@@ -68,7 +80,7 @@ public class CosmicRayWarn : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        CosmicTelegraphVertex.Draw(Projectile.Center - Main.screenPosition, new Vector2(Projectile.velocity.Length() * CosmicRay.MAXLASERLENGTH, 128 * Projectile.scale), Projectile.rotation + MathHelper.PiOver2);
+        CosmicTelegraphVertex.Draw(Projectile.Center - Main.screenPosition, new Vector2(Projectile.velocity.Length() * CosmicRay.MAXLASERLENGTH, rayWidth), Projectile.rotation + MathHelper.PiOver2);
         return false;
     }
 
@@ -88,6 +100,20 @@ public class CosmicRayWarn : ModProjectile
                     ray.timeLeft = 800;
                 }
             }
+        }
+    }
+    public readonly struct CosmicTelegraphVertex
+    {
+        public static void Draw(Vector2 position, Vector2 size, float rotation)
+        {
+            GameShaders.Misc["Telegraph"]
+                .UseColor(new Color(248, 160, 121, 50))
+                .UseSecondaryColor(new Color(248, 160, 121, 50))
+                .Apply();
+            SimpleSquare.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1f),
+                rotation, position + rotation.ToRotationVector2() * size.X / 2f);
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
         }
     }
 }

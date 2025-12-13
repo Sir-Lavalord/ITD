@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.Graphics.Shaders;
 namespace ITD.Content.Projectiles.Hostile.CosJel;
 
@@ -48,7 +49,7 @@ public class CosmicRay : ModProjectile
 
     public List<CosmicGoos> cosmicGoos = [];
     public float CurrentHitboxesAmount = 0;
-    private readonly int laserWidth = 350;
+    private readonly int laserWidth = 200;
     private int NPCOwner
     {
         get { return (int)Projectile.ai[0]; }
@@ -67,7 +68,6 @@ public class CosmicRay : ModProjectile
     private float sweepDir => Projectile.localAI[0];
     // 0 = no collision, 1 = tile collision only, 2 = tile and platform collisions.
     private ref float CollisionType => ref Projectile.localAI[1];
-    private bool MiniRay => Projectile.localAI[2] != 0;
     // private int max_timeleft;
 
     int LasersLength = 0;
@@ -75,9 +75,16 @@ public class CosmicRay : ModProjectile
     public override void AI()
     {
         NPC npc = Main.npc[NPCOwner];
+        if (npc == null)
+        {
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            Projectile.Kill();
+            return;
+        }
         Player player = Main.player[npc.target];
         player.GetITDPlayer().BetterScreenshake(20, 5, 5, true);
-        Projectile.Center = npc.Center - new Vector2(0, 15);
+        Projectile.Center = npc.Center + new Vector2(0, -60);
         // change the projetile rotation for adjusting the laser rotation
         if (!spawnAnim)
         {                //from clamtea
@@ -102,6 +109,14 @@ public class CosmicRay : ModProjectile
         if (slopTimer++>SWEEPTIME * 2)
         {
             Projectile.Kill();
+        }
+        if (slopTimer % 15 == 0)
+        {
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
+            {
+                PositionInWorld = Projectile.Center,
+
+            }, Projectile.whoAmI);
         }
         Projectile.velocity = Projectile.rotation.ToRotationVector2();
         UpdateLaserCollision();
@@ -147,9 +162,9 @@ public class CosmicRay : ModProjectile
             {
 
                 Projectile.scale += 0.2f;
-                player.GetModPlayer<ITDPlayer>().BetterScreenshake(2, 2, 2, true);
+                player.GetModPlayer<ITDPlayer>().BetterScreenshake(4, 5, 2, true);
+                other.ai[1] = (360 - slopTimer) /2;
                 other.Kill();
-                other.active = false;
                 for (int j = 0; j < 20; j++)
                 {
                     Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CosJelDust>(), 0, 0, 60, default, Main.rand.NextFloat(1f, 1.7f));
@@ -201,12 +216,7 @@ public class CosmicRay : ModProjectile
     public override bool PreDraw(ref Color lightColor)
     {
         CosmicLaserImpactVertex.Draw(Projectile.Center - Main.screenPosition + Projectile.velocity * CurrentLasterLength, 0, new Vector2(Projectile.width * 1f, Projectile.height * 0.25f), Projectile.timeLeft / 120f, (float)Projectile.timeLeft / 60);
-
-        if (!MiniRay)
-            CosmicLaserVertex.Draw(Projectile.Center - Main.screenPosition, Projectile.rotation, new Vector2(Projectile.velocity.Length() * CurrentLasterLength, laserWidth));
-        else
-            CosmicLaserMiniVertex.Draw(Projectile.Center - Main.screenPosition, Projectile.rotation, new Vector2(Projectile.velocity.Length() * CurrentLasterLength, laserWidth));
-
+        CosmicLaserVertex.Draw(Projectile.Center - Main.screenPosition, Projectile.rotation, new Vector2(Projectile.velocity.Length() * CurrentLasterLength, laserWidth));
         //foreach (CosmicGoos goo in cosmicGoos)
         //{
         //    default(CosmicGooVertex).Draw(goo.hitbox.Center.ToVector2() - Main.screenPosition, goo.rotation, new Vector2(Projectile.width, Projectile.height), MathHelper.Min((float)goo.timeleft / 120f,(float)Projectile.timeLeft / max_timeleft), (float)goo.timeleft / 60f);
@@ -261,23 +271,27 @@ public readonly struct CosmicLaserVertex
     public static void Draw(Vector2 position, float rotation, Vector2 size)
     {
         MiscShaderData shader = GameShaders.Misc["CosmicLaser"];
-
-        //purple laser 
-        shader
-            .UseShaderSpecificData(new Vector4(size.X, 2, 0, 0)) //Laserlength, Flow speed, none, none
-            .UseImage0(TextureAssets.Extra[ExtrasID.MagicMissileTrailErosion])
-            .UseColor(new Color(192, 59, 166,50))
-            .Apply();
-
-        SimpleSquare.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1.5f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
-
         //beige laser 
         shader
-            .UseColor(new Color(192, 59, 166, 50))
+            .UseColor(new Color(248, 160, 121, 50))
+            .Apply();
+
+        SimpleSquare.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1.25f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
+        //purple laser 
+        shader
+            .UseShaderSpecificData(new Vector4(size.X, 0.5f, 0, 0)) //Laserlength, Flow speed, none, none
+            .UseImage0(TextureAssets.Extra[ExtrasID.MagicMissileTrailErosion])
+            .UseColor(new Color(255, 255, 255, 50))
             .Apply();
 
         SimpleSquare.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 1f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
 
+        //beige laser 
+        shader
+            .UseColor(new Color(15, 13, 59, 50))
+            .Apply();
+
+        SimpleSquare.Draw(position + rotation.ToRotationVector2() * (size.X * 0.5f), Color.White, size * new Vector2(1, 0.75f), rotation, position + rotation.ToRotationVector2() * size.X / 2f);
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }
 }
