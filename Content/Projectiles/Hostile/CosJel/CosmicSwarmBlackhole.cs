@@ -107,7 +107,7 @@ public class CosmicSwarmBlackhole : ITDProjectile
             case ActionState.Opening:
                 Projectile.Center = new Vector2(player.Center.X, MathHelper.Lerp(Projectile.Center.Y, player.Center.Y + Main.screenHeight / 3, 0.1f));
 
-                Projectile.scale = MathHelper.Clamp(Projectile.scale + 0.01f, 0, 1);
+                Projectile.scale = MathHelper.Clamp(Projectile.scale + 0.02f, 0, 1);
                 if (Projectile.scale >= 1)
                 {
                     AI_State = ActionState.Aligning;
@@ -115,9 +115,9 @@ public class CosmicSwarmBlackhole : ITDProjectile
                 }
                 break;
             case ActionState.Aligning:
-                if (Projectile.localAI[0]++ <= 60)
+                if (Projectile.localAI[0]++ <= 45)
                 {
-                    Projectile.Center = Vector2.Lerp(Projectile.Center, new Vector2(player.Center.X + player.velocity.X * 40, player.Center.Y + Main.screenHeight / 3),0.2f);
+                    Projectile.Center = Vector2.Lerp(Projectile.Center, new Vector2(player.Center.X + player.velocity.X * 60, player.Center.Y + Main.screenHeight / 3) ,0.2f);
                 }
                 else
                 {
@@ -135,7 +135,7 @@ public class CosmicSwarmBlackhole : ITDProjectile
                 }
                 break;
             case ActionState.Spamming:
-                if (Projectile.localAI[0]++ <= 360)
+                if (Projectile.localAI[0]++ <= 200)
                 {
                     if (Projectile.scale > 1)
                     Projectile.scale = MathHelper.Clamp(Projectile.scale - 0.05f, 1, 2);
@@ -186,7 +186,7 @@ public class CosmicSwarmBlackhole : ITDProjectile
 
                         }
                     }
-                    if (Projectile.localAI[0] % 5 == 0 && Projectile.localAI[0] <= 200)
+                    if (Projectile.localAI[0] % 5 == 0 && Projectile.localAI[0] <= 140)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
@@ -194,7 +194,7 @@ public class CosmicSwarmBlackhole : ITDProjectile
                             Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), 
                                 Projectile.Center - new Vector2(Main.rand.NextFloat(-600,600), Main.rand.NextFloat(2000,2600)),  Vector2.Zero,
                                 ModContent.ProjectileType<CosmicSwarm>(), damage, 0, Main.myPlayer, 0, 1);
-                            proj.velocity = Vector2.Normalize(Projectile.Center - proj.Center) * 24 * Main.rand.NextFloat(0.9f,1.1f);
+                            proj.velocity = Vector2.Normalize(Projectile.Center - proj.Center) * 24 * Main.rand.NextFloat(1.25f,1.75f);
                             proj.rotation = proj.velocity.ToRotation();
                         }
                     }
