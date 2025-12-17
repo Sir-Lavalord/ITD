@@ -28,7 +28,7 @@ public class CosmicStarlitBlackhole : ModProjectile
         Projectile.ignoreWater = true;
         Projectile.light = 1f;
         Projectile.tileCollide = true;
-        Projectile.timeLeft = 1200;
+        Projectile.timeLeft = 600;
         Projectile.penetrate = -1;
     }
     public override void AI()

@@ -205,7 +205,7 @@ namespace ITD.Content.NPCs.Bosses
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
             notExpertRule.OnSuccess(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<GravityBoots>(), 10));
             notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<CosmicJellyfishMask>(), 7));
-            notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<StarlitOre>(), 1, 15, 30));
+            notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<StarlitOre>(), 1, 30, 60));
             notExpertRule.OnSuccess(ItemDropRule.Common(ItemID.Star, 1, 10, 20));
 
 
@@ -231,9 +231,9 @@ namespace ITD.Content.NPCs.Bosses
         public int ProjectileDamage(int damage)
         {
             if (expertMode)
-                return (int)(damage / 2.5f);      
+                return (int)(damage / 2.25f);      
             if (masterMode)
-                return (int)(damage / 3.5f);
+                return (int)(damage / 3.25f);
             return (int)(damage / 1);
         }
         //kill flag
@@ -331,6 +331,10 @@ namespace ITD.Content.NPCs.Bosses
                         break;
                     MeteorDeathRay(player);   
                     break;
+                case 10: //tidal wave jumpscare
+                    if (!PlayerCheck(player))
+                        break;
+                    break;
             }
         }
         //--------------------------------------------------------------------------------------------------------------------------------
@@ -345,9 +349,15 @@ namespace ITD.Content.NPCs.Bosses
                 player = Main.player[NPC.target];
                 if (!player.active || player.dead || Vector2.Distance(NPC.Center, player.Center) > 4000f || Main.dayTime)
                 {
+                    float maxRotation = MathHelper.Pi / 6;
+                    float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);
                     if (NPC.timeLeft > 60)
                         NPC.timeLeft = 60;
-                    NPC.velocity.Y -= 0.2f;
+                    NPC.velocity.Y -= 0.2f; 
+                    NPC.velocity.X *= 0.95f;
+                    rotation = rotationFactor * maxRotation;
+                    NPC.rotation = rotation;
+                    NPC.Opacity -= 0.01f;
                     NPC.EncourageDespawn(30);
                 }
                 return false;
@@ -449,8 +459,8 @@ namespace ITD.Content.NPCs.Bosses
         {
             distanceAbove = 350;
             AITimer1++;
-
-            if ((AITimer1 >= 120 && AttackCount <= 0) || AITimer1 >= 250)
+            float restTime = masterMode ? 250 : expertMode ? 280 : 300;
+            if ((AITimer1 >= 120 && AttackCount <= 0) || AITimer1 >= restTime)
             {
                 if (AttackCount < 3)
                 {
@@ -467,7 +477,7 @@ namespace ITD.Content.NPCs.Bosses
                 AttackCount++;
             }
 
-            if (AttackCount > 3)
+            if (AttackCount > 3 && AITimer1 >= 150)
             {
                 AttackID = GetNextAttack();
                 ResetStats(true);
@@ -517,13 +527,14 @@ namespace ITD.Content.NPCs.Bosses
                         dist = 400 - AttackCount * 20;
                     }
                     if (AttackCount == finalAttack - 1 && bSecondStage)
-                        dist = 600;
+                        dist = masterMode ? 450 : expertMode ? 500 : 600;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile proj1 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
-                         ModContent.ProjectileType<CosmicFistBarrier>(), ProjectileDamage(NPC.damage), 0f, -1, player.whoAmI, 0, dist);
-                        Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
-                         ModContent.ProjectileType<CosmicFistBarrier>(), ProjectileDamage(NPC.damage), 0f, -1, player.whoAmI, 1, dist);
+                        for (int i = 0; i <= 1; i++)
+                        {
+                            Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero,
+                             ModContent.ProjectileType<CosmicFistBarrier>(), ProjectileDamage(NPC.damage), 0f, -1, player.whoAmI, i, dist);
+                        }
                     }
                 }
                 AITimer1 = 0;
@@ -537,13 +548,13 @@ namespace ITD.Content.NPCs.Bosses
         public void MeteorDash(Player player)
         {
             AITimer1++;
-            distanceAbove = 300;
+            distanceAbove = 250;
             if (AITimer2++ == 90)
             {
                 AI_State = MovementState.Explode;
                 float baseRotation = Main.rand.NextFloat(MathF.Tau);
                 int amount = (expertMode || masterMode) ? 8 : 5;
-                float dist = 1250;
+                float dist = masterMode ? 1000 : expertMode ? 1250 : 1500;
                 for (int i = 0; i < amount; i++)
                 {
                     float rot = baseRotation + MathF.Tau * ((float)i / amount);
@@ -605,7 +616,7 @@ namespace ITD.Content.NPCs.Bosses
         public void TentacleBorder()
         {
             AITimer1++;
-            distanceAbove = 300;
+            distanceAbove = 250;
             float tentacleDistAway = 1500;
             float sweepTime = 180;
             tentacleDistAway = masterMode ? 1200 : expertMode ? 1500 : 1800;
@@ -620,7 +631,7 @@ namespace ITD.Content.NPCs.Bosses
                 }
 
             }
-            if (AITimer1 >= 600)//loop
+            if (AITimer1 >= 400 + sweepTime)//loop
             {
                 AI_State = MovementState.FollowingRegular;
                 AttackID = GetNextAttack();
@@ -634,17 +645,17 @@ namespace ITD.Content.NPCs.Bosses
 
             AITimer1++;
             distanceAbove = 300;
-            int maxAttack = 3;
+            int maxAttack = 100;
+            float restTime = masterMode ? 240 : expertMode ? 320 : 450;
             if (AttackCount < maxAttack)
             {
-                if (AITimer1 >= 90 && AttackCount <= 0 || AITimer1 >= 450)
+                if (AITimer1 >= 90 && AttackCount <= 0 || AITimer1 >= restTime)
                 {
                     AttackCount++;
-
                     Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos, Vector2.Zero,
             ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
                     Blast.ai[1] = 250f;
-                    Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+                    Blast.localAI[1] = Main.rand.NextFloat(0.15f, 0.25f);
                     Blast.netUpdate = true;
                     AITimer1 = 0;
                     AI_State = MovementState.Explode;
@@ -656,11 +667,11 @@ namespace ITD.Content.NPCs.Bosses
 
                 }
             }
-            if (AITimer1 >= 60 && AITimer1 < 120 && AttackCount <= 0 || AITimer1 >= 200 && AITimer1 <= 400)
+            if (AITimer1 >= 60 && AITimer1 < 120 && AttackCount <= 0 || AITimer1 >= restTime - 100 && AITimer1 <= restTime - 50)
             {
                 AI_State = MovementState.FollowingRegular;
             }
-            if (AttackCount >= maxAttack && AITimer1 >= 500)//loop
+            if (AttackCount >= maxAttack && AITimer1 >= restTime + 50)//loop
             {
                 AI_State = MovementState.FollowingRegular;
                 AttackID = GetNextAttack();
@@ -674,14 +685,14 @@ namespace ITD.Content.NPCs.Bosses
             Vector2 eyePos = NPC.Center + new Vector2(0, -60);
 
             AITimer1++;
-            float angleDeviation = 40;
-            float amountFire = 30;
-            float maxDeviation = 80;
+            float angleDeviation = 30;
+            float amountFire = 20;
+            float maxDeviation = 70;
             float maxAmount = 80;
 
             if (expertMode || masterMode)
             {
-                maxDeviation = 90;
+                maxDeviation = 100;
                 maxAmount = 80;
             }
             else if (!expertMode || !masterMode)
@@ -689,8 +700,8 @@ namespace ITD.Content.NPCs.Bosses
                 maxDeviation = 70;
                 maxAmount = 50;
             }
-            amountFire = Math.Clamp(30 + 5 * AttackCount, 0, maxAmount);
-            angleDeviation = Math.Clamp(40 + 10 * AttackCount, 0, maxDeviation);
+            amountFire = Math.Clamp(20 + 5 * AttackCount, 0, maxAmount);
+            angleDeviation = Math.Clamp(30 + 10 * AttackCount, 0, maxDeviation);
             if (AITimer1 == 60)
             {
                 AI_State = MovementState.Explode;
@@ -811,6 +822,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             Vector2 eyePos = NPC.Center + new Vector2(0, -60);
             int hitTime = 4;
+            float restTime = masterMode ? 45 : expertMode ? 60 : 60;
             hitTime = masterMode ? 5 : expertMode ? 5 : 3;
             if (AI_State == MovementState.Teleport)
             {
@@ -822,7 +834,7 @@ namespace ITD.Content.NPCs.Bosses
                 {
                     if (AITimer2 < hitTime)
                     {
-                        if (AITimer1++ >= 60)
+                        if (AITimer1++ >= restTime)
                         {
                             AITimer2++;
                             AITimer1 = 0;
@@ -847,7 +859,7 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     else
                     {
-                        if (AITimer1++ >= 180)
+                        if (AITimer1++ >= restTime * 3)
                         {
                             if (!masterMode && !expertMode)
                             {
@@ -870,7 +882,7 @@ namespace ITD.Content.NPCs.Bosses
                 {
                     if (AITimer2 < hitTime)
                     {
-                        if (AITimer1++ >= 60)
+                        if (AITimer1++ >= restTime)
                         {
                             AITimer2++;
                             AITimer1 = 0;
@@ -896,10 +908,10 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     else
                     {
-                        if (AITimer1++ >= 120)
+                        if (AITimer1++ >= restTime * 2)
                         {
                             AI_State = MovementState.FollowingRegular;
-                            AttackID = GetNextAttack();
+                            AttackID = 7;
                             ResetStats();
                             NPC.dontTakeDamage = false;
                         }
@@ -908,7 +920,6 @@ namespace ITD.Content.NPCs.Bosses
             }
         }
         #endregion
-        Vector2 whereToGo = Vector2.Zero;
 
         private void Movement(Player player)//___________________________________________________________________________________________________________________________________________________
         {
@@ -964,9 +975,9 @@ namespace ITD.Content.NPCs.Bosses
 
                         case 1:
 
-                            if (AITimer1 <= 10)
+                            if (AITimer1 <= 5)
                             {
-                                dashPos = player.Center;
+                                dashPos = player.Center + player.velocity * 10;
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     NPC.velocity *= 0.95f;

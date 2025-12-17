@@ -95,8 +95,8 @@ public class CosmicSwordStar : ModProjectile
                 {
                     Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), eyePos, Vector2.Zero,
             ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
-                    Blast.ai[1] = 250f;
-                    Blast.localAI[1] = Main.rand.NextFloat(0.18f, 0.3f);
+                    Blast.ai[1] = 300f;
+                    Blast.localAI[1] = Main.rand.NextFloat(0.15f, 0.25f);
                     Blast.netUpdate = true; 
                     Projectile.Kill();
                 }
