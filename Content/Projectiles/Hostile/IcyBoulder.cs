@@ -28,6 +28,8 @@ public class IcyBoulder : ModProjectile
     }
     public override void OnKill(int timeLeft)
     {
+        if (Main.dedServ)
+            return;
         SoundEngine.PlaySound(SoundID.Item50, Projectile.Center);
         SoundEngine.PlaySound(SoundID.Item89, Projectile.Center);
         int gore0 = Mod.Find<ModGore>("IcyBoulderGore0").Type;
