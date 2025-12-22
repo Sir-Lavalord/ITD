@@ -286,6 +286,11 @@ public class Sandberus : ITDNPC
 						WrapCount = 0;
                         StateTimer = 95;
                         SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
+						if (Math.Sign(Main.windSpeedCurrent) != NPC.direction)
+						{
+							Main.windSpeedCurrent *= -1f;
+							Main.windSpeedTarget *= -1f;
+						}
                         break;
                     case 1:
                         AI_State = ActionState.Leaping;
