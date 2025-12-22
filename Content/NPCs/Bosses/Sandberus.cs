@@ -24,8 +24,12 @@ public class Sandberus : ITDNPC
     }
     private ActionState AI_State;
     private int StateTimer = 200;
+	private const int ArenaSize = 1500;
+	private float Boundry0 = 0;
+    private float Boundry1 = 0;
     private int AttackCycle = 0;
     //private int ShootCycle = 0;
+	private int WrapCount = 0;
     private float JumpX = 0;
     private float JumpY = 0;
     private bool ValidTargets = true;
@@ -56,14 +60,46 @@ public class Sandberus : ITDNPC
 
     public override void OnSpawn(IEntitySource source)
     {
-        if (Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
+        if (Main.netMode != NetmodeID.MultiplayerClient)
         {
-            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(), ModContent.ProjectileType<SuffocationAura>(), 0, 0, -1, NPC.whoAmI);
+			NPC.TargetClosest(false);
+			Boundry0 = Main.player[NPC.target].Center.X - ArenaSize / 2;
+			Boundry1 = Main.player[NPC.target].Center.X + ArenaSize / 2;
+            Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(Boundry0, NPC.Center.Y), new Vector2(), ModContent.ProjectileType<Dustnado>(), 0, 0, -1, NPC.whoAmI, -1f);
+			Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(Boundry1, NPC.Center.Y), new Vector2(), ModContent.ProjectileType<Dustnado>(), 0, 0, -1, NPC.whoAmI, 1f);
         }
     }
 
     public override void AI()
     {
+		if (NPC.Center.X < Boundry0)
+		{
+			WrapCount++;
+			NPC.TargetClosest(false);
+			for (int k = 0; k < 30; k++)
+            {
+				int dust0 = Dust.NewDust(NPC.position + new Vector2(NPC.width / 2, 0), 0, NPC.height, DustID.Dirt, 0f, 0f, 0, default, 3f);
+				Main.dust[dust0].noGravity = true;
+				Main.dust[dust0].velocity.X = Main.rand.NextFloat(10f, 40f);
+				Main.dust[dust0].velocity.Y = 0;
+			}
+			SoundEngine.PlaySound(SoundID.Item69, NPC.Center);
+			NPC.Bottom = new Vector2(NPC.Bottom.X + ArenaSize, Main.player[NPC.target].Bottom.Y);
+		}
+		if (NPC.Center.X > Boundry1)
+		{
+			WrapCount++;
+			NPC.TargetClosest(false);
+			for (int k = 0; k < 30; k++)
+            {
+				int dust1 = Dust.NewDust(NPC.position + new Vector2(NPC.width / 2, 0), 0, NPC.height, DustID.Dirt, 0f, 0f, 0, default, 3f);
+				Main.dust[dust1].noGravity = true;
+				Main.dust[dust1].velocity.X = -Main.rand.NextFloat(10f, 40f);
+				Main.dust[dust1].velocity.Y = 0;
+			}
+			SoundEngine.PlaySound(SoundID.Item69, NPC.Center);
+			NPC.Bottom = new Vector2(NPC.Bottom.X - ArenaSize, Main.player[NPC.target].Bottom.Y);
+		}
         switch (AI_State)
         {
             case ActionState.Chasing:
@@ -79,7 +115,10 @@ public class Sandberus : ITDNPC
                 break;
             case ActionState.Cooking:
                 NPC.TargetClosest(false);
-                NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();
+                if (AttackCycle == 0) // look in the wind direction before dashing
+					NPC.direction = (int)Math.Sign(Main.windSpeedCurrent);
+				else
+					NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();				
                 NPC.spriteDirection = NPC.direction;
                 NPC.velocity *= 0.9f;
                 //if (StateTimer == 12 && ShootCycle == 0 && NPC.life < NPC.lifeMax*0.66f && Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
@@ -88,23 +127,26 @@ public class Sandberus : ITDNPC
                 //	ShootAttack();
                 break;
             case ActionState.Dashing:
-                if (StateTimer > 30 && (StateTimer < 70 || Main.expertMode))
+                if (StateTimer > 10)
                 {
-                    NPC.velocity.X = NPC.direction * 10f;
-                    if (Main.expertMode)
-                        NPC.velocity.X *= 1.2f;
+                    NPC.velocity.X += NPC.direction;
+					if (Main.expertMode)
+                        NPC.velocity.X += NPC.direction;
+					NPC.velocity.X = Math.Clamp(NPC.velocity.X, -24f, 24f);
                 }
                 else
-                    NPC.velocity.X *= 0.9f;
-                StepUp();
-                if (NPC.collideX)
-                {
-                    StateTimer = 1;
-                    Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 4, 4, false);
-                    SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
-                }
-                else if (Math.Abs(NPC.velocity.X) > 6 && Main.netMode != NetmodeID.MultiplayerClient)
-                    SpikeTrail();
+                    NPC.velocity.X *= 0.95f;
+				if (WrapCount < 4)
+						StateTimer = 12;
+                //StepUp();
+                //if (NPC.collideX)
+                //{
+                //    StateTimer = 1;
+                //    Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 4, 4, false);
+                //    SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
+                //}
+                //else if (Math.Abs(NPC.velocity.X) > 6 && Main.netMode != NetmodeID.MultiplayerClient)
+                //    SpikeTrail();
                 break;
             case ActionState.Leaping:
                 if (StateTimer > 10)
@@ -178,6 +220,20 @@ public class Sandberus : ITDNPC
             case ActionState.Chasing:
                 AI_State = ActionState.Cooking;
                 StateTimer = 25;
+				
+				AttackCycle = ++AttackCycle % 3;
+				NPC.TargetClosest(false);
+                if (Main.player[NPC.target].dead)
+                {
+                    ValidTargets = false;
+                    AttackCycle = 1; // leap offscreen and despawn
+                }
+				
+				if (AttackCycle == 0) // look in the wind direction before dashing
+					NPC.direction = (int)Math.Sign(Main.windSpeedCurrent);
+				else
+					NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();				
+				NPC.spriteDirection = NPC.direction;
                 //if (Main.expertMode)
                 //	ShootCycle = ++ShootCycle % 2;
                 //else
@@ -186,20 +242,14 @@ public class Sandberus : ITDNPC
                 //	ShootAttack();
                 break;
             case ActionState.Cooking:
-                AttackCycle = ++AttackCycle % 3;
-                NPC.TargetClosest(false);
-                if (Main.player[NPC.target].dead)
-                {
-                    ValidTargets = false;
-                    AttackCycle = 1;
-                }
-                NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();
-                NPC.spriteDirection = NPC.direction;
                 switch (AttackCycle)
                 {
                     case 0:
                         AI_State = ActionState.Dashing;
-                        StateTimer = 80;
+						NPC.noGravity = true;
+						NPC.noTileCollide = true;
+						WrapCount = 0;
+                        StateTimer = 12;
                         SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
                         break;
                     case 1:
@@ -227,6 +277,12 @@ public class Sandberus : ITDNPC
                         break;
 
                 }
+                break;
+			case ActionState.Dashing:
+				NPC.noGravity = false;
+				NPC.noTileCollide = false;
+				AI_State = ActionState.Chasing;
+                StateTimer = 100;
                 break;
             default:
                 AI_State = ActionState.Chasing;

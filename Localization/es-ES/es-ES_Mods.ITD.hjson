@@ -266,6 +266,7 @@ Projectiles: {
 	// CosmicSwordStar2.DisplayName: Cosmic Sword Star2
 	// CosmicStarlitBlackhole.DisplayName: Cosmic Starlit Blackhole
 	// CosmicRayMeteorite.DisplayName: Cosmic Ray Meteorite
+	// Dustnado.DisplayName: Dustnado
 }
 
 NPCs: {
