@@ -75,8 +75,6 @@ public class Sandberus : ITDNPC
     {
 		if (NPC.Center.X < Boundry0)
 		{
-			WrapCount++;
-			
 			for (int k = 0; k < 30; k++)
             {
 				int dust0 = Dust.NewDust(NPC.position + new Vector2(NPC.width / 2, 0), 0, NPC.height, DustID.Dirt, 0f, 0f, 0, default, 3f);
@@ -92,12 +90,12 @@ public class Sandberus : ITDNPC
 				Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(14f, 4f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
 				Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(12f, 6f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
             }
+			NPC.Bottom = new Vector2(Boundry1, NPC.Bottom.Y);
 			NPC.TargetClosest(false);
-			NPC.Bottom = new Vector2(NPC.Bottom.X + ArenaSize, Main.player[NPC.target].Bottom.Y);
+			NPC.Bottom = new Vector2(Boundry1, Main.player[NPC.target].Bottom.Y);
 		}
 		if (NPC.Center.X > Boundry1)
 		{
-			WrapCount++;
 			for (int k = 0; k < 30; k++)
             {
 				int dust1 = Dust.NewDust(NPC.position + new Vector2(NPC.width / 2, 0), 0, NPC.height, DustID.Dirt, 0f, 0f, 0, default, 3f);
@@ -113,8 +111,9 @@ public class Sandberus : ITDNPC
 				Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(-14f, 4f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
 				Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(-12f, 6f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
             }
+			NPC.Bottom = new Vector2(Boundry0, NPC.Bottom.Y);
 			NPC.TargetClosest(false);
-			NPC.Bottom = new Vector2(NPC.Bottom.X - ArenaSize, Main.player[NPC.target].Bottom.Y);
+			NPC.Bottom = new Vector2(Boundry0, Main.player[NPC.target].Bottom.Y);
 		}
         switch (AI_State)
         {
@@ -141,28 +140,34 @@ public class Sandberus : ITDNPC
                 //	ShootAttack();
                 break;
             case ActionState.Dashing:
-                if (StateTimer > 10)
+				if (NPC.collideX && StateTimer < 95)
+				{
+					StateTimer = 1;
+					Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 4, 4, false);
+					SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
+				}
+                if (StateTimer > 20)
                 {
-                    NPC.velocity.X += NPC.direction;
-					if (Main.expertMode)
-                        NPC.velocity.X += NPC.direction;
-					NPC.velocity.X = Math.Clamp(NPC.velocity.X, -20f, 20f);
-					if (WrapCount < 4)
-						StateTimer = 12;
+                    NPC.velocity.X = NPC.direction * 20f;
                 }
                 else
 				{
-					NPC.noGravity = false;
-					NPC.noTileCollide = false;
-					if (NPC.collideX)
+                    NPC.velocity.X *= 0.9f;
+					if (StateTimer == 1 && WrapCount < 4)
 					{
-						StateTimer = 1;
-						Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 4, 4, false);
-						SoundEngine.PlaySound(SoundID.Item62, NPC.Center);
+						WrapCount++;
+						StateTimer = 96;
+						SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
+						NPC.direction *= -1;	
+						NPC.spriteDirection = NPC.direction;						
+						if (Math.Sign(Main.windSpeedCurrent) != NPC.direction)
+						{
+							Main.windSpeedCurrent *= -1f;
+							Main.windSpeedTarget *= -1f;
+						}
 					}
-                    NPC.velocity.X *= 0.95f;
 				}
-                //StepUp();
+                StepUp();
                 //if (NPC.collideX)
                 //{
                 //    StateTimer = 1;
@@ -239,10 +244,13 @@ public class Sandberus : ITDNPC
 				break;
         }
 
-        int dust = Dust.NewDust(NPC.position + new Vector2(0f, NPC.height), NPC.width, 0, DustID.Dirt, 0f, 0f, 0, default, 1.5f);
-        Main.dust[dust].noGravity = true;
-        Main.dust[dust].velocity.X = NPC.velocity.X * 0.5f;
-        Main.dust[dust].velocity.Y = -2f * Main.rand.NextFloat();
+		if (Math.Abs(NPC.velocity.X) > 2f && NPC.collideY)
+		{
+			int dust = Dust.NewDust(NPC.position + new Vector2(0f, NPC.height), NPC.width, 0, DustID.Dirt, 0f, 0f, 0, default, 1.5f);
+			Main.dust[dust].noGravity = true;
+			Main.dust[dust].velocity.X = NPC.velocity.X * 0.5f;
+			Main.dust[dust].velocity.Y = -2f * Main.rand.NextFloat();
+		}
 
         StateTimer--;
         if (StateTimer == 0)
@@ -275,10 +283,8 @@ public class Sandberus : ITDNPC
                 {
                     case 0:
                         AI_State = ActionState.Dashing;
-						NPC.noGravity = true;
-						NPC.noTileCollide = true;
 						WrapCount = 0;
-                        StateTimer = 12;
+                        StateTimer = 95;
                         SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
                         break;
                     case 1:
@@ -309,8 +315,6 @@ public class Sandberus : ITDNPC
                         AI_State = ActionState.Roaring;
                         StateTimer = 55;
 						Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 4, 4, false);
-						Main.windSpeedCurrent *= -1f;
-						Main.windSpeedTarget *= -1f;
 						SoundEngine.PlaySound(SoundID.Roar, NPC.Center);
                         break;
 
