@@ -47,18 +47,20 @@ public class Dustnado : ModProjectile
     {
         Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 		int frameHeight = texture.Height / Main.projFrames[Projectile.type];
-		for (int k = 0; k < 24; k++)
+		for (int k = 0; k < 22; k++)
         {
 			Rectangle frameRect = new(0, frameHeight * ((k + (int)(Main.GlobalTimeWrappedHourly * 16)) % Main.projFrames[Projectile.type]), texture.Width, frameHeight);
 			const float scale = 1.8f;
-			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition + new Vector2(0, (frameHeight - 4) * scale * (k - 12)), frameRect, Color.White * 0.5f, Projectile.rotation, new Vector2(texture.Width / 2, 0), new Vector2(scale * 1.5f + (float)Math.Sin(k + Main.GlobalTimeWrappedHourly) * 0.35f, scale), SpriteEffects.None);
+			Vector2 drawPos = Projectile.Center + new Vector2(0, (frameHeight - 2) * scale * (k - 10.5f));
+			Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frameRect, Lighting.GetColor(drawPos.ToTileCoordinates()) * 0.5f, Projectile.rotation, new Vector2(texture.Width / 2, frameHeight / 2), new Vector2(scale * 1.5f + (float)Math.Sin(k + Main.GlobalTimeWrappedHourly) * 0.35f, scale), SpriteEffects.None);
 		}
 		
 		for (int k = 0; k < 24; k++)
         {
 			Rectangle frameRect = new(0, frameHeight * ((k + (int)(Main.GlobalTimeWrappedHourly * 16)) % Main.projFrames[Projectile.type]), texture.Width, frameHeight);
 			const float scale = 1.6f;
-			Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition + new Vector2(0, (frameHeight - 4) * scale * (k - 12)), frameRect, Color.White, Projectile.rotation, new Vector2(texture.Width / 2, 0), new Vector2(scale * 1.5f + (float)Math.Sin(k + Main.GlobalTimeWrappedHourly) * 0.35f, scale), SpriteEffects.None);
+			Vector2 drawPos = Projectile.Center + new Vector2(0, (frameHeight - 4) * scale * (k - 11.5f));
+			Main.EntitySpriteDraw(texture, drawPos - Main.screenPosition, frameRect, Lighting.GetColor(drawPos.ToTileCoordinates()), Projectile.rotation, new Vector2(texture.Width / 2, frameHeight / 2), new Vector2(scale * 1.5f + (float)Math.Sin(k + Main.GlobalTimeWrappedHourly) * 0.35f, scale), SpriteEffects.None);
 		}
 
         return false;

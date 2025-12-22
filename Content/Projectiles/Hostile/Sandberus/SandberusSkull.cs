@@ -22,27 +22,14 @@ public class SandberusSkull : ModProjectile
 
     public override void AI()
     {
-        int target = Player.FindClosest(Projectile.Center, 1, 1);
-        Projectile.ai[1] += 1f;
-        if (Projectile.ai[1] < 110f)
-        {
-            float scaleFactor = Projectile.velocity.Length();
-            Vector2 distance = Main.player[target].Center - Projectile.Center;
-            distance.Normalize();
-            distance *= scaleFactor;
-            Projectile.velocity = (Projectile.velocity * 14f + distance) / 15f;
-            Projectile.velocity.Normalize();
-            Projectile.velocity *= scaleFactor;
-        }
         if (Projectile.velocity.Length() < 18f)
         {
-            Projectile.velocity *= 1.02f;
+            Projectile.velocity *= 1.05f;
         }
         if (Projectile.localAI[0] == 0f)
         {
             Projectile.localAI[0] = 1f;
-            SoundEngine.PlaySound(SoundID.NPCDeath13, Projectile.position);
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 3; i++)
             {
                 int spawnDust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Dirt, Projectile.velocity.X, Projectile.velocity.Y, 0, default, 2f);
                 Main.dust[spawnDust].noGravity = true;
