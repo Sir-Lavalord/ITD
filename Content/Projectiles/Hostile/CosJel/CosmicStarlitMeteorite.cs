@@ -44,10 +44,14 @@ public class CosmicStarlitMeteorite : ITDProjectile
     public override void OnSpawn(IEntitySource source)
     {
         Projectile.scale = 0f;
-        if (emitter != null)
+        // Only create client-side visual emitters when not a dedicated server.
+        if (!Main.dedServ)
+        {
+            emitter = ParticleSystem.NewEmitter<SpaceMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+            emitter.tag = Projectile;
             emitter.keptAlive = true;
+        }
     }
-
     public override Color? GetAlpha(Color lightColor)
     {
         return Color.White * (1f - Projectile.alpha / 255f);
@@ -88,11 +92,14 @@ public class CosmicStarlitMeteorite : ITDProjectile
         {
             innerScale = 1f;
         }
-        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => 
-        Main.EntitySpriteDraw(texture2, Projectile.Center - Main.screenPosition, frame2, new Color(122, 0, 208, 0) * Main.essScale,
-        Projectile.rotation, new Vector2(texture2.Width * 0.5f, texture2.Height / Main.projFrames[Type] * 0.5f), innerScale * Projectile.scale * 1.25f *  Main.essScale, SpriteEffects.None, 0f));
+        if (!Main.dedServ)
+        {
+            Main.EntitySpriteDraw(texture2, Projectile.Center - Main.screenPosition, frame2, new Color(122, 0, 208, 0) * Main.essScale,
+                Projectile.rotation, new Vector2(texture2.Width * 0.5f, texture2.Height / Main.projFrames[Type] * 0.5f), innerScale * Projectile.scale * 1.25f * Main.essScale, SpriteEffects.None, 0f);
 
-        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => DrawAtProj(outline));
+            DrawAtProj(outline);
+        }
+
         if (Projectile.timeLeft >= 5)
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(texture.Width * 0.5f, texture.Height / Main.projFrames[Type] * 0.5f), innerScale * Projectile.scale, SpriteEffects.None, 0f);
 
@@ -178,6 +185,12 @@ public class CosmicStarlitMeteorite : ITDProjectile
     }
     public override void OnKill(int timeLeft)
     {
+        if (!Main.dedServ && emitter != null)
+        {
+            emitter.keptAlive = false;
+            emitter = null;
+        }
+
         NPC owner = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
         if (owner == null)
         {
@@ -203,7 +216,7 @@ public class CosmicStarlitMeteorite : ITDProjectile
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CosmicStarlitBlackhole>(), Projectile.damage, 1, Main.myPlayer, 0, 1);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CosmicStarlitBlackhole>(), (int)(Projectile.damage / 3), 1, Main.myPlayer, 0, 1);
             }
         }
     }

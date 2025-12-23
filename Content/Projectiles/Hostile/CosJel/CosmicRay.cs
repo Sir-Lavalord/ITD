@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Dusts;
+using ITD.Content.NPCs.Bosses;
 using ITD.Particles;
 using ITD.Particles.CosJel;
 using ITD.PrimitiveDrawing;
@@ -74,12 +75,11 @@ public class CosmicRay : ModProjectile
     bool spawnAnim = false;
     public override void AI()
     {
-        NPC npc = Main.npc[NPCOwner];
+        NPC npc = MiscHelpers.NPCExists(NPCOwner, ModContent.NPCType<CosmicJellyfish>());
         if (npc == null)
         {
             Projectile.timeLeft = 0;
             Projectile.active = false;
-            Projectile.Kill();
             return;
         }
         Player player = Main.player[npc.target];
@@ -106,10 +106,14 @@ public class CosmicRay : ModProjectile
 
         }
         Projectile.rotation -= ((float)Math.PI / SWEEPTIME) * sweepDir;
-        if (slopTimer++>SWEEPTIME * 2)
+        if (slopTimer++ > SWEEPTIME * 2)
         {
             Projectile.Kill();
+
         }
+
+        UpdateLaserCollision();
+    
         if (slopTimer % 15 == 0)
         {
             ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
@@ -119,7 +123,6 @@ public class CosmicRay : ModProjectile
             }, Projectile.whoAmI);
         }
         Projectile.velocity = Projectile.rotation.ToRotationVector2();
-        UpdateLaserCollision();
 
         //update current laser length slowly, if you dont want that, just uncomment the comment at the end of the AI hook
         if (LasersLength > CurrentLasterLength)

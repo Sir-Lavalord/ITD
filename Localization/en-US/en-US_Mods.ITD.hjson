@@ -267,6 +267,7 @@ Projectiles: {
 	CosmicStarlitBlackhole.DisplayName: Cosmic Starlit Blackhole
 	CosmicRayMeteorite.DisplayName: Cosmic Ray Meteorite
 	Dustnado.DisplayName: Dustnado
+	CosmicTentacleArena2.DisplayName: Cosmic Tentacle Arena2
 }
 
 NPCs: {

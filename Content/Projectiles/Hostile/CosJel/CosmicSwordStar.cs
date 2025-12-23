@@ -71,6 +71,8 @@ public class CosmicSwordStar : ModProjectile
         }
         else
         {
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
             Projectile.Kill();
         }
     }
@@ -85,6 +87,13 @@ public class CosmicSwordStar : ModProjectile
     public override void AI()
     {
         NPC CosJel = Main.npc[(int)Projectile.ai[0]];
+        if (CosJel == null)
+        {
+            Projectile.Kill();
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
+        }
         Vector2 eyePos = CosJel.Center + new Vector2(0, -60);
         if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
         {
@@ -93,11 +102,14 @@ public class CosmicSwordStar : ModProjectile
             {
                 if (FinalStar)
                 {
-                    Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), eyePos, Vector2.Zero,
-            ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
-                    Blast.ai[1] = 300f;
-                    Blast.localAI[1] = Main.rand.NextFloat(0.15f, 0.25f);
-                    Blast.netUpdate = true; 
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), eyePos, Vector2.Zero,
+                            ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
+                        Blast.ai[1] = 300f;
+                        Blast.localAI[1] = Main.rand.NextFloat(0.15f, 0.25f);
+                        Blast.netUpdate = true;
+                    }
                     Projectile.Kill();
                 }
                 Projectile.Kill();

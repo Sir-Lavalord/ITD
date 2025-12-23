@@ -11,7 +11,7 @@ using Terraria.UI;
 
 namespace ITD.Content.Projectiles.Hostile.CosJel;
 
-public class CosmicTentacleArena : ModProjectile
+public class CosmicTentacleArena2 : ModProjectile
 {
 
     private static Asset<Texture2D> segmentA = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Hostile/CosJel/CosmicTentacleSegmentA");
@@ -44,7 +44,6 @@ public class CosmicTentacleArena : ModProjectile
         Projectile.hide = true;
         Projectile.timeLeft = 99999;
         Projectile.tileCollide = false;
-        Projectile.netImportant = true;
     }
     public ref float distAway => ref Projectile.ai[1];
     public ref float circleTime => ref Projectile.ai[2];
@@ -78,13 +77,13 @@ public class CosmicTentacleArena : ModProjectile
             switch (AI_State)
             {             
                 case ActionState.Extend:
-                    if (Projectile.localAI[0]++ < 60)
+                    if (Projectile.localAI[0]++ < 30)
                     {
-                        Projectile.Center = Vector2.Lerp(Projectile.Center, CosJel.Center + new Vector2(0, -distAway), 0.05f);
+                        Projectile.Center = Vector2.Lerp(Projectile.Center, CosJel.Center + new Vector2(0, distAway), 0.1f);
                     }
-                    else if (Projectile.localAI[0] >= 60)
+                    else if (Projectile.localAI[0] >= 30)
                     {
-                        Projectile.Center = CosJel.Center + new Vector2(0, -distAway).RotatedBy(Projectile.localAI[1]);
+                        Projectile.Center = CosJel.Center + new Vector2(0, distAway).RotatedBy(Projectile.localAI[1]);
                         AI_State = ActionState.Spinning;
                         Projectile.localAI[0] = 0;
                         zapGlow = 1;
@@ -95,28 +94,26 @@ public class CosmicTentacleArena : ModProjectile
                     {
                         Projectile.localAI[1] -= ((float)Math.PI / circleTime) * sweepDir;
 
-                        Projectile.Center = CosJel.Center + new Vector2(0, -distAway).RotatedBy(Projectile.localAI[1]);
+                        Projectile.Center = CosJel.Center + new Vector2(0, distAway).RotatedBy(Projectile.localAI[1]);
                         zapDog = true;
                         if (zapDog)
                         {
-                            if (Projectile.localAI[0] % 4 == 0)
+                            if (Projectile.localAI[0] % 5 == 0)
                             {
                                 for (int i = 0; i < 2; i++)
                                 {
-                                    int dust = Dust.NewDust(Projectile.position, Projectile.width / 2, Projectile.height / 2, DustID.Electric, 0, 0, 0, default, 2f);
+                                    int dust = Dust.NewDust(Projectile.position, Projectile.width / 2, Projectile.height / 2, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, 2f);
                                     Main.dust[dust].noGravity = true;
                                     Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 3;
                                 }
-
-                                if (Main.netMode != NetmodeID.MultiplayerClient) // <- SERVER ONLY spawn
-                                {
-                                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CosmicLightningOrb>(),
-                                        Projectile.damage, 0, 0);
-                                    proj.timeLeft = 60 * 30;
-                                }
+                                Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center,
+                                    Vector2.UnitX.RotatedBy(MathHelper.PiOver2 + Projectile.localAI[1]) * 6, ModContent.ProjectileType<CosmicStar>(),
+                                    Projectile.damage, 0, -1,0,0,0);
+                                proj.timeLeft = 60 * 30;
                             }
+
                         }
-                        if (Projectile.localAI[2]++ >= circleTime * 2)
+                        if (Projectile.localAI[2]++ >= circleTime * 6)
                         {
                             AI_State = ActionState.Retract;
                             zapDog = false;
@@ -126,7 +123,7 @@ public class CosmicTentacleArena : ModProjectile
                     {
                         if (CosJel.HasPlayerTarget)
                         {
-                            sweepDir = Main.player[CosJel.target].Center.X > CosJel.Center.X ? -1 : 1;
+                            sweepDir = Main.player[CosJel.target].Center.X > CosJel.Center.X ? 1 : -1;
                         }
                     }
                     break;
@@ -152,20 +149,8 @@ public class CosmicTentacleArena : ModProjectile
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
-        float num1 = 0f;
-        if (expertMode || masterMode)
-        {
-            NPC CosJel = Main.npc[(int)Projectile.ai[0]];
-
-            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
-                Projectile.Center, CosJel.Center,
-                18f * Projectile.scale, ref num1))
-            {
-
-                return true;
-            }
-        }
-        return base.Colliding(projHitbox, targetHitbox);
+        //fair's fair
+        return false;
     }
     float zapGlow = 1;
 
@@ -227,7 +212,7 @@ public class CosmicTentacleArena : ModProjectile
             }
             if (zapGlow > 0)//fargo eridanus epic
             {
-                float scale = 3f * Projectile.scale * (float)Math.Cos(Math.PI / 2 * zapGlow);
+                float scale = 2f * Projectile.scale * (float)Math.Cos(Math.PI / 2 * zapGlow);
                 float opacity = Projectile.Opacity * (float)Math.Sqrt(zapGlow);
                 Main.spriteBatch.Draw(segmentTextureToDraw.Value, segmentDrawPosition - Main.screenPosition, segmentSourceRectangle, new Color(90, 70, 255, 50) * opacity, segmentRotation, segmentOrigin, 1f * scale, SpriteEffects.None, 0f);
             }

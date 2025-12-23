@@ -35,6 +35,7 @@ public class CosmicRayWarn : ModProjectile
         NPC CosJel = Main.npc[(int)NPCWhoAmI];
         if (CosJel == null)
         {
+            Projectile.Kill();
             Projectile.timeLeft = 0;
             Projectile.active = false;
             return;
@@ -62,7 +63,6 @@ public class CosmicRayWarn : ModProjectile
                 dustIncr++;
             }
             spawnAnim = true;
-
         }
         rayWidth = MathHelper.Lerp(rayWidth, rayWidthMax, 0.025f);
         Projectile.rotation = MathHelper.Pi;

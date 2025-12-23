@@ -47,7 +47,6 @@ public class CosmicChainBomb : ModProjectile
     }
     public override void AI()
     {
-
         if (Projectile.frame >= 2)
         {
             if (doBomb)
@@ -55,8 +54,13 @@ public class CosmicChainBomb : ModProjectile
                 Projectile.ai[2] = 1;
                 lifeLeft--;
                 if (lifeLeft > 0)
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(Projectile.width, 0).RotatedBy(setRotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
-                        Projectile.damage, 0f, Main.myPlayer, lifeLeft, setRotation, 0f);
+                {
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(Projectile.width, 0).RotatedBy(setRotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
+                            Projectile.damage, 0f, Main.myPlayer, lifeLeft, setRotation, 0f);
+                    }
+                }
             }
         }
 
