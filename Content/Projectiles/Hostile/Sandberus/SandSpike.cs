@@ -23,15 +23,10 @@ public class SandSpike : ModProjectile
     public override void AI()
     {
         int dustType = 0;
-        int num2 = 5;
-        int num3 = 5;
-        int num6 = 20;
-        int num7 = 20;
-        int num8 = 30;
         int maxValue = 6;
-        bool flag = Projectile.ai[0] < num6;
-        bool flag2 = Projectile.ai[0] >= num7;
-        bool flag3 = Projectile.ai[0] >= num8;
+        bool flag = Projectile.ai[0] < 30;
+        bool flag2 = Projectile.ai[0] >= 30;
+        bool flag3 = Projectile.ai[0] >= 35;
         Projectile.ai[0] += 1f;
         Projectile.position -= Projectile.velocity;
         if (Projectile.localAI[0] == 0f)
@@ -39,20 +34,22 @@ public class SandSpike : ModProjectile
             Projectile.localAI[0] = 1f;
             Projectile.rotation = Projectile.velocity.ToRotation();
             Projectile.frame = Main.rand.Next(maxValue);
-            for (int i = 0; i < num2 * Projectile.ai[1]; i++)
+            for (int i = 0; i < 5 * Projectile.ai[1]; i++)
             {
-                Dust expr_148 = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24f, 24f), dustType, Projectile.velocity * Projectile.ai[1] * 4f * Main.rand.NextFloat(), 0, default, 0.8f + Main.rand.NextFloat() * 0.5f);
+                Dust dust0 = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24f, 24f), dustType, Projectile.velocity * Projectile.ai[1] * 16f * Main.rand.NextFloat(), 0, default, 1.2f + Main.rand.NextFloat() * 0.5f);
+				dust0.noGravity = true;
             }
-            for (int j = 0; j < num3 * Projectile.ai[1]; j++)
+            for (int j = 0; j < 5 * Projectile.ai[1]; j++)
             {
-                Dust expr_21B = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24f, 24f), dustType, Projectile.velocity * Projectile.ai[1] * 4f * Main.rand.NextFloat(), 0, default, 0.8f + Main.rand.NextFloat() * 0.5f);
-                expr_21B.fadeIn = 1f;
+                Dust dust1 = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24f, 24f), dustType, Projectile.velocity * Projectile.ai[1] * 16f * Main.rand.NextFloat(), 0, default, 1.2f + Main.rand.NextFloat() * 0.5f);
+                dust1.fadeIn = 1f;
+				dust1.noGravity = true;
             }
             SoundEngine.PlaySound(SoundID.Item60, Projectile.Center);
         }
         if (flag)
         {
-            Projectile.Opacity += 0.1f;
+            Projectile.Opacity += 0.2f;
             Projectile.scale = Projectile.Opacity * Projectile.ai[1];
         }
         if (flag2)
@@ -68,7 +65,7 @@ public class SandSpike : ModProjectile
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
         float num32 = 0f;
-        return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity.SafeNormalize(-Vector2.UnitY) * 200f * Projectile.scale, 22f * Projectile.scale, ref num32);
+        return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + Projectile.velocity.SafeNormalize(-Vector2.UnitY) * 180f * Projectile.scale, 22f * Projectile.scale, ref num32);
     }
 
     /*public override void OnKill(int timeLeft)

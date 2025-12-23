@@ -25,7 +25,7 @@ public class Sandberus : ITDNPC
 		Roaring
     }
     private ActionState AI_State;
-    private int StateTimer = 200;
+    private int StateTimer = 90;
 	private const int ArenaSize = 1500;
     private int AttackCycle = 0;
     //private int ShootCycle = 0;
@@ -46,7 +46,7 @@ public class Sandberus : ITDNPC
         NPC.width = 130;
         NPC.height = 110;
         NPC.defense = 2;
-        NPC.lifeMax = 750;
+        NPC.lifeMax = 1000;
         NPC.knockBackResist = 0f;
         NPC.value = Item.buyPrice(gold: 4);
         NPC.HitSound = SoundID.NPCHit1;
@@ -132,7 +132,7 @@ public class Sandberus : ITDNPC
                 NPC.direction = (NPC.Center.X < Main.player[NPC.target].Center.X).ToDirectionInt();
                 NPC.spriteDirection = NPC.direction;
                 NPC.velocity.X += NPC.direction * 0.1f;
-                if (Math.Abs(NPC.velocity.X) > 4f)
+                if (Math.Abs(NPC.velocity.X) > 3.5f)
 					NPC.velocity.X *= 0.9f;
                 StepUp();
                 //Player player = Main.player[NPC.target];
@@ -158,15 +158,15 @@ public class Sandberus : ITDNPC
 				}
                 if (StateTimer > 20)
                 {
-                    NPC.velocity.X = NPC.direction * 20f;
+                    NPC.velocity.X = NPC.direction * 15f;
                 }
                 else
 				{
                     NPC.velocity.X *= 0.9f;
-					if (StateTimer == 1 && WrapCount < 4)
+					if (StateTimer == 1 && WrapCount < 3)
 					{
 						WrapCount++;
-						StateTimer = 96;
+						StateTimer = 116;
 						SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
 						NPC.direction *= -1;	
 						NPC.spriteDirection = NPC.direction;						
@@ -237,18 +237,21 @@ public class Sandberus : ITDNPC
                 NPC.velocity *= 0.9f;
                 break;
 			case ActionState.Roaring:
+				int RoarSkullCount = 7;
+				if (Main.expertMode)
+					RoarSkullCount = 9;
 				if ((StateTimer == 51 || StateTimer == 1) && Main.netMode != NetmodeID.MultiplayerClient)
 				{
-					for (int j = 0; j < 10; j++)
+					for (int j = 0; j < RoarSkullCount; j++)
                     {
-						Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(0f, 4f).RotatedBy(MathHelper.TwoPi / 10f * j), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
+						Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(0f, 4f).RotatedBy(MathHelper.TwoPi / RoarSkullCount * j), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
 					}
 				}
                 if (StateTimer == 26 && Main.netMode != NetmodeID.MultiplayerClient)
 				{
-					for (int j = 0; j < 10; j++)
+					for (int j = 0; j < RoarSkullCount; j++)
                     {
-						Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(0f, 4f).RotatedBy(MathHelper.TwoPi / 10f * (j + 0.5f)), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
+						Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(0f, 4f).RotatedBy(MathHelper.TwoPi / RoarSkullCount * (j + 0.5f)), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
 					}
 				}
 				break;
@@ -273,7 +276,7 @@ public class Sandberus : ITDNPC
         {
             case ActionState.Chasing:
                 AI_State = ActionState.Cooking;
-                StateTimer = 25;
+                StateTimer = 35;
                 //if (Main.expertMode)
                 //	ShootCycle = ++ShootCycle % 2;
                 //else
@@ -294,7 +297,7 @@ public class Sandberus : ITDNPC
                     case 0:
                         AI_State = ActionState.Dashing;
 						WrapCount = 0;
-                        StateTimer = 95;
+                        StateTimer = 115;
                         SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
 						if (Math.Sign(Main.windSpeedCurrent) != NPC.direction)
 						{
@@ -302,7 +305,13 @@ public class Sandberus : ITDNPC
 							Main.windSpeedTarget *= -1f;
 						}
                         break;
-                    case 1:
+					case 1:
+                        AI_State = ActionState.Roaring;
+                        StateTimer = 55;
+						Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 4, 4, false);
+						SoundEngine.PlaySound(SoundID.Roar, NPC.Center);
+                        break;
+                    case 2:
                         AI_State = ActionState.Leaping;
 						NPC.noTileCollide = true;
                         StateTimer = 60;
@@ -310,7 +319,7 @@ public class Sandberus : ITDNPC
                         distance = Main.player[NPC.target].Center - NPC.Center;
                         distance.X /= StateTimer;
                         distance.Y = distance.Y / StateTimer - 0.18f * StateTimer;
-                        JumpX = Math.Clamp(distance.X, -16, 16);
+                        JumpX = Math.Clamp(distance.X + Math.Sign(distance.X) * 2f, -16, 16);
                         JumpY = distance.Y;
                         for (int j = 0; j < 5; j++)
                         {
@@ -320,24 +329,17 @@ public class Sandberus : ITDNPC
                         }
                         SoundEngine.PlaySound(SoundID.NPCDeath17, NPC.Center);
                         break;
-                    case 2:
+                    case 3:
                         AI_State = ActionState.Clawing;
                         StateTimer = 20;
                         NPC.velocity.X = NPC.direction * 12f;
                         SoundEngine.PlaySound(SoundID.Item74, NPC.Center);
                         break;
-					case 3:
-                        AI_State = ActionState.Roaring;
-                        StateTimer = 55;
-						Main.LocalPlayer.GetITDPlayer().BetterScreenshake(20, 4, 4, false);
-						SoundEngine.PlaySound(SoundID.Roar, NPC.Center);
-                        break;
-
                 }
                 break;
             default:
                 AI_State = ActionState.Chasing;
-                StateTimer = 100;
+                StateTimer = 90;
                 break;
         }
     }
@@ -348,21 +350,6 @@ public class Sandberus : ITDNPC
     //	toPlayer.Normalize();
     //	Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, toPlayer * 4f, ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
     //}
-
-    private void SpikeTrail()
-    {
-        Point point = NPC.Bottom.ToTileCoordinates();
-        point.X += -NPC.direction * 3;
-
-        int bestY = SpikeAttackFindBestY(ref point, point.X);
-        if (!WorldGen.ActiveAndWalkableTile(point.X, bestY))
-        {
-            return;
-        }
-        Vector2 position = new(point.X * 16 + 8, bestY * 16 - 8);
-        Vector2 velocity = new Vector2(0f, -1f).RotatedBy((double)(20 * -NPC.direction * 0.7f * (0.7853982f / 20f)), default);
-        Projectile.NewProjectile(NPC.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<SandSpike>(), 15, 0f, -1, 0f, Main.rand.NextFloat(0.4f, 0.6f), 0f);
-    }
 
     private void SpikeAttack(int i)
     {
@@ -376,8 +363,8 @@ public class Sandberus : ITDNPC
             return;
         }
         Vector2 position = new(num * 16 + 8, bestY * 16 - 8);
-        Vector2 velocity = new Vector2(0f, -1f).RotatedBy((double)(i * NPC.direction * 0.7f * (0.7853982f / 20f)), default);
-        Projectile.NewProjectile(NPC.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<SandSpike>(), 15, 0f, -1, 0f, Main.rand.NextFloat(0.1f, 0.2f) + i * 1.1f / 20f, 0f);
+        Vector2 velocity = new Vector2(0f, -1f).RotatedBy((double)(i * NPC.direction * (0.7853982f / 20f)), default);
+        Projectile.NewProjectile(NPC.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<SandSpike>(), 15, 0f, -1, 0f, Main.rand.NextFloat(0.3f, 0.4f) + i * 0.9f / 20f, 0f);
     }
 
     private static int SpikeAttackFindBestY(ref Point sourceTileCoords, int x)
@@ -401,7 +388,7 @@ public class Sandberus : ITDNPC
     public override bool? CanFallThroughPlatforms()
     {
         Player player = Main.player[NPC.target];
-        return AI_State == ActionState.Chasing && player.position.Y > NPC.position.Y + NPC.height;
+        return AI_State == ActionState.Chasing && StateTimer < 80 && player.position.Y > NPC.position.Y + NPC.height;
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

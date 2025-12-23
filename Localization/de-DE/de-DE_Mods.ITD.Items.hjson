@@ -769,7 +769,7 @@ HardmodeGravekeeperBag: {
 
 DuneSkull: {
 	// DisplayName: Dune Skull
-	// Tooltip: Summons Sandberus during a sandstorm
+	// Tooltip: Summons Sandberus in the desert
 }
 
 CyanideArrow: {
