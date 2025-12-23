@@ -8,6 +8,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent.Events;
 
 namespace ITD.Content.NPCs.Bosses;
 
@@ -26,8 +27,6 @@ public class Sandberus : ITDNPC
     private ActionState AI_State;
     private int StateTimer = 200;
 	private const int ArenaSize = 1500;
-	private float Boundry0 = 0;
-    private float Boundry1 = 0;
     private int AttackCycle = 0;
     //private int ShootCycle = 0;
 	private int WrapCount = 0;
@@ -36,6 +35,7 @@ public class Sandberus : ITDNPC
     private bool ValidTargets = true;
     public override void SetStaticDefaultsSafe()
     {
+		NPCID.Sets.MPAllowedEnemies[Type] = true;
         NPCID.Sets.TrailCacheLength[Type] = 5;
         NPCID.Sets.TrailingMode[Type] = 0;
     }
@@ -63,57 +63,67 @@ public class Sandberus : ITDNPC
     {
         if (Main.netMode != NetmodeID.MultiplayerClient)
         {
+			Sandstorm.StartSandstorm();
+			if (Math.Abs(Main.windSpeedCurrent) < 0.6f)
+			{
+				Main.windSpeedCurrent = Math.Sign(Main.windSpeedCurrent) * 0.6f;
+				Main.windSpeedTarget = Main.windSpeedCurrent;
+			}
+			
 			NPC.TargetClosest(false);
-			Boundry0 = Main.player[NPC.target].Center.X - ArenaSize / 2;
-			Boundry1 = Main.player[NPC.target].Center.X + ArenaSize / 2;
-            Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(Boundry0, NPC.Center.Y), new Vector2(), ModContent.ProjectileType<Dustnado>(), 0, 0, -1, NPC.whoAmI, -1f);
-			Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(Boundry1, NPC.Center.Y), new Vector2(), ModContent.ProjectileType<Dustnado>(), 0, 0, -1, NPC.whoAmI, 1f);
+			NPC.ai[0] = Main.player[NPC.target].Center.X - ArenaSize / 2;
+			NPC.ai[1] = Main.player[NPC.target].Center.X + ArenaSize / 2;
+            Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(NPC.ai[0], NPC.Center.Y), new Vector2(), ModContent.ProjectileType<Dustnado>(), 0, 0, -1, NPC.whoAmI, -1f);
+			Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(NPC.ai[1], NPC.Center.Y), new Vector2(), ModContent.ProjectileType<Dustnado>(), 0, 0, -1, NPC.whoAmI, 1f);
         }
     }
 
     public override void AI()
     {
-		if (NPC.Center.X < Boundry0)
+		if (ValidTargets)
 		{
-			for (int k = 0; k < 30; k++)
-            {
-				int dust0 = Dust.NewDust(NPC.position + new Vector2(NPC.width / 2, 0), 0, NPC.height, DustID.Dirt, 0f, 0f, 0, default, 3f);
-				Main.dust[dust0].noGravity = true;
-				Main.dust[dust0].velocity.X = Main.rand.NextFloat(10f, 40f);
-				Main.dust[dust0].velocity.Y = 0;
+			if (NPC.Center.X < NPC.ai[0])
+			{
+				for (int k = 0; k < 30; k++)
+				{
+					int dust0 = Dust.NewDust(NPC.position + new Vector2(NPC.width / 2, 0), 0, NPC.height, DustID.Dirt, 0f, 0f, 0, default, 3f);
+					Main.dust[dust0].noGravity = true;
+					Main.dust[dust0].velocity.X = Main.rand.NextFloat(10f, 40f);
+					Main.dust[dust0].velocity.Y = 0;
+				}
+				SoundEngine.PlaySound(SoundID.Item69, NPC.Center);
+				if (Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
+				{
+					Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(14f, -4f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
+					Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(12f, -6f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
+					Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(14f, 4f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
+					Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(12f, 6f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
+				}
+				NPC.Bottom = new Vector2(NPC.ai[1], NPC.Bottom.Y);
+				NPC.TargetClosest(false);
+				NPC.Bottom = new Vector2(NPC.ai[1], Main.player[NPC.target].Bottom.Y);
 			}
-			SoundEngine.PlaySound(SoundID.Item69, NPC.Center);
-			if (Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(14f, -4f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
-				Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(12f, -6f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
-				Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(14f, 4f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
-				Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(12f, 6f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
-            }
-			NPC.Bottom = new Vector2(Boundry1, NPC.Bottom.Y);
-			NPC.TargetClosest(false);
-			NPC.Bottom = new Vector2(Boundry1, Main.player[NPC.target].Bottom.Y);
-		}
-		if (NPC.Center.X > Boundry1)
-		{
-			for (int k = 0; k < 30; k++)
-            {
-				int dust1 = Dust.NewDust(NPC.position + new Vector2(NPC.width / 2, 0), 0, NPC.height, DustID.Dirt, 0f, 0f, 0, default, 3f);
-				Main.dust[dust1].noGravity = true;
-				Main.dust[dust1].velocity.X = -Main.rand.NextFloat(10f, 40f);
-				Main.dust[dust1].velocity.Y = 0;
+			if (NPC.Center.X > NPC.ai[1])
+			{
+				for (int k = 0; k < 30; k++)
+				{
+					int dust1 = Dust.NewDust(NPC.position + new Vector2(NPC.width / 2, 0), 0, NPC.height, DustID.Dirt, 0f, 0f, 0, default, 3f);
+					Main.dust[dust1].noGravity = true;
+					Main.dust[dust1].velocity.X = -Main.rand.NextFloat(10f, 40f);
+					Main.dust[dust1].velocity.Y = 0;
+				}
+				SoundEngine.PlaySound(SoundID.Item69, NPC.Center);
+				if (Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
+				{
+					Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(-14f, -4f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
+					Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(-12f, -6f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
+					Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(-14f, 4f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
+					Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(-12f, 6f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
+				}
+				NPC.Bottom = new Vector2(NPC.ai[0], NPC.Bottom.Y);
+				NPC.TargetClosest(false);
+				NPC.Bottom = new Vector2(NPC.ai[0], Main.player[NPC.target].Bottom.Y);
 			}
-			SoundEngine.PlaySound(SoundID.Item69, NPC.Center);
-			if (Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(-14f, -4f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
-				Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(-12f, -6f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
-				Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(-14f, 4f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
-				Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(-12f, 6f), ModContent.ProjectileType<SandberusSkull>(), 15, 0, -1);
-            }
-			NPC.Bottom = new Vector2(Boundry0, NPC.Bottom.Y);
-			NPC.TargetClosest(false);
-			NPC.Bottom = new Vector2(Boundry0, Main.player[NPC.target].Bottom.Y);
 		}
         switch (AI_State)
         {

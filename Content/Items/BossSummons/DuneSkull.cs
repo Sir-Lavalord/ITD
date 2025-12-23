@@ -1,5 +1,4 @@
 ﻿using ITD.Content.NPCs.Bosses;
-using Terraria.GameContent.Events;
 
 namespace ITD.Content.Items.BossSummons;
 
@@ -27,8 +26,9 @@ public class DuneSkull : BossSummoner
 
     public override bool CanUseItem(Player player)
     {
-        return !NPC.AnyNPCs(NPCType) && player.ZoneDesert && Sandstorm.Happening;
+        return !NPC.AnyNPCs(NPCType) && player.ZoneDesert;
     }
+	
     public override void AddRecipes()
     {
         CreateRecipe()
