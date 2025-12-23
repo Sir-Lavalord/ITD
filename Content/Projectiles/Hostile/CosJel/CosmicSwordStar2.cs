@@ -53,7 +53,7 @@ public class CosmicSwordStar2 : ModProjectile
     }
     public override bool? CanDamage()
     {
-        return spawnGlow <= 0;
+        return spawnGlow <= 0.1f;
     }
     public override void AI()
     {
@@ -78,7 +78,7 @@ public class CosmicSwordStar2 : ModProjectile
             Projectile.velocity = Vector2.Zero;
         }
 
-        spawnGlow -= 0.02f;
+        spawnGlow -= 0.05f;
     }
     private Color StripColors(float progressOnStrip)
     {

@@ -115,8 +115,12 @@ public class CosmicFistBump : ModProjectile
                     Projectile.Center = Vector2.Lerp(Projectile.Center, playerPos, 0.3f);
                     if (Vector2.Distance(Projectile.Center, playerPos) <= 10)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CosmicFistTelegraph>(),
-                            0, 0f, Main.myPlayer, Projectile.rotation, Projectile.whoAmI, 0f);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
+                                ModContent.ProjectileType<CosmicFistTelegraph>(), 0, 0f, Main.myPlayer, Projectile.rotation, Projectile.whoAmI, 0f);
+                        }
+
                         Projectile.localAI[1] = 0;
                         player.GetITDPlayer().BetterScreenshake(10, 10, 10, true);
 
@@ -126,8 +130,7 @@ public class CosmicFistBump : ModProjectile
                             Dust dust = Dust.NewDustDirect(Projectile.Center, 10, 10, ModContent.DustType<CosJelDust>(), 0, 0, 60, default, Main.rand.NextFloat(1.5f, 2f));
                             dust.noGravity = false;
                             dust.velocity = velo.RotatedByRandom(0.8f) * Main.rand.NextFloat(0.75f, 1.25f);
-
-                        }
+                        }  
                         if (isMainHand)
                         {
                             if (shouldDoStar)
@@ -164,7 +167,7 @@ public class CosmicFistBump : ModProjectile
                         if (Main.rand.NextBool(2))
                         {
                             Vector2 veloDelta = Projectile.velocity;
-                            Projectile proj1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, -((velo * 2f) + veloDelta).RotatedByRandom(0.8f), ModContent.ProjectileType<CosmicWave>(), Projectile.damage, 0, Main.myPlayer);
+                            Projectile proj1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, -((velo * 2f) + veloDelta).RotatedByRandom(0.75f), ModContent.ProjectileType<CosmicWave>(), Projectile.damage, 0, Main.myPlayer);
                             proj1.tileCollide = false;
                             proj1.friendly = false;
                             proj1.hostile = true;
@@ -218,10 +221,13 @@ public class CosmicFistBump : ModProjectile
             {
             }
 
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center +
-            new Vector2(Projectile.width / 2, 0).RotatedBy(Projectile.rotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
-            (int)(Projectile.damage), 0f, Main.myPlayer, 40, Projectile.rotation + MathHelper.PiOver2, 0f);
-        
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center +
+                new Vector2(Projectile.width / 2, 0).RotatedBy(Projectile.rotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
+                (int)(Projectile.damage), 0f, Main.myPlayer, 40, Projectile.rotation + MathHelper.PiOver2, 0f);
+            }
+
             for (int i = 0; i < 20; i++)
             {
                 int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, 2f);

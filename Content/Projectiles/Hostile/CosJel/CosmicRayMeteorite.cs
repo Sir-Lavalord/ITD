@@ -36,6 +36,13 @@ public class CosmicRayMeteorite : ModProjectile
     }
     public override void AI()
     {
+        NPC owner = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
+        if (owner == null)
+        {
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
+        }
         Projectile.rotation += 0.01f;
         if (Projectile.timeLeft > 30)
         {

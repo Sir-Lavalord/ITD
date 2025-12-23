@@ -40,7 +40,8 @@ public class CosmicSwarmBlackhole : ITDProjectile
         Projectile.tileCollide = false;
         Projectile.hide = false;
         Projectile.alpha = 0;
-        Projectile.scale = 1;
+        Projectile.scale = 1; 
+        Projectile.netImportant = true;
         emitter = ParticleSystem.NewEmitter<SpaceMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
         emitter.tag = Projectile;
     }

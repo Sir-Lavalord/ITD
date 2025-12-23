@@ -30,6 +30,8 @@ using Terraria.GameContent.Skies;
 using Terraria.Graphics;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using static System.Net.Mime.MediaTypeNames;
 namespace ITD.Content.NPCs.Bosses
 
 {
@@ -50,17 +52,8 @@ namespace ITD.Content.NPCs.Bosses
             NPCID.Sets.BossBestiaryPriority.Add(Type);
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
             Main.npcFrameCount[NPC.type] = 10;
-            NPCID.Sets.TrailCacheLength[Type] = 10;
+            NPCID.Sets.TrailCacheLength[Type] = 24;
             NPCID.Sets.TrailingMode[Type] = 3;
-        }
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            writer.Write(bFinalAttack);
-            writer.Write(goodtransition);
-            writer.Write(NPC.localAI[1]);
-            writer.Write(NPC.localAI[2]);
-            writer.Write(AIRand);
-
         }
         //AI timer, timer for attacks
         public ref float AITimer1 => ref NPC.ai[1];
@@ -109,8 +102,24 @@ namespace ITD.Content.NPCs.Bosses
 
         public int maxAttack = 5;
         public List<int> availableAttacks;
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write(DashTimer);
+            writer.Write(bFinalAttack);
+            writer.Write(goodtransition);
+            writer.Write(AttackCount);
+            writer.Write(NPC.localAI[0]);
+            writer.Write(NPC.localAI[1]);
+            writer.Write(NPC.localAI[2]);
+            writer.Write(AIRand);
+            writer.Write(maxAttack);
+            
+
+
+        }
         public override void ReceiveExtraAI(BinaryReader reader)
         {
+            DashTimer = reader.ReadSingle();
             bFinalAttack = reader.ReadBoolean();
             goodtransition = reader.ReadInt32();
             AttackCount = reader.ReadSingle();
@@ -118,13 +127,26 @@ namespace ITD.Content.NPCs.Bosses
             NPC.localAI[1] = reader.ReadSingle();
             NPC.localAI[2] = reader.ReadSingle();
             AIRand = reader.ReadSingle();
+            maxAttack = reader.ReadInt32();
+
         }
 
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
+        {
+            if (AI_State == MovementState.SuperDashing)
+            {
+                target.AddBuff(BuffID.BrokenArmor, 300);
+            }
+        }
         public void CheckAttackList()
         {
             if (bSecondStage)
             {
-                maxAttack = 9;
+                if (Main.expertMode || Main.masterMode)
+                {
+                    maxAttack = 10;
+                }
+                else maxAttack = 9;
             }
             else
             {
@@ -156,8 +178,9 @@ namespace ITD.Content.NPCs.Bosses
             Dashing,//is currently dashing
             Explode,//stand still
             Slamdown,//slam attack, is currently dropping down
-            RandomMove,// Sort of lock in but move randomly away from the player
-            Teleport//so cheap god damn
+            Aligning,// aligning for dash
+            Teleport,//so cheap god damn
+            SuperDashing//is bigdashing
         }
         private MovementState AI_State = MovementState.FollowingRegular;// starts in normal follow mode
 
@@ -165,7 +188,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             NPC.width = 180;
             NPC.height = 252;
-            NPC.damage = 15;
+            NPC.damage = 30;
             NPC.defense = 5;
             NPC.lifeMax = 3500;
             NPC.HitSound = new SoundStyle("ITD/Content/Sounds/NPCSounds/Bosses/CosjelOuch")
@@ -231,9 +254,9 @@ namespace ITD.Content.NPCs.Bosses
         public int ProjectileDamage(int damage)
         {
             if (expertMode)
-                return (int)(damage / 2.25f);      
+                return (int)(damage / 2.5f);      
             if (masterMode)
-                return (int)(damage / 3.25f);
+                return (int)(damage / 3.5f);
             return (int)(damage / 1);
         }
         //kill flag
@@ -260,7 +283,8 @@ namespace ITD.Content.NPCs.Bosses
             NPC.damage = NPC.defDamage;
             if (PlayerCheck(player))
                 Movement(player);
-        
+
+
 
             CheckAttackList();
             CheckSecondStage();
@@ -331,9 +355,10 @@ namespace ITD.Content.NPCs.Bosses
                         break;
                     MeteorDeathRay(player);   
                     break;
-                case 10: //tidal wave jumpscare
+                case 10: //blazing star marisa
                     if (!PlayerCheck(player))
                         break;
+                    BlazingStar(player);
                     break;
             }
         }
@@ -397,7 +422,7 @@ namespace ITD.Content.NPCs.Bosses
                 }
             }
         }
-      
+
         public void StartUp()
         {
             distanceAbove = 700;//goes high above player
@@ -507,12 +532,15 @@ namespace ITD.Content.NPCs.Bosses
                     float angleRad = MathHelper.ToRadians(AITimer2);
                     float speed = notFinal ? Main.rand.NextFloat(4f, 10f) : 3f;
                     Vector2 velocity = new Vector2((float)Math.Sin(angleRad), -(float)Math.Cos(angleRad)) * speed;
-                    Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -60), velocity, ModContent.ProjectileType<CosmicGlowStar>(),
-                        ProjectileDamage(NPC.damage),
-                        0f,
-                        -1, player.whoAmI, notFinal ? 30 : 60);
-                    proj.localAI[0] = notFinal ? 0 : 1.5f;
 
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -60), velocity, ModContent.ProjectileType<CosmicGlowStar>(),
+                            ProjectileDamage(NPC.damage),
+                            0f,
+                            -1, player.whoAmI, notFinal ? 30 : 60);
+                        proj.localAI[0] = notFinal ? 0 : 1.5f;
+                    }
                 }
             }
             if ((AITimer1 == 160 && AttackCount < finalAttack) || AITimer1 == 200)
@@ -615,28 +643,41 @@ namespace ITD.Content.NPCs.Bosses
         }
         public void TentacleBorder()
         {
-            AITimer1++;
             distanceAbove = 250;
             float tentacleDistAway = 1500;
             float sweepTime = 180;
             tentacleDistAway = masterMode ? 1200 : expertMode ? 1500 : 1800;
             sweepTime = masterMode ? 150 : expertMode ? 180 : 120;
-            if (AITimer1 == 120)
+            if (AITimer2 <= 0)
             {
-                AI_State = MovementState.Explode;
-                if (Main.netMode != NetmodeID.MultiplayerClient)
+                AI_State = MovementState.Teleport;
+            }
+            else
+            {
+                AITimer1++;
+                if (AITimer1 == 90)
                 {
-                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicTentacleArena>(), ProjectileDamage(NPC.damage), 0f, Main.myPlayer, NPC.whoAmI, tentacleDistAway, sweepTime);
+                    AI_State = MovementState.Explode;
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicTentacleArena>(), ProjectileDamage(NPC.damage), 0f, Main.myPlayer, NPC.whoAmI, tentacleDistAway, sweepTime);
+                    }
 
                 }
-
-            }
-            if (AITimer1 >= 400 + sweepTime)//loop
-            {
-                AI_State = MovementState.FollowingRegular;
-                AttackID = GetNextAttack();
-                ResetStats(true);
-                distanceAbove = 250;
+                if (AITimer1 == 150)
+                {
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicTentacleArena2>(), ProjectileDamage(NPC.damage), 0f, Main.myPlayer, NPC.whoAmI, tentacleDistAway / 6, sweepTime / 5);
+                    }
+                }
+                if (AITimer1 >= 400 + sweepTime)//loop
+                {
+                    AI_State = MovementState.FollowingRegular;
+                    AttackID = GetNextAttack();
+                    ResetStats(true);
+                    distanceAbove = 250;
+                }
             }
         }
         public void WhiteholePortal(Player player)
@@ -645,26 +686,28 @@ namespace ITD.Content.NPCs.Bosses
 
             AITimer1++;
             distanceAbove = 300;
-            int maxAttack = 100;
+            int maxAttack = 6;
             float restTime = masterMode ? 240 : expertMode ? 320 : 450;
             if (AttackCount < maxAttack)
             {
                 if (AITimer1 >= 90 && AttackCount <= 0 || AITimer1 >= restTime)
                 {
                     AttackCount++;
-                    Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos, Vector2.Zero,
-            ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
-                    Blast.ai[1] = 250f;
-                    Blast.localAI[1] = Main.rand.NextFloat(0.15f, 0.25f);
-                    Blast.netUpdate = true;
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile Blast = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos, Vector2.Zero,
+                            ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
+                        Blast.ai[1] = 250f;
+                        Blast.localAI[1] = Main.rand.NextFloat(0.15f, 0.25f);
+                        Blast.netUpdate = true;
+                    }
+
                     AITimer1 = 0;
                     AI_State = MovementState.Explode;
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(player.Center.X, player.Center.Y + Main.screenHeight / 2), Vector2.Zero, ModContent.ProjectileType<CosmicSwarmBlackhole>(), ProjectileDamage(NPC.damage), 0f, Main.myPlayer, NPC.whoAmI, 0, 0);
-
                     }
-
                 }
             }
             if (AITimer1 >= 60 && AITimer1 < 120 && AttackCount <= 0 || AITimer1 >= restTime - 100 && AITimer1 <= restTime - 50)
@@ -734,10 +777,15 @@ namespace ITD.Content.NPCs.Bosses
                 }
                 SoundEngine.PlaySound(SoundID.Item28, eyePos);
                 SoundEngine.PlaySound(SoundID.Item20, eyePos);
-                Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), eyePos +
-                    new Vector2(100, 0).RotatedBy(velocity.ToRotation()), Vector2.Zero,
-                    ModContent.ProjectileType<CosmicSwordStar2>(), ProjectileDamage(NPC.damage), 0, -1, 0, 0, amountFire - (AITimer2));
-                proj.rotation = velocity.ToRotation();
+
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), eyePos +
+                        new Vector2(100, 0).RotatedBy(velocity.ToRotation()), Vector2.Zero,
+                        ModContent.ProjectileType<CosmicSwordStar2>(), ProjectileDamage(NPC.damage), 0, -1, 0, 0, amountFire - (AITimer2));
+                    proj.rotation = velocity.ToRotation();
+                }
+
                 AITimer2++;
                 if (AITimer2 >= amountFire)
                 {
@@ -790,25 +838,28 @@ namespace ITD.Content.NPCs.Bosses
             {
                 distanceAbove = 200;
 
-                if (AITimer1 >= 30)
-                {
-                    AI_State = MovementState.Explode;
-                }
+                AI_State = MovementState.Explode;
                 if (AITimer1++ >= 60)
                 {
                     AttackCount++;
+
                     AITimer1 = 0;
-                    int count = 1 + (int)AttackCount * 2;
-                    float dist = 400 * AttackCount;
-                    float baseRot = 0 + AttackCount * MathHelper.ToRadians(15);
+                    int count = 3 + (int)AttackCount * 2;
+                    float dist = 350 * AttackCount;
+                    float baseRot = MathHelper.ToRadians(180 / (count));
                     SoundEngine.PlaySound(SoundID.Item28, eyePos);
-                    for (int i = 0; i < count; i++)
+
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        float rot = baseRot + MathF.Tau * ((float)i / count);
-                        Vector2 vel = -rot.ToRotationVector2() * 14;
-                        Projectile meteor = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot)
-                            , Vector2.Zero, ModContent.ProjectileType<CosmicRayMeteorite>(), ProjectileDamage(NPC.damage), 1f, Main.myPlayer, NPC.whoAmI,60 * AttackCount);
+                        for (int i = 0; i < count; i++)
+                        {
+                            float rot = baseRot + MathF.Tau * ((float)i / count);
+                            Vector2 vel = -rot.ToRotationVector2() * 14;
+                            Projectile meteor = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot)
+                                , Vector2.Zero, ModContent.ProjectileType<CosmicRayMeteorite>(), ProjectileDamage(NPC.damage), 1f, Main.myPlayer, NPC.whoAmI, 60 * AttackCount);
+                        }
                     }
+
                     for (int i = 0; i < 18; i++)
                     {
                         int dust = Dust.NewDust(eyePos, 0, 0, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, Main.rand.NextFloat(1.25f, 2.5f));
@@ -818,13 +869,43 @@ namespace ITD.Content.NPCs.Bosses
                 }
             }
         }
+
+        public const int maxDash = 6;
+        public void BlazingStar(Player player)
+        {
+            if (AITimer2 <= 0)
+            {
+                if (AttackCount >= maxDash - 2)
+                {
+                    distanceAbove = Main.screenHeight * (AttackCount % 2 == 0 ? 1 : -1);
+                    distanceAway = 0;
+
+                }
+                else
+                {
+                    distanceAbove = 0;
+                    distanceAway = Main.screenWidth / 2 * (AttackCount % 2 == 0 ? 1 : -1);
+                }
+                AI_State = MovementState.Teleport;
+            }
+            if (AttackCount >= maxDash)
+            {
+                AI_State = MovementState.FollowingRegular;
+                AttackID = GetNextAttack();
+                ResetStats();
+                distanceAbove = 250;
+                distanceAway = 0;
+            }
+            //to be implemented later
+        }
         public void P2Transition(Player player)
         {
             Vector2 eyePos = NPC.Center + new Vector2(0, -60);
-            int hitTime = 4;
+            int hitTime = 1;
             float restTime = masterMode ? 45 : expertMode ? 60 : 60;
             hitTime = masterMode ? 5 : expertMode ? 5 : 3;
-            if (AI_State == MovementState.Teleport)
+/*            hitTime = 1;
+*/            if (AI_State == MovementState.Teleport)
             {
                 NPC.dontTakeDamage = true;
             }
@@ -838,17 +919,22 @@ namespace ITD.Content.NPCs.Bosses
                         {
                             AITimer2++;
                             AITimer1 = 0;
-                            int count = 6 + (int)AITimer2 * 2;
+                            int count = 6 + (int)(AITimer2 * 2);
                             float dist = 100 + 350 * AITimer2;
-                            float baseRot = 0 + AITimer2 * MathHelper.ToRadians(30);
+                            float baseRot = MathHelper.ToRadians(180 / (count));
                             SoundEngine.PlaySound(SoundID.Item28, eyePos);
-                            for (int i = 0; i < count; i++)
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient) // server-authoritative spawn
                             {
-                                float rot = baseRot + MathF.Tau * ((float)i / count);
-                                Vector2 vel = -rot.ToRotationVector2() * 14;
-                                Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot), Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), ProjectileDamage(NPC.damage), 1f, Main.myPlayer, NPC.whoAmI, i >= (count - 1) ? 1 : 0);
-                                sword.rotation = vel.ToRotation();
+                                for (int i = 0; i < count; i++)
+                                {
+                                    float rot = baseRot + MathF.Tau * ((float)i / count);
+                                    Vector2 vel = -rot.ToRotationVector2() * 14;
+                                    Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot), Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), ProjectileDamage(NPC.damage), 1f, Main.myPlayer, NPC.whoAmI, i >= (count - 1) ? 1 : 0);
+                                    sword.rotation = vel.ToRotation();
+                                }
                             }
+
                             for (int i = 0; i < 18; i++)
                             {
                                 int dust = Dust.NewDust(eyePos, 0, 0, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, Main.rand.NextFloat(1.25f, 2.5f));
@@ -886,18 +972,23 @@ namespace ITD.Content.NPCs.Bosses
                         {
                             AITimer2++;
                             AITimer1 = 0;
-                            int count = 10;
+                            int count = 12;
                             float dist = 240 - 30 * AITimer2;
                             float baseRot = 0 + AITimer2 * MathHelper.ToRadians(15);
                             SoundEngine.PlaySound(SoundID.Item28, eyePos);
-                            for (int i = 0; i < count; i++)
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                float rot = baseRot + MathF.Tau * ((float)i / count);
-                                Vector2 vel = rot.ToRotationVector2() * 14;
-                                Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot),
-                                    Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), ProjectileDamage((int)(NPC.damage * 0.75f)), 1f, Main.myPlayer, NPC.whoAmI, 0, 1);
-                                sword.rotation = vel.ToRotation();
+                                for (int i = 0; i < count; i++)
+                                {
+                                    float rot = baseRot + MathF.Tau * ((float)i / count);
+                                    Vector2 vel = rot.ToRotationVector2() * 14;
+                                    Projectile sword = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), eyePos + new Vector2(dist, 0).RotatedBy(rot),
+                                        Vector2.Zero, ModContent.ProjectileType<CosmicSwordStar>(), ProjectileDamage((int)(NPC.damage * 0.75f)), 1f, Main.myPlayer, NPC.whoAmI, 0, 1);
+                                    sword.rotation = vel.ToRotation();
+                                }
                             }
+
                             for (int i = 0; i < 18; i++)
                             {
                                 int dust = Dust.NewDust(eyePos, 0, 0, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, Main.rand.NextFloat(1.25f, 2.5f));
@@ -911,7 +1002,7 @@ namespace ITD.Content.NPCs.Bosses
                         if (AITimer1++ >= restTime * 2)
                         {
                             AI_State = MovementState.FollowingRegular;
-                            AttackID = 7;
+                            AttackID = GetNextAttack();
                             ResetStats();
                             NPC.dontTakeDamage = false;
                         }
@@ -1017,6 +1108,8 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     if (DashTimer > 0)
                     {
+                        NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
+
                         if (emitter != null)
                             emitter.keptAlive = true;
                         for (int j = 0; j < 6; j++)
@@ -1024,34 +1117,39 @@ namespace ITD.Content.NPCs.Bosses
                             emitter?.Emit(Main.rand.NextVector2FromRectangle(NPC.Hitbox), NPC.velocity * 0.25f, 0f, 20);
                         }
                     }
-                    NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
                     NetSync();
                     break;
                 case MovementState.Explode:
-                    NPC.velocity *= 0.95f;
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                        NPC.velocity *= 0.95f;
                     rotation = rotationFactor * maxRotation;
                     NPC.rotation = rotation;
                     break;
                 case MovementState.Slamdown:
                     //This scan for floor, then do collision, inconsistent sometimes
                     RaycastData data = Helpers.QuickRaycast(NPC.Center, NPC.velocity, (point) => { return (player.Bottom.Y >= point.ToWorldCoordinates().Y + 20); }, 120);
+
                     if (AITimer2 <= 0)
                     {
                         if (NPC.Center.Distance(data.End) >= 20)
                         {
                             if (AITimer1++ >= 5)
                             {
-                                NPC.velocity.X *= 0.99f;
-                                NPC.velocity.Y += 0.5f;
+                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                    NPC.velocity.X *= 0.99f;
+                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                    NPC.velocity.Y += 0.5f;
                             }
                             else
                             {
-                                NPC.velocity.X *= 0.96f;
+                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                    NPC.velocity.X *= 0.96f;
                             }
                         }
                         else
                         {
-                            NPC.velocity *= 0;
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                NPC.velocity *= 0;
                             AITimer2++;
                         }
                     }
@@ -1059,10 +1157,15 @@ namespace ITD.Content.NPCs.Bosses
                     {
                         if (AITimer2++ == 2)
                         {
-                            //could have been a dash() except this needs a big velo boost from the start
-                            dashVel = Vector2.Normalize(new Vector2(NPC.Center.X, NPC.Center.Y - 750) - new Vector2(NPC.Center.X, NPC.Center.Y)) * 18;
-                            NPC.velocity = dashVel;
-                            AttackCount++;
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                //could have been a dash() except this needs a big velo boost from the start
+                                dashVel = Vector2.Normalize(new Vector2(NPC.Center.X, NPC.Center.Y - 750) - new Vector2(NPC.Center.X, NPC.Center.Y)) * 18;
+                                NPC.velocity = dashVel;
+                                AttackCount++;
+                                NPC.netUpdate = true;
+                            }
+
                             SoundEngine.PlaySound(new SoundStyle("ITD/Content/Sounds/NPCSounds/Bosses/CosjelSlam"), NPC.Center);
                             SludgeSlam();
                             player.GetITDPlayer().BetterScreenshake(30, 10, 20, true);//Very shaky, might need some tweaking to the decay
@@ -1089,6 +1192,25 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     NPC.rotation = 0;
                     break;
+                case MovementState.Aligning:
+                    if (AITimer1++ <= Math.Max(60 - AttackCount * 10, 10))
+                    {
+                        if (AttackCount >= maxDash - 2)
+                        {
+                            NPC.Center = player.Center + new Vector2(distanceAway, distanceAbove);
+                        }
+                        else
+                        {
+                            NPC.Center = player.Center + new Vector2(distanceAway, distanceAbove - NPC.localAI[0]);
+                        }
+                        NPC.rotation = NPC.rotation.AngleLerp(NPC.Center.AngleTo(player.Center + new Vector2(0, 0)) + MathHelper.PiOver2, 0.1f);
+                    }
+                    else
+                    {
+                        AITimer1 = 0;
+                        AI_State = MovementState.SuperDashing;
+                    }
+                    break;
                 case MovementState.Teleport:// flash whole body, then teleport on top of player, no contact damage
 
                     if (NPC.HasValidTarget)
@@ -1098,8 +1220,23 @@ namespace ITD.Content.NPCs.Bosses
                             case -1:
                                 Teleport(Main.player[NPC.target].Center + new Vector2(0, -400), 60, 90, (int)AttackID);
                                 break;
-                            case -2:
-                                Teleport(Main.player[NPC.target].Center + new Vector2(0, -800), 40, 80, (int)AttackID);
+                            case 6:
+                                Teleport(Main.player[NPC.target].Center + new Vector2(0, 250), 60, 90, (int)AttackID);
+                                break;
+                            case 10:
+                                if (NPC.localAI[0] == 0)
+                                {
+                                    NPC.localAI[0] = Main.rand.NextFloat(-400, 400);
+                                }
+                                if (AttackCount >= maxDash - 2)
+                                {
+                                    Teleport(Main.player[NPC.target].Center + new Vector2(0, Main.screenHeight * (AttackCount % 2 == 0 ? 1 : -1)), 40, 80, (int)AttackID);
+                                }
+                                else
+                                {
+                                    Teleport(Main.player[NPC.target].Center + new Vector2(Main.screenWidth / 2 * (AttackCount % 2 == 0 ? 1 : -1), -NPC.localAI[0]), 40, 80, (int)AttackID);
+                                }
+                                NPC.velocity *= 0f;
                                 break;
                         }
 
@@ -1108,49 +1245,97 @@ namespace ITD.Content.NPCs.Bosses
                     rotation = rotationFactor * maxRotation;
                     NPC.rotation = rotation;
                     break;
+                case MovementState.SuperDashing:
+                    AITimer1++;
+
+                    if (AITimer1 <= 10)
+                    {
+                        dashPos = player.Center + new Vector2(0, 0);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            NPC.velocity *= 0.95f;
+                            NetSync();
+                        }
+                    }
+                    else
+                    {
+                        Dash(dashPos, 1, 28, 50, 60, 10);
+                    }
+                    if (DashTimer > 0)
+                    {
+                        hideSelf = true;
+                        if (emitter != null)
+                            emitter.keptAlive = true;
+                        for (int j = 0; j < 6; j++)
+                        {
+                            emitter?.Emit(Main.rand.NextVector2FromRectangle(NPC.Hitbox), NPC.velocity * 0.25f, 0f, 20);
+                        }
+                        NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
+                    }
+                    else
+                    {
+                        hideSelf = false;
+                    }
+                    NetSync();
+                    break;
             }
-            teleEffect -= 0.05f;
+            teleEffect = MathF.Round(Math.Clamp(teleEffect - 0.05f, -1, 1), 2);
             intimidateMe -= 0.02f;
         }
         public void Teleport(Vector2 telePos, int time1, int time2, int attackID)
         {
             AITimer1++;
-            if (AITimer1 == time1 - 30 || AITimer1 == time2 - 20)
+
+            if (AITimer1 == time1 - 30)
             {
-                teleEffect = 1;
-                if (!reappearTele)
-                {
-/*                    Vector2 magVec = telePos - NPC.Center;
-                    magVec.Along(NPC.Center, 6, v =>
-                    {
-                        for (int i = 0; i <= 1; i++)
-                        {
-                            Dust dust = Dust.NewDustPerfect(new Vector2(v.X, v.Y), DustID.PurpleCrystalShard, Vector2.Zero, 0, Scale: 2);
-                            dust.noGravity = true;
-                        }
-                    });*/
-                }
+                teleEffect = 1f;
+                reappearTele = true;
             }
+            else if (AITimer1 == time2 - 30)
+            {
+                teleEffect = 1f;
+                reappearTele = false;
+            }
+
             if (AITimer1 == time1)
             {
-                NPC.Center = telePos;
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    NPC.Center = telePos;
+                    NetSync();
+                }
             }
             else if (AITimer1 >= time2)
             {
-                AITimer1 = 0;
-                switch (attackID)
+                teleEffect = 0f;
+                reappearTele = false;
+                // reset reappearTele after the cycle ends so next teleport will start clean
+
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    case -1:
-                        AI_State = MovementState.Explode;
-                        break;
-                    case 6:
-                        AI_State = MovementState.Explode;
-                        AITimer2 = 1;
-                        distanceAbove = 300;
-                        break;
+                    AITimer1 = 0;
+                    switch (attackID)
+                    {
+                        case -1:
+                            AI_State = MovementState.Explode;
+                            break;
+                        case 6:
+                            AI_State = MovementState.Explode;
+                            AITimer2 = 1;
+                            distanceAbove = 250;
+                            break;
+                        case 10:
+                            AITimer2 = 1;
+                            AI_State = MovementState.Aligning;
+                            break;
+                    }
+                    NetSync();
                 }
             }
         }
+
+        bool shouldBlank = false;
+        float blankCount = 0;
         //pos: set dash to where
         //time1: when to start dashing, start gaining velocity
         //time2: stop gaining velocity
@@ -1178,38 +1363,81 @@ namespace ITD.Content.NPCs.Bosses
                 NPC.netUpdate = true;
             }
             DashTimer++;
-
-            if (attackID == 1)
+            switch (attackID)
             {
-                if (DashTimer % 10 == 0 && DashTimer > time1 && DashTimer < reset)
-                {
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                case 1:
+                    if (DashTimer % 10 == 0 && DashTimer > time1 && DashTimer < reset)
                     {
-                        Vector2 vel1 = !bSecondStage ? Vector2.Normalize(NPC.velocity).RotatedBy(Math.PI / 2) : Vector2.Normalize(NPC.velocity).RotatedBy(Math.PI / 2 + MathHelper.Pi/6) * 1.25f;
-                        Vector2 vel2 = !bSecondStage ? Vector2.Normalize(NPC.velocity).RotatedBy(-Math.PI / 2) : Vector2.Normalize(NPC.velocity).RotatedBy(-Math.PI / 2 - MathHelper.Pi/6) * 1.25f;
-                        Projectile proj1 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, vel1, ModContent.ProjectileType<CosmicWave>(), ProjectileDamage((int)(NPC.damage * 0.75f)), 0, Main.myPlayer);
-                        Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, vel2, ModContent.ProjectileType<CosmicWave>(), ProjectileDamage((int)(NPC.damage * 0.75f)), 0, Main.myPlayer);
-                        proj1.tileCollide = false;
-                        proj2.tileCollide = false;
-                        if (expertMode|| masterMode)
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile proj3 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, -Vector2.Normalize(NPC.velocity), ModContent.ProjectileType<CosmicWave>(), ProjectileDamage(NPC.damage), 0, Main.myPlayer);
-                            proj3.tileCollide = false;
+                            Vector2 vel1 = !bSecondStage ? Vector2.Normalize(NPC.velocity).RotatedBy(Math.PI / 2) : Vector2.Normalize(NPC.velocity).RotatedBy(Math.PI / 2 + MathHelper.Pi / 6) * 1.25f;
+                            Vector2 vel2 = !bSecondStage ? Vector2.Normalize(NPC.velocity).RotatedBy(-Math.PI / 2) : Vector2.Normalize(NPC.velocity).RotatedBy(-Math.PI / 2 - MathHelper.Pi / 6) * 1.25f;
+                            Projectile proj1 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, vel1, ModContent.ProjectileType<CosmicWave>(), ProjectileDamage((int)(NPC.damage * 0.75f)), 0, Main.myPlayer);
+                            Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, vel2, ModContent.ProjectileType<CosmicWave>(), ProjectileDamage((int)(NPC.damage * 0.75f)), 0, Main.myPlayer);
+                            proj1.tileCollide = false;
+                            proj2.tileCollide = false;
+                            if (expertMode || masterMode)
+                            {
+                                Projectile proj3 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, -Vector2.Normalize(NPC.velocity), ModContent.ProjectileType<CosmicWave>(), ProjectileDamage(NPC.damage), 0, Main.myPlayer);
+                                proj3.tileCollide = false;
 
+                            }
                         }
                     }
-                }
+                    break;
+                case 2:
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        //it has to spawn something wtf
+                        Projectile WHATISTHIS = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center,
+                            Vector2.Zero, ProjectileID.None,
+                            (NPC.defDamage), 0);
+                    }
+                    break;
+                case 10:
+                    if (DashTimer == 1)
+                        AIRand = 40 + Main.rand.Next(-2, 1);
+                    if (DashTimer == time1 + 1 || DashTimer == AIRand - 2)
+                    {
+                        int ring = 128 - (int)(DashTimer * 2);
+                        for (int index1 = 0; index1 < ring; ++index1)
+                        {
+                            Vector2 vector2 = (-Vector2.UnitY.RotatedBy(index1 * 3.14159274101257 * 2 / ring) * new Vector2(8f, 16f)).RotatedBy(NPC.velocity.ToRotation());
+                            int index2 = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<CosJelDust>(), 0.0f, 0.0f, 0, new Color(), 1f);
+                            Main.dust[index2].scale = 3f;
+                            Main.dust[index2].noGravity = true;
+                            Main.dust[index2].position = NPC.Center;
+                            Main.dust[index2].velocity = Vector2.Zero;
+                            Main.dust[index2].velocity += vector2 * 1.5f * (reset - DashTimer)/reset + NPC.velocity * 0.5f;
+                        }
+                    }
+                    if (DashTimer == AIRand)
+                    {
+                        shouldBlank = true;
+                    }
+                    if (DashTimer % 1 == 0 && DashTimer > time1 + 20 && DashTimer < reset)
+                    {
+                        if (shouldBlank && blankCount++ <= 2)
+                        {
+                        }
+                        else
+                        {
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                            {
+                                Vector2 vel1 = Vector2.Normalize(NPC.velocity).RotatedBy(Math.PI / 2);
+                                Vector2 vel2 = Vector2.Normalize(NPC.velocity).RotatedBy(-Math.PI / 2);
+                                Projectile proj1 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, vel1, ModContent.ProjectileType<CosmicSwordStar2>(), ProjectileDamage((int)(NPC.damage * 0.75f)), 0, Main.myPlayer, 0, 0, 15);
+                                Projectile proj2 = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center, vel2, ModContent.ProjectileType<CosmicSwordStar2>(), ProjectileDamage((int)(NPC.damage * 0.75f)), 0, Main.myPlayer, 0, 0, 15);
+                                proj1.tileCollide = false;
+                                proj2.tileCollide = false;
+                                proj1.rotation = vel1.ToRotation();
+                                proj2.rotation = vel2.ToRotation();
+                            }
+                        }
+                    }
 
-            }
-            if (attackID == 2)
-            {
-                if (Main.netMode != NetmodeID.MultiplayerClient)
-                {
-                    //it has to spawn something wtf
-                    Projectile WHATISTHIS = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), NPC.Center,
-                        Vector2.Zero, ProjectileID.None,
-                        (NPC.defDamage), 0);
-                }
+            
+                    break;
             }
             NPC.netUpdate = true;
 
@@ -1252,8 +1480,17 @@ namespace ITD.Content.NPCs.Bosses
                         AITimer1 = 0;
                         AITimer2 = 0;
                         break;
+                    case 10:
+                        AITimer1 = 0;
+                        AITimer2 = 0;
+                        NPC.localAI[0] = 0;
+                        shouldBlank = false;
+                        blankCount = 0;
+                        AttackCount++;
+                        AI_State = MovementState.Teleport;
+                        distanceAbove = 300;
+                        break;
                 }
-
                 NetSync();
             }
 
@@ -1263,7 +1500,7 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (bSecondStage)
             {
-                if (AttackID > 9)//use phase 2 attacks
+                if (AttackID > maxAttack)//use phase 2 attacks
                 {
                     AttackID = 1;
                 }
@@ -1453,9 +1690,11 @@ namespace ITD.Content.NPCs.Bosses
             return 80f;
         }
         float teleEffect = 0;
+        float prevTeleEffect = 0f;
         float intimidateMe = 0;//actual fargo epicMe this time
 
         bool reappearTele = false;
+        bool hideSelf = false;
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
@@ -1465,8 +1704,12 @@ namespace ITD.Content.NPCs.Bosses
             Vector2 origin = new(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);
             Rectangle frameRect = new(0, NPC.frame.Y, tex.Width, vertSize);
             Vector2 center = NPC.Size / 2f;
-            Texture2D glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
-            if (DashTimer > 0 && AI_State != MovementState.FollowingRegular)
+            Texture2D glowTexture = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
+            Texture2D sDashTex = ModContent.Request<Texture2D>(Texture + "_DashGlow").Value;
+            Texture2D sDashTex2 = ModContent.Request<Texture2D>(Texture + "_DashThing").Value;
+            Texture2D sDashTrail = TextureAssets.Extra[ExtrasID.SharpTears].Value;
+
+            if (DashTimer > 0)
             {
                 for (int i = 0; i < 3; i++)
                 {
@@ -1480,15 +1723,6 @@ namespace ITD.Content.NPCs.Bosses
                 }
                 stretch = new Vector2(1f, 1f + NPC.velocity.Length() * 0.025f);
             }
-            if (AI_State == MovementState.Dashing)
-            {
-                Shader.Apply();
-                TrailStrip.PrepareStrip(dashOldPositions, dashOldRotations, StripColors, StripWidth, NPC.Size * 0.5f - Main.screenPosition, dashOldPositions.Length, true);
-                TrailStrip.DrawTrail();
-                Main.spriteBatch.End(out SpriteBatchData spriteBatchData); // unapply shaders
-                Main.spriteBatch.Begin(spriteBatchData);
-
-            }
             if (AI_State == MovementState.Slamdown)
             {
                 if (NPC.velocity.Y != 0)
@@ -1501,15 +1735,51 @@ namespace ITD.Content.NPCs.Bosses
                 }
             }
 
-            if (AI_State == MovementState.Dashing && DashTimer > 0)
+            if (AI_State == MovementState.Dashing)
             {
-                for (int k = 0; k < NPC.oldPos.Length; k++)
+                Shader.Apply();
+                TrailStrip.PrepareStrip(dashOldPositions, dashOldRotations, StripColors, StripWidth, NPC.Size * 0.5f - Main.screenPosition, dashOldPositions.Length, true);
+                TrailStrip.DrawTrail();
+                Main.spriteBatch.End(out SpriteBatchData spriteBatchData); // unapply shaders
+                Main.spriteBatch.Begin(spriteBatchData);
+                if (DashTimer > 0)
                 {
-                    Vector2 drawPos = NPC.oldPos[k] - Main.screenPosition + center;
-                    Color color = NPC.GetAlpha(drawColor) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length) * 0.4f;
-                    spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, 1f, SpriteEffects.None, 0f);
+                    for (int k = 0; k < NPC.oldPos.Length; k++)
+                    {
+                        Vector2 drawPos = NPC.oldPos[k] - Main.screenPosition + center;
+                        Color color = NPC.GetAlpha(drawColor) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length) * 0.4f;
+                        spriteBatch.Draw(tex, drawPos, frameRect, color, NPC.oldRot[k], origin, 1f, SpriteEffects.None, 0f);
+                    }
                 }
             }
+            Color glowColor = Color.White * 0.5f;
+
+            if (AI_State == MovementState.SuperDashing && DashTimer > 10)
+            {
+                for (float i = 0; i < NPCID.Sets.TrailCacheLength[NPC.type]; i += 0.15f)
+                {
+                    Color color27 = glowColor * 0.35f;
+                    Color color28 = glowColor;
+                    color27 *= (float)(NPCID.Sets.TrailCacheLength[NPC.type] - i) / NPCID.Sets.TrailCacheLength[NPC.type] * 0.75f;
+                    color28 *= (float)(NPCID.Sets.TrailCacheLength[NPC.type] - i) / NPCID.Sets.TrailCacheLength[NPC.type] *2f;
+
+                    float scale = NPC.scale;
+                    scale *= (float)(NPCID.Sets.TrailCacheLength[NPC.type] - i) / NPCID.Sets.TrailCacheLength[NPC.type];
+                    int max0 = (int)i - 1;//Math.Max((int)i - 1, 0);
+                    if (max0 < 0)
+                        continue;
+                    Vector2 value4 = NPC.oldPos[max0];
+                    float num165 = NPC.rotation; //NPC.oldRot[max0];
+                    Vector2 center2 = Vector2.Lerp(NPC.oldPos[(int)i], NPC.oldPos[max0], 1 - i % 1);
+                    center2 += NPC.Size / 2;
+                    Vector2 origin2 = new(sDashTex.Width / 2f, sDashTex.Height / 2f);
+                    Vector2 origin3 = new(sDashTrail.Width / 2f, sDashTex.Height / 2f);
+                    spriteBatch.Draw(sDashTrail, center2 - screenPos, sDashTrail.Frame(1, 1, 0, 0), new Color(255, 242, 191,50), num165, origin3, scale * new Vector2(2,5), SpriteEffects.None, 0);
+                    Main.EntitySpriteDraw(sDashTex, center2 - screenPos, sDashTex.Frame(1, 1, 0, 0), color27, num165, origin2, scale * 6f, SpriteEffects.None, 0);
+
+                }
+            }
+
             Vector2 miragePos = NPC.position - Main.screenPosition + center;
 
             //old treasure bag draw code, augh
@@ -1532,58 +1802,63 @@ namespace ITD.Content.NPCs.Bosses
                 {
                     float radians = (i + timer) * MathHelper.TwoPi;
 
-                    spriteBatch.Draw(tex, miragePos + new Vector2(0f, 8f).RotatedBy(radians) * time, frameRect, new Color(90, 70, 255, 50) * glowOpacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+                    spriteBatch.Draw(tex, miragePos + new Vector2(0f, 8f).RotatedBy(radians) * time, frameRect, new Color(90, 70, 255, 50) * glowOpacity * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
                 }
 
                 for (float i = 0f; i < 1f; i += 0.34f)
                 {
                     float radians = (i + timer) * MathHelper.TwoPi;
 
-                    spriteBatch.Draw(tex, miragePos + new Vector2(0f, 12f).RotatedBy(radians) * time, frameRect, new Color(90, 70, 255, 50) * glowOpacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+                    spriteBatch.Draw(tex, miragePos + new Vector2(0f, 12f).RotatedBy(radians) * time, frameRect, new Color(90, 70, 255, 50) * glowOpacity * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
                 }
             }
             else
             {
                 glowOpacity = MathHelper.Clamp(glowOpacity - 0.1f, 0f, 1f);
             }
-            if (teleEffect > 0)//fargo eridanus epic
+            if (teleEffect > 0f)
             {
                 float scale = 1f * NPC.scale * (float)Math.Cos(Math.PI / 2 * teleEffect) + 1;
                 if (teleEffect <= 0.05f)
                 {
                     for (int i = 0; i < 30; i++)
                     {
-                        int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.PurpleTorch, 0, 0, 0, default, Main.rand.NextFloat(1.25f,2.5f));
+                        int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.PurpleTorch, 0, 0, 0, default, Main.rand.NextFloat(1.25f, 2.5f));
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 20;
                     }
-                    reappearTele = !reappearTele;
                 }
+
                 float opacity = NPC.Opacity * (float)Math.Sqrt(teleEffect);
-                if (reappearTele)
+                if (!reappearTele)
                 {
                     Main.EntitySpriteDraw(tex, miragePos, NPC.frame, new Color(255, 255, 255, 255) * opacity, NPC.rotation, NPC.frame.Size() / 2f, new Vector2(MathHelper.Max(scale - 1, 0.1f), 3 - scale), SpriteEffects.None, 0);
-
-                    Main.EntitySpriteDraw(glowTexture, miragePos, null, new Color(255, 255, 255, 255) * opacity, NPC.rotation, glowTexture.Size() / 2f, new Vector2(MathHelper.Max(scale - 1, 0.1f), 3 - scale), SpriteEffects.None, 0);
+                    Main.EntitySpriteDraw(glowTexture, miragePos, NPC.frame, new Color(255, 255, 255, 255) * opacity, NPC.rotation, NPC.frame.Size() / 2f, new Vector2(MathHelper.Max(scale - 1, 0.1f), 3 - scale), SpriteEffects.None, 0);
                 }
                 else
                 {
-
                     Main.EntitySpriteDraw(tex, miragePos, NPC.frame, new Color(255, 255, 255, 255) * opacity, NPC.rotation, NPC.frame.Size() / 2f, new Vector2(MathHelper.Max(2 - scale, 0.1f), scale), SpriteEffects.None, 0);
-
-                    Main.EntitySpriteDraw(glowTexture, miragePos, null, new Color(255, 255, 255, 255) * opacity, NPC.rotation, glowTexture.Size() / 2f, new Vector2(MathHelper.Max(2 - scale, 0.1f), scale), SpriteEffects.None, 0);
+                    Main.EntitySpriteDraw(glowTexture, miragePos, NPC.frame, new Color(255, 255, 255, 255) * opacity, NPC.rotation, NPC.frame.Size() / 2f, new Vector2(MathHelper.Max(2 - scale, 0.1f), scale), SpriteEffects.None, 0);
                 }
-
             }
+
             if (intimidateMe > 0)//fargo eridanus epic
             {
                 float scale = 2f * NPC.scale * (float)Math.Cos(Math.PI / 2 * intimidateMe);
                 float opacity = NPC.Opacity * (float)Math.Sqrt(intimidateMe);
                 Main.EntitySpriteDraw(tex, miragePos, NPC.frame, Color.White * opacity, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale * scale, SpriteEffects.None, 0);
             }
-            if (teleEffect <= 0 && !reappearTele)
+            if ((teleEffect <= 0 && !reappearTele))  
             {
-                Main.EntitySpriteDraw(TextureAssets.Npc[Type].Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White, NPC.rotation, NPC.frame.Size() / 2f, stretch, SpriteEffects.None);
+                Main.EntitySpriteDraw(TextureAssets.Npc[Type].Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * NPC.Opacity, NPC.rotation, NPC.frame.Size() / 2f, stretch, SpriteEffects.None);
+            }
+            if (hideSelf)
+            {
+                NPC.Opacity = MathHelper.Lerp(NPC.Opacity, 0, 0.2f);
+            }
+            else
+            {
+                NPC.Opacity = MathHelper.Lerp(NPC.Opacity, 1, 0.2f);
             }
             return false;
         }
