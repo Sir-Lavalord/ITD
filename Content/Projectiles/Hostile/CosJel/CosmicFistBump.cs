@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Dusts;
+using ITD.Content.NPCs.Bosses;
 using ITD.Utilities;
 using System;
 using Terraria.Audio;
@@ -18,7 +19,7 @@ public class CosmicFistBump : ModProjectile
         Chainbombing
     }
     private ActionState AI_State;
-    private bool shouldDoStar => Projectile.ai[0] == 1;
+    public int OwnerIndex => (int)Projectile.ai[0];
     private float PhaseTime => Projectile.ai[2];
     private Vector2 playerPos = Vector2.Zero;
     public bool isMainHand => Projectile.ai[1] == 0;
@@ -47,12 +48,32 @@ public class CosmicFistBump : ModProjectile
     }
     public override void OnSpawn(IEntitySource source)
     {
+        NPC owner = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
+        if (owner == null)
+        {
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
+        }
     }
     static bool isExpert => Main.expertMode;
     static bool isMaster => Main.masterMode;
     public override void AI()
     {
-        Player player = Main.player[Projectile.owner];
+        NPC owner = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
+        if (owner == null)
+        {
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
+        }
+        if (owner.ai[3] == -1)//5 is current place of meteor slam attack
+        {
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
+        }
+        Player player = Main.player[owner.target];
         switch (AI_State)
         {
             
@@ -115,11 +136,10 @@ public class CosmicFistBump : ModProjectile
                     Projectile.Center = Vector2.Lerp(Projectile.Center, playerPos, 0.3f);
                     if (Vector2.Distance(Projectile.Center, playerPos) <= 10)
                     {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
+
                             Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero,
                                 ModContent.ProjectileType<CosmicFistTelegraph>(), 0, 0f, Main.myPlayer, Projectile.rotation, Projectile.whoAmI, 0f);
-                        }
+                        
 
                         Projectile.localAI[1] = 0;
                         player.GetITDPlayer().BetterScreenshake(10, 10, 10, true);
@@ -133,7 +153,7 @@ public class CosmicFistBump : ModProjectile
                         }  
                         if (isMainHand)
                         {
-                            if (shouldDoStar)
+                            if (owner.localAI[2] != 0)
                             {
                                 int amount = 6;
                                 for (int i = 0; i < amount; i++)
@@ -143,10 +163,9 @@ public class CosmicFistBump : ModProjectile
                                     int knockBack = 3;
                                     float speed = 12f;
                                     Vector2 vector = Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * speed;
-                                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                                    {
-                                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicStar>(), damage, knockBack, Main.myPlayer, 0, 1);
-                                    }
+
+                                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicStar>(), damage, knockBack, Main.myPlayer, 0, 1);
+
                                 }
                             }
                         }
@@ -162,7 +181,7 @@ public class CosmicFistBump : ModProjectile
                     player.GetITDPlayer().BetterScreenshake(4, 2, 2, true);
                     Vector2 velo = Projectile.rotation.ToRotationVector2() * 8;
                     SoundEngine.PlaySound(SoundID.Item103, Projectile.Center);
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    if (Main.netMode != NetmodeID.Server)
                     {
                         if (Main.rand.NextBool(2))
                         {
@@ -221,12 +240,11 @@ public class CosmicFistBump : ModProjectile
             {
             }
 
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center +
-                new Vector2(Projectile.width / 2, 0).RotatedBy(Projectile.rotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
-                (int)(Projectile.damage), 0f, Main.myPlayer, 40, Projectile.rotation + MathHelper.PiOver2, 0f);
-            }
+
+            Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center +
+            new Vector2(Projectile.width / 2, 0).RotatedBy(Projectile.rotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
+            (int)(Projectile.damage), 0f, Main.myPlayer, 40, Projectile.rotation + MathHelper.PiOver2, 0f);
+        
 
             for (int i = 0; i < 20; i++)
             {

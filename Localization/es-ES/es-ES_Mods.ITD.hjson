@@ -268,6 +268,10 @@ Projectiles: {
 	// CosmicRayMeteorite.DisplayName: Cosmic Ray Meteorite
 	// Dustnado.DisplayName: Dustnado
 	// CosmicTentacleArena2.DisplayName: Cosmic Tentacle Arena2
+	// CosmicWaterWall.DisplayName: Cosmic Water Wall
+	// CosmicFistSetGrab.DisplayName: Cosmic Fist Set Grab
+	// CosmicWaterBlob.DisplayName: Cosmic Water Blob
+	// CosmicFistSetPunch.DisplayName: Cosmic Fist Set Punch
 }
 
 NPCs: {
