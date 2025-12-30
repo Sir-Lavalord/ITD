@@ -45,17 +45,17 @@ public class CosmicTentacleArena2 : ModProjectile
         Projectile.timeLeft = 99999;
         Projectile.tileCollide = false;
     }
+    public int OwnerIndex => (int)Projectile.ai[0];
     public ref float distAway => ref Projectile.ai[1];
     public ref float circleTime => ref Projectile.ai[2];
     public override void OnSpawn(IEntitySource source)
     {
-        NPC CosJel = Main.npc[(int)Projectile.ai[0]];
-        if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+        NPC CosJel = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
+        if (CosJel == null)
         {
-        }
-        else
-        {
-            Projectile.Kill();
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
         }
     }
     public override bool? CanDamage()
@@ -71,10 +71,14 @@ public class CosmicTentacleArena2 : ModProjectile
     float sweepDir = 1;
     public override void AI()
     {
-        NPC CosJel = Main.npc[(int)Projectile.ai[0]];
-        if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+        NPC CosJel = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
+        if (CosJel == null)
         {
-            switch (AI_State)
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
+        }
+        switch (AI_State)
             {             
                 case ActionState.Extend:
                     if (Projectile.localAI[0]++ < 30)
@@ -135,14 +139,7 @@ public class CosmicTentacleArena2 : ModProjectile
                     }
                     break;
             }
-            return;
-        }
-        else
-        {
-            Projectile.Kill();
-        }
         zapGlow -= 0.05f;
-
     }
     bool expertMode = Main.expertMode;
     bool masterMode = Main.masterMode;

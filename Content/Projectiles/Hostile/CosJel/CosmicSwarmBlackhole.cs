@@ -90,7 +90,7 @@ public class CosmicSwarmBlackhole : ITDProjectile
     }
     public override void AI()
     {
-        if (++Projectile.frameCounter >=8 )
+        if (++Projectile.frameCounter >= 8)
         {
             Projectile.frameCounter = 0;
             Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
@@ -154,7 +154,7 @@ public class CosmicSwarmBlackhole : ITDProjectile
                         Projectile other = Main.projectile[i];
 
                         if (other.type == ModContent.ProjectileType<CosmicSwarm>() && other.active && other.timeLeft > 0
-                            && Math.Abs(Projectile.Center.X - other.Center.X) < Projectile.width 
+                            && Math.Abs(Projectile.Center.X - other.Center.X) < Projectile.width
                             && Math.Abs(Projectile.Center.Y - other.Center.Y) < Projectile.height)
                         {
                             Projectile.scale += 0.1f;
@@ -168,19 +168,19 @@ public class CosmicSwarmBlackhole : ITDProjectile
                                 dust.velocity = new Vector2(0, -20).RotatedByRandom(MathHelper.ToRadians(10));
 
                             }
-
-                            int amount = 11;
-                            for (int k = 0; k < amount; k++)
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-
-                                float rad = MathHelper.PiOver2 / (amount / 2) * k + MathHelper.PiOver2;
-                                int damage = (int)(Projectile.damage * 0.28f);
-                                int knockBack = 3;
-                                float speed = 18f;
-                                Vector2 vector = Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * speed;
-                                vector = vector.RotatedByRandom(0.06f);
-                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                int amount = 11;
+                                for (int k = 0; k < amount; k++)
                                 {
+
+                                    float rad = MathHelper.PiOver2 / (amount / 2) * k + MathHelper.PiOver2;
+                                    int damage = (int)(Projectile.damage * 0.28f);
+                                    int knockBack = 3;
+                                    float speed = 18f;
+                                    Vector2 vector = Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * speed;
+                                    vector = vector.RotatedByRandom(0.06f);
+
                                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicSwarmGib>(), damage, knockBack, Main.myPlayer, 0, 1);
                                 }
                             }
@@ -191,10 +191,11 @@ public class CosmicSwarmBlackhole : ITDProjectile
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
+                            Vector2 spawnPos = Projectile.Center - new Vector2(Main.rand.NextFloat(-600, 600), Main.rand.NextFloat(2000, 2600));
                             int damage = (int)(Projectile.damage * 0.28f);
                             Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), 
-                                Projectile.Center - new Vector2(Main.rand.NextFloat(-600,600), Main.rand.NextFloat(2000,2600)),  Vector2.Zero,
-                                ModContent.ProjectileType<CosmicSwarm>(), damage, 0, Main.myPlayer, 0, 1);
+                                spawnPos,  Vector2.Zero,
+                                ModContent.ProjectileType<CosmicSwarm>(), damage, 0, -1, 0, 1);
                             proj.velocity = Vector2.Normalize(Projectile.Center - proj.Center) * 24 * Main.rand.NextFloat(1.25f,1.75f);
                             proj.rotation = proj.velocity.ToRotation();
                         }

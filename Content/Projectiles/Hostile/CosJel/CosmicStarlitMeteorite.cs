@@ -43,8 +43,14 @@ public class CosmicStarlitMeteorite : ITDProjectile
     }
     public override void OnSpawn(IEntitySource source)
     {
+        NPC owner = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
+        if (owner == null)
+        {
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
+        }
         Projectile.scale = 0f;
-        // Only create client-side visual emitters when not a dedicated server.
         if (!Main.dedServ)
         {
             emitter = ParticleSystem.NewEmitter<SpaceMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
@@ -92,13 +98,11 @@ public class CosmicStarlitMeteorite : ITDProjectile
         {
             innerScale = 1f;
         }
-        if (!Main.dedServ)
-        {
-            Main.EntitySpriteDraw(texture2, Projectile.Center - Main.screenPosition, frame2, new Color(122, 0, 208, 0) * Main.essScale,
-                Projectile.rotation, new Vector2(texture2.Width * 0.5f, texture2.Height / Main.projFrames[Type] * 0.5f), innerScale * Projectile.scale * 1.25f * Main.essScale, SpriteEffects.None, 0f);
+        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () =>
+        Main.EntitySpriteDraw(texture2, Projectile.Center - Main.screenPosition, frame2, new Color(122, 0, 208, 0) * Main.essScale,
+        Projectile.rotation, new Vector2(texture2.Width * 0.5f, texture2.Height / Main.projFrames[Type] * 0.5f), innerScale * Projectile.scale * 1.25f * Main.essScale, SpriteEffects.None, 0f));
 
-            DrawAtProj(outline);
-        }
+        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => DrawAtProj(outline));
 
         if (Projectile.timeLeft >= 5)
             Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, new Vector2(texture.Width * 0.5f, texture.Height / Main.projFrames[Type] * 0.5f), innerScale * Projectile.scale, SpriteEffects.None, 0f);
@@ -152,30 +156,28 @@ public class CosmicStarlitMeteorite : ITDProjectile
         }
         else
         {
-            if (!Main.dedServ)
+            for (int i = 0; i <= 3; i++)
             {
-                for (int i = 0; i <= 3; i++)
-                {
-                    emitter?.Emit(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), Vector2.Zero);
-                    emitter.scale *= 10;
+                emitter?.Emit(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height), Vector2.Zero);
+                emitter.scale *= 10;
 
-                }
-                if (emitter is null)
-                {
-                    emitter = ParticleSystem.NewEmitter<TwilightDemiseFlash>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
-                    emitter.additive = true;
-                }
-                emitter.keptAlive = true;
-                emitter.timeLeft = 180;
-                if (Projectile.localAI[0] == 120)
-                {
+            }
+            if (emitter is null)
+            {
+                emitter = ParticleSystem.NewEmitter<TwilightDemiseFlash>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
+                emitter.additive = true;
+            }
+            emitter.keptAlive = true;
+            emitter.timeLeft = 180;
+            if (Projectile.localAI[0] == 120)
+            {
 
-                    for (int i = 0; i < 18; i++)
-                    {
-                        emitter?.Emit(Projectile.Center, Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 20);
-                    }
-
+                for (int i = 0; i < 18; i++)
+                {
+                    emitter?.Emit(Projectile.Center, Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 20);
                 }
+
+
             }
 
             Projectile.scale = MathHelper.Clamp(Projectile.scale + 0.1f, 0, 2);
@@ -212,7 +214,7 @@ public class CosmicStarlitMeteorite : ITDProjectile
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicStar>(), damage, knockBack, Main.myPlayer, 0, 1);
             }
         }
-        if (owner.life <= owner.lifeMax)
+        if (owner.localAI[2] != 0)
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {

@@ -38,17 +38,23 @@ public class CosmicSwordStar : ModProjectile
         Projectile.ignoreWater = true;
         Projectile.tileCollide = false;
         Projectile.alpha = 0;
+        Projectile.netImportant = true;
 
     }
+    public int OwnerIndex => (int)Projectile.ai[0];
     public bool FinalStar =>  Projectile.ai[1] == 1;
     public bool RoundTrip => Projectile.ai[2] == 1;
 
     public override void OnSpawn(IEntitySource source)
     {
-        NPC CosJel = Main.npc[(int)Projectile.ai[0]];
-        if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+        NPC CosJel = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
+        if (CosJel == null)
         {
-            if (!RoundTrip)
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
+        }
+        if (!RoundTrip)
             {
                 Vector2 eyePos = CosJel.Center + new Vector2(0, -60); 
                 Vector2 magVec = eyePos - Projectile.Center;
@@ -62,18 +68,11 @@ public class CosmicSwordStar : ModProjectile
                     }
                 });
             }
-            for (int i = 0; i < 20; i++)
-            {
-                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, 2f);
-                Main.dust[dust].noGravity = true;
-                Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
-            }
-        }
-        else
+        for (int i = 0; i < 20; i++)
         {
-            Projectile.timeLeft = 0;
-            Projectile.active = false;
-            Projectile.Kill();
+            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, 2f);
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 10;
         }
     }
     public override Color? GetAlpha(Color lightColor)
@@ -86,35 +85,33 @@ public class CosmicSwordStar : ModProjectile
     }
     public override void AI()
     {
-        NPC CosJel = Main.npc[(int)Projectile.ai[0]];
+        NPC CosJel = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
         if (CosJel == null)
         {
-            Projectile.Kill();
             Projectile.timeLeft = 0;
             Projectile.active = false;
             return;
         }
         Vector2 eyePos = CosJel.Center + new Vector2(0, -60);
-        if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+
+        float killDist = 60;
+        if (Vector2.Distance(Projectile.Center, eyePos) < killDist)
         {
-            float killDist = 60;
-            if (Vector2.Distance(Projectile.Center, eyePos) < killDist)
+            if (FinalStar)
             {
-                if (FinalStar)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), eyePos, Vector2.Zero,
-                            ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
-                        Blast.ai[1] = 300f;
-                        Blast.localAI[1] = Main.rand.NextFloat(0.15f, 0.25f);
-                        Blast.netUpdate = true;
-                    }
-                    Projectile.Kill();
+                    Projectile Blast = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), eyePos, Vector2.Zero,
+                        ModContent.ProjectileType<CosmicJellyfishBlast>(), 0, 0);
+                    Blast.ai[1] = 300f;
+                    Blast.localAI[1] = Main.rand.NextFloat(0.15f, 0.25f);
+                    Blast.netUpdate = true;
                 }
                 Projectile.Kill();
             }
+            Projectile.Kill();
         }
+        
         if (RoundTrip)
         {
             spawnGlow -= 0.02f;

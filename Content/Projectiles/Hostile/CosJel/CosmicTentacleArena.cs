@@ -50,13 +50,12 @@ public class CosmicTentacleArena : ModProjectile
     public ref float circleTime => ref Projectile.ai[2];
     public override void OnSpawn(IEntitySource source)
     {
-        NPC CosJel = Main.npc[(int)Projectile.ai[0]];
-        if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+        NPC CosJel = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
+        if (CosJel == null)
         {
-        }
-        else
-        {
-            Projectile.Kill();
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
+            return;
         }
     }
     public override bool? CanDamage()
@@ -70,79 +69,79 @@ public class CosmicTentacleArena : ModProjectile
     }
     public bool zapDog = false;
     float sweepDir = 1;
+    public int OwnerIndex => (int)Projectile.ai[0];
+
     public override void AI()
     {
-        NPC CosJel = Main.npc[(int)Projectile.ai[0]];
-        if (CosJel.active && CosJel.type == ModContent.NPCType<CosmicJellyfish>())
+        NPC CosJel = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
+        if (CosJel == null)
         {
-            switch (AI_State)
-            {             
-                case ActionState.Extend:
-                    if (Projectile.localAI[0]++ < 60)
-                    {
-                        Projectile.Center = Vector2.Lerp(Projectile.Center, CosJel.Center + new Vector2(0, -distAway), 0.05f);
-                    }
-                    else if (Projectile.localAI[0] >= 60)
-                    {
-                        Projectile.Center = CosJel.Center + new Vector2(0, -distAway).RotatedBy(Projectile.localAI[1]);
-                        AI_State = ActionState.Spinning;
-                        Projectile.localAI[0] = 0;
-                        zapGlow = 1;
-                    }
-                    break;
-                case ActionState.Spinning:
-                    if (Projectile.localAI[0]++ >= 60)
-                    {
-                        Projectile.localAI[1] -= ((float)Math.PI / circleTime) * sweepDir;
-
-                        Projectile.Center = CosJel.Center + new Vector2(0, -distAway).RotatedBy(Projectile.localAI[1]);
-                        zapDog = true;
-                        if (zapDog)
-                        {
-                            if (Projectile.localAI[0] % 4 == 0)
-                            {
-                                for (int i = 0; i < 2; i++)
-                                {
-                                    int dust = Dust.NewDust(Projectile.position, Projectile.width / 2, Projectile.height / 2, DustID.Electric, 0, 0, 0, default, 2f);
-                                    Main.dust[dust].noGravity = true;
-                                    Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 3;
-                                }
-
-                                if (Main.netMode != NetmodeID.MultiplayerClient) // <- SERVER ONLY spawn
-                                {
-                                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CosmicLightningOrb>(),
-                                        Projectile.damage, 0, 0);
-                                    proj.timeLeft = 60 * 30;
-                                }
-                            }
-                        }
-                        if (Projectile.localAI[2]++ >= circleTime * 2)
-                        {
-                            AI_State = ActionState.Retract;
-                            zapDog = false;
-                        }
-                    }
-                    else
-                    {
-                        if (CosJel.HasPlayerTarget)
-                        {
-                            sweepDir = Main.player[CosJel.target].Center.X > CosJel.Center.X ? -1 : 1;
-                        }
-                    }
-                    break;
-                case ActionState.Retract:
-                    Projectile.Center = Vector2.Lerp(Projectile.Center, CosJel.Center, 0.05f);
-                    if (Vector2.Distance(Projectile.Center, CosJel.Center) <= 50)
-                    {
-                        Projectile.Kill();
-                    }
-                    break;
-            }
+            Projectile.timeLeft = 0;
+            Projectile.active = false;
             return;
         }
-        else
+        switch (AI_State)
         {
-            Projectile.Kill();
+            case ActionState.Extend:
+                if (Projectile.localAI[0]++ < 60)
+                {
+                    Projectile.Center = Vector2.Lerp(Projectile.Center, CosJel.Center + new Vector2(0, -distAway), 0.05f);
+                }
+                else if (Projectile.localAI[0] >= 60)
+                {
+                    Projectile.Center = CosJel.Center + new Vector2(0, -distAway).RotatedBy(Projectile.localAI[1]);
+                    AI_State = ActionState.Spinning;
+                    Projectile.localAI[0] = 0;
+                    zapGlow = 1;
+                }
+                break;
+            case ActionState.Spinning:
+                if (Projectile.localAI[0]++ >= 60)
+                {
+                    Projectile.localAI[1] -= ((float)Math.PI / circleTime) * sweepDir;
+
+                    Projectile.Center = CosJel.Center + new Vector2(0, -distAway).RotatedBy(Projectile.localAI[1]);
+                    zapDog = true;
+                    if (zapDog)
+                    {
+                        if (Projectile.localAI[0] % 4 == 0)
+                        {
+                            for (int i = 0; i < 2; i++)
+                            {
+                                int dust = Dust.NewDust(Projectile.position, Projectile.width / 2, Projectile.height / 2, DustID.Electric, 0, 0, 0, default, 2f);
+                                Main.dust[dust].noGravity = true;
+                                Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 3;
+                            }
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient) // <- SERVER ONLY spawn
+                            {
+                                Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CosmicLightningOrb>(),
+                                    Projectile.damage, 0, 0);
+                                proj.timeLeft = 60 * 30;
+                            }
+                        }
+                    }
+                    if (Projectile.localAI[2]++ >= circleTime * 2)
+                    {
+                        AI_State = ActionState.Retract;
+                        zapDog = false;
+                    }
+                }
+                else
+                {
+                    if (CosJel.HasPlayerTarget)
+                    {
+                        sweepDir = Main.player[CosJel.target].Center.X > CosJel.Center.X ? -1 : 1;
+                    }
+                }
+                break;
+            case ActionState.Retract:
+                Projectile.Center = Vector2.Lerp(Projectile.Center, CosJel.Center, 0.05f);
+                if (Vector2.Distance(Projectile.Center, CosJel.Center) <= 50)
+                {
+                    Projectile.Kill();
+                }
+                break;
         }
         zapGlow -= 0.05f;
 

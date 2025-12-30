@@ -59,7 +59,7 @@ public class CosmicSwordStar2 : ModProjectile
     {
         if (Projectile.localAI[0]++ == startTime)
         {
-            Projectile.velocity = Projectile.rotation.ToRotationVector2() * 2;
+            Projectile.velocity = rotation.ToRotationVector2() * 2;
             Projectile.ai[1]++;
             spawnGlow = 1; 
             for (int i = 0; i < 20; i++)
