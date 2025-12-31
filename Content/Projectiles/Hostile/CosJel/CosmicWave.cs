@@ -75,7 +75,6 @@ public class CosmicWave : ModProjectile
                 Projectile.alpha += 2;
             else Projectile.Kill();
         }
-
         Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
     }
     public override Color? GetAlpha(Color lightColor)
