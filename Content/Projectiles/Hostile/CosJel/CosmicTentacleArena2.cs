@@ -102,13 +102,13 @@ public class CosmicTentacleArena2 : ModProjectile
                         zapDog = true;
                         if (zapDog)
                         {
-                            if (Projectile.localAI[0] % 5 == 0)
+                            if (Projectile.localAI[0] % 8 == 0)
                             {
                                 for (int i = 0; i < 2; i++)
                                 {
                                     int dust = Dust.NewDust(Projectile.position, Projectile.width / 2, Projectile.height / 2, ModContent.DustType<CosJelDust>(), 0, 0, 0, default, 2f);
                                     Main.dust[dust].noGravity = true;
-                                    Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 3;
+                                    Main.dust[dust].velocity = Vector2.UnitX.RotatedByRandom(Math.PI) * Main.rand.NextFloat(0.9f, 1.1f) * 2.5f;
                                 }
                                 Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center,
                                     Vector2.UnitX.RotatedBy(MathHelper.PiOver2 + Projectile.localAI[1]) * 6, ModContent.ProjectileType<CosmicStar>(),
@@ -203,7 +203,7 @@ public class CosmicTentacleArena2 : ModProjectile
                 {
                     float radians = (i + timer) * MathHelper.TwoPi;
 
-                    Main.spriteBatch.Draw(segmentTextureToDraw.Value, segmentDrawPosition - Main.screenPosition + new Vector2(0f, 4).RotatedBy(radians) * time, segmentSourceRectangle, new Color(90, 70, 255, 50) * Projectile.Opacity, segmentRotation, segmentOrigin, 1f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(segmentTextureToDraw.Value, segmentDrawPosition - Main.screenPosition + new Vector2(0f, 4).RotatedBy(radians) * time, segmentSourceRectangle, new Color(253, 241, 186, 50) * Projectile.Opacity, segmentRotation, segmentOrigin, 1f, SpriteEffects.None, 0f);
 
                 }
             }
@@ -211,7 +211,7 @@ public class CosmicTentacleArena2 : ModProjectile
             {
                 float scale = 2f * Projectile.scale * (float)Math.Cos(Math.PI / 2 * zapGlow);
                 float opacity = Projectile.Opacity * (float)Math.Sqrt(zapGlow);
-                Main.spriteBatch.Draw(segmentTextureToDraw.Value, segmentDrawPosition - Main.screenPosition, segmentSourceRectangle, new Color(90, 70, 255, 50) * opacity, segmentRotation, segmentOrigin, 1f * scale, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(segmentTextureToDraw.Value, segmentDrawPosition - Main.screenPosition, segmentSourceRectangle, new Color(253, 241, 186, 50) * opacity, segmentRotation, segmentOrigin, 1f * scale, SpriteEffects.None, 0f);
             }
             Main.spriteBatch.Draw(segmentTextureToDraw.Value, segmentDrawPosition - Main.screenPosition, segmentSourceRectangle, segmentDrawColor, segmentRotation, segmentOrigin, 1f,  0, 0f);
             segmentDrawPosition += unitvectorFromProjectileToCosJel * segmentSegmentLength;

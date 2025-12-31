@@ -83,17 +83,28 @@ namespace ITD.Content.Projectiles.Hostile.CosJel
             Rectangle rectangle = new(0, frameY, tex.Width, sizeY);
             Vector2 origin = rectangle.Size() / 2f;
             SpriteEffects spriteEffects = Projectile.velocity.X >= 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            Color glowColor = new Color(36, 12, 34,50) * 0.5f;
 
-            for (int i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i++)
+            for (float i = 0; i < ProjectileID.Sets.TrailCacheLength[Type]; i += 0.15f)
             {
-                Color oldColor = Color.White;
-                oldColor *= 0.5f;
-                oldColor *= (float)(ProjectileID.Sets.TrailCacheLength[Projectile.type] - i) / ProjectileID.Sets.TrailCacheLength[Projectile.type];
-                Vector2 oldPos = Projectile.oldPos[i] + Projectile.Size / 2 + offset;
-                float oldRot = Projectile.oldRot[i];
-                Main.EntitySpriteDraw(tex, oldPos - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rectangle, Projectile.GetAlpha(oldColor),
-                    oldRot, origin, stretch, spriteEffects, 0);
+                Color color27 = glowColor * 0.35f;
+                Color color28 = glowColor;
+                color27 *= (float)(ProjectileID.Sets.TrailCacheLength[Type] - i) / ProjectileID.Sets.TrailCacheLength[Type] * 0.75f;
+                color28 *= (float)(ProjectileID.Sets.TrailCacheLength[Type] - i) / ProjectileID.Sets.TrailCacheLength[Type] * 2f;
+
+                float scale = Projectile.scale;
+                scale *= (float)(ProjectileID.Sets.TrailCacheLength[Type] - i) / ProjectileID.Sets.TrailCacheLength[Type];
+                int max0 = (int)i - 1;//Math.Max((int)i - 1, 0);
+                if (max0 < 0)
+                    continue;
+                Vector2 value4 = Projectile.oldPos[max0];
+                float num165 = Projectile.rotation; //NPC.oldRot[max0];
+                Vector2 center2 = Vector2.Lerp(Projectile.oldPos[(int)i], Projectile.oldPos[max0], 1 - i % 1);
+                center2 += Projectile.Size / 2;
+                Main.EntitySpriteDraw(tex, center2 - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rectangle, new Color(65, 80, 128, 50),
+    num165, origin, stretch * scale, spriteEffects, 0);
             }
+
             float time = Main.GlobalTimeWrappedHourly;
             float timer = (float)Main.time / 240f + time * 0.04f;
 

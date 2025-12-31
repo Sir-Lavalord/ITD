@@ -150,7 +150,7 @@ public class CosmicFistBump : ModProjectile
                             Dust dust = Dust.NewDustDirect(Projectile.Center, 10, 10, ModContent.DustType<CosJelDust>(), 0, 0, 60, default, Main.rand.NextFloat(1.5f, 2f));
                             dust.noGravity = false;
                             dust.velocity = velo.RotatedByRandom(0.8f) * Main.rand.NextFloat(0.75f, 1.25f);
-                        }  
+                        }
                         if (isMainHand)
                         {
                             if (owner.localAI[2] != 0)
@@ -225,6 +225,24 @@ public class CosmicFistBump : ModProjectile
                     Projectile.Center = Vector2.Lerp(Projectile.Center, playerPos, 0.5f);
                     if (Vector2.Distance(Projectile.Center, playerPos) <= 10)
                     {
+                        if (isMainHand)
+                        {
+                            if (owner.localAI[2] != 0)
+                            {
+                                int amount = 6;
+                                for (int i = 0; i < amount; i++)
+                                {
+                                    double rad = Math.PI / (amount / 2) * i;
+                                    int damage = (int)(Projectile.damage * 0.28f);
+                                    int knockBack = 3;
+                                    float speed = 12f;
+                                    Vector2 vector = Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * speed;
+
+                                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicStar>(), damage, knockBack, Main.myPlayer, 0, 1);
+
+                                }
+                            }
+                        }
                         Projectile.Kill();
                         player.GetITDPlayer().BetterScreenshake(10, 10, 10, true);
                     }

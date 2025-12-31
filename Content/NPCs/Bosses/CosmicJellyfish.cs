@@ -17,6 +17,7 @@ using ITD.Systems.Extensions;
 using ITD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -124,17 +125,22 @@ namespace ITD.Content.NPCs.Bosses
         }
         public void CheckAttackList()
         {
+            //string result = string.Join(", ", availableAttacks); // Output: "1, 2, 3"
+            //Main.NewText(result);
             if (bSecondStage)
             {
-                if (Main.expertMode)
+                if (masterMode)
+                {
+                    maxAttack = 10;
+                }
+                if (expertMode && !masterMode)
                 {
                     maxAttack = 9;
                 }
-                if (Main.masterMode)
-                { 
-                    maxAttack = 10;
+                else if (!expertMode && !masterMode)
+                {
+                    maxAttack = 8;
                 }
-                else maxAttack = 8;
             }
             else
             {
@@ -249,7 +255,7 @@ namespace ITD.Content.NPCs.Bosses
         //testing this: boss doesn't hit in these movement mode to avoid unfair hit
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
-            return AI_State != MovementState.FollowingRegular && AI_State != MovementState.FollowingSlow;
+            return AI_State != MovementState.FollowingRegular && AI_State != MovementState.FollowingSlow && AttackID != 6;//fair?
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -367,11 +373,6 @@ namespace ITD.Content.NPCs.Bosses
                         break;
                     SetSpell(player);
                     break;
-/*                case 11: //set's screen drag
-                    if (!PlayerCheck(player))
-                        break;
-                    SetSpell(player);
-                    break;*/
             }
         }
         //--------------------------------------------------------------------------------------------------------------------------------
@@ -523,7 +524,7 @@ namespace ITD.Content.NPCs.Bosses
                 AttackCount++;
             }
 
-            if (AttackCount > 3 && AITimer1 >= 150)
+            if (AttackCount > 3 && AITimer1 >= 120)
             {
                 AttackID = GetNextAttack();
                 ResetStats(true);
@@ -533,7 +534,7 @@ namespace ITD.Content.NPCs.Bosses
         public void TenseiSpell(Player player)
         {
             float dir = (AttackCount % 2 == 0) ? 1 : -1;
-            float finalAttack = 7;
+            float finalAttack = 5;
             bool notFinal = AttackCount < finalAttack;
             float rotateAngle = notFinal ? 110 : 180;
             float angleIncrement = notFinal ? 5 : 6;
@@ -574,7 +575,7 @@ namespace ITD.Content.NPCs.Bosses
                     float dist = 400;
                     if (expertMode || masterMode)
                     {
-                        dist = 400 - AttackCount * 20;
+                        dist = 400 - AttackCount * 30;
                     }
                     if (AttackCount == finalAttack - 1 && bSecondStage)
                         dist = masterMode ? 450 : expertMode ? 500 : 600;
@@ -667,7 +668,7 @@ namespace ITD.Content.NPCs.Bosses
             float tentacleDistAway = 1500;
             float sweepTime = 180;
             tentacleDistAway = masterMode ? 1200 : expertMode ? 1500 : 1800;
-            sweepTime = masterMode ? 150 : expertMode ? 180 : 120;
+            sweepTime = masterMode ? 200 : expertMode ? 240 : 120;
             if (AITimer2 <= 0)
             {
                 AI_State = MovementState.Teleport;
@@ -688,7 +689,7 @@ namespace ITD.Content.NPCs.Bosses
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicTentacleArena2>(), ProjectileDamage(NPC.damage), 0f, -1, NPC.whoAmI, tentacleDistAway / 6, sweepTime / 5);
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicTentacleArena2>(), ProjectileDamage(NPC.damage), 0f, -1, NPC.whoAmI, tentacleDistAway / 6.5f, sweepTime / 3);
                     }
                 }
                 if (AITimer1 >= 400 + sweepTime)//loop
@@ -821,7 +822,7 @@ namespace ITD.Content.NPCs.Bosses
                     AttackCount++;
                 }
             }
-            if (AttackCount > 8)//loop
+            if (AttackCount >= 6)//loop
             {
                 AI_State = MovementState.FollowingRegular;
                 AttackID = GetNextAttack();
@@ -927,7 +928,7 @@ namespace ITD.Content.NPCs.Bosses
 
         public void SetSpell(Player player)
         {
-            float maxAttackPhase = 3;
+            float maxAttackPhase = 4;
             ref float AttackPhase = ref AITimer2;
             distanceAbove = 350;
             AITimer1++;
@@ -953,16 +954,16 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     break;
                 case 1:
-                    if (AITimer1 % 120 == 0)
+                    if (AITimer1 % 150 == 0)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            spawnPunch(160, AttackCount % 2 == 0 ? 1 : -1);
+                            spawnPunch(120, AttackCount % 2 == 0 ? 1 : -1);
                         }
                         AttackCount++;
 
                     }
-                    if (AITimer1 % 240 == 0)
+                    if (AITimer1 % 300 == 0)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
@@ -984,19 +985,22 @@ namespace ITD.Content.NPCs.Bosses
                             spawnHand(1);
                             spawnHand(-1);
                         }
-                        if (AttackCount < 2)
-                        {
-                            AITimer1 = 0;
-                        }
                         AttackCount++;
-
+                        if (AttackCount >= 2)
+                        {
+                            AttackCount = 0;
+                            AITimer1 = 0;
+                            AttackPhase++;
+                        }
                     }
+                    break;
+                case 3:
                     break;
                 default:
                     goto case 0;
                  
             }
-            if (AttackCount >= 2 && AttackPhase >= maxAttackPhase - 1 && AITimer1 >= 600)
+            if (AttackPhase >= maxAttackPhase - 1 && AITimer1 >= 600)
             {
                 AI_State = MovementState.FollowingRegular;
                 AttackID = GetNextAttack();
@@ -1335,7 +1339,7 @@ namespace ITD.Content.NPCs.Bosses
                         case 6:
                             Teleport(player.Center + new Vector2(0, -250), 60, 90, (int)AttackID);
                             break;
-                        case 10:
+                        case 9:
                             if (NPC.localAI[0] == 0)
                             {
                                 NPC.localAI[0] = Main.rand.NextFloat(-400, 400);
@@ -1368,7 +1372,7 @@ namespace ITD.Content.NPCs.Bosses
                     }
                     else
                     {
-                        Dash(dashPos, 1, 28, 50, 60, 10);
+                        Dash(dashPos, 1, 28, 50, 60, 9);
                     }
                     if (DashTimer > 0)
                     {
@@ -1426,7 +1430,7 @@ namespace ITD.Content.NPCs.Bosses
                         AITimer2 = 1;
                         distanceAbove = 250;
                         break;
-                    case 10:
+                    case 9:
                         AITimer2 = 1;
                         AI_State = MovementState.Aligning;
                         break;
@@ -1468,6 +1472,20 @@ namespace ITD.Content.NPCs.Bosses
             switch (attackID)
             {
                 case 1:
+                    if (DashTimer == time1 + 1)
+                    {
+                        int ring = 100 - (int)(DashTimer * 2);
+                        for (int index1 = 0; index1 < ring; ++index1)
+                        {
+                            Vector2 vector2 = (-Vector2.UnitY.RotatedBy(index1 * 3.14159274101257 * 2 / ring) * new Vector2(6f, 12f)).RotatedBy(NPC.velocity.ToRotation());
+                            int index2 = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<CosJelDust>(), 0.0f, 0.0f, 0, new Color(), 1f);
+                            Main.dust[index2].scale = 3f;
+                            Main.dust[index2].noGravity = true;
+                            Main.dust[index2].position = NPC.Center;
+                            Main.dust[index2].velocity = Vector2.Zero;
+                            Main.dust[index2].velocity += vector2 * 1f * (reset - DashTimer) / reset + NPC.velocity * 0.5f;
+                        }
+                    }
                     if (DashTimer % 10 == 0 && DashTimer > time1 && DashTimer < reset)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -1500,9 +1518,11 @@ namespace ITD.Content.NPCs.Bosses
                             (NPC.defDamage), 0);
                     }
                     break;
-                case 10:
+                case 9:
                     if (DashTimer == 1)
-                        AIRand = 40 + Main.rand.Next(-2, 1);
+                    {
+                        AIRand = 38;//not using rand is better?
+                    }
                     if (DashTimer == time1 + 1 || DashTimer == AIRand - 2)
                     {
                         int ring = 128 - (int)(DashTimer * 2);
@@ -1586,7 +1606,7 @@ namespace ITD.Content.NPCs.Bosses
                         AITimer1 = 0;
                         AITimer2 = 0;
                         break;
-                    case 10:
+                    case 9:
                         AITimer1 = 0;
                         AITimer2 = 0;
                         NPC.localAI[0] = 0;
@@ -1608,7 +1628,7 @@ namespace ITD.Content.NPCs.Bosses
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    availableAttacks.AddRange(Enumerable.Range(6, maxAttack - 1));
+                    availableAttacks.AddRange(Enumerable.Range(6, maxAttack).ToList());
                     AITimer1 = 0;
                     AITimer2 = 0;
                     NPC.localAI[2] = 1;
@@ -1871,7 +1891,7 @@ namespace ITD.Content.NPCs.Bosses
             }
 
             time = time * 0.5f + 0.75f;
-            if (AI_State != MovementState.FollowingRegular && AI_State != MovementState.FollowingSlow && ((teleEffect <= 0) && !reappearTele))
+            if (AI_State != MovementState.FollowingRegular && AI_State != MovementState.FollowingSlow && AttackID != 6 && ((teleEffect <= 0) && !reappearTele))
             {
                 glowOpacity = MathHelper.Clamp(glowOpacity + 0.1f, 0f, 1f);
                 for (float i = 0f; i < 1f; i += 0.25f)
