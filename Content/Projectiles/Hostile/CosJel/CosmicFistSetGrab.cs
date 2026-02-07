@@ -1,5 +1,7 @@
 ﻿using ITD.Content.Dusts;
 using ITD.Content.NPCs.Bosses;
+using ITD.Particles;
+using ITD.Particles.Misc;
 using ITD.Utilities;
 using System;
 using Terraria.Audio;
@@ -111,7 +113,7 @@ public class CosmicFistSetGrab : ModProjectile
                         }
                     }
                 }
-                Projectile.Center = owner.Center + new Vector2(dir * 300, -250);
+                Projectile.Center = owner.Center + new Vector2(dir * 300, 0);
                 Projectile.rotation = MathHelper.PiOver2 * -dir;
                 break;
             case ActionState.GetWater:
@@ -125,7 +127,7 @@ public class CosmicFistSetGrab : ModProjectile
                     {
                         Projectile water1 = Projectile.NewProjectileDirect(owner.GetSource_FromAI(),
                             Projectile.Center, Vector2.Zero,
-                            ModContent.ProjectileType<CosmicWaterWall>(), 0, 0, -1, owner.whoAmI, Projectile.whoAmI);
+                            ModContent.ProjectileType<CosmicWaterWall>(), (int)(Projectile.damage * 0.25f), 0, -1, owner.whoAmI, Projectile.whoAmI);
                         water1.rotation = MathHelper.PiOver2 * -dir;
                     }
                 }

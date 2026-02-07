@@ -1,4 +1,5 @@
-﻿using ITD.Content.NPCs.Bosses;
+﻿using ITD.Content.Dusts;
+using ITD.Content.NPCs.Bosses;
 using ITD.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -24,6 +25,8 @@ public class CosmicWaterWall : ITDProjectile
         Projectile.alpha = 255;
         Projectile.hide = true;
         Projectile.netImportant = true;
+        Projectile.hostile = true;
+        Projectile.friendly = false;
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -34,10 +37,14 @@ public class CosmicWaterWall : ITDProjectile
     Vector2 spawnPos = Vector2.Zero;
     public bool retractWall = false;
     public int OwnerIndex => (int)Projectile.ai[0];
-    //strike the fear of god into q if he reads this
+    //strikes the fear of god into q if he reads this
     //hand is owner2
     public int ParentIndex => (int)Projectile.ai[1];
 
+    public override bool? CanDamage()
+    {
+        return base.CanDamage();
+    }
     public override void OnSpawn(IEntitySource source)
     {
         NPC CosJel = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<CosmicJellyfish>());
@@ -57,6 +64,7 @@ public class CosmicWaterWall : ITDProjectile
             Projectile.active = false;
             return;
         }
+
         Projectile hand = Main.projectile[ParentIndex];
         if (hand == null || !hand.active || hand.timeLeft <= 0)
         {
@@ -78,6 +86,20 @@ public class CosmicWaterWall : ITDProjectile
             hand.ai[2] = 0;
             Projectile.netUpdate = true;
         }
+    }
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+    {
+        float num1 = 0f;
+        float wallHeight = 2400f;
+        float dir = (Projectile.rotation / MathHelper.PiOver2);
+        if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
+            new Vector2(Projectile.Center.X, Projectile.Center.Y + wallHeight), new Vector2(Projectile.Center.X, Projectile.Center.Y - wallHeight),
+            50f, ref num1))
+        {
+
+            return true;
+        }
+        return base.Colliding(projHitbox, targetHitbox);
     }
     private void SpawnProjectileWall(int layer, int maxLayer, float dir, float deviation)
     {

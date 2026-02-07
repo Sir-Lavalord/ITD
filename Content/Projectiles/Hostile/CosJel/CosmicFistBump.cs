@@ -122,6 +122,8 @@ public class CosmicFistBump : ModProjectile
                     AI_State = ActionState.Ramming;
                     Projectile.localAI[1] = 0;
                 }
+                Dust dust1 = Dust.NewDustPerfect(Projectile.Center - new Vector2(80 * (isMainHand ? -1: 1),0).RotatedBy(Projectile.localAI[0]), DustID.PurpleCrystalShard,new Vector2(0),0,default,2.5f);
+                dust1.noGravity = true;
                 Projectile.rotation = (Projectile.Center - player.Center).ToRotation() + MathHelper.PiOver2;
                 Projectile.Center = player.Center + new Vector2(isMainHand ? 200 : -200, 0).RotatedBy(Projectile.localAI[0]);
                 playerPos = player.Center;
