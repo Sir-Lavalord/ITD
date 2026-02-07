@@ -294,4 +294,8 @@
     </Reference>
   </ItemGroup>
 	
+  <ItemGroup>
+    <Folder Include="Content\Buffs\MinionBuffs\" />
+  </ItemGroup>
+	
 </Project>

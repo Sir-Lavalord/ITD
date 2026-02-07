@@ -120,13 +120,11 @@ namespace ITD.Content.NPCs.Bosses
         {
             if (AI_State == MovementState.SuperDashing)
             {
-                target.AddBuff(BuffID.BrokenArmor, 300);
+                target.AddBuff(BuffID.BrokenArmor, 600);
             }
         }
         public void CheckAttackList()
         {
-            //string result = string.Join(", ", availableAttacks); // Output: "1, 2, 3"
-            //Main.NewText(result);
             if (bSecondStage)
             {
                 if (masterMode)
@@ -256,6 +254,14 @@ namespace ITD.Content.NPCs.Bosses
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
             return AI_State != MovementState.FollowingRegular && AI_State != MovementState.FollowingSlow && AttackID != 6;//fair?
+        }
+        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
+        {
+            modifiers.FinalDamage *= 1.5f;
+            if (AI_State == MovementState.SuperDashing)
+            {
+                modifiers.FinalDamage *= 1.5f;
+            }
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -454,6 +460,7 @@ namespace ITD.Content.NPCs.Bosses
                 AttackID = GetNextAttack();
                 ResetStats();
                 distanceAbove = 250;
+                AITimer1 = -60;
             }
         }
         public void WaveDash()
@@ -502,10 +509,11 @@ namespace ITD.Content.NPCs.Bosses
         {
             distanceAbove = 350;
             AITimer1++;
+            float maxAttackCount = 3;
             float restTime = masterMode ? 250 : expertMode ? 280 : 300;
             if ((AITimer1 >= 120 && AttackCount <= 0) || AITimer1 >= restTime)
             {
-                if (AttackCount < 3)
+                if (AttackCount < maxAttackCount)
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
@@ -524,11 +532,12 @@ namespace ITD.Content.NPCs.Bosses
                 AttackCount++;
             }
 
-            if (AttackCount > 3 && AITimer1 >= 120)
+            if (AttackCount > maxAttackCount)
             {
                 AttackID = GetNextAttack();
                 ResetStats(true);
                 AttackCount = 0;
+                AITimer1 = -120;
             }
         }
         public void TenseiSpell(Player player)
@@ -617,7 +626,7 @@ namespace ITD.Content.NPCs.Bosses
                     }
                 }
             }
-            if (AITimer1 >= 240)
+            if (AITimer1 >= 200)
             {
                 MeteorTarget ??= FindMeteorite(20000);
 
@@ -685,11 +694,14 @@ namespace ITD.Content.NPCs.Bosses
                     }
 
                 }
-                if (AITimer1 == 150)
+                if (masterMode)
                 {
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    if (AITimer1 == 150)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicTentacleArena2>(), ProjectileDamage(NPC.damage), 0f, -1, NPC.whoAmI, tentacleDistAway / 6.5f, sweepTime / 3);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CosmicTentacleArena2>(), ProjectileDamage(NPC.damage), 0f, -1, NPC.whoAmI, tentacleDistAway / 6.5f, sweepTime / 3);
+                        }
                     }
                 }
                 if (AITimer1 >= 400 + sweepTime)//loop
@@ -707,9 +719,9 @@ namespace ITD.Content.NPCs.Bosses
 
             AITimer1++;
             distanceAbove = 300;
-            int maxAttack = masterMode ? 3 : expertMode ? 4 : 5;//less attack means faster cycle
+            int maxAttackCount = masterMode ? 3 : expertMode ? 4 : 5;//less attack means faster cycle
             float restTime = masterMode ? 240 : expertMode ? 320 : 450;
-            if (AttackCount < maxAttack)
+            if (AttackCount < maxAttackCount)
             {
                 if (AITimer1 >= 90 && AttackCount <= 0 || AITimer1 >= restTime)
                 {
@@ -735,12 +747,13 @@ namespace ITD.Content.NPCs.Bosses
             {
                 AI_State = MovementState.FollowingRegular;
             }
-            if (AttackCount >= maxAttack && AITimer1 >= restTime + 50)//loop
+            if (AttackCount >= maxAttackCount)//loop
             {
                 AI_State = MovementState.FollowingRegular;
                 AttackID = GetNextAttack();
                 ResetStats(true);
                 distanceAbove = 250;
+                AITimer1 = -(restTime + 50);
             }
         }
 
@@ -898,12 +911,12 @@ namespace ITD.Content.NPCs.Bosses
             }
         }
 
-        public const int maxDash = 6;
+        public const int maxDash = 8;
         public void BlazingStar(Player player)
         {
             if (AITimer2 <= 0)
             {
-                if (AttackCount >= maxDash - 2)
+                if (AttackCount >= maxDash / 2)
                 {
                     distanceAbove = Main.screenHeight * (AttackCount % 2 == 0 ? 1 : -1);
                     distanceAway = 0;
@@ -970,7 +983,7 @@ namespace ITD.Content.NPCs.Bosses
                             spawnHand(AttackCount % 4 == 0 ? 1 : -1);
                         }
                     }
-                    if (AttackCount >= 6)
+                    if (AttackCount >= 3)
                     {
                         AttackCount = 0;
                         AITimer1 = 0;
@@ -986,7 +999,7 @@ namespace ITD.Content.NPCs.Bosses
                             spawnHand(-1);
                         }
                         AttackCount++;
-                        if (AttackCount >= 2)
+                        if (AttackCount >= 3)
                         {
                             AttackCount = 0;
                             AITimer1 = 0;
@@ -1000,12 +1013,12 @@ namespace ITD.Content.NPCs.Bosses
                     goto case 0;
                  
             }
-            if (AttackPhase >= maxAttackPhase - 1 && AITimer1 >= 600)
+            if (AttackPhase >= maxAttackPhase - 1)
             {
                 AI_State = MovementState.FollowingRegular;
                 AttackID = GetNextAttack();
                 ResetStats();
-                AITimer1 = 0;
+                AITimer1 = -300;
             }
             void spawnHand(int dir = -1)
             {
@@ -1027,8 +1040,6 @@ namespace ITD.Content.NPCs.Bosses
             int hitTime = 1;
             float restTime = masterMode ? 45 : expertMode ? 60 : 60;
             hitTime = masterMode ? 5 : expertMode ? 5 : 3;
-            //hitTime = 1;
-            //restTime = 10;
             NPC.dontTakeDamage = true;
 
             if (AI_State == MovementState.Teleport)
@@ -1314,7 +1325,7 @@ namespace ITD.Content.NPCs.Bosses
                 case MovementState.Aligning:
                     if (AITimer1++ <= Math.Max(60 - AttackCount * 10, 10))
                     {
-                        if (AttackCount >= maxDash - 2)
+                        if (AttackCount >= maxDash / 2)
                         {
                             NPC.Center = player.Center + new Vector2(distanceAway, distanceAbove);
                         }
@@ -1344,7 +1355,7 @@ namespace ITD.Content.NPCs.Bosses
                             {
                                 NPC.localAI[0] = Main.rand.NextFloat(-400, 400);
                             }
-                            if (AttackCount >= maxDash - 2)
+                            if (AttackCount >= maxDash / 2)
                             {
                                 Teleport(player.Center + new Vector2(0, Main.screenHeight * (AttackCount % 2 == 0 ? 1 : -1)), 40, 80, (int)AttackID);
                             }
@@ -1802,7 +1813,6 @@ namespace ITD.Content.NPCs.Bosses
             Vector2 center = NPC.Size / 2f;
             Texture2D glowTexture = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
             Texture2D sDashTex = ModContent.Request<Texture2D>(Texture + "_DashGlow").Value;
-            Texture2D sDashTex2 = ModContent.Request<Texture2D>(Texture + "_DashThing").Value;
             Texture2D sDashTrail = TextureAssets.Extra[ExtrasID.SharpTears].Value;
 
             if (DashTimer > 0)

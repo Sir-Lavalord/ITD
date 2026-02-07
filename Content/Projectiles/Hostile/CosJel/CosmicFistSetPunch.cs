@@ -1,5 +1,8 @@
 ﻿using ITD.Content.Dusts;
 using ITD.Content.NPCs.Bosses;
+using ITD.Particles;
+using ITD.Particles.CosJel;
+using ITD.Particles.Misc;
 using ITD.Utilities;
 using System;
 using Terraria.Audio;
@@ -29,8 +32,10 @@ public class CosmicFistSetPunch : ModProjectile
     public ref float AttackTime => ref Projectile.ai[2];
 
     public Vector2 targetPos = Vector2.Zero;
+
     public VertexStrip TrailStrip = new();
 
+    public ParticleEmitter emitter;
     public override void SetStaticDefaults()
     {
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 24;
@@ -39,8 +44,8 @@ public class CosmicFistSetPunch : ModProjectile
     }
     public override void SetDefaults()
     {
-        Projectile.width = 64;
-        Projectile.height = 64;
+        Projectile.width = 90;
+        Projectile.height = 90;
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.penetrate = -1;
@@ -49,8 +54,12 @@ public class CosmicFistSetPunch : ModProjectile
         Projectile.tileCollide = false;
         Projectile.scale = 1.5f;
         Projectile.Opacity = 0;
-        Projectile.gfxOffY = -20;
+        Projectile.gfxOffY = 0;
+        emitter = ParticleSystem.NewEmitter<BeanMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+        emitter.tag = Projectile;
     }
+
+
     public override bool? CanDamage()
     {
         return true;
@@ -64,6 +73,9 @@ public class CosmicFistSetPunch : ModProjectile
             Projectile.active = false;
             return;
         }
+        emitter = ParticleSystem.NewEmitter<SpaceMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+        emitter.tag = Projectile;
+        emitter.keptAlive = true;
     }
     static bool isExpert => Main.expertMode;
     static bool isMaster => Main.masterMode;
@@ -82,6 +94,8 @@ public class CosmicFistSetPunch : ModProjectile
             Projectile.active = false;
             return;
         }
+        if (emitter != null)
+            emitter.keptAlive = true;
         Player player = Main.player[owner.target];
         float dir = (isLeftHand ? -1 : 1);
         switch (AI_State)
@@ -121,14 +135,23 @@ public class CosmicFistSetPunch : ModProjectile
                         }
                     }
                 }
-                Projectile.Center = owner.Center + new Vector2(dir * 150, -150);
-                Projectile.rotation = Projectile.AngleTo(player.Center) - MathHelper.PiOver2;
+                Projectile.Center = owner.Center + new Vector2(dir * 150, -100);
+                //wtf is this rotation
+                Projectile.rotation = Projectile.rotation.AngleTowards(Projectile.AngleTo(player.Center) - MathHelper.PiOver2 + (MathHelper.PiOver4) * dir, 0.6f);
+
                 break;
             case ActionState.Tracking:
                 Projectile.frame = 1;
+                if (Main.rand.NextBool(2))
+                {
+                    Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
+                    Vector2 veloDelta = Projectile.position - Projectile.oldPosition; // i can't use projectile.velocity here because we're manually changing the position for most of its existence
+                    Vector2 sideOffset = new Vector2(16f, 0) * (isLeftHand ? 1 : -1); // so the dust appears visually from the wrists
+                    emitter?.Emit(Projectile.Center + new Vector2(Main.rand.NextFloat(-Projectile.height / 3, Projectile.height / 3), Projectile.height / 2 - 100) + sideOffset, (-(velo * 6f) + veloDelta).RotatedByRandom(0.6f),0,60);
+                }
                 if (Projectile.localAI[1]++ < AttackTime)
                 {
-                    Projectile.rotation = Projectile.AngleTo(player.Center) - MathHelper.PiOver2;
+                    Projectile.rotation = Projectile.rotation.AngleTowards(Projectile.AngleTo(player.Center) - MathHelper.PiOver2 + (MathHelper.PiOver4) * dir, 0.6f);
                 }
                 else
                 {
@@ -140,21 +163,26 @@ public class CosmicFistSetPunch : ModProjectile
                     else if (Projectile.localAI[1] >= AttackTime + 30)
                     {
 
-                        Projectile.velocity = Vector2.Normalize(player.Center - Projectile.Center) * 18;
+                        Projectile.velocity = Vector2.Normalize((player.Center) - Projectile.Center) * 14;
                         Projectile.localAI[1] = 0;
                         AI_State = ActionState.Punching;
                     }
                     SoundEngine.PlaySound(SoundID.Item14 with { Volume = 0.8f, PitchVariance = 0.3f }, Projectile.Center);
                 }
-                Projectile.Center = owner.Center + new Vector2(dir * 150, -150);
+                Projectile.Center = owner.Center + new Vector2(dir * 150, -100);
                 break;
             case ActionState.Punching:
-                Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
                 if (Projectile.localAI[1]++ >= 120)
                 {
                     if (Projectile.alpha < 180)
                         Projectile.alpha += 2;
                     else Projectile.Kill();
+                }
+                if (Main.rand.NextBool(1))
+                {
+                    Vector2 velo = Projectile.rotation.ToRotationVector2().RotatedBy(MathHelper.PiOver2);
+                    Vector2 sideOffset = new Vector2(-16f, 0f) * Projectile.spriteDirection; // so the dust appears visually from the wrists
+                    emitter?.Emit(Projectile.Center + new Vector2(Main.rand.NextFloat(-Projectile.height / 3, Projectile.height / 3), Projectile.height / 2 - 100) + sideOffset, (-(velo * 6f)).RotatedByRandom(0.6f),0,90);
                 }
                 break;
         }
@@ -177,13 +205,15 @@ public class CosmicFistSetPunch : ModProjectile
     }
     private float StripWidth(float progressOnStrip)
     {
-        return 36 * Projectile.scale;
+        return 40 * Projectile.scale;
     }
     public override bool PreDraw(ref Color lightColor)
     {
         Texture2D tex = TextureAssets.Projectile[Type].Value;
+        Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
         Rectangle frame = tex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
         Vector2 center = Projectile.Size / 2f;
+        SpriteBatch sb = Main.spriteBatch;
         for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
         {
             Projectile.oldRot[i] = Projectile.oldRot[i - 1];
@@ -193,11 +223,14 @@ public class CosmicFistSetPunch : ModProjectile
 
         Vector2 miragePos = Projectile.position - Main.screenPosition + center;
         Vector2 origin = new(tex.Width * 0.5f, tex.Height / Main.projFrames[Type] * 0.5f);
-
         GameShaders.Misc["LightDisc"].Apply(null);
         TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, Projectile.Size * 0.5f - Main.screenPosition, Projectile.oldPos.Length, true);
         TrailStrip.DrawTrail();
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        void DrawAtProj(Texture2D texture)
+        {
+            Main.EntitySpriteDraw(texture, miragePos, frame, Color.White, Projectile.rotation, origin, Projectile.scale,isLeftHand ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
+        }
 
         //old treasure bag draw code, augh
         float time = Main.GlobalTimeWrappedHourly;
@@ -216,24 +249,28 @@ public class CosmicFistSetPunch : ModProjectile
         {
             float radians = (i + timer) * MathHelper.TwoPi;
 
-            Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 6 + 50f * (1 - Projectile.Opacity)).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, isLeftHand ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+            emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => Main.EntitySpriteDraw(outline, miragePos + new Vector2(0f, 6 + 50f * (1 - Projectile.Opacity)).RotatedBy(radians) * time, frame,
+                new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, isLeftHand ? 
+                SpriteEffects.None : SpriteEffects.FlipHorizontally, 0));
         }
 
         for (float i = 0f; i < 1f; i += 0.5f)
         {
             float radians = (i + timer) * MathHelper.TwoPi;
 
-            Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 8 + 50f * (1 - Projectile.Opacity)).RotatedBy(radians) * time, frame,
-                new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, isLeftHand ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+            emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => Main.EntitySpriteDraw(outline, miragePos + new Vector2(0f, 8 + 50f * (1 - Projectile.Opacity)).RotatedBy(radians) * time, frame,
+                new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, isLeftHand ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0));
         }
-        if (spawnGlow > 0)
+/*        if (spawnGlow > 0)
         {
             float scale = 2f * Projectile.scale * (float)Math.Cos(Math.PI / 2 * spawnGlow);
             float opacity = Projectile.Opacity * (float)Math.Sqrt(spawnGlow);
-            Main.EntitySpriteDraw(tex, miragePos, frame, new Color(90, 70, 255, 50) * opacity, Projectile.rotation, origin, Projectile.scale * scale, isLeftHand ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-        }
-        Main.EntitySpriteDraw(tex, miragePos, frame, Color.White * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale,
-            isLeftHand ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+            emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => Main.EntitySpriteDraw(tex, miragePos, 
+                frame, new Color(90, 70, 255, 50) * opacity, Projectile.rotation, origin,
+                Projectile.scale * scale, isLeftHand ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0));
+        }*/
+        emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterPreDrawAll, () => DrawAtProj(outline));
+        emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterDrawAll, () => DrawAtProj(tex));
 
         return false;
     }

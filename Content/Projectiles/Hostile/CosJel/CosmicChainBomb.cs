@@ -26,7 +26,7 @@ public class CosmicChainBomb : ModProjectile
         Projectile.hostile = true;
         Projectile.friendly = false;
         Projectile.penetrate = -1;
-        Projectile.timeLeft = 60;
+        Projectile.timeLeft = 90;
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
         Projectile.alpha = 80;
@@ -47,7 +47,7 @@ public class CosmicChainBomb : ModProjectile
     }
     public override void AI()
     {
-        if (Projectile.frame >= 2)
+        if (Projectile.frame >= 1)
         {
             if (doBomb)
             {
@@ -57,14 +57,14 @@ public class CosmicChainBomb : ModProjectile
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(Projectile.width, 0).RotatedBy(setRotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(Projectile.width/1.5f + Main.rand.NextFloat(-Projectile.width / 6, Projectile.width / 6), +Main.rand.NextFloat(-Projectile.width / 6, Projectile.width / 6)).RotatedBy(setRotation), Vector2.Zero, ModContent.ProjectileType<CosmicChainBomb>(),
                             Projectile.damage, 0f, Main.myPlayer, lifeLeft, setRotation, 0f);
                     }
                 }
             }
         }
 
-        if (++Projectile.frameCounter >= 3)
+        if (++Projectile.frameCounter >= 4)
         {
             Projectile.frameCounter = 0;
             if (++Projectile.frame >= Main.projFrames[Projectile.type])
@@ -72,6 +72,13 @@ public class CosmicChainBomb : ModProjectile
                 Projectile.frame--;
                 Projectile.Kill();
             }
+        }
+        if (Projectile.localAI[0] == 0f)
+        {
+            Projectile.localAI[0] = 1f;
+            SoundEngine.PlaySound(SoundID.Item88, Projectile.Center);
+            Projectile.scale *= Main.rand.NextFloat(1f, 1.25f);
+            Projectile.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
         }
     }
 

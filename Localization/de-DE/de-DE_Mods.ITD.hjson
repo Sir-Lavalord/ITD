@@ -375,6 +375,7 @@ NPCs: {
 
 	// MoldSpore.DisplayName: Mold Spore
 	// BloatedSlime.DisplayName: Bloated Slime
+	// MotherWisp.DisplayName: Mother Wisp
 }
 
 Buffs: {
@@ -518,8 +519,8 @@ Buffs: {
 	}
 
 	WhiplatchBuff: {
-		// DisplayName: PPPLACEHOLDER
-		// Description: SSSHITSTORM
+		// DisplayName: Stylish!
+		// Description: The more risk you take the stronger you are
 	}
 
 	Trailblazing: {
