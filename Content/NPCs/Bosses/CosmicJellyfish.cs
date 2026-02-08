@@ -33,9 +33,8 @@ using Terraria.Graphics;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
-namespace ITD.Content.NPCs.Bosses
+namespace ITD.Content.NPCs.Bosses;
 
-{
     [AutoloadBossHead]
     public class CosmicJellyfish : ITDNPC
     {
@@ -1969,20 +1968,19 @@ namespace ITD.Content.NPCs.Bosses
             return false;
         }
     }
-    //shader rip
+//shader rip
 
-    public readonly struct BlackholeVertex
+public readonly struct BlackholeVertex
+{
+    public static void Draw(Vector2 position, float size)
     {
-        public static void Draw(Vector2 position, float size)
-        {
-            GameShaders.Misc["Blackhole"]
-                .UseImage0(TextureAssets.Extra[ExtrasID.RainbowRodTrailErosion])
-                .UseColor(new Color(192, 59, 166))
-                .UseSecondaryColor(Color.Beige)
-                .Apply();
-            SimpleSquare.Draw(position, size: new Vector2(size, size));
-            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-        }
-
+        GameShaders.Misc["Blackhole"]
+            .UseImage0(TextureAssets.Extra[ExtrasID.RainbowRodTrailErosion])
+            .UseColor(new Color(192, 59, 166))
+            .UseSecondaryColor(Color.Beige)
+            .Apply();
+        SimpleSquare.Draw(position, size: new Vector2(size, size));
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }
+
 }

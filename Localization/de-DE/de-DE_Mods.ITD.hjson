@@ -376,6 +376,8 @@ NPCs: {
 	// MoldSpore.DisplayName: Mold Spore
 	// BloatedSlime.DisplayName: Bloated Slime
 	// MotherWisp.DisplayName: Mother Wisp
+	// WispCandle.DisplayName: Wisp Candle
+	// GrandWisp.DisplayName: Grand Wisp
 }
 
 Buffs: {
