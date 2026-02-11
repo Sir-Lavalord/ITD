@@ -272,6 +272,10 @@ Projectiles: {
 	// CosmicFistSetGrab.DisplayName: Cosmic Fist Set Grab
 	// CosmicWaterBlob.DisplayName: Cosmic Water Blob
 	// CosmicFistSetPunch.DisplayName: Cosmic Fist Set Punch
+	// FireRainTelegraph.DisplayName: Fire Rain Telegraph
+	// WispTelegraph.DisplayName: Wisp Telegraph
+	// WispBreath.DisplayName: Wisp Breath
+	// WispFireRain.DisplayName: Wisp Fire Rain
 }
 
 NPCs: {

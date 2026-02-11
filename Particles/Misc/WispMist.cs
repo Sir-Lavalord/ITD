@@ -36,7 +36,8 @@ public class WispMist : ParticleEmitter
 
         foreach (ITDParticle particle in CollectionsMarshal.AsSpan(particles))
         {
-            particle.DrawCommon(in Main.spriteBatch, in tex, CanvasOffset);
+            Color color = new(75, 75, 75, 0);
+            particle.DrawCommon(in Main.spriteBatch, in tex, CanvasOffset + Main.rand.NextVector2Square(-2f, 2f),color);
         }
     }
 }

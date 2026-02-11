@@ -1,13 +1,17 @@
 ﻿using ITD.Content.Buffs.Debuffs;
 using ITD.Content.Projectiles.Hostile.CosJel;
+using ITD.Content.Projectiles.Hostile.MotherWisp;
 using ITD.Particles;
 using ITD.Particles.Misc;
+using ITD.Particles.Projectiles;
+using ITD.Utilities;
 using System;
 using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.ID;
 
 namespace ITD.Content.NPCs.Bosses;
 
@@ -26,11 +30,13 @@ public class WispCandle : ModNPC
     public ParticleEmitter emitter;
     private float AITimer = 0;
     public bool hasWisp = false;
+
+    private int wispID = -1;
     public override void SetDefaults()
     {
         NPC.width = 100;
         NPC.height = 100;
-        NPC.damage = 0;
+        NPC.damage = 30;
         NPC.defense = 0;
         NPC.lifeMax = 1000;
         NPC.HitSound = SoundID.NPCHit42;
@@ -40,7 +46,7 @@ public class WispCandle : ModNPC
         NPC.knockBackResist = 0f;
         NPC.dontTakeDamage = true;
         NPC.aiStyle = -1;
-        emitter = ParticleSystem.NewEmitter<WispMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+        emitter = ParticleSystem.NewEmitter<WispFlame>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
         emitter.tag = NPC;
     }
     public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
@@ -62,44 +68,76 @@ public class WispCandle : ModNPC
         if (emitter != null)
             emitter.keptAlive = true;
     }
+    float gravity = 0.4f;
     public override void AI()
     {
+        if (emitter != null)
+            emitter.keptAlive = true;
+        NPC Wisp = MiscHelpers.NPCExists(wispID, ModContent.NPCType<MotherWisp>());
+        if (hasWisp && Wisp == null)
+        {
+            NPC.timeLeft = 0;
+            NPC.active = false;
+            return;
+        }
         switch (AI_State)
         {
             case ActionState.Spawning:
-                if (AITimer++ >= 300)
+                float spawnTime = 240;
+                if (Main.rand.NextBool(1))
                 {
-                    int type = ModContent.NPCType<MotherWisp>();
-                    NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, type, 0, NPC.whoAmI);
-                    AITimer = 0;
-                    AI_State = ActionState.Controlled;
+                    emitter?.Emit(NPC.Center + new Vector2(0, 20), (-Vector2.UnitY * Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.ToRadians(30)), 0f, 20);
                 }
+                if (AITimer++ >= spawnTime)
+                {
+                    if (wispID == -1 || !Main.npc[wispID].active || Main.npc[wispID].type != ModContent.NPCType<MotherWisp>())
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            int type = ModContent.NPCType<MotherWisp>();
+                            wispID = NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Bottom.Y, type, 0, NPC.whoAmI);
+                            AITimer = 0;
+                            AI_State = ActionState.Controlled;
+                            hasWisp = true;
+                        }
+                    }
+                }
+                NPC.velocity.Y += gravity;
                 break;
             case ActionState.Controlled:
-                //trojan champ jump code
-                if (NPC.ai[0] == 0)
+                //trojan sq jump code
+                if (Main.rand.NextBool(1))
                 {
-                    if (NPC.ai[1] == 1)
-                    {
-                        ExecuteJump(Main.player[(int)(NPC.ai[2])]);
-                    }
-                    else
-                    {
-                        NPC.velocity.X *= 0.8f;
-                        if (Math.Abs(NPC.velocity.X) < 0.1f) NPC.velocity.X = 0;
-                        NPC.velocity.Y += 0.4f;
-                    }
+                    emitter?.Emit(NPC.Center + new Vector2(0, 20), (-Vector2.UnitY * Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.ToRadians(120)), 0f, 20);
                 }
+
+                if (NPC.ai[1] == 1)
+                {
+                    ExecuteJump(Main.player[(int)(NPC.ai[2])], NPC.ai[0]);
+                }
+                else
+                {
+                    NPC.velocity.X *= 0.8f;
+                    if (Math.Abs(NPC.velocity.X) < 0.1f) NPC.velocity.X = 0;
+                    NPC.velocity.Y += 0.4f;
+                }
+        
                 break;
             case ActionState.Detaching:
 
                 break;
         }
     }
-    private void ExecuteJump(Player player)
+    private void ExecuteJump(Player player, float attackID)
     {
-        const float gravity = 0.4f;
-        float time = 60f;
+        NPC Wisp = MiscHelpers.NPCExists(wispID, ModContent.NPCType<MotherWisp>());
+        if (hasWisp && Wisp == null)
+        {
+            NPC.timeLeft = 0;
+            NPC.active = false;
+            return;
+        }
+        float time = 90f - 30f * (1- (Wisp.life/Wisp.lifeMax));
         if (NPC.localAI[0] == 0)
         {
             for (int i = 0; i < 4; i++)
@@ -107,17 +145,18 @@ public class WispCandle : ModNPC
                 int side = i % 2 == 0 ? 1 : -1;
                 float speed = Main.rand.NextFloat(4, 6);
                 Vector2 vel = (Vector2.UnitX * side * speed).RotatedByRandom(MathHelper.Pi / 11);
-                Gore gore = Gore.NewGoreDirect(NPC.GetSource_FromThis(), NPC.Bottom - Vector2.UnitY * 10, vel, Main.rand.Next(11, 14), Scale: 2f);
+                emitter?.Emit(NPC.Bottom, vel, 0f, 20);
             }
             Vector2 distance = player.Top - NPC.Bottom;
             distance.X /= time;
             distance.Y = distance.Y / time - 0.5f * gravity * time;
-
+            NPC.noTileCollide = true;
             NPC.velocity = distance;
             NPC.netUpdate = true;
         }
         else
         {
+            NPC.noTileCollide = true;
             NPC.velocity.Y += gravity;
         }
 
@@ -126,16 +165,21 @@ public class WispCandle : ModNPC
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                for (int j = -1; j <= 1; j += 2)
+                if (attackID == 1) //shockwave attack
                 {
-                    Projectile shockwave = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(30 * j, +40), new Vector2(1 * j, 0), ModContent.ProjectileType<CosmicShockwave>(), ProjectileDamage(NPC.damage), 0, -1);
-                    shockwave.spriteDirection = j;
+                    for (int j = -1; j <= 1; j += 2)
+                    {
+                        Projectile shockwave = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(30 * j, +40), new Vector2(1 * j, 0), ModContent.ProjectileType<CosmicShockwave>(), ProjectileDamage(NPC.damage), 0, -1);
+                        shockwave.spriteDirection = j;
+                    }
                 }
             }
+            player.GetITDPlayer().BetterScreenshake(10, 10, 10, true);
             SoundEngine.PlaySound(SoundID.Item14, NPC.Center);
             NPC.ai[1] = 0f;
             NPC.localAI[0] = 0f;
             NPC.netUpdate = true;
+            NPC.noTileCollide = false;
         }
     }
     

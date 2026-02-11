@@ -56,6 +56,16 @@ public static class MiscHelpers
         return closestNPC;
     }
     //swiped off fargo
+    //very lazy
+    public static void text(object o)
+    {
+        Main.NewText(o);
+    }
+
+    public static float BetterEssScale(float speed, float deviation)
+    {
+        return 1f + (float)Math.Sin(Main.GlobalTimeWrappedHourly * speed) * deviation;
+    }
 
     public static Projectile NewProjectileDirectSafe(IEntitySource spawnSource, Vector2 pos, Vector2 vel, int type, int damage, float knockback, int owner = 255, float ai0 = 0f, float ai1 = 0f)
     {
