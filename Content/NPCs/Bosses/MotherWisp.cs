@@ -46,7 +46,7 @@ public class MotherWisp : ModNPC
         Jump,
         Fireburst,
         SingNote,
-        WispStomp,
+        Stomp,
         ToTarget
     }
     private ActionState AI_State;
@@ -104,6 +104,12 @@ public class MotherWisp : ModNPC
             case ActionState.Fireburst:
                 FireRain(player, Candle);
                 break;
+            case ActionState.SingNote:
+                //SingNote(player, Candle);
+                break;
+            case ActionState.Stomp:
+                SpiritStomp(player, Candle);
+                break;
             case ActionState.ToTarget:
                 TargetJump(player, Candle);
                 break;
@@ -150,7 +156,7 @@ public class MotherWisp : ModNPC
         NPC.scale = scaleMult;
         aiTimer0++;
 
-        if (aiTimer0 >= 180 / speedMult)
+        if (aiTimer0 >= 150 / speedMult)
         {
             if (attackCount++ > maxAttack)
             {
@@ -170,7 +176,7 @@ public class MotherWisp : ModNPC
 
     public void FireRain(Player player, NPC candle)
     {
-        float splitTime = 180;
+        float splitTime = 90;
         if (aiTimer0 == 0)
         {
             NPC.Center = Vector2.Lerp(NPC.Center, new Vector2(candle.Center.X, candle.Top.Y - (NPC.height / 8)), 0.5f);
@@ -212,7 +218,7 @@ public class MotherWisp : ModNPC
                     SpawnRain(dropPos, Vector2.UnitY, ProjectileDamage(NPC.damage));
                     attackCount++;
                 }
-                if (attackCount >= 3)
+                if (attackCount >= 2)
                 {
                     attackCount = 0;
                     aiTimer0 = -50;
@@ -220,7 +226,10 @@ public class MotherWisp : ModNPC
                 }
                 break;
             case 2://fast droplets
-                if (aiTimer0 % ((120) - Math.Clamp(attackCount * 10,0,100)) == 0)
+                float pulseFast = BetterEssScale(8, 2f);
+                NPC.Center = Vector2.Lerp(NPC.Center, new Vector2(candle.Center.X, candle.Top.Y - ((NPC.height / 8)) * pulseFast), 0.1f);
+
+                if (aiTimer0 % ((120) - Math.Clamp(attackCount * 10,0,105)) == 0)
                 {
                     attackCount++;
                     if (attackCount % 6 == 0)
@@ -241,7 +250,9 @@ public class MotherWisp : ModNPC
                 }
                 break;
             case 3://slows down 
-                if (aiTimer0 % ((20) + Math.Clamp(attackCount * 10, 0, 90)) == 0)
+                float pulseSlow = BetterEssScale(2, 2f);
+                NPC.Center = Vector2.Lerp(NPC.Center, new Vector2(candle.Center.X, candle.Top.Y - ((NPC.height / 8)) * pulseSlow), 0.1f);
+                if (aiTimer0 % ((15) + Math.Clamp(attackCount * 10, 0, 90)) == 0)
                 {
                     dropRange = 800 - (int)(attackCount * 30);
                     attackCount++;
@@ -262,7 +273,7 @@ public class MotherWisp : ModNPC
                     attackCount = 0;
                     aiTimer0 = -50;
                     aiTimer1 = 0;
-                    AI_State = ActionState.Jump;
+                    AI_State = ActionState.Stomp;
                 }
             break;
         }
@@ -274,7 +285,31 @@ public class MotherWisp : ModNPC
                 ModContent.ProjectileType<WispTelegraph>(), damage, 0, -1, 0, data.End.Y);
         }
     }
+    public void SpiritStomp(Player player, NPC candle)
+    {
+        float maxAttack = 1;
+        NPC.Center = Vector2.Lerp(NPC.Center, new Vector2(candle.Center.X, candle.Top.Y - (NPC.height / 8) * (pulseScale)), 0.1f);
+        NPC.velocity = Vector2.Zero;
+        NPC.scale = scaleMult;
+        aiTimer0++;
 
+        if (aiTimer0 >= 180 / speedMult)
+        {
+            if (attackCount++ > maxAttack)
+            {
+                ResetStats();
+                AI_State = ActionState.Jump;
+            }
+            else
+            {
+                candle.ai[0] = 2;//spawn wisps
+                candle.ai[1] = 1;//activate jump
+                candle.ai[2] = player.whoAmI;
+                aiTimer0 = 0;
+            }
+            NPC.netUpdate = true;
+        }
+    }
     public void TargetJump(Player player, NPC candle)
     {
         float maxAttack = 1;
@@ -330,7 +365,7 @@ public class MotherWisp : ModNPC
                 faceFrameCurrent = 0;
                 break;
             case 2://fireburst breath face start
-                faceFrameCurrent = 1;
+                faceFrameCurrent = 2;
                 break;
             default:
                 goto case 0;

@@ -128,6 +128,7 @@ public class WispCandle : ModNPC
                 break;
         }
     }
+    float time = 0; 
     private void ExecuteJump(Player player, float attackID)
     {
         NPC Wisp = MiscHelpers.NPCExists(wispID, ModContent.NPCType<MotherWisp>());
@@ -137,9 +138,23 @@ public class WispCandle : ModNPC
             NPC.active = false;
             return;
         }
-        float time = 90f - 30f * (1- (Wisp.life/Wisp.lifeMax));
         if (NPC.localAI[0] == 0)
         {
+            Vector2 distance = player.Top - NPC.Bottom;
+            switch (attackID)
+            {
+                case 0:
+                    distance = player.Top - NPC.Bottom;
+                    break;
+                case 1:
+                    time = 90f - 30f * (1 - (Wisp.life / Wisp.lifeMax));
+                    distance = player.Top - NPC.Bottom;
+                    break;
+                case 2:
+                    time = 60f - 30f * (1 - (Wisp.life / Wisp.lifeMax));
+                    distance = Wisp.Bottom - NPC.Bottom;
+                    break;
+            }
             for (int i = 0; i < 4; i++)
             {
                 int side = i % 2 == 0 ? 1 : -1;
@@ -147,7 +162,6 @@ public class WispCandle : ModNPC
                 Vector2 vel = (Vector2.UnitX * side * speed).RotatedByRandom(MathHelper.Pi / 11);
                 emitter?.Emit(NPC.Bottom, vel, 0f, 20);
             }
-            Vector2 distance = player.Top - NPC.Bottom;
             distance.X /= time;
             distance.Y = distance.Y / time - 0.5f * gravity * time;
             NPC.noTileCollide = true;
@@ -165,13 +179,24 @@ public class WispCandle : ModNPC
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                if (attackID == 1) //shockwave attack
+                switch (attackID)
                 {
-                    for (int j = -1; j <= 1; j += 2)
-                    {
-                        Projectile shockwave = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(30 * j, +40), new Vector2(1 * j, 0), ModContent.ProjectileType<CosmicShockwave>(), ProjectileDamage(NPC.damage), 0, -1);
-                        shockwave.spriteDirection = j;
-                    }
+                    case 0:
+                        break;
+                    case 1:
+                        for (int j = -1; j <= 1; j += 2)
+                        {
+                            Projectile shockwave = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom + new Vector2(30 * j, +40), new Vector2(1 * j, 0), ModContent.ProjectileType<CosmicShockwave>(), ProjectileDamage(NPC.damage), 0, -1);
+                            shockwave.spriteDirection = j;
+                        }
+                        break;
+                    case 2:
+                        for (int j = -1; j <= 1; j += 2)
+                        {
+                            NPC wisp = NPC.NewNPCDirect(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Bottom.Y + 50, NPCID.DungeonSpirit, 0, NPC.whoAmI);
+                            wisp.velocity = (Vector2.UnitX * j * 4f).RotatedByRandom(MathHelper.ToRadians(30));
+                        }
+                        break;
                 }
             }
             player.GetITDPlayer().BetterScreenshake(10, 10, 10, true);
