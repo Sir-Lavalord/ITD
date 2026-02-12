@@ -100,7 +100,7 @@ public class WispTelegraph : ModProjectile
         {
             int damage = (int)(Projectile.damage * 0.75f);
             int knockBack = 3;
-            Projectile rain = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.UnitY * 10, ModContent.ProjectileType<WispFireRain>(), damage, knockBack, Main.myPlayer, 1,rayPosY);
+            Projectile rain = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.UnitY * 12, ModContent.ProjectileType<WispFireRain>(), damage, knockBack, Main.myPlayer, 1,rayPosY);
             rain.timeLeft = 300;
         }
         base.OnKill(timeLeft);
