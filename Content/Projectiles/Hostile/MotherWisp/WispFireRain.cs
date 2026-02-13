@@ -77,7 +77,7 @@ public class WispFireRain : ModProjectile
                         dust.noGravity = true;
                         dust.velocity = Vector2.Zero;
                     }
-                    if (Main.rand.NextBool(2))
+                    if (Main.rand.NextBool(1))
                         emitter?.Emit(Projectile.Center + new Vector2(Main.rand.Next(-Projectile.width / 2, Projectile.width / 2), Main.rand.Next(-2, 2)), Projectile.velocity * 0.2f, 0, 20);
                 }
                 break;

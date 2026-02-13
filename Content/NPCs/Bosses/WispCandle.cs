@@ -46,6 +46,7 @@ public class WispCandle : ModNPC
         NPC.knockBackResist = 0f;
         NPC.dontTakeDamage = true;
         NPC.aiStyle = -1;
+        NPC.boss = true;
         emitter = ParticleSystem.NewEmitter<WispFlame>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
         emitter.tag = NPC;
     }
@@ -115,13 +116,17 @@ public class WispCandle : ModNPC
                 {
                     ExecuteJump(Main.player[(int)(NPC.ai[2])], NPC.ai[0]);
                 }
+                else if (NPC.ai[1] == 2)
+                {
+                    AITimer = 0;
+                    AI_State = ActionState.Detaching;
+                }
                 else
                 {
                     NPC.velocity.X *= 0.8f;
                     if (Math.Abs(NPC.velocity.X) < 0.1f) NPC.velocity.X = 0;
                     NPC.velocity.Y += 0.4f;
                 }
-        
                 break;
             case ActionState.Detaching:
 
