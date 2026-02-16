@@ -4,6 +4,7 @@ using ITD.Content.Projectiles.Hostile.MotherWisp;
 using ITD.Particles;
 using ITD.Particles.Misc;
 using ITD.Particles.Projectiles;
+using ITD.Systems.DataStructures;
 using ITD.Utilities;
 using System;
 using System.Linq;
@@ -21,11 +22,15 @@ public class WispCandle : ModNPC
     {
         Spawning,
         Controlled,
-        Detaching //it's bye bye baby
+        Detaching,
+        Death,//TCD candle death
     }
     private ActionState AI_State;
     public override void SetStaticDefaults()
     {
+        NPCID.Sets.MPAllowedEnemies[Type] = true;
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+        Main.npcFrameCount[NPC.type] = 1;
     }
     public ParticleEmitter emitter;
     private float AITimer = 0;
@@ -34,8 +39,8 @@ public class WispCandle : ModNPC
     private int wispID = -1;
     public override void SetDefaults()
     {
-        NPC.width = 100;
-        NPC.height = 100;
+        NPC.width = 26;
+        NPC.height = 24;
         NPC.damage = 30;
         NPC.defense = 0;
         NPC.lifeMax = 1000;
@@ -69,6 +74,10 @@ public class WispCandle : ModNPC
         if (emitter != null)
             emitter.keptAlive = true;
     }
+    public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+    {
+        return AI_State != ActionState.Detaching;
+    }
     float gravity = 0.4f;
     public override void AI()
     {
@@ -87,7 +96,7 @@ public class WispCandle : ModNPC
                 float spawnTime = 240;
                 if (Main.rand.NextBool(1))
                 {
-                    emitter?.Emit(NPC.Center + new Vector2(0, 20), (-Vector2.UnitY * Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.ToRadians(30)), 0f, 20);
+                    emitter?.Emit(NPC.Top - new Vector2(0, 10), (-Vector2.UnitY * Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.ToRadians(30)), 0f, 20);
                 }
                 if (AITimer++ >= spawnTime)
                 {
@@ -109,7 +118,7 @@ public class WispCandle : ModNPC
                 //trojan sq jump code
                 if (Main.rand.NextBool(1))
                 {
-                    emitter?.Emit(NPC.Center + new Vector2(0, 20), (-Vector2.UnitY * Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.ToRadians(120)), 0f, 20);
+                    emitter?.Emit(NPC.Top - new Vector2(0,10), (-Vector2.UnitY * Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.ToRadians(120)), 0f, 20);
                 }
 
                 if (NPC.ai[1] == 1)
@@ -118,6 +127,8 @@ public class WispCandle : ModNPC
                 }
                 else if (NPC.ai[1] == 2)
                 {
+                    NPC.localAI[2] = Main.rand.Next(0, 2);
+                    NPC.localAI[0] = 0;
                     AITimer = 0;
                     AI_State = ActionState.Detaching;
                 }
@@ -129,11 +140,30 @@ public class WispCandle : ModNPC
                 }
                 break;
             case ActionState.Detaching:
-
+                if (Main.rand.NextBool(3))
+                {
+                    emitter?.Emit(NPC.Top - new Vector2(0, 10), (-Vector2.UnitY * Main.rand.NextFloat(3, 4)).RotatedByRandom(MathHelper.ToRadians(120)), 0f, 20);
+                }
+                if (Main.rand.NextBool(1))
+                {
+                    emitter?.Emit(NPC.Top - new Vector2(0, 10), (-Vector2.UnitY * Main.rand.NextFloat(8, 9)).RotatedByRandom(MathHelper.ToRadians(10)), 0f, 20);
+                }
+                if (NPC.ai[1] != 2)
+                {
+                    NPC.localAI[0] = 0;
+                    NPC.localAI[1] = 0;
+                    NPC.localAI[2] = 0;
+                    AITimer = 0;
+                    AI_State = ActionState.Controlled;
+                }
+                if (AITimer ++ >= 120)
+                {
+                    ExecuteCrazyMode(Main.player[(int)(NPC.ai[2])]);
+                }
                 break;
         }
     }
-    float time = 0; 
+    float time = 0;
     private void ExecuteJump(Player player, float attackID)
     {
         NPC Wisp = MiscHelpers.NPCExists(wispID, ModContent.NPCType<MotherWisp>());
@@ -212,9 +242,128 @@ public class WispCandle : ModNPC
             NPC.noTileCollide = false;
         }
     }
-    
+    float pulseScale = 1;
+    float swayScale = 1;
+    private void ExecuteCrazyMode(Player player)
+    {
+        NPC Wisp = MiscHelpers.NPCExists(wispID, ModContent.NPCType<MotherWisp>());
+        if (hasWisp && Wisp == null)
+        {
+            NPC.timeLeft = 0;
+            NPC.active = false;
+            return;
+        }
+        NPC.localAI[0]++;
+        if (NPC.localAI[0] >= 180)
+        {
+            switch (NPC.localAI[2])
+            {
+                case 0:
+                    if (NPC.localAI[1]++ % 60 == 0 && NPC.localAI[1] != 0)
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            int amount = 4;
+                            amount = masterMode ? 9 : expertMode ? 7 : 5;
+                            for (int i = -amount; i <= amount; i++)
+                            {
+                                if (i != 0)
+                                {
+                                    Vector2 spawnPos = new Vector2(NPC.Center.X, NPC.Center.Y);
+                                    Vector2 velocity = new Vector2(i * 1f, -2);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos,
+                                        velocity, ModContent.ProjectileType<CosmicSludgeBomb>(), ProjectileDamage(NPC.damage), 0f, -1, 0);
+                                }
+                            }
+                        }
+                    }
+                    swayScale = MiscHelpers.BetterEssScale(2, 0.0035f);
+                    pulseScale = 1;
+                    break;
+                case 1:
+                    if (NPC.localAI[1]++ % 6 == 0)
+                    {
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+
+                            Vector2 spawnPos = new Vector2(NPC.Center.X, NPC.Center.Y);
+                            Vector2 velocity = new Vector2(Main.rand.Next(-2,3),Main.rand.Next(-3,-1));
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos,
+                                velocity, ModContent.ProjectileType<CosmicSludgeBomb>(), ProjectileDamage(NPC.damage), 0f, -1, 0);
+
+
+                        }
+                    }
+                    swayScale = MiscHelpers.BetterEssScale(2, 0.005f);
+                    pulseScale = MiscHelpers.BetterEssScale(2, 0.25f);
+                    break;
+            }
+            if (NPC.localAI[2] > 1)
+            {
+                NPC.localAI[2] = 0;
+            }
+            if (NPC.localAI[0] >= 180 * 2)
+            {
+                NPC.localAI[1] = 0;
+                NPC.localAI[2]++;
+                NPC.localAI[0] = 0;
+            }
+        }
+        else
+        {
+            pulseScale = MiscHelpers.BetterEssScale(4, 0.25f);
+            swayScale = MiscHelpers.BetterEssScale(2, 0.0035f);
+        }
+        NPC.Center = Vector2.Lerp(NPC.Center, new Vector2(player.Center.X * swayScale, player.Center.Y - 400 * pulseScale), 0.1f);
+
+
+    }
     public override bool? CanFallThroughPlatforms()
     {
         return false;
+    }
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+    {
+        Vector2 stretch = new(1f, 1f);
+        Texture2D tex = TextureAssets.Npc[NPC.type].Value;
+        int vertSize = tex.Height / Main.npcFrameCount[NPC.type];
+        Vector2 origin = new(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);
+
+        Vector2 center = NPC.Size / 2f;
+        Vector2 miragePos = NPC.Center - Main.screenPosition;
+
+        //old treasure bag draw code, augh
+        float time = Main.GlobalTimeWrappedHourly;
+        float timer = (float)Main.time / 240f + time * 0.04f;
+
+        time %= 4f;
+        time /= 2f;
+
+        if (time >= 1f)
+        {
+            time = 2f - time;
+        }
+
+        time = time * 0.5f + 0.75f;
+        if (AI_State == ActionState.Detaching)
+        {
+            for (float i = 0f; i < 1f; i += 0.1f)
+            {
+                float radians = (i + timer) * MathHelper.TwoPi;
+
+                spriteBatch.Draw(tex, miragePos + new Vector2(0f, 4f).RotatedBy(radians) * time, null, new Color(16, 236, 195, 50) * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+            }
+
+            for (float i = 0f; i < 1f; i += 0.2f)
+            {
+                float radians = (i + timer) * MathHelper.TwoPi;
+
+                spriteBatch.Draw(tex, miragePos + new Vector2(0f, 6f).RotatedBy(radians) * time, null, new Color(16, 236, 195, 50) * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+            }
+        }
+        
+        spriteBatch.Draw(tex, miragePos, null, Color.White * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+
+        return true;
     }
 }
