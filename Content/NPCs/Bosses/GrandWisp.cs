@@ -95,19 +95,22 @@ public class GrandWisp : ModNPC
         {
             NPC.dontTakeDamage = true;
             NPC.damage = 0;
-
-
-            if (NPC.ai[2]++ == 0)
+            //fargo ml sun
+            if (NPC.ai[2] == 0)
             {
-                NPC.velocity = (Mom.Center - NPC.Center) * 2f / 90f;
-                NPC.localAI[1] = NPC.velocity.Length() / 90f;
-            }
-            else
-            {
-                NPC.velocity = Vector2.Normalize(NPC.velocity) * (NPC.velocity.Length() - NPC.localAI[1]);
+                NPC.localAI[0] = NPC.Center.X;
+                NPC.localAI[1] = NPC.Center.Y;
             }
 
-            if (NPC.Distance(Mom.Center) < 10f)
+            NPC.ai[2]++;
+            float duration = 90f;
+            float progress = Math.Clamp(NPC.ai[2] / duration, 0f, 1f);
+            float ease = progress * progress;
+
+            Vector2 startPos = new Vector2(NPC.localAI[0], NPC.localAI[1]);
+            NPC.Center = Vector2.Lerp(startPos, Mom.Center, ease);
+
+            if (progress >= 1f || NPC.Distance(Mom.Center) < 20f)
             {
                 NPC.active = false;
                 NPC.netUpdate = true;
