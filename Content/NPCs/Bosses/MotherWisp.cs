@@ -1,4 +1,5 @@
 ﻿using ITD.Content.Buffs.Debuffs;
+using ITD.Content.Projectiles.Hostile.CosJel;
 using ITD.Content.Projectiles.Hostile.MotherWisp;
 using ITD.Particles;
 using ITD.Particles.Misc;
@@ -45,21 +46,24 @@ public class MotherWisp : ModNPC
     }
     private enum ActionState
     {
+        Die = -3,
+        ToP2 = -2,
+        Split = -1,
         Spawning,
         Jump,
         Fireburst,
         SingNote,
         Stomp,
         ToTarget,
-        Split
     }
     bool expertMode = Main.expertMode;
     bool masterMode = Main.masterMode;
     bool legendaryMode = (Main.getGoodWorld || Main.zenithWorld) && Main.masterMode;
     private ActionState AI_State;
-    public float aiTimer0 = 0;
-    public float aiTimer1 = 0;
-    public float aiTimer2 = 0;
+    public ref float aiTimer0 => ref NPC.localAI[0];
+    public ref float aiTimer1 => ref NPC.localAI[1];
+    public ref float aiTimer2 => ref NPC.localAI[2];
+    public ref float Phase => ref NPC.localAI[3];
     public float attackCount = 0;
     public int maxWispCount = 10;
     //.ai[0] is owner
@@ -99,37 +103,58 @@ public class MotherWisp : ModNPC
         {
             NPC.TargetClosest();
         }
-        GrandWispsLost = Math.Max(GrandWispsLost, 5);
-        float clampedLoss = Math.Clamp(GrandWispsLost,5, maxWispCount);
-        speedMult = 1f + (clampedLoss * 0.025f);
-        scaleMult = Math.Max(0.5f, 1.25f - (clampedLoss * (0.75f / maxWispCount)));
+        if (GrandWispsLost >= maxWispCount)
+        {
+            CheckDead();
+        }
+        speedMult = 1f + (GrandWispsLost * 0.025f);
+        scaleMult = Math.Max(0.5f, scaleMultMax - (GrandWispsLost * (0.75f / maxWispCount)));
 
         pulseScale = BetterEssScale(4, 0.25f);
-
         Player player = Main.player[NPC.target];
         if (emitter != null)
             emitter.keptAlive = true;
         switch (AI_State)
         {
+            case ActionState.Die:
+                WispPop(player);
+                break;
+            case ActionState.ToP2:
+                WispUnleashed(player, Candle);
+                break;
             case ActionState.Spawning:
+                if (P2Check())
+                    break;
                 Spawning(Candle);
                 break;
             case ActionState.Jump:
+                if (P2Check())
+                    break;
                 SpiritJump(player, Candle);
                 break;
             case ActionState.Fireburst:
+                if (P2Check())
+                    break;
                 FireRain(player, Candle);
                 break;
             case ActionState.SingNote:
+                if (P2Check())
+                    break;
                 SpiritSong(player, Candle);
                 break;
             case ActionState.Stomp:
+                if (P2Check())
+                    break;
                 SpiritStomp(player, Candle);
                 break;
             case ActionState.ToTarget:
+                if (P2Check())
+                    break;
                 TargetJump(player, Candle);
                 break;
             case ActionState.Split:
+                if (P2Check())
+                    break;
                 GrandWispDance(player, Candle);
                 break;
         }
@@ -151,6 +176,7 @@ public class MotherWisp : ModNPC
     }
     float speedMult = 1;
     float scaleMult = 2;
+    float scaleMultMax = 1.5f;
     float pulseScale = 0;
     public void Spawning(NPC candle)
     {
@@ -163,10 +189,10 @@ public class MotherWisp : ModNPC
         if (aiTimer0 >= morphTime)
         {
             aiTimer0 = 0;
-            AI_State = ActionState.Jump;
+            AI_State = ActionState.SingNote;
         }
     }
-    float maxDist = 200;//if farther than this, force jump
+    float maxDist = 600;//if farther than this, force jump
     public void SpiritJump(Player player,NPC candle)
     {
         float maxAttack = 2;
@@ -234,7 +260,7 @@ public class MotherWisp : ModNPC
                 break;
             case 1://precise droplets
                 NPC.Center = Vector2.Lerp(NPC.Center, new Vector2(candle.Center.X, candle.Top.Y - ((NPC.height) * scaleMult) * pulseScale), 0.1f);
-                if (aiTimer0 % (120) == 0)
+                if (aiTimer0 % (120 / speedMult) == 0)
                 {
                     SpawnRain(dropPos, Vector2.UnitY, ProjectileDamage(NPC.damage));
                     attackCount++;
@@ -250,7 +276,7 @@ public class MotherWisp : ModNPC
                 float pulseFast = BetterEssScale(6, 0.5f);
                 NPC.Center = Vector2.Lerp(NPC.Center, new Vector2(candle.Center.X, candle.Top.Y - ((NPC.height) * scaleMult) * pulseFast), 0.1f);
 
-                if (aiTimer0 % ((120) - Math.Clamp(attackCount * 10,0,105)) == 0)
+                if (aiTimer0 % ((120) - Math.Clamp(attackCount * 15,0,105)) == 0)
                 {
                     attackCount++;
                     if (attackCount % 6 == 0)
@@ -294,7 +320,7 @@ public class MotherWisp : ModNPC
                     attackCount = 0;
                     aiTimer0 = -50;
                     aiTimer1 = 0;
-                    GetNextAttack(player, ActionState.Stomp);
+                    GetNextAttack(player, ActionState.SingNote);
                 }
             break;
         }
@@ -308,28 +334,11 @@ public class MotherWisp : ModNPC
     }
     public void SpiritSong(Player player, NPC candle)
     {
-        float maxAttack = 1;
-        NPC.Center = Vector2.Lerp(NPC.Center, new Vector2(candle.Center.X, candle.Top.Y - (NPC.height) * scaleMult * (pulseScale)), 0.1f);
-        NPC.velocity = Vector2.Zero;
-        NPC.scale = scaleMult;
-        aiTimer0++;
 
-        if (aiTimer0 >= 180 / speedMult)
-        {
-            if (attackCount++ > maxAttack)
-            {
-                ResetStats();
-                GetNextAttack(player, ActionState.Jump);
-            }
-            else
-            {
-                candle.ai[0] = 2;//spawn wisps
-                candle.ai[1] = 1;//activate jump
-                candle.ai[2] = player.whoAmI;
-                aiTimer0 = 0;
-            }
-            NPC.netUpdate = true;
-        }
+        NPC.ai[1] = 0; // Reset Face
+        ResetStats();
+        GetNextAttack(player, ActionState.Stomp); // Chain to next attack
+
     }
     public void SpiritStomp(Player player, NPC candle)
     {
@@ -385,7 +394,7 @@ public class MotherWisp : ModNPC
     bool anyWispsAlive = false;
     public void GrandWispDance(Player player, NPC candle)
     {
-        float danceTime = 900 / speedMult;
+        float danceTime = 300 / speedMult;
         aiTimer0++;
         NPC.scale = scaleMult;
         if (aiTimer0 < 120)
@@ -451,7 +460,7 @@ public class MotherWisp : ModNPC
                     NPC.dontTakeDamage = false;
                     NPC.ShowNameOnHover = true;
                     NPC.life = NPC.lifeMax;
-
+                    GrandWispsLost = Math.Min(GrandWispsLost, maxWispCount - 5);
                     NPC.ai[1] = 0;
                     candle.ai[1] = 0;
                     candle.netUpdate = true;
@@ -488,27 +497,120 @@ public class MotherWisp : ModNPC
         ResetStats();
         NPC.netUpdate = true;
     }
-    public override bool CheckDead()
+    public void WispUnleashed(Player player, NPC candle)
     {
-        if (AI_State != ActionState.Split)
+        float morphTime = 120;
+        NPC.dontTakeDamage = true;
+        if (NPC.buffType[0] != 0)
+            NPC.DelBuff(0);
+        if (++aiTimer0 > morphTime)
         {
-            if (GrandWispsLost >= maxWispCount)
+            scaleMultMax = 2f;
+            Phase = 1;
+            candle.hide = true;
+            NPC.Center = player.Center;
+            NPC.dontTakeDamage = false;
+        }
+        else if (aiTimer0 == morphTime)
+        {
+            SoundEngine.PlaySound(SoundID.Roar, NPC.Center);
+        }
+        else
+        {
+            NPC.Center = Vector2.Lerp(NPC.Center, new Vector2(candle.Center.X, candle.Top.Y - (NPC.height) * scaleMult), 0.1f);
+            NPC.velocity = Vector2.Zero;
+            NPC.scale = scaleMult;
+            scaleMultMax = MathHelper.Lerp(1.5f, 2f, 0.02f);
+        }
+    }
+
+    public void WispPop(Player player)
+    {
+        float morphTime = 300;
+        NPC.dontTakeDamage = true;
+        if (NPC.buffType[0] != 0)
+            NPC.DelBuff(0);
+        if (++aiTimer0 > morphTime)
+        {
+            for (int i = 0; i <= 30; i++)
             {
-                SoundEngine.PlaySound(SoundID.NPCDeath10, NPC.Center);
-                if (emitter != null) 
-                    emitter.keptAlive = false;
-                return true;
+                emitter?.Emit(NPC.Center, (-Vector2.UnitY * Main.rand.NextFloat(7, 10)).RotatedByRandom(MathHelper.ToRadians(360)), 0f, 90);
             }
+            NPC.life = 0;
+            NPC.checkDead();
+        }
+        else
+        {
             NPC.dontTakeDamage = true;
             NPC.Opacity = 1f;
             NPC.life = 1;
-            AI_State = ActionState.Split;
-            NPC.ai[1] = 3;
-            ResetStats();
-            NPC.netUpdate = true;
-            return false;
+            NPC.velocity = Vector2.Zero;
+            NPC.scale = scaleMult;
+            scaleMultMax = MathHelper.Min(scaleMultMax + 0.01f, 4);
         }
+    }
 
+    public bool P2Check()
+    {
+        if (Phase > 0)
+            return false;
+        if (AI_State == ActionState.Split)
+            return false;
+        if (Phase <= 0)
+        {
+            if (GrandWispsLost >= maxWispCount - 5)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    AI_State = ActionState.ToP2;
+                    ResetStats();
+                    NPC.netUpdate = true;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public override bool CheckDead()
+    {
+        if (Phase <= 0)
+        {
+            if (AI_State != ActionState.Split)
+            {
+                if (GrandWispsLost < maxWispCount)
+                {
+                    NPC.dontTakeDamage = true;
+                    NPC.Opacity = 1f;
+                    NPC.life = 1;
+                    AI_State = ActionState.Split;
+                    NPC.ai[1] = 3;
+                    ResetStats();
+                    NPC.netUpdate = true;
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            NPC.dontTakeDamage = true;
+            NPC.Opacity = 1f;
+            NPC.life = 1;
+            if (AI_State != ActionState.Die)
+            {
+                ResetStats();
+                AI_State = ActionState.Die;
+            }
+            if (AI_State == ActionState.Die && aiTimer0 >= 300)
+                return true;
+        }
+        if (GrandWispsLost >= maxWispCount)
+        {
+            SoundEngine.PlaySound(SoundID.NPCDeath10, NPC.Center);
+            if (emitter != null)
+                emitter.keptAlive = false;
+            return true;
+        }
         return false;
     }
     int faceFrameTotal = 7;
