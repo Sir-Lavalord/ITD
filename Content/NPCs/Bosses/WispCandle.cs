@@ -12,6 +12,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 
 namespace ITD.Content.NPCs.Bosses;
@@ -261,6 +262,11 @@ public class WispCandle : ModNPC
                 case 0:
                     if (NPC.localAI[1]++ % 60 == 0 && NPC.localAI[1] != 0)
                     {
+                        ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
+                        {
+                            PositionInWorld = NPC.Center,
+
+                        }, NPC.whoAmI);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             int amount = 4;
@@ -270,7 +276,7 @@ public class WispCandle : ModNPC
                                 if (i != 0)
                                 {
                                     Vector2 spawnPos = new Vector2(NPC.Center.X, NPC.Center.Y);
-                                    Vector2 velocity = new Vector2(i * 1f, -2);
+                                    Vector2 velocity = new Vector2(i * 0.75f, -2);
                                     Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos,
                                         velocity, ModContent.ProjectileType<CosmicSludgeBomb>(), ProjectileDamage(NPC.damage), 0f, -1, 0);
                                 }
@@ -283,6 +289,11 @@ public class WispCandle : ModNPC
                 case 1:
                     if (NPC.localAI[1]++ % 6 == 0)
                     {
+                        ParticleOrchestrator.RequestParticleSpawn(clientOnly: true, ParticleOrchestraType.Excalibur, new ParticleOrchestraSettings
+                        {
+                            PositionInWorld = NPC.Center,
+
+                        }, NPC.whoAmI);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
 
@@ -290,8 +301,6 @@ public class WispCandle : ModNPC
                             Vector2 velocity = new Vector2(Main.rand.Next(-2,3),Main.rand.Next(-3,-1));
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos,
                                 velocity, ModContent.ProjectileType<CosmicSludgeBomb>(), ProjectileDamage(NPC.damage), 0f, -1, 0);
-
-
                         }
                     }
                     swayScale = MiscHelpers.BetterEssScale(2, 0.005f);
