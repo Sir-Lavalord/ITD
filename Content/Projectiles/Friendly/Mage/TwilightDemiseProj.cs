@@ -167,7 +167,6 @@ public class TwilightDemiseProj : ITDProjectile
     {
         Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
         Texture2D texture = TextureAssets.Projectile[Type].Value;
-        //i made it
         Texture2D texture2 = Mod.Assets.Request<Texture2D>("Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
         Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
         Rectangle frame2 = texture2.Frame(1, Main.projFrames[Type], 0, Projectile.frame);

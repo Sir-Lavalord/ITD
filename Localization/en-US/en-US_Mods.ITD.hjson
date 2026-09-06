@@ -294,6 +294,7 @@ Projectiles: {
 	WispFireOrb.DisplayName: Wisp Fire Orb
 	WispFireBreath.DisplayName: Wisp Fire Breath
 	WispChainBlast.DisplayName: Wisp Chain Blast
+	WispFireBreathTelegraph.DisplayName: Wisp Fire Breath Telegraph
 }
 
 NPCs: {

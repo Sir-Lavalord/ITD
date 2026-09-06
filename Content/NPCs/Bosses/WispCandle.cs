@@ -1,9 +1,11 @@
 ﻿using ITD.Particles;
 using ITD.Particles.Misc;
 using ITD.Particles.Projectiles;
+using ITD.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -20,6 +22,9 @@ public class WispCandle : ModNPC
     public ref float SpawnState => ref NPC.ai[0];
     public ref float WispID => ref NPC.ai[1];
 
+    public int FlameState = 0;
+    public int ExtraParticles = 0;
+
     public override void SetStaticDefaults()
     {
         NPCID.Sets.MPAllowedEnemies[Type] = true;
@@ -29,8 +34,8 @@ public class WispCandle : ModNPC
 
     public override void SetDefaults()
     {
-        NPC.width = 26;
-        NPC.height = 24;
+        NPC.width = 24;
+        NPC.height = 38;
         NPC.damage = 30;
         NPC.defense = 0;
         NPC.lifeMax = 1000;
@@ -43,18 +48,31 @@ public class WispCandle : ModNPC
         NPC.aiStyle = -1;
         NPC.boss = true;
         NPC.hide = true;
-        emitter = ParticleSystem.NewEmitter<WispFlame>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+        NPC.scale = 1.25f;
+        emitter = ParticleSystem.NewEmitter<WispFlame>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
         emitter.tag = NPC;
     }
 
     public override void DrawBehind(int index)
     {
-        Main.instance.DrawCacheNPCProjectiles.Add(index);
+        Main.instance.DrawCacheNPCsOverPlayers.Add(index);
     }
 
     public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
     {
         NPC.lifeMax = 1000;
+    }
+
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write(FlameState);
+        writer.Write(ExtraParticles);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        FlameState = reader.ReadInt32();
+        ExtraParticles = reader.ReadInt32();
     }
 
     public override void OnSpawn(IEntitySource source)
@@ -72,7 +90,7 @@ public class WispCandle : ModNPC
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                int id = NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<MotherWisp>(), 0, NPC.whoAmI);
+                int id = NPCHelpers.NewNPCEasy(NPC.GetSource_FromThis(), NPC.Center, ModContent.NPCType<MotherWisp>(), 0, NPC.whoAmI);
                 WispID = id;
                 SpawnState = 1;
                 NPC.netUpdate = true;
@@ -82,9 +100,9 @@ public class WispCandle : ModNPC
 
         if (SpawnState == 1)
         {
-            NPC Wisp = Main.npc[(int)WispID];
+            NPC Wisp = MiscHelpers.NPCExists(WispID, ModContent.NPCType<MotherWisp>());
 
-            if (!Wisp.active || Wisp.type != ModContent.NPCType<MotherWisp>())
+            if (Wisp == null)
             {
                 NPC.active = false;
                 if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -93,12 +111,36 @@ public class WispCandle : ModNPC
                 }
                 return;
             }
-
-            if (Main.rand.NextBool(3))
+            if (FlameState == 1)
             {
-                emitter?.Emit(NPC.Top - new Vector2(0, 10),
-                    (-Vector2.UnitY * Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.ToRadians(30)), 0f, 20);
+                int amount = ExtraParticles > 0 ? ExtraParticles : 8;
+                for (int i = 0; i < amount; i++)
+                {
+                    float candleWiggle = (float)Math.Sin((Main.GlobalTimeWrappedHourly * 24f) + Main.rand.NextFloat(MathHelper.TwoPi)) * 3.5f;
+                    Vector2 flameVel = new Vector2(candleWiggle, -Main.rand.NextFloat(14f, 22f));
+                    emitter?.Emit(NPC.Top - new Vector2(0, 10f * NPC.scale), flameVel, 0f, 40);
+                }
             }
+            else if (FlameState == 2)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    float candleWiggle = (float)Math.Sin((Main.GlobalTimeWrappedHourly * 30f) + Main.rand.NextFloat(MathHelper.TwoPi)) * 5f;
+                    Vector2 flameVel = new Vector2(candleWiggle, -Main.rand.NextFloat(10f, 18f));
+                    emitter?.Emit(NPC.Center + Main.rand.NextVector2Circular(15f, 15f), flameVel, 0f, 50);
+                }
+            }
+            else
+            {
+                if (Main.rand.NextBool(3))
+                {
+                    emitter?.Emit(NPC.Top - new Vector2(0, 10f * NPC.scale),
+                        (-Vector2.UnitY * Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.ToRadians(30)), 0f, 20);
+                }
+            }
+
+            FlameState = 0;
+            ExtraParticles = 0;
         }
     }
 
@@ -109,7 +151,7 @@ public class WispCandle : ModNPC
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
-        Vector2 stretch = new(1f, 1f);
+        Vector2 stretch = new(NPC.scale, NPC.scale);
         Texture2D tex = TextureAssets.Npc[NPC.type].Value;
         Vector2 origin = new(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);
         Vector2 miragePos = NPC.Center - Main.screenPosition;
@@ -130,13 +172,13 @@ public class WispCandle : ModNPC
         for (float i = 0f; i < 1f; i += 0.1f)
         {
             float radians = (i + timer) * MathHelper.TwoPi;
-            spriteBatch.Draw(tex, miragePos + new Vector2(0f, 4f).RotatedBy(radians) * time, null, new Color(16, 236, 195, 180) * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+            spriteBatch.Draw(tex, miragePos + new Vector2(0f, 2f).RotatedBy(radians) * time, null, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
         }
 
         for (float i = 0f; i < 1f; i += 0.2f)
         {
             float radians = (i + timer) * MathHelper.TwoPi;
-            spriteBatch.Draw(tex, miragePos + new Vector2(0f, 8f).RotatedBy(radians) * time, null, new Color(16, 236, 195, 180) * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+            spriteBatch.Draw(tex, miragePos + new Vector2(0f, 4f).RotatedBy(radians) * time, null, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
         }
 
         spriteBatch.Draw(tex, miragePos, null, Color.White * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
