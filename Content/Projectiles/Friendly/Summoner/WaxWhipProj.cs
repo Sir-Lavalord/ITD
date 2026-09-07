@@ -1,4 +1,5 @@
-﻿using ITD.Particles;
+﻿using ITD.Content.Buffs.Debuffs;
+using ITD.Particles;
 using ITD.Particles.Projectiles;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -30,6 +31,8 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         }
         public override void AI()
         {
+            if (emitter != null) emitter.keptAlive = true;
+
             List<Vector2> points = Projectile.WhipPointsForCollision;
             Projectile.FillWhipControlPoints(Projectile, points);
             emitter?.Emit(points[points.Count - 1],
@@ -57,7 +60,27 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                 pos += diff;
             }
         }
-
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            int debuffType = ModContent.BuffType<WaxWhipTagDebuff>();
+            bool isNewTarget = !target.HasBuff(debuffType);
+            target.AddBuff(debuffType, 60);
+            if (isNewTarget)
+            {
+                foreach (var npc in Main.ActiveNPCs)
+                {
+                    if (npc.whoAmI != target.whoAmI)
+                    {
+                        int buffIndex = npc.FindBuffIndex(debuffType);
+                        if (buffIndex != -1)
+                        {
+                            npc.DelBuff(buffIndex);
+                        }
+                    }
+                }
+            }
+            base.OnHitNPC(target, hit, damageDone);
+        }
         public override bool PreDraw(ref Color lightColor)
         {
             List<Vector2> list = new List<Vector2>();
