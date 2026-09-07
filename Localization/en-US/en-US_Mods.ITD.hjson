@@ -295,6 +295,7 @@ Projectiles: {
 	WispFireBreath.DisplayName: Wisp Fire Breath
 	WispChainBlast.DisplayName: Wisp Chain Blast
 	WispFireBreathTelegraph.DisplayName: Wisp Fire Breath Telegraph
+	WaxWhipExplosion.DisplayName: Wax Whip Explosion
 }
 
 NPCs: {
@@ -582,6 +583,11 @@ Buffs: {
 	IncendipedeMinionBuff: {
 		DisplayName: Incendipede Minion
 		Description: Mods.ITD.Buffs.IncendipedeMinionBuff.Description
+	}
+
+	WaxWhipTagDebuff: {
+		DisplayName: Wax Whip Tag Debuff
+		Description: Mods.ITD.Buffs.WaxWhipTagDebuff.Description
 	}
 }
 

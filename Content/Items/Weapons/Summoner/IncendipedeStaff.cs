@@ -10,6 +10,10 @@ namespace ITD.Content.Items.Weapons.Summoner
 {
     public class IncendipedeStaff : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Main.RegisterItemAnimation(Type, new Terraria.DataStructures.DrawAnimationVertical(7,6));
+        }
         public override void SetDefaults()
         {
             Item.damage = 35;

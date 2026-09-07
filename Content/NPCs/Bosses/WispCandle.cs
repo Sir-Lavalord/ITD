@@ -18,18 +18,22 @@ namespace ITD.Content.NPCs.Bosses;
 public class WispCandle : ModNPC
 {
     public ParticleEmitter emitter;
+    public ParticleEmitter emitter2;
 
     public ref float SpawnState => ref NPC.ai[0];
     public ref float WispID => ref NPC.ai[1];
 
     public int FlameState = 0;
     public int ExtraParticles = 0;
-
+    public float currentHandX = 20f;
+    public bool showHand = false;
     public override void SetStaticDefaults()
     {
         NPCID.Sets.MPAllowedEnemies[Type] = true;
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
         Main.npcFrameCount[NPC.type] = 1;
+        NPCID.Sets.TrailCacheLength[NPC.type] = 12;
+        NPCID.Sets.TrailingMode[NPC.type] = 2;
     }
 
     public override void SetDefaults()
@@ -50,7 +54,9 @@ public class WispCandle : ModNPC
         NPC.hide = true;
         NPC.scale = 1.25f;
         emitter = ParticleSystem.NewEmitter<WispFlame>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
-        emitter.tag = NPC;
+        emitter.tag = NPC; 
+        emitter2 = ParticleSystem.NewEmitter<WispMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+        emitter2.tag = NPC;
     }
 
     public override void DrawBehind(int index)
@@ -79,12 +85,16 @@ public class WispCandle : ModNPC
     {
         if (emitter != null)
             emitter.keptAlive = true;
+        if (emitter2 != null)
+            emitter2.keptAlive = true;
     }
 
     public override void AI()
     {
         if (emitter != null)
             emitter.keptAlive = true;
+        if (emitter2 != null)
+            emitter2.keptAlive = true;
 
         if (SpawnState == 0)
         {
@@ -111,6 +121,31 @@ public class WispCandle : ModNPC
                 }
                 return;
             }
+
+            NPC.spriteDirection = Wisp.Center.X > NPC.Center.X ? 1 : -1;
+
+            float targetHandX = 20f * NPC.spriteDirection;
+            currentHandX = MathHelper.Lerp(currentHandX, targetHandX, 0.15f);
+
+            showHand = Wisp.ai[1] > 0f;
+
+            if (showHand)
+            {
+                Vector2 handWorldPos = NPC.Center + new Vector2(currentHandX, 6f) * NPC.scale;
+
+                if (Main.rand.NextBool(3))
+                {
+                    int particleCount = Main.rand.Next(1, 3);
+                    for (int i = 0; i < particleCount; i++)
+                    {
+                        float wiggle = (float)Math.Sin((Main.GlobalTimeWrappedHourly * 5f)) * 2.5f;
+                        Vector2 mistVelocity = new Vector2(wiggle, -Main.rand.NextFloat(3f, 4.5f) * NPC.scale);
+                        Vector2 spawnOffset = Main.rand.NextVector2Circular(NPC.width / 2.2f, NPC.height / 2.2f) * NPC.scale;
+                        emitter2?.Emit(handWorldPos + spawnOffset, mistVelocity, 0f);
+                    }
+                }
+            }
+
             if (FlameState == 1)
             {
                 int amount = ExtraParticles > 0 ? ExtraParticles : 8;
@@ -132,10 +167,20 @@ public class WispCandle : ModNPC
             }
             else
             {
+                Vector2 candleTop = NPC.Top - new Vector2(0, 10f * NPC.scale);
+
                 if (Main.rand.NextBool(3))
                 {
-                    emitter?.Emit(NPC.Top - new Vector2(0, 10f * NPC.scale),
-                        (-Vector2.UnitY * Main.rand.NextFloat(2, 4)).RotatedByRandom(MathHelper.ToRadians(30)), 0f, 20);
+                    float wiggle = (float)Math.Sin((Main.GlobalTimeWrappedHourly * 12f)) * 1.5f;
+                    emitter?.Emit(candleTop + Main.rand.NextVector2Circular(4f, 4f), new Vector2(wiggle, -Main.rand.NextFloat(2f, 4f)), 0f, 20);
+                }
+
+                int mistCount = 1;
+                for (int i = 0; i < mistCount; i++)
+                {
+                    float mistWiggle = (float)Math.Sin((Main.GlobalTimeWrappedHourly * 12f)) * 1.5f;
+                    Vector2 mistVelocity = new Vector2(mistWiggle, -Main.rand.NextFloat(2f, 4f) * NPC.scale);
+                    emitter?.Emit(candleTop + Main.rand.NextVector2Circular(6f, 6f) * NPC.scale, mistVelocity, 0f);
                 }
             }
 
@@ -143,18 +188,13 @@ public class WispCandle : ModNPC
             ExtraParticles = 0;
         }
     }
-
-    public override bool? CanFallThroughPlatforms()
-    {
-        return false;
-    }
-
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
         Vector2 stretch = new(NPC.scale, NPC.scale);
         Texture2D tex = TextureAssets.Npc[NPC.type].Value;
         Vector2 origin = new(tex.Width / 2f, tex.Height / 2f / Main.npcFrameCount[NPC.type]);
         Vector2 miragePos = NPC.Center - Main.screenPosition;
+        SpriteEffects effects = NPC.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
         float time = Main.GlobalTimeWrappedHourly;
         float timer = (float)Main.time / 240f + time * 0.04f;
@@ -172,17 +212,48 @@ public class WispCandle : ModNPC
         for (float i = 0f; i < 1f; i += 0.1f)
         {
             float radians = (i + timer) * MathHelper.TwoPi;
-            spriteBatch.Draw(tex, miragePos + new Vector2(0f, 2f).RotatedBy(radians) * time, null, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+            spriteBatch.Draw(tex, miragePos + new Vector2(0f, 2f).RotatedBy(radians) * time, null, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, origin, stretch, effects, 0);
         }
 
         for (float i = 0f; i < 1f; i += 0.2f)
         {
             float radians = (i + timer) * MathHelper.TwoPi;
-            spriteBatch.Draw(tex, miragePos + new Vector2(0f, 4f).RotatedBy(radians) * time, null, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+            spriteBatch.Draw(tex, miragePos + new Vector2(0f, 4f).RotatedBy(radians) * time, null, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, origin, stretch, effects, 0);
         }
 
-        spriteBatch.Draw(tex, miragePos, null, Color.White * NPC.Opacity, NPC.rotation, origin, stretch, SpriteEffects.None, 0);
+        spriteBatch.Draw(tex, miragePos, null, Color.White * NPC.Opacity, NPC.rotation, origin, stretch, effects, 0);
 
+        if (showHand)
+        {
+            Texture2D handTex = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/MotherWisp").Value;
+            Texture2D glowOrb = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
+            Vector2 handOffset = new Vector2(currentHandX, 6f) * NPC.scale;
+
+            Rectangle glowOrbFrame = glowOrb.Frame(1, 1, 0, 0);
+            Rectangle handFrame = handTex.Frame(1, 1, 0, 0);
+
+            for (int i = 1; i < NPC.oldPos.Length; i++)
+            {
+                if (NPC.oldPos[i] == Vector2.Zero) continue;
+
+                Vector2 oldCenter = NPC.oldPos[i] + NPC.Size / 2f;
+                Vector2 oldHandDrawPos = oldCenter - Main.screenPosition + handOffset;
+                Color trailColor = new Color(131, 255, 236, 80) * NPC.Opacity * ((NPC.oldPos.Length - i) / (float)NPC.oldPos.Length);
+
+                spriteBatch.Draw(handTex, oldHandDrawPos, handFrame, trailColor, NPC.rotation, handFrame.Size() / 2f, NPC.scale * 0.35f, effects, 0f);
+            }
+            
+
+            Vector2 handDrawPos = miragePos + handOffset;
+            spriteBatch.Draw(glowOrb, handDrawPos, glowOrbFrame, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, glowOrbFrame.Size() / 2f, NPC.scale * 0.65f * MiscHelpers.BetterEssScale(2, 0.05f), SpriteEffects.None, 0f);
+            spriteBatch.Draw(handTex, handDrawPos, handFrame, Color.White * NPC.Opacity, NPC.rotation, handFrame.Size() / 2f, NPC.scale * 0.3f, effects, 0f);
+        }
+
+        return false;
+    }
+
+    public override bool? CanFallThroughPlatforms()
+    {
         return false;
     }
 }
