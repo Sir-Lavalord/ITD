@@ -13,8 +13,10 @@ public class WispFlame : ParticleEmitter
     {
         return Color.White;
     }
+    public float maxTime = 0;
     public override void OnEmitParticle(ref ITDParticle particle)
     {
+        maxTime = particle.timeLeft;
         particle.scale *= Main.rand.NextFloat(1f, 1.2f);
     }
     public override void AI(ref ITDParticle particle)
@@ -27,7 +29,11 @@ public class WispFlame : ParticleEmitter
         //        particle.frameVertical = 0;
         //    }
         //}
-        particle.scale -= 0.05f;
+        if (particle.scale <= 0)
+        {
+            particle.timeLeft = 0;
+        }
+        particle.scale = particle.timeLeft / (maxTime + 1);
     }
     public override void DrawAllParticles()
     {

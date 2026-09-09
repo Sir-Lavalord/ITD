@@ -11,7 +11,7 @@ public class WaxWhip : ModItem
     }
     public override void SetDefaults()
     {
-        Item.DefaultToWhip(ModContent.ProjectileType<WaxWhipProj>(), 20, 1, 20, 35);
+        Item.DefaultToWhip(ModContent.ProjectileType<WaxWhipProj>(), 6, 1, 30, 35);
         Item.rare = ItemRarityID.Blue;
         Item.value = 1000;
     }
