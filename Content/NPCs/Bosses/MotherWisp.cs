@@ -6,7 +6,6 @@ using ITD.Particles.Projectiles;
 using ITD.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Mono.Cecil;
 using System;
 using System.IO;
 using Terraria;
@@ -15,18 +14,14 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ITD.Particles;
-using ITD.Particles.Projectiles;
-using ITD.Utilities;
-using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.Graphics;
-using Terraria.Graphics.Shaders;
+
 namespace ITD.Content.NPCs.Bosses;
 
 [AutoloadBossHead]
 public class MotherWisp : ModNPC
 {
+    public override string Texture => "ITD/Content/NPCs/Bosses/MotherWisp";
+
     public ParticleEmitter emitter;
 
     private enum ActionState
@@ -57,18 +52,19 @@ public class MotherWisp : ModNPC
 
     public int CandleIndex => (int)NPC.ai[0];
 
-    int faceFrameTotal = 7;
+    int faceFrameTotal = 6;
     int faceFrameCurrent = 0;
     private int consecutiveMainCount = 0;
 
     public override void SetStaticDefaults()
     {
+        Main.npcFrameCount[Type] = 6;
     }
 
     public override void SetDefaults()
     {
-        NPC.width = 100;
-        NPC.height = 100;
+        NPC.width = 124;
+        NPC.height = 120;
         NPC.damage = 30;
         NPC.defense = 0;
         NPC.lifeMax = 1000;
@@ -82,7 +78,6 @@ public class MotherWisp : ModNPC
         emitter = ParticleSystem.NewEmitter<WispMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
         emitter.tag = NPC;
     }
-
     public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
     {
         NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
@@ -120,9 +115,6 @@ public class MotherWisp : ModNPC
             NPC.TargetClosest();
 
         Player player = Main.player[NPC.target];
-
-        if (emitter != null) emitter.keptAlive = true;
-
         int particleCount = Main.rand.Next(4, 7);
         for (int i = 0; i < particleCount; i++)
         {
@@ -131,14 +123,15 @@ public class MotherWisp : ModNPC
             Vector2 spawnOffset = Main.rand.NextVector2Circular(NPC.width / 2.2f, NPC.height / 2.2f) * NPC.scale;
             emitter?.Emit(NPC.Center + spawnOffset, mistVelocity, 0f);
         }
-
         switch ((ActionState)AI_State)
         {
             case ActionState.Spawning:
-                AttackTimer++;
-                NPC.scale = MathHelper.Lerp(0f, 1.5f, AttackTimer / 60f);
-                NPC.Center = Vector2.Lerp(NPC.Center, candle.Center - new Vector2(0, 90), 0.1f);
-                if (AttackTimer >= 60)
+                float morphTime = 60;
+                float progress = Utils.Clamp(AttackTimer / morphTime, 0f, 1f);
+                NPC.scale = MathHelper.Lerp(0f, 1.5f, progress);
+                NPC.Center = Vector2.Lerp(NPC.Center, new Vector2(candle.Center.X, candle.Top.Y - ((NPC.height / 1.25f)) * NPC.scale), 0.1f);
+
+                if (AttackTimer++ >= morphTime)
                 {
                     ResetState(ActionState.Idle);
                 }
@@ -161,14 +154,14 @@ public class MotherWisp : ModNPC
                     float prevMain = MainAttack;
                     float prevSec = SecAttack;
 
-                    MainAttack = Main.rand.Next(0,2);
+                    MainAttack = Main.rand.Next(2);
 
                     if (MainAttack == prevMain && consecutiveMainCount >= 2)
                     {
                         MainAttack = (MainAttack + Main.rand.Next(1, 3)) % 3;
                     }
 
-                    SecAttack = Main.rand.Next(0, 3);
+                    SecAttack = Main.rand.Next(3);
 
                     if (SecAttack == MainAttack)
                     {
@@ -241,7 +234,64 @@ public class MotherWisp : ModNPC
 
         if (sec == BaseAttack.None)
         {
-            
+            float windupEnd = 40f;
+            float positionEnd = 60f;
+            float attackTimeout = 120f;
+            float restEnd = 150f;
+
+            if (time < windupEnd)
+            {
+                Vector2 handPos = NPC.Center + new Vector2(NPC.direction * 180, 50);
+                candle.Center = Vector2.Lerp(candle.Center, handPos, 0.15f);
+                candle.velocity = Vector2.Zero;
+            }
+            else if (time < positionEnd)
+            {
+                Vector2 targetAim = player.Center - new Vector2(0, 250);
+                candle.Center = Vector2.Lerp(candle.Center, targetAim, 0.2f);
+                candle.velocity = Vector2.Zero;
+            }
+            else if (time == positionEnd)
+            {
+                candle.velocity = new Vector2(0, 25f);
+                candle.netUpdate = true;
+            }
+            else if (time > positionEnd && time <= attackTimeout)
+            {
+                bool hitTile = Collision.SolidCollision(candle.position, candle.width, candle.height);
+                bool hitFloor = candle.Bottom.Y >= player.Bottom.Y;
+
+                if (hitTile || hitFloor || time == attackTimeout)
+                {
+                    candle.velocity = Vector2.Zero;
+                    SoundEngine.PlaySound(SoundID.Item14, candle.Center);
+
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        for (int j = -1; j <= 1; j += 2)
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), candle.Bottom + new Vector2(30 * j, -20), new Vector2(8 * j, 0),
+                                ModContent.ProjectileType<CosmicShockwave>(), (int)(NPC.damage * 0.5f), 0, -1);
+                        }
+                    }
+
+                    AttackTimer = attackTimeout;
+                }
+            }
+            else if (time > attackTimeout && time < restEnd)
+            {
+                candle.velocity = Vector2.Zero;
+            }
+            else if (time >= restEnd)
+            {
+                AttackCount++;
+                AttackTimer = 0;
+
+                if (AttackCount >= 3)
+                {
+                    ResetState(ActionState.Idle);
+                }
+            }
         }
         else if (sec == BaseAttack.Fireblow)
         {
@@ -377,7 +427,6 @@ public class MotherWisp : ModNPC
         AttackTimer++;
         float time = AttackTimer;
 
-
         if (time < 40f)
         {
             float hoverHeight = sec == BaseAttack.Enflame ? 600 : 300;
@@ -388,7 +437,6 @@ public class MotherWisp : ModNPC
             NPC.velocity *= 0.8f;
             if (NPC.velocity.Length() < 0.1f) NPC.velocity = Vector2.Zero;
         }
-    
 
         if (sec == BaseAttack.None)
         {
@@ -627,19 +675,21 @@ public class MotherWisp : ModNPC
                 if (time % 40 == 0)
                 {
                     AttackCount++;
-                    numProjectiles = AttackCount % 2 == 0 ? 5: 6;
+                    numProjectiles = AttackCount % 2 == 0 ? 5 : 6;
                     float rotation = MathHelper.ToRadians(30);
-                    Vector2 baseVelocity = NPC.DirectionTo(aimPos) * 14f;
+                    Vector2 baseVelocity = currentAim * 14f;
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         for (int i = 0; i < numProjectiles; i++)
-                        {   float currentRotation = MathHelper.Lerp(-rotation, rotation, i / (float)(numProjectiles - 1));
+                        {
+                            float currentRotation = MathHelper.Lerp(-rotation, rotation, i / (float)(numProjectiles - 1));
                             Vector2 shootVel = baseVelocity.RotatedBy(currentRotation);
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, shootVel, projType, NPC.damage, 1f, Main.myPlayer);
                         }
                     }
                 }
+
                 if (time % 2 == 0)
                 {
                     if (time % 6 == 0)
@@ -647,7 +697,6 @@ public class MotherWisp : ModNPC
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-
                         Vector2 shootVel1 = currentAim.RotatedBy(-spread) * 16f;
                         Vector2 shootVel2 = currentAim.RotatedBy(spread) * 16f;
 
@@ -731,11 +780,11 @@ public class MotherWisp : ModNPC
 
     public override void FindFrame(int frameHeight)
     {
-        if (NPC.frameCounter++ >= 8)
+        if (NPC.frameCounter++ >= 6)
         {
             faceFrameCurrent++;
             NPC.frameCounter = 0;
-            if (faceFrameCurrent >= 4)
+            if (faceFrameCurrent >= 6)
             {
                 faceFrameCurrent = 0;
             }
@@ -747,27 +796,30 @@ public class MotherWisp : ModNPC
     {
         SpriteBatch sb = Main.spriteBatch;
         Texture2D texture = TextureAssets.Npc[Type].Value;
-        Texture2D outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
-        Texture2D face = ModContent.Request<Texture2D>(Texture + "_Face").Value;
-        Rectangle frame = texture.Frame(1, 1, 0, 0);
+        Texture2D outline = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/MotherWisp_Outline").Value;
+        Texture2D face = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/MotherWisp_Face").Value;
+
+        Rectangle frameBody = texture.Frame(1, faceFrameTotal, 0, faceFrameCurrent);
+        Rectangle frameOutline = outline.Frame(1, 1, 0, 0);
         Rectangle frameFace = face.Frame(1, faceFrameTotal, 0, faceFrameCurrent);
+
         Texture2D glowOrb = Mod.Assets.Request<Texture2D>("Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
         Rectangle glowOrbFrame = glowOrb.Frame(1, 1, 0, 0);
-        void DrawAtNPC(Texture2D tex, float scale)
-        {
-            sb.Draw(tex, NPC.Center + Main.rand.NextVector2Circular(2f, 2f) - Main.screenPosition, frame, Color.White * NPC.Opacity, NPC.rotation,
-                new Vector2(tex.Width * 0.5f, tex.Height / Main.projFrames[Type] * 0.5f),
-                scale, NPC.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
-        }
-        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => Main.EntitySpriteDraw(glowOrb, NPC.Center + Main.rand.NextVector2Circular(1f, 1f) -
-            Main.screenPosition, glowOrbFrame, new Color(131, 255, 236, 150), NPC.rotation, new Vector2(glowOrb.Width * 0.5f,
-            glowOrb.Height / Main.projFrames[Type] * 0.5f), NPC.scale * 2f * MiscHelpers.BetterEssScale(2, 0.05f), SpriteEffects.None, 0f));
 
-        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => DrawAtNPC(outline, NPC.scale));
-        emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterPreDrawAll, () => DrawAtNPC(texture, NPC.scale));
+        void DrawAtNPC(Texture2D tex, Rectangle rect, float scale)
+        {
+            sb.Draw(tex, NPC.Center + Main.rand.NextVector2Circular(2f, 2f) - Main.screenPosition, rect, Color.White * NPC.Opacity, NPC.rotation,
+                rect.Size() / 2f, scale, NPC.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+        }
+
+        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => Main.EntitySpriteDraw(glowOrb, NPC.Center + Main.rand.NextVector2Circular(1f, 1f) -
+            Main.screenPosition, glowOrbFrame, new Color(131, 255, 236, 150), NPC.rotation, glowOrbFrame.Size() / 2f, NPC.scale * 2f * MiscHelpers.BetterEssScale(2, 0.05f), SpriteEffects.None, 0f));
+
+        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => DrawAtNPC(outline, frameOutline, NPC.scale));
         emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterDrawAll, () =>
-            Main.EntitySpriteDraw(face, NPC.Center + new Vector2(0, 20 * NPC.scale) - Main.screenPosition, frameFace,
-            Color.White * NPC.Opacity, NPC.rotation, frameFace.Size() / 2, NPC.scale, SpriteEffects.None));
+    Main.EntitySpriteDraw(face, NPC.Center + new Vector2(0, 0 * NPC.scale) - Main.screenPosition, frameFace,
+    Color.White * NPC.Opacity, NPC.rotation, frameFace.Size() / 2f, NPC.scale, SpriteEffects.None));
+        emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterDrawAll, () => DrawAtNPC(texture, frameBody, NPC.scale));
 
         return false;
     }

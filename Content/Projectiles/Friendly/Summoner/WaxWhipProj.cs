@@ -26,7 +26,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             Projectile.WhipSettings.RangeMultiplier = 0.25f;
             Projectile.WhipSettings.Segments = 25;
             Projectile.rotation += Projectile.ai[0];
-            emitter = ParticleSystem.NewEmitter<WispFlame>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
+            emitter = ParticleSystem.NewEmitter<WispFlame>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
             emitter.tag = Projectile;
         }
         public override void AI()
@@ -64,21 +64,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
         {
             int debuffType = ModContent.BuffType<WaxWhipTagDebuff>();
             bool isNewTarget = !target.HasBuff(debuffType);
-            target.AddBuff(debuffType, 60);
-            if (isNewTarget)
-            {
-                foreach (var npc in Main.ActiveNPCs)
-                {
-                    if (npc.whoAmI != target.whoAmI)
-                    {
-                        int buffIndex = npc.FindBuffIndex(debuffType);
-                        if (buffIndex != -1)
-                        {
-                            npc.DelBuff(buffIndex);
-                        }
-                    }
-                }
-            }
+            target.AddBuff(debuffType, 45);
             base.OnHitNPC(target, hit, damageDone);
         }
         public override bool PreDraw(ref Color lightColor)

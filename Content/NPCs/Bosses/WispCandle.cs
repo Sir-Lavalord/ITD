@@ -17,6 +17,8 @@ namespace ITD.Content.NPCs.Bosses;
 
 public class WispCandle : ModNPC
 {
+    public override string Texture => "ITD/Content/NPCs/Bosses/WispCandle";
+
     public ParticleEmitter emitter;
     public ParticleEmitter emitter2;
 
@@ -27,6 +29,7 @@ public class WispCandle : ModNPC
     public int ExtraParticles = 0;
     public float currentHandX = 20f;
     public bool showHand = false;
+
     public override void SetStaticDefaults()
     {
         NPCID.Sets.MPAllowedEnemies[Type] = true;
@@ -54,7 +57,7 @@ public class WispCandle : ModNPC
         NPC.hide = true;
         NPC.scale = 1.25f;
         emitter = ParticleSystem.NewEmitter<WispFlame>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
-        emitter.tag = NPC; 
+        emitter.tag = NPC;
         emitter2 = ParticleSystem.NewEmitter<WispMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
         emitter2.tag = NPC;
     }
@@ -188,6 +191,7 @@ public class WispCandle : ModNPC
             ExtraParticles = 0;
         }
     }
+
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
         Vector2 stretch = new(NPC.scale, NPC.scale);
@@ -225,7 +229,7 @@ public class WispCandle : ModNPC
 
         if (showHand)
         {
-            Texture2D handTex = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/MotherWisp").Value;
+            Texture2D handTex = ModContent.Request<Texture2D>("ITD/Content/NPCs/Bosses/MotherWisp_Outline").Value;
             Texture2D glowOrb = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
             Vector2 handOffset = new Vector2(currentHandX, 6f) * NPC.scale;
 
@@ -242,7 +246,6 @@ public class WispCandle : ModNPC
 
                 spriteBatch.Draw(handTex, oldHandDrawPos, handFrame, trailColor, NPC.rotation, handFrame.Size() / 2f, NPC.scale * 0.35f, effects, 0f);
             }
-            
 
             Vector2 handDrawPos = miragePos + handOffset;
             spriteBatch.Draw(glowOrb, handDrawPos, glowOrbFrame, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, glowOrbFrame.Size() / 2f, NPC.scale * 0.65f * MiscHelpers.BetterEssScale(2, 0.05f), SpriteEffects.None, 0f);

@@ -27,6 +27,12 @@ public class WaxWhipTaggedNPC : GlobalNPC
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
+                    int debuffType = ModContent.BuffType<WaxWhipTagDebuff>();
+                    int buffIndex = npc.FindBuffIndex(debuffType);
+                    if (buffIndex != -1)
+                    {
+                        npc.DelBuff(buffIndex);
+                    }
                     Projectile boom = Projectile.NewProjectileDirect(projectile.GetSource_FromThis(), npc.Center,
                         Vector2.Zero, ModContent.ProjectileType<WaxWhipExplosion>(), (int)(projectile.damage * 1.5f), projectile.knockBack, projectile.owner);
                     boom.hostile = false;

@@ -27,7 +27,7 @@ public class WaxWhipExplosion : ModProjectile
         Projectile.tileCollide = false;
         Projectile.light = 0.75f;
         Projectile.ignoreWater = true;
-        Projectile.extraUpdates = 1;
+        Projectile.extraUpdates = 0;
         Projectile.localNPCHitCooldown = -1;
         Projectile.usesLocalNPCImmunity = true;
         emitter = ParticleSystem.NewEmitter<WispFlame>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
