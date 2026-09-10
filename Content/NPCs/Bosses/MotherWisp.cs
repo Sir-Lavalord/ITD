@@ -78,6 +78,7 @@ public class MotherWisp : ModNPC
         emitter = ParticleSystem.NewEmitter<WispMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
         emitter.tag = NPC;
     }
+
     public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
     {
         NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
@@ -111,6 +112,15 @@ public class MotherWisp : ModNPC
             return;
         }
 
+        if (AI_State == (float)ActionState.Idle || AI_State == (float)ActionState.Spawning)
+        {
+            candle.localAI[0] = 0;
+        }
+        else
+        {
+            candle.localAI[0] = 2;
+        }
+
         if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             NPC.TargetClosest();
 
@@ -123,6 +133,7 @@ public class MotherWisp : ModNPC
             Vector2 spawnOffset = Main.rand.NextVector2Circular(NPC.width / 2.2f, NPC.height / 2.2f) * NPC.scale;
             emitter?.Emit(NPC.Center + spawnOffset, mistVelocity, 0f);
         }
+
         switch ((ActionState)AI_State)
         {
             case ActionState.Spawning:
@@ -154,7 +165,7 @@ public class MotherWisp : ModNPC
                     float prevMain = MainAttack;
                     float prevSec = SecAttack;
 
-                    MainAttack = Main.rand.Next(2);
+                    MainAttack = Main.rand.Next(3);
 
                     if (MainAttack == prevMain && consecutiveMainCount >= 2)
                     {
@@ -210,58 +221,53 @@ public class MotherWisp : ModNPC
             case ActionState.Die:
                 break;
         }
-    }
 
-    private void GeneralHover(Player player, float hoverHeight = 300f, float speed = 0.05f)
-    {
-        float verticalBob = MiscHelpers.BetterEssScale(2, 0.2f);
-        Vector2 hoverTarget = player.Center - new Vector2(0, hoverHeight * verticalBob);
-        NPC.velocity = (hoverTarget - NPC.Center) * speed;
-    }
-
-    private void CandleIdleHover(NPC candle)
-    {
-        Vector2 targetPos = NPC.Center + new Vector2(0, 160f);
-        candle.velocity = (targetPos - candle.Center) * 0.1f;
+        float targetBossRotation = 0f;
+        if (AI_State == (float)ActionState.Idle || AI_State == (float)ActionState.Spawning)
+        {
+            float maxRotation = MathHelper.Pi / 6;
+            float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);
+            targetBossRotation = rotationFactor * maxRotation;
+        }
+        NPC.rotation = Utils.AngleLerp(NPC.rotation, targetBossRotation, 0.15f);
     }
 
     private void CandleMash(Player player, NPC candle, BaseAttack sec)
     {
         AttackTimer++;
-        float time = AttackTimer;
         NPC.velocity *= 0.8f;
         if (NPC.velocity.Length() < 0.1f) NPC.velocity = Vector2.Zero;
 
-        if (sec == BaseAttack.None)
+        if (sec == BaseAttack.None || sec == BaseAttack.Fireblow)
         {
             float windupEnd = 40f;
             float positionEnd = 60f;
             float attackTimeout = 120f;
             float restEnd = 150f;
 
-            if (time < windupEnd)
+            if (AttackTimer < windupEnd)
             {
                 Vector2 handPos = NPC.Center + new Vector2(NPC.direction * 180, 50);
                 candle.Center = Vector2.Lerp(candle.Center, handPos, 0.15f);
                 candle.velocity = Vector2.Zero;
             }
-            else if (time < positionEnd)
+            else if (AttackTimer < positionEnd)
             {
                 Vector2 targetAim = player.Center - new Vector2(0, 250);
                 candle.Center = Vector2.Lerp(candle.Center, targetAim, 0.2f);
                 candle.velocity = Vector2.Zero;
             }
-            else if (time == positionEnd)
+            else if (AttackTimer == positionEnd)
             {
                 candle.velocity = new Vector2(0, 25f);
                 candle.netUpdate = true;
             }
-            else if (time > positionEnd && time <= attackTimeout)
+            else if (AttackTimer > positionEnd && AttackTimer <= attackTimeout)
             {
                 bool hitTile = Collision.SolidCollision(candle.position, candle.width, candle.height);
                 bool hitFloor = candle.Bottom.Y >= player.Bottom.Y;
 
-                if (hitTile || hitFloor || time == attackTimeout)
+                if (hitTile || hitFloor || AttackTimer == attackTimeout)
                 {
                     candle.velocity = Vector2.Zero;
                     SoundEngine.PlaySound(SoundID.Item14, candle.Center);
@@ -278,72 +284,11 @@ public class MotherWisp : ModNPC
                     AttackTimer = attackTimeout;
                 }
             }
-            else if (time > attackTimeout && time < restEnd)
+            else if (AttackTimer > attackTimeout && AttackTimer < restEnd)
             {
                 candle.velocity = Vector2.Zero;
             }
-            else if (time >= restEnd)
-            {
-                AttackCount++;
-                AttackTimer = 0;
-
-                if (AttackCount >= 3)
-                {
-                    ResetState(ActionState.Idle);
-                }
-            }
-        }
-        else if (sec == BaseAttack.Fireblow)
-        {
-            float windupEnd = 40f;
-            float positionEnd = 60f;
-            float attackTimeout = 120f;
-            float restEnd = 150f;
-
-            if (time < windupEnd)
-            {
-                Vector2 handPos = NPC.Center + new Vector2(NPC.direction * 180, 50);
-                candle.Center = Vector2.Lerp(candle.Center, handPos, 0.15f);
-                candle.velocity = Vector2.Zero;
-            }
-            else if (time < positionEnd)
-            {
-                Vector2 targetAim = player.Center - new Vector2(0, 250);
-                candle.Center = Vector2.Lerp(candle.Center, targetAim, 0.2f);
-                candle.velocity = Vector2.Zero;
-            }
-            else if (time == positionEnd)
-            {
-                candle.velocity = new Vector2(0, 25f);
-                candle.netUpdate = true;
-            }
-            else if (time > positionEnd && time <= attackTimeout)
-            {
-                bool hitTile = Collision.SolidCollision(candle.position, candle.width, candle.height);
-                bool hitFloor = candle.Bottom.Y >= player.Bottom.Y;
-
-                if (hitTile || hitFloor || time == attackTimeout)
-                {
-                    candle.velocity = Vector2.Zero;
-                    SoundEngine.PlaySound(SoundID.Item14, candle.Center);
-
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        for (int j = -1; j <= 1; j += 2)
-                        {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), candle.Bottom + new Vector2(30 * j, -20), new Vector2(8 * j, 0),
-                                ModContent.ProjectileType<CosmicShockwave>(), (int)(NPC.damage * 0.5f), 0, -1);
-                        }
-                    }
-
-                    AttackTimer = attackTimeout;
-                }
-            }
-            else if (time > attackTimeout && time < restEnd)
-            {
-                candle.velocity = Vector2.Zero;
-            }
-            else if (time >= restEnd)
+            else if (AttackTimer >= restEnd)
             {
                 AttackCount++;
                 AttackTimer = 0;
@@ -366,29 +311,29 @@ public class MotherWisp : ModNPC
                 wispCandle.FlameState = 1;
             }
 
-            if (time < windupEnd)
+            if (AttackTimer < windupEnd)
             {
                 Vector2 handPos = NPC.Center + new Vector2(NPC.direction * 180, 50);
                 candle.Center = Vector2.Lerp(candle.Center, handPos, 0.1f);
                 candle.velocity = Vector2.Zero;
             }
-            else if (time < positionEnd)
+            else if (AttackTimer < positionEnd)
             {
                 Vector2 targetAim = player.Center - new Vector2(0, 250);
                 candle.Center = Vector2.Lerp(candle.Center, targetAim, 0.1f);
                 candle.velocity = Vector2.Zero;
             }
-            else if (time == positionEnd)
+            else if (AttackTimer == positionEnd)
             {
                 candle.velocity = new Vector2(0, 20f);
                 candle.netUpdate = true;
             }
-            else if (time > positionEnd && time <= attackTimeout)
+            else if (AttackTimer > positionEnd && AttackTimer <= attackTimeout)
             {
                 bool hitTile = Collision.SolidCollision(candle.position, candle.width, candle.height);
                 bool hitFloor = candle.Bottom.Y >= player.Bottom.Y;
 
-                if (hitTile || hitFloor || time == attackTimeout)
+                if (hitTile || hitFloor || AttackTimer == attackTimeout)
                 {
                     candle.velocity = Vector2.Zero;
                     SoundEngine.PlaySound(SoundID.Item14, candle.Center);
@@ -405,11 +350,11 @@ public class MotherWisp : ModNPC
                     AttackTimer = attackTimeout;
                 }
             }
-            else if (time > attackTimeout && time < restEnd)
+            else if (AttackTimer > attackTimeout && AttackTimer < restEnd)
             {
                 candle.velocity = Vector2.Zero;
             }
-            else if (time >= restEnd)
+            else if (AttackTimer >= restEnd)
             {
                 AttackCount++;
                 AttackTimer = 0;
@@ -425,9 +370,7 @@ public class MotherWisp : ModNPC
     private void Fireblow(Player player, NPC candle, BaseAttack sec)
     {
         AttackTimer++;
-        float time = AttackTimer;
-
-        if (time < 40f)
+        if (AttackTimer < 40f)
         {
             float hoverHeight = sec == BaseAttack.Enflame ? 600 : 300;
             GeneralHover(player, hoverHeight);
@@ -444,33 +387,34 @@ public class MotherWisp : ModNPC
             float blowEnd = 80f;
             float resetTime = 150f;
 
-            if (time < windupEnd)
+            if (AttackTimer < windupEnd)
             {
                 aimPos = player.Center;
             }
             Vector2 aimDir = NPC.DirectionTo(aimPos);
 
-            if (time < windupEnd)
+            if (AttackTimer < windupEnd)
             {
                 Vector2 targetPos = NPC.Center + aimDir * 50f;
                 candle.Center = Vector2.Lerp(candle.Center, targetPos, 0.2f);
                 candle.velocity = Vector2.Zero;
             }
-            else if (time == windupEnd)
+            else if (AttackTimer == windupEnd)
             {
                 NPC.netUpdate = true;
+
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), candle.Center, Vector2.Zero, ModContent.ProjectileType<WispFireBreathTelegraph>(), 0, 0, Main.myPlayer, aimDir.ToRotation(), candle.whoAmI);
                 }
             }
-            else if (time > windupEnd && time <= blowEnd)
+            else if (AttackTimer > windupEnd && AttackTimer <= blowEnd)
             {
                 Vector2 targetPos = NPC.Center + aimDir * 100f;
                 candle.Center = targetPos;
                 candle.velocity = Vector2.Zero;
 
-                if (time % 2 == 0)
+                if (AttackTimer % 2 == 0)
                 {
                     SoundEngine.PlaySound(SoundID.Item34, candle.Center);
 
@@ -484,7 +428,7 @@ public class MotherWisp : ModNPC
                     }
                 }
             }
-            else if (time >= resetTime)
+            else if (AttackTimer >= resetTime)
             {
                 ResetState(ActionState.Idle);
             }
@@ -499,33 +443,34 @@ public class MotherWisp : ModNPC
             float blastTime = 270f;
             float restEnd = 300f;
 
-            if (time < windupEnd)
+            if (AttackTimer < windupEnd)
             {
                 aimPos = player.Center;
             }
             Vector2 aimDir = NPC.DirectionTo(aimPos);
 
-            if (time < windupEnd)
+            if (AttackTimer < windupEnd)
             {
                 Vector2 targetPos = NPC.Center + aimDir * 50f;
                 candle.Center = Vector2.Lerp(candle.Center, targetPos, 0.2f);
                 candle.velocity = Vector2.Zero;
             }
-            else if (time == windupEnd)
+            else if (AttackTimer == windupEnd)
             {
                 NPC.netUpdate = true;
+
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), candle.Center, Vector2.Zero, ModContent.ProjectileType<WispFireBreathTelegraph>(), 0, 0, Main.myPlayer, aimDir.ToRotation(), candle.whoAmI);
                 }
             }
-            else if (time > windupEnd && time <= blowEnd)
+            else if (AttackTimer > windupEnd && AttackTimer <= blowEnd)
             {
                 Vector2 targetPos = NPC.Center + aimDir * 100f;
                 candle.Center = targetPos;
                 candle.velocity = Vector2.Zero;
 
-                if (time % 2 == 0)
+                if (AttackTimer % 2 == 0)
                 {
                     SoundEngine.PlaySound(SoundID.Item34, candle.Center);
 
@@ -539,9 +484,9 @@ public class MotherWisp : ModNPC
                     }
                 }
             }
-            else if (time > blowEnd)
+            else if (AttackTimer > blowEnd)
             {
-                if (time < positionEnd)
+                if (AttackTimer < positionEnd)
                 {
                     Lighting.AddLight(candle.Center, 0.8f, 0.4f, 0f);
 
@@ -554,17 +499,17 @@ public class MotherWisp : ModNPC
                     candle.Center = Vector2.Lerp(candle.Center, aimPosSmash, 0.08f);
                     candle.velocity = Vector2.Zero;
                 }
-                else if (time == positionEnd)
+                else if (AttackTimer == positionEnd)
                 {
                     candle.velocity = new Vector2(0, 35f);
                     candle.netUpdate = true;
                 }
-                else if (time > positionEnd && time <= attackTimeout)
+                else if (AttackTimer > positionEnd && AttackTimer <= attackTimeout)
                 {
                     bool hitTile = Collision.SolidCollision(candle.position, candle.width, candle.height);
                     bool hitFloor = candle.Bottom.Y >= player.Bottom.Y;
 
-                    if (hitTile || hitFloor || time == attackTimeout)
+                    if (hitTile || hitFloor || AttackTimer == attackTimeout)
                     {
                         candle.velocity = Vector2.Zero;
                         SoundEngine.PlaySound(SoundID.Item14, candle.Center);
@@ -588,11 +533,11 @@ public class MotherWisp : ModNPC
                         AttackTimer = telegraphStart;
                     }
                 }
-                else if (time > telegraphStart && time < blastTime)
+                else if (AttackTimer > telegraphStart && AttackTimer < blastTime)
                 {
                     candle.velocity = Vector2.Zero;
                 }
-                else if (time == blastTime)
+                else if (AttackTimer == blastTime)
                 {
                     candle.velocity = Vector2.Zero;
 
@@ -610,11 +555,11 @@ public class MotherWisp : ModNPC
                         }
                     }
                 }
-                else if (time > blastTime && time < restEnd)
+                else if (AttackTimer > blastTime && AttackTimer < restEnd)
                 {
                     candle.velocity = Vector2.Zero;
                 }
-                else if (time >= restEnd)
+                else if (AttackTimer >= restEnd)
                 {
                     ResetState(ActionState.Idle);
                 }
@@ -627,16 +572,12 @@ public class MotherWisp : ModNPC
             float restEnd = 350f;
             float spread = MathHelper.ToRadians(25);
 
-            int extraParticles = (int)MathHelper.Min(time / 3f, 10f);
-            for (int i = 0; i < extraParticles; i++)
+            if (AttackTimer < blowEnd)
             {
-                float wiggle = (float)Math.Sin((Main.GlobalTimeWrappedHourly * 24f) + Main.rand.NextFloat(MathHelper.TwoPi)) * 3.5f;
-                Vector2 mistVelocity = new Vector2(wiggle, -Main.rand.NextFloat(14f, 22f) * NPC.scale);
-                Vector2 spawnOffset = Main.rand.NextVector2Circular(NPC.width / 2.5f, NPC.height / 2.5f) * NPC.scale;
-                emitter?.Emit(NPC.Center + spawnOffset, mistVelocity, 0f);
+                DoEnflameAnimation(AttackTimer, candle, AttackTimer < windupEnd);
             }
 
-            if (time < windupEnd)
+            if (AttackTimer < windupEnd)
             {
                 aimPos = player.Center;
                 Vector2 aimDir = NPC.DirectionTo(aimPos);
@@ -645,7 +586,7 @@ public class MotherWisp : ModNPC
                 candle.Center = Vector2.Lerp(candle.Center, targetPos, 0.2f);
                 candle.velocity = Vector2.Zero;
             }
-            else if (time == windupEnd)
+            else if (AttackTimer == windupEnd)
             {
                 NPC.netUpdate = true;
                 Vector2 lockedAim = NPC.DirectionTo(aimPos);
@@ -661,7 +602,7 @@ public class MotherWisp : ModNPC
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), candle.Center, lineVel2, ModContent.ProjectileType<WispTelegraph>(), 0, 0, Main.myPlayer, 0f, 0f, 120f);
                 }
             }
-            else if (time > windupEnd && time <= blowEnd)
+            else if (AttackTimer > windupEnd && AttackTimer <= blowEnd)
             {
                 aimPos = Vector2.Lerp(aimPos, player.Center, 0.025f);
                 Vector2 currentAim = NPC.DirectionTo(aimPos);
@@ -669,10 +610,11 @@ public class MotherWisp : ModNPC
                 Vector2 targetPos = NPC.Center + currentAim * 100f;
                 candle.Center = targetPos;
                 candle.velocity = Vector2.Zero;
+
                 int numProjectiles = 6;
                 int projType = ModContent.ProjectileType<WispFireBreath>();
 
-                if (time % 40 == 0)
+                if (AttackTimer % 40 == 0)
                 {
                     AttackCount++;
                     numProjectiles = AttackCount % 2 == 0 ? 5 : 6;
@@ -690,9 +632,9 @@ public class MotherWisp : ModNPC
                     }
                 }
 
-                if (time % 2 == 0)
+                if (AttackTimer % 2 == 0)
                 {
-                    if (time % 6 == 0)
+                    if (AttackTimer % 6 == 0)
                         SoundEngine.PlaySound(SoundID.Item34, candle.Center);
 
                     if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -705,11 +647,11 @@ public class MotherWisp : ModNPC
                     }
                 }
             }
-            else if (time > blowEnd && time < restEnd)
+            else if (AttackTimer > blowEnd && AttackTimer < restEnd)
             {
                 candle.velocity = Vector2.Zero;
             }
-            else if (time >= restEnd)
+            else if (AttackTimer >= restEnd)
             {
                 ResetState(ActionState.Idle);
             }
@@ -718,23 +660,24 @@ public class MotherWisp : ModNPC
 
     private void Enflame(Player player, NPC candle, BaseAttack sec)
     {
-        if (sec == BaseAttack.None)
+        AttackTimer++;
+        if (AttackTimer < 30f)
         {
-            AttackTimer++;
-            CandleIdleHover(candle);
-
+            float hoverHeight = sec == BaseAttack.CandleMash ? 450 : 300;
+            GeneralHover(player, hoverHeight);
+        }
+        else
+        {
             NPC.velocity *= 0.8f;
             if (NPC.velocity.Length() < 0.1f) NPC.velocity = Vector2.Zero;
+        }
+        if (sec == BaseAttack.None)
+        {
+            CandleIdleHover(candle);
 
             if (AttackTimer < 120)
             {
-                int extraParticles = (int)MathHelper.Min(AttackTimer / 3f, 10f);
-
-                if (candle.ModNPC is WispCandle wispCandle)
-                {
-                    wispCandle.FlameState = 1;
-                    wispCandle.ExtraParticles = extraParticles;
-                }
+                DoEnflameAnimation(AttackTimer, candle, true);
             }
 
             if (AttackTimer > 40 && AttackTimer < 120)
@@ -762,12 +705,112 @@ public class MotherWisp : ModNPC
         }
         else if (sec == BaseAttack.CandleMash)
         {
+            CandleIdleHover(candle);
+
+            float windupEnd = 60f;
+            float swingEnd = 120f;
+            float restEnd = 160f;
+
+            if (AttackTimer < swingEnd)
+            {
+                DoEnflameAnimation(AttackTimer, candle, AttackTimer < windupEnd);
+            }
+
+            if (AttackTimer < windupEnd)
+            {
+                aimPos = player.Center;
+                Vector2 aimDir = NPC.DirectionTo(aimPos);
+
+                Vector2 startPos = NPC.Center + aimDir.RotatedBy(-MathHelper.PiOver2) * 120f;
+                candle.Center = Vector2.Lerp(candle.Center, startPos, 0.15f);
+                candle.velocity = Vector2.Zero;
+
+                candle.localAI[1] = aimDir.RotatedBy(-MathHelper.PiOver2).ToRotation() + MathHelper.PiOver2;
+            }
+            else if (AttackTimer <= swingEnd)
+            {
+                if (AttackTimer == windupEnd) NPC.netUpdate = true;
+
+                Vector2 lockedAim = NPC.DirectionTo(aimPos);
+
+                float progress = (AttackTimer - windupEnd) / (swingEnd - windupEnd);
+                float smoothedProgress = MathHelper.SmoothStep(0f, 1f, progress);
+
+                float currentAngle = MathHelper.Lerp(-MathHelper.PiOver2, MathHelper.PiOver2, smoothedProgress);
+                Vector2 offsetDir = lockedAim.RotatedBy(currentAngle);
+
+                candle.Center = NPC.Center + offsetDir * 180f;
+                candle.velocity = Vector2.Zero;
+
+
+                candle.localAI[0] = 1;
+                candle.localAI[1] = offsetDir.ToRotation() + MathHelper.PiOver2;
+                    
+
+                if (AttackTimer % 4 == 0)
+                {
+                    SoundEngine.PlaySound(SoundID.Item34, candle.Center);
+
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        int projType = ModContent.ProjectileType<WispFireBreath>();
+                        float spread = MathHelper.ToRadians(15);
+
+                        for (int i = -1; i <= 1; i++)
+                        {
+                            Vector2 shootVel = offsetDir.RotatedBy(spread * i) * Main.rand.NextFloat(10f, 16f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), candle.Center, shootVel, projType, (int)(NPC.damage * 0.5f), 0, -1);
+                        }
+                    }
+                }
+            }
+            else if (AttackTimer >= restEnd)
+            {
+                ResetState(ActionState.Idle);
+            }
         }
-        else if (sec == BaseAttack.Fireblow)
+
+        float rotation = 0f;
+        float maxRotation = MathHelper.Pi / 12;
+        float rotationFactor = MathHelper.Clamp(NPC.velocity.X / 8f, -1f, 1f);
+        rotation = rotationFactor * maxRotation;
+        NPC.rotation = rotation;
+    }
+
+    private void DoEnflameAnimation(float AttackTimer, NPC candle, bool isWindup)
+    {
+        int extraParticles = (int)MathHelper.Min(AttackTimer / 3f, 12f);
+
+        for (int i = 0; i < extraParticles; i++)
         {
+            float wiggle = (float)Math.Sin((Main.GlobalTimeWrappedHourly * 24f) + Main.rand.NextFloat(MathHelper.TwoPi)) * 3.5f;
+            Vector2 mistVelocity = new Vector2(wiggle, -Main.rand.NextFloat(14f, 22f) * NPC.scale);
+            Vector2 spawnOffset = Main.rand.NextVector2Circular(NPC.width / 2.5f, NPC.height / 2.5f) * NPC.scale;
+            emitter?.Emit(NPC.Center + spawnOffset, mistVelocity, 0f);
+        }
+
+        if (candle.ModNPC is WispCandle wispCandle)
+        {
+            wispCandle.FlameState = isWindup ? 1 : 2;
+            wispCandle.ExtraParticles = extraParticles;
         }
     }
 
+    private void GeneralHover(Player player, float hoverHeight = 300f, float speed = 0.05f)
+    {
+        float verticalBob = MiscHelpers.BetterEssScale(2, 0.2f);
+        Vector2 hoverTarget = player.Center - new Vector2(0, hoverHeight * verticalBob);
+        NPC.velocity = (hoverTarget - NPC.Center) * speed;
+    }
+
+    private void CandleIdleHover(NPC candle)
+    {
+        Vector2 targetPos = NPC.Center + new Vector2(0, 160f);
+        candle.velocity = (targetPos - candle.Center) * 0.1f;
+    }
+
+    
+    
     private void ResetState(ActionState nextState)
     {
         AI_State = (float)nextState;
@@ -817,8 +860,8 @@ public class MotherWisp : ModNPC
 
         emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => DrawAtNPC(outline, frameOutline, NPC.scale));
         emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterDrawAll, () =>
-    Main.EntitySpriteDraw(face, NPC.Center + new Vector2(0, 0 * NPC.scale) - Main.screenPosition, frameFace,
-    Color.White * NPC.Opacity, NPC.rotation, frameFace.Size() / 2f, NPC.scale, SpriteEffects.None));
+        Main.EntitySpriteDraw(face, NPC.Center + new Vector2(0, 0 * NPC.scale) - Main.screenPosition, frameFace,
+        Color.White * NPC.Opacity, NPC.rotation, frameFace.Size() / 2f, NPC.scale, SpriteEffects.None));
         emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterDrawAll, () => DrawAtNPC(texture, frameBody, NPC.scale));
 
         return false;
