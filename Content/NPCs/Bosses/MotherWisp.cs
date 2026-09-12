@@ -34,7 +34,13 @@ public class MotherWisp : ModNPC
         Die,
         Stunned
     }
-
+    /// <summary>
+    /// <para> This is the base attack of mWisp </para>
+    /// <para>Boss picks from these attacks and then picks a secondary attack to combo with it </para>
+    /// <para>Boss does not pick the same main attack and secondary attack </para>
+    /// <para>Boss does not pick the same main attack twice in a row, but it can pick the same secondary attack twice in a row </para>
+    /// <para>Boss does not pick the same main attack thrice in a row, regardless of the secondary </para>
+    /// </summary>
     public enum BaseAttack
     {
         None = -1,
@@ -65,11 +71,11 @@ public class MotherWisp : ModNPC
 
     int faceFrameTotal = 6;
     int faceFrameCurrent = 0;
-    int faceFrameCounter = 0; // NEW: Dedicated counter for the face so it doesn't override the body
+    int faceFrameCounter = 0; //epic, took too long to figure out
     private int consecutiveMainCount = 0;
 
     public Vector2 actualHandPos;
-    public Vector2[] handOldPos = new Vector2[12];
+    public Vector2[] handOldPos = new Vector2[12]; // 12 is too much already
 
     public override void SetStaticDefaults()
     {
@@ -142,7 +148,12 @@ public class MotherWisp : ModNPC
         }
         return true;
     }
-
+    /// <summary>
+    /// <para> This is used to animate face only </para>
+    /// <para>Frame start and frame end are inclusive, so if you want to animate frames 0, 1, 2, you would call AnimateFace(0, 2, speed)</para>
+    /// <para>Frame start =-1 makes it starts from current frame</para>
+    /// <para>doLoop determines if the animation should loop or not</para>
+    /// </summary>
     public void AnimateFace(int frameStart, int frameEnd, int frameSpeed, bool doLoop = true)
     {
         if (frameStart != -1 && (faceFrameCurrent < frameStart || faceFrameCurrent > frameEnd))
@@ -1020,7 +1031,7 @@ public class MotherWisp : ModNPC
 
     public override void FindFrame(int frameHeight)
     {
-        if (++NPC.frameCounter >= 6) // Controls pure body animation speed
+        if (++NPC.frameCounter >= 6) // body only
         {
             NPC.frameCounter = 0;
             NPC.frame.Y = (NPC.frame.Y + frameHeight) % (Main.npcFrameCount[Type] * frameHeight);
@@ -1037,9 +1048,9 @@ public class MotherWisp : ModNPC
         int frameHeight = texture.Height / Main.npcFrameCount[Type];
         int bodyFrameCurrent = NPC.frame.Y / frameHeight;
 
-        Rectangle frameBody = texture.Frame(1, Main.npcFrameCount[Type], 0, bodyFrameCurrent); // Decoupled body animation
+        Rectangle frameBody = texture.Frame(1, Main.npcFrameCount[Type], 0, bodyFrameCurrent); // split now
         Rectangle frameOutline = outline.Frame(1, 1, 0, 0);
-        Rectangle frameFace = face.Frame(1, faceFrameTotal, 0, faceFrameCurrent); // Handled by AnimateFace
+        Rectangle frameFace = face.Frame(1, faceFrameTotal, 0, faceFrameCurrent); // fixed sht
 
         Texture2D glowOrb = Mod.Assets.Request<Texture2D>("Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
         Rectangle glowOrbFrame = glowOrb.Frame(1, 1, 0, 0);
