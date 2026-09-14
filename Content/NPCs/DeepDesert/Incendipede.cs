@@ -204,7 +204,7 @@ public class IncendipedeHead : ITDNPC
         Rectangle frame = new(frameX, NPC.frame.Y, tex.Width / 2, NPC.frame.Height);
         Vector2 origin = new(tex.Width / 4, tex.Height / Main.npcFrameCount[Type] / 2);
         Vector2 offset = new(!Wall ? -8f * NPC.spriteDirection : 0f, NPC.gfxOffY);
-        Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, frame, drawColor, NPC.rotation, origin, NPC.scale, CommonSpriteDirection);
+        Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, frame, drawColor, NPC.rotation, origin, NPC.scale, NPC.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
         return false;
     }
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -314,7 +314,7 @@ public class IncendipedeBodySegment : ITDNPC
         Rectangle frame = new(frameX, NPC.frame.Y, tex.Width / 2, NPC.frame.Height);
         Vector2 origin = new(tex.Width / 4, tex.Height / Main.npcFrameCount[Type] / 2);
         Vector2 offset = new(0, NPC.gfxOffY);
-        Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, frame, drawColor, NPC.rotation, origin, NPC.scale, CommonSpriteDirection);
+        Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, frame, drawColor, NPC.rotation, origin, NPC.scale, NPC.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
         return false;
     }
 }
@@ -419,7 +419,7 @@ public class IncendipedeTail : ITDNPC
         Rectangle frame = new(frameX, NPC.frame.Y, tex.Width / 2, NPC.frame.Height);
         Vector2 origin = new(tex.Width / 4, tex.Height / Main.npcFrameCount[Type] / 2);
         Vector2 offset = new(0, NPC.gfxOffY);
-        Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, frame, drawColor, NPC.rotation, origin, NPC.scale, CommonSpriteDirection);
+        Main.EntitySpriteDraw(tex, NPC.Center - screenPos + offset, frame, drawColor, NPC.rotation, origin, NPC.scale, NPC.spriteDirection > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
         return false;
     }
 }

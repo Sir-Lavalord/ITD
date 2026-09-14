@@ -118,7 +118,7 @@ public class UndertakerGhostProj : ModProjectile
     {
         Vector2 stretch = new(1f, 1f);
         Texture2D tex = TextureAssets.Projectile[Type].Value;
-        Texture2D tex2 = Mod.Assets.Request<Texture2D>("Content/Projectiles/Friendly/Melee/UndertakerGhostMuzzle").Value;
+        Texture2D tex2 = Mod.Assets.Request<Texture2D>("Content/Projectiles/Friendly/Summoner/UndertakerGhostMuzzle").Value;
         Texture2D tex3 = Mod.Assets.Request<Texture2D>("Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
         Rectangle frame = tex.Frame(1, 1, 0, 0);
         Rectangle frame3 = tex3.Frame(1, 1, 0, 0);

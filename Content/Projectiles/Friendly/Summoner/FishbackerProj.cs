@@ -7,6 +7,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
+using Terraria.GameContent.Tile_Entities;
 
 namespace ITD.Content.Projectiles.Friendly.Summoner
 {
@@ -49,17 +50,19 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2; // Without PiOver2, the rotation would be off by 90 degrees counterclockwise.
 
             Projectile.Center = Main.GetPlayerArmPosition(Projectile) + Projectile.velocity * Timer;
-            
             Projectile.spriteDirection = Projectile.velocity.X >= 0f ? 1 : -1;
 
-            Timer++;
 
+            Timer++;
             float swingTime = owner.itemAnimationMax * Projectile.MaxUpdates;
-            if (Timer >= swingTime || owner.itemAnimation <= 0)
+
+            Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out _, out _);
+            if (Timer >= swingTime || Timer >= timeToFlyOut || owner.itemAnimation <= 0)
             {
                 Projectile.Kill();
                 return;
             }
+
             if ((Timer >= swingTime * 0.5f && Timer <= swingTime * 0.8f) && CanParry)
             {
                 List<Vector2> points = Projectile.WhipPointsForCollision;
@@ -99,14 +102,16 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
                     }
                 }
             }
-                owner.heldProj = Projectile.whoAmI;
-            if (Timer == swingTime / 2)
+            owner.heldProj = Projectile.whoAmI;
+            owner.MatchItemTimeToItemAnimation();
+            if (Timer == timeToFlyOut / 2)
             {
                 List<Vector2> points = Projectile.WhipPointsForCollision;
                 Projectile.FillWhipControlPoints(Projectile, points);
                 SoundEngine.PlaySound(SoundID.Item153, points[points.Count - 1]);
             }
-            float swingProgress = Timer / swingTime;
+
+            float swingProgress = Timer / timeToFlyOut;
             if (Utils.GetLerpValue(0.1f, 0.7f, swingProgress, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, swingProgress, clamped: true) > 0.5f && !Main.rand.NextBool(3))
             {
                 List<Vector2> points = Projectile.WhipPointsForCollision;
@@ -196,7 +201,7 @@ namespace ITD.Content.Projectiles.Friendly.Summoner
 
             SoundEngine.PlaySound(SoundID.NPCHit1, target.Center);//Sloppy toppy
 
-            
+
         }
         public override Color? GetAlpha(Color lightColor)
         {

@@ -1590,3 +1590,8 @@ IncendipedeStaff: {
 	// DisplayName: Incendipede Staff
 	// Tooltip: ""
 }
+
+WaxWhip: {
+	// DisplayName: Wax Whip
+	// Tooltip: ""
+}

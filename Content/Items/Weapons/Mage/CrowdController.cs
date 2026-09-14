@@ -1,4 +1,5 @@
-﻿using ITD.Content.Projectiles.Friendly.Mage;
+﻿using ITD.Content.Events;
+using ITD.Content.Projectiles.Friendly.Mage;
 using ITD.Systems;
 using ITD.Utilities;
 using Terraria.DataStructures;
@@ -36,7 +37,8 @@ public class CrowdController : ModItem
     }
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
-        Vector2 muzzleOffset = Vector2.Normalize(velocity) * 14f;
+/*        Events.EventsSystem.BeginEvent<LavaRainEvent>();
+*/        Vector2 muzzleOffset = Vector2.Normalize(velocity) * 14f;
         for (int i = 0; i < 20; i++)
         {
             Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(30));

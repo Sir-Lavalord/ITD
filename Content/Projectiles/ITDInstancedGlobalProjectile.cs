@@ -13,6 +13,7 @@ public class ITDInstancedGlobalProjectile : GlobalProjectile//there is now, than
 
     public enum ProjectileItemSource : byte
     {
+        None,
         Potshot,
         TheEpicenter,
         Fwoomstick,
