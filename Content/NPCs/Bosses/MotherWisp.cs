@@ -47,7 +47,8 @@ public class MotherWisp : ModNPC
         CandleMash = 0,
         Fireblow = 1,
         Enflame = 2,
-        Split = 3
+        FlameSword = 3,
+        Split = 4
     }
 
     public ref float AI_State => ref NPC.ai[1];
@@ -58,6 +59,7 @@ public class MotherWisp : ModNPC
     public ref float AttackCount => ref NPC.localAI[1];
 
     public int maxWispCount = 10;
+    public int minWispCount = 5;
     public float GrandWispsLost
     {
         get => NPC.localAI[2];
@@ -76,6 +78,9 @@ public class MotherWisp : ModNPC
 
     public Vector2 actualHandPos;
     public Vector2[] handOldPos = new Vector2[12]; // 12 is too much already
+
+    bool expertMode = Main.expertMode;
+    bool masterMode = Main.masterMode;
 
     public override void SetStaticDefaults()
     {
@@ -102,7 +107,20 @@ public class MotherWisp : ModNPC
         handEmitter = ParticleSystem.NewEmitter<WispMist>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
         handEmitter.tag = NPC;
     }
-
+    public override void OnSpawn(IEntitySource source)
+    {
+        if (expertMode && !masterMode)
+        {
+            maxWispCount = 16;
+            minWispCount = 8;
+        }
+        if (masterMode)
+        {
+            maxWispCount = 20;
+            minWispCount = 10;
+        }
+        base.OnSpawn(source);
+    }
     public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
     {
         NPC.lifeMax = (int)(NPC.lifeMax * 0.8f * balance * bossAdjustment);
@@ -147,6 +165,14 @@ public class MotherWisp : ModNPC
             return false;
         }
         return true;
+    }
+    public int ProjectileDamage(int damage)
+    {
+        if (expertMode)
+            return (int)(damage / 2.5f);
+        if (masterMode)
+            return (int)(damage / 3.5f);
+        return (int)(damage / 1);
     }
     /// <summary>
     /// <para> This is used to animate face only </para>
@@ -407,9 +433,8 @@ public class MotherWisp : ModNPC
             {
                 SoundEngine.PlaySound(SoundID.Item14, NPC.Center);
 
-                GrandWispsLost = Math.Max(GrandWispsLost, 5);
                 int currentPool = maxWispCount - (int)GrandWispsLost;
-                int countToSpawn = Math.Max(5, currentPool);
+                int countToSpawn = Math.Max(minWispCount, currentPool);
 
                 if (HostCheck)
                 {
@@ -571,10 +596,10 @@ public class MotherWisp : ModNPC
             float windupEnd = 60f;
             float positionEnd = 90f;
             float attackTimeout = 180f;
-            float restEnd = 210f;
+            float restEnd = 250f;
 
-            if (candle.ModNPC is WispCandle wispCandle)
-                wispCandle.FlameState = 1;
+            if (time < attackTimeout)
+                DoEnflameAnimation(time, candle, time < windupEnd);
 
             if (time < windupEnd)
             {
@@ -590,7 +615,7 @@ public class MotherWisp : ModNPC
             }
             else if (time == positionEnd)
             {
-                candle.velocity = new Vector2(0, 20f);
+                candle.velocity = new Vector2(0, 25f);
                 candle.netUpdate = true;
             }
             else if (time > positionEnd && time <= attackTimeout)
@@ -605,9 +630,18 @@ public class MotherWisp : ModNPC
 
                     if (HostCheck)
                     {
-                        for (int j = -1; j <= 1; j += 2)
+                        int projType = ModContent.ProjectileType<WispFireBall>();
+                        int gapStart = Main.rand.Next(2, 8);
+
+                        for (int i = 0; i <= 10; i++)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), candle.Bottom + new Vector2(30 * j, -20), new Vector2(6 * j, 0), ModContent.ProjectileType<CosmicShockwave>(), (int)(NPC.damage * 0.75f), 0, -1);
+                            if (i >= gapStart && i <= gapStart + 2) continue;
+
+                            float angle = MathHelper.Lerp(-MathHelper.Pi, 0f, i / 10f);
+                            angle += Main.rand.NextFloat(-0.05f, 0.05f);
+                            Vector2 shootVel = angle.ToRotationVector2() * Main.rand.NextFloat(12f, 15f);
+
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), candle.Bottom + new Vector2(0, -20f), shootVel, projType, (int)(NPC.damage * 0.75f), 0, -1);
                         }
                     }
 

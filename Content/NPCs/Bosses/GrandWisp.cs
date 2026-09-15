@@ -64,6 +64,19 @@ public class GrandWisp : ModNPC
             emitter.keptAlive = true;
     }
 
+    public override bool CheckDead()
+    {
+        if (NPC.ai[3] == 0)
+        {
+            NPC.ai[3] = 1;
+            NPC.life = 1;
+            NPC.dontTakeDamage = true;
+            NPC.netUpdate = true;
+            return false;
+        }
+        return true;
+    }
+
     public override void AI()
     {
         NPC Mom = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<MotherWisp>());
@@ -123,6 +136,7 @@ public class GrandWisp : ModNPC
         {
             NPC.dontTakeDamage = true;
             NPC.damage = 0;
+            AnimateFace(0, 2, 10);
 
             if (NPC.ai[2] == 0)
             {
@@ -144,6 +158,24 @@ public class GrandWisp : ModNPC
                 NPC.netUpdate = true;
             }
         }
+        float dieTime = 120;
+        if (NPC.ai[3] > 0)
+        {
+            NPC.ai[3]++;
+            if (NPC.ai[3] > dieTime)
+            {
+                SoundEngine.PlaySound(SoundID.Item14, NPC.Center);
+                for (int i = 0; i < 20; i++)
+                {
+                    emitter?.Emit(NPC.Center, Main.rand.NextVector2Circular(10f, 10f), 0f, 60);
+                }
+
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    NPC.StrikeInstantKill();
+                }
+            }
+        }
     }
 
     public override void OnKill()
@@ -162,6 +194,30 @@ public class GrandWisp : ModNPC
     }
 
     int faceFrameCurrent = 0;
+    int faceFrameCounter = 0;
+
+    public void AnimateFace(int frameStart, int frameEnd, int frameSpeed, bool doLoop = true)
+    {
+        if (frameStart != -1 && (faceFrameCurrent < frameStart || faceFrameCurrent > frameEnd))
+        {
+            faceFrameCurrent = frameStart;
+            faceFrameCounter = 0;
+        }
+
+        if (++faceFrameCounter >= frameSpeed)
+        {
+            faceFrameCounter = 0;
+            faceFrameCurrent++;
+
+            if (faceFrameCurrent > frameEnd)
+            {
+                if (doLoop)
+                    faceFrameCurrent = frameStart == -1 ? 0 : frameStart;
+                else
+                    faceFrameCurrent = frameEnd;
+            }
+        }
+    }
 
     public override void FindFrame(int frameHeight)
     {
@@ -169,10 +225,14 @@ public class GrandWisp : ModNPC
         {
             NPC.frameCounter = 0;
             NPC.frame.Y = (NPC.frame.Y + frameHeight) % (6 * frameHeight);
-            if (faceFrameCurrent++ >= 2)
-            {
-                faceFrameCurrent = 0;
-            }
+        }
+
+        if (NPC.ai[3] > 0)
+        {
+            AnimateFace(0, 2, 10,false);
+        }
+        else
+        {
         }
     }
 
@@ -188,17 +248,23 @@ public class GrandWisp : ModNPC
         Texture2D glowOrb = Mod.Assets.Request<Texture2D>("Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
         Rectangle glowOrbFrame = glowOrb.Frame(1, 1, 0, 0);
 
+        Vector2 drawOffset = Vector2.Zero;
+        if (NPC.ai[3] > 0)
+        {
+            drawOffset = Main.rand.NextVector2Circular(6f, 6f);
+        }
+
         void DrawAtNPC(Texture2D tex, Rectangle rect, float scale)
         {
-            sb.Draw(tex, NPC.Center + Main.rand.NextVector2Circular(2f, 2f) - Main.screenPosition, rect, Color.White * NPC.Opacity, NPC.rotation,
+            sb.Draw(tex, NPC.Center + drawOffset + Main.rand.NextVector2Circular(2f, 2f) - Main.screenPosition, rect, Color.White * NPC.Opacity, NPC.rotation,
                 rect.Size() / 2f, scale, NPC.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
         }
 
-        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => Main.EntitySpriteDraw(glowOrb, NPC.Center + Main.rand.NextVector2Circular(1f, 1f) - Main.screenPosition, 
-            glowOrbFrame, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, glowOrbFrame.Size() / 2f, NPC.scale * 1.25f 
+        emitter?.InjectDrawAction(ParticleEmitterDrawStep.BeforePreDrawAll, () => Main.EntitySpriteDraw(glowOrb, NPC.Center + drawOffset + Main.rand.NextVector2Circular(1f, 1f) - Main.screenPosition,
+            glowOrbFrame, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, glowOrbFrame.Size() / 2f, NPC.scale * 1.15f
             * MiscHelpers.BetterEssScale(2, 0.05f), SpriteEffects.None, 0f));
         emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterPreDrawAll, () => DrawAtNPC(texture, frameBody, NPC.scale));
-        emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterDrawAll, () => Main.EntitySpriteDraw(face, NPC.Center + Main.rand.NextVector2Circular(1f, 1f) - Main.screenPosition, frameFace,
+        emitter?.InjectDrawAction(ParticleEmitterDrawStep.AfterDrawAll, () => Main.EntitySpriteDraw(face, NPC.Center + drawOffset + Main.rand.NextVector2Circular(1f, 1f) - Main.screenPosition, frameFace,
             Color.White * NPC.Opacity, NPC.rotation, frameFace.Size() / 2f, NPC.scale, SpriteEffects.None));
 
         return false;
