@@ -296,6 +296,8 @@ Projectiles: {
 	// WispChainBlast.DisplayName: Wisp Chain Blast
 	// WispFireBreathTelegraph.DisplayName: Wisp Fire Breath Telegraph
 	// WaxWhipExplosion.DisplayName: Wax Whip Explosion
+	// WispCandleDeadRay.DisplayName: Wisp Candle Dead Ray
+	// WispFireBall.DisplayName: Wisp Fire Ball
 }
 
 NPCs: {

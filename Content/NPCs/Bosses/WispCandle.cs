@@ -1,4 +1,5 @@
-﻿using ITD.Particles;
+﻿using ITD.Content.Projectiles.Hostile.MotherWisp;
+using ITD.Particles;
 using ITD.Particles.Misc;
 using ITD.Particles.Projectiles;
 using ITD.Utilities;
@@ -121,8 +122,8 @@ public class WispCandle : ModNPC
 
             if (Wisp == null)
             {
-                NPC.active = false;
-                if (Main.netMode != NetmodeID.MultiplayerClient) NPC.netUpdate = true;
+                SpawnState = 2; //to death seq
+                NPC.netUpdate = true;
                 return;
             }
 
@@ -181,6 +182,35 @@ public class WispCandle : ModNPC
             }
 
             NPC.rotation = Utils.AngleLerp(NPC.rotation, targetRotation, 0.15f);
+        }
+        else if (SpawnState == 2)
+        {
+            NPC.velocity.Y += 0.4f;
+            if (NPC.velocity.Y > 16f) NPC.velocity.Y = 16f;
+            NPC.rotation += NPC.velocity.Y * 0.02f;
+
+            NPC.ai[2]++;
+
+            if (NPC.ai[2] > 60)
+            {
+                SoundEngine.PlaySound(SoundID.Item14, NPC.Center);
+
+                for (int i = 0; i < 40; i++)
+                {
+                    emitter?.Emit(NPC.Center, -NPC.velocity.RotatedByRandom(MathHelper.ToRadians(30)) * Main.rand.NextFloat(0.75f,1.1f), 0f, 120);
+
+                    emitter?.Emit(NPC.Center, Main.rand.NextVector2Circular(12f, 12f), 0f, 120);
+                    emitter2?.Emit(NPC.Center, Main.rand.NextVector2Circular(20f, 20f), 0f, 120);
+                }
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, -Vector2.UnitY, ModContent.ProjectileType<WispCandleDeadRay>(), 0, 0f, Main.myPlayer,0,0,150);
+                }
+
+                NPC.active = false;
+            }
+
+
         }
     }
 
