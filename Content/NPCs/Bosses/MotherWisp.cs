@@ -59,7 +59,10 @@ public class MotherWisp : ModNPC
     public ref float AttackCount => ref NPC.localAI[1];
 
     public int maxWispCount = 10;
-    public int minWispCount = 5;
+
+    public float splitTimeDefault = 420;
+    public float splitTime = 420;
+    public int minWispCount = 3;
     public float GrandWispsLost
     {
         get => NPC.localAI[2];
@@ -111,13 +114,15 @@ public class MotherWisp : ModNPC
     {
         if (expertMode && !masterMode)
         {
+            splitTime = 500;
             maxWispCount = 16;
-            minWispCount = 8;
+            minWispCount = 5;
         }
         if (masterMode)
         {
+            splitTime = 600;
             maxWispCount = 20;
-            minWispCount = 10;
+            minWispCount = 6;
         }
         base.OnSpawn(source);
     }
@@ -293,7 +298,7 @@ public class MotherWisp : ModNPC
                 break;
 
             case ActionState.Idle:
-                AnimateFace(0, 0, 6);
+                AnimateFace(-1, 0, 6, false);
                 AttackTimer++;
                 GeneralHover(player, 300f);
                 CandleIdleHover(candle);
@@ -322,7 +327,7 @@ public class MotherWisp : ModNPC
                     float prevMain = MainAttack;
                     float prevSec = SecAttack;
 
-                    MainAttack = Main.rand.Next(3);
+                    MainAttack = 0;
 
                     if (MainAttack == prevMain && consecutiveMainCount >= 2)
                         MainAttack = (MainAttack + Main.rand.Next(1, 3)) % 3;
@@ -535,7 +540,7 @@ public class MotherWisp : ModNPC
         float time = AttackTimer;
         ApplyFriction();
 
-        if (sec == BaseAttack.None || sec == BaseAttack.Fireblow)
+        if (sec == BaseAttack.None)
         {
             float windupEnd = 40f;
             float positionEnd = 60f;
@@ -591,6 +596,96 @@ public class MotherWisp : ModNPC
                 else AttackTimer = 0;
             }
         }
+        else if (sec == BaseAttack.Fireblow)
+        {
+            float windupEnd = 60f;
+
+            float sweepDuration = 30f;
+            float stopDuration = 30f;
+            float cycleTime = sweepDuration + stopDuration;
+
+            float sweepWidth = 1000f;
+            int orbsPerSweep = 13;
+            int maxSweeps = 4;
+
+            if (time < windupEnd)
+            {
+                Vector2 bossHoverPos = new Vector2(player.Center.X, player.Center.Y - 350f);
+                NPC.Center = Vector2.Lerp(NPC.Center, bossHoverPos, 0.08f);
+                NPC.velocity = Vector2.Zero;
+
+                if (time % 4 == 0)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Vector2 offset = (MathHelper.TwoPi / 5 * i - MathHelper.PiOver2).ToRotationVector2() * (windupEnd - time) * 2.5f;
+                        Dust.NewDustPerfect(NPC.Center + offset, DustID.PurpleCrystalShard, -offset * 0.05f).noGravity = true;
+                    }
+                }
+            }
+            bool sweepingRight = (AttackCount % 2 == 0);
+
+            float pathAngle = 0;
+            Vector2 sweepOffset = new Vector2(sweepWidth / 2f, 0).RotatedBy(pathAngle);
+
+
+            if (time <= windupEnd)
+            {
+                aimPos = player.Center - new Vector2(0, 500f);
+                Vector2 edgeStart = sweepingRight ? aimPos - sweepOffset : aimPos + sweepOffset;
+
+                candle.Center = Vector2.Lerp(candle.Center, edgeStart, 0.08f);
+                candle.velocity = Vector2.Zero;
+            }
+            else
+            {
+                float localTime = (time - windupEnd) % cycleTime;
+
+                Vector2 leftEdge = aimPos - sweepOffset;
+                Vector2 rightEdge = aimPos + sweepOffset;
+                Vector2 currentPos;
+
+                if (localTime < sweepDuration)
+                {
+                    float lerpFactor = localTime / sweepDuration;
+                    currentPos = sweepingRight ? Vector2.Lerp(leftEdge, rightEdge, lerpFactor) : Vector2.Lerp(rightEdge, leftEdge, lerpFactor);
+
+                    int dropInterval = (int)(sweepDuration / orbsPerSweep);
+                    if (dropInterval < 1) dropInterval = 1;
+
+                    if (HostCheck && localTime % dropInterval == 0 && localTime < dropInterval * orbsPerSweep)
+                    {
+                        int spawnIndex = (int)(localTime / dropInterval);
+                        float chevronIndex = spawnIndex - (orbsPerSweep / 2);
+
+                        float sectorLean = MathHelper.ToRadians(20);
+                        float sweepAngle = MathHelper.PiOver2 + (sweepingRight ? -sectorLean : sectorLean);
+
+                        Vector2 spawnPos = candle.Top - new Vector2(0, 20f);
+
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), spawnPos, Vector2.Zero, ModContent.ProjectileType<WispOrbSpawner>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer, sweepAngle, chevronIndex);
+                    }
+                }
+                else
+                {
+                    currentPos = sweepingRight ? rightEdge : leftEdge;
+                    aimPos.X = MathHelper.Lerp(aimPos.X, player.Center.X, 0.015f);
+
+                    if (localTime == cycleTime - 1)
+                    {
+                        AttackCount++;
+                        if (AttackCount >= maxSweeps)
+                        {
+                            ResetState(ActionState.Idle);
+                            return;
+                        }
+                    }
+                }
+
+                candle.Center = currentPos;
+                candle.velocity = Vector2.Zero;
+            }
+        }
         else if (sec == BaseAttack.Enflame)
         {
             float windupEnd = 60f;
@@ -631,15 +726,16 @@ public class MotherWisp : ModNPC
                     if (HostCheck)
                     {
                         int projType = ModContent.ProjectileType<WispFireBall>();
-                        int gapStart = Main.rand.Next(2, 8);
+                        int gapStart = Main.rand.Next(-7, 8);
 
-                        for (int i = 0; i <= 10; i++)
+                        for (int i = -10; i <= 10; i++)
                         {
-                            if (i >= gapStart && i <= gapStart + 2) continue;
+                            if (i >= gapStart && i <= gapStart + 1) continue;
 
-                            float angle = MathHelper.Lerp(-MathHelper.Pi, 0f, i / 10f);
+                            float angle = MathHelper.Lerp(-MathHelper.PiOver2, 0f, i / 20f);
                             angle += Main.rand.NextFloat(-0.05f, 0.05f);
                             Vector2 shootVel = angle.ToRotationVector2() * Main.rand.NextFloat(12f, 15f);
+                            shootVel.X *= 2f;
 
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), candle.Bottom + new Vector2(0, -20f), shootVel, projType, (int)(NPC.damage * 0.75f), 0, -1);
                         }
