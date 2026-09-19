@@ -9,7 +9,7 @@ public class StarlitBar : ModItem
 {
     public override void SetStaticDefaults()
     {
-        Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(5, 5));
+        Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(5, 8));
         ItemID.Sets.AnimatesAsSoul[Type] = true;
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
         ItemID.Sets.SortingPriorityMaterials[Type] = 59;

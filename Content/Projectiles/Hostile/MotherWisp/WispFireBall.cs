@@ -1,10 +1,11 @@
 ﻿using ITD.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.Graphics;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,23 +13,24 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp;
 
 public class WispFireBall : ModProjectile
 {
-    public override string Texture => "ITD/Content/Projectiles/Hostile/MotherWisp/WispFireOrb";
+    public VertexStrip TrailStrip = new();
+    public VertexStrip TrailStrip2 = new();
 
-    private readonly Asset<Texture2D> effect = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Hostile/CosJel/CosmicSludgeBomb_Effect");
+    public ref float Target => ref Projectile.ai[0];
+    public ref float Timer => ref Projectile.ai[1];
+    public ref float BlowTime => ref Projectile.ai[2];
 
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
-        ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
+        ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         Main.projFrames[Projectile.type] = 1;
     }
-
     readonly int defaultWidthHeight = 8;
-
     public override void SetDefaults()
     {
-        Projectile.width = defaultWidthHeight;
-        Projectile.height = defaultWidthHeight;
+        Projectile.width = 32;
+        Projectile.height = 32;
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.penetrate = -1;
@@ -39,12 +41,7 @@ public class WispFireBall : ModProjectile
         DrawOffsetX = -16;
         DrawOriginOffsetY = -16;
         Projectile.hide = true;
-        Projectile.scale = 0.75f;
-    }
-
-    public override Color? GetAlpha(Color lightColor)
-    {
-        return Color.White * (1f - Projectile.alpha / 255f);
+        Projectile.scale = 1f;
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -52,73 +49,58 @@ public class WispFireBall : ModProjectile
         behindProjectiles.Add(index);
     }
 
+    public override Color? GetAlpha(Color lightColor)
+    {
+        return new Color(255, 170, 90);
+    }
+
+    private Color StripColors(float progressOnStrip) => new Color(53, 247, 180);
+    private Color StripColors2(float progressOnStrip) => Color.White;
+
+    private float StripWidth(float progressOnStrip) => MathHelper.Lerp(16f, 0f, Utils.GetLerpValue(0f, 0.6f, progressOnStrip, true));
+
+    private float StripWidth2(float progressOnStrip)
+    {
+        return MathHelper.Lerp(8f, 0f, Utils.GetLerpValue(0f, 0.4f, progressOnStrip, true));
+
+    }
+
     public override bool PreDraw(ref Color lightColor)
     {
-        Texture2D texture = effect.Value;
-        Vector2 drawOrigin = new(texture.Width * 0.5f, Projectile.height * 0.5f);
+        SpriteBatch sb = Main.spriteBatch;
+        Texture2D texture = TextureAssets.Projectile[Type].Value;
+        Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+        Vector2 origin = new(texture.Width * 0.5f, texture.Height / Main.projFrames[Type] * 0.5f);
+        Vector2 offset = Projectile.Size * 0.5f - Main.screenPosition;
+        SpriteEffects effects = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        Texture2D texture2 = Mod.Assets.Request<Texture2D>("Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
+        Rectangle frame2 = texture2.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+        Main.EntitySpriteDraw(texture2, Projectile.Center - Main.screenPosition, frame2, new Color(207, 255, 200, 180), Projectile.rotation, new Vector2(texture2.Width * 0.5f, texture2.Height / Main.projFrames[Type] * 0.5f), Projectile.scale * 0.6f, SpriteEffects.None, 0f);
+        sb.Draw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, origin, Projectile.scale, effects, 0f);
 
-        for (int k = 0; k < Projectile.oldPos.Length; k++)
-        {
-            Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY + DrawOriginOffsetX) + new Vector2(DrawOffsetX, DrawOriginOffsetY) + new Vector2(4, 4);
-            Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-            Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
-        }
+        GameShaders.Misc["LightDisc"].Apply(null);
 
-        Texture2D tex = TextureAssets.Projectile[Type].Value;
-        Rectangle frame = tex.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
-        Vector2 center = Projectile.Size / 2f;
+        TrailStrip.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors, StripWidth, offset, Projectile.oldPos.Length, true);
+        TrailStrip2.PrepareStrip(Projectile.oldPos, Projectile.oldRot, StripColors2, StripWidth2, offset, Projectile.oldPos.Length, true);
 
-        for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
-        {
-            Projectile.oldRot[i] = Projectile.oldRot[i - 1];
-            Projectile.oldRot[i] = Projectile.rotation + MathHelper.PiOver2;
-        }
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
-        Vector2 miragePos = Projectile.position - Main.screenPosition + center;
-        Vector2 origin = new(tex.Width * 0.5f, tex.Height / Main.projFrames[Type] * 0.5f);
-        float time = Main.GlobalTimeWrappedHourly;
-        float timer = (float)Main.time / 240f + time * 0.04f;
+        TrailStrip.DrawTrail();
+        TrailStrip2.DrawTrail();
 
-        time %= 4f;
-        time /= 2f;
-
-        if (time >= 1f)
-        {
-            time = 2f - time;
-        }
-
-        time = time * 0.5f + 0.5f;
-
-        for (float i = 0f; i < 1f; i += 0.35f)
-        {
-            float radians = (i + timer) * MathHelper.TwoPi;
-            Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 6).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
-        }
-
-        for (float i = 0f; i < 1f; i += 0.5f)
-        {
-            float radians = (i + timer) * MathHelper.TwoPi;
-            Main.EntitySpriteDraw(tex, miragePos + new Vector2(0f, 8).RotatedBy(radians) * time, frame, new Color(90, 70, 255, 50) * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
-        }
-
-        Main.EntitySpriteDraw(tex, miragePos, frame, Color.White * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
         return false;
     }
 
-    public ref float Target => ref Projectile.ai[0];
-    public ref float Timer => ref Projectile.ai[1];
-    public ref float BlowTime => ref Projectile.ai[2];
-
     public override void AI()
     {
-        Projectile.rotation += 0.2f;
+        Projectile.rotation = Projectile.velocity.ToRotation();
         Timer++;
 
-        if (Timer < 60)
+        if (Timer >= 20 && Timer < 45)
         {
             Projectile.velocity *= 0.95f;
         }
-        else if (Timer == 60)
+        else if (Timer == 45)
         {
             Projectile.velocity = Vector2.Zero;
 
@@ -127,13 +109,9 @@ public class WispFireBall : ModProjectile
                 Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.UnitY, ModContent.ProjectileType<WispTelegraph>(), 0, 0, Main.myPlayer, 0, 0, 45f);
             }
         }
-        else if (Timer > 60 && Timer < 105)
+        else if (Timer == 90)
         {
-            Projectile.velocity = Vector2.Zero;
-        }
-        else if (Timer == 105)
-        {
-            Projectile.velocity = Vector2.UnitY * 20f;
+            Projectile.velocity = Vector2.UnitY * 30f;
         }
     }
 }

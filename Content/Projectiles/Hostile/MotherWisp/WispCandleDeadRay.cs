@@ -72,7 +72,7 @@ public class WispCandleDeadRay : ModProjectile
         }
 
         float sineValue = (float)Math.Sin(Math.PI / maxTime * aiTimer);
-        Projectile.scale = sineValue * 5f;
+        Projectile.scale = sineValue * 4f;
 
         Projectile.alpha = 255 - (int)(255 * sineValue);
         if (Projectile.alpha < 0)
@@ -113,14 +113,15 @@ public class WispCandleDeadRay : ModProjectile
         const float resolutionCompensation = 128f / 24f;
 
         float alphaMult = (255f - Projectile.alpha) / 255f;
+        Color unused = new Color(53, 247, 180, 200);//eh
 
         sb.End();
         sb.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-        Rectangle outerDest = new((int)position.X, (int)position.Y, length, (int)(rectangle.Height * Projectile.scale * 4 / resolutionCompensation));
-        sb.Draw(texture2D13, outerDest, rectangle, new Color(53, 247, 180, 200), Projectile.rotation, origin2, SpriteEffects.None, 0);
+        Rectangle outerDest = new((int)position.X, (int)position.Y, length, (int)(rectangle.Height * Projectile.scale * 8 / resolutionCompensation));
+        sb.Draw(texture2D13, outerDest, rectangle, Color.White, Projectile.rotation, origin2, SpriteEffects.None, 0);
 
-        Rectangle coreDest = new((int)position.X, (int)position.Y, length, (int)(rectangle.Height * Projectile.scale * 1f / resolutionCompensation));
+        Rectangle coreDest = new((int)position.X, (int)position.Y, length, (int)(rectangle.Height * Projectile.scale * 4f / resolutionCompensation));
         sb.Draw(texture2D13, coreDest, rectangle, new Color(207, 254, 200, 255) * alphaMult, Projectile.rotation, origin2, SpriteEffects.None, 0);
 
         return false;
