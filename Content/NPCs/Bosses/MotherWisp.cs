@@ -76,11 +76,11 @@ public class MotherWisp : ModNPC
 
     int faceFrameTotal = 6;
     int faceFrameCurrent = 0;
-    int faceFrameCounter = 0; //epic, took too long to figure out
+    int faceFrameCounter = 0;
     private int consecutiveMainCount = 0;
 
     public Vector2 actualHandPos;
-    public Vector2[] handOldPos = new Vector2[12]; // 12 is too much already
+    public Vector2[] handOldPos = new Vector2[12];
 
     bool expertMode = Main.expertMode;
     bool masterMode = Main.masterMode;
@@ -179,12 +179,7 @@ public class MotherWisp : ModNPC
             return (int)(damage / 3.5f);
         return (int)(damage / 1);
     }
-    /// <summary>
-    /// <para> This is used to animate face only </para>
-    /// <para>Frame start and frame end are inclusive, so if you want to animate frames 0, 1, 2, you would call AnimateFace(0, 2, speed)</para>
-    /// <para>Frame start =-1 makes it starts from current frame</para>
-    /// <para>doLoop determines if the animation should loop or not</para>
-    /// </summary>
+
     public void AnimateFace(int frameStart, int frameEnd, int frameSpeed, bool doLoop = true)
     {
         if (frameStart != -1 && (faceFrameCurrent < frameStart || faceFrameCurrent > frameEnd))
@@ -267,36 +262,98 @@ public class MotherWisp : ModNPC
         switch ((ActionState)AI_State)
         {
             case ActionState.Spawning:
+                NPC.dontTakeDamage = true;
                 AnimateFace(0, 5, 6);
-                float morphTime = 60;
-                float reachTime = 60;
-                float progress = Utils.Clamp(AttackTimer / morphTime, 0f, 1f);
 
+                float morphTime = 90f;
+                float swoopTime = 25f;
+                float holdTime = 10f;
+                float recoilTime = 30f;
+                float totalTime = morphTime + swoopTime + holdTime + recoilTime;
+
+                if (AttackTimer == 0)
+                {
+                    aimPos = candle.Center;
+                }
+
+                float progress = Utils.Clamp(AttackTimer / morphTime, 0f, 1f);
                 NPC.scale = MathHelper.Lerp(0f, 1.5f, progress);
 
-                Vector2 hoverPos = new Vector2(candle.Center.X, candle.Top.Y - (120f * NPC.scale));
+                Vector2 hoverPos = aimPos + new Vector2(0, -160f * NPC.scale);
                 NPC.Center = Vector2.Lerp(NPC.Center, hoverPos, 0.1f);
                 ApplyFriction();
 
                 if (candle.ModNPC is WispCandle wispCandleSpawn)
                 {
+                    Vector2 startHandPos = NPC.Center + new Vector2(NPC.spriteDirection * 120f, -40f) * NPC.scale;
+                    Vector2 idleCandlePos = NPC.Center + new Vector2(0, 160f);
+                    Vector2 handleOffset = new Vector2(wispCandleSpawn.currentHandX, 8f) * candle.scale;
+                    Vector2 targetHandle = idleCandlePos + handleOffset;
+
                     if (AttackTimer < morphTime)
                     {
-                        actualHandPos = NPC.Center + new Vector2(NPC.spriteDirection * 55f, 10f) * NPC.scale;
+                        actualHandPos = startHandPos;
+                        candle.Center = aimPos;
+                        candle.velocity = Vector2.Zero;
+                        SetCandleState(candle, 0, 0f);
+                    }
+                    else if (AttackTimer < morphTime + swoopTime)
+                    {
+                        float localT = (AttackTimer - morphTime) / swoopTime;
+
+                        float easedT = 1f - (float)Math.Pow(1f - localT, 3);
+
+                        Vector2 p0 = startHandPos;
+                        Vector2 p2 = NPC.Center + new Vector2(-NPC.spriteDirection * 100f, 20f) * NPC.scale;
+                        Vector2 p1 = aimPos + new Vector2(NPC.spriteDirection * 50f, 100f);
+
+                        Vector2 q0 = Vector2.Lerp(p0, p1, easedT);
+                        Vector2 q1 = Vector2.Lerp(p1, p2, easedT);
+                        actualHandPos = Vector2.Lerp(q0, q1, easedT);
+
+                        if (easedT > 0.45f)
+                        {
+                            candle.Center = actualHandPos - handleOffset;
+
+                            Vector2 handVelocity = actualHandPos - handOldPos[0];
+                            float targetRotation = -MathHelper.Clamp(handVelocity.X * 0.05f, -1.2f, 1.2f);
+                            SetCandleState(candle, 4, targetRotation);
+                        }
+                        else
+                        {
+                            candle.Center = aimPos;
+                            SetCandleState(candle, 0, 0f);
+                        }
+                        candle.velocity = Vector2.Zero;
+                    }
+                    else if (AttackTimer < morphTime + swoopTime + holdTime)
+                    {
+                        Vector2 p2 = NPC.Center + new Vector2(-NPC.spriteDirection * 100f, 20f) * NPC.scale;
+                        actualHandPos = p2;
+                        candle.Center = actualHandPos - handleOffset;
+                        candle.velocity = Vector2.Zero;
                     }
                     else
                     {
-                        Vector2 targetHandle = candle.Center + new Vector2(wispCandleSpawn.currentHandX, 8f) * candle.scale;
-                        actualHandPos = Vector2.Lerp(actualHandPos, targetHandle, 0.12f);
+                        float localT = (AttackTimer - (morphTime + swoopTime + holdTime)) / recoilTime;
+                        float eased = MathHelper.SmoothStep(0f, 1f, localT);
+
+                        Vector2 recoilStart = NPC.Center + new Vector2(-NPC.spriteDirection * 100f, 20f) * NPC.scale;
+
+                        actualHandPos = Vector2.Lerp(recoilStart, targetHandle, eased);
+                        candle.Center = actualHandPos - handleOffset;
+                        candle.velocity = Vector2.Zero;
+
+                        SetCandleState(candle, 0, 0f);
                     }
                 }
 
-                if (AttackTimer++ >= morphTime + reachTime)
+                if (AttackTimer++ >= totalTime)
                 {
+                    NPC.dontTakeDamage = false;
                     ResetState(ActionState.Idle);
                 }
                 break;
-
             case ActionState.Idle:
                 AnimateFace(-1, 0, 6, false);
                 AttackTimer++;

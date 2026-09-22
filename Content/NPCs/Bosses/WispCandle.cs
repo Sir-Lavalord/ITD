@@ -176,7 +176,7 @@ public class WispCandle : ModNPC
 
             float targetRotation = 0f;
 
-            if (NPC.localAI[0] == 3)
+            if (NPC.localAI[0] == 3 || NPC.localAI[0] == 4)
             {
                 targetRotation = NPC.localAI[1];
             }
