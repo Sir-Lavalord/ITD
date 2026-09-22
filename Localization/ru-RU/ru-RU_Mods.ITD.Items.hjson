@@ -1595,3 +1595,8 @@ WaxWhip: {
 	// DisplayName: Wax Whip
 	// Tooltip: ""
 }
+
+OminousCandle: {
+	// DisplayName: Ominous Candle
+	// Tooltip: ""
+}
