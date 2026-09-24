@@ -121,6 +121,7 @@ public class OminousCandleProj : ModProjectile
                 {
                     if (Vector2.DistanceSquared(p.position, mainPos) < Math.Sqrt(15))
                     {
+                        
                         p.timeLeft = 1;
                     }
                 }

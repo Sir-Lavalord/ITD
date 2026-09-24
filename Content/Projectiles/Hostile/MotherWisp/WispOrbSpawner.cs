@@ -69,11 +69,11 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
             {
                 float fireAngle = Projectile.ai[0];
                 float chevronIndex = Projectile.ai[1];
+                float sweepDelay = Projectile.ai[2];
 
                 float initialSpeed = 18f;
                 Vector2 shootVel = fireAngle.ToRotationVector2() * initialSpeed;
-
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<WispChevronBullet>(), Projectile.damage, 0, Main.myPlayer, chevronIndex);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, shootVel, ModContent.ProjectileType<WispChevronBullet>(), Projectile.damage, 0, Main.myPlayer, chevronIndex, 0f, sweepDelay);
             }
         }
 
@@ -82,7 +82,6 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
             if (ModContent.RequestIfExists<Texture2D>("ITD/Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing", out var effectTexture))
             {
                 Vector2 drawPosition = Projectile.Center - Main.screenPosition;
-
 
                 Main.EntitySpriteDraw(
                     effectTexture.Value,
@@ -95,7 +94,6 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
                     SpriteEffects.None,
                     0
                 );
-
             }
             return false;
         }

@@ -9,8 +9,8 @@ public class WispFireOrb : ModProjectile
     private readonly Asset<Texture2D> effect = ModContent.Request<Texture2D>("ITD/Content/Projectiles/Hostile/CosJel/CosmicSludgeBomb_Effect");
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
-        ProjectileID.Sets.TrailingMode[Projectile.type] = 0; // The recording mode
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
+        ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         Main.projFrames[Projectile.type] = 1;
     }
 
