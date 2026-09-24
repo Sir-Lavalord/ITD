@@ -9,6 +9,7 @@ public class BlueshroomCap : ModItem
     public override void SetStaticDefaults()
     {
         Item.ResearchUnlockCount = 1;
+        ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
         SetBonusText = this.GetLocalization("SetBonus");
     }
     public override void SetDefaults()
