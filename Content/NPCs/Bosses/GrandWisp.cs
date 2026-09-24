@@ -119,9 +119,10 @@ public class GrandWisp : ModNPC
                     }
                 }
 
-                NPC.localAI[1] += 0.02f;
+                NPC.localAI[1] += 0.005f;
 
-                float dynamicRadius = Math.Max(160f, activeWisps * 50f);
+                float dynamicRadius = Math.Max(200f, activeWisps * 25f);
+                dynamicRadius += MiscHelpers.BetterEssScale(5, 0.5f) * Math.Max(20f, activeWisps * 2f);
                 float myAngle = NPC.localAI[1] + (MathHelper.TwoPi / Math.Max(1, activeWisps)) * myIndex;
                 Vector2 targetPos = candle.Center + new Vector2(dynamicRadius, 0).RotatedBy(myAngle);
 
@@ -134,30 +135,38 @@ public class GrandWisp : ModNPC
         }
         else
         {
-            NPC.dontTakeDamage = true;
-            NPC.damage = 0;
-            AnimateFace(0, 2, 10);
-
-            if (NPC.ai[2] == 0)
+            if (NPC.ai[3] == 0)
             {
-                NPC.localAI[0] = NPC.Center.X;
-                NPC.localAI[1] = NPC.Center.Y;
+                NPC.dontTakeDamage = true;
+                NPC.damage = 0;
+                AnimateFace(0, 2, 10);
+
+                if (NPC.ai[2] == 0)
+                {
+                    NPC.localAI[0] = NPC.Center.X;
+                    NPC.localAI[1] = NPC.Center.Y;
+                }
+
+                NPC.ai[2]++;
+                float duration = 90f;
+                float progress = Math.Clamp(NPC.ai[2] / duration, 0f, 1f);
+                float ease = progress * progress;
+
+                Vector2 startPos = new Vector2(NPC.localAI[0], NPC.localAI[1]);
+                NPC.Center = Vector2.Lerp(startPos, Mom.Center, ease);
+
+                if (progress >= 1f || NPC.Distance(Mom.Center) < 20f)
+                {
+                    NPC.active = false;
+                    NPC.netUpdate = true;
+                }
             }
-
-            NPC.ai[2]++;
-            float duration = 90f;
-            float progress = Math.Clamp(NPC.ai[2] / duration, 0f, 1f);
-            float ease = progress * progress;
-
-            Vector2 startPos = new Vector2(NPC.localAI[0], NPC.localAI[1]);
-            NPC.Center = Vector2.Lerp(startPos, Mom.Center, ease);
-
-            if (progress >= 1f || NPC.Distance(Mom.Center) < 20f)
+            else
             {
-                NPC.active = false;
-                NPC.netUpdate = true;
+                NPC.velocity *= 0.9f;
             }
         }
+
         float dieTime = 120;
         if (NPC.ai[3] > 0)
         {
@@ -229,10 +238,7 @@ public class GrandWisp : ModNPC
 
         if (NPC.ai[3] > 0)
         {
-            AnimateFace(0, 2, 10,false);
-        }
-        else
-        {
+            AnimateFace(0, 2, 10, false);
         }
     }
 

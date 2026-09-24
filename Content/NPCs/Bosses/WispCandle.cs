@@ -134,7 +134,7 @@ public class WispCandle : ModNPC
 
             if (FlameState == 1)
             {
-                int amount = ExtraParticles > 0 ? ExtraParticles : 8;
+                int amount = ExtraParticles > 0 ? ExtraParticles : 3;
                 for (int i = 0; i < amount; i++)
                 {
                     float candleWiggle = (float)Math.Sin((Main.GlobalTimeWrappedHourly * 24f) + Main.rand.NextFloat(MathHelper.TwoPi)) * 3.5f;
@@ -155,7 +155,7 @@ public class WispCandle : ModNPC
             {
                 Vector2 candleTop = NPC.Top - new Vector2(0, 10f * NPC.scale);
 
-                int flameCount = Main.rand.Next(3, 6);
+                int flameCount = Main.rand.Next(1, 3);
                 for (int i = 0; i < flameCount; i++)
                 {
                     float wiggle = (float)Math.Sin((Main.GlobalTimeWrappedHourly * 12f)) * 3f;
@@ -176,7 +176,7 @@ public class WispCandle : ModNPC
 
             float targetRotation = 0f;
 
-            if (NPC.localAI[0] == 3)
+            if (NPC.localAI[0] == 3 || NPC.localAI[0] == 4)
             {
                 targetRotation = NPC.localAI[1];
             }
@@ -204,7 +204,7 @@ public class WispCandle : ModNPC
                 }
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, -Vector2.UnitY, ModContent.ProjectileType<WispCandleDeadRay>(), 0, 0f, Main.myPlayer,0,0,150);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0,1000), -Vector2.UnitY, ModContent.ProjectileType<WispCandleDeadRay>(), 0, 0f, Main.myPlayer,0,0,150);
                 }
 
                 NPC.active = false;
@@ -251,17 +251,17 @@ public class WispCandle : ModNPC
 
         if (time >= 1f) time = 2f - time;
         time = time * 0.5f + 0.75f;
-
+        Color unused = new Color(131, 255, 236, 150);//eh
         for (float i = 0f; i < 1f; i += 0.1f)
         {
             float radians = (i + timer) * MathHelper.TwoPi;
-            sb.Draw(tex, miragePos + new Vector2(0f, 2f).RotatedBy(radians) * time, null, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, origin, stretch, effects, 0);
+            sb.Draw(tex, miragePos + new Vector2(0f, 2f).RotatedBy(radians) * time, null, unused * NPC.Opacity, NPC.rotation, origin, stretch, effects, 0);
         }
 
         for (float i = 0f; i < 1f; i += 0.2f)
         {
             float radians = (i + timer) * MathHelper.TwoPi;
-            sb.Draw(tex, miragePos + new Vector2(0f, 4f).RotatedBy(radians) * time, null, new Color(131, 255, 236, 150) * NPC.Opacity, NPC.rotation, origin, stretch, effects, 0);
+            sb.Draw(tex, miragePos + new Vector2(0f, 4f).RotatedBy(radians) * time, null, unused * NPC.Opacity, NPC.rotation, origin, stretch, effects, 0);
         }
 
         sb.Draw(tex, miragePos, null, Color.White * NPC.Opacity, NPC.rotation, origin, stretch, effects, 0);

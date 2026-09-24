@@ -298,6 +298,9 @@ Projectiles: {
 	// WaxWhipExplosion.DisplayName: Wax Whip Explosion
 	// WispCandleDeadRay.DisplayName: Wisp Candle Dead Ray
 	// WispFireBall.DisplayName: Wisp Fire Ball
+	// WispChevronBullet.DisplayName: Wisp Chevron Bullet
+	// WispOrbSpawner.DisplayName: Wisp Orb Spawner
+	// OminousCandleProj.DisplayName: Ominous Candle Proj
 }
 
 NPCs: {
