@@ -302,6 +302,7 @@ Projectiles: {
 	// WispOrbSpawner.DisplayName: Wisp Orb Spawner
 	// OminousCandleProj.DisplayName: Ominous Candle Proj
 	// WispArena.DisplayName: Wisp Arena
+	// WispScythe.DisplayName: Wisp Scythe
 }
 
 NPCs: {
@@ -409,6 +410,11 @@ NPCs: {
 	// WispCandle.DisplayName: Wisp Candle
 	// GrandWisp.DisplayName: Grand Wisp
 	// SlimeCoating.DisplayName: Slime Coating
+
+	Blizzer: {
+		// Bestiary: Mods.ITD.NPCs.Blizzer.Bestiary
+		// DisplayName: Blizzer
+	}
 }
 
 Buffs: {

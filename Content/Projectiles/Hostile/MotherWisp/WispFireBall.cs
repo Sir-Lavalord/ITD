@@ -76,7 +76,7 @@ public class WispFireBall : ModProjectile
         Texture2D texture2 = Mod.Assets.Request<Texture2D>("Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing").Value;
         Rectangle frame2 = texture2.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
         Main.EntitySpriteDraw(texture2, Projectile.Center - Main.screenPosition, frame2, new Color(207, 255, 200, 180), Projectile.rotation, new Vector2(texture2.Width * 0.5f, texture2.Height / Main.projFrames[Type] * 0.5f), Projectile.scale * 0.6f, SpriteEffects.None, 0f);
-        sb.Draw(texture, Projectile.Center - Main.screenPosition, frame, Color.White, Projectile.rotation, origin, Projectile.scale, effects, 0f);
+        sb.Draw(texture, Projectile.Center + Main.rand.NextVector2Circular(2,2) - Main.screenPosition, frame, Color.White, Projectile.rotation, origin, Projectile.scale, effects, 0f);
 
         GameShaders.Misc["LightDisc"].Apply(null);
 
