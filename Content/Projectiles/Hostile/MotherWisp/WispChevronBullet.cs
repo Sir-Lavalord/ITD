@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
@@ -13,7 +15,7 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
 {
     public class WispChevronBullet : ModProjectile
     {
-       public override string Texture => "ITD/Content/Projectiles/Hostile/MotherWisp/WispFireBall";
+        public override string Texture => "ITD/Content/Projectiles/Hostile/MotherWisp/WispFireBall";
 
         public VertexStrip TrailStrip = new();
         public VertexStrip TrailStrip2 = new();
@@ -32,13 +34,21 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
             Projectile.friendly = false;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
-            Projectile.timeLeft = 480;
+            Projectile.timeLeft = 540;
             Projectile.alpha = 255;
+            Projectile.hide = true;
+        }
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
         }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
+            behindProjectiles.Add(index);
         }
+
         private Color StripColors(float progressOnStrip) => new Color(53, 247, 180) * Projectile.Opacity;
         private Color StripColors2(float progressOnStrip) => Color.White * Projectile.Opacity;
 
@@ -47,10 +57,27 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
 
         public override void AI()
         {
-            float chevronIndex = Projectile.ai[0];
-            Projectile.ai[1]++;
-            float time = Projectile.ai[1];
+            float sweepAngle = Projectile.ai[0];
+            float chevronIndex = Projectile.ai[1];
             float sweepDelay = Projectile.ai[2];
+
+            float time = Projectile.localAI[0]++;
+
+            if (time < 40f)
+            {
+                Projectile.velocity = Vector2.Zero;
+                Projectile.alpha = 255;
+                return;
+            }
+            if (time == 40f)
+            {
+                if (chevronIndex == 0) SoundEngine.PlaySound(SoundID.Item34, Projectile.Center);
+
+                float initialSpeed = 18f;
+                Projectile.velocity = sweepAngle.ToRotationVector2() * initialSpeed;
+                Projectile.rotation = Projectile.velocity.ToRotation();
+            }
+            float bulletTime = time - 40f;
 
             float spawnDelay = (chevronIndex + 6f) * 2f;
 
@@ -59,9 +86,9 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
 
             float totalFormTime = baseFormTime + (sweepDelay * 40f);
 
-            if (time < totalFormTime)
+            if (bulletTime < totalFormTime)
             {
-                float fadeProgress = MathHelper.Clamp(time / totalFormTime, 0f, 1f);
+                float fadeProgress = MathHelper.Clamp(bulletTime / totalFormTime, 0f, 1f);
                 Projectile.alpha = (int)MathHelper.Lerp(255, 0, fadeProgress);
             }
             else
@@ -72,7 +99,7 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
             float morphDuration = 35f;
             float finalUnifiedSpeed = 8f;
 
-            if (time < baseFormTime)
+            if (bulletTime < baseFormTime)
             {
                 float minSpeed = 3f;
                 float gentleBrake = 0.85f;
@@ -82,7 +109,7 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
                     Projectile.velocity *= gentleBrake;
                 }
             }
-            else if (time < totalFormTime)
+            else if (bulletTime < totalFormTime)
             {
                 Projectile.velocity *= 0.8f;
 
@@ -91,7 +118,7 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
                     Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitY) * 0.01f;
                 }
             }
-            else if (time < totalFormTime + morphDuration)
+            else if (bulletTime < totalFormTime + morphDuration)
             {
                 float catchupFactor = 0.25f;
                 float speedAdjustment = (Math.Abs(chevronIndex) * catchupFactor);
@@ -114,6 +141,29 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
 
         public override bool PreDraw(ref Color lightColor)
         {
+            float time = Projectile.localAI[0];
+
+            if (time < 40f)
+            {
+                if (ModContent.RequestIfExists<Texture2D>("ITD/Content/Projectiles/Friendly/Mage/TwilightDemiseHorribleThing", out var effectTexture))
+                {
+                    float spawnerScale = 1f - (time / 40f);
+                    Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+
+                    Main.EntitySpriteDraw(
+                        effectTexture.Value,
+                        drawPosition,
+                        null,
+                        new Color(37, 255, 152, 0),
+                        Projectile.rotation,
+                        effectTexture.Value.Size() / 2f,
+                        new Vector2(2f, 2f) * spawnerScale,
+                        SpriteEffects.None,
+                        0
+                    );
+                }
+                return false;
+            }
             SpriteBatch sb = Main.spriteBatch;
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             Rectangle frame = texture.Frame(1, 1, 0, 0);
@@ -137,7 +187,7 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
                 );
             }
 
-            sb.Draw(texture, Projectile.Center - Main.screenPosition, frame, Projectile.GetAlpha(Color.White), Projectile.rotation, origin, Projectile.scale, effects, 0f);
+            sb.Draw(texture, Projectile.Center + Main.rand.NextVector2Circular(2, 2) - Main.screenPosition, frame, Projectile.GetAlpha(Color.White), Projectile.rotation, origin, Projectile.scale, effects, 0f);
 
             GameShaders.Misc["LightDisc"].Apply(null);
 
