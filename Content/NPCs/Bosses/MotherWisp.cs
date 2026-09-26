@@ -1175,7 +1175,7 @@ public class MotherWisp : ModNPC
         {
             float windupEnd = 60f;
             float swingEnd = 90f;
-            float restEnd = 150f;
+            float restEnd = 100f;
 
             if (AttackTimer < swingEnd)
                 DoEnflameAnimation(AttackTimer, candle, AttackTimer < windupEnd);
