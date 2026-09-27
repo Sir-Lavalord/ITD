@@ -14,7 +14,7 @@ public class WispFireRain : ModProjectile
     public override void SetStaticDefaults()
     {
         Main.projFrames[Type] = 1;
-        ProjectileID.Sets.TrailCacheLength[Type] = 30;
+        ProjectileID.Sets.TrailCacheLength[Type] = 15;
         ProjectileID.Sets.TrailingMode[Type] = 2;
     }
     public override void SetDefaults()
@@ -25,9 +25,10 @@ public class WispFireRain : ModProjectile
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.ignoreWater = true;
-        Projectile.timeLeft = 120;
+        Projectile.timeLeft = 300;
         emitter = ParticleSystem.NewEmitter<WispFlame>(ParticleEmitterDrawCanvas.WorldOverProjectiles);
         emitter.tag = Projectile;
+        Projectile.hide = true;
     }
 
     public override bool? CanDamage()
@@ -48,38 +49,40 @@ public class WispFireRain : ModProjectile
     {
         if (emitter != null)
             emitter.keptAlive = true;
-        switch ((int)(Projectile.ai[0]))
+
+        switch ((int)Projectile.ai[0])
         {
             case 0:
-                Projectile.hide = true;
-                if (Main.rand.NextBool(5 - (Projectile.timeLeft / 30)))
-                    emitter?.Emit(Projectile.Center + Main.rand.NextVector2Square(-Projectile.width/4, Projectile.width / 4), Projectile.velocity * 0.2f, Projectile.velocity.ToRotation() - MathHelper.PiOver2, 20);
+                Projectile.velocity.Y += 0.4f;
+                Projectile.velocity.X *= 0.98f;
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+
+                if (Main.rand.NextBool(3))
+                    emitter?.Emit(Projectile.Center + Main.rand.NextVector2Square(-Projectile.width / 4, Projectile.width / 4), Projectile.velocity * 0.2f, Projectile.velocity.ToRotation() - MathHelper.PiOver2, 20);
+
+                if (Projectile.velocity.Y > 3f)
+                {
+                    Projectile.ai[0] = 1;
+                    Projectile.ai[1] = 0;
+                    Projectile.velocity = Vector2.Zero;
+                }
                 break;
             case 1:
-                if (rayPosY - Projectile.Center.Y > 20)
+                Projectile.velocity = Vector2.Zero;
+                Projectile.ai[1]++;
+                if (Projectile.ai[1] > 20)
                 {
-                    for (int i = 0; i < 2; i++)
-                    {
-                        Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.UltraBrightTorch, 0, 0, 120, Color.Turquoise, Main.rand.NextFloat(0.5f, 1.1f));
-                        dust.noGravity = true;
-                        dust.velocity = Vector2.Zero;
-                    }
-                    Projectile.tileCollide = false;
+                    Projectile.hide = false;
+                    Projectile.ai[0] = 2;
                 }
-                else
-                {
-                    Projectile.hide = true;
-                    Projectile.velocity *= 0.5f;
-                    Projectile.tileCollide = true;
-                    for (int i = 0; i < 2; i++)
-                    {
-                        Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.UltraBrightTorch, 0, 0, 120, Color.Turquoise, Main.rand.NextFloat(0.5f, 1.1f));
-                        dust.noGravity = true;
-                        dust.velocity = Vector2.Zero;
-                    }
-                    if (Main.rand.NextBool(1))
-                        emitter?.Emit(Projectile.Center + new Vector2(Main.rand.Next(-Projectile.width / 2, Projectile.width / 2), Main.rand.Next(-2, 2)), Projectile.velocity * 0.2f, 0, 20);
-                }
+                if (Main.rand.NextBool(2))
+                    emitter?.Emit(Projectile.Center + new Vector2(Main.rand.Next(-Projectile.width / 2, Projectile.width / 2), Main.rand.Next(-2, 2)), Projectile.velocity * 0.2f, 0, 20);
+                break;
+            case 2:
+                Projectile.velocity.X = 0;
+                Projectile.velocity.Y += 0.4f;
+                if (Projectile.velocity.Y > 16f) Projectile.velocity.Y = 20f;
+                Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
                 break;
         }
     }
@@ -95,15 +98,7 @@ public class WispFireRain : ModProjectile
     }
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
     {
-        if (rayPosY - Projectile.Center.Y > 20)
-        {
-            fallThrough = false;
-        }
-        else
-        {
-            fallThrough = true;
-        }
-        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+        return false;
     }
 
     public override bool PreDraw(ref Color lightColor)
@@ -140,7 +135,7 @@ public class WispFireRain : ModProjectile
             Vector2 center2 = Vector2.Lerp(Projectile.oldPos[(int)i], Projectile.oldPos[max0], 1 - i % 1);
             center2 += Projectile.Size / 2;
             Main.EntitySpriteDraw(tex, center2 - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rectangle, new Color(65, 80, 128, 50),
-num165, origin, stretch * scale, spriteEffects, 0);
+        num165, origin, stretch * scale, spriteEffects, 0);
         }
 
         float time = Main.GlobalTimeWrappedHourly;
