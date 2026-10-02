@@ -27,7 +27,7 @@ public class WispFireOrb : ModProjectile
         Projectile.tileCollide = false;
         DrawOffsetX = -16;
         DrawOriginOffsetY = -16;
-        Projectile.hide = true;
+        Projectile.hide = false;
         Projectile.scale = 0.75f;
     }
     public override Color? GetAlpha(Color lightColor)

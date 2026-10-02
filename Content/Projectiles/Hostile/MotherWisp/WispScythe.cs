@@ -9,8 +9,6 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
 {
     public class WispScythe : ModProjectile
     {
-        public override string Texture => "ITD/Content/Projectiles/Hostile/MotherWisp/WispFireBall";
-
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
@@ -19,7 +17,7 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
 
         public override void SetDefaults()
         {
-            Projectile.width = 40;
+            Projectile.width = 48;
             Projectile.height = 40;
             Projectile.hostile = true;
             Projectile.friendly = false;
@@ -39,7 +37,7 @@ namespace ITD.Content.Projectiles.Hostile.MotherWisp
 
             Projectile.ai[0]++;
 
-            Projectile.rotation += 0.4f * (Projectile.velocity.X > 0 ? 1f : -1f);
+            Projectile.rotation += Projectile.velocity.ToRotation() * 0.1f;
 
             if (Projectile.ai[0] > 24f + Projectile.ai[1])
             {
