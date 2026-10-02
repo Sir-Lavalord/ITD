@@ -69,7 +69,15 @@ public class WispArena : ModProjectile
             currentRadius = MathHelper.Lerp(currentRadius, TargetRadius, 0.05f);
         }
 
-        Projectile.Center = Vector2.Lerp(Projectile.Center, boss.Center, 0.02f);
+        if (Projectile.ai[2] == 1f)
+        {
+            Vector2 lockedPos = new Vector2(Projectile.localAI[1], Projectile.localAI[2]);
+            Projectile.Center = Vector2.Lerp(Projectile.Center, lockedPos, 0.05f);
+        }
+        else
+        {
+            Projectile.Center = Vector2.Lerp(Projectile.Center, boss.Center, 0.02f);
+        }
 
         float maxDragDist = 3000f * 16f;
 
@@ -159,7 +167,6 @@ public class WispArena : ModProjectile
         {
             float angle = MathHelper.TwoPi * ((float)i / baseSegments) + rotationOffset;
 
-            // Uses currentRadius directly so it draws seamlessly during dynamic adjustments
             circlePos[i] = Projectile.Center + angle.ToRotationVector2() * currentRadius;
             circleRot[i] = angle + MathHelper.PiOver2;
         }

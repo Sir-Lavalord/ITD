@@ -85,7 +85,7 @@ public class BleedbreakerSwing : ModProjectile
                 }
                 ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
                     new ParticleOrchestraSettings { PositionInWorld = target.Center }, target.whoAmI);
-                if (target.Gimmickable() || target.type == ModContent.NPCType<StrawmanDummy>() && target.ai[0] == 6)
+                if (target.Gimmickable()/* || target.type == ModContent.NPCType<StrawmanDummy>() && target.ai[0] == 6*/)
                 {
                     switch (Projectile.frame)
                     {

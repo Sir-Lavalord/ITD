@@ -1,4 +1,4 @@
-﻿using ITD.Content.Items.Other;
+﻿/*using ITD.Content.Items.Other;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Localization;
@@ -189,4 +189,4 @@ public class StrawmanDummy : ModNPC
     {
         return true;
     }
-}
+}*/

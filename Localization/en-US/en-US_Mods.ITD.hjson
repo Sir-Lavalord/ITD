@@ -303,6 +303,9 @@ Projectiles: {
 	OminousCandleProj.DisplayName: Ominous Candle Proj
 	WispArena.DisplayName: Wisp Arena
 	WispScythe.DisplayName: Wisp Scythe
+	WispFireburst.DisplayName: Wisp Fireburst
+	WispSharpTear.DisplayName: Wisp Sharp Tear
+	WispTearBlast.DisplayName: Wisp Tear Blast
 }
 
 NPCs: {

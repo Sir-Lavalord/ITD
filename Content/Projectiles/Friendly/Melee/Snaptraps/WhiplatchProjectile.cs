@@ -75,7 +75,7 @@ namespace ITD.Content.Projectiles.Friendly.Melee.Snaptraps
                 bool shouldTargetBePulledTowardsPlayer =
 
                 target is NPC ?
-                (possibleNPC.ModNPC is StrawmanDummy d && possibleNPC.ai[0] == 6) || !possibleNPC.boss && possibleNPC.BossBar == null && possibleNPC.knockBackResist > 0 :
+                /*possibleNPC.ModNPC is StrawmanDummy d && possibleNPC.ai[0] == 6) ||*/ !possibleNPC.boss && possibleNPC.BossBar == null && possibleNPC.knockBackResist > 0 :
 
                 target is Player ?
                 !possiblePlayer.noKnockback :

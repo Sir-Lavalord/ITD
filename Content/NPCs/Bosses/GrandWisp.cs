@@ -191,14 +191,10 @@ public class GrandWisp : ModNPC
     {
         NPC Mom = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<MotherWisp>());
         if (Mom == null) return;
-
-        if (NPC.ai[1] == 0)
+        if (Main.netMode != NetmodeID.MultiplayerClient)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                Mom.localAI[2] += 1f;
-                Mom.netUpdate = true;
-            }
+            Mom.localAI[2] += 1f;
+            Mom.netUpdate = true;
         }
     }
 
