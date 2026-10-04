@@ -1045,7 +1045,7 @@ namespace ITD.Content.NPCs.Bosses;
             Vector2 eyePos = NPC.Center + new Vector2(0, -60);
             int hitTime = 1;
             float restTime = masterMode ? 40 : expertMode ? 50 : 60;
-            hitTime = masterMode ? 5 : expertMode ? 5 : 3;
+            hitTime = masterMode ? 5 : expertMode ? 4 : 3;
             NPC.dontTakeDamage = true;
 
             if (AI_State == MovementState.Teleport)
@@ -1196,7 +1196,6 @@ namespace ITD.Content.NPCs.Bosses;
 
                         NPC.velocity = aboveNormalized * (speed + 1f) / speed2;
                         NetSync();
-
                     }
                     else
                     {

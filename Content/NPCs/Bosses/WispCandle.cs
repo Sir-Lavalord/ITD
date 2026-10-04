@@ -91,6 +91,10 @@ public class WispCandle : ModNPC
     private Vector2[] trailOldPositions = new Vector2[40];
     private float[] trailOldRotations = new float[40];
 
+    public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+    {
+        return SpawnState != 1;
+    }
     public override void AI()
     {
         if (emitter != null) emitter.keptAlive = true;
