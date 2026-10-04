@@ -32,11 +32,13 @@ public class GrandWisp : ModNPC
         NPC.damage = 30;
         NPC.defense = 0;
         NPC.lifeMax = 500;
-        NPC.HitSound = SoundID.NPCHit42;
+        NPC.HitSound = SoundID.NPCHit37;
         NPC.DeathSound = SoundID.NPCDeath44;
         NPC.noGravity = true;
         NPC.noTileCollide = true;
-        NPC.knockBackResist = 0f;
+
+        NPC.knockBackResist = 0.6f;
+
         NPC.aiStyle = -1;
         emitter = ParticleSystem.NewEmitter<WispMist>(ParticleEmitterDrawCanvas.WorldUnderProjectiles);
         emitter.tag = NPC;
@@ -46,8 +48,8 @@ public class GrandWisp : ModNPC
 
     public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
     {
-        NPC.lifeMax = (int)(NPC.lifeMax * 0.5f * balance * bossAdjustment);
-        NPC.damage = (int)(NPC.damage * 0.7f);
+        NPC.lifeMax = (int)(NPC.lifeMax * 0.2f * balance * bossAdjustment);
+        NPC.damage = (int)(NPC.damage * 0.5f);
     }
 
     public override void OnSpawn(IEntitySource source)
@@ -77,8 +79,18 @@ public class GrandWisp : ModNPC
         return true;
     }
 
+    public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+    {
+        return NPC.ai[1] == 0 && NPC.ai[3] == 0 && NPC.localAI[2] > 60f;
+    }
+
     public override void AI()
     {
+        if (NPC.localAI[2] < 100f)
+        {
+            NPC.localAI[2]++;
+        }
+
         NPC Mom = MiscHelpers.NPCExists(OwnerIndex, ModContent.NPCType<MotherWisp>());
         if (Mom == null)
         {
@@ -92,78 +104,86 @@ public class GrandWisp : ModNPC
 
         if (Main.rand.NextBool(4))
         {
-            float wiggle = (float)Math.Sin((Main.GlobalTimeWrappedHourly * 12f)) * 2.5f;
-            Vector2 mistVelocity = new Vector2(wiggle, -Main.rand.NextFloat(8f, 10.5f) * NPC.scale);
-            Vector2 spawnOffset = Main.rand.NextVector2Circular(NPC.width / 2.2f, NPC.height / 2.2f) * NPC.scale;
-            emitter?.Emit(NPC.Center + spawnOffset, mistVelocity, 0f);
+            emitter?.Emit(NPC.Center + Main.rand.NextVector2Circular(NPC.width / 2, NPC.height / 2) * NPC.scale, -NPC.velocity, 0f, 90);
         }
 
         if (NPC.ai[1] == 0)
         {
-            NPC.TargetClosest(false);
-
-            NPC candle = MiscHelpers.NPCExists((int)Mom.ai[0], ModContent.NPCType<WispCandle>());
-
-            if (candle != null && candle.active)
+            if (NPC.localAI[0]++ >= 30)
             {
-                int activeWisps = 0;
-                int myIndex = 0;
+                NPC.TargetClosest(false);
 
+                NPC candle = MiscHelpers.NPCExists((int)Mom.ai[0], ModContent.NPCType<WispCandle>());
+                Vector2 anchorPos = candle != null && candle.active ? candle.Center : Mom.Center;
+
+                float maxCandleDist = 350f;
+                float pullStrength = 0.2f;
+                float wispPushRadius = 100f;
+                float wispPushForce = 0.4f;
+
+                if (Main.rand.NextBool(40))
+                {
+                    Vector2 randomVel = Main.rand.NextVector2Circular(5f, 5f);
+                    NPC.velocity += randomVel;
+                }
+
+                float distToAnchor = Vector2.Distance(NPC.Center, anchorPos);
+                if (distToAnchor > maxCandleDist)
+                {
+                    Vector2 pullDir = Vector2.Normalize(anchorPos - NPC.Center);
+                    NPC.velocity += pullDir * pullStrength * (distToAnchor / maxCandleDist);
+                }
+
+                Vector2 pushForceVec = Vector2.Zero;
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     NPC other = Main.npc[i];
-                    if (other.active && other.type == ModContent.NPCType<GrandWisp>() && (int)other.ai[0] == OwnerIndex)
+
+                    if (other.active && other.whoAmI != NPC.whoAmI && other.type == NPC.type && (int)other.ai[0] == OwnerIndex && other.ai[1] == 0)
                     {
-                        if (i == NPC.whoAmI) myIndex = activeWisps;
-                        activeWisps++;
+                        float dist = Vector2.Distance(NPC.Center, other.Center);
+
+                        if (dist < wispPushRadius && dist > 0.1f)
+                        {
+                            Vector2 pushAway = Vector2.Normalize(NPC.Center - other.Center);
+                            float pushMultiplier = (wispPushRadius - dist) / wispPushRadius;
+                            pushForceVec += pushAway * (wispPushForce * pushMultiplier);
+                        }
                     }
                 }
+                NPC.velocity += pushForceVec;
 
-                NPC.localAI[1] += 0.005f;
+                if (NPC.velocity.LengthSquared() > 18f * 18f)
+                {
+                    NPC.velocity = Vector2.Normalize(NPC.velocity) * 18f;
+                }
 
-                float dynamicRadius = Math.Max(200f, activeWisps * 25f);
-                dynamicRadius += MiscHelpers.BetterEssScale(5, 0.5f) * Math.Max(20f, activeWisps * 2f);
-                float myAngle = NPC.localAI[1] + (MathHelper.TwoPi / Math.Max(1, activeWisps)) * myIndex;
-                Vector2 targetPos = candle.Center + new Vector2(dynamicRadius, 0).RotatedBy(myAngle);
-
-                NPC.velocity = Vector2.Lerp(NPC.velocity, (targetPos - NPC.Center) * 0.08f, 0.1f);
-            }
-            else
-            {
-                NPC.velocity *= 0.98f;
+                NPC.velocity *= 0.96f;
             }
         }
         else
         {
-            if (NPC.ai[3] == 0)
+            NPC.dontTakeDamage = true;
+            NPC.damage = 0;
+
+            if (NPC.ai[2] == 0)
             {
-                NPC.dontTakeDamage = true;
-                NPC.damage = 0;
-                AnimateFace(0, 2, 10);
-
-                if (NPC.ai[2] == 0)
-                {
-                    NPC.localAI[0] = NPC.Center.X;
-                    NPC.localAI[1] = NPC.Center.Y;
-                }
-
-                NPC.ai[2]++;
-                float duration = 90f;
-                float progress = Math.Clamp(NPC.ai[2] / duration, 0f, 1f);
-                float ease = progress * progress;
-
-                Vector2 startPos = new Vector2(NPC.localAI[0], NPC.localAI[1]);
-                NPC.Center = Vector2.Lerp(startPos, Mom.Center, ease);
-
-                if (progress >= 1f || NPC.Distance(Mom.Center) < 20f)
-                {
-                    NPC.active = false;
-                    NPC.netUpdate = true;
-                }
+                NPC.localAI[0] = NPC.Center.X;
+                NPC.localAI[1] = NPC.Center.Y;
             }
-            else
+
+            NPC.ai[2]++;
+            float duration = 90f;
+            float progress = Math.Clamp(NPC.ai[2] / duration, 0f, 1f);
+            float ease = progress * progress;
+
+            Vector2 startPos = new Vector2(NPC.localAI[0], NPC.localAI[1]);
+            NPC.Center = Vector2.Lerp(startPos, Mom.Center, ease);
+
+            if (progress >= 1f || NPC.Distance(Mom.Center) < 20f)
             {
-                NPC.velocity *= 0.9f;
+                NPC.active = false;
+                NPC.netUpdate = true;
             }
         }
 

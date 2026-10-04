@@ -37,6 +37,10 @@ public class WispTearBlast : BigBlankExplosion
 
     public float ProgressZeroToOne => Utils.GetLerpValue(Lifetime, 0f, Projectile.timeLeft, true);
 
+    public override bool? CanDamage()
+    {
+        return false;
+    }
     public override void OnSpawn(IEntitySource source)
     {
         if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -47,9 +51,6 @@ public class WispTearBlast : BigBlankExplosion
 
     public override void AI()
     {
-        if (CurrentRadius >= MaxRadius * 0.99f)
-            Projectile.Kill();
-
         if (Main.netMode != NetmodeID.MultiplayerClient)
         {
             for (int i = 0; i < Main.maxProjectiles; i++)
@@ -59,10 +60,19 @@ public class WispTearBlast : BigBlankExplosion
                 {
                     if (Vector2.Distance(Projectile.Center, p.Center) <= Projectile.width / 3f)
                     {
-                        p.ai[1] = 1f;
-                        p.netUpdate = true;
+                        if (Projectile.ai[2] != 0f)
+                        {
+                            p.Kill();
+                            p.netUpdate = true;
+                        }
+                        else
+                        {
+                            p.ai[1] = 1f;
+                            p.netUpdate = true;
+                        }
                     }
                 }
+
             }
         }
         base.AI();
