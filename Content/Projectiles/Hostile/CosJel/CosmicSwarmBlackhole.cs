@@ -130,6 +130,16 @@ public class CosmicSwarmBlackhole : ITDProjectile
                     }
                     SoundEngine.PlaySound(SoundID.Item109, Projectile.Center);
 
+                    int amount = 11;
+                    for (int k = 0; k < amount; k++)
+                    {
+
+                        float rad = MathHelper.PiOver2 / (amount / 2) * k + MathHelper.PiOver2;
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)), ModContent.ProjectileType<CosmicTelegraph>(), 0, 0, -1, 0, 0, 60);
+
+                    }
+
+
                     Projectile.localAI[0] = 0;
                     spawnGlow = 1;
                     AI_State = ActionState.Spamming;
@@ -179,7 +189,7 @@ public class CosmicSwarmBlackhole : ITDProjectile
                                     int knockBack = 3;
                                     float speed = 18f;
                                     Vector2 vector = Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * speed;
-                                    vector = vector.RotatedByRandom(0.06f);
+                                    vector = vector.RotatedByRandom(0.04f);
 
                                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicSwarmGib>(), damage, knockBack, Main.myPlayer, 0, 1);
                                 }

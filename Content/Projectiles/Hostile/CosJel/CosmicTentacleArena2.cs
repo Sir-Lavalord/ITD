@@ -211,7 +211,7 @@ public class CosmicTentacleArena2 : ModProjectile
             {
                 float scale = 2f * Projectile.scale * (float)Math.Cos(Math.PI / 2 * zapGlow);
                 float opacity = Projectile.Opacity * (float)Math.Sqrt(zapGlow);
-                Main.spriteBatch.Draw(segmentTextureToDraw.Value, segmentDrawPosition - Main.screenPosition, segmentSourceRectangle, new Color(253, 241, 186, 50) * opacity, segmentRotation, segmentOrigin, 1f * scale, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(segmentTextureToDraw.Value, segmentDrawPosition - Main.screenPosition, segmentSourceRectangle, new Color(113, 251, 255, 50) * opacity, segmentRotation, segmentOrigin, 1f * scale, SpriteEffects.None, 0f);
             }
             Main.spriteBatch.Draw(segmentTextureToDraw.Value, segmentDrawPosition - Main.screenPosition, segmentSourceRectangle, segmentDrawColor, segmentRotation, segmentOrigin, 1f,  0, 0f);
             segmentDrawPosition += unitvectorFromProjectileToCosJel * segmentSegmentLength;
