@@ -4,6 +4,7 @@ using ITD.Particles.CosJel;
 using ITD.Particles.Projectiles;
 using ITD.Utilities;
 using System;
+using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics;
@@ -200,6 +201,7 @@ public class CosmicStarlitMeteorite : ITDProjectile
             Projectile.active = false;
             return;
         }
+
         int amount = 20;
         for (int i = 0; i < amount; i++)
         {
@@ -211,7 +213,12 @@ public class CosmicStarlitMeteorite : ITDProjectile
             Vector2 vector = Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)) * speed;
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicStar>(), damage, knockBack, Main.myPlayer, 0, 1);
+                Projectile proj1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromThis(), Projectile.Center, vector, ModContent.ProjectileType<CosmicSwordStar2>(), damage, 0, -1, vector.ToRotation(), 0, 1);
+                proj1.tileCollide = false;
+                proj1.rotation = vector.ToRotation();
+
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Normalize(Vector2.UnitY.RotatedBy(rad)), ModContent.ProjectileType<CosmicTelegraph>(), 0, 0, -1, 0, 0, 60);
+
             }
         }
         if (owner.localAI[2] != 0)

@@ -115,7 +115,7 @@ public class CosmicSwordStar : ModProjectile
         {
 
             spawnGlow -= 0.01f;
-            if (Projectile.localAI[0]++ == 100)
+            if (Projectile.localAI[0]++ == 150)
             {
                 SoundEngine.PlaySound(SoundID.Item20, eyePos);
                 Projectile.velocity = Vector2.Normalize(eyePos - Projectile.Center) * 30;

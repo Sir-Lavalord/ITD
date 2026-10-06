@@ -22,7 +22,7 @@ public class CosmicLightningOrb: ModProjectile
         Projectile.friendly = false;
         Projectile.hostile = true;
         Projectile.penetrate = -1;
-        Projectile.timeLeft = 1200;
+        Projectile.timeLeft = 900;
         Projectile.light = 0.5f;
         Projectile.ignoreWater = true;
         Projectile.tileCollide = false;
@@ -38,8 +38,17 @@ public class CosmicLightningOrb: ModProjectile
 
         return base.Colliding(projHitbox, targetHitbox);
     }
+
     public override void OnSpawn(IEntitySource source)
     {
+        if (expertMode || masterMode)
+        {
+            Projectile.timeLeft = 900;
+        }
+        else
+        {
+            Projectile.timeLeft = 600;
+        }
         for (int i = 0; i < 20; i++)
         {
             int dust = Dust.NewDust(Projectile.Center, 1, 1, DustID.UltraBrightTorch, 0, 0, 0, default, 1f);
