@@ -1604,3 +1604,8 @@ OminousCandle: {
 	// DisplayName: Ominous Candle
 	// Tooltip: ""
 }
+
+NeptuneNet: {
+	// DisplayName: Neptune's Net
+	// Tooltip: ""
+}

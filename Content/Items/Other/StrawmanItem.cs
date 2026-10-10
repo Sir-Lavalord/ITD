@@ -1,4 +1,4 @@
-﻿/*using ITD.Content.NPCs.Friendly;
+﻿using ITD.Content.NPCs.Friendly;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.Localization;
@@ -145,4 +145,4 @@ public class StrawmanSpawner : ModProjectile
         if (n != Main.maxNPCs && Main.netMode == NetmodeID.Server)
             NetMessage.SendData(MessageID.SyncNPC, number: n);
     }
-}*/
+}

@@ -306,6 +306,8 @@ Projectiles: {
 	// WispFireburst.DisplayName: Wisp Fireburst
 	// WispSharpTear.DisplayName: Wisp Sharp Tear
 	// WispTearBlast.DisplayName: Wisp Tear Blast
+	// NeptuneJellyfishMinion.DisplayName: Neptune Jellyfish Minion
+	// NeptunePortal.DisplayName: Neptune Portal
 }
 
 NPCs: {
@@ -603,6 +605,11 @@ Buffs: {
 	WaxWhipTagDebuff: {
 		// DisplayName: Wax Whip Tag Debuff
 		// Description: Mods.ITD.Buffs.WaxWhipTagDebuff.Description
+	}
+
+	NeptuneJellyfishBuff: {
+		// DisplayName: Neptune Jellyfish Buff
+		// Description: Mods.ITD.Buffs.NeptuneJellyfishBuff.Description
 	}
 }
 

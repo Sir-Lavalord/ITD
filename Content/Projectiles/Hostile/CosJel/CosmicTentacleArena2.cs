@@ -203,7 +203,7 @@ public class CosmicTentacleArena2 : ModProjectile
                 {
                     float radians = (i + timer) * MathHelper.TwoPi;
 
-                    Main.spriteBatch.Draw(segmentTextureToDraw.Value, segmentDrawPosition - Main.screenPosition + new Vector2(0f, 4).RotatedBy(radians) * time, segmentSourceRectangle, new Color(253, 241, 186, 50) * Projectile.Opacity, segmentRotation, segmentOrigin, 1f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(segmentTextureToDraw.Value, segmentDrawPosition - Main.screenPosition + new Vector2(0f, 2).RotatedBy(radians) * time, segmentSourceRectangle, new Color(113, 251, 255, 50) * Projectile.Opacity, segmentRotation, segmentOrigin, 1f, SpriteEffects.None, 0f);
 
                 }
             }
