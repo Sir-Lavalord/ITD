@@ -21,7 +21,8 @@ namespace ITD.Content.Items.Weapons.Summoner
             Item.height = 32;
             Item.useTime = 30;
             Item.useAnimation = 30;
-            Item.useStyle = ItemUseStyleID.Swing;
+            Item.holdStyle = ItemHoldStyleID.HoldFront;
+            Item.useStyle = ItemUseStyleID.EatFood;
             Item.noMelee = true;
             Item.DamageType = DamageClass.Summon;
             Item.buffType = ModContent.BuffType<IncendipedeMinionBuff>();

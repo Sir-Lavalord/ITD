@@ -290,7 +290,8 @@ namespace ITD.Content.NPCs.Bosses;
             {
                 NPC.TargetClosest();
             }
-            if (emitter != null)
+/*            MiscHelpers.text(string.Join(", ",availableAttacks));
+*/            if (emitter != null)
                 emitter.keptAlive = true;
             ITDGlobalNPC.cosjelBoss = NPC.whoAmI;
             Player player = Main.player[NPC.target];
@@ -468,7 +469,7 @@ namespace ITD.Content.NPCs.Bosses;
         public void WaveDash()
         {
             distanceAbove = 350;
-            if (AITimer1++ >= 120 && AttackCount <= 0)
+            if (AITimer1++ >= 180 && AttackCount <= 0)
             {
                 AITimer1 = 0;
                 AI_State = MovementState.Dashing;
@@ -1363,7 +1364,7 @@ namespace ITD.Content.NPCs.Bosses;
                         case -1:
                             Teleport(player.Center + new Vector2(0, -400), 60, 90, (int)AttackID);
                             break;
-                        case 6:
+                        case 9:
                             Teleport(player.Center + new Vector2(0, -250), 60, 90, (int)AttackID);
                             break;
                         case 8:
@@ -1454,7 +1455,7 @@ namespace ITD.Content.NPCs.Bosses;
                     case -1:
                         AI_State = MovementState.Stopping;
                         break;
-                    case 6:
+                    case 9:
                         AI_State = MovementState.Stopping;
                         AITimer2 = 1;
                         distanceAbove = 250;
@@ -1644,8 +1645,9 @@ namespace ITD.Content.NPCs.Bosses;
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    availableAttacks.AddRange(Enumerable.Range(6, maxAttack).ToList());
-                    AITimer1 = 0;
+                    int p2MaxAttack = masterMode ? 9 : expertMode ? 8 : 7;
+                    int newAttackCount = p2MaxAttack - 5;
+                    availableAttacks.AddRange(Enumerable.Range(6, newAttackCount).ToList()); AITimer1 = 0;
                     AITimer2 = 0;
                     NPC.localAI[2] = 1;
                     AttackID = -1;
